@@ -1,0 +1,52 @@
+52 180
+[1mStudy actions · recent first · content-free[0m
+  [9ccda20d/2] 2026-08-11 11:45:44 +0.034s  COMMAND_FINISHED
+      status=COMPLETED
+  [9ccda20d/1] 2026-08-11 11:45:44 +0.000s  COMMAND_STARTED
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [7b29c31d/2] 2026-08-11 11:45:44 +0.086s  COMMAND_FINISHED
+      status=COMPLETED
+  [7b29c31d/1] 2026-08-11 11:45:43 +0.000s  COMMAND_STARTED
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [ab2e6ee7/2] 2026-08-11 11:45:43 +0.063s  COMMAND_FINISHED
+      status=COMPLETED
+  [ab2e6ee7/1] 2026-08-11 11:45:43 +0.000s  COMMAND_STARTED
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [4831e011/2] 2026-08-11 11:45:42 +0.002s  COMMAND_FINISHED
+      status=COMPLETED
+  [4831e011/1] 2026-08-11 11:45:42 +0.000s  COMMAND_STARTED
+      operation=switch · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [641e4f91/7] 2026-08-11 11:45:42 +2.037s  COMMAND_FINISHED
+      status=COMPLETED
+  [641e4f91/6] 2026-08-11 11:45:42 +2.033s  TUI_ACTION
+      action=CLOSE · surface=resolution
+  [641e4f91/5] 2026-08-11 11:45:42 +2.032s  TEXT_INPUT
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False
+  [641e4f91/4] 2026-08-11 11:45:41 +1.010s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [641e4f91/3] 2026-08-11 11:45:41 +1.010s  KEY
+      count=1 · focus=FormattedTextControl · key=down
+  [641e4f91/2] 2026-08-11 11:45:41 +1.010s  KEY
+      count=1 · focus=FormattedTextControl · key=c-i
+  [641e4f91/1] 2026-08-11 11:45:40 +0.000s  COMMAND_STARTED
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [c6d31281/2] 2026-08-11 11:43:55 +0.022s  COMMAND_FINISHED
+      status=COMPLETED
+  [c6d31281/1] 2026-08-11 11:43:55 +0.000s  COMMAND_STARTED
+      operation=log · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [f002d8a7/2] 2026-08-11 11:43:55 +0.073s  COMMAND_FINISHED
+      status=COMPLETED
+  [f002d8a7/1] 2026-08-11 11:43:55 +0.000s  COMMAND_STARTED
+      operation=compare · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [b52996b7/7] 2026-08-11 11:43:54 +3.294s  COMMAND_FINISHED
+      status=COMPLETED
+  [b52996b7/6] 2026-08-11 11:43:54 +3.293s  TEXT_INPUT
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False
+  [b52996b7/5] 2026-08-11 11:43:53 +2.361s  KEY
+      count=1 · focus=FormattedTextControl · key=c-m
+  [b52996b7/4] 2026-08-11 11:43:52 +1.572s  KEY
+      count=97 · focus=FormattedTextControl · key=up
+  [b52996b7/3] 2026-08-11 11:43:52 +1.179s  KEY
+      count=1 · focus=FormattedTextControl · key=end
+  [b52996b7/2] 2026-08-11 11:43:51 +0.783s  KEY
+      count=1 · focus=FormattedTextControl · key=c-i

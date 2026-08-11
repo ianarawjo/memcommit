@@ -1,0 +1,254 @@
+52 180
+[1mContext: task-2/participant/symmetric-replay-result[0m
+  Memories 249  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 38fb80e2] [2m[task-2/advisor1/structure] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.[0m
+  [memory ac410ef1] [2m[task-2/advisor1/structure] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.[0m
+  [memory 6168ed39] [2m[task-2/advisor1/structure] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.[0m
+  [memory 88d0a458] [2m[task-2/advisor1/structure] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.[0m
+  [memory 8ecfb48b] [2m[task-2/advisor2/structure] Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.[0m
+  [memory fadabce6] [2m[task-2/advisor2/structure] Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.[0m
+  [memory 35b93d8e] [2m[task-2/advisor2/structure] Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.[0m
+  [memory 2e8dc7c3] [2m[task-2/advisor2/structure] A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.[0m
+  [memory ec7d69bd] [2m[task-2/advisor1/structure] Specify the user, context, and interaction to be explored in the primary HCI research question.[0m
+  [memory 14efab88] [2m[task-2/advisor2/structure] Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.[0m
+  [memory 0a4549b7] [2m[task-2/advisor1/structure] Provide one compact visual summary when proposing an unfamiliar interaction procedure.[0m
+  [memory 1646f26c] [2m[task-2/advisor1/structure] Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.[0m
+  [memory 933fbba7] [2m[task-2/advisor1/structure] Link one reviewable deliverable to each phase of the master’s research.[0m
+  [memory ef7f1e28] [2m[task-2/advisor2/structure] Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.[0m
+  [memory 655f4f89] [2m[task-2/advisor2/structure] Link deliverables that determine entry into the next phase to each milestone of the master’s research.[0m
+  [memory 5fe81360] [2m[task-2/advisor1/structure] Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.[0m
+  [memory ea557434] [2m[task-2/advisor2/structure] Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.[0m
+  [memory 2fbb5529] [2m[task-2/advisor1/structure] Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.[0m
+  [memory b3b3d234] [2m[task-2/advisor1/structure] Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.[0m
+  [memory 59bab9e5] [2m[task-2/advisor1/structure] Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.[0m
+  [memory ef88d1eb] [2m[task-2/advisor1/structure] Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.[0m
+  [memory 721288e5] [2m[task-2/advisor1/structure] Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.[0m
+  [memory c5af4493] [2m[task-2/advisor1/structure] Readers often scan section labels before deciding which paragraph to read closely.[0m
+  [memory 946deed4] [2m[task-2/advisor2/structure] Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.[0m
+  [memory 187ada72] [2m[task-2/advisor2/structure] Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.[0m
+  [memory c14037fe] [2m[task-2/advisor2/structure] Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.[0m
+  [memory d34f4ee2] [2m[task-2/advisor2/structure] End each paragraph with the question or consequence that the next paragraph answers.[0m
+  [memory fb323bfb] [2m[task-2/advisor2/structure] A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.[0m
+  [memory 6a8312aa] [2m[task-2/advisor2/structure] Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.[0m
+  [memory 7ee8c501] [2m[task-2/advisor1/structure] Place pilot observation or initial prototype results near sentences supporting feasibility claims.[0m
+  [memory 5e6509b3] [2m[task-2/advisor2/structure] Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.[0m
+  [memory fcb3f30c] [2m[task-2/advisor1/emphasis] Do not exceed two primary HCI contributions.[0m
+  [memory e49ed055] [2m[task-2/advisor1/emphasis] Name each design or empirical contribution and present it in a single sentence.[0m
+  [memory f94e84c8] [2m[task-2/advisor2/emphasis] Present each design or operational contribution as a single named sentence.[0m
+  [memory 5e3e9d60] [2m[task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the time burden associated with participation.[0m
+  [memory a58e877c] [2m[task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the travel burden associated with participation.[0m
+  [memory 4e667fb2] [2m[task-2/advisor2/emphasis] In studies recruiting organizational members, emphasize workflow constraints.[0m
+  [memory df862a11] [2m[task-2/advisor2/emphasis] In studies recruiting organizational members, emphasize manager approval constraints.[0m
+  [memory 930f3c40] [2m[task-2/advisor1/emphasis] Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.[0m
+  [memory cf7f2532] [2m[task-2/advisor1/emphasis] Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.[0m
+  [memory f0413f73] [2m[task-2/advisor2/emphasis] Highlight one primary field operational decision to be changed by evaluation results as the central claim.[0m
+  [memory 97266518] [2m[task-2/advisor1/emphasis] Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.[0m
+  [memory 780a1233] [2m[task-2/advisor1/terminology] Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.[0m
+  [memory c00af2a8] [2m[task-2/advisor1/review] The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.[0m
+  [memory cf3b9826] [2m[task-2/advisor2/emphasis] Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.[0m
+  [memory 61729bad] [2m[task-2/advisor1/style] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.[0m
+  [memory bf717cc2] [2m[task-2/advisor1/style] The user tends to repeat em dashes when a sentence already contains several clauses.[0m
+  [memory 36a815cc] [2m[task-2/advisor1/style] Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.[0m
+  [memory 39ff3ab5] [2m[task-2/advisor2/style] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.[0m
+  [memory 44aeaf14] [2m[task-2/advisor2/style] The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.[0m
+  [memory 67cb24f7] [2m[task-2/advisor2/style] An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.[0m
+  [memory 8bc34a1a] [2m[task-2/advisor1/style] Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan.[0m
+  [memory 3245bfc6] [2m[task-2/advisor1/style] When a commitment is phrased passively, readers may interpret it as uncertainty, evasiveness, or reluctance to take responsibility.[0m
+  [memory 10c92043] [2m[task-2/advisor1/style] Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party.[0m
+  [memory 439fb769] [2m[task-2/advisor1/style] The user tends to hide unsettled commitments behind passive phrases such as “will be considered” or “is expected.”[0m
+  [memory de5385ca] [2m[task-2/advisor2/style] In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.[0m
+  [memory cbf3582d] [2m[task-2/advisor2/style] Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.[0m
+  [memory 3859d8f2] [2m[task-2/advisor2/style] Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.[0m
+  [memory 594ea71d] [2m[task-2/advisor2/style] Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.[0m
+  [memory 398fa6f5] [2m[task-2/advisor1/style] Describe prototype operations that have already been implemented and verified as observed states.[0m
+  [memory cf176c1a] [2m[task-2/advisor1/style] Describe prototype operations not yet implemented or evaluated as plans or expectations.[0m
+  [memory 01adae0f] [2m[task-2/advisor1/claim-evidence] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.[0m
+  [memory ee36e097] [2m[task-2/advisor2/style] Write system behaviors confirmed in the actual usage environment as observed states.[0m
+  [memory 6efd6f07] [2m[task-2/advisor2/style] Write system behaviors not yet confirmed in the field as conditional plans.[0m
+  [memory 5c5b532e] [2m[task-2/advisor2/claim-evidence] Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.[0m
+  [memory 77b50d33] [2m[task-2/advisor1/style] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes.[0m
+  [memory 3a9833e6] [2m[task-2/advisor1/style] The user tends to place several independently reviewable claims in one long sentence.[0m
+  [memory 5e86273e] [2m[task-2/advisor1/style] Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.[0m
+  [memory 22ae085a] [2m[task-2/advisor1/style] Keep one main claim in each sentence so a reviewer can locate and assess it quickly.[0m
+  [memory 0944a28b] [2m[task-2/advisor2/style] Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.[0m
+  [memory 1a8a5d34] [2m[task-2/advisor2/style] Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.[0m
+  [memory bde4bcfe] [2m[task-2/advisor2/style] The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.[0m
+  [memory 8b0a2c6b] [2m[task-2/advisor1/claim-evidence] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.[0m
+  [memory ed72f1cc] [2m[task-2/advisor1/claim-evidence] Do not use verbs that imply proving causation if the design does not support causal inference.[0m
+  [memory f5488026] [2m[task-2/advisor1/claim-evidence] For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.[0m
+  [memory 1c780fb0] [2m[task-2/advisor2/claim-evidence] Prioritize citations of recent systems and field research in rapidly changing HCI topics.[0m
+  [memory 96fb57ef] [2m[task-2/advisor1/claim-evidence] Explain how each design choice was derived to address specific user needs.[0m
+  [memory 7f539597] [2m[task-2/advisor2/claim-evidence] Explain the user or operational stakeholder needs that each design choice aims to address.[0m
+  [memory 795aa1c7] [2m[task-2/advisor1/claim-evidence] Connect the proposed conceptual design principle to at least one observable user behavior.[0m
+  [memory 09a5d29c] [2m[task-2/advisor1/claim-evidence] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.[0m
+  [memory 7b16be65] [2m[task-2/advisor1/claim-evidence] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.[0m
+  [memory 8b7b3231] [2m[task-2/advisor1/claim-evidence] Results from controlled formative studies do not directly prove effects in actual long-term use.[0m
+  [memory 2bc9f8ab] [2m[task-2/advisor1/evaluation] Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.[0m
+  [memory e338e7cc] [2m[task-2/advisor1/review] The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.[0m
+  [memory 873150c9] [2m[task-2/advisor2/evaluation] Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.[0m
+  [memory 63f44999] [2m[task-2/advisor2/claim-evidence] Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.[0m
+  [memory fb0a1885] [2m[task-2/advisor2/claim-evidence] Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.[0m
+  [memory 3ac4240f] [2m[task-2/advisor2/claim-evidence] Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.[0m
+  [memory 1cd2d4b3] [2m[task-2/advisor2/claim-evidence] In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.[0m
+  [memory f620b6c8] [2m[task-2/advisor1/expression] Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.[0m
+  [memory 3cb80b77] [2m[task-2/advisor1/expression] Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.[0m
+  [memory ce3dae5c] [2m[task-2/advisor1/expression] A flow diagram can make alternate branches and their different outcomes visible in one view.[0m
+  [memory a288c837] [2m[task-2/advisor1/expression] Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.[0m
+  [memory 53438547] [2m[task-2/advisor1/expression] Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.[0m
+  [memory 5adeb907] [2m[task-2/advisor2/expression] Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.[0m
+  [memory 35c51cff] [2m[task-2/advisor2/expression] Give each step, actor, condition, and outcome a stable row in the sequence table.[0m
+  [memory e6537537] [2m[task-2/advisor2/expression] Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.[0m
+  [memory 23a8f3b2] [2m[task-2/advisor2/expression] Readers can check sequence tables step by step but may find the overall branching shape less immediate.[0m
+  [memory b373b518] [2m[task-2/advisor1/expression] The visual fidelity of a prototype may differ from its functional fidelity.[0m
+  [memory e780d68b] [2m[task-2/advisor2/expression] The visual fidelity of a prototype and its level of connection to actual data and services may differ.[0m
+  [memory 27c7f5d1] [2m[task-2/advisor1/expression] HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.[0m
+  [memory 8bc3d578] [2m[task-2/advisor1/expression] Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.[0m
+  [memory d6622962] [2m[task-2/advisor2/expression] HCI reviewers often scan system structure and service flow diagrams before the main text.[0m
+  [memory 85bd885b] [2m[task-2/advisor2/expression] Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.[0m
+  [memory 31010da3] [2m[task-2/advisor1/terminology] Use the same term throughout the proposal for the same interaction concept or interface element.[0m
+  [memory 8e257483] [2m[task-2/advisor1/terminology] Use abbreviations only for recurring terms of three or more words.[0m
+  [memory 87d3e3f2] [2m[task-2/advisor1/terminology] Prioritize the research role over diagnostic labels or deficits when referring to participants.[0m
+  [memory b9f4a6db] [2m[task-2/advisor2/terminology] Refer to participants based on the roles they perform in the study rather than their status.[0m
+  [memory 42271730] [2m[task-2/advisor1/terminology] Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.[0m
+  [memory c2d3b417] [2m[task-2/advisor1/terminology] The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.[0m
+  [memory 81d3c4c4] [2m[task-2/advisor2/terminology] When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.[0m
+  [memory 896c7185] [2m[task-2/advisor2/terminology] Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.[0m
+  [memory 2ed02300] [2m[task-2/advisor2/terminology] The user tends to group distinct field roles under the single label “user.”[0m
+  [memory a3c561f9] [2m[task-2/advisor1/methods] Link each HCI research question directly to corresponding user data and analysis procedures.[0m
+  [memory 0de00c1f] [2m[task-2/advisor1/methods] Reviewers judge answerability by tracing the path from each research question to the data and analysis.[0m
+  [memory e6e5a8a2] [2m[task-2/advisor2/methods] Specify field and user data sources and analysis procedures corresponding to all HCI research questions.[0m
+  [memory 91be4eb2] [2m[task-2/advisor2/methods] Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.[0m
+  [memory 5c71f11d] [2m[task-2/advisor1/methods] In preregistered studies, specify the conditions under which deviations from the plan are permissible.[0m
+  [memory db92a947] [2m[task-2/advisor1/methods] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.[0m
+  [memory 20adb757] [2m[task-2/advisor1/methods] Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.[0m
+  [memory bf0617c4] [2m[task-2/advisor1/methods] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.[0m
+  [memory de0d199c] [2m[task-2/advisor1/methods] If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.[0m
+  [memory b78a1330] [2m[task-2/advisor1/methods] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.[0m
+  [memory a74f43a1] [2m[task-2/advisor2/methods] Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.[0m
+  [memory 81090ba6] [2m[task-2/advisor2/methods] Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.[0m
+  [memory b3217ce9] [2m[task-2/advisor2/methods] Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.[0m
+  [memory 4858b150] [2m[task-2/advisor2/methods] Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.[0m
+  [memory 28bb6bac] [2m[task-2/advisor2/methods] Show how session count and facilitator time change at the minimum and maximum bounds.[0m
+  [memory 0293efb3] [2m[task-2/advisor2/methods] Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.[0m
+  [memory 9766f19a] [2m[task-2/advisor2/methods] A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.[0m
+  [memory 4ee7f46b] [2m[task-2/advisor1/methods] Specify the interview protocols, recording devices, or log tools used to collect each type of user data.[0m
+  [memory 955af52a] [2m[task-2/advisor1/methods] Specify whether each type of user data is collected before, during, or after the interaction.[0m
+  [memory 273b1871] [2m[task-2/advisor2/methods] Specify the observation records, system logs, or interview tools used to collect each type of field and user data.[0m
+  [memory ec49a072] [2m[task-2/advisor2/methods] Specify whether each type of field and user data will be collected before, during, or after deployment.[0m
+  [memory 7f9d62c6] [2m[task-2/advisor1/methods] In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.[0m
+  [memory c63dec32] [2m[task-2/advisor2/methods] In field deployments, network and service instability exist as independent causes of task failure alongside design choices.[0m
+  [memory d0a074e9] [2m[task-2/advisor1/methods] If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.[0m
+  [memory a08ec5ca] [2m[task-2/advisor2/methods] If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.[0m
+  [memory 0bcb8227] [2m[task-2/advisor1/methods] The author of this proposal tends to present implemented feature lists directly as design contributions.[0m
+  [memory c9cf19c0] [2m[task-2/advisor1/evaluation] Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.[0m
+  [memory d0ac420a] [2m[task-2/advisor1/evaluation] HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.[0m
+  [memory e491bcbe] [2m[task-2/advisor2/evaluation] Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.[0m
+  [memory 62ec3139] [2m[task-2/advisor2/evaluation] The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.[0m
+  [memory 2fff2810] [2m[task-2/advisor1/evaluation] Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.[0m
+  [memory 569f37ad] [2m[task-2/advisor1/evaluation] Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.[0m
+  [memory 96f04cae] [2m[task-2/advisor2/evaluation] Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.[0m
+  [memory e33e101e] [2m[task-2/advisor1/evaluation] Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.[0m
+  [memory cc60b98d] [2m[task-2/advisor1/review] Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.[0m
+  [memory 57d4a87a] [2m[task-2/advisor2/evaluation] Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.[0m
+  [memory 1f8fb8bb] [2m[task-2/advisor2/evaluation] Distinguish usability from organizational adoption intent as separate evaluation outcomes.[0m
+  [memory 2cca77c8] [2m[task-2/advisor2/evaluation] Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.[0m
+  [memory 133d283c] [2m[task-2/advisor1/ethics] Link expected participant burden in each user study task to its corresponding mitigation strategy.[0m
+  [memory 276e07ca] [2m[task-2/advisor1/ethics] HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.[0m
+  [memory 10fd0cc8] [2m[task-2/advisor2/ethics] Link anticipated participant burden with its mitigation strategies for each field user study task.[0m
+  [memory 67489549] [2m[task-2/advisor2/ethics] The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.[0m
+  [memory 2fe14e47] [2m[task-2/advisor1/ethics] Specify the accommodations necessary for participants to access the prototype and research tasks.[0m
+  [memory 9f208359] [2m[task-2/advisor1/ethics] Specify how accessibility accommodations will be provided during user study sessions.[0m
+  [memory c8bcefd4] [2m[task-2/advisor2/ethics] Specify the accommodations necessary for participants to access the field system and research tasks.[0m
+  [memory 58df2499] [2m[task-2/advisor2/ethics] Specify how accessibility accommodations will be provided in the field user study.[0m
+  [memory 83f1bf8c] [2m[task-2/advisor1/ethics] Describe how personal identifiers will be separated from research data immediately after collection.[0m
+  [memory a8b4b363] [2m[task-2/advisor1/ethics] Specify the equipment to be loaned to participants who lack necessary devices.[0m
+  [memory 19b526c0] [2m[task-2/advisor1/ethics] Inform participants that the formative evaluation prototype is not a finished service.[0m
+  [memory 9d34e6e5] [2m[task-2/advisor1/ethics] Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.[0m
+  [memory e2b88a97] [2m[task-2/advisor1/ethics] The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.[0m
+  [memory 182ade38] [2m[task-2/advisor2/ethics] The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.[0m
+  [memory 053d8ea0] [2m[task-2/advisor1/ethics] In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.[0m
+  [memory f6ba703d] [2m[task-2/advisor2/ethics] Ensure that participants can safely return to existing work procedures if they discontinue research participation.[0m
+  [memory 3512fa8c] [2m[task-2/advisor2/ethics] The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.[0m
+  [memory 1f80324c] [2m[task-2/advisor2/ethics] Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.[0m
+  [memory 64841612] [2m[task-2/advisor1/scope] Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.[0m
+  [memory 93f43539] [2m[task-2/advisor1/scope] Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.[0m
+  [memory 50ec77b6] [2m[task-2/advisor2/scope] Specify in one sentence the user population and actual usage environment to which the design knowledge applies.[0m
+  [memory db6066dc] [2m[task-2/advisor2/scope] Reviewers judge the generalization boundary of results through the specified target population and environment.[0m
+  [memory ece92cd4] [2m[task-2/advisor1/scope] Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.[0m
+  [memory 373193bf] [2m[task-2/advisor2/scope] Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.[0m
+  [memory 4ee99ef3] [2m[task-2/advisor2/scope] The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.[0m
+  [memory da11a638] [2m[task-2/advisor1/scope] Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.[0m
+  [memory 6b1c107c] [2m[task-2/advisor1/scope] The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.[0m
+  [memory af2c11a2] [2m[task-2/advisor2/scope] The user tends to apply results confirmed at one deployment site to all similar organizations.[0m
+  [memory 94072f3a] [2m[task-2/advisor1/safety] Specify the order and recipients for reporting serious discomfort during the study.[0m
+  [memory 4c07b6b9] [2m[task-2/advisor1/safety] Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.[0m
+  [memory 1b5d4598] [2m[task-2/advisor1/safety] Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.[0m
+  [memory bb3e4f73] [2m[task-2/advisor2/safety] Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.[0m
+  [memory f2b95c03] [2m[task-2/advisor2/safety] Establish procedures to restore existing systems and workflow states after suspending field deployment.[0m
+  [memory fec38db8] [2m[task-2/advisor2/safety] The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.[0m
+  [memory 18311a76] [2m[task-2/advisor1/safety] Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.[0m
+  [memory c0514abd] [2m[task-2/advisor2/safety] In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.[0m
+  [memory 3ddf2dca] [2m[task-2/advisor1/feasibility] Mark unverified schedule assumptions as such.[0m
+  [memory 64ec6adf] [2m[task-2/advisor1/feasibility] Clarify which stage of prototype fabrication or user study each requested resource is used for.[0m
+  [memory 8be36e19] [2m[task-2/advisor2/feasibility] Trace back the resources required for each core prototype feature and field research procedure.[0m
+  [memory 51955c18] [2m[task-2/advisor1/feasibility] Operations reviewers judge feasibility based on the personnel assigned to each procedure.[0m
+  [memory 6ff36b8e] [2m[task-2/advisor1/feasibility] Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.[0m
+  [memory 3ac9e602] [2m[task-2/advisor1/feasibility] The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.[0m
+  [memory 924b015f] [2m[task-2/advisor1/feasibility] Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.[0m
+  [memory 9db08d0a] [2m[task-2/advisor1/feasibility] Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.[0m
+  [memory c277af0b] [2m[task-2/advisor2/feasibility] Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.[0m
+  [memory 44dc8c4d] [2m[task-2/advisor2/feasibility] The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.[0m
+  [memory bef14076] [2m[task-2/advisor2/feasibility] Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.[0m
+  [memory 400d2904] [2m[task-2/advisor2/review] The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.[0m
+  [memory 0170d5f9] [2m[task-2/advisor2/feasibility] Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.[0m
+  [memory 83fa7a79] [2m[task-2/advisor1/reproducibility] HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.[0m
+  [memory ea75f801] [2m[task-2/advisor2/reproducibility] HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.[0m
+  [memory 84ed5932] [2m[task-2/advisor1/reproducibility] Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.[0m
+  [memory ddcac09c] [2m[task-2/advisor1/reproducibility] Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.[0m
+  [memory 7457f838] [2m[task-2/advisor1/reproducibility] The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.[0m
+  [memory ec05ae8e] [2m[task-2/advisor2/reproducibility] Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.[0m
+  [memory 8152c207] [2m[task-2/advisor2/reproducibility] The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.[0m
+  [memory d8668cc7] [2m[task-2/advisor1/budget] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.[0m
+  [memory 1cb5ba65] [2m[task-2/advisor1/budget] Place each major cost beside the activity or deliverable it enables in the main text.[0m
+  [memory e0fa140b] [2m[task-2/advisor1/budget] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.[0m
+  [memory d76a0f65] [2m[task-2/advisor1/budget] Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.[0m
+  [memory e2a41c8d] [2m[task-2/advisor1/budget] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.[0m
+  [memory 5d9a8a49] [2m[task-2/advisor1/budget] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.[0m
+  [memory 30509fe3] [2m[task-2/advisor1/budget] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.[0m
+  [memory 90be0b08] [2m[task-2/advisor2/budget] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.[0m
+  [memory c53c6ea5] [2m[task-2/advisor2/budget] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.[0m
+  [memory 1886ecf7] [2m[task-2/advisor2/budget] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.[0m
+  [memory b41f13f7] [2m[task-2/advisor2/budget] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.[0m
+  [memory 6d8dc982] [2m[task-2/advisor2/budget] Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.[0m
+  [memory e8aa2d66] [2m[task-2/advisor2/budget] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.[0m
+  [memory af77050e] [2m[task-2/advisor2/budget] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.[0m
+  [memory 7692b785] [2m[task-2/advisor1/compensation] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.[0m
+  [memory 3bf22713] [2m[task-2/advisor1/compensation] Compensate for the actual time participants spent in sessions, regardless of research modality.[0m
+  [memory 704e9e3c] [2m[task-2/advisor1/compensation] Leave cash payment as an available compensation method for face-to-face studies.[0m
+  [memory 0a29f29a] [2m[task-2/advisor2/compensation] Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.[0m
+  [memory 16c075da] [2m[task-2/advisor1/compensation] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.[0m
+  [memory ebd212d4] [2m[task-2/advisor1/compensation] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.[0m
+  [memory 5dabefbc] [2m[task-2/advisor2/compensation] Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.[0m
+  [memory 3b32d092] [2m[task-2/advisor1/compensation] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.[0m
+  [memory 285086ee] [2m[task-2/advisor2/compensation] In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.[0m
+  [memory 377e6501] [2m[task-2/advisor1/compensation] Compensate participants for time already invested even if a session is terminated early due to prototype errors.[0m
+  [memory c446489b] [2m[task-2/advisor2/compensation] Compensate participants who withdraw from the study midway for their actual participation time.[0m
+  [memory df92dbc5] [2m[task-2/advisor2/compensation] Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.[0m
+  [memory 2c5ccfb5] [2m[task-2/advisor1/review] Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.[0m
+  [memory 790102c3] [2m[task-2/advisor1/review] Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.[0m
+  [memory 5be25950] [2m[task-2/advisor2/review] Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.[0m
+  [memory b19c88dd] [2m[task-2/advisor2/review] Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.[0m
+  [memory 71d96ee5] [2m[task-2/advisor1/review] Cross-check whether research questions align with the core functions of the prototype.[0m
+  [memory 3fe10287] [2m[task-2/advisor1/review] HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.[0m
+  [memory 8e968a7f] [2m[task-2/advisor2/review] Cross-check whether research questions align with the core functions of the system.[0m
+  [memory 7928e79d] [2m[task-2/advisor2/review] HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.[0m
+  [memory 04d1d9de] [2m[task-2/advisor1/review] Cross-check whether evaluation tasks align with representative measures.[0m
+  [memory f73b9dfb] [2m[task-2/advisor1/review] HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.[0m
+  [memory dbcfcb65] [2m[task-2/advisor2/review] Cross-check whether field tasks align with representative measures.[0m
+  [memory f9377945] [2m[task-2/advisor2/review] HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.[0m
+  [memory 38625cee] [2m[task-2/advisor1/review] Cross-check whether collected evidence aligns with design and operational decisions to be changed.[0m
+  [memory 3bcc3550] [2m[task-2/advisor1/review] Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.[0m
+  [memory 09c1b649] [2m[task-2/advisor2/review] Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.[0m
+  [memory 0c6d8679] [2m[task-2/advisor2/review] Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.[0m

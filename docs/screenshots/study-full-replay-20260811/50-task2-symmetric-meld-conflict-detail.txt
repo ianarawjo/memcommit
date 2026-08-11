@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ CONFLICT 1/45                                                                                                                                                                    ┃
+┃ Opening-length rule                                                                                                                                                              ┃
+┃ [REQUIRED] OPEN                                                                                                                                                                  ┃
+┃ REVIEW SET · REQUIRED 5 · OPTIONAL 40                                                                                                                                            ┃
+┃ MEMORY COLLISION · R1                                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ CONFLICT · UNRESOLVED                                                                                                                                                            ┃
+┃The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · FROM task-2/advisor1                                                                                                                                                   ┃
+┃   [44249c8a] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.                    ┃
+┃   [21371c6c] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.                              ┃
+┃   [8ecaec22] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.                                                    ┃
+┃   [a4536b84] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.                ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ What reader, venue, or comprehension evidence determines whether this proposal must complete framing in two sentences or may use a contextual third sentence?                    │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Strict two sentences                                                                                                                                                         │
+│  Require the central problem and consequence within the first two sentences.                                                                                                     │
+│                                                                                                                                                                                  │
+│  2. Conditional third sentence                                                                                                                                                   │
+│  Allow a third sentence when concrete context is necessary for comprehension.                                                                                                   v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› CONFLICT       Opening-length rule                                                                                                                                              │
+│  CONFLICT       Navigation structure                                                                                                                                             │
+│  CONFLICT       Em-dash policy                                                                                                                                                   │
+│  CONFLICT       Participant target                                                                                                                                               │
+│  CONFLICT       Budget-detail location                                                                                                                                          v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-2/participant/symmetric-replay-result · CURRENT TARGET    Enter to change                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ RESOLVE ]  Resolve 5 required conflicts · 40 optional reviews may be skipped. Enter to open the first unresolved item.                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

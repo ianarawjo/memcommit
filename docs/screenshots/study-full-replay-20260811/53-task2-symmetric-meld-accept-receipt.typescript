@@ -1,0 +1,620 @@
+52 180
+MEM MELD · SYMMETRIC
+task-2/advisor1 + task-2/advisor2 → task-2/participant/symmetric-replay-result
+SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS
+Compare: 6bbd2ff9 · IMPORTED
+State: APPLIED · Round: 2
+
+WHAT MEM UNDERSTOOD
+Every supported source distinction is preserved in a relation-local target Memory, while equivalent Memories are coalesced without a semantic rewrite.
+
+RELATIONS · 98  ISSUES · 0  RESULTS · 249
+
+ACCOUNTING
+  Source coverage: 300/300
+  Relation coverage: 98/98
+  Final Memories: 249 · PRESERVE 231 · COALESCE 18 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 0
+  Cross-relation results: 0
+  ✓ R1. CONFLICT · The frames prescribe incompatible maximum lengths and sentence roles for the proposal ope…
+  ✓ R2. COMPATIBLE · The primary research question should identify its users and concrete interaction or use e…
+  ✓ R3. EQUIVALENT · An unfamiliar interaction procedure needs one compact visual showing step-transition cond…
+  ✓ R4. SCOPED · The research schedule should use phases with linked deliverables or milestones, specializ…
+  ✓ R5. COMPATIBLE · Place the research gap close to the proposed design and practical contributions.
+  ✓ R6. CONFLICT · The frames prescribe opposing navigation structures for a two-page proposal.
+  ✓ R7. COMPATIBLE · Place preliminary observational or technical evidence beside feasibility claims.
+  ✓ R8. EQUIVALENT · Limit the proposal to two primary HCI contributions readers must identify.
+  ✓ R9. COMPATIBLE · Name each primary contribution and express it in one sentence.
+  ✓ R10. SCOPED · Recruitment burden should foreground time and travel for community participants, but work…
+  ✓ R11. SCOPED · Evaluation should support consequential modification decisions, focused on design choices…
+  ✓ R12. DISTINCT · Separate transferable design knowledge from prototype features and outcomes, and express…
+  ✓ R13. DISTINCT · Mark prototype features unnecessary to the primary field problem as secondary scope.
+  ✓ R14. CONFLICT · The frames set incompatible policies for em dashes.
+  ✓ R15. SCOPED · Use explicit authorial voice for owned commitments, but action-first wording for reusable…
+  ✓ R16. SCOPED · State confirmed behavior as observed and unconfirmed behavior as planned or conditional,…
+  ✓ R17. EQUIVALENT · Use “I” or “we” consistently for the same responsible party.
+  ✓ R18. SCOPED · Split independently reviewable claims, while preserving longer sentences whose clauses fo…
+  ✓ R19. EQUIVALENT · Place direct evidence adjacent to the verifiable claim or important conclusion it support…
+  ✓ R20. EQUIVALENT · Avoid causal-proof verbs when the study design cannot support causal inference.
+  ✓ R21. SCOPED · Prioritize comprehensive recent evidence in established topics and recent systems or fiel…
+  ✓ R22. COMPATIBLE · Explain which user or stakeholder needs each design choice addresses.
+  ✓ R23. DISTINCT · Connect each conceptual design principle to observable user behavior.
+  ✓ R24. DISTINCT · Treat an explanation as a conceptual contribution only when observable data can falsify i…
+  ✓ R25. DISTINCT · Identify whether each formative-evaluation finding supports retaining, modifying, or disc…
+  ✓ R26. SCOPED · Do not treat initial or controlled evaluations as direct evidence of long-term real-world…
+  ✓ R27. DISTINCT · Use observed workarounds around existing tools as evidence of design need.
+  ✓ R28. DISTINCT · Distinguish stakeholder-reported problems from researcher-observed problems.
+  ✓ R29. DISTINCT · Use field breakdown logs to reveal failures and adaptive behavior with their timing and c…
+  ✓ R30. DISTINCT · Account for temporary coexistence of new systems and manual routines when interpreting fi…
+  ✓ R31. SCOPED · Use a flow diagram when branching comprehension matters and a sequence table when repeate…
+  ✓ R32. COMPATIBLE · Assess visual fidelity separately from nonvisual implementation fidelity.
+  ✓ R33. COMPATIBLE · Assume reviewers may inspect the principal system or interaction visual before reading th…
+  ✓ R34. DISTINCT · Use service-flow diagrams to expose human-system transitions hidden by individual screens.
+  ✓ R35. EQUIVALENT · Keep names consistent for the same concepts, roles, functions, elements, or stages.
+  ✓ R36. EQUIVALENT · Reserve abbreviations for recurring long terms and define them at first use.
+  ✓ R37. COMPATIBLE · Refer to participants by their research roles rather than status, labels, or deficits.
+  ✓ R38. DISTINCT · Use “formative evaluation” specifically for studies seeking modification evidence rather…
+  ✓ R39. DISTINCT · Match contribution labels such as principles, models, or guidelines to the abstraction le…
+  ✓ R40. DISTINCT · Define operational roles by decisions, actions, privileges, and access rather than collap…
+  ✓ R41. COMPATIBLE · Trace every research question to corresponding data sources and analysis procedures.
+  ✓ R42. EQUIVALENT · For preregistered studies, define permissible plan changes and where deviations are recor…
+  ✓ R43. CONFLICT · The frames prescribe incompatible participant-target policies for planning workload and b…
+  ✓ R44. COMPATIBLE · Specify collection tools and timing for every relevant user or field data type.
+  ✓ R45. SCOPED · Treat technical instability as an independent failure cause, focusing on prototype implem…
+  ✓ R46. SCOPED · Institutional safety procedures override planned research activity when a safety signal o…
+  ✓ R47. EQUIVALENT · The proposal author tends to mistake implemented feature lists for design contributions.
+  ✓ R48. SCOPED · Declare one representative measure that governs design decisions, using alternative-selec…
+  ✓ R49. DISTINCT · Collect process measures alongside the primary outcome to locate problematic interaction…
+  ✓ R50. SCOPED · Interpret formative results comparatively across alternatives, while field decisions use…
+  ✓ R51. DISTINCT · Test design principles at adjacent boundary cases and present their application condition…
+  ✓ R52. DISTINCT · Evaluate whether workload reductions for one role create tasks for other roles.
+  ✓ R53. DISTINCT · Evaluate usability and organizational adoption intent as separate outcomes.
+  ✓ R54. DISTINCT · Measure whether field features and procedures were delivered as intended through implemen…
+  ✓ R55. SCOPED · Link each study-task burden to a mitigation strategy, including field-specific burdens wh…
+  ✓ R56. SCOPED · Specify needed accessibility accommodations and how they will be delivered in sessions or…
+  ✓ R57. EQUIVALENT · Separate personal identifiers from research data immediately upon collection.
+  ✓ R58. EQUIVALENT · List necessary loan equipment and define its return procedure.
+  ✓ R59. DISTINCT · Tell participants that a formative prototype is not a finished service.
+  ✓ R60. DISTINCT · Set an upper limit on cumulative burden for repeated participation.
+  ✓ R61. SCOPED · Correct burden underestimation by considering participant burden beyond apparent benefit…
+  ✓ R62. DISTINCT · Recognize that recruitment authority and academic or professional evaluation authority ma…
+  ✓ R63. DISTINCT · Ensure withdrawing field participants can safely resume existing work procedures.
+  ✓ R64. DISTINCT · Protect organizational members who decline participation from assignment or performance-e…
+  ✓ R65. COMPATIBLE · State the population and usage contexts defining the generalization boundary, including b…
+  ✓ R66. COMPATIBLE · State the user, workflow, technical, and authority conditions required to transfer design…
+  ✓ R67. DISTINCT · Allow small formative studies to support analytic rather than statistical generalization…
+  ✓ R68. SCOPED · Avoid extending findings beyond their evidentiary base, whether from an accessible sample…
+  ✓ R69. EQUIVALENT · Predefine whom to notify and in what order when serious discomfort is reported.
+  ✓ R70. SCOPED · Define stopping thresholds and prevent unsafe continuation, scoped to formative alternati…
+  ✓ R71. DISTINCT · Define field restoration procedures and assign authority and responsibility for recovery…
+  ✓ R72. DISTINCT · Recognize that delayed prototype recovery changes interruption time and data-collection c…
+  ✓ R73. DISTINCT · Address traceability gaps when performance-sensitive safety records are separated from re…
+  ✓ R74. EQUIVALENT · Label unverified schedule, recruitment, and technical assumptions.
+  ✓ R75. COMPATIBLE · Tie requested resources to the prototype features, fabrication stages, or research proced…
+  ✓ R76. EQUIVALENT · Judge procedural feasibility from assigned personnel, equipment, and time.
+  ✓ R77. DISTINCT · Test whether planned formative iterations leave enough recruitment, modification time, an…
+  ✓ R78. DISTINCT · Limit a formative prototype to functionality needed to compare primary design assumptions.
+  ✓ R79. DISTINCT · Expose field-partner and equipment confirmation status, external dependencies, and operat…
+  ✓ R80. DISTINCT · Assign responsibility for deployment updates, inspections, and user support.
+  ✓ R81. SCOPED · Disclose the evaluated software version, whether it is a formative prototype or a field-d…
+  ✓ R82. SCOPED · Maintain records connecting versions, configurations, procedures, observations, rationale…
+  ✓ R83. CONFLICT · The frames prescribe incompatible locations for detailed budget arithmetic and estimate a…
+  ✓ R84. EQUIVALENT · Base compensation on total participation burden, including session, preparation, and trav…
+  ✓ R85. EQUIVALENT · Compensate actual session time regardless of research modality.
+  ✓ R86. SCOPED · Preserve usable payment options suited to modality, including cash for face-to-face work…
+  ✓ R87. EQUIVALENT · Do not require the final payment method to be settled at the proposal stage.
+  ✓ R88. SCOPED · Use equal base rates when burdens are equal and allow modality-specific amounts when trav…
+  ✓ R89. SCOPED · Compensate out-of-session burden, including rescheduling and repeat visits in iterative s…
+  ✓ R90. COMPATIBLE · Pay participants for time already invested when participation ends early.
+  ✓ R91. DISTINCT · Separate participant compensation from labor costs for field staff performing operational…
+  ✓ R92. SCOPED · Conduct a focused pre-submission review of problem, intervention, evaluation, and contrib…
+  ✓ R93. SCOPED · Check that research questions connect to core prototype or system functions.
+  ✓ R94. SCOPED · Check that evaluation or field tasks generate representative measures.
+  ✓ R95. EQUIVALENT · Check that collected evidence can change specified design or operational decisions.
+  ✓ R96. DISTINCT · Trace each research question through formative data to its design-modification judgment.
+  ✓ R97. DISTINCT · Walk through installation failures, interruptions, and recovery scenarios with field liai…
+  ✓ R98. DISTINCT · State how each proposed contribution could alter a specific design or operational decisio…
+
+ISSUES
+  (none)
+
+PROPOSED TARGET MEMORIES
+  +  1. [PRESERVE] [task-2/advisor1/structure] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before any supporting background.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  2. [PRESERVE] [task-2/advisor1/structure] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the proposed response.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  3. [PRESERVE] [task-2/advisor1/structure] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  4. [PRESERVE] [task-2/advisor1/structure] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the exact problem being proposed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  5. [PRESERVE] [task-2/advisor2/structure] Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed to make the issue understandable.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  6. [PRESERVE] [task-2/advisor2/structure] Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-sentence summary.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  7. [PRESERVE] [task-2/advisor2/structure] Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  8. [PRESERVE] [task-2/advisor2/structure] A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the proposal intends to change.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  +  9. [PRESERVE] [task-2/advisor1/structure] Specify the user, context, and interaction to be explored in the primary HCI research question.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 10. [PRESERVE] [task-2/advisor2/structure] Explicitly specify the users, operational stakeholders, and actual usage environment in the primary HCI research question.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 11. [COALESCE] [task-2/advisor1/structure] Provide one compact visual summary when proposing an unfamiliar interaction procedure.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 12. [PRESERVE] [task-2/advisor1/structure] Present the master’s research schedule as phased periods for exploration, design, prototyping, and user evaluation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 13. [PRESERVE] [task-2/advisor1/structure] Link one reviewable deliverable to each phase of the master’s research.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 14. [PRESERVE] [task-2/advisor2/structure] Present the master’s research schedule as phase-specific milestones for field understanding, system implementation, user study, and analysis.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 15. [PRESERVE] [task-2/advisor2/structure] Link deliverables that determine entry into the next phase to each milestone of the master’s research.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 16. [PRESERVE] [task-2/advisor1/structure] Place the gap left by HCI-related research and the proposed design and empirical contributions in close proximity.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 17. [PRESERVE] [task-2/advisor2/structure] Directly connect the gap in the actual usage context with the proposed design and operational contributions in a single flow.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 18. [PRESERVE] [task-2/advisor1/structure] Divide a two-page proposal with short descriptive subheadings so a reader can jump directly to the problem, proposed response, and next steps.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 19. [PRESERVE] [task-2/advisor1/structure] Give the problem and proposed response their own descriptive subheadings instead of relying only on paragraph transitions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 20. [PRESERVE] [task-2/advisor1/structure] Give the next steps and requested support their own descriptive subheading so they remain easy to find on a return visit.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 21. [PRESERVE] [task-2/advisor1/structure] Reuse the same short subheadings in discussion so a reader can return to a section without searching through the whole page.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 22. [PRESERVE] [task-2/advisor1/structure] Use visible subheadings as a completeness check: an empty or missing section makes an omitted part of the proposal immediately apparent.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 23. [PRESERVE] [task-2/advisor1/structure] Readers often scan section labels before deciding which paragraph to read closely.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 24. [PRESERVE] [task-2/advisor2/structure] Avoid extra subheadings in a two-page proposal; use paragraph transitions to preserve one continuous argument from problem to proposed response and next steps.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 25. [PRESERVE] [task-2/advisor2/structure] Begin each paragraph by connecting it to the previous claim so the short proposal reads as an argument rather than a stack of labeled fragments.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 26. [PRESERVE] [task-2/advisor2/structure] Use paragraph transitions instead of extra headings when the repeated labels would consume space needed for the argument itself.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 27. [PRESERVE] [task-2/advisor2/structure] End each paragraph with the question or consequence that the next paragraph answers.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 28. [PRESERVE] [task-2/advisor2/structure] A continuous sequence of problem, consequence, response, and next step makes the relationship among claims audible without repeating section labels.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 29. [PRESERVE] [task-2/advisor2/structure] Readers may experience very short headed sections as an outline because each new label interrupts the connection to the previous paragraph.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 30. [PRESERVE] [task-2/advisor1/structure] Place pilot observation or initial prototype results near sentences supporting feasibility claims.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 31. [PRESERVE] [task-2/advisor2/structure] Place preliminary results from field observations or technical validations near sentences supporting feasibility claims.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 32. [COALESCE] [task-2/advisor1/emphasis] Do not exceed two primary HCI contributions.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 33. [PRESERVE] [task-2/advisor1/emphasis] Name each design or empirical contribution and present it in a single sentence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 34. [PRESERVE] [task-2/advisor2/emphasis] Present each design or operational contribution as a single named sentence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 35. [PRESERVE] [task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the time burden associated with participation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 36. [PRESERVE] [task-2/advisor1/emphasis] In studies recruiting community participants, emphasize the travel burden associated with participation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 37. [PRESERVE] [task-2/advisor2/emphasis] In studies recruiting organizational members, emphasize workflow constraints.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 38. [PRESERVE] [task-2/advisor2/emphasis] In studies recruiting organizational members, emphasize manager approval constraints.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 39. [PRESERVE] [task-2/advisor1/emphasis] Emphasize the core design decisions that formative evaluation will change rather than a polished product demonstration.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 40. [PRESERVE] [task-2/advisor1/emphasis] Formative evaluation creates grounds for modification in subsequent iterations rather than definitively determining the superiority of design alternatives.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 41. [PRESERVE] [task-2/advisor2/emphasis] Highlight one primary field operational decision to be changed by evaluation results as the central claim.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 42. [PRESERVE] [task-2/advisor1/emphasis] Emphasize design principles transferable to other similar interactions as the primary contribution, rather than the performance of a specific prototype.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 43. [PRESERVE] [task-2/advisor1/terminology] Design principles describe the relationship between conditions and outcomes rather than serving as instructions that merely replicate a single screen layout.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 44. [PRESERVE] [task-2/advisor1/review] The user can have contributions reviewed only if prototype outcomes and the transferable design knowledge derived from them are separated.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 45. [PRESERVE] [task-2/advisor2/emphasis] Specify prototype features unnecessary for reviewing the primary field problem as secondary scope.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 46. [PRESERVE] [task-2/advisor1/style] Avoid em dashes in the proposal; split the sentence or use more ordinary punctuation instead.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 47. [PRESERVE] [task-2/advisor1/style] The user tends to repeat em dashes when a sentence already contains several clauses.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 48. [PRESERVE] [task-2/advisor1/style] Repeated em dashes can shift a reviewer’s attention from the proposal’s argument to suspicion that its prose was generated by AI.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 49. [PRESERVE] [task-2/advisor2/style] Use an em dash only for a deliberate interruption or sharp contrast; otherwise split the sentence or choose ordinary punctuation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 50. [PRESERVE] [task-2/advisor2/style] The user can explain whether an em dash marks an intentional interruption or contrast rather than using it decoratively.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 51. [PRESERVE] [task-2/advisor2/style] An em dash creates a stronger interruption than a comma and can make a deliberate contrast easier to hear in the sentence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 52. [PRESERVE] [task-2/advisor1/style] Use first-person active voice for choices and commitments owned by the proposal author so responsibility remains explicit throughout the work plan.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 53. [PRESERVE] [task-2/advisor1/style] When a commitment is phrased passively, readers may interpret it as uncertainty, evasiveness, or reluctance to take responsibility.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 54. [PRESERVE] [task-2/advisor1/style] Use “we” only for decisions and commitments the authors control, not for external facts or actions owned by another party.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 55. [PRESERVE] [task-2/advisor1/style] The user tends to hide unsettled commitments behind passive phrases such as “will be considered” or “is expected.”
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 56. [PRESERVE] [task-2/advisor2/style] In procedural passages, begin each sentence with the action, condition, or output instead of repeating “we” so the steps remain easy to follow and reuse.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 57. [PRESERVE] [task-2/advisor2/style] Readers can reconstruct a sequence more accurately when each sentence begins with the action or condition rather than the author.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 58. [PRESERVE] [task-2/advisor2/style] Write procedural sentences so their opening phrase can be reused as a checklist item without changing the step's meaning.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 59. [PRESERVE] [task-2/advisor2/style] Action-first procedural sentences can be reordered or copied into a checklist more easily because their subject is the step rather than the proposal author.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 60. [PRESERVE] [task-2/advisor1/style] Describe prototype operations that have already been implemented and verified as observed states.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 61. [PRESERVE] [task-2/advisor1/style] Describe prototype operations not yet implemented or evaluated as plans or expectations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 62. [PRESERVE] [task-2/advisor1/claim-evidence] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 63. [PRESERVE] [task-2/advisor2/style] Write system behaviors confirmed in the actual usage environment as observed states.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 64. [PRESERVE] [task-2/advisor2/style] Write system behaviors not yet confirmed in the field as conditional plans.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 65. [PRESERVE] [task-2/advisor2/claim-evidence] Distinguish at the sentence level between facts already confirmed in the field and predictions to be examined in the user study.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 66. [COALESCE] [task-2/advisor1/style] The user should use one first-person pronoun consistently for the same authorial role and should not alternate between “I” and “we” unless the responsible party actually changes.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 67. [PRESERVE] [task-2/advisor1/style] The user tends to place several independently reviewable claims in one long sentence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 68. [PRESERVE] [task-2/advisor1/style] Split proposal prose into short sentences when a sentence contains more than one independently reviewable claim.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 69. [PRESERVE] [task-2/advisor1/style] Keep one main claim in each sentence so a reviewer can locate and assess it quickly.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 70. [PRESERVE] [task-2/advisor2/style] Do not mechanically split connected thoughts into separate short sentences when doing so destroys the intended reading rhythm.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 71. [PRESERVE] [task-2/advisor2/style] Preserve a longer sentence when its clauses form one continuous movement that is easier to follow together than apart.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 72. [PRESERVE] [task-2/advisor2/style] The user understands that short sentences are easier to scan but feels that uniformly segmented prose loses its reading rhythm.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 73. [COALESCE] [task-2/advisor1/claim-evidence] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 74. [COALESCE] [task-2/advisor1/claim-evidence] Do not use verbs that imply proving causation if the design does not support causal inference.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 75. [PRESERVE] [task-2/advisor1/claim-evidence] For topics with sufficient HCI research evidence, prioritize citing recent comprehensive studies over listing individual cases.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 76. [PRESERVE] [task-2/advisor2/claim-evidence] Prioritize citations of recent systems and field research in rapidly changing HCI topics.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 77. [PRESERVE] [task-2/advisor1/claim-evidence] Explain how each design choice was derived to address specific user needs.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 78. [PRESERVE] [task-2/advisor2/claim-evidence] Explain the user or operational stakeholder needs that each design choice aims to address.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 79. [PRESERVE] [task-2/advisor1/claim-evidence] Connect the proposed conceptual design principle to at least one observable user behavior.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 80. [PRESERVE] [task-2/advisor1/claim-evidence] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 81. [PRESERVE] [task-2/advisor1/claim-evidence] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 82. [PRESERVE] [task-2/advisor1/claim-evidence] Results from controlled formative studies do not directly prove effects in actual long-term use.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 83. [PRESERVE] [task-2/advisor1/evaluation] Controlled evaluation environments do not reproduce time pressure, peer intervention, or voluntary termination conditions found in daily use.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 84. [PRESERVE] [task-2/advisor1/review] The scope of observation in controlled formative evaluations does not include long-term adaptation and operational changes in real-world usage contexts.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 85. [PRESERVE] [task-2/advisor2/evaluation] Initial evaluations and long-term operation do not share identical measurement conditions due to differences in system exposure duration and frequency of repeated use.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 86. [PRESERVE] [task-2/advisor2/claim-evidence] Use field cases in which people completed tasks by working around existing tools as evidence for the need for the design.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 87. [PRESERVE] [task-2/advisor2/claim-evidence] Distinguish between problems reported by operational stakeholders and those directly observed by the researcher as separate forms of evidence.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 88. [PRESERVE] [task-2/advisor2/claim-evidence] Field breakdown logs can reveal both system failures and user adaptive behaviors, including their timing and conditions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 89. [PRESERVE] [task-2/advisor2/claim-evidence] In field sites introducing new systems, formal procedures often coexist with existing manual routines for a period, making it difficult to isolate the effects of single design changes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 90. [PRESERVE] [task-2/advisor1/expression] Use a flow diagram rather than a sequence table when alternate procedural branches lead to different outcomes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 91. [PRESERVE] [task-2/advisor1/expression] Draw alternate branches and their resulting outcomes in the same flow diagram so readers can compare them at once.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 92. [PRESERVE] [task-2/advisor1/expression] A flow diagram can make alternate branches and their different outcomes visible in one view.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 93. [PRESERVE] [task-2/advisor1/expression] Readers can understand the overall branching shape of a procedure more quickly from a flow diagram than from rows read one at a time.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 94. [PRESERVE] [task-2/advisor1/expression] Redrawing a branching flow diagram after a procedural change usually takes longer than updating one row in a table.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 95. [PRESERVE] [task-2/advisor2/expression] Use a sequence table rather than a flow diagram when the procedure is likely to change repeatedly during drafting.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 96. [PRESERVE] [task-2/advisor2/expression] Give each step, actor, condition, and outcome a stable row in the sequence table.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 97. [PRESERVE] [task-2/advisor2/expression] Updating one row in a sequence table is usually faster than redrawing a branching diagram after a procedural change.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 98. [PRESERVE] [task-2/advisor2/expression] Readers can check sequence tables step by step but may find the overall branching shape less immediate.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 99. [PRESERVE] [task-2/advisor1/expression] The visual fidelity of a prototype may differ from its functional fidelity.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 100. [PRESERVE] [task-2/advisor2/expression] The visual fidelity of a prototype and its level of connection to actual data and services may differ.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 101. [PRESERVE] [task-2/advisor1/expression] HCI reviewers often skim prototype screens and interaction flow diagrams before reading the main text.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 102. [PRESERVE] [task-2/advisor1/expression] Reviewers often inspect the proposal’s main visual before reading the procedural explanation in full.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 103. [PRESERVE] [task-2/advisor2/expression] HCI reviewers often scan system structure and service flow diagrams before the main text.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 104. [PRESERVE] [task-2/advisor2/expression] Service flow diagrams indicate human-system transitions that are not revealed by individual screens alone.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 105. [COALESCE] [task-2/advisor1/terminology] Use the same term throughout the proposal for the same interaction concept or interface element.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 106. [COALESCE] [task-2/advisor1/terminology] Use abbreviations only for recurring terms of three or more words.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 107. [PRESERVE] [task-2/advisor1/terminology] Prioritize the research role over diagnostic labels or deficits when referring to participants.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 108. [PRESERVE] [task-2/advisor2/terminology] Refer to participants based on the roles they perform in the study rather than their status.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 109. [PRESERVE] [task-2/advisor1/terminology] Use the term formative evaluation for studies seeking design modification evidence, and distinguish it from final efficacy judgments.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 110. [PRESERVE] [task-2/advisor1/terminology] The user can have contribution labels such as principles, models, or guidelines approved only if they align with the abstraction level of the actual deliverables.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 111. [PRESERVE] [task-2/advisor2/terminology] When introducing an operational role for the first time, define both the decisions it can make and the actions it performs.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 112. [PRESERVE] [task-2/advisor2/terminology] Individuals holding identical job titles may possess different system modification privileges and data access rights depending on their deployment site.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 113. [PRESERVE] [task-2/advisor2/terminology] The user tends to group distinct field roles under the single label “user.”
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 114. [PRESERVE] [task-2/advisor1/methods] Link each HCI research question directly to corresponding user data and analysis procedures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 115. [PRESERVE] [task-2/advisor1/methods] Reviewers judge answerability by tracing the path from each research question to the data and analysis.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 116. [PRESERVE] [task-2/advisor2/methods] Specify field and user data sources and analysis procedures corresponding to all HCI research questions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 117. [PRESERVE] [task-2/advisor2/methods] Reviewers judge answerability by tracing the path from each research question to its data sources and analysis procedures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 118. [COALESCE] [task-2/advisor1/methods] In preregistered studies, specify the conditions under which deviations from the plan are permissible.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 119. [PRESERVE] [task-2/advisor1/methods] Commit to one exact target number of participants so the schedule, workload, and budget can be checked against the same quantity.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 120. [PRESERVE] [task-2/advisor1/methods] Readers cannot tell whether the schedule and budget agree when different sections imply different target counts.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 121. [PRESERVE] [task-2/advisor1/methods] Calculate the required sessions, facilitator hours, and participant payments from the same exact target rather than from separate rough estimates.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 122. [PRESERVE] [task-2/advisor1/methods] If recruitment falls below the exact target, state the shortfall explicitly and revise the affected schedule or deliverable.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 123. [PRESERVE] [task-2/advisor1/methods] Do not use a wide range merely to postpone choosing the quantity that the rest of the proposal must support.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 124. [PRESERVE] [task-2/advisor2/methods] Use a justified minimum-to-maximum target range when confirmations can change, and tie the minimum and maximum to different workload and budget cases.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 125. [PRESERVE] [task-2/advisor2/methods] Readers cannot assess a target range unless both bounds have a stated consequence for schedule, workload, or cost.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 126. [PRESERVE] [task-2/advisor2/methods] Define what can still be completed at the minimum target instead of treating every number inside the range as operationally identical.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 127. [PRESERVE] [task-2/advisor2/methods] Use a bounded range to absorb expected confirmation changes without pretending that one early estimate is guaranteed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 128. [PRESERVE] [task-2/advisor2/methods] Show how session count and facilitator time change at the minimum and maximum bounds.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 129. [PRESERVE] [task-2/advisor2/methods] Define the additional workload or deliverable enabled at the maximum target so the upper bound is not an arbitrary cushion.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 130. [PRESERVE] [task-2/advisor2/methods] A bounded range preserves uncertainty honestly but makes the final workload and budget less certain than one fixed target.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 131. [PRESERVE] [task-2/advisor1/methods] Specify the interview protocols, recording devices, or log tools used to collect each type of user data.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 132. [PRESERVE] [task-2/advisor1/methods] Specify whether each type of user data is collected before, during, or after the interaction.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 133. [PRESERVE] [task-2/advisor2/methods] Specify the observation records, system logs, or interview tools used to collect each type of field and user data.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 134. [PRESERVE] [task-2/advisor2/methods] Specify whether each type of field and user data will be collected before, during, or after deployment.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 135. [PRESERVE] [task-2/advisor1/methods] In formative evaluation prototypes, implementation instability exists as an independent cause of task failure alongside design choices.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 136. [PRESERVE] [task-2/advisor2/methods] In field deployments, network and service instability exist as independent causes of task failure alongside design choices.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 137. [PRESERVE] [task-2/advisor1/methods] If a prototype safety signal occurs during formative evaluation, existing institutional safety procedures take precedence over planned data collection.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 138. [PRESERVE] [task-2/advisor2/methods] If a safety signal occurs in the field system, existing institutional safety procedures take precedence over the research schedule and data collection plan.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 139. [COALESCE] [task-2/advisor1/methods] The author of this proposal tends to present implemented feature lists directly as design contributions.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 140. [PRESERVE] [task-2/advisor1/evaluation] Specify a single representative measure that serves as the criterion for retaining, modifying, or discarding compared design alternatives.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 141. [PRESERVE] [task-2/advisor1/evaluation] HCI review panels verify whether clear criteria for judging design alternatives are established using the declared primary measure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 142. [PRESERVE] [task-2/advisor2/evaluation] Specify a single representative measure that will drive operational decisions to maintain, modify, or discontinue the deployed design.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 143. [PRESERVE] [task-2/advisor2/evaluation] The HCI review panel verifies whether operational decisions can be made based on the declared primary measure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 144. [PRESERVE] [task-2/advisor1/evaluation] Collect process measures to diagnose interaction steps where problems occurred, alongside the primary outcome measure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 145. [PRESERVE] [task-2/advisor1/evaluation] Interpret evaluation results as differences between compared design alternatives rather than as success or failure of a single prototype.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 146. [PRESERVE] [task-2/advisor2/evaluation] Establish decision thresholds indicating at what levels key metrics trigger maintaining, modifying, or discontinuing the design.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 147. [PRESERVE] [task-2/advisor1/evaluation] Check boundary cases to verify whether the derived design principles retain explanatory power for adjacent situations not included in the comparison.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 148. [PRESERVE] [task-2/advisor1/review] Review whether the application conditions of proposed design principles and boundary cases of failure are presented together.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 149. [PRESERVE] [task-2/advisor2/evaluation] Evaluate whether reducing workload for one role creates new tasks for other roles through the proposed design changes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 150. [PRESERVE] [task-2/advisor2/evaluation] Distinguish usability from organizational adoption intent as separate evaluation outcomes.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 151. [PRESERVE] [task-2/advisor2/evaluation] Implementation fidelity indicates whether planned features and operational procedures were delivered in the field according to intended specifications.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 152. [PRESERVE] [task-2/advisor1/ethics] Link expected participant burden in each user study task to its corresponding mitigation strategy.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 153. [PRESERVE] [task-2/advisor1/ethics] HCI ethics reviewers verify that expected burdens and mitigation strategies correspond to each user study task.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 154. [PRESERVE] [task-2/advisor2/ethics] Link anticipated participant burden with its mitigation strategies for each field user study task.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 155. [PRESERVE] [task-2/advisor2/ethics] The HCI ethics reviewer verifies that anticipated burden and mitigation strategies correspond for each field user study task.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 156. [PRESERVE] [task-2/advisor1/ethics] Specify the accommodations necessary for participants to access the prototype and research tasks.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 157. [PRESERVE] [task-2/advisor1/ethics] Specify how accessibility accommodations will be provided during user study sessions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 158. [PRESERVE] [task-2/advisor2/ethics] Specify the accommodations necessary for participants to access the field system and research tasks.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 159. [PRESERVE] [task-2/advisor2/ethics] Specify how accessibility accommodations will be provided in the field user study.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 160. [COALESCE] [task-2/advisor1/ethics] Describe how personal identifiers will be separated from research data immediately after collection.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 161. [COALESCE] [task-2/advisor1/ethics] Specify the equipment to be loaned to participants who lack necessary devices.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 162. [PRESERVE] [task-2/advisor1/ethics] Inform participants that the formative evaluation prototype is not a finished service.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 163. [PRESERVE] [task-2/advisor1/ethics] Set an upper limit on cumulative task burden when requesting repeated evaluations from the same participant.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 164. [PRESERVE] [task-2/advisor1/ethics] The author of this proposal tends to emphasize expected benefits of the prototype over participant burden.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 165. [PRESERVE] [task-2/advisor2/ethics] The user tends to assume that a short session also entails little burden from work interruption and exposure to a manager.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 166. [PRESERVE] [task-2/advisor1/ethics] In organizations where leaders or institutional staff handle recruitment, recruitment authority and academic or professional evaluation authority may be combined in the same role.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 167. [PRESERVE] [task-2/advisor2/ethics] Ensure that participants can safely return to existing work procedures if they discontinue research participation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 168. [PRESERVE] [task-2/advisor2/ethics] The user's withdrawal risk can be adequately assessed only when a safe alternative procedure exists for field tasks.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 169. [PRESERVE] [task-2/advisor2/ethics] Specify that organizational members who decline research participation will not face disadvantages in task assignment or performance evaluation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 170. [PRESERVE] [task-2/advisor1/scope] Define in one sentence the user groups and usage contexts to which the design knowledge does not apply.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 171. [PRESERVE] [task-2/advisor1/scope] Reviewers judge the generalization boundary of results through explicitly excluded targets and situations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 172. [PRESERVE] [task-2/advisor2/scope] Specify in one sentence the user population and actual usage environment to which the design knowledge applies.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 173. [PRESERVE] [task-2/advisor2/scope] Reviewers judge the generalization boundary of results through the specified target population and environment.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 174. [PRESERVE] [task-2/advisor1/scope] Specify user goals, interaction conditions, and technological constraints under which the proposed design knowledge can be transferred.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 175. [PRESERVE] [task-2/advisor2/scope] Specify the workflow, technical infrastructure, and operational-authority conditions that must match before applying the design guidelines at another field site.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 176. [PRESERVE] [task-2/advisor2/scope] The transferability of field design knowledge depends not only on user characteristics but also on workflow and technological–organizational infrastructure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 177. [PRESERVE] [task-2/advisor1/scope] Small-scale formative studies can support analytic generalization distinct from statistical representativeness when results are expressed in terms of design conditions and mechanisms.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 178. [PRESERVE] [task-2/advisor1/scope] The author of this proposal tends to apply design knowledge derived from an accessible sample to a broader user population.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 179. [PRESERVE] [task-2/advisor2/scope] The user tends to apply results confirmed at one deployment site to all similar organizations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 180. [COALESCE] [task-2/advisor1/safety] Specify the order and recipients for reporting serious discomfort during the study.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 181. [PRESERVE] [task-2/advisor1/safety] Establish criteria for halting the use of a design alternative if recurring severe errors appear during formative evaluation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 182. [PRESERVE] [task-2/advisor1/safety] Do not include a design alternative halted for safety reasons in subsequent evaluation iterations without modification.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 183. [PRESERVE] [task-2/advisor2/safety] Define the thresholds for participant harm, operational disruption, and data anomalies at which deployment and data collection must cease.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 184. [PRESERVE] [task-2/advisor2/safety] Establish procedures to restore existing systems and workflow states after suspending field deployment.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 185. [PRESERVE] [task-2/advisor2/safety] The user's stop plan can be judged feasible only when it identifies who has authority to order recovery and who is responsible for carrying it out.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 186. [PRESERVE] [task-2/advisor1/safety] Even in controlled environments, delayed prototype recovery procedures increase session interruption time and alter data collection conditions for the same task.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 187. [PRESERVE] [task-2/advisor2/safety] In organizations where error reporting is linked to individual performance evaluations, safety signal records may be separated from research decision logs, potentially breaking the traceability path for the same incident.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 188. [COALESCE] [task-2/advisor1/feasibility] Mark unverified schedule assumptions as such.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 189. [PRESERVE] [task-2/advisor1/feasibility] Clarify which stage of prototype fabrication or user study each requested resource is used for.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 190. [PRESERVE] [task-2/advisor2/feasibility] Trace back the resources required for each core prototype feature and field research procedure.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 191. [COALESCE] [task-2/advisor1/feasibility] Operations reviewers judge feasibility based on the personnel assigned to each procedure.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 192. [PRESERVE] [task-2/advisor1/feasibility] Verify that the planned number of formative evaluation iterations is feasible within the time for prototype modification and recruitment resources.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 193. [PRESERVE] [task-2/advisor1/feasibility] The user's iterative design plan can be judged feasible only if time and personnel are allocated for modifying the prototype between iterations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 194. [PRESERVE] [task-2/advisor1/feasibility] Delays in participant recruitment can compress the time available for prototype modification between formative evaluations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 195. [PRESERVE] [task-2/advisor1/feasibility] Include only the minimum functionality required to compare primary design assumptions in the scope of the formative evaluation prototype.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 196. [PRESERVE] [task-2/advisor2/feasibility] Document separately the commitments and confirmation status of field partners required for recruitment, installation, and operational support.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 197. [PRESERVE] [task-2/advisor2/feasibility] The user's deployment readiness can be assessed only when dependencies on external services and field personnel are visible.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 198. [PRESERVE] [task-2/advisor2/feasibility] Field schedules and assigned personnel may change due to operational factors beyond the researcher’s control.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 199. [PRESERVE] [task-2/advisor2/review] The user must distinguish unconfirmed field partners and equipment from finalized ones so remaining execution risks can be assessed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 200. [PRESERVE] [task-2/advisor2/feasibility] Designate a responsible party for software updates, equipment inspections, and user support during the deployment period.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 201. [PRESERVE] [task-2/advisor1/reproducibility] HCI reviewers find it difficult to assess the reproducibility of results if the prototype version used in the evaluation is not disclosed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 202. [PRESERVE] [task-2/advisor2/reproducibility] HCI reviewers find it difficult to assess result reproducibility if the system version used in the field deployment is not disclosed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 203. [PRESERVE] [task-2/advisor1/reproducibility] Record the manipulated and fixed elements of compared design alternatives so that other researchers can reconstruct them.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 204. [PRESERVE] [task-2/advisor1/reproducibility] Records of formative evaluation decisions enable the reconstruction of connections between raw data, interpretation, and design modifications.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 205. [PRESERVE] [task-2/advisor1/reproducibility] The user must make it possible to trace which observations each prototype version reflects so the process of deriving design knowledge can be reviewed.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 206. [PRESERVE] [task-2/advisor2/reproducibility] Record changes in system configurations, field procedures, and data collection tools during deployment, along with their timestamps and rationales.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 207. [PRESERVE] [task-2/advisor2/reproducibility] The history of deployment versions and configuration changes provides necessary evidence for interpreting results from different field sites.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 208. [PRESERVE] [task-2/advisor1/budget] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the proposal.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 209. [PRESERVE] [task-2/advisor1/budget] Place each major cost beside the activity or deliverable it enables in the main text.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 210. [PRESERVE] [task-2/advisor1/budget] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 211. [PRESERVE] [task-2/advisor1/budget] Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 212. [PRESERVE] [task-2/advisor1/budget] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 213. [PRESERVE] [task-2/advisor1/budget] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 214. [PRESERVE] [task-2/advisor1/budget] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 215. [PRESERVE] [task-2/advisor2/budget] Keep the main text to the total and major categories, and place quantities, unit rates, and assumptions in one compact budget table or appendix.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 216. [PRESERVE] [task-2/advisor2/budget] Give each cost category, quantity, unit rate, and subtotal a stable row in the separate budget table.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 217. [PRESERVE] [task-2/advisor2/budget] Put the estimate basis in a dedicated table column so one assumption can be checked or revised without rewriting the narrative.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 218. [PRESERVE] [task-2/advisor2/budget] Readers can verify arithmetic and compare categories faster in a consistent table than in amounts distributed across prose.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 219. [PRESERVE] [task-2/advisor2/budget] Revise one table row and its subtotal when an estimate changes instead of repeating the new amount across several prose paragraphs.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 220. [PRESERVE] [task-2/advisor2/budget] Keep detailed arithmetic out of the main argument when readers can reach the complete table from a clear reference.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 221. [PRESERVE] [task-2/advisor2/budget] The user tends to interrupt the argument with long cost enumerations when no separate budget table is available.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 222. [COALESCE] [task-2/advisor1/compensation] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 223. [COALESCE] [task-2/advisor1/compensation] Compensate for the actual time participants spent in sessions, regardless of research modality.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 224. [PRESERVE] [task-2/advisor1/compensation] Leave cash payment as an available compensation method for face-to-face studies.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 225. [PRESERVE] [task-2/advisor2/compensation] Allow the issuance of gift cards of equivalent value to participants in remote studies who cannot use electronic transfers.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 226. [COALESCE] [task-2/advisor1/compensation] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 227. [PRESERVE] [task-2/advisor1/compensation] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 228. [PRESERVE] [task-2/advisor2/compensation] Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technical preparation.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 229. [PRESERVE] [task-2/advisor1/compensation] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 230. [PRESERVE] [task-2/advisor2/compensation] In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation calculations.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 231. [PRESERVE] [task-2/advisor1/compensation] Compensate participants for time already invested even if a session is terminated early due to prototype errors.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 232. [PRESERVE] [task-2/advisor2/compensation] Compensate participants who withdraw from the study midway for their actual participation time.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 233. [PRESERVE] [task-2/advisor2/compensation] Distinguish between participant research compensation and labor costs for field staff performing installation and operational support as part of their duties.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 234. [PRESERVE] [task-2/advisor1/review] Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 235. [PRESERVE] [task-2/advisor1/review] Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 236. [PRESERVE] [task-2/advisor2/review] Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation logic.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 237. [PRESERVE] [task-2/advisor2/review] Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 238. [PRESERVE] [task-2/advisor1/review] Cross-check whether research questions align with the core functions of the prototype.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 239. [PRESERVE] [task-2/advisor1/review] HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 240. [PRESERVE] [task-2/advisor2/review] Cross-check whether research questions align with the core functions of the system.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 241. [PRESERVE] [task-2/advisor2/review] HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 242. [PRESERVE] [task-2/advisor1/review] Cross-check whether evaluation tasks align with representative measures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 243. [PRESERVE] [task-2/advisor1/review] HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 244. [PRESERVE] [task-2/advisor2/review] Cross-check whether field tasks align with representative measures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 245. [PRESERVE] [task-2/advisor2/review] HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 246. [COALESCE] [task-2/advisor1/review] Cross-check whether collected evidence aligns with design and operational decisions to be changed.
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.
+  + 247. [PRESERVE] [task-2/advisor1/review] Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly connected.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 248. [PRESERVE] [task-2/advisor2/review] Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recovery scenarios.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+  + 249. [PRESERVE] [task-2/advisor2/review] Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.
+       WHY · The user requested that this supported source distinction remain independently revisable.
+[32m[1mApplied 249 meld results in checkpoint [adf240c9].[0m

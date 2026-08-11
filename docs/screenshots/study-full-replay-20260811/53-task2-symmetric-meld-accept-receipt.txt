@@ -1,0 +1,51 @@
+  + 228. [PRESERVE] [task-2/advisor2/compensation] Allow differential compensation amounts for on-site and remote studies when participation burden varies due to travel or technica
+l preparation.                                                                                                                                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 229. [PRESERVE] [task-2/advisor1/compensation] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 230. [PRESERVE] [task-2/advisor2/compensation] In longitudinal studies requiring diary entries and repeated reporting, include out-of-session recording time in compensation cal
+culations.                                                                                                                                                                          
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 231. [PRESERVE] [task-2/advisor1/compensation] Compensate participants for time already invested even if a session is terminated early due to prototype errors.                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 232. [PRESERVE] [task-2/advisor2/compensation] Compensate participants who withdraw from the study midway for their actual participation time.                                  
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 233. [PRESERVE] [task-2/advisor2/compensation] Distinguish between participant research compensation and labor costs for field staff performing installation and operational sup
+port as part of their duties.                                                                                                                                                       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 234. [PRESERVE] [task-2/advisor1/review] Conduct one review prior to submission focusing solely on the validity of user problems, design interventions, and evaluation logic.   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 235. [PRESERVE] [task-2/advisor1/review] Verify at the end that user problems, design interventions, user studies, and expected contributions form a coherent logical flow.     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 236. [PRESERVE] [task-2/advisor2/review] Conduct one review prior to submission focusing solely on the validity of user problems, system interventions, and field evaluation log
+ic.                                                                                                                                                                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 237. [PRESERVE] [task-2/advisor2/review] Finally verify that the user problem, system intervention, field evaluation, and expected contribution form one coherent logical flow. 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 238. [PRESERVE] [task-2/advisor1/review] Cross-check whether research questions align with the core functions of the prototype.                                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 239. [PRESERVE] [task-2/advisor1/review] HCI reviewers view the validity of design interventions as low if research questions are not linked to prototype functions.            
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 240. [PRESERVE] [task-2/advisor2/review] Cross-check whether research questions align with the core functions of the system.                                                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 241. [PRESERVE] [task-2/advisor2/review] HCI reviewers view the validity of design interventions as low if research questions do not connect to system functions.               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 242. [PRESERVE] [task-2/advisor1/review] Cross-check whether evaluation tasks align with representative measures.                                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 243. [PRESERVE] [task-2/advisor1/review] HCI reviewers view the validity of evaluation plans as low if evaluation tasks do not produce representative measures.                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 244. [PRESERVE] [task-2/advisor2/review] Cross-check whether field tasks align with representative measures.                                                                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 245. [PRESERVE] [task-2/advisor2/review] HCI reviewers view the validity of evaluation plans as low if field tasks fail to generate representative measures.                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 246. [COALESCE] [task-2/advisor1/review] Cross-check whether collected evidence aligns with design and operational decisions to be changed.                                     
+       WHY · Equivalent source Memories were coalesced without changing their supported claim.                                                                                      
+  + 247. [PRESERVE] [task-2/advisor1/review] Cross-check at the end whether each research question, formative evaluation data, and design modification judgment are seamlessly conne
+cted.                                                                                                                                                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 248. [PRESERVE] [task-2/advisor2/review] Before submission, conduct a sequential walkthrough with field liaisons of installation failures, operational interruptions, and recove
+ry scenarios.                                                                                                                                                                       
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 249. [PRESERVE] [task-2/advisor2/review] Verify in one sentence how each proposed contribution could actually alter specific design or operational decisions.                   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+Applied 249 meld results in checkpoint [adf240c9].

@@ -140,3 +140,23 @@ The full exact report appeared in `0.412` seconds. The retained analysis has
 `18` equivalent, `14` compatible, `26` scoped, `5` conflict, and `35`
 distinct groups. `task2-compare-replay-metrics.json` records the unchanged
 zero provider-event counter.
+
+## Task 2 symmetric Meld interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `49-task2-symmetric-meld-exact-entry` | `mem meld task-2/advisor1 task-2/advisor2 --left-descendants --right-descendants --to task-2/participant/symmetric-replay-result` | None | Exact 150+150 Compare basis, 98 relations, five required conflicts, and empty result | Created the empty result and target-bound review session |
+| `50-task2-symmetric-meld-conflict-detail` | same | `Tab`, `Down`, `Enter` | Required opening-length conflict with exact claims and two distinct resolution choices | None |
+| `51-task2-symmetric-meld-target-switch` | `mem switch task-2/participant/symmetric-replay-result` | None | Empty result becomes the current Meld target | Current-Context pointer only |
+| `52-task2-symmetric-meld-preserve-all` | resumed Meld with `--preserve-all` | None | Deterministic 300/300 Source and 98/98 relation coverage | Saved ready proposal only |
+| `53-task2-symmetric-meld-accept-receipt` | resumed Meld with `--accept` | None | Green checkpoint receipt for 249 Meld results | Materialized 249 result Memories |
+| `54-task2-symmetric-meld-result-verification` | `mem show --context task-2/participant/symmetric-replay-result` | None | Durable coalesced and preserved advisor contents | None; read-only |
+| `55-task2-symmetric-meld-action-log` | `mem log --actions --limit 25` | None | Completed initial, preserve, and accept attempts with no provider event | None; read-only |
+| `56-task2-symmetric-meld-current-restored` | `mem switch practice/source-atomized` | None | Prior tutorial result restored as current | Current-Context pointer only |
+
+The initial review appeared in `0.501` seconds, deterministic preservation in
+`0.452` seconds, and exact acceptance in `0.475` seconds. Equivalent advisor
+claims were coalesced, so 300 inputs produced 249 provenance-bearing result
+Memories. Required conflicts remain visible in the participant-guided path;
+preserve-all is retained here only as the provider-free coverage control. The
+provider-event counter remained `0`.

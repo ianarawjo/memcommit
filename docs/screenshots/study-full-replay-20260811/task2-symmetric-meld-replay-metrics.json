@@ -1,0 +1,20 @@
+{
+  "result_creation_command": "mem meld task-2/advisor1 task-2/advisor2 --left-descendants --right-descendants --to task-2/participant/symmetric-replay-result",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_review_seconds": 0.5009276249911636,
+  "preserve_all_seconds": 0.45178295799996704,
+  "accept_seconds": 0.4749908749945462,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "input_memories": [
+    150,
+    150
+  ],
+  "relations": 98,
+  "issues": 45,
+  "required_conflicts": 5,
+  "result_memories": 249,
+  "origin": "EXACT_PREWARM_COMPARE_BASIS",
+  "current_before": "practice/source-atomized",
+  "current_after": "practice/source-atomized"
+}
