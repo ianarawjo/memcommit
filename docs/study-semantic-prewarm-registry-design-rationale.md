@@ -170,6 +170,23 @@ subset projection remains outside this step because filtering a full proposal
 cannot discover actions whose meaning changes when evidence or an existing
 Target Memory disappears.
 
+### Task 1 symmetric Meld transfer
+
+Task 1 symmetric Meld requires no additional semantic cache family for its
+initial review state. A fresh run imported the exact Task 1 Compare basis and
+created the empty result Context and `AWAITING_REPLY` Meld session in `0.47`
+seconds with no Meld provider call. The session exposed all `51` relations and
+`24` optional issues while leaving both Sources and the empty result unchanged.
+
+The deterministic `--preserve-all` branch then covered `375/375` source
+Memories and `51/51` relations, produced `375` provenance-bearing result
+Memories in `0.46` seconds, and remained unapplied until the separate exact
+`--accept`. Apply completed in `0.52` seconds and materialized exactly `375`
+Memories in the new result Context. This is a conservative quality control: it
+proves provider-free, lossless transfer and application mechanics, not that
+preservation-only is the preferred semantic merge. Any participant comment,
+choice, or synthesis request remains a live Meld turn.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a
@@ -551,7 +568,7 @@ earlier all-pairs graph sidecars.
 | Registry and lookup | Persist the frozen matrix, exact basis keys, preparation status, offline provider time, and allowed `EXACT_PREWARM` or projection route. Lookup is an optimization decision, never operation authorization. | A checked exact key hits with zero provider calls; an unchecked route, wrong operation mode, changed digest, or unlisted key takes the ordinary live path. No unrelated output file is searched. |
 | Compare | Store one canonical whole-pair relation artifact per declared basis. Project only a requested left subset versus right subset, repair relation sides and coverage, and label the result projected. | Extend `test_compare_prewarm_projection.py`: exact hit, subset coverage, group-count bound, same-side rejection, add/edit miss, stale ruleset miss, and zero partial publication. |
 | Update | **Task 1 exact basis implemented.** Store an ordered Source-to-Target action proposal keyed by both complete revisions, scopes, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Keep partial projection experimental until repeated fresh-partial controls show that surviving actions remain supported. | Exact reuse, Source change, configuration skip, current owner/provenance rebinding, existing multi-owner apply, and public undo/redo are covered. Projected-versus-fresh action support remains future work. |
-| Symmetric Meld | Store the exact peer Compare seed and prepared peer-result proposal separately from target application. Bind only to a valid empty new C under the declared target contract. Prepare partial Melds exactly unless a later claim-provenance projection passes the quality gate. | Exact A+B basis reuse, complete peer provenance, both peers unchanged, empty-C precondition, provider-free prepared reopen, fresh-partial quality comparison, apply/undo/redo, and rejection of directional artifacts. |
+| Symmetric Meld | **Task 1 initial and preservation paths verified.** Reuse the exact peer Compare seed, bind only to a valid empty new C, and keep participant-authored synthesis turns live. Prepare partial Melds exactly unless a later claim-provenance projection passes the quality gate. | Task 1 exact A+B basis reuse, `375/375` provenance coverage, empty-C precondition, provider-free preserve-all, and exact apply are verified. Task 2/3 bases, live synthesis quality, and partial controls remain. |
 | Directional Meld | For Task 1 only, store the exact `construction-updates` `INCOMING` to `campus-wiki` `BASELINE` proposal. Its key includes order, baseline digest, owners, scopes, and baseline mutation target. Prepare partial directional proposals exactly by default. | Exact reuse, incoming read-only, only baseline owners changed, `EDIT`/`ADD` only, no `DELETE`, exact recovery, fresh-partial quality comparison, changed baseline miss, and rejection of symmetric artifacts. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
 | Sever | Store exact whole-Source plus exact ordinary-Criteria decisions. Allow a visibly projected Source-deletion view only under the declared study condition; a changed Criteria or Source addition is live. | Exact hit, exact Criteria digest, complete disposition, Source unchanged, require-new output, projected status, addition/Criteria miss, apply/undo/redo, and no reuse of a Forget artifact. |

@@ -1,0 +1,31 @@
+{
+  "apply": {
+    "result_context": "task-1/participant/meld-result",
+    "result_memories": 375,
+    "seconds": 0.517
+  },
+  "basis": {
+    "compare_analysis_uid": "74bf4d5f-6e42-4b49-a3a0-66ee389eb1f8",
+    "left": "task-1/participant/construction-updates",
+    "left_memories": 75,
+    "right": "task-1/campus-wiki",
+    "right_memories": 300
+  },
+  "initial": {
+    "issues": 24,
+    "provider_calls": 0,
+    "relations": 51,
+    "seconds": 0.473,
+    "state": "AWAITING_REPLY"
+  },
+  "kind": "STUDY_MELD_SYMMETRIC_EXACT_EVIDENCE",
+  "preserve_all": {
+    "provider_calls": 0,
+    "relation_coverage": "51/51",
+    "result_memories": 375,
+    "seconds": 0.460,
+    "source_coverage": "375/375",
+    "state": "READY_TO_APPLY"
+  },
+  "schema_version": 1
+}
