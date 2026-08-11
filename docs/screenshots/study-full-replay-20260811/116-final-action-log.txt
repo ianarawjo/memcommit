@@ -1,0 +1,24 @@
+52 180                                                                                                                                                                              
+Operation attempts · recent first                                                                                                                                                   
+  [cc2120ee] 2026-08-11 12:17  COMPLETED   status           0.0s                                                                                                                    
+  [1a4a6021] 2026-08-11 12:17  COMPLETED   profile          2.0s                                                                                                                    
+  [79358304] 2026-08-11 12:16  COMPLETED   log              0.0s                                                                                                                    
+  [e62fdda6] 2026-08-11 12:16  COMPLETED   log              0.0s                                                                                                                    
+  [79f5bdd1] 2026-08-11 12:16  COMPLETED   log              0.0s                                                                                                                    
+  [fcb55ba0] 2026-08-11 12:16  COMPLETED   log              0.0s                                                                                                                    
+  [65392c7b] 2026-08-11 12:16  COMPLETED   status           0.0s                                                                                                                    
+  [b1cad43b] 2026-08-11 12:15  COMPLETED   profile          2.2s                                                                                                                    
+  [ef3d6607] 2026-08-11 12:14  COMPLETED   log              0.0s                                                                                                                    
+  [b1b8dad6] 2026-08-11 12:14  COMPLETED   status           0.0s                                                                                                                    
+  [7eedd7ba] 2026-08-11 12:14  COMPLETED   profile          2.5s                                                                                                                    
+  [fc20e774] 2026-08-11 12:11  COMPLETED   log              0.0s                                                                                                                    
+  [2b774827] 2026-08-11 12:11  COMPLETED   show             0.0s                                                                                                                    
+  [90d888e8] 2026-08-11 12:11  COMPLETED   redo             0.2s                                                                                                                    
+  [85c9a8be] 2026-08-11 12:11  COMPLETED   undo             0.1s                                                                                                                    
+  [9ba2d25c] 2026-08-11 12:11  COMPLETED   show             0.0s                                                                                                                    
+  [cf4badc2] 2026-08-11 12:11  COMPLETED   show             0.0s                                                                                                                    
+  [37d52589] 2026-08-11 12:11  COMPLETED   sever            5.0s                                                                                                                    
+      SEVER · task-3/local/personal-memory (300) × task-3/local/guardrails (75) → task-3/participant/subtractive-first                                                              
+  [37ae2e79] 2026-08-11 12:10  COMPLETED   shell-init       0.0s                                                                                                                    
+  [b7a3f586] 2026-08-11 12:09  FAILED      redo             0.1s                                                                                                                    
+      COMMAND · Exit · exit 1

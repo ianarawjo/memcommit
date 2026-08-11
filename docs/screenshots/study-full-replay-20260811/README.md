@@ -259,3 +259,27 @@ Redo when the authority-side stack was empty. The focused regression fixes
 retain explicit review state and allow only the proven empty-stack fallback;
 revocation, authority drift, and exact-unit ordering failures still fail
 closed.
+
+## Full replay verification
+
+| Capture | Command | Visible state | Durable mutation |
+| --- | --- | --- | --- |
+| `114-final-profile-verification` | `mem profile current` | Fresh replay Profile, 73 owned plus 43 granted Contexts, and restored tutorial current Context | None; read-only |
+| `115-final-current-context-verification` | `mem status` | Eight atomized tutorial Memories and their two retained checkpoints | None; read-only |
+| `116-final-action-log` | `mem log --operations --limit 20` | Newest-first command ledger, including the final completed 300-by-75 Sever and completed Redo | None; read-only |
+
+`full-replay-summary.json` verifies a contiguous `1` through `116` capture set,
+all eleven operation metric files, zero semantic provider events, and every
+recorded foreground stage below the 30-second target. The maximum was the
+participant-visible Sever review-through-Apply path at `5.401` seconds. The
+final ledger deliberately retains the earlier failed Redo that exposed the
+stale granted-receipt routing defect; the newer completed Redo above it is the
+post-fix evidence.
+
+Final recursive Memory counts are: tutorial Atomize `8`; Task 1 incoming `75`,
+directional target `375`, and symmetric result `375`; Task 2 result `249`;
+Task 3 year results `240`, `180`, and `174`; Task 3 rule result `100`; and Task
+3 Sever Source `300`, Criteria `75`, Result `0`. Failed automation sessions are
+not participant-visible: 22 pre-approval `REVIEWING` Sever records were moved
+intact to `outputs/study-replay-debug-quarantine-20260811/`, leaving exactly
+one applied Sever session in the Study store.

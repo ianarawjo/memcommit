@@ -1,0 +1,14 @@
+52 180                                                                                                                                                                              
+On context: practice/source-atomized                                                                                                                                                
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0  |  Checkpoints 2                                                                                          
+                                                                                                                                                                                    
+Recent memories:                                                                                                                                                                    
+  [b50f69f1] Keep the refinement close to the original text.                                                                                                                        
+  [dfa9406e] Preserve the original meaning.                                                                                                                                         
+  [e9cac07b] Limit the changes mainly to necessary grammatical corrections.                                                                                                         
+  [d9a21f87] Avoid an overly casual style.                                                                                                                                          
+  [4fbeb0b0] Keep the writing concise while giving it a minimally formal tone.                                                                                                      
+                                                                                                                                                                                    
+Recent checkpoints:                                                                                                                                                                 
+  931846dd  2026-08-11 07:13  atomize       Applied atomize [496dd810]: 1 splits -> 8 children; 0 preserved; 0 unresolved at apply                                                  
+  c3f07a48  2026-08-11 07:13  init          Initialized 'practice/source-atomized' from 'practice/source' before applying atomize [496dd810]

@@ -1,0 +1,14 @@
+52 180
+[1mOn context: practice/source-atomized[0m
+  Memories 8  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0  |  Checkpoints 2
+[1m
+Recent memories:[0m
+  [b50f69f1] [2mKeep the refinement close to the original text.[0m
+  [dfa9406e] [2mPreserve the original meaning.[0m
+  [e9cac07b] [2mLimit the changes mainly to necessary grammatical corrections.[0m
+  [d9a21f87] [2mAvoid an overly casual style.[0m
+  [4fbeb0b0] [2mKeep the writing concise while giving it a minimally formal tone.[0m
+[1m
+Recent checkpoints:[0m
+  931846dd  2026-08-11 07:13  atomize       Applied atomize [496dd810]: 1 splits -> 8 children; 0 preserved; 0 unresolved at apply[0m
+  c3f07a48  2026-08-11 07:13  init          Initialized 'practice/source-atomized' from 'practice/source' before applying atomize [496dd810][0m
