@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
@@ -40,6 +41,9 @@ from memcommit.granted_comparison_store import (
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore
+
+if TYPE_CHECKING:
+    from memcommit.profile_config import ProfileRegistry
 
 
 COMPARISON_AGGREGATE_TIMEOUT_SECONDS = 900
@@ -140,10 +144,15 @@ def load_comparison_context(
     access: ContextAccess,
     *,
     include_descendants: bool = False,
+    registry: ProfileRegistry | None = None,
 ) -> Context:
     """Load one local or granted source using Compare's exact projection."""
 
-    reader = GrantedReadStore(access) if access.is_granted else access.store
+    reader = (
+        GrantedReadStore(access, registry=registry)
+        if access.is_granted
+        else access.store
+    )
     context = load_context_scope(
         reader,
         access.display_name if access.is_granted else access.context_name,

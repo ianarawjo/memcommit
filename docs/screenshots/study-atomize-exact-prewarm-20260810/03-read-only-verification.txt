@@ -1,0 +1,16 @@
+Saved analysis [496dd810]: EXACT PREWARM · CURRENT. Resumed; the provider was not called.
+Apply the planned Output with: mem atomize --save
+  INPUT  practice/source
+  OUTPUT practice/source-atomized · NOT CREATED
+
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
+v
+
+READ-ONLY CONTRACT CHECK
+  PTY · 180 columns × 52 rows
+  PROVIDER CALLS · 0
+  ORIGIN · EXACT PREWARM
+  ANALYSIS · 496dd810-d3b2-4e42-9d90-ff15e0179f99
+  SOURCE MEMORIES · 1
+  PROJECTED MEMORIES · 8
+  OUTPUT · practice/source-atomized · NOT CREATED

@@ -57,6 +57,7 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore, context_record_digest
+from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -445,9 +446,15 @@ def _resume_selected_atomize(
             bold=True,
         )
     else:
+        exact_prewarm = is_installed_atomize_prewarm(store, analysis)
         typer.secho(
-            f"Saved analysis [{analysis.uid[:8]}]: CURRENT. "
-            "Resumed; the provider was not called.",
+            f"Saved analysis [{analysis.uid[:8]}]: "
+            + (
+                "EXACT PREWARM · CURRENT. "
+                if exact_prewarm
+                else "CURRENT. "
+            )
+            + "Resumed; the provider was not called.",
             fg=typer.colors.CYAN,
         )
 
@@ -1027,6 +1034,10 @@ def cmd(
                 # checkpoint path below; the shared Apply row is its approval.
                 pass
             else:
+                exact_prewarm = (
+                    not opened.created_analysis
+                    and is_installed_atomize_prewarm(store, session)
+                )
                 typer.secho(
                     (
                         f"Saved analysis [{session.uid[:8]}]: APPLIED."
@@ -1034,8 +1045,13 @@ def cmd(
                         else f"Saved analysis [{session.uid[:8]}]: CURRENT."
                         if opened.created_analysis
                         else (
-                            f"Saved analysis [{session.uid[:8]}]: CURRENT. "
-                            "Resumed; the provider was not called."
+                            f"Saved analysis [{session.uid[:8]}]: "
+                            + (
+                                "EXACT PREWARM · CURRENT. "
+                                if exact_prewarm
+                                else "CURRENT. "
+                            )
+                            + "Resumed; the provider was not called."
                         )
                     ),
                     fg=typer.colors.CYAN,

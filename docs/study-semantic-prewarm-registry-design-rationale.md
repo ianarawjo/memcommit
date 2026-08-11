@@ -4,9 +4,10 @@
 
 This note defines a study-design registry for moving known long semantic work
 out of participant-facing time. It is a cache-hit eligibility list, never an
-operation allowlist. The first production slice now installs the declared
-Task 2 full Compare seed when `init-study` creates a run and projects declared
-opposite-side descendant subsets from that seed. Other checked cells remain an
+operation allowlist. The implemented production slices now install the
+declared Task 2 full Compare seed and Tutorial Atomize analysis when
+`init-study` creates a run. Compare also projects declared opposite-side
+descendant subsets from its exact seed. Other checked cells remain an
 implementation plan. The registry itself never runs a provider, and an
 unlisted operation remains available through its ordinary live path.
 
@@ -66,16 +67,48 @@ configuration drift, or `--refresh` takes the ordinary live path. One actual
 groups in `0.46` wall-clock seconds including process startup, with zero
 provider calls and complete `26/26` primary-ledger coverage.
 
-The production transfer order after this slice is:
+The production transfer order after the Atomize slice is:
 
-1. import Tutorial Atomize's existing exact digest-bound analysis;
-2. add exact Update proposal reuse, preserving Source-to-Target direction;
-3. record Impact as the deterministic projection of its owning typed proposal
+1. add exact Update proposal reuse, preserving Source-to-Target direction;
+2. record Impact as the deterministic projection of its owning typed proposal
    rather than creating another semantic cache;
-4. verify that symmetric Meld opens provider-free from the installed exact
+3. verify that symmetric Meld opens provider-free from the installed exact
    Compare basis while keeping participant-authored responses live;
-5. add Task 1 directional Meld as a separate exact raw-response contract; and
-6. add Task 3 Sever as an exact whole-Source plus whole-Criteria contract.
+4. add Task 1 directional Meld as a separate exact raw-response contract; and
+5. add Task 3 Sever as an exact whole-Source plus whole-Criteria contract.
+
+### Tutorial Atomize exact prewarm
+
+The second production slice moves only the fixed tutorial analysis out of the
+participant turn. `memcommit.eval.study_atomize_registry` publishes an already
+validated `AtomizeAnalysisSession` into the baseline registry. A new Study run
+checks the exact `practice/source` direct-Memory ledger, the complete
+`practice/description` digest, Atomize ruleset and prompt/decoder contract,
+and configured provider, model, and reasoning effort. It then installs the
+analysis into Atomize's existing production analysis slot and creates a fresh
+run-local workbench with `practice/source-atomized` as the not-yet-created
+Output.
+
+The portable unit contains semantic analysis only. Review responses,
+grounding dialogue, application state, and checkpoints are not copied. The
+foreground command visibly reports `EXACT PREWARM · CURRENT` and reopens with
+zero provider calls. Editing either the Source or tutorial instruction fails
+the setup binding, while a provider configuration mismatch is counted as an
+explicit skip so the ordinary live route remains available. `--refresh`
+continues to be a deliberate live provider call and overwrites the exact slot
+only through Atomize's existing validation and rollback boundary.
+
+The real frozen tutorial run used `gpt-5.6-sol` at reasoning `medium`. Its cold
+CLI path took `23.29` seconds wall-clock and produced eight source-grounded
+children. A fresh participant run installed both the existing Compare seed and
+the new Atomize seed in `1.08` seconds. The identical participant-facing
+Atomize command then rendered in `0.36` seconds including Python startup. Ten
+direct production reopens had a `0.140` ms median (`0.129`–`0.244` ms), kept
+the same analysis UID, and connected the provider zero times. The content-free
+metrics are recorded in
+[`outputs/atomize-prewarm/20260810-tutorial-e2e.json`](../outputs/atomize-prewarm/20260810-tutorial-e2e.json),
+with ordered real-PTY evidence under
+[`docs/screenshots/study-atomize-exact-prewarm-20260810/`](screenshots/study-atomize-exact-prewarm-20260810/).
 
 There is no independent production Refine operator in the current repository,
 so it is not an implementation target yet. Generic Update, Meld, Atomize, and
@@ -468,7 +501,7 @@ earlier all-pairs graph sidecars.
 | Directional Meld | For Task 1 only, store the exact `construction-updates` `INCOMING` to `campus-wiki` `BASELINE` proposal. Its key includes order, baseline digest, owners, scopes, and baseline mutation target. Prepare partial directional proposals exactly by default. | Exact reuse, incoming read-only, only baseline owners changed, `EDIT`/`ADD` only, no `DELETE`, exact recovery, fresh-partial quality comparison, changed baseline miss, and rejection of symmetric artifacts. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
 | Sever | Store exact whole-Source plus exact ordinary-Criteria decisions. Allow a visibly projected Source-deletion view only under the declared study condition; a changed Criteria or Source addition is live. | Exact hit, exact Criteria digest, complete disposition, Source unchanged, require-new output, projected status, addition/Criteria miss, apply/undo/redo, and no reuse of a Forget artifact. |
-| Tutorial Atomize | Store only the exact frozen practice Source and instruction analysis. | Exact reopen without provider, Source or instruction change miss, complete source provenance, and no mutation before its existing review boundary. |
+| Tutorial Atomize | **Implemented.** Store only the exact frozen practice Source and instruction analysis in Atomize's existing durable slot; create fresh run-local review state. | Exact reopen without provider, Source or instruction change miss, complete source provenance, configuration skip, atomic installation rollback, and no mutation before its existing review boundary. |
 | Refine | Store only frozen exact Memory, instruction, revision, and style-contract tuples that the protocol actually exposes. Participant-authored wording remains live. | Exact reopen, instruction or Source miss, bidirectional meaning review, required style checks, no unsupported factual unit, and unchanged Source until acceptance. |
 | Impact | Key a prepared report by the exact proposal and Source/Target revision digests, or recompute it deterministically when the proposal already contains the full typed diff. | Predicted-versus-applied owner, action, count, and digest agreement; exact reopen; proposal change miss; review before mutation; and read-only post-apply verification. |
 | Participant-visible status and study ledger | Render and record `EXACT PREWARM`, `PROJECTED`, or `LIVE`, registry version, foreground elapsed time, and separate offline provider work. | End-to-end Study runs assert the same registry for every participant. If UI changes materially, capture the required ordered color-PTY states for exact hit, projection, live miss, review, apply, and read-only verification. |

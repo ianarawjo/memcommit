@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import uuid
 
 from typer.testing import CliRunner
@@ -7,6 +8,7 @@ from typer.testing import CliRunner
 import memcommit.config as config_module
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.commands.comparison_execution import load_comparison_context
 from memcommit.commands.granted_context import resolve_context_access
 from memcommit.comparison import (
@@ -21,11 +23,46 @@ from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
 from memcommit.profile_config import load_profile_registry, profile_store_dir
 from memcommit.store import MemoryStore
+from memcommit.study_prewarm.atomize import build_atomize_prewarm_artifact
 from memcommit.study_prewarm.compare import build_compare_prewarm_artifact
 from memcommit.study_prewarm.registry import publish_artifact
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+class _TutorialAtomizeProvider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "impact_atomize"
+        payload = json.loads(prompt.split("ATOMIZE IMPACT PAYLOAD:\n", 1)[1])
+        memories = payload["memories"]
+        source_ids = [item["candidate_id"] for item in memories]
+        return json.dumps(
+            {
+                "overview": {
+                    "understood": {
+                        "text": "The frozen tutorial request is preserved.",
+                        "source_ids": source_ids,
+                    },
+                    "changed": {
+                        "text": "No split is proposed by this setup fixture.",
+                        "source_ids": source_ids,
+                    },
+                    "unresolved": {"text": "", "source_ids": []},
+                },
+                "items": [
+                    {
+                        "candidate_id": item["candidate_id"],
+                        "classification": "ATOMIC",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [],
+                        "reason": "The source is retained as one test focus.",
+                    }
+                    for item in memories
+                ],
+                "quality_issues": [],
+            }
+        )
 
 
 def _distinct_analysis(reference, compared) -> ComparisonAnalysis:
@@ -68,7 +105,7 @@ def _distinct_analysis(reference, compared) -> ComparisonAnalysis:
     )
 
 
-def test_init_study_copies_and_rebinds_declared_exact_compare(
+def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -141,11 +178,34 @@ def test_init_study_copies_and_rebinds_declared_exact_compare(
         key=key,
         artifact=artifact,
     )
+    practice_source = first_store.load_direct("practice/source")
+    practice_description = first_store.load_direct("practice/description")
+    atomize_analysis = create_atomize_analysis(
+        practice_source,
+        impact_atomize(practice_source, _TutorialAtomizeProvider),
+    )
+    atomize_key, atomize_artifact = build_atomize_prewarm_artifact(
+        task_description=practice_description,
+        analysis=atomize_analysis,
+        provider="codex_chatgpt",
+        model="gpt-5.6-sol",
+        reasoning="medium",
+        offline_provider_seconds=2.0,
+    )
+    publish_artifact(
+        profile_store_dir(baseline),
+        baseline_profile_uid=baseline.uid,
+        operation="ATOMIZE",
+        task="tutorial",
+        key=atomize_key,
+        artifact=atomize_artifact,
+    )
 
     initialized = runner.invoke(app, ["init-study", "seed-target"])
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
     assert "Declared Compare prewarms 1 installed." in initialized.output
+    assert "Declared Tutorial Atomize prewarms 1 installed." in initialized.output
     second_registry = load_profile_registry()
     second = second_registry.active
     second_store = MemoryStore(root=profile_store_dir(second), create=False)
@@ -162,6 +222,12 @@ def test_init_study_copies_and_rebinds_declared_exact_compare(
         for binding in saved.bindings
         if binding is not None
     )
+    saved_atomize = second_store.load_atomize_analysis(practice_source.uid)
+    assert saved_atomize is not None
+    assert saved_atomize.to_dict() == atomize_analysis.to_dict()
+    atomize_workbench = second_store.load_atomize_workbench(saved_atomize)
+    assert atomize_workbench is not None
+    assert atomize_workbench.output_context_name == "practice/source-atomized"
     assert all(
         binding.grantee_profile_uid != first.uid
         for binding in saved.bindings

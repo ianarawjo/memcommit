@@ -430,7 +430,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     practice_source = store.load_direct("practice/source")
     source_memories = [
@@ -1227,7 +1227,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     practice_source = copied_store.load_direct("practice/source")
     source_memories = [
@@ -1286,7 +1286,7 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     assert [item.content for item in memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     source = store.load_direct("practice/source")
     source_memories = [
@@ -1295,6 +1295,28 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     assert [item.content for item in source_memories] == [
         profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
     ]
+
+
+def test_study_practice_source_matches_instruction_refinement_topic():
+    source = profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
+    task = profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+    provenance = profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT
+
+    assert source == (
+        "Please avoid using the expression “rather than” in the text. Do not "
+        "add a forced concluding sentence that uses wording such as “taken "
+        "together.” Do not use em dashes or colons. Keep the refinement close "
+        "to the original text and preserve the original meaning. Limit the "
+        "changes mainly to necessary grammatical corrections. Avoid an overly "
+        "casual style. Keep the writing concise while giving it a minimally "
+        "formal tone."
+    )
+    assert "informal editing request" in task
+    assert "without adding instructions or changing the intended meaning" in task
+    assert provenance == (
+        "The practice source is a synthetic editing request supplied for this "
+        "study. It has no external bibliographic source."
+    )
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(

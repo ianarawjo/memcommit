@@ -90,15 +90,15 @@ input. Spreadsheet views are regenerated from the current parsed corpus.
 
 Every `init-study` participant Profile receives two separate local rehearsal
 Contexts. `practice/description` contains an overview Memory, a task Memory,
-and a bibliographic-reference Memory. The overview introduces MemLab and the
+and a provenance Memory. The overview introduces MemLab and the
 three Study situations. The task directs the participant to use the grouped
 `mem help` browser to discover the atomization operation, review its proposal,
-and save the result as `practice/source-atomized`. The reference preserves the
-translation citation without placing it in the analysis target.
-`practice/source` contains the one composite Memory to analyze. Separating
-instruction and reference from source prevents either from becoming Atomize
-evidence while still requiring the participant to learn the help structure
-rather than receiving an exact command.
+and save the result as `practice/source-atomized`. The provenance Memory marks
+the editing request as synthetic without placing that note in the analysis
+target. `practice/source` contains the one composite Memory to analyze.
+Separating instruction and provenance from source prevents either from
+becoming Atomize evidence while still requiring the participant to learn the
+help structure rather than receiving an exact command.
 
 Both Contexts exist solely for onboarding. Keeping them outside `task-1`,
 `task-2`, and `task-3` prevents rehearsal analyses, workbenches, and any
@@ -118,21 +118,51 @@ In this study, you will use MemLab in three different situations, each involving
 ```
 
 ```text
-Before beginning the three study tasks, complete a short practice exercise to become familiar with how MemLab organizes and presents its commands. The Memory in `practice/source` was produced by chunking a larger source. However, this chunk still combines multiple propositions in a single Memory. It would therefore be better to divide it into appropriate atomic Memories so that each can be handled independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
+Before beginning the three study tasks, complete a short practice exercise to become familiar with how MemLab organizes and presents its commands. The informal editing request in `practice/source` combines several constraints in a single Memory. Divide it into appropriate atomic Memories without adding instructions or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
 ```
 
 ```text
-King Sejong, “Preface to *Hunminjeongeum*” (1446), translated by Gari K. Ledyard, *The Korean Language Reform of 1446: The Origin, Background, and Early History of the Korean Alphabet* (Seoul: Singu Munhwasa, 1998), p. 170.
+The practice source is a synthetic editing request supplied for this study. It has no external bibliographic source.
 ```
 
-The source Memory reproduces only Gari K. Ledyard's English translation of
-King Sejong's 1446 preface to *Hunminjeongeum*. Attribution stays in the
-separate bibliographic-reference Memory so it cannot become an extra
-proposition in the Atomize input. The translation's several claims and causal
-relations provide a small, legible semantic decomposition target. The
-translation is cited from Gari K. Ledyard, *The Korean Language Reform of
-1446: The Origin, Background, and Early History of the Korean Alphabet*
-(Seoul: Singu Munhwasa, 1998), 170.
+The source Memory is the following English editing request:
+
+```text
+Please avoid using the expression “rather than” in the text. Do not add a forced concluding sentence that uses wording such as “taken together.” Do not use em dashes or colons. Keep the refinement close to the original text and preserve the original meaning. Limit the changes mainly to necessary grammatical corrections. Avoid an overly casual style. Keep the writing concise while giving it a minimally formal tone.
+```
+
+It deliberately combines several separable constraints about prohibited
+phrasing, prohibited punctuation, fidelity to source meaning, the acceptable
+amount of grammatical refinement, and a minimally formal tone. This is closer
+to the Study's agent-memory and instruction-refinement setting than the former
+historical quotation. Atomize should preserve the informal source wording as
+evidence and separate its requirements; the rehearsal does not ask the model
+to perform the requested rewrite.
+
+A cold production Atomize check used `gpt-5.6-sol` with reasoning `medium`.
+The first English draft used the phrase `preserve its meaning`; the provider
+correctly returned UNCERTAIN because `its` could refer to either the text or
+the context. That draft was rejected rather than making ambiguity part of the
+onboarding exercise. The final source above removes the pronoun while
+preserving the requested meaning. It completed in 22.81 seconds, classified
+the one source Memory as COMPOSITE, reported no quality issue, and proposed
+these eight children:
+
+1. `Please avoid using the expression “rather than” in the text.`
+2. `Do not add a forced concluding sentence that uses wording such as “taken together.”`
+3. `Do not use em dashes or colons.`
+4. `Keep the refinement close to the original text.`
+5. `Preserve the original meaning.`
+6. `Limit the changes mainly to necessary grammatical corrections.`
+7. `Avoid an overly casual style.`
+8. `Keep the writing concise while giving it a minimally formal tone.`
+
+This cold check is the frozen semantic basis for the tutorial prewarm. The
+validated analysis is published separately into the Study semantic registry
+and installed into each new participant run's ordinary Atomize slot. The
+participant still performs the full Atomize review and explicit application
+workflow, but does not wait for the fixed provider analysis. Any change to the
+Source or tutorial instruction invalidates the exact binding.
 
 Each Task Profile also owns one participant-facing description Memory directly
 under `description`. Its English body is the previously authored Task

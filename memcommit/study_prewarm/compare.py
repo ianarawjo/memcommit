@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 import uuid
 
 from memcommit.commands.comparison_execution import (
-    ComparisonExecutionResult,
     install_prepared_comparison_analysis,
     load_comparison_context,
 )
@@ -705,6 +704,7 @@ def install_declared_compare_prewarms(
                 load_comparison_context(
                     access,
                     include_descendants=include_descendants,
+                    registry=registry_snapshot,
                 )
             )
         description_access = resolve_context_access(

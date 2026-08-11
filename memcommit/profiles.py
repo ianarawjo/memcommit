@@ -150,6 +150,9 @@ class StudyInitializationResult:
     declared_compare_prewarms: int = 0
     installed_compare_prewarms: int = 0
     skipped_compare_prewarms: int = 0
+    declared_atomize_prewarms: int = 0
+    installed_atomize_prewarms: int = 0
+    skipped_atomize_prewarms: int = 0
 
 
 @dataclass(frozen=True)
@@ -222,29 +225,26 @@ _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
 _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "Before beginning the three study tasks, complete a short practice "
     "exercise to become familiar with how MemLab organizes and presents its "
-    "commands. The Memory in `practice/source` was produced by chunking a "
-    "larger source. However, this chunk still combines multiple propositions "
-    "in a single Memory. It would therefore be better to divide it into "
-    "appropriate atomic Memories so that each can be handled independently. "
-    "Open `mem help`, inspect the available operations, find the operation "
-    "designed for atomization, and use it to review the proposed atomization "
-    "and save the result as `practice/source-atomized`."
+    "commands. The informal editing request in `practice/source` combines "
+    "several constraints in a single Memory. Divide it into appropriate "
+    "atomic Memories without adding instructions or changing the intended "
+    "meaning, so that each constraint can be reviewed independently. Open "
+    "`mem help`, inspect the available operations, find the operation designed "
+    "for atomization, and use it to review the proposed atomization and save "
+    "the result as `practice/source-atomized`."
 )
-_STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT = (
-    "King Sejong, “Preface to *Hunminjeongeum*” (1446), translated by Gari K. "
-    "Ledyard, *The Korean Language Reform of 1446: The Origin, Background, "
-    "and Early History of the Korean Alphabet* (Seoul: Singu Munhwasa, 1998), "
-    "p. 170."
+_STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT = (
+    "The practice source is a synthetic editing request supplied for this "
+    "study. It has no external bibliographic source."
 )
 _STUDY_PRACTICE_SOURCE = "practice/source"
 _STUDY_PRACTICE_SOURCE_CONTENT = (
-    "The sounds of our country's language are different from those of the "
-    "Middle Kingdom and are not confluent with the sounds of characters. "
-    "Therefore, among the ignorant people, there have been many who, having "
-    "something they want to put into words, have in the end been unable to "
-    "express their feelings. I have been distressed because of this, and have "
-    "newly designed twenty-eight letters, which I wish to have everyone "
-    "practice at their ease and make convenient for their daily use."
+    "Please avoid using the expression “rather than” in the text. Do not add "
+    "a forced concluding sentence that uses wording such as “taken together.” "
+    "Do not use em dashes or colons. Keep the refinement close to the original "
+    "text and preserve the original meaning. Limit the changes mainly to "
+    "necessary grammatical corrections. Avoid an overly casual style. Keep "
+    "the writing concise while giving it a minimally formal tone."
 )
 STUDY_BASELINE_PROFILE_NAME = "study-baseline"
 _STUDY_BASELINE_SOURCE_KIND = "STUDY_BASELINE"
@@ -2907,7 +2907,7 @@ def _study_practice_contexts() -> tuple[Context, ...]:
                     "memcommit:study:practice/description:reference-memory",
                 )
             ),
-            content=_STUDY_PRACTICE_DESCRIPTION_REFERENCE_CONTENT,
+            content=_STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
         )
     )
     source = Context(
@@ -3902,10 +3902,19 @@ def _publish_study_run_pair(
         # persistence happens after releasing this registry lock because the
         # production Compare save boundary acquires the same guard itself.
         from memcommit.store import MemoryStore
+        from memcommit.study_prewarm.atomize import (
+            install_declared_atomize_prewarms,
+        )
         from memcommit.study_prewarm.compare import (
             install_declared_compare_prewarms,
         )
 
+        install_declared_atomize_prewarms(
+            store=MemoryStore(root=profile_store_dir(participant), create=False),
+            profile=participant,
+            registry_snapshot=updated,
+            publish=False,
+        )
         install_declared_compare_prewarms(
             store=MemoryStore(root=profile_store_dir(participant), create=False),
             profile=participant,
@@ -4039,31 +4048,42 @@ def init_study_profile(
                 shutil.rmtree(staging)
 
     # The new registry generation is now visible and the outer registry guard
-    # has been released. Install through the ordinary Compare save boundary so
-    # it can acquire that guard, revalidate current Grants, and write a fresh
-    # run-local binding without deadlocking init-study.
+    # has been released. Install through each operation's ordinary durable
+    # boundary so current identities and Grants can be revalidated without
+    # deadlocking init-study.
     from memcommit.store import MemoryStore
+    from memcommit.study_prewarm.atomize import install_declared_atomize_prewarms
     from memcommit.study_prewarm.compare import install_declared_compare_prewarms
 
     try:
-        prewarms = install_declared_compare_prewarms(
-            store=MemoryStore(
-                root=profile_store_dir(initialization.profile),
-                create=False,
-            ),
+        participant_store = MemoryStore(
+            root=profile_store_dir(initialization.profile),
+            create=False,
+        )
+        current_registry = load_profile_registry()
+        compare_prewarms = install_declared_compare_prewarms(
+            store=participant_store,
             profile=initialization.profile,
-            registry_snapshot=load_profile_registry(),
+            registry_snapshot=current_registry,
+        )
+        atomize_prewarms = install_declared_atomize_prewarms(
+            store=participant_store,
+            profile=initialization.profile,
+            registry_snapshot=current_registry,
         )
     except Exception as error:
         raise ProfileError(
-            f"Study run {profile_name!r} was created, but its declared Compare "
+            f"Study run {profile_name!r} was created, but its declared semantic "
             f"prewarm could not be installed: {error}"
         ) from error
     return replace(
         initialization,
-        declared_compare_prewarms=prewarms.declared,
-        installed_compare_prewarms=prewarms.installed,
-        skipped_compare_prewarms=prewarms.skipped_configuration,
+        declared_compare_prewarms=compare_prewarms.declared,
+        installed_compare_prewarms=compare_prewarms.installed,
+        skipped_compare_prewarms=compare_prewarms.skipped_configuration,
+        declared_atomize_prewarms=atomize_prewarms.declared,
+        installed_atomize_prewarms=atomize_prewarms.installed,
+        skipped_atomize_prewarms=atomize_prewarms.skipped_configuration,
     )
 
 

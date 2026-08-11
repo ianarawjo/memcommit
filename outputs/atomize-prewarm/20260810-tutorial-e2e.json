@@ -1,0 +1,35 @@
+{
+  "analysis_uid": "496dd810-d3b2-4e42-9d90-ff15e0179f99",
+  "cold": {
+    "children": 8,
+    "model": "gpt-5.6-sol",
+    "provider": "codex_chatgpt",
+    "reasoning": "medium",
+    "source_memories": 1,
+    "wall_seconds": 23.29
+  },
+  "exact_reopen": {
+    "cli_wall_seconds": 0.36,
+    "direct_max_ms": 0.244,
+    "direct_median_ms": 0.14,
+    "direct_min_ms": 0.129,
+    "direct_repetitions": 10,
+    "provider_calls": 0
+  },
+  "fixture": {
+    "description_digest_after": "5fe9e2dcbf53886546aa294a60698676924bbb49337e5fdf37d33e2c5c40f159",
+    "description_digest_before": "7a8ee4a1a3493476b1ab774d09615043612724b0e78b60f58b273abee4e55eca",
+    "source_digest_after": "f695e7516f6376fadb5a3c6887c345ef1f3f834fd60ce7e149a774321801dec0",
+    "source_digest_before": "09609caff74b4f706c2d4cd86d1a1bd314ad049c316d5dc8c424c2bf7b6cbba8"
+  },
+  "kind": "STUDY_ATOMIZE_PREWARM_E2E_EVIDENCE",
+  "prewarm_entry_key": "4ab703711e69671eb27b253f4ed689f145472ec3bc6552068cc54b5b7e34c9ea",
+  "proof_profile": "atomize-prewarm-proof-20260810",
+  "schema_version": 1,
+  "semantic_content_in_evidence": false,
+  "setup": {
+    "atomize_prewarms_installed": 1,
+    "compare_prewarms_installed": 1,
+    "wall_seconds": 1.08
+  }
+}

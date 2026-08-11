@@ -32,6 +32,77 @@ class OpenAtomizeWorkbenchResult:
     created_analysis: bool
 
 
+def install_prepared_atomize_analysis(
+    *,
+    store: MemoryStore,
+    ctx: Context,
+    analysis: AtomizeAnalysisSession,
+    output_context_name: str | None = None,
+) -> OpenAtomizeWorkbenchResult:
+    """Install one exact prepared analysis without opening a provider.
+
+    Study setup uses the same durable analysis/workbench pair as an ordinary
+    Atomize run.  The portable semantic payload is accepted only after it
+    matches the current direct Source exactly; the workbench is regenerated
+    for this run so no review response or application state crosses runs.
+    """
+
+    if (
+        analysis.context_uid != ctx.uid
+        or analysis.context_name != ctx.name
+        or not atomize_analysis_matches_context(analysis, ctx)
+    ):
+        raise AtomizeImpactError(
+            "Prepared atomize analysis does not match the current Context."
+        )
+    latest = store.load_direct(ctx.name)
+    if not atomize_analysis_matches_context(analysis, latest):
+        raise AtomizeImpactError(
+            "Context changed while the prepared atomize analysis was being "
+            "installed; no preview was saved."
+        )
+
+    existing = store.load_atomize_analysis(ctx.uid)
+    previous_workbench = (
+        store.load_atomize_workbench(existing)
+        if existing is not None
+        else None
+    )
+    workbench = create_atomize_workbench(
+        analysis,
+        output_context_name=output_context_name or ctx.name,
+    )
+    analysis_saved = False
+    try:
+        store.save_atomize_analysis(analysis)
+        analysis_saved = True
+        store.save_atomize_workbench(workbench)
+    except Exception:
+        if not analysis_saved:
+            raise
+        try:
+            if existing is None:
+                store.delete_atomize_workbench(analysis.context_uid)
+                store.delete_atomize_analysis(analysis.context_uid)
+            else:
+                store.save_atomize_analysis(existing)
+                if previous_workbench is None:
+                    store.delete_atomize_workbench(existing.context_uid)
+                else:
+                    store.save_atomize_workbench(previous_workbench)
+        except Exception as cleanup_error:
+            raise RuntimeError(
+                "Prepared atomize installation failed and its previous derived "
+                "state could not be restored."
+            ) from cleanup_error
+        raise
+    return OpenAtomizeWorkbenchResult(
+        analysis=analysis,
+        workbench=workbench,
+        created_analysis=False,
+    )
+
+
 def _connect_aggregate_atomize_provider(
     provider_factory: Callable[[], AtomizeProvider],
 ) -> AtomizeProvider:

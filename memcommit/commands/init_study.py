@@ -155,6 +155,18 @@ def cmd(
             )
             + "."
         )
+    if result.declared_atomize_prewarms:
+        typer.echo(
+            "Declared Tutorial Atomize prewarms "
+            f"{result.installed_atomize_prewarms} installed"
+            + (
+                f" · {result.skipped_atomize_prewarms} skipped for the current "
+                "provider configuration"
+                if result.skipped_atomize_prewarms
+                else ""
+            )
+            + "."
+        )
     typer.echo(
         "Operational history starts empty; checkpoints, sessions, ad-hoc caches, "
         "locks, and run logs were not imported."

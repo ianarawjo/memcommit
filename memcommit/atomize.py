@@ -62,6 +62,10 @@ def _atomize_execution_policy() -> SemanticExecutionPolicy:
         staged_supported=False,
     )
 ATOMIZE_RULESET_VERSION = "atomize-v2-reviewed-frame-draft"
+# Study prewarm keys bind the complete provider prompt/decoder contract in
+# addition to the semantic ruleset.  Keep this separate so a presentation-only
+# ruleset change cannot accidentally make an older structured response current.
+ATOMIZE_PROVIDER_CONTRACT_VERSION = "atomize-one-shot-quality-v1"
 ATOMIZE_LEGACY_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80
 ATOMIZE_SIZE_REVIEW_SEGMENTS = 2

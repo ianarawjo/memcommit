@@ -1,0 +1,11 @@
+{
+  "analysis_uid": "496dd810-d3b2-4e42-9d90-ff15e0179f99",
+  "baseline_profile_name": "study-baseline",
+  "entry_key": "4ab703711e69671eb27b253f4ed689f145472ec3bc6552068cc54b5b7e34c9ea",
+  "kind": "STUDY_ATOMIZE_PREWARM_PUBLICATION_RECEIPT",
+  "operation": "ATOMIZE",
+  "provider_calls": 0,
+  "schema_version": 1,
+  "semantic_content_in_receipt": false,
+  "task": "tutorial"
+}
