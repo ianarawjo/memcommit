@@ -239,6 +239,17 @@ the basis with a new Grant binding and reopened it in `1.599` ms with the
 analyzer forbidden. The public report labels it `EXACT PREWARM · SAVED ·
 RETAINED`; the artifact contains no portable Grant identity.
 
+### Task 3 rule-pair symmetric Meld transfer
+
+The mixed-authority rule pair opened as equal symmetric peers in `0.430`
+seconds with no Meld provider call. It retained all `57` relations, derived
+`16` optional review issues, and kept the new local result empty. The
+provider-free preservation control covered all `100` Source Memories in
+`0.405` seconds; exact acceptance materialized `100` result Memories in
+`0.419` seconds. Neither the local guardrails nor the granted authority frame
+was changed. A directional rule-to-rule merge remains a different, undeclared
+operation.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a

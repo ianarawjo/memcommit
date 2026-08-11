@@ -1,0 +1,12 @@
+{
+  "apply": {"result_memories": 100, "seconds": 0.419},
+  "basis": {
+    "compare_analysis_uid": "9de1c904-7e0e-4607-b3f1-30c700a44933",
+    "left": "task-3/local/guardrails",
+    "right": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance"
+  },
+  "initial": {"issues": 16, "provider_calls": 0, "relations": 57, "seconds": 0.430},
+  "kind": "STUDY_MELD_TASK3_RULE_EXACT_EVIDENCE",
+  "preserve_all": {"provider_calls": 0, "source_memories": 100, "seconds": 0.405},
+  "schema_version": 1
+}
