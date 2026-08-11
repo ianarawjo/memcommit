@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ╭─ MEM COMPARE · SYMMETRIC PEERS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮^┃
+┃ │ CONTEXT LOCATIONS                                                                                                                                                            │ ┃
+┃ │   SOURCE A · task-3/local/guardrails                                                                                                                                         │ ┃
+┃ │   SOURCE B · task-3/remote/government/healthcare-agent/info-request/transmission-guidance                                                                                    │ ┃
+┃ │   RESULT · task-3/participant/rule-meld-replay-result                                                                                                                        │ ┃
+┃ │ Reference: task-3/local/guardrails (layout only; no authority)                                                                                                               │ ┃
+┃ │ Compared: task-3/remote/government/healthcare-agent/info-request/transmission-guidance                                                                                       │ ┃
+┃ │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                           │ ┃
+┃ │ Analysis: 9de1c904 · REUSED                                                                                                                                                  │ ┃
+┃ │ METRICS · MEMORIES 75 + 25 · RELATIONS 57 · POTENTIAL CONFLICTS 0                                                                                                            │ ┃
+┃ │ EQUIVALENT 0 · COMPATIBLE 14 · SCOPED 2 · CONFLICT 0 · DISTINCT 41 · UNCLEAR 0                                                                                               │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT MEM UNDERSTOOD ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Prepared comparison of the declared Task 3 rule frames.                                                                                                                      │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT BOTH CONTAIN · 14 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 14 shared or compatible relation groups.                                                                                                                                     │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT DIFFERS · 2 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 2 scoped, conflicting, or unclear relation groups.                                                                                                                           │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-3/local/guardrails · 34 · not automatically a deficiency ──────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Distinct local guardrails remain separate.                                                                                                                                   │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-3/remote/government/healthcare-agent/info-request/transmission-guidance · 7 · not automatically a deficiency ──────────────────────────────────────────────────╮ ┃
+┃ │ Distinct transmission rules remain separate.                                                                                                                                 │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSED TARGET MEMORIES · 0                                                                                                                                                     ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Compare report                                                                                                                                         ^│
+│  SCOPED         The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                             │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/rule-meld-replay-result · CURRENT TARGET    Enter to change                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close

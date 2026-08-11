@@ -1,0 +1,51 @@
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 84. [PRESERVE] [task-3/local/guardrails/downstream-use] Do not assume that a shared Memory may be used for model training.                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 85. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Depending on the information type and applicable rules, a recipien
+t institution may consider transmitted content for service improvement; this public guidance does not identify the actual use.                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 86. [PRESERVE] [task-3/local/guardrails/downstream-use] Once created, a copy may remain across multiple processing stages.                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 87. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Adding detail makes more material available after delivery, but th
+is public guidance does not determine whether or how a recipient will copy, retain, or use it.                                                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 88. [PRESERVE] [task-3/local/guardrails/audit-and-recovery] Record the recipient of approved sharing.                                                                           
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 89. [PRESERVE] [task-3/local/guardrails/audit-and-recovery] Record the purpose of approved sharing.                                                                             
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 90. [PRESERVE] [task-3/local/guardrails/audit-and-recovery] Record the approval time.                                                                                           
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 91. [PRESERVE] [task-3/local/guardrails/audit-and-recovery] If a transmission error occurs, inform the user of the failure state.                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 92. [PRESERVE] [task-3/local/guardrails/audit-and-recovery] If a user's local record conflicts with an external system's audit record, an external system operator may place gre
+ater trust in its own audit record.                                                                                                                                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 93. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] This Context is a synthetic, publicly distributable summary of hig
+h-level considerations for reviewing a possible transmission to a government healthcare institution system; it does not replace detailed guidance or applicable institutional policy
+.                                                                                                                                                                                   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 94. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Use these public Memories only as preliminary review cues, identif
+y material unknowns, and consult an authorized source before relying on details they do not establish.                                                                              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 95. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] When a private causal event is not needed for the healthcare-suppo
+rt purpose, consider whether a summary or preference can preserve the relevant conditions with less disclosure.                                                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 96. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A user may expect locally reviewed content to remain editable unti
+l explicit submission; confirm that expectation instead of assuming it applies.                                                                                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 97. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A user may confuse a polished draft with an approved or sent trans
+mission, so label draft, reviewed, approved, and sent states distinctly without inferring the user's understanding.                                                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 98. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] The detailed query specification states that content actually sent
+ through the government healthcare institution system's transmission screen is treated as one submitted unit; this public summary does not independently establish when that rule ap
+plies.                                                                                                                                                                              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 99. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Mentioning personal information in a local review or query convers
+ation does not by itself constitute transmission through the government healthcare institution system.                                                                              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 100. [PRESERVE] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A locally saved Sever output is a review artifact and does not by
+ itself establish that information was transmitted or received.                                                                                                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+                                                                                                                                                                                    
+Apply exactly this proposal: mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance --right-descendants --
+accept

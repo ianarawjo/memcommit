@@ -1,0 +1,51 @@
+  [memory 9a55e821] [task-3/local/guardrails/channel-and-format] Apply an approved protection method to sensitive items.                                                            
+  [memory 12e9848b] [task-3/local/guardrails/channel-and-format] If transmission fails, do not automatically retransmit the same content through another channel.                   
+  [memory 5505a2dc] [task-3/local/guardrails/channel-and-format] Access restrictions on one channel do not automatically apply to another channel.                                  
+  [memory e5160a11] [task-3/local/guardrails/channel-and-format] The local agent can record the selected channel and transmission format but cannot inspect an external channel's ac
+tual retention method.                                                                                                                                                              
+  [memory f220a0e1] [task-3/local/guardrails/audit-and-recovery] The local agent can reconstruct its own approval and transmission records but cannot trace unrecorded external proc
+essing.                                                                                                                                                                             
+  [memory 965e1ff2] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] The local review agent may refer to this public summary when expl
+aining possible transmission considerations, but it cannot confirm exact services, recipients, retention, receipt, or downstream handling.                                          
+  [memory 99b91ded] [task-3/local/guardrails/channel-and-format] If format markers are not clearly distinguished, a recipient organization may be unable to tell whether content is 
+an instruction, body text, or a quotation.                                                                                                                                          
+  [memory baa3597c] [task-3/local/guardrails/downstream-use] Do not put language in the shared material that permits unapproved forwarding.                                         
+  [memory d6f985e8] [task-3/local/guardrails/downstream-use] Authority to receive information differs from authority to reuse it.                                                   
+  [memory 905bb68c] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Depending on the information type and applicable rules, an initia
+l recipient may route transmitted content to relevant healthcare third parties; this public guidance does not identify the actual parties or permitted scope.                       
+  [memory ac295e5c] [task-3/local/guardrails/downstream-use] State the purpose-of-use restriction to the recipient.                                                                 
+  [memory e865740f] [task-3/local/guardrails/downstream-use] Do not guarantee deletion without verifying the recipient's compliance.                                                
+  [memory 66692ffa] [task-3/local/guardrails/audit-and-recovery] A copy conveyed to an external system may not automatically synchronize with a later correction to the local Memory
+.                                                                                                                                                                                   
+  [memory 229ae173] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A delivered copy may not synchronize with later local changes, bu
+t this public guidance cannot determine whether a particular copy persists or can be deleted.                                                                                       
+  [memory 89b8183e] [task-3/local/guardrails/downstream-use] Do not assume that a shared Memory may be used for model training.                                                     
+  [memory b5566ea5] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Depending on the information type and applicable rules, a recipie
+nt institution may consider transmitted content for service improvement; this public guidance does not identify the actual use.                                                     
+  [memory e94fc889] [task-3/local/guardrails/downstream-use] Once created, a copy may remain across multiple processing stages.                                                     
+  [memory e6670549] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Adding detail makes more material available after delivery, but t
+his public guidance does not determine whether or how a recipient will copy, retain, or use it.                                                                                     
+  [memory 07b13577] [task-3/local/guardrails/audit-and-recovery] Record the recipient of approved sharing.                                                                          
+  [memory 6f43319a] [task-3/local/guardrails/audit-and-recovery] Record the purpose of approved sharing.                                                                            
+  [memory eac3aceb] [task-3/local/guardrails/audit-and-recovery] Record the approval time.                                                                                          
+  [memory ca9f16e8] [task-3/local/guardrails/audit-and-recovery] If a transmission error occurs, inform the user of the failure state.                                              
+  [memory 1826e1a3] [task-3/local/guardrails/audit-and-recovery] If a user's local record conflicts with an external system's audit record, an external system operator may place gr
+eater trust in its own audit record.                                                                                                                                                
+  [memory bd29f173] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] This Context is a synthetic, publicly distributable summary of hi
+gh-level considerations for reviewing a possible transmission to a government healthcare institution system; it does not replace detailed guidance or applicable institutional polic
+y.                                                                                                                                                                                  
+  [memory 324e470e] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Use these public Memories only as preliminary review cues, identi
+fy material unknowns, and consult an authorized source before relying on details they do not establish.                                                                             
+  [memory 49654ce1] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] When a private causal event is not needed for the healthcare-supp
+ort purpose, consider whether a summary or preference can preserve the relevant conditions with less disclosure.                                                                    
+  [memory 2329c836] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A user may expect locally reviewed content to remain editable unt
+il explicit submission; confirm that expectation instead of assuming it applies.                                                                                                    
+  [memory fb17f976] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A user may confuse a polished draft with an approved or sent tran
+smission, so label draft, reviewed, approved, and sent states distinctly without inferring the user's understanding.                                                                
+  [memory d873ffbc] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] The detailed query specification states that content actually sen
+t through the government healthcare institution system's transmission screen is treated as one submitted unit; this public summary does not independently establish when that rule a
+pplies.                                                                                                                                                                             
+  [memory 5bb2ac54] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] Mentioning personal information in a local review or query conver
+sation does not by itself constitute transmission through the government healthcare institution system.                                                                             
+  [memory cffe0b7b] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance] A locally saved Sever output is a review artifact and does not by
+ itself establish that information was transmitted or received.

@@ -1,0 +1,19 @@
+{
+  "result_creation_command": "mem meld task-3/local/guardrails task-3/remote/government/healthcare-agent/info-request/transmission-guidance --left-descendants --right-descendants --to task-3/participant/rule-meld-replay-result",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_review_seconds": 0.407395499991253,
+  "preserve_all_seconds": 0.43006174999754876,
+  "accept_seconds": 0.4316576670098584,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "input_memories": [
+    75,
+    25
+  ],
+  "relations": 57,
+  "issues": 16,
+  "result_memories": 100,
+  "origin": "EXACT_PREWARM_COMPARE_BASIS",
+  "current_before": "practice/source-atomized",
+  "current_after": "practice/source-atomized"
+}

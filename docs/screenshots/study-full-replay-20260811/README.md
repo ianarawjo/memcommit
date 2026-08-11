@@ -210,3 +210,21 @@ retain `14` compatible, `2` scoped, and `41` distinct relations. The installed
 artifact was rebound to the fresh Study Grant before this participant-facing
 lookup; `task3-rule-compare-replay-metrics.json` records the zero provider
 events.
+
+## Task 3 rule-pair symmetric Meld interaction log
+
+| Capture | Command or input | Visible state | Durable mutation |
+| --- | --- | --- | --- |
+| `95-task3-rule-meld-exact-entry` | exact rule-pair Meld with descendant scopes and `--to task-3/participant/rule-meld-replay-result` | 57-relation mixed-authority review and empty result | Created the empty local result and saved review session |
+| `96-task3-rule-meld-issue-detail` | `Tab`, `Down`, `Enter` | First scoped relation, exact claims, and optional resolution choices | None |
+| `97-task3-rule-meld-target-switch` | switch to the result | Empty result becomes current | Current-Context pointer only |
+| `98-task3-rule-meld-preserve-all` | resumed Meld with `--preserve-all` | Complete 100/100 Source and 57/57 relation coverage | Saved ready proposal only |
+| `99-task3-rule-meld-accept-receipt` | resumed Meld with `--accept` | Green 100-result checkpoint receipt | Materialized 100 result Memories |
+| `100-task3-rule-meld-result-verification` | `mem show --context task-3/participant/rule-meld-replay-result` | Durable local and granted rule provenance | None; read-only |
+| `101-task3-rule-meld-action-log` | `mem log --actions --limit 25` | Completed initial, preserve, and accept attempts with no provider event | None; read-only |
+| `102-task3-rule-meld-current-restored` | switch to `practice/source-atomized` | Prior current Context restored | Current-Context pointer only |
+
+The review appeared in `0.407` seconds, preservation in `0.430` seconds, and
+acceptance in `0.432` seconds. All 100 inputs remained separately
+provenance-bearing in the result. Neither the local guardrails nor the granted
+authority frame changed, and the provider-event counter remained `0`.
