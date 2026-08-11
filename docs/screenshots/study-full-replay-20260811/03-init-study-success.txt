@@ -1,0 +1,19 @@
+ STUDY NAME                                                                                                                                                                         
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+┃study-snapshot-replay-20260811                                                                                                                                                    ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Edit directly · Ctrl-U clear · Enter create · Esc cancel                                                                                                                           
+Initialized Study run 'study-snapshot-replay-20260811'.                                                                                                                             
+Baseline Profile: study-baseline                                                                                                                                                    
+Participant Profile: study-snapshot-replay-20260811                                                                                                                                 
+Granted-memory Profile: study-snapshot-replay-20260811-granted-memory                                                                                                               
+Contexts 65 · Memories 457 · current=task-1/participant/construction-updates                                                                                                        
+Granted Contexts 43 · Granted Memories 625                                                                                                                                          
+Task-owned and granted-memory data were copied into isolated run Profiles and connected with real authority grants.                                                                 
+Declared Compare prewarms 6 installed.                                                                                                                                              
+Declared Tutorial Atomize prewarms 1 installed.                                                                                                                                     
+Declared Task 1 Update prewarms 1 installed.                                                                                                                                        
+Declared Task 3 Sever prewarms 1 installed.                                                                                                                                         
+Declared Task 1 Directional Meld prewarms 1 installed.                                                                                                                              
+Operational history starts empty; checkpoints, sessions, ad-hoc caches, locks, and run logs were not imported.                                                                      
+Active Profile: study-snapshot-replay-20260811

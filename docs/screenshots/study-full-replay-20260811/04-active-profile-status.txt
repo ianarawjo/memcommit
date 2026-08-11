@@ -1,0 +1,5 @@
+52 180                                                                                                                                                                              
+Profile: study-snapshot-replay-20260811                                                                                                                                             
+Store: /Users/KimMunyeong/.mem-profiles/stores/c199d4f1-8f38-48ce-b73f-19280307b680                                                                                                 
+Contexts 65 owned + 43 granted · Memories 457 owned + 625 granted                                                                                                                   
+Current Context: task-1/participant/construction-updates

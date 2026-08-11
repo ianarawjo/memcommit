@@ -1,0 +1,30 @@
+52 180                                                                                                                                                                              
+Study actions · recent first · content-free                                                                                                                                         
+  [8a8bdc5b/2] 2026-08-11 11:06:10 +2.017s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [8a8bdc5b/1] 2026-08-11 11:06:08 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=profile · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                
+  [9b588e4c/2] 2026-08-11 11:05:33 +2.891s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [9b588e4c/1] 2026-08-11 11:05:30 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=profile · stdin_tty=False · stdout_tty=False                                                                                                                        
+  [50f0bb57/2] 2026-08-11 11:05:30 +0.003s  COMMAND_FINISHED                                                                                                                        
+      exit_code=0 · failure_kind=Exit · status=COMPLETED                                                                                                                            
+  [50f0bb57/1] 2026-08-11 11:05:30 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=profile · stdin_tty=False · stdout_tty=False                                                                                                                        
+  [6d04948e/2] 2026-08-11 11:05:23 +0.018s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [6d04948e/1] 2026-08-11 11:05:23 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=False · stdout_tty=False                                                                                                                            
+  [7c07210b/2] 2026-08-11 11:05:22 +0.003s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [7c07210b/1] 2026-08-11 11:05:22 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=status · stdin_tty=False · stdout_tty=False                                                                                                                         
+  [9a7fbbe3/2] 2026-08-11 11:05:15 +0.003s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [9a7fbbe3/1] 2026-08-11 11:05:15 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=status · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                 
+  [ce8de847/2] 2026-08-11 11:05:15  PROFILE_ENTERED                                                                                                                                 
+      other_profile_name=task1-directional-prewarm-proof2-20260811 · other_profile_uid=d0124b28-8605-4981-b062-027ac5805512                                                         
+  [ce8de847/1] 2026-08-11 11:05:15  STUDY_CREATED                                                                                                                                   
+      baseline_profile_name=study-baseline · baseline_profile_uid=e2cdbdc7-3db4-4d23-b59e-2a2783545005 · paired_profile_uid=6700c616-8a6a-4756-b2b4-d30c708d17cd · role=PARTICIPANT
