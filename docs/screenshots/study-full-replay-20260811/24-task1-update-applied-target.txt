@@ -1,0 +1,51 @@
+  [memory c30faae3] The access information agent cannot issue access credentials.                                                                                                   
+  [memory 5b1a6f72] The access information agent cannot unlock locked doors.                                                                                                        
+  [memory b6987cd9] Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app, except during the construction pe
+riod, when students authorized to enter after 5 p.m. must use a physical NFC student ID card rather than the app.                                                                   
+  [memory f80ad345] If access authentication fails, check the posted contact information for the responsible office before providing guidance.                                      
+  [memory 732458c0] Do not guess an unverified contact number.                                                                                                                      
+  [memory cb1e0734] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. During the construction period, staff and construction or faciliti
+es personnel must use only the designated staff entrance rather than the third-floor rear entrance.                                                                                 
+  [memory 36db4bf8] The existing accessible route beside the Main Building main entrance normally provides stair-free access to the first-floor lobby, but it cannot be used during 
+the construction period because it is being reconstructed.                                                                                                                          
+  [memory 804bfc6b] Tour leaders for external groups tend to expect that the route through the third-floor rear entrance used on a previous visit will remain valid; during the cons
+truction period, this may lead them to take their visiting group to the closed entrance.                                                                                            
+  [memory cc2a0d18] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m.                                                       
+  [memory 3ca6b6b2] The start of regular opening hours for the Main Building main entrance during recess is 8 a.m.                                                                  
+  [memory 4a01fd2b] The Main Building's regular weekend opening hours are posted separately in the weekend operating schedule.                                                      
+  [memory 78298531] The Main Building's holiday access hours may differ from regular operating hours.                                                                               
+  [memory 4189e656] First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors.                                   
+  [memory aee44d0a] Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance.                                                         
+  [memory d2f32d9e] Valid staff access eligibility is required to use the staff-only entrance.                                                                                      
+  [memory 2d97d6b9] The Main Building service entrance is used for preregistered deliveries and facilities work.                                                                    
+  [memory fef275b1] Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected.                                     
+  [memory 41d5bf0b] Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a differe
+nt entrance.                                                                                                                                                                        
+  [memory 7da885c1] The access information agent can explain the difference between the normal uses of the front and rear entrances.                                                
+  [memory 27f6e089] The access information agent cannot check the physical lock state in real time at the time of an inquiry.                                                       
+  [memory 5e9fc7b5] If the posted operating hours differ from the access signage on site, instruct people to follow the on-site signage.                                            
+  [memory bb601c38] Do not suggest that a person without access eligibility follow another authenticated user inside.                                                               
+  [memory efffd1fe] Emergency exits are doors for emergency evacuation and are not regular entrances for general access.                                                            
+  [memory 2b2642c9] The automatic door at the Main Building main entrance operates during regular opening hours.                                                                    
+  [memory e55771f0] Service animals may use the Main Building's general entrances together with their users.                                                                        
+  [memory 2ed45e16] Instruct people not to ride bicycles or personal mobility devices inside the Main Building.                                                                     
+  [memory 9374def9] Visitors using strollers may use the accessible route beside the main entrance.                                                                                 
+  [memory 70fe5986] Group-tour visitors often expect their tour leader to wait in the first-floor main entrance lobby.                                                              
+  [memory 411fa9fb] External workers may confuse the separate check-in procedure at the service entrance with the general visitor procedure.                                        
+  [memory 66b1d3f3] Borrowed visitor access passes must be returned to the information desk before leaving the Main Building.                                                       
+  [memory e99d3f15] Direct users who have lost their access credentials to the posted access support desk.                                                                          
+  [memory 430563f2] The accessible entrance beside the main entrance has an automatic door.                                                                                         
+  [memory 2052527b] The vestibule inside the main entrance is between the outside and the lobby.                                                                                    
+  [memory 5bf2c18d] Nighttime access to the Main Building follows an eligibility policy separate from general opening.                                                              
+  [memory 38a17415] The validity of campus-issued access eligibility depends on the user's affiliation status.                                                                      
+  [memory 625a9fcb] Support for mobile access authentication may vary by campus building.                                                                                           
+  [memory f3f4e4ff] Registered visitors to public events use the entrance designated in the event information.                                                                      
+  [memory e3435ec0] The hours when an event-only entrance is available follow the schedule for that event.                                                                          
+  [memory a24cd65b] Student groups expect to be able to meet their party immediately in the main entrance lobby during large visits.                                                
+  [memory 22dcad33] If an item left at an entrance obstructs passage, report it through the facilities reporting agent.                                                             
+  [memory da9f2a7d] Direct visitors who need on-site access support to the first-floor information desk.                                                                            
+  [memory a3f1889b] During the construction period, a temporary accessible route next to the Main Building main entrance remains available.                                         
+  [memory b2784eba] During the construction period, the general accessible route bypasses the existing route under reconstruction and runs from the temporary passage next to the ma
+in entrance to the first-floor lobby.                                                                                                                                               
+  [memory 346e1980] During the construction period, proactively tell students trying to reach the Central Library, especially those who normally use the third-floor rear entrance, 
+that this route is unavailable.

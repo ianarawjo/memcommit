@@ -1,0 +1,51 @@
+Study actions · recent first · content-free                                                                                                                                         
+  [a3bb9c04/2] 2026-08-11 11:25:44 +0.018s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [a3bb9c04/1] 2026-08-11 11:25:44 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=False · stdout_tty=False                                                                                                                            
+  [ecabe0f3/2] 2026-08-11 11:25:39 +0.019s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [ecabe0f3/1] 2026-08-11 11:25:39 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                    
+  [a15893c0/2] 2026-08-11 11:25:20 +0.018s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [a15893c0/1] 2026-08-11 11:25:20 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=False · stdout_tty=False                                                                                                                            
+  [e2a4b79c/2] 2026-08-11 11:24:43 +0.018s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [e2a4b79c/1] 2026-08-11 11:24:43 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                    
+  [616bf091/2] 2026-08-11 11:24:42 +0.035s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [616bf091/1] 2026-08-11 11:24:42 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [4944bc8b/2] 2026-08-11 11:24:41 +0.088s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [4944bc8b/1] 2026-08-11 11:24:41 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=undo · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [977a4076/2] 2026-08-11 11:24:41 +0.034s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [977a4076/1] 2026-08-11 11:24:41 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [3fcd7206/11] 2026-08-11 11:24:40 +3.438s  COMMAND_FINISHED                                                                                                                       
+      status=COMPLETED                                                                                                                                                              
+  [3fcd7206/10] 2026-08-11 11:24:40 +3.333s  TUI_ACTION                                                                                                                             
+      action=ACCEPT · surface=resolution                                                                                                                                            
+  [3fcd7206/9] 2026-08-11 11:24:40 +3.332s  APPROVAL_ACCEPTED                                                                                                                       
+      action=ACCEPT · surface=resolution                                                                                                                                            
+  [3fcd7206/8] 2026-08-11 11:24:40 +3.331s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [3fcd7206/7] 2026-08-11 11:24:39 +2.645s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=end                                                                                                                                
+  [3fcd7206/6] 2026-08-11 11:24:38 +1.820s  APPROVAL_PRESENTED                                                                                                                      
+      action=REVIEW AND APPLY · surface=resolution                                                                                                                                  
+  [3fcd7206/5] 2026-08-11 11:24:38 +1.819s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [3fcd7206/4] 2026-08-11 11:24:37 +0.786s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [3fcd7206/3] 2026-08-11 11:24:37 +0.786s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=down                                                                                                                               
+  [3fcd7206/2] 2026-08-11 11:24:37 +0.786s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [3fcd7206/1] 2026-08-11 11:24:37 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=update · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52

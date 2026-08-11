@@ -1,0 +1,20 @@
+{
+  "command": "mem update --from task-1/participant/construction-updates --to task-1/campus-wiki --source-descendants --target-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_plan_seconds": 0.3975941669777967,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "source_memories": 75,
+  "target_memories_before": 300,
+  "target_memories_applied": 342,
+  "target_memories_restored": 300,
+  "target_digest_before": "dd78a0bbec077f8012702f57f0f9d9a3753e2ae44807388dcafbea5bcc8803aa",
+  "target_digest_applied": "a912cb3c4accd84472d8464b05994fae275ceb95e9eb6dec35cf056accedaa9c",
+  "target_digest_restored": "dd78a0bbec077f8012702f57f0f9d9a3753e2ae44807388dcafbea5bcc8803aa",
+  "operations": {
+    "edit": 32,
+    "add": 42,
+    "remove": 0
+  },
+  "origin": "EXACT_PREWARM"
+}

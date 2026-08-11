@@ -59,3 +59,22 @@ turn.
 `task1-compare-replay-metrics.json` records the measured time from process
 start to the first complete report and the unchanged provider-event counter.
 The exact analysis remains retained under the run-local current Grant binding.
+
+## Task 1 Update interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `19-task1-update-exact-entry` | `mem update --from task-1/participant/construction-updates --to task-1/campus-wiki --source-descendants --target-descendants` | None | Exact 32-edit + 42-add plan | Staged run-local Update receipt only |
+| `20-task1-update-edit-detail` | same | `Tab`, `Down`, `Enter` | First edit's before, after, reason, and Source provenance | None |
+| `21-task1-update-final-review` | same | `A` | Non-mutating 74-change final review | None |
+| `22-task1-update-exact-approval` | same | `End` | Exact Apply action focused | None |
+| `23-task1-update-apply-receipt` | same | `Enter` | Applied granted-target report | Target changed from 300 to 342 Memories; Source unchanged |
+| `24-task1-update-applied-target` | `mem show --context task-1/campus-wiki/building-access` | None | Construction-qualified durable target text | None; read-only |
+| `25-task1-update-undo-receipt` | `mem undo` | None | Command-unit restoration receipt | Restored all affected granted target Contexts |
+| `26-task1-update-restored-target` | `mem show --context task-1/campus-wiki/building-access` | None | Original unqualified durable target text | None; read-only |
+| `27-task1-update-action-log` | `mem log --actions --limit 25` | None | Approval, Update, and Undo command boundaries | None; read-only |
+
+`task1-update-replay-metrics.json` records the 75-to-300 input, 74
+operations, applied 342-Memory target, and exact 300-Memory digest restoration.
+Undo is part of this replay's isolation protocol: it lets the later Task 1
+Directional Meld exercise its own exact prewarm against the unchanged fixture.

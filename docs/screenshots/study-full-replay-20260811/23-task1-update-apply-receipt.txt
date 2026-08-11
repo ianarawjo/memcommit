@@ -1,0 +1,51 @@
+  SOURCE REFERENCES                                                                                                                                                                 
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]                                                                         
+    Memory [2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f]                                                                                                                                   
+    Content SHA-256: 8a2ae18f699247abffe8f15292c34586fc00aab83967d59e8d9e5e0109eacc68                                                                                               
+                                                                                                                                                                                    
+ADD task-1/campus-wiki/route-changes Memory [2b6bfaed-5e52-4363-a6b1-4d900633c98d]                                                                                                  
+  OWNER                                                                                                                                                                             
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]                                                                                                 
+  MEMORY UID                                                                                                                                                                        
+    2b6bfaed-5e52-4363-a6b1-4d900633c98d                                                                                                                                            
+  AFTER                                                                                                                                                                             
+    During the construction period, directions to the accessible restroom in the Student Centre should tell users to take the accessible route to the left as viewed from the Main B
+uilding.                                                                                                                                                                            
+  REASON                                                                                                                                                                            
+    Adds the supported directional instruction.                                                                                                                                     
+  SOURCE REFERENCES                                                                                                                                                                 
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]                                                                         
+    Memory [8276ab56-741f-5f60-ab77-79fe6dc0ba55]                                                                                                                                   
+    Content SHA-256: d1daeafba59512cdcad389af173aebc99aa2330602fc1ff011f750fb06a74a42                                                                                               
+                                                                                                                                                                                    
+ADD task-1/campus-wiki/route-changes Memory [37619cdd-007c-477c-a3bd-9ec476880639]                                                                                                  
+  OWNER                                                                                                                                                                             
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]                                                                                                 
+  MEMORY UID                                                                                                                                                                        
+    37619cdd-007c-477c-a3bd-9ec476880639                                                                                                                                            
+  AFTER                                                                                                                                                                             
+    During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library w
+est entrance.                                                                                                                                                                       
+  REASON                                                                                                                                                                            
+    Adds the official temporary accessible route.                                                                                                                                   
+  SOURCE REFERENCES                                                                                                                                                                 
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]                                                                         
+    Memory [9af0f95c-0a5e-584e-ba7b-92789e071f7e]                                                                                                                                   
+    Content SHA-256: c8f5dab391db6ea31bcc66030da486681c116d1bd69668e005e0e4ebc64132a6                                                                                               
+                                                                                                                                                                                    
+ADD task-1/campus-wiki/route-changes Memory [6cecca0a-5efd-46a2-8048-c1d9cb84d94e]                                                                                                  
+  OWNER                                                                                                                                                                             
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]                                                                                                 
+  MEMORY UID                                                                                                                                                                        
+    6cecca0a-5efd-46a2-8048-c1d9cb84d94e                                                                                                                                            
+  AFTER                                                                                                                                                                             
+    During the construction period, the Central Library west entrance is the official alternative entrance for the closed connecting route through the Main Building.               
+  REASON                                                                                                                                                                            
+    Adds the official alternative library entrance.                                                                                                                                 
+  SOURCE REFERENCES                                                                                                                                                                 
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]                                                                         
+    Memory [fd27f19b-5f2c-51ee-a9b2-7182120163cb]                                                                                                                                   
+    Content SHA-256: 48e95c6255031ddaac7e4f54ae2403b33463514aa152c4516022f68ff5050540                                                                                               
+                                                                                                                                                                                    
+Updated granted authority target task-1/campus-wiki.                                                                                                                                
+The participant source and fixed study baseline were not changed.

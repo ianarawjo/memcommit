@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ REVIEW DETAIL · 1/74 · CHANGE · EDIT · PLANNED                                                                                                                                   ┃
+┃ task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388]                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ WHY THIS NEEDS REVIEW                                                                                                                                                            ┃
+┃ Adds the construction-period exception to the existing rear-entrance rule.                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ OPERATION DETAIL                                                                                                                                                                 ┃
+┃ OWNER                                                                                                                                                                            ┃
+┃ Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]                                                                                                ┃
+┃ MEMORY UID                                                                                                                                                                       ┃
+┃ 1cb2aa88-4c31-5bbc-97be-ba2ebcef1388                                                                                                                                             ┃
+┃ BEFORE                                                                                                                                                                           ┃
+┃ The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.                                   ┃
+┃ AFTER                                                                                                                                                                            ┃
+┃ The Main Building third-floor rear entrance may normally be used for general passage during regular opening hours in both the academic term and recess, but it cannot be used fo ┃
+┃r general passage during the construction period.                                                                                                                                 ┃
+┃ REASON                                                                                                                                                                           ┃
+┃ Adds the construction-period exception to the existing rear-entrance rule.                                                                                                       ┃
+┃ SOURCE REFERENCES                                                                                                                                                                ┃
+┃ 1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]                                                                        ┃
+┃Memory [8b077f2a-6a9f-50f0-ae91-f6536fb226cb]                                                                                                                                     ┃
+┃Content SHA-256: be62efd767c7a63ec9464bec484d5501f0f1257db3c07a54d1717c95cad53095                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Update report                                                                                                                                          ^│
+│› EDIT           task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [614389e2-3b83-5fbb-bac1-07cb20f2e4fa]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [36db4bf8-285c-573b-8127-0efa0c10f8bd]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [b6987cd9-7198-56b5-bf6f-0162624db30f]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [cb1e0734-91ce-53f3-b00c-da4734df5cb5]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [4ed338df-7bd0-5801-bb3b-535886f6d007]                                                                                 │
+│  EDIT           task-1/campus-wiki/building-access Memory [e3929a49-e9b9-566c-bdc2-296ad7ee086a]                                                                                v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Update action · APPLY is available. Enter to review before anything changes.                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  A review & apply  H Help  Q close

@@ -1,0 +1,1475 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m Staged update: task-1/participant/construction-updates -> task-1/campus-wiki                                                                                                    [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   SOURCE · task-1/participant/construction-updates                                                                                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   TARGET · task-1/campus-wiki                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m STAGED · 32 EDITS · 42 ADDITIONS · 0 REMOVALS · 74 CHANGES                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ PLAN[0m                                                                                                                                                                            [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.[0m                                                                [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT WILL CHANGE                                                                                                                                                                [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m 74 exact target Memory changes in 6 target Context locations: 32 EDIT, 42 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exact reason and source pro[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247mvenance remain inspectable in Items.[0m                                                                                                                                             [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m IMPACT · UPDATE                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m These exact target changes are staged. Apply remains a separate explicit action.                                                                                                [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [1cb2aa88][0m                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and [0;38;2;237;135;150;4mrecess.[0m                    [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The Main Building third-floor rear entrance may[0;38;2;166;218;149;4m normally[0;38;2;255;255;255m be used for general passage during regular opening hours in both the academic term and [0;38;2;166;218;149;4mrecess, but it can[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m               [0;38;2;166;218;149;4mnot be used for general passage during the construction period.[0m                                                                                                   [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [614389e2][0m                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.[0m                                                                     [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The end of regular opening hours for the Main Building main entrance during recess is [0;38;2;166;218;149;4mnormally [0;38;2;255;255;255m10 [0;38;2;166;218;149;4mp.m., but during the construction period general access through [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m               [0;38;2;166;218;149;4mthe main entrance ends at 5 [0;38;2;255;255;255mp.m.[0m                                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [36db4bf8][0m                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The accessible route beside the main entrance [0;38;2;237;135;150;4mis[0;38;2;255;255;255m [0;38;2;237;135;150;4man[0;38;2;255;255;255m [0;38;2;237;135;150;4malways-available[0;38;2;255;255;255m [0;38;2;237;135;150;4mroute[0;38;2;255;255;255m [0;38;2;237;135;150;4minto[0;38;2;255;255;255m the first-floor [0;38;2;237;135;150;4mlobby[0;38;2;255;255;255m [0;38;2;237;135;150;4mwithout[0;38;2;255;255;255m [0;38;2;237;135;150;4musing[0;38;2;255;255;255m [0;38;2;237;135;150;4mstairs.[0m                                       [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The[0;38;2;166;218;149;4m existing[0;38;2;255;255;255m accessible route beside the [0;38;2;166;218;149;4mMain Building [0;38;2;255;255;255mmain entrance [0;38;2;166;218;149;4mnormally[0;38;2;255;255;255m [0;38;2;166;218;149;4mprovides[0;38;2;255;255;255m [0;38;2;166;218;149;4mstair-free[0;38;2;255;255;255m [0;38;2;166;218;149;4maccess[0;38;2;255;255;255m [0;38;2;166;218;149;4mto[0;38;2;255;255;255m the first-floor [0;38;2;166;218;149;4mlobby,[0;38;2;255;255;255m [0;38;2;166;218;149;4mbut[0;38;2;255;255;255m [0;38;2;166;218;149;4mit[0;38;2;255;255;255m [0;38;2;166;218;149;4mcannot be used during th[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m               [0;38;2;166;218;149;4me construction period because it is being reconstructed.[0m                                                                                                          [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [b6987cd9][0m                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.[0m                                    [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered [0;38;2;166;218;149;4mapp, except during the construction peri[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m               [0;38;2;166;218;149;4mod, when students authorized to enter after 5 p.m. must use a physical NFC student ID card rather than the [0;38;2;255;255;255mapp.[0m                                                   [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [cb1e0734][0m                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.[0m                                                                     [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.[0;38;2;166;218;149;4m During the construction period, staff and construction or facilities[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m               [0;38;2;166;218;149;4m personnel must use only the designated staff entrance rather than the third-floor rear entrance.[0m                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mtask-1/campus-wiki/building-access [4ed338df][0m                                                                                                                  [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Update report[0m                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│  EDIT           task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  EDIT           task-1/campus-wiki/building-access Memory [614389e2-3b83-5fbb-bac1-07cb20f2e4fa]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  EDIT           task-1/campus-wiki/building-access Memory [36db4bf8-285c-573b-8127-0efa0c10f8bd]                                                                                [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  EDIT           task-1/campus-wiki/building-access Memory [b6987cd9-7198-56b5-bf6f-0162624db30f]                                                                                [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  EDIT           task-1/campus-wiki/building-access Memory [cb1e0734-91ce-53f3-b00c-da4734df5cb5]                                                                                [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ REVIEW AND APPLY ]  Review final Update action · APPLY is available. Enter to review before anything changes.                                                                   [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  H Help  Q close[151D[43A[C[0m[7A[0m                                                                             [0m
+[C[0;38;2;139;213;255;1m REVIEW DETAIL · 1/74 · CHANGE · EDIT · PLANNED[0m
+[C[0;38;2;139;213;255;1m task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388][0m
+[C[0m                              [0m
+[C[0;38;2;139;213;255;1m WHY THIS NEEDS REVIEW[0m                                     [118C[0;48;2;68;68;68m [0m
+[C[0m Adds the construction-period exception to the existing rear-entrance rule.[102C[0;48;2;68;68;68m [0m
+[C[0m                    [157C[0;48;2;68;68;68m [0m
+[2C[0;38;2;139;213;255;1mOPERATION DETAIL[160C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m OWNER[0m                                                                                                           [64C[0;48;2;68;68;68m [0m
+[C[0m Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0][95C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m MEMORY UID[0m      [160C[0;48;2;68;68;68m [0m
+[C[0m 1cb2aa88-4c31-5bbc-97be-ba2ebcef1388                                                                                                                                            [0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m BEFORE[0m                             [141C[0;48;2;68;68;68m [0m
+[C[0m The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.[34C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m AFTER[0m          [161C[0;48;2;68;68;68m [0m
+[5C[0m Main Building third-floo[C rear [Cntrance may normally be us[Cd for general passage during regular opening hours in both the academic term and recess, but it cannot be used fo[0;48;2;68;68;68m [0m
+[C[0mr gener[Cl passage during[Ct[Ce construct[Con[Cperiod.           [117C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m REASON[0m                                                        [114C[0;48;2;68;68;68m [0m
+[C[0m Adds the construction-period exception to the existing rear-entrance rule.                                                                                  [20C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m SOURCE REFERENCES[0m                                                                                                                                                               [0;48;2;68;68;68m [0m
+[C[0m 1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677][71C[0;48;2;68;68;68m [0m
+[C[0mMemory [8b077f2a-6a9f-50f0-ae91-f6536fb226cb]                  [114C[0;48;2;68;68;68m [0m
+[C[0mContent SHA-256: be62efd767c7a63ec9464bec484d5501f0f1257db3c07a54d1717c95cad53095                           [69C[0;48;2;68;68;68m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
+[C[0m                                               [130C[0;48;2;68;68;68m [0m
+[C[0m                                                               [114C[0;48;2;68;68;68m [0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;244;245;247m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│›                                                                                                                                                                              [0;1m^[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;38;2;244;245;247;48;2;68;68;68m [0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;38;2;244;245;247;48;2;68;68;68m [0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;38;2;244;245;247;48;2;68;68;68m [0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;1mv[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  REPORT         Complete Update report                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│[0;1m› EDIT           task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388][0m                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[C[0m  EDIT           task-1/campus-wiki/building-access Memory [614389e2-3b83-5fbb-bac1-07cb20f2e4fa][80C[0;48;2;68;68;68m [0m
+[61C[0m36db4bf[2C285c[2C73b[C8127[C0efa0[C10f8bd[81C[0;48;2;170;170;170m [0m
+[61C[0mb6987cd9[C7198[2C6[C5[2Cf6f[2C162624db30f[81C[0;48;2;170;170;170m [0m
+[61C[0mcb1e0734[C91ce[2C3f3[Cb00c[Cda4734df5c[C5[0m
+[61C[0m4ed338[Cf[2Cbd0[2C801[2Cb3b[C535886f6d0[C7[0m
+[61C[0me3929a49[Ce9b9[2C66c[2Cdc2[C296ad7ee086a[0m
+
+
+
+
+[5C[0msection/item  Tab switch[2C←/→ option  Enter choo[Ce/other  C send/comment  Esc/Backspace report G comment all  A[Crevi[Cw & apply  H[CHelp  Q[Cclose[0m[K[51A[148D[0m[0;38;2;139;213;255;1m┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[C[0;38;2;139;213;255;1m ╭─ REVIEW AND APPLY ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0m
+[C[0;38;2;139;213;255;1m │ No open issue responses remain in the current proposal.                                                                                                                      │[0m
+[C[0;38;2;139;213;255;1m │ OPEN REVIEWS · NONE                                                                                                                                                          │[0m
+[C[0;38;2;139;213;255;1m │ Nothing changes until the final action below is confirmed.                                                                                                                   │[0m
+[C[0;38;2;139;213;255;1m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+[C[0m                                                                           [0m
+[C[0;38;2;255;255;255m ╭─ APPLY ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0m
+[C[0;38;2;255;255;255m │ Apply Update                                                                                                                                                                 │[0m
+[C[0;38;2;255;255;255m │ Enter to apply the exact current proposal shown in the report.                                                                                                               │[0m
+[C[0;38;2;255;255;255m │ Esc/Backspace returns without applying.                                                                                                                                      │[0m
+[C[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+[C[0m                                     [0m
+[C[0m       [0m
+[C[0m                                                                                                                                               [0m
+[C[0m      [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                 [0m
+[C[0m       [0m
+[C[0m                                                                           [0m
+[C[0m                  [0m
+[C[0m                                                                                                          [0m
+[C[0m                                             [0m
+[C[0m                                                                                 [0m
+
+
+[178C[0;48;2;68;68;68m [0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+
+[C[0m  EDIT           task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388][0m
+
+
+
+
+
+
+
+
+[23C[0mConfirm final Update action · A[CPLY is ready. Enter to[Capply no[C.                        [0m
+
+[5C[0mr[Cview  Tab switch  Enter[Creturn  Esc/Backspace r[Cturn G[Ccomm[2Ct all  A review & ap[Cly [CH Help[C Q close[0m[K[51A[108D[0m[0m
+[C[0;38;2;255;255;255m ╭─ REVIEW AND APPLY ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0m
+[C[0;38;2;255;255;255m │ No open issue responses remain in the current proposal.                                                                                                                      │[0m
+[C[0;38;2;255;255;255m │ OPEN REVIEWS · NONE                                                                                                                                                          │[0m
+[C[0;38;2;255;255;255m │ Nothing changes until the final action below is confirmed.                                                                                                                   │[0m
+[C[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+
+[C[0;38;2;139;213;255;1m ╭─ APPLY ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0m
+[C[0;38;2;139;213;255;1m │ Apply Update                                                                                                                                                                 │[0m
+[C[0;38;2;139;213;255;1m │ Enter to apply the exact current proposal shown in the report.                                                                                                               │[0m
+[C[0;38;2;139;213;255;1m │ Esc/Backspace returns without applying.                                                                                                                                      │[0m
+[C[0;38;2;139;213;255;1m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[31C[0mapply [CEsc/Backspace return G com[Cent al[C [CA review & ap[Cly [CH Help [CQ close[0m[K[51A[107D[0m[J[0m[?7h[?1049l[?2004l[?12l[?25h Applied update: task-1/participant/construction-updates -> task-1/campus-wiki
+ SOURCE task-1/participant/construction-updates → TARGET task-1/campus-wiki
+ APPLIED · 32 EDITS · 42 ADDITIONS · 0 REMOVALS · 74 CHANGES
+
+ WHAT MEM UNDERSTOOD
+ PLAN
+ The exact target Memory changes shown below were applied to the recorded Target revision.
+
+ PLANNED CHANGES
+ ›  1. [CHANGE] task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388]
+       EDIT · APPLIED · Adds the construction-period exception to the existing rear-entrance rule.
+    2. [CHANGE] task-1/campus-wiki/building-access Memory [614389e2-3b83-5fbb-bac1-07cb20f2e4fa]
+       EDIT · APPLIED · Preserves the normal recess schedule while applying the temporary earlier closing time.
+    3. [CHANGE] task-1/campus-wiki/building-access Memory [36db4bf8-285c-573b-8127-0efa0c10f8bd]
+       EDIT · APPLIED · Applies the temporary closure while preserving the route's normal function.
+    4. [CHANGE] task-1/campus-wiki/building-access Memory [b6987cd9-7198-56b5-bf6f-0162624db30f]
+       EDIT · APPLIED · Adds the construction-period authentication restriction to the existing guidance.
+    5. [CHANGE] task-1/campus-wiki/building-access Memory [cb1e0734-91ce-53f3-b00c-da4734df5cb5]
+       EDIT · APPLIED · Preserves the entrance distinction and adds the temporary required use.
+    6. [CHANGE] task-1/campus-wiki/building-access Memory [4ed338df-7bd0-5801-bb3b-535886f6d007]
+       EDIT · APPLIED · Extends the agent guidance with the supported construction priorities.
+    7. [CHANGE] task-1/campus-wiki/building-access Memory [e3929a49-e9b9-566c-bdc2-296ad7ee086a]
+       EDIT · APPLIED · Preserves the normal expectation and adds the documented construction-period failure mode.
+    8. [CHANGE] task-1/campus-wiki/building-access Memory [804bfc6b-188b-5579-bc83-10b04a28bd69]
+       EDIT · APPLIED · Updates the existing tour-leader expectation with its temporary consequence.
+    9. [CHANGE] task-1/campus-wiki/event-relocations Memory [a2ec4e87-1f0c-5c29-af2c-5bb560286a2e]
+       EDIT · APPLIED · Adds the construction-period suspension while retaining the normal recess rule.
+   10. [CHANGE] task-1/campus-wiki/event-relocations Memory [a0700edb-d51a-54f3-88e9-6096cec36b1e]
+       EDIT · APPLIED · Applies the temporary reservation restriction to an existing Main Building venue memory.
+   11. [CHANGE] task-1/campus-wiki/event-relocations Memory [ed4e7c60-edeb-59e3-a590-f6e359069f77]
+       EDIT · APPLIED · Adds the supported temporary comparison scope.
+   12. [CHANGE] task-1/campus-wiki/event-relocations Memory [1929991c-36ee-5897-9409-d83400120362]
+       EDIT · APPLIED · Preserves the general limitation and adds the construction-specific restrictions.
+   13. [CHANGE] task-1/campus-wiki/event-relocations Memory [2a0f0a0e-1930-5983-9074-de449f8669d5]
+       EDIT · APPLIED · Adds the documented relocation risk to the existing visitor expectation.
+   14. [CHANGE] task-1/campus-wiki/event-relocations Memory [4bc2268d-5966-53bd-9501-e8fb0861ddd0]
+       EDIT · APPLIED · Preserves the operator need and adds the construction-period failure modes.
+   15. [CHANGE] task-1/campus-wiki/temporary-parking Memory [6960c0ca-295d-5449-91dc-d9293a6bb79d]
+       EDIT · APPLIED · Adds the temporary parking closure to the normal access rule.
+   16. [CHANGE] task-1/campus-wiki/temporary-parking Memory [67d07765-ac5f-58f6-b7a5-f733cc4228d2]
+       EDIT · APPLIED · Applies the temporary locked-door condition.
+   17. [CHANGE] task-1/campus-wiki/temporary-parking Memory [489960d6-711f-55d0-a410-16bcd6e9acf8]
+       EDIT · APPLIED · Adds the construction-period closure while preserving normal availability.
+   18. [CHANGE] task-1/campus-wiki/temporary-parking Memory [c0ac84d9-367b-5809-856e-9f0d6c471b2b]
+       EDIT · APPLIED · Adds the lot's designated temporary role to its existing operating rule.
+   19. [CHANGE] task-1/campus-wiki/temporary-parking Memory [5d690022-0ab6-52ed-b6a1-77d719c8c6ce]
+       EDIT · APPLIED · Preserves the geographic connection and adds its temporary closure.
+   20. [CHANGE] task-1/campus-wiki/temporary-parking Memory [9514e9f2-d556-50dc-8739-01c37b3322fc]
+       EDIT · APPLIED · Extends the existing agent capability with the specific posted construction information.
+   21. [CHANGE] task-1/campus-wiki/temporary-parking Memory [6a38e1b0-b9bb-5941-aa03-3f29b492feaa]
+       EDIT · APPLIED · Preserves and contextualizes the existing real-time availability limitation.
+   22. [CHANGE] task-1/campus-wiki/temporary-parking Memory [3bd9a7e3-af83-5d3d-9cca-0a3926c446e1]
+       EDIT · APPLIED · Preserves the existing expectation and adds the supported construction-period behavior.
+   23. [CHANGE] task-1/campus-wiki/temporary-parking Memory [efbe330f-eb79-5a05-8ef8-0664355d320c]
+       EDIT · APPLIED · Adds the construction impact to the existing contractor expectation.
+   24. [CHANGE] task-1/campus-wiki/shop-updates Memory [9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83]
+       EDIT · APPLIED · Adds the temporary closure while preserving normal recess hours.
+   25. [CHANGE] task-1/campus-wiki/shop-updates Memory [3ecf1523-62fe-5bb1-be29-2b4a9b3384df]
+       EDIT · APPLIED · Preserves ordinary recess hours and adds the construction-period schedule.
+   26. [CHANGE] task-1/campus-wiki/shop-updates Memory [46192dec-18a4-5404-b3fe-5c0c42be97da]
+       EDIT · APPLIED · Adds the temporary relocation consequence to the existing user expectation.
+   27. [CHANGE] task-1/campus-wiki/shop-updates Memory [b0fa660c-d579-5c27-bf74-c9b3839fd36d]
+       EDIT · APPLIED · Adds the construction-period recommendation constraint.
+   28. [CHANGE] task-1/campus-wiki/shop-updates Memory [39b4d014-8b9d-55ac-a5c2-ccc3e948a721]
+       EDIT · APPLIED · Preserves the demand-planning fact and adds the supported construction-period response.
+   29. [CHANGE] task-1/campus-wiki/facility-updates Memory [a3f16328-2a27-5b18-b802-11036a6d2be6]
+       EDIT · APPLIED · Adds the documented construction-period burden and error risk.
+   30. [CHANGE] task-1/campus-wiki/route-changes Memory [4369c450-1ca1-58e7-b98f-c087552a0a5a]
+       EDIT · APPLIED · Preserves the route preference and adds the supported impact of its closure.
+   31. [CHANGE] task-1/campus-wiki/route-changes Memory [02df0e1e-fc32-5136-a0c2-5af11f99293e]
+       EDIT · APPLIED · Specifies which closed routes may be excluded during construction.
+   32. [CHANGE] task-1/campus-wiki/route-changes Memory [f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646]
+       EDIT · APPLIED · Preserves the existing preference and adds the supported construction-period response.
+   33. [CHANGE] task-1/campus-wiki/building-access Memory [a3f1889b-9b5b-4189-a1e2-526d4f0ae7a1]
+       ADD · APPLIED · Adds the designated temporary accessible entrance route.
+   34. [CHANGE] task-1/campus-wiki/building-access Memory [b2784eba-185a-41b4-b691-7db99bc5a026]
+       ADD · APPLIED · Adds the missing temporary step-free route configuration.
+   35. [CHANGE] task-1/campus-wiki/building-access Memory [346e1980-472a-410c-a91e-4ea55aa6339b]
+       ADD · APPLIED · Adds the supported proactive access guidance.
+   36. [CHANGE] task-1/campus-wiki/event-relocations Memory [cf7feabf-84ab-431c-bdd7-6593f9b89074]
+       ADD · APPLIED · Adds a designated alternative event venue.
+   37. [CHANGE] task-1/campus-wiki/event-relocations Memory [163c1963-02eb-431b-94e6-14f2dea71654]
+       ADD · APPLIED · Adds a second designated alternative event venue.
+   38. [CHANGE] task-1/campus-wiki/event-relocations Memory [45510b41-0967-45a5-81d0-df816da20708]
+       ADD · APPLIED · Adds the auditorium's temporary converted function.
+   39. [CHANGE] task-1/campus-wiki/event-relocations Memory [11becdce-b06e-429d-b5e4-a0daa8a96b00]
+       ADD · APPLIED · Adds the temporary equipment-loading location.
+   40. [CHANGE] task-1/campus-wiki/temporary-parking Memory [c25942ff-af6e-4acd-8fbe-f7271ce31ca0]
+       ADD · APPLIED · Adds the authorized staff access procedure.
+   41. [CHANGE] task-1/campus-wiki/temporary-parking Memory [cba30532-7020-4161-b600-088cc3b4cf32]
+       ADD · APPLIED · Adds the distinct controlled access procedure for authorized personnel.
+   42. [CHANGE] task-1/campus-wiki/temporary-parking Memory [88ac89e1-a62f-41ed-8a7a-3ccac49db885]
+       ADD · APPLIED · Adds the garage's temporary construction use.
+   43. [CHANGE] task-1/campus-wiki/temporary-parking Memory [a32bfdf2-9159-4bb0-8406-c3514ea8e223]
+       ADD · APPLIED · Adds the disposition of personal items left in the garage.
+   44. [CHANGE] task-1/campus-wiki/temporary-parking Memory [5e8d843d-c6d9-42bb-b12b-8f4ad554741a]
+       ADD · APPLIED · Adds the temporary closure of Parking Lot A.
+   45. [CHANGE] task-1/campus-wiki/temporary-parking Memory [c4defd51-1ad1-4689-ab71-a2f22fac8d8c]
+       ADD · APPLIED · Adds the stated reopening plan.
+   46. [CHANGE] task-1/campus-wiki/shop-updates Memory [1b2f9ab5-967d-438d-8efb-240607562d9d]
+       ADD · APPLIED · Adds the temporary ATM closure.
+   47. [CHANGE] task-1/campus-wiki/shop-updates Memory [85ee57ba-c7f6-4d70-a0d3-c0bc4dc1fe4a]
+       ADD · APPLIED · Adds the temporary unattended-store closure.
+   48. [CHANGE] task-1/campus-wiki/shop-updates Memory [39c648d2-150a-4e06-bb4f-ddc50ff9cb4a]
+       ADD · APPLIED · Adds the designated alternative ATM.
+   49. [CHANGE] task-1/campus-wiki/shop-updates Memory [950645f5-5d0a-4976-860d-c66a3b3f721f]
+       ADD · APPLIED · Adds the designated store alternative and its hours.
+   50. [CHANGE] task-1/campus-wiki/shop-updates Memory [269470fa-2779-4261-a6a5-1d950524ee7f]
+       ADD · APPLIED · Adds the limitation of the temporary store alternative.
+   51. [CHANGE] task-1/campus-wiki/shop-updates Memory [ccc34965-31c0-4063-aceb-4507c497ce1a]
+       ADD · APPLIED · Adds the temporary cafe closure.
+   52. [CHANGE] task-1/campus-wiki/shop-updates Memory [2157ad3d-9398-49f2-9a44-a741f38dbd35]
+       ADD · APPLIED · Adds the construction-safe ATM route.
+   53. [CHANGE] task-1/campus-wiki/facility-updates Memory [2021f9b2-8522-4dfe-87d1-5c0eb2af29f1]
+       ADD · APPLIED · Adds the overarching construction status.
+   54. [CHANGE] task-1/campus-wiki/facility-updates Memory [1550b932-a333-4e66-831b-3514dcf7947b]
+       ADD · APPLIED · Adds the temporary elevator operating pattern.
+   55. [CHANGE] task-1/campus-wiki/facility-updates Memory [5335955a-575b-47b8-b174-057b18a9b906]
+       ADD · APPLIED · Adds the temporary suspension of in-person visitor services.
+   56. [CHANGE] task-1/campus-wiki/facility-updates Memory [97860f5d-8eaf-470a-a7af-3deb7b9a341c]
+       ADD · APPLIED · Adds the replacement visitor-service channel.
+   57. [CHANGE] task-1/campus-wiki/facility-updates Memory [870309cb-4a42-4464-9f7a-85734a2ab0c9]
+       ADD · APPLIED · Adds the first-floor restroom closure.
+   58. [CHANGE] task-1/campus-wiki/facility-updates Memory [65774e08-cd16-40ac-a592-83df60cd4a67]
+       ADD · APPLIED · Adds the second-floor restroom closure.
+   59. [CHANGE] task-1/campus-wiki/facility-updates Memory [bed480c5-d764-4c3a-ba44-c946bcb743a7]
+       ADD · APPLIED · Adds the third-floor restroom closure.
+   60. [CHANGE] task-1/campus-wiki/facility-updates Memory [cf770933-9769-4ecf-9955-b21a22de9434]
+       ADD · APPLIED · Adds the nearest temporary general-restroom alternative.
+   61. [CHANGE] task-1/campus-wiki/facility-updates Memory [d60c6d3b-8609-4b3e-9844-4e1d878299f9]
+       ADD · APPLIED · Adds restroom guidance for campus-affiliated users.
+   62. [CHANGE] task-1/campus-wiki/facility-updates Memory [eb13404f-474b-4110-a21c-76b60c036077]
+       ADD · APPLIED · Adds restroom guidance for general visitors.
+   63. [CHANGE] task-1/campus-wiki/facility-updates Memory [bdf9b1a2-66e6-4921-9aa5-a60340a5cb06]
+       ADD · APPLIED · Adds the temporary accessible-restroom alternative.
+   64. [CHANGE] task-1/campus-wiki/facility-updates Memory [73bd31b7-77be-4e31-bef0-28941c06e9e2]
+       ADD · APPLIED · Adds the temporary consultation-desk closure.
+   65. [CHANGE] task-1/campus-wiki/facility-updates Memory [1232b624-321c-4d4e-ad44-75fd181a9488]
+       ADD · APPLIED · Adds the documented visitor expectation and resulting difficulty.
+   66. [CHANGE] task-1/campus-wiki/facility-updates Memory [7c1e64e6-d25d-4fea-b211-918f089a364a]
+       ADD · APPLIED · Adds the disclosed temporary service interruption.
+   67. [CHANGE] task-1/campus-wiki/facility-updates Memory [0c979546-348f-4432-a385-b2b2d97c9c44]
+       ADD · APPLIED · Adds the construction dates.
+   68. [CHANGE] task-1/campus-wiki/facility-updates Memory [1f668a8a-b32e-4513-b8f7-9f52c6e499ab]
+       ADD · APPLIED · Adds the agent's construction-specific response boundary.
+   69. [CHANGE] task-1/campus-wiki/route-changes Memory [35953536-579d-4fa1-80a4-eaa25bc35b16]
+       ADD · APPLIED · Adds the indoor-route closure.
+   70. [CHANGE] task-1/campus-wiki/route-changes Memory [c6f9a80c-a094-47cb-8931-0a1397df3132]
+       ADD · APPLIED · Adds the rear-entrance route closure.
+   71. [CHANGE] task-1/campus-wiki/route-changes Memory [d829138d-de6c-4f83-9f0d-786a721287e7]
+       ADD · APPLIED · Adds the parking-to-library route closure.
+   72. [CHANGE] task-1/campus-wiki/route-changes Memory [2b6bfaed-5e52-4363-a6b1-4d900633c98d]
+       ADD · APPLIED · Adds the supported directional instruction.
+   73. [CHANGE] task-1/campus-wiki/route-changes Memory [37619cdd-007c-477c-a3bd-9ec476880639]
+       ADD · APPLIED · Adds the official temporary accessible route.
+   74. [CHANGE] task-1/campus-wiki/route-changes Memory [6cecca0a-5efd-46a2-8048-c1d9cb84d94e]
+       ADD · APPLIED · Adds the official alternative library entrance.
+
+ APPLICATION
+  (none)
+
+SUMMARY · 32 edits, 42 additions, 0 removals
+SCOPE · SOURCE INCLUDE DESCENDANTS · TARGET INCLUDE DESCENDANTS
+GRANTED TARGET · task-1/campus-wiki · grant cb123652 revision 1
+REQUIRED TO APPLY · READ + CREATE + UPDATE
+GRANT PERMISSIONS · READY
+
+EXACT PLANNED CHANGE DETAILS
+
+EDIT task-1/campus-wiki/building-access Memory [1cb2aa88-4c31-5bbc-97be-ba2ebcef1388]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    1cb2aa88-4c31-5bbc-97be-ba2ebcef1388
+  BEFORE
+    The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.
+  AFTER
+    The Main Building third-floor rear entrance may normally be used for general passage during regular opening hours in both the academic term and recess, but it cannot be used for general passage during the construction period.
+  REASON
+    Adds the construction-period exception to the existing rear-entrance rule.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [8b077f2a-6a9f-50f0-ae91-f6536fb226cb]
+    Content SHA-256: be62efd767c7a63ec9464bec484d5501f0f1257db3c07a54d1717c95cad53095
+
+EDIT task-1/campus-wiki/building-access Memory [614389e2-3b83-5fbb-bac1-07cb20f2e4fa]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    614389e2-3b83-5fbb-bac1-07cb20f2e4fa
+  BEFORE
+    The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.
+  AFTER
+    The end of regular opening hours for the Main Building main entrance during recess is normally 10 p.m., but during the construction period general access through the main entrance ends at 5 p.m.
+  REASON
+    Preserves the normal recess schedule while applying the temporary earlier closing time.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [56c34a24-0954-5c64-9fd4-880995e6e53c]
+    Content SHA-256: 0b97b32b5a52bd735ed6ff005de594710a6ae2aca7aeef110372a99c685eeec4
+
+EDIT task-1/campus-wiki/building-access Memory [36db4bf8-285c-573b-8127-0efa0c10f8bd]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    36db4bf8-285c-573b-8127-0efa0c10f8bd
+  BEFORE
+    The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.
+  AFTER
+    The existing accessible route beside the Main Building main entrance normally provides stair-free access to the first-floor lobby, but it cannot be used during the construction period because it is being reconstructed.
+  REASON
+    Applies the temporary closure while preserving the route's normal function.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [84a45a62-09c7-5187-8fa6-ff7063f9e8d0]
+    Content SHA-256: b97de845a0beb48d16adab51bb8706d60274f0429060418c602d8c1bea39f46a
+
+EDIT task-1/campus-wiki/building-access Memory [b6987cd9-7198-56b5-bf6f-0162624db30f]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    b6987cd9-7198-56b5-bf6f-0162624db30f
+  BEFORE
+    Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.
+  AFTER
+    Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app, except during the construction period, when students authorized to enter after 5 p.m. must use a physical NFC student ID card rather than the app.
+  REASON
+    Adds the construction-period authentication restriction to the existing guidance.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [f9d7eb4e-221f-5b5f-a237-213a31e04093]
+    Content SHA-256: 9ed2e30a31f0747ed1c08c4089b4673c7f10a16e10dad4587dc9d2bd9869911a
+
+EDIT task-1/campus-wiki/building-access Memory [cb1e0734-91ce-53f3-b00c-da4734df5cb5]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    cb1e0734-91ce-53f3-b00c-da4734df5cb5
+  BEFORE
+    The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.
+  AFTER
+    The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. During the construction period, staff and construction or facilities personnel must use only the designated staff entrance rather than the third-floor rear entrance.
+  REASON
+    Preserves the entrance distinction and adds the temporary required use.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [f1b7843e-2c8a-5434-94a4-1383534abb3a]
+    Content SHA-256: 5a921d5ff15108f4257fb2def923a475bdff60bacc649fe675d3b81052f0c6d1
+
+EDIT task-1/campus-wiki/building-access Memory [4ed338df-7bd0-5801-bb3b-535886f6d007]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    4ed338df-7bd0-5801-bb3b-535886f6d007
+  BEFORE
+    The access information agent can explain the posted opening hours.
+  AFTER
+    The access information agent can explain posted opening hours and, during the construction period, may prioritize explaining the 5 p.m. closing of the main entrance and the closure of the third-floor rear entrance.
+  REASON
+    Extends the agent guidance with the supported construction priorities.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [be002fc9-b9e0-5d73-9c15-622c0688c73c]
+    Content SHA-256: 1013f30d41840097748d3d315ed553a69ae75efee50c8fee4e5db52f3700fc7c
+
+EDIT task-1/campus-wiki/building-access Memory [e3929a49-e9b9-566c-bdc2-296ad7ee086a]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    e3929a49-e9b9-566c-bdc2-296ad7ee086a
+  BEFORE
+    Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.
+  AFTER
+    Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage. During the construction period, they may go as far as the closed rear entrance before turning back or searching there for an alternative route.
+  REASON
+    Preserves the normal expectation and adds the documented construction-period failure mode.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [2d8e8c75-1dad-5dbc-9eaa-04cd522410f0]
+    Content SHA-256: 1f7ca0e15bf03a25a926dfd0297263420ecb24dd67d0fea5bed5d2b0c783c34a
+
+EDIT task-1/campus-wiki/building-access Memory [804bfc6b-188b-5579-bc83-10b04a28bd69]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    804bfc6b-188b-5579-bc83-10b04a28bd69
+  BEFORE
+    Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.
+  AFTER
+    Tour leaders for external groups tend to expect that the route through the third-floor rear entrance used on a previous visit will remain valid; during the construction period, this may lead them to take their visiting group to the closed entrance.
+  REASON
+    Updates the existing tour-leader expectation with its temporary consequence.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [31f5b67b-40f8-5690-b772-b329ce50e443]
+    Content SHA-256: 06f2112182556787aa5681632843ece9db13cf9ce5ed4e7b1a6542fca11f10e3
+
+EDIT task-1/campus-wiki/event-relocations Memory [a2ec4e87-1f0c-5c29-af2c-5bb560286a2e]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    a2ec4e87-1f0c-5c29-af2c-5bb560286a2e
+  BEFORE
+    The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.
+  AFTER
+    The exhibition and event hall on the tenth floor of the Main Building normally remains open for exhibition viewing during recess, but viewing is suspended during the construction period.
+  REASON
+    Adds the construction-period suspension while retaining the normal recess rule.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [3fcfa405-cf3d-500e-810b-28ddc81fefca]
+    Content SHA-256: b80ec25ae7bca925c4f932d166aba9b2d44885b0075d0831238ec64f858100ae
+
+EDIT task-1/campus-wiki/event-relocations Memory [a0700edb-d51a-54f3-88e9-6096cec36b1e]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    a0700edb-d51a-54f3-88e9-6096cec36b1e
+  BEFORE
+    The meeting space on the first floor of the Main Building can be reserved for external events.
+  AFTER
+    The meeting space on the first floor of the Main Building can normally be reserved for external events, but no new reservations for Main Building event venues are accepted during the construction period.
+  REASON
+    Applies the temporary reservation restriction to an existing Main Building venue memory.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [1754ab18-13ca-5e07-a40c-eb12e45dcd1e]
+    Content SHA-256: 46fbeb99262be763068bc9975e3f3351b5d95c8e690ad7ff2ed6f7626ebba3a6
+
+EDIT task-1/campus-wiki/event-relocations Memory [ed4e7c60-edeb-59e3-a590-f6e359069f77]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    ed4e7c60-edeb-59e3-a590-f6e359069f77
+  BEFORE
+    The event information agent can compare published event spaces.
+  AFTER
+    The event information agent can normally compare published event spaces. During the construction period, it may exclude closed Main Building event venues and compare only designated alternative spaces.
+  REASON
+    Adds the supported temporary comparison scope.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [2587dbb3-dc02-5e13-b1de-9d704c7a706a]
+    Content SHA-256: fdd8418aa429f806014c9ffc7ffa1446070168cb8164b4bd74eea53de674c8c3
+
+EDIT task-1/campus-wiki/event-relocations Memory [1929991c-36ee-5897-9409-d83400120362]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    1929991c-36ee-5897-9409-d83400120362
+  BEFORE
+    The event information agent cannot create reservations.
+  AFTER
+    The event information agent cannot create reservations. During the construction period, it also cannot restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.
+  REASON
+    Preserves the general limitation and adds the construction-specific restrictions.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [eee1213e-3582-5c9a-bde8-78af7b216df0]
+    Content SHA-256: 90c1c299ea8b57301a774e0cc8db14e88ff3c8c6e5d21b094a6376f4b39097a2
+
+EDIT task-1/campus-wiki/event-relocations Memory [2a0f0a0e-1930-5983-9074-de449f8669d5]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    2a0f0a0e-1930-5983-9074-de449f8669d5
+  BEFORE
+    External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again.
+  AFTER
+    External visitors who have previously attended an event in the Main Building tend to look for the same entrance and floor on a later visit; during the construction period, this expectation may cause them to miss guidance about the alternative venue.
+  REASON
+    Adds the documented relocation risk to the existing visitor expectation.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [b867c632-6a7e-55c8-8371-91b3f0e1bb89]
+    Content SHA-256: 520cf9fc5e9e2a87228e91cad907808c1e310bab7455899e5caa748bbac9b1ac
+
+EDIT task-1/campus-wiki/event-relocations Memory [4bc2268d-5966-53bd-9501-e8fb0861ddd0]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    4bc2268d-5966-53bd-9501-e8fb0861ddd0
+  BEFORE
+    External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event.
+  AFTER
+    External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event. During the construction period, they may incorrectly assume the existing Main Building loading procedure remains valid, send equipment to the existing loading entrance, or check the alternative venue's access rules too late.
+  REASON
+    Preserves the operator need and adds the construction-period failure modes.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [8bf7a20c-ced2-51ad-8847-1fbb946ea3a5]
+    Content SHA-256: cd0d698ae8b361f1d1ff5d3ca233cbaccef21d42f3fd6e6843a9a1e25ea8786b
+
+EDIT task-1/campus-wiki/temporary-parking Memory [6960c0ca-295d-5449-91dc-d9293a6bb79d]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    6960c0ca-295d-5449-91dc-d9293a6bb79d
+  BEFORE
+    General vehicles may enter and park in the Main Building underground parking garage during operating hours.
+  AFTER
+    General vehicles may normally enter and park in the Main Building underground parking garage during operating hours, but the garage cannot be used for general parking during the construction period.
+  REASON
+    Adds the temporary parking closure to the normal access rule.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [84196dc5-9ae8-5663-866a-048024119fd2]
+    Content SHA-256: 699e90beb6a821858ed341065ef08ae6078682978522015ae642a2f940e4133c
+
+EDIT task-1/campus-wiki/temporary-parking Memory [67d07765-ac5f-58f6-b7a5-f733cc4228d2]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    67d07765-ac5f-58f6-b7a5-f733cc4228d2
+  BEFORE
+    The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.
+  AFTER
+    The pedestrian entrance to the underground parking garage is normally open to general pedestrians during operating hours, but it is kept locked during the construction period.
+  REASON
+    Applies the temporary locked-door condition.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [fdffd727-3579-5edc-8433-1f1f372b7576]
+    Content SHA-256: 378dcc9513846605fa191a67f43571feadac5eef2e8cf34852683ca659961ed9
+
+EDIT task-1/campus-wiki/temporary-parking Memory [489960d6-711f-55d0-a410-16bcd6e9acf8]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    489960d6-711f-55d0-a410-16bcd6e9acf8
+  BEFORE
+    The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.
+  AFTER
+    The interior stairs leading down from the Main Building lobby to the underground parking garage are normally available during operating hours, but they are closed to all users during the construction period.
+  REASON
+    Adds the construction-period closure while preserving normal availability.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [5a4dd86f-bead-50bb-b6e8-45c176b6d65f]
+    Content SHA-256: 4ef59f8b5c113637f29f837969a2850cd75a5b96c6ab62af3c79a887bdfb52c5
+
+EDIT task-1/campus-wiki/temporary-parking Memory [c0ac84d9-367b-5809-856e-9f0d6c471b2b]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    c0ac84d9-367b-5809-856e-9f0d6c471b2b
+  BEFORE
+    Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.
+  AFTER
+    Outdoor Parking Lot C accepts visitor vehicles during posted operating hours and operates as the temporary alternative parking lot for vehicles visiting the Main Building during the construction period.
+  REASON
+    Adds the lot's designated temporary role to its existing operating rule.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [9b8a7458-4ebc-5b82-be5b-522268680f63]
+    Content SHA-256: 6452da6c8a876b2a6b6a92a0ecbe4cb363b9531554f2c10a4efd2aa495ccc454
+
+EDIT task-1/campus-wiki/temporary-parking Memory [5d690022-0ab6-52ed-b6a1-77d719c8c6ce]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    5d690022-0ab6-52ed-b6a1-77d719c8c6ce
+  BEFORE
+    Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road.
+  AFTER
+    Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road, but that road is blocked during the construction period.
+  REASON
+    Preserves the geographic connection and adds its temporary closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [91de6da4-a9f4-5e2a-a585-14609a8d8497]
+    Content SHA-256: 24bd7afa84efacd6ee13d6700ca365bd8d7c50fdc7a8e83131c07b8b527b18be
+
+EDIT task-1/campus-wiki/temporary-parking Memory [9514e9f2-d556-50dc-8739-01c37b3322fc]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    9514e9f2-d556-50dc-8739-01c37b3322fc
+  BEFORE
+    The parking information agent can explain posted open statuses.
+  AFTER
+    The parking information agent can explain posted parking statuses and, during the construction period, may explain the closures of the underground garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C.
+  REASON
+    Extends the existing agent capability with the specific posted construction information.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [71a5daa6-e289-51bf-bf1f-051d9958091e]
+    Content SHA-256: 5fe65a3cc020b1872ab67d16e4fb2aa7f267f09aaa59e195337572a7db26fbdd
+
+EDIT task-1/campus-wiki/temporary-parking Memory [6a38e1b0-b9bb-5941-aa03-3f29b492feaa]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    6a38e1b0-b9bb-5941-aa03-3f29b492feaa
+  BEFORE
+    The parking information agent cannot check real-time space availability.
+  AFTER
+    The parking information agent cannot check real-time space availability. During the construction period, it may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry.
+  REASON
+    Preserves and contextualizes the existing real-time availability limitation.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [7f72387d-58fc-511c-84c3-940933217e9d]
+    Content SHA-256: 0e3717d6aea1b5c03d83bb54ba113c30c96e7929ad6b15ee62c4948ddd83a000
+
+EDIT task-1/campus-wiki/temporary-parking Memory [3bd9a7e3-af83-5d3d-9cca-0a3926c446e1]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    3bd9a7e3-af83-5d3d-9cca-0a3926c446e1
+  BEFORE
+    First-time visiting drivers often expect there to be general parking spaces in the parking lot closest to the Main Building.
+  AFTER
+    First-time visiting drivers often expect general parking near the Main Building, and visitors accustomed to parking there may expect to enter the underground garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and only then search for Outdoor Parking Lot C.
+  REASON
+    Preserves the existing expectation and adds the supported construction-period behavior.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [85518d54-4515-5bc0-ad8c-f5dd4e2b7d51]
+    Content SHA-256: 9b958122bff8481d9cdcd1cbea92d3a9240ba5b6787a5c221365461f129efe44
+
+EDIT task-1/campus-wiki/temporary-parking Memory [efbe330f-eb79-5a05-8ef8-0664355d320c]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    efbe330f-eb79-5a05-8ef8-0664355d320c
+  BEFORE
+    Delivery drivers and external maintenance providers sometimes expect to be able to load and unload briefly at the edge of Outdoor Parking Lot A.
+  AFTER
+    Delivery drivers and external maintenance providers sometimes expect to load or unload at the edge of Outdoor Parking Lot A. During the construction period, they may approach the same point and then have to reconfirm the delivery time or unloading location at the control line.
+  REASON
+    Adds the construction impact to the existing contractor expectation.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [ceffae14-e966-566e-83b2-df46680d4582]
+    Content SHA-256: e364b4117634e6861aab264d21adbc31215f65cb55a3d712891cb985bbb23f3a
+
+EDIT task-1/campus-wiki/shop-updates Memory [9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83
+  BEFORE
+    The Campus Store on the first floor of the Main Building operates from 7:00 a.m. to 11:00 p.m. even during recess.
+  AFTER
+    The Campus Store on the first floor of the Main Building normally operates from 7 a.m. to 11 p.m. even during recess, but it is closed during the construction period.
+  REASON
+    Adds the temporary closure while preserving normal recess hours.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [9e0d0ca2-362c-5498-9560-a217d74eaaab]
+    Content SHA-256: 9f70033352f539616b31ed2bc545fa63edc4ef065684623fb5fd6f0eed5eae9b
+
+EDIT task-1/campus-wiki/shop-updates Memory [3ecf1523-62fe-5bb1-be29-2b4a9b3384df]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    3ecf1523-62fe-5bb1-be29-2b4a9b3384df
+  BEFORE
+    The Engineering Building Campus Store's usual operating hours during recess are from 9:00 a.m. to 6:00 p.m.
+  AFTER
+    The Engineering Building Campus Store's usual recess hours are 9 a.m. to 6 p.m., but during the construction period it operates from 7 a.m. to 11 p.m.
+  REASON
+    Preserves ordinary recess hours and adds the construction-period schedule.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [9c623c17-1942-52a6-bf3d-ebc25d6ad078]
+    Content SHA-256: 31fa2ee2fb31c9cdeccf16222a325738c869cc0b645c70fb78a5dc745261dba7
+
+EDIT task-1/campus-wiki/shop-updates Memory [46192dec-18a4-5404-b3fe-5c0c42be97da]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    46192dec-18a4-5404-b3fe-5c0c42be97da
+  BEFORE
+    Students who need cash in the evening often expect that they can use the Main Building ATM at any time.
+  AFTER
+    Students who need cash in the evening often expect to use the Main Building ATM. During the construction period, they may come to the Main Building expecting to withdraw cash there and then have to find the West Complex ATM.
+  REASON
+    Adds the temporary relocation consequence to the existing user expectation.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [0a73702a-306c-5b54-a2c3-d3e4a23d6a9f]
+    Content SHA-256: 4003382735d7c160772cb6444912cd0a1b572dc89f6a8e94670fef3a2099d071
+
+EDIT task-1/campus-wiki/shop-updates Memory [b0fa660c-d579-5c27-bf74-c9b3839fd36d]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    b0fa660c-d579-5c27-bf74-c9b3839fd36d
+  BEFORE
+    The amenities information agent can answer with posted locations.
+  AFTER
+    The amenities information agent can answer with posted locations. During the construction period, it may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.
+  REASON
+    Adds the construction-period recommendation constraint.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [e7b747cf-a1d2-571a-af5b-e1d3514434f1]
+    Content SHA-256: 76c6fc5e99a27a79caa030aa9126d16e6c10eb95a86cc0496f47a954df9e3173
+
+EDIT task-1/campus-wiki/shop-updates Memory [39b4d014-8b9d-55ac-a5c2-ccc3e948a721]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    39b4d014-8b9d-55ac-a5c2-ccc3e948a721
+  BEFORE
+    The Campus Store contractor incorporates students' tendency to use the Main Building ATM and the 24-hour store together in the evening into demand planning.
+  AFTER
+    The Campus Store contractor incorporates students' evening use of the Main Building ATM and 24-hour store into demand planning. Because Main Building facilities are closed during the construction period, the contractor operating the Engineering Building Campus Store may expect additional alternative users and seek to increase evening staffing and inventory above normal levels.
+  REASON
+    Preserves the demand-planning fact and adds the supported construction-period response.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [50be93d9-d0da-542c-beab-be56adde4ee2]
+    Content SHA-256: 5d3b92486b39f0220b05e3ee6896f3e55d2ebe1b5a582b5025fe7f8641af9ef5
+
+EDIT task-1/campus-wiki/facility-updates Memory [a3f16328-2a27-5b18-b802-11036a6d2be6]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    a3f16328-2a27-5b18-b802-11036a6d2be6
+  BEFORE
+    Cleaning and security contractor staff prefer service routes separated from general users during shift changes.
+  AFTER
+    Cleaning and security contractor staff prefer service routes separated from general users during shift changes. During the construction period, they may find the designated service entrance more burdensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.
+  REASON
+    Adds the documented construction-period burden and error risk.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [0c87297c-f5fb-5380-9cc3-efa21c0fb60b]
+    Content SHA-256: ff75e84cf29f120764f958a8305d6f71b4840de585b14b653239f27df76a66fe
+
+EDIT task-1/campus-wiki/route-changes Memory [4369c450-1ca1-58e7-b98f-c087552a0a5a]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    4369c450-1ca1-58e7-b98f-c087552a0a5a
+  BEFORE
+    In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.
+  AFTER
+    In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route. During the construction period, closure of that indoor route may impose substantial heat and travel burdens when they are redirected outdoors.
+  REASON
+    Preserves the route preference and adds the supported impact of its closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [a8bb36e1-2629-5b8f-b4dc-af9b88020dc9]
+    Content SHA-256: 5a8f61fa78c57b591bfb9c9cdfc456f6679f4c47834cf5a1a8a61df241e0e246
+
+EDIT task-1/campus-wiki/route-changes Memory [02df0e1e-fc32-5136-a0c2-5af11f99293e]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    02df0e1e-fc32-5136-a0c2-5af11f99293e
+  BEFORE
+    Recommend only routes that are currently confirmed to be open.
+  AFTER
+    Recommend only routes currently confirmed to be open. During the construction period, the route guidance agent may exclude routes passing through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A because those routes are closed.
+  REASON
+    Specifies which closed routes may be excluded during construction.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [638f272f-9fbd-5d1f-bfd8-b01618424065]
+    Content SHA-256: 80eda31eb9ae4a3aa98637b1d0043c816d83bad2384f22dcb69ed1ba5d75cb24
+
+EDIT task-1/campus-wiki/route-changes Memory [f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646
+  BEFORE
+    Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.
+  AFTER
+    Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather. If that shortcut is closed during the construction period, a companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.
+  REASON
+    Preserves the existing preference and adds the supported construction-period response.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [ba9d70f9-02c4-56d9-ac23-f2a532c22488]
+    Content SHA-256: e1f6fd794cdf9ba8f19f0df39c6f4bb82c6c7109f9b20a5ca0f6f5037b3f03ef
+
+ADD task-1/campus-wiki/building-access Memory [a3f1889b-9b5b-4189-a1e2-526d4f0ae7a1]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    a3f1889b-9b5b-4189-a1e2-526d4f0ae7a1
+  AFTER
+    During the construction period, a temporary accessible route next to the Main Building main entrance remains available.
+  REASON
+    Adds the designated temporary accessible entrance route.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [89e6f853-8c98-51ba-98cc-ad5c84580a53]
+    Content SHA-256: 979a262f5728f6a04005ee9e1c1c15741a3445a535a14667d5990063e445eab1
+
+ADD task-1/campus-wiki/building-access Memory [b2784eba-185a-41b4-b691-7db99bc5a026]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    b2784eba-185a-41b4-b691-7db99bc5a026
+  AFTER
+    During the construction period, the general accessible route bypasses the existing route under reconstruction and runs from the temporary passage next to the main entrance to the first-floor lobby.
+  REASON
+    Adds the missing temporary step-free route configuration.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0]
+    Content SHA-256: 0d45fa12a9fc3dbbc622d93b1685844535b0b35d18fb8d208273d3457eb7bf33
+
+ADD task-1/campus-wiki/building-access Memory [346e1980-472a-410c-a91e-4ea55aa6339b]
+  OWNER
+    Context task-1/campus-wiki/building-access [91ee5b65-ef1c-5414-961c-e9d17c6b16c0]
+  MEMORY UID
+    346e1980-472a-410c-a91e-4ea55aa6339b
+  AFTER
+    During the construction period, proactively tell students trying to reach the Central Library, especially those who normally use the third-floor rear entrance, that this route is unavailable.
+  REASON
+    Adds the supported proactive access guidance.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/building-access [5a66e0ec-3497-5ccf-9d8f-08c966647677]
+    Memory [ebc1d272-2f9a-5b2e-a5a4-6c0539f46527]
+    Content SHA-256: c302de30c9b6a9d793937dc1a8d463caffd382f0544e8e44eeb0034a0f0360f8
+
+ADD task-1/campus-wiki/event-relocations Memory [cf7feabf-84ab-431c-bdd7-6593f9b89074]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    cf7feabf-84ab-431c-bdd7-6593f9b89074
+  AFTER
+    During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.
+  REASON
+    Adds a designated alternative event venue.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [686d630d-defe-5aa1-a28d-470b3ebb9059]
+    Content SHA-256: 953c4a18509e933a9f8f0e0cfa8381091f8dc6fffc222f408a4c2bbbd18ca032
+
+ADD task-1/campus-wiki/event-relocations Memory [163c1963-02eb-431b-94e6-14f2dea71654]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    163c1963-02eb-431b-94e6-14f2dea71654
+  AFTER
+    During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.
+  REASON
+    Adds a second designated alternative event venue.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a]
+    Content SHA-256: 35257852b8b548b7d740e012ddce83cda6f164cee08936fa6b2ccadfadc974de
+
+ADD task-1/campus-wiki/event-relocations Memory [45510b41-0967-45a5-81d0-df816da20708]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    45510b41-0967-45a5-81d0-df816da20708
+  AFTER
+    During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.
+  REASON
+    Adds the auditorium's temporary converted function.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [9d4a1560-5a6d-5c3f-8414-a56f1acc7f18]
+    Content SHA-256: d88c16355aff6552882324b9106411802c86681e57e81ca800897ba7b5de2c96
+
+ADD task-1/campus-wiki/event-relocations Memory [11becdce-b06e-429d-b5e4-a0daa8a96b00]
+  OWNER
+    Context task-1/campus-wiki/event-relocations [c56f66c9-ea2f-504b-85f3-69eb66929924]
+  MEMORY UID
+    11becdce-b06e-429d-b5e4-a0daa8a96b00
+  AFTER
+    During the construction period, the separate loading entrance of the detached east-building auditorium serves as the loading point for event equipment relocated from the Main Building.
+  REASON
+    Adds the temporary equipment-loading location.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/event-relocations [f95f7748-b112-5084-ad52-6848cdf1280b]
+    Memory [9ab36f33-97ce-5790-8b2e-d0ab195039ef]
+    Content SHA-256: 2a3e1038b70860b99314cd84bdc1afa1ba52c9380362974f26b1c2c586ce2a91
+
+ADD task-1/campus-wiki/temporary-parking Memory [c25942ff-af6e-4acd-8fbe-f7271ce31ca0]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    c25942ff-af6e-4acd-8fbe-f7271ce31ca0
+  AFTER
+    During the construction period, staff must use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage.
+  REASON
+    Adds the authorized staff access procedure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4]
+    Content SHA-256: 2e524ab307c36b59e7ebf980f91305a7c9600efa86f4c62dd6336fab3c6121ef
+
+ADD task-1/campus-wiki/temporary-parking Memory [cba30532-7020-4161-b600-088cc3b4cf32]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    cba30532-7020-4161-b600-088cc3b4cf32
+  AFTER
+    Construction and facilities personnel must access the underground parking garage through the approved controlled on-site access procedure.
+  REASON
+    Adds the distinct controlled access procedure for authorized personnel.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [fb0765f1-92fa-50b6-ab78-35ca165ab2e6]
+    Content SHA-256: 2662ccea22001a499114935be2f4daf58bf440d31a5ac167e62fbd2ca84c07e9
+
+ADD task-1/campus-wiki/temporary-parking Memory [88ac89e1-a62f-41ed-8a7a-3ccac49db885]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    88ac89e1-a62f-41ed-8a7a-3ccac49db885
+  AFTER
+    The Main Building underground parking garage is used as temporary storage for construction materials.
+  REASON
+    Adds the garage's temporary construction use.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [32e116a4-526b-5cd1-af16-4872680376b5]
+    Content SHA-256: 836456fc236a8899840e25cd165b2319715b0648a9a08d394a8a551d721252d9
+
+ADD task-1/campus-wiki/temporary-parking Memory [a32bfdf2-9159-4bb0-8406-c3514ea8e223]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    a32bfdf2-9159-4bb0-8406-c3514ea8e223
+  AFTER
+    After the underground parking garage was cleared out, personal items left there were moved to the lost and found center.
+  REASON
+    Adds the disposition of personal items left in the garage.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [8fa46317-ba39-54bb-8cf0-f85770bd5032]
+    Content SHA-256: 33aeb86f229c6537deb904f027df389b066cc48f424c621e2a756e96ef3cc3ca
+
+ADD task-1/campus-wiki/temporary-parking Memory [5e8d843d-c6d9-42bb-b12b-8f4ad554741a]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    5e8d843d-c6d9-42bb-b12b-8f4ad554741a
+  AFTER
+    Outdoor Parking Lot A connected to the Main Building is closed during the construction period.
+  REASON
+    Adds the temporary closure of Parking Lot A.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc]
+    Content SHA-256: 8ad4d8911e825afbe55c1419a7737b657cd01755e8742cc30d2b3bb275d7bb7e
+
+ADD task-1/campus-wiki/temporary-parking Memory [c4defd51-1ad1-4689-ab71-a2f22fac8d8c]
+  OWNER
+    Context task-1/campus-wiki/temporary-parking [c0d853a6-985e-574f-a921-7602a470d432]
+  MEMORY UID
+    c4defd51-1ad1-4689-ab71-a2f22fac8d8c
+  AFTER
+    Outdoor Parking Lot A is planned to reopen immediately after construction on the Main Building ends.
+  REASON
+    Adds the stated reopening plan.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/temporary-parking [b392133c-278c-5c86-aaf9-5791ed5e9cd4]
+    Memory [d47493d3-5b50-53d0-a5b9-5dedbdb268a4]
+    Content SHA-256: 29795909ab403254614692703e97024e9a18ae36371b94f1ea94d045de4b17cd
+
+ADD task-1/campus-wiki/shop-updates Memory [1b2f9ab5-967d-438d-8efb-240607562d9d]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    1b2f9ab5-967d-438d-8efb-240607562d9d
+  AFTER
+    The ATM on the first floor of the Main Building is closed during the construction period.
+  REASON
+    Adds the temporary ATM closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [37113bd0-5194-521b-9d9e-48903d819520]
+    Content SHA-256: 9c5aa27570e0e2700fda36f27a0dd97d27daa9d3096dc7d353440489fc6d17f4
+
+ADD task-1/campus-wiki/shop-updates Memory [85ee57ba-c7f6-4d70-a0d3-c0bc4dc1fe4a]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    85ee57ba-c7f6-4d70-a0d3-c0bc4dc1fe4a
+  AFTER
+    The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.
+  REASON
+    Adds the temporary unattended-store closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [741db845-9a4e-5281-825c-e046801b8be5]
+    Content SHA-256: ef949eb8c4e67133d73e13aa012410352f95630ca5b37183f788190aa78c46ab
+
+ADD task-1/campus-wiki/shop-updates Memory [39c648d2-150a-4e06-bb4f-ddc50ff9cb4a]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    39c648d2-150a-4e06-bb4f-ddc50ff9cb4a
+  AFTER
+    During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.
+  REASON
+    Adds the designated alternative ATM.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [b49d48fb-d2d9-55b8-bc87-b8e0066541f8]
+    Content SHA-256: caf6d19fa67667fc574eef5da0d166d843c1263ad96effab38e3b3fc7e99e001
+
+ADD task-1/campus-wiki/shop-updates Memory [950645f5-5d0a-4976-860d-c66a3b3f721f]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    950645f5-5d0a-4976-860d-c66a3b3f721f
+  AFTER
+    During the construction period, direct users of the Main Building's 24-hour store to the Engineering Building Campus Store between 7 a.m. and 11 p.m.
+  REASON
+    Adds the designated store alternative and its hours.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [3094e271-3bb6-57cf-ae78-c67eeac30d94]
+    Content SHA-256: 5ae53e1b59cd11ee8af5dd38fcabd080e2fcbc4b7188dff97eb66a9dcafc4a7d
+
+ADD task-1/campus-wiki/shop-updates Memory [269470fa-2779-4261-a6a5-1d950524ee7f]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    269470fa-2779-4261-a6a5-1d950524ee7f
+  AFTER
+    After 11 p.m. during the construction period, there is no alternative on-campus store replacing the Main Building's 24-hour unattended store.
+  REASON
+    Adds the limitation of the temporary store alternative.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [c88880dc-ebfa-5847-89d2-692cd22406d5]
+    Content SHA-256: f46e632f91ff8c7264b7a57fbff4036e79faec9bb1e39ae9812d246191f054e5
+
+ADD task-1/campus-wiki/shop-updates Memory [ccc34965-31c0-4063-aceb-4507c497ce1a]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    ccc34965-31c0-4063-aceb-4507c497ce1a
+  AFTER
+    The cafe on the first floor of the Main Building does not operate during the construction period.
+  REASON
+    Adds the temporary cafe closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [048d155c-f81b-5293-b493-44fbce424662]
+    Content SHA-256: a93f57dca84d8ad52e001965948d66941fbf101bf6602951d96586edd4dafb73
+
+ADD task-1/campus-wiki/shop-updates Memory [2157ad3d-9398-49f2-9a44-a741f38dbd35]
+  OWNER
+    Context task-1/campus-wiki/shop-updates [d1995b25-eefe-5353-8c23-0e0965e7a6ae]
+  MEMORY UID
+    2157ad3d-9398-49f2-9a44-a741f38dbd35
+  AFTER
+    During the construction period, the route for ATM use shifts from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.
+  REASON
+    Adds the construction-safe ATM route.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/shop-updates [94dbac4b-70b5-5c76-b53a-1ebc69248a41]
+    Memory [b8300d7e-381c-5bce-81e7-fbb8a00eac9d]
+    Content SHA-256: e45fdbdf6776a010ad9692c7d780853d498973f66a3f8bcc4a3f746a1485270e
+
+ADD task-1/campus-wiki/facility-updates Memory [2021f9b2-8522-4dfe-87d1-5c0eb2af29f1]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    2021f9b2-8522-4dfe-87d1-5c0eb2af29f1
+  AFTER
+    The Main Building undergoes major facility improvement construction during summer break.
+  REASON
+    Adds the overarching construction status.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [99c29cea-9270-5a77-952c-b3f48da55612]
+    Content SHA-256: f6cabc8be233fe08fc34c55cc33921be8a8ba462deea6b28452b440b7b3d7bd5
+
+ADD task-1/campus-wiki/facility-updates Memory [1550b932-a333-4e66-831b-3514dcf7947b]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    1550b932-a333-4e66-831b-3514dcf7947b
+  AFTER
+    During the construction period, the Main Building elevators operate alternately, one at a time.
+  REASON
+    Adds the temporary elevator operating pattern.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [26131bc5-ee41-5d66-9507-4f11f9d0afde]
+    Content SHA-256: 82533ca579af17bad318da369bae3e1d9d2f215c02f673b38561a9ce6fce6c2a
+
+ADD task-1/campus-wiki/facility-updates Memory [5335955a-575b-47b8-b174-057b18a9b906]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    5335955a-575b-47b8-b174-057b18a9b906
+  AFTER
+    The visitor services desk suspends in-person operations during the construction period.
+  REASON
+    Adds the temporary suspension of in-person visitor services.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [5e34a7f5-41ab-5322-849b-f8304a1a3148]
+    Content SHA-256: 5ec3f65e5ed0f8e690d655f0d8fdf33c47ac73e29d489e5aee594f8d0fb9f270
+
+ADD task-1/campus-wiki/facility-updates Memory [97860f5d-8eaf-470a-a7af-3deb7b9a341c]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    97860f5d-8eaf-470a-a7af-3deb7b9a341c
+  AFTER
+    During the construction period, visitor services are provided through the visitor menu in the integrated campus portal.
+  REASON
+    Adds the replacement visitor-service channel.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [f460b6d0-66c8-581c-860f-a925cc03770e]
+    Content SHA-256: fa2c5abc68e02fb604c141e018e03455590ce250b4df0987d10cddce9d20920e
+
+ADD task-1/campus-wiki/facility-updates Memory [870309cb-4a42-4464-9f7a-85734a2ab0c9]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    870309cb-4a42-4464-9f7a-85734a2ab0c9
+  AFTER
+    The general restroom on the first floor of the Main Building cannot be used during the construction period.
+  REASON
+    Adds the first-floor restroom closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [cd0830c7-5289-529f-bedd-b0fd27d29b3f]
+    Content SHA-256: 21a33f61243532b3bf0df3350dd617a5d8cfffdf390ac6ea77975c72182a3ab8
+
+ADD task-1/campus-wiki/facility-updates Memory [65774e08-cd16-40ac-a592-83df60cd4a67]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    65774e08-cd16-40ac-a592-83df60cd4a67
+  AFTER
+    The general restroom on the second floor of the Main Building cannot be used during the construction period.
+  REASON
+    Adds the second-floor restroom closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [d73ccf7b-55d0-5f1c-8197-d3c9551da84d]
+    Content SHA-256: 27c79f22f859611b3e02d453e5aed9b1692f425ab369b035eeda032015b9a8d8
+
+ADD task-1/campus-wiki/facility-updates Memory [bed480c5-d764-4c3a-ba44-c946bcb743a7]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    bed480c5-d764-4c3a-ba44-c946bcb743a7
+  AFTER
+    The general restroom on the third floor of the Main Building cannot be used during the construction period.
+  REASON
+    Adds the third-floor restroom closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6]
+    Content SHA-256: acf8fc6762c12b0a26ace2b23d502ade85e37a95a716d927786de2ee8d77bebc
+
+ADD task-1/campus-wiki/facility-updates Memory [cf770933-9769-4ecf-9955-b21a22de9434]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    cf770933-9769-4ecf-9955-b21a22de9434
+  AFTER
+    Because the Main Building's first- through third-floor general restrooms are closed during construction, the nearest general restroom is in the third-floor exhibition hall of the West Complex.
+  REASON
+    Adds the nearest temporary general-restroom alternative.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [7a58eb23-f1a1-552b-b4b1-c3732cbeeb86]
+    Content SHA-256: 7c08bb0b02f1f83f9f40a6d4c3e19b30fc82063fd5816cfbd73cf54844daaa85
+
+ADD task-1/campus-wiki/facility-updates Memory [d60c6d3b-8609-4b3e-9844-4e1d878299f9]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    d60c6d3b-8609-4b3e-9844-4e1d878299f9
+  AFTER
+    During the construction period, direct students, staff, and members who cannot use the Main Building restrooms to the Central Library restrooms.
+  REASON
+    Adds restroom guidance for campus-affiliated users.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [cb4f2f04-25c6-58ed-acd6-71b0a9c29b69]
+    Content SHA-256: 0aecc940017d00acd913126ea5d0e7df71de222362828a1a36c5b4a4ebdb6c26
+
+ADD task-1/campus-wiki/facility-updates Memory [eb13404f-474b-4110-a21c-76b60c036077]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    eb13404f-474b-4110-a21c-76b60c036077
+  AFTER
+    As a rule during the construction period, direct general visitors who cannot use the Main Building restrooms to restrooms outside the Main Building.
+  REASON
+    Adds restroom guidance for general visitors.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [0df15633-8f63-54c3-b679-1ab878e8c4f3]
+    Content SHA-256: 127863c62c301de152bbaa72ebc31b47b21a163c0f51a9abfd10733d25cf4730
+
+ADD task-1/campus-wiki/facility-updates Memory [bdf9b1a2-66e6-4921-9aa5-a60340a5cb06]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    bdf9b1a2-66e6-4921-9aa5-a60340a5cb06
+  AFTER
+    During the construction period, direct users who cannot use the accessible restroom in the Main Building to the Student Centre.
+  REASON
+    Adds the temporary accessible-restroom alternative.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [aa595f26-74ce-5f66-8a54-87bcc962cb06]
+    Content SHA-256: 5b29f4a50178d1978a09eff82528c9d0900ca4a5223bb61ee4ad4c1cf6a570a0
+
+ADD task-1/campus-wiki/facility-updates Memory [73bd31b7-77be-4e31-bef0-28941c06e9e2]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    73bd31b7-77be-4e31-bef0-28941c06e9e2
+  AFTER
+    The first-floor Innovation Hub consultation desk does not operate during the construction period.
+  REASON
+    Adds the temporary consultation-desk closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [8e868c0f-3a92-54e6-a76d-21d3ded46c65]
+    Content SHA-256: 8e86c4bae9133b0da498eb55b5d021a05ba093a802f5a95a30cbafd4b47089e6
+
+ADD task-1/campus-wiki/facility-updates Memory [1232b624-321c-4d4e-ad44-75fd181a9488]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    1232b624-321c-4d4e-ad44-75fd181a9488
+  AFTER
+    An Innovation Hub visitor accustomed to in-person consultation may expect immediate help at the first-floor desk during construction, find it closed, and then have to search for the online consultation channel.
+  REASON
+    Adds the documented visitor expectation and resulting difficulty.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [1dbffba3-b393-5a96-89c4-785df0782e3a]
+    Content SHA-256: c98a1ef56e07f70f37a47c435a7c541c376138a0b529bdfeb405cd5e84410eeb
+
+ADD task-1/campus-wiki/facility-updates Memory [7c1e64e6-d25d-4fea-b211-918f089a364a]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    7c1e64e6-d25d-4fea-b211-918f089a364a
+  AFTER
+    Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.
+  REASON
+    Adds the disclosed temporary service interruption.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [e79f6d6c-7637-5ef6-b373-651c21a6bb29]
+    Content SHA-256: f7005149c18f78c0cdbc4a36962b16408624e14a6c56506215505093cd8c9cad
+
+ADD task-1/campus-wiki/facility-updates Memory [0c979546-348f-4432-a385-b2b2d97c9c44]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    0c979546-348f-4432-a385-b2b2d97c9c44
+  AFTER
+    The Main Building construction period runs from June 24 through August 23.
+  REASON
+    Adds the construction dates.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [faea18ec-3091-571f-be3f-345bdbf086b3]
+    Content SHA-256: eca1360a046a45d01f80d742252a67085d87f528c40871569f00f44210c76f8d
+
+ADD task-1/campus-wiki/facility-updates Memory [1f668a8a-b32e-4513-b8f7-9f52c6e499ab]
+  OWNER
+    Context task-1/campus-wiki/facility-updates [0b57fe07-2a32-55b7-8ad3-cba6cd55df27]
+  MEMORY UID
+    1f668a8a-b32e-4513-b8f7-9f52c6e499ab
+  AFTER
+    During the construction period, the facility guidance agent is limited to publicly disclosed operational impacts and cannot verify or infer nonpublic types of work.
+  REASON
+    Adds the agent's construction-specific response boundary.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/facility-updates [fe3ca57d-565a-5839-a78f-15f9a224e75d]
+    Memory [ecf1c8bb-4099-5e7f-82e0-a95928defd5f]
+    Content SHA-256: 78644c8befa4044add7271ba256c549b42ce327c3f02ea72a6160f0917938bdc
+
+ADD task-1/campus-wiki/route-changes Memory [35953536-579d-4fa1-80a4-eaa25bc35b16]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    35953536-579d-4fa1-80a4-eaa25bc35b16
+  AFTER
+    During the construction period, the indoor route through the first through third floors of the Main Building to the Central Library cannot be used.
+  REASON
+    Adds the indoor-route closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [8017409a-8af8-5a55-a49e-e9ccb44b9f34]
+    Content SHA-256: 8c0a9b88912165a538fab8a4e36faf6595cb350d3c6b098bceb114c0a14fa454
+
+ADD task-1/campus-wiki/route-changes Memory [c6f9a80c-a094-47cb-8931-0a1397df3132]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    c6f9a80c-a094-47cb-8931-0a1397df3132
+  AFTER
+    The route from the Main Building third-floor rear entrance to the Central Library is closed during the construction period.
+  REASON
+    Adds the rear-entrance route closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [dbb3c40c-7699-509d-901d-be9de2f110dc]
+    Content SHA-256: 154fed89b432d760e0a85a04944fb44abda6b88e0cd525454109b8132fe9d767
+
+ADD task-1/campus-wiki/route-changes Memory [d829138d-de6c-4f83-9f0d-786a721287e7]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    d829138d-de6c-4f83-9f0d-786a721287e7
+  AFTER
+    The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.
+  REASON
+    Adds the parking-to-library route closure.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f]
+    Content SHA-256: 8a2ae18f699247abffe8f15292c34586fc00aab83967d59e8d9e5e0109eacc68
+
+ADD task-1/campus-wiki/route-changes Memory [2b6bfaed-5e52-4363-a6b1-4d900633c98d]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    2b6bfaed-5e52-4363-a6b1-4d900633c98d
+  AFTER
+    During the construction period, directions to the accessible restroom in the Student Centre should tell users to take the accessible route to the left as viewed from the Main Building.
+  REASON
+    Adds the supported directional instruction.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [8276ab56-741f-5f60-ab77-79fe6dc0ba55]
+    Content SHA-256: d1daeafba59512cdcad389af173aebc99aa2330602fc1ff011f750fb06a74a42
+
+ADD task-1/campus-wiki/route-changes Memory [37619cdd-007c-477c-a3bd-9ec476880639]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    37619cdd-007c-477c-a3bd-9ec476880639
+  AFTER
+    During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.
+  REASON
+    Adds the official temporary accessible route.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [9af0f95c-0a5e-584e-ba7b-92789e071f7e]
+    Content SHA-256: c8f5dab391db6ea31bcc66030da486681c116d1bd69668e005e0e4ebc64132a6
+
+ADD task-1/campus-wiki/route-changes Memory [6cecca0a-5efd-46a2-8048-c1d9cb84d94e]
+  OWNER
+    Context task-1/campus-wiki/route-changes [5cb64d0a-a8b5-5547-95df-d6dae155dce4]
+  MEMORY UID
+    6cecca0a-5efd-46a2-8048-c1d9cb84d94e
+  AFTER
+    During the construction period, the Central Library west entrance is the official alternative entrance for the closed connecting route through the Main Building.
+  REASON
+    Adds the official alternative library entrance.
+  SOURCE REFERENCES
+    1. Context task-1/participant/construction-updates/route-changes [725d4213-9ce1-569c-9e91-e4cd0d046bd5]
+    Memory [fd27f19b-5f2c-51ee-a9b2-7182120163cb]
+    Content SHA-256: 48e95c6255031ddaac7e4f54ae2403b33463514aa152c4516022f68ff5050540
+
+Updated granted authority target task-1/campus-wiki.
+The participant source and fixed study baseline were not changed.
