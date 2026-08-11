@@ -1,0 +1,10 @@
+52 180
+[1mContext: task-3/local/personal-memory[0m
+  Memories 0  |  Memory Refs 0  |  Query Views 1  |  Embedded Contexts 4
+[1m
+Items (in context order):[0m
+  [context f60cba75] task-3/local/personal-memory/2024  VIA EMBED
+  [context dbe52d14] task-3/local/personal-memory/2025  VIA EMBED
+  [context 03415050] task-3/local/personal-memory/2026  VIA EMBED
+  [query view 81c991b9] task-3/remote/government/healthcare-agent/info-request/questions-and-answers  QUERY GRANT
+  [context 1ed7cefe] task-3/remote/government/healthcare-agent/info-request/transmission-guidance  READ GRANT

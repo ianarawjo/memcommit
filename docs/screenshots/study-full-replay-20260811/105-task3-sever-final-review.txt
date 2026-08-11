@@ -1,0 +1,52 @@
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+┃ │ 286. When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.                                                       │^┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 287. For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.                                                                       │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 288. For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.                                                     │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 289. When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.                                                                    │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 290. Some park restrooms and drinking fountains may be closed seasonally.                                                                                                    │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 291. The user keeps four folding chairs for family barbecues in storage.                                                                                                     │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 292. When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.                    │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 293. The user held the next gathering in their father's yard and moved between seats while speaking with everyone.                                                           │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 294. On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.                                                                         │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 295. The next time, the user started at 6 p.m. and remained outside until sunset.                                                                                            │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 296. Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.                                          │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 297. At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.                                                                    │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 298. After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.                                 │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 299. The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.                                      │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ 300. The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.                                            │ ┃
+┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │ ┃
+┃ │ RESPONSES · 300/300 ANSWERED                                                                                                                                                 │ ┃
+┃ │ OPEN REVIEWS · NONE                                                                                                                                                          │ ┃
+┃ │ Nothing changes until the final action below is confirmed.                                                                                                                   │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Sever report                                                                                                                                           ^│
+│  SEVER DECISION The user's mother's birthday falls in the third week of January.                                                                                                 │
+│  SEVER DECISION At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                               │
+│  SEVER DECISION At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                       │
+│  SEVER DECISION During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                                │
+│  SEVER DECISION When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                         v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/subtractive-first · NOT CREATED    Enter to change                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Confirm final Sever action · APPLY is ready. Enter to apply now.                                                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ review  Tab switch  Enter return  Esc/Backspace return A review & apply  H Help  Q close

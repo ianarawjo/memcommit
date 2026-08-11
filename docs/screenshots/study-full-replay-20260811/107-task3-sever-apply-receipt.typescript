@@ -1,0 +1,1518 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM SEVER · 1/3 · FREEZING SOURCE AND CRITERIA . · 0s[0m
+[0m┌───────────────────────────────────────────────────────────────────────────| SEVER REPORT · BUILDING |────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;139;213;255;1mMEM SEVER · REPORT BUILDING[0m                                                                                                                                                      [0;1m^[179C[0m│[0m
+[0m│[0;38;2;238;212;159;1mCONTENT PENDING · THIS IS NOT A RESULT[0m                                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;139;213;255;1mWHAT MEM UNDERSTOOD[0m                                                                                                                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;165;173;203m  .  [0m                                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;139;213;255;1mCANDIDATES[0m                                                                                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;165;173;203m  .. [0m                                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;139;213;255;1mOUTPUT PREVIEW[0m                                                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;165;173;203m  …  [0m                                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mThe completed report will replace these markers after analysis.[0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mC/c opens Contexts; R/r returns here; H/h/? opens Help.[0m                                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[125D[49A[C[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m MEM SEVER · LOCAL CONTENT REVIEW                                                                                                                                                [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   SOURCE · task-3/local/personal-memory                                                                                                                                         [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   CRITERIA · task-3/local/guardrails                                                                                                                                            [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   RESULT · task-3/participant/subtractive-first · NOT CREATED                                                                                                                   [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m REVIEWING · 300 SOURCE · 1 Context CRITERIA · 0 RESULT                                                                                                                          [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ UNDERSTOOD[0m                                                                                                                                                                      [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m The Source contains detailed personal memories about the user’s family, health-related routines, home access and maintenance, scheduling, travel, finances, household activities[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m, preferences, and past experiences from January 2024 through June 2026.[0m                                                                                                         [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT APPLIED                                                                                                                                                                    [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m All 300 Source Memories were evaluated in one contextual batch. All personal details, third-party information, preferences, policies, and historical observations were excluded [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247mbecause no specific sharing purpose was supplied, preventing a purpose-limited determination of what was necessary. Affected Source examples: “The user's mother's birthday falls[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m in the third week of January.”, “At the user's last family meal out, noise from the next table made conversation nearly im…”, “At a barbecue at home in the same month, the user[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m was comfortable because no one had to r…”, and 297 more. Main Criteria: “If the sharing purpose is not specific, ask the user to clarify it before creating candid…”. Exact Sour[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247mce-to-Criteria mappings, rationale, and alternatives remain inspectable in Items; the complete per-Memory outcome appears once in the full result view. The Source is unchanged. [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247mThe Result Context has not been created.[0m                                                                                                                                         [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED                                                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m This is the exact local result that Apply would materialize. The Source Context remains unchanged.                                                                              [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [2cd0229d][0m                                                                       [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe user's mother's birthday falls in the third week of January.[0m                                                                                                  [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [c62f1669][0m                                                                       [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mAt the user's last family meal out, noise from the next table made conversation nearly impossible.[0m                                                                [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [674f4bdf][0m                                                                       [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mAt a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.[0m                                                        [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [21509788][0m                                                                       [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mDuring their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.[0m                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Sever report[0m                                                                                                                                           [0;1m^[179C[0m│[0m
+[0m│  SEVER DECISION The user's mother's birthday falls in the third week of January.                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SEVER DECISION At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SEVER DECISION At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                      [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SEVER DECISION During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                               [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SEVER DECISION When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                         [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│task-3/participant/subtractive-first · NOT CREATED    Enter to change                                                                                                             [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ REVIEW AND APPLY ]  Review final Sever action · APPLY is available. Enter to review before anything changes.                                                                    [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A review & apply  H Help  Q close[136D[42A[C[0m[8A[0m                                 [0m
+[2C[0mSEVER DECISION 1/300[156C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m The user's mother's birthday falls in the third week of January.[112C[0;48;2;68;68;68m [0m
+[2C[0m[REQUIRED][CRECOMMENDED              [140C[0;48;2;68;68;68m [0m
+[2C[0mREVIEW SET[C· REQUIRED 300 · OPTIONAL 0                       [115C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m SEVER ASSESSMENT[0m                                      [122C[0;48;2;68;68;68m [0m
+[178C[0;48;2;68;68;68m [0m
+[C[0;38;2;139;213;255;1m CLASSIFICATION[0m     [157C[0;48;2;68;68;68m [0m
+[C[0;38;2;139;213;255m RECOMMENDED RESULT · FORGET[149C[0;48;2;68;68;68m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m EVIDENCE MEMORIES[0m                                                      [105C[0;48;2;68;68;68m [0m
+[178C[0;48;2;68;68;68m [0m
+[C[0;38;2;255;255;255;1m SOURCE MEMORY · FROM task-3/local/personal-memory/2024/01[119C[0;48;2;68;68;68m [0m
+[C[0m   [2cd0229d] [0;38;2;202;211;245mThe user's mother's birthday falls in the third week of January.[0m                                                                                                   [0;48;2;68;68;68m [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0;38;2;255;255;255;1m APPLICABLE CRITERION 1 · FROM task-3/local/guardrails/purpose-and-scope[0m                                                                                                         [0m
+[C[0m   [78bba4e2] [0;38;2;202;211;245mIf the sharing purpose is not specific, ask the user to clarify it before creating candidates.[0m                                                                     [0m
+[C[0m                                                                                                                                                                                 [0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255;1m WHY THIS TREATMENT[0m                                                                                                                                                              [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;255;255;255;1m SEVER QUESTION[0m                                                                                                                                                                  [0;1m^[179C[0m│[0m
+[0m│[0;38;2;244;245;247m Choose what the local result should remember.[0m                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255;1m PROPOSED RESULT TREATMENTS[0m                                                                                                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ ↑/↓ move through choices and Response · Enter select                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ 1. Use recommendation · FORGET[0m                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m  Forget this Memory.[0m                                                                                                                                                            [0;48;2;170;170;170m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  2. Keep                                                                                                                                                                        [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  The user's mother's birthday falls in the third week of January.                                                                                                               [0;1mv[179C[0m│[0m
+[0m│[0;38;2;244;245;247m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│›                                                                                                                                                                              [0;1m^[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;38;2;244;245;247;48;2;68;68;68m [0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;1mv[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+[C[0m  REPORT         Complete Sever report[0m
+[C[0;1m› SEVER DECISION The user's mother's birthday falls in the third week of January.[0m
+
+
+
+
+
+
+
+
+
+
+
+[5C[0msection/item  Tab switch[2C←/→ option  Enter choo[Ce/other  C send/comment  Esc/Backspace report A revi[Cw & apply  H[CHelp  Q[Cclose[0m[K[45A[132D[0m[6A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│ MEM SEVER · LOCAL CONTENT REVIEW                                                                                                                                                [0;1m^[179C[0m│[0m
+[0m│ CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│   SOURCE · task-3/local/personal-memory                                                                                                                                         [0;48;2;170;170;170m [179C[0m│[0m
+[0m│   CRITERIA · task-3/local/guardrails                                                                                                                                            [0;48;2;170;170;170m [179C[0m│[0m
+[0m│   RESULT · task-3/participant/subtractive-first · NOT CREATED                                                                                                                   [0;48;2;170;170;170m [179C[0m│[0m
+[0m│ REVIEWING · 300 SOURCE · 1 Context CRITERIA · 0 RESULT                                                                                                                          [0;48;2;170;170;170m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0m│[0m
+[0m│ WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;2;170;170;170m [179C[0m│[0m
+[0m│ UNDERSTOOD                                                                                                                                                                      [0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m The Source contains detailed personal memories about the user’s family, health-related routines, home access and maintenance, scheduling, travel, finances, household activities[0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m, preferences, and past experiences from January 2024 through June 2026.[0m                                                                                                         [0;48;2;170;170;170m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0m│[0m
+[0m│ WHAT APPLIED                                                                                                                                                                    [0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m All 300 Source Memories were evaluated in one contextual batch. All personal details, third-party information, preferences, policies, and historical observations were excluded [0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mbecause no specific sharing purpose was supplied, preventing a purpose-limited determination of what was necessary. Affected Source examples: “The user's mother's birthday falls[0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m in the third week of January.”, “At the user's last family meal out, noise from the next table made conversation nearly im…”, “At a barbecue at home in the same month, the user[0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m was comfortable because no one had to r…”, and 297 more. Main Criteria: “If the sharing purpose is not specific, ask the user to clarify it before creating candid…”. Exact Sour[0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mce-to-Criteria mappings, rationale, and alternatives remain inspectable in Items; the complete per-Memory outcome appears once in the full result view. The Source is unchanged. [0;48;2;170;170;170m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mThe Result Context has not been created.[0m                                                                                                                                         [0;48;2;170;170;170m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0m│[0m
+[0m│ IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED                                                                                                                                  [0;48;2;170;170;170m [179C[0m│[0m
+[C[0m This is the exact local result that Apply would materialize. The Source Context remains unchanged.                                                                              [0;48;2;170;170;170m [0m
+[C[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;170;170;170m [0m
+[C[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [2cd0229d][0m                                                                       [0;48;2;170;170;170m [0m
+[C[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe user's mother's birthday falls in the third week of January.[0m                                                                                                  [0;48;2;170;170;170m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;170;170;170m [0m
+[C[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [c62f1669][0m                                                                       [0;48;2;170;170;170m [0m
+[C[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mAt the user's last family meal out, noise from the next table made conversation nearly impossible.[0m                                                                [0;48;2;170;170;170m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;170;170;170m [0m
+[C[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [674f4bdf][0m                                                                       [0;48;2;170;170;170m [0m
+[C[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mAt a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.[0m                                                        [0;48;2;170;170;170m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;170;170;170m [0m
+[C[0;38;2;237;135;150;1m       ▸ − [FORGET] [0;38;2;202;211;245mtask-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [21509788][0m                                                                       [0;48;2;170;170;170m [0m
+[C[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mDuring their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.[0m                                                                 [0;48;2;170;170;170m [0m
+[C[0m                                                                                                                                                                                 [0;1mv[0m
+
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0;1;7m› REPORT         Complete Sever report[0m                                                                                                                                           [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SEVER DECISION The user's mother's birthday falls in the third week of January.                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SEVER DECISION At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SEVER DECISION At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                      [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SEVER DECISION During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                               [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SEVER DECISION When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                         [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+
+
+
+
+
+[5C[0mblock (hold accelerates)[2CPgUp/PgDn page  End la[Ct  Tab switch  Enter open  Esc/Backspace/Q close A r[Cview & apply[C H Help[C Q close[13A[135D[0m[38A[0;38;2;139;213;255;1m┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;2;139;213;255;1m┃ │ 286. When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.                                                       │[0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 287. For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.                                                                       │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 288. For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.                                                     │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 289. When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 290. Some park restrooms and drinking fountains may be closed seasonally.                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 291. The user keeps four folding chairs for family barbecues in storage.                                                                                                     │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 292. When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 293. The user held the next gathering in their father's yard and moved between seats while speaking with everyone.                                                           │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 294. On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.                                                                         │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 295. The next time, the user started at 6 p.m. and remained outside until sunset.                                                                                            │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 296. Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.                                          │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 297. At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 298. After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.                                 │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 299. The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.                                      │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ 300. The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.                                            │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ RESPONSES · 300/300 ANSWERED                                                                                                                                                 │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ OPEN REVIEWS · NONE                                                                                                                                                          │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ │ Nothing changes until the final action below is confirmed.                                                                                                                   │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  REPORT         Complete Sever report                                                                                                                                           [0;1m^[179C[0m│[0m
+[0m│  SEVER DECISION The user's mother's birthday falls in the third week of January.                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SEVER DECISION At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SEVER DECISION At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                      [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SEVER DECISION During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                               [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SEVER DECISION When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                         [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+
+[23C[0mConfirm final Sever action · A[CPLY is ready. Enter to[Capply no[C.                        [0m
+
+[5C[0mreview  Tab[Cswitch  Enter[Creturn  Esc/Backspace return A review[C& apply  H[CHelp  Q close[0m[K[51A[93D[0m[0m
+[C[0;38;2;255;255;255m │ 289. When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.                                                                    │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 290. Some park restrooms and drinking fountains may be closed seasonally.                                                                                                    │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 291. The user keeps four folding chairs for family barbecues in storage.                                                                                                     │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 292. When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.                    │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 293. The user held the next gathering in their father's yard and moved between seats while speaking with everyone.                                                           │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 294. On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.                                                                         │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 295. The next time, the user started at 6 p.m. and remained outside until sunset.                                                                                            │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 296. Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.                                          │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 297. At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.                                                                    │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 298. After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.                                 │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 299. The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.                                      │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ 300. The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.                                            │[0m
+[C[0;38;2;255;255;255m │    SELECTED · Use recommendation · FORGET                                                                                                                                    │[0m
+[C[0;38;2;255;255;255m │ RESPONSES · 300/300 ANSWERED                                                                                                                                                 │[0m
+[C[0;38;2;255;255;255m │ OPEN REVIEWS · NONE                                                                                                                                                          │[0m
+[C[0;38;2;255;255;255m │ Nothing changes until the final action below is confirmed.                                                                                                                   │[0m
+[C[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+[C[0m                                                                                                                                                                                 [0m
+[2C[0;38;2;139;213;255;1m╭─[CAPPLY ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0m
+[4C[0;38;2;139;213;255;1mApply [Cever[C       [C        [0m
+[4C[0;38;2;139;213;255;1mEnter to apply[Cthe exact[Ccurrent[Cproposal[Cshown[Cin[Cthe[Creport.[0m
+[4C[0;38;2;139;213;255;1mEsc/Backsp[Cce returns[Cwithout apply[Cng.     [C  [C          [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[31C[0mapply [CEsc/Backspace return A review & ap[Cly [CH Help [CQ close[0m[K[51A[92D[0m[J[0m[?7h[?1049l[?2004l[?12l[?25hANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED
+SEVER · APPLIED · SOURCE UNCHANGED
+SOURCE · task-3/local/personal-memory · INCLUDE DESCENDANTS · 300 Memories
+CRITERIA · task-3/local/guardrails · INCLUDE DESCENDANTS
+OUTPUT · task-3/participant/subtractive-first · CREATED LOCALLY
+
+The Source contains detailed personal memories about the user’s family, health-related routines, home access and maintenance, scheduling, travel, finances, household activities, preferences, and past experiences from January 2024 through June 2026.
+
+CANDIDATES
+  1. [e8bfa337] FORGET
+     SOURCE · The user's mother's birthday falls in the third week of January.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  2. [be0b36c9] FORGET
+     SOURCE · At the user's last family meal out, noise from the next table made conversation nearly impossible.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  3. [eb92e3d0] FORGET
+     SOURCE · At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  4. [0582caa5] FORGET
+     SOURCE · During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  5. [a59014dc] FORGET
+     SOURCE · When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  6. [6d8e6b37] FORGET
+     SOURCE · At a large banquet hall reserved by their older sister, the user remembered the surrounding noise more than the food.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  7. [f70ac1f7] FORGET
+     SOURCE · On a day the user ate grilled food at home with their younger brother, conversation was easy to continue, so the user stayed another hour after the meal.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  8. [12032b73] FORGET
+     SOURCE · The user's mother considers having the whole family eat at the same time more important than receiving a birthday gift.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  9. [f75bfb21] FORGET
+     SOURCE · When proposing a birthday meal for the user's mother, check the schedule and attendees; if conversation is the purpose, first consider a low-noise location, then confirm the final choice with the user.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  10. [6a6c9742] FORGET
+     SOURCE · The local agent can compare past dining environments and the user's responses, but those records alone cannot determine the location of the next gathering.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  11. [3d8e3d80] FORGET
+     SOURCE · The user's maternal aunt keeps one spare key to the user's home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  12. [56129662] FORGET
+     SOURCE · If the door is locked, the user is accustomed to contacting their maternal aunt, who has the spare key, before contacting building management.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  13. [bc9bdd1e] FORGET
+     SOURCE · When going to collect the spare key from their maternal aunt, the user wants to give an arrival time first so neither person has to wait.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  14. [c56e6acb] FORGET
+     SOURCE · The user feels at ease only after returning a borrowed spare key in person on the same day.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  15. [a64568ce] FORGET
+     SOURCE · The user feels uneasy about writing down a new entrance passcode on paper.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  16. [03235168] FORGET
+     SOURCE · The user found it difficult when a family member arrived without notice during a meeting and the user could not respond immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  17. [cd49403f] FORGET
+     SOURCE · On a day their younger brother received a package for them, the user felt reassured after checking the delivery photo.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  18. [654e94df] FORGET
+     SOURCE · The user's maternal aunt wants confirmation that the user is coming in person before handing over the spare key.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  19. [493fcf92] FORGET
+     SOURCE · Confirm with the user before sharing the spare key's storage location or the maternal aunt's contact information.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  20. [9cf60aa2] FORGET
+     SOURCE · The management office of a multi-unit residential building does not hold a unit key without verifying identity.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  21. [d07e6681] FORGET
+     SOURCE · The instructions for one medication the user takes say to take it after the evening meal.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  22. [6528b689] FORGET
+     SOURCE · On a day with a morning appointment, the user miscalculated the fasting period and checked again at the reception desk.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  23. [d9f4cd19] FORGET
+     SOURCE · For an afternoon visit, the user felt less rushed while preparing to travel than for a morning visit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  24. [29acaa5a] FORGET
+     SOURCE · On a day there was no waiting chair, the user stood for 20 minutes and their back became uncomfortable.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  25. [519e9c16] FORGET
+     SOURCE · On a day medication instructions were explained all at once and at length, the user failed to write down an important time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  26. [c8d1e041] FORGET
+     SOURCE · On a day medication times were confirmed one line at a time, the user copied them directly into their schedule after returning home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  27. [53a06fd0] FORGET
+     SOURCE · On a visit when their younger brother drove them, the user did not have to find a separate route home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  28. [a4456092] FORGET
+     SOURCE · The user's younger brother prefers to receive a request for weekday-afternoon transportation two days beforehand rather than on the day itself.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  29. [eb5acb34] FORGET
+     SOURCE · The local agent cannot determine the current prescription or whether use continues from medication notes alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  30. [a174d95d] FORGET
+     SOURCE · The waiting area at that clinic has too few chairs, so there may be periods when people must wait standing.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  31. [6c7ab03c] FORGET
+     SOURCE · The user completed a routine dental checkup in April 2024.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  32. [c3e849fe] FORGET
+     SOURCE · When the user heard three checkup questions in succession, they asked for the first question again.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  33. [e4d9e683] FORGET
+     SOURCE · At the next visit, when questions were asked one at a time, the user answered each without omission.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  34. [ce5432ad] FORGET
+     SOURCE · The user called to reschedule an appointment at lunchtime but did not reach anyone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  35. [8cd8aa77] FORGET
+     SOURCE · After returning home, the user kept a photo of the paper instructions received at the clinic.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  36. [9709cf0d] FORGET
+     SOURCE · On a day the user put only the visit address in the calendar, they had to search again for the floor.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  37. [44aa83f2] FORGET
+     SOURCE · On a day the user shared the checkup time with their older sister, the sister called to check in after the user returned home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  38. [9b2ae92d] FORGET
+     SOURCE · The scheduling staff at that clinic expect requests to change appointments to arrive by telephone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  39. [7a66a182] FORGET
+     SOURCE · Before adding a follow-up visit to the calendar, confirm the date, time, address, and floor with the user.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  40. [fec2aa52] FORGET
+     SOURCE · The local agent can track completed checkups and scheduled appointments but cannot determine whether a follow-up visit is needed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  41. [248cc87e] FORGET
+     SOURCE · The user keeps a small table fan beside the bedroom window.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  42. [740dd6d0] FORGET
+     SOURCE · On a day the user drank coffee late in the afternoon, they could not fall asleep until dawn.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  43. [506fc563] FORGET
+     SOURCE · On a day the user drank coffee before 2 p.m., they fell asleep at their usual time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  44. [1faa11f8] FORGET
+     SOURCE · On a tired day, the user ate dinner out and postponed even washing the dishes after returning home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  45. [393dae47] FORGET
+     SOURCE · In the same week, on a day the user made simple noodles at home, they rested immediately after the meal.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  46. [83a7a009] FORGET
+     SOURCE · On a night the window was left open, street noise woke the user twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  47. [3ff95215] FORGET
+     SOURCE · On a night the table fan was running, the user was not too warm even with the window closed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  48. [1b85f2b0] FORGET
+     SOURCE · The user's father prefers to have coffee available after dinner and believes it will not cause a sleep problem.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  49. [3ae14aa6] FORGET
+     SOURCE · When making a sleep-related suggestion, do not treat one or two records as a general lifestyle habit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  50. [36227303] FORGET
+     SOURCE · The user tends to go to bed much later after drinking coffee late in the afternoon.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  51. [611c1ba1] FORGET
+     SOURCE · The user stores copies of identity documents in an encrypted folder.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  52. [55744c9e] FORGET
+     SOURCE · On a day the user transferred between buses twice, they rested for an hour after the trip.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  53. [0d42ea1f] FORGET
+     SOURCE · On a day the user took a direct route with a similar travel time, they remained seated to the destination.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  54. [7bad092f] FORGET
+     SOURCE · After arriving at an entrance with stairs only, the user went around to an entrance on the other side of the building.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  55. [ab03374d] FORGET
+     SOURCE · On a day the user checked the accessible entrance location in advance, they arrived before the agreed time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  56. [789d0cfb] FORGET
+     SOURCE · On a rainy day, the user's clothes became wet while crossing an uncovered section at a transfer stop.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  57. [c6cd65c0] FORGET
+     SOURCE · On a day the user traveled with their maternal uncle, they agreed to meet at an entrance near the elevator.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  58. [d180069e] FORGET
+     SOURCE · The user's maternal uncle prefers an aisle seat from which it is easy to stand during long-distance travel.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  59. [16dcf570] FORGET
+     SOURCE · The local agent cannot know whether an accessible entrance is operating that day from past route records alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  60. [f3f002d7] FORGET
+     SOURCE · The transfer route the user takes has more boarding and alighting events and walking segments than the direct route.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  61. [83e89574] FORGET
+     SOURCE · The user updated the utility account for their residence in July 2024.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  62. [3b20b5d3] FORGET
+     SOURCE · After putting a paper bill in a drawer, the user checked it one day after the payment date.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  63. [f063a849] FORGET
+     SOURCE · In the month after receiving an electronic billing alert, the user paid two days before the deadline.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  64. [f1260bc1] FORGET
+     SOURCE · The user saw a water-inspection notice late and started washing dishes during the scheduled shutoff.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  65. [4fd52529] FORGET
+     SOURCE · After transferring a management-office notice to their phone calendar, the user did not miss the inspection time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  66. [aec116f5] FORGET
+     SOURCE · During a boiler technician's visit, the user had not cleared boxes from the entrance in advance and had to rearrange the passage.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  67. [dd0774c0] FORGET
+     SOURCE · The user cleared the entrance the day before the next visit so the inspection could begin immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  68. [6ab75037] FORGET
+     SOURCE · The building manager expects that a one-day advance visit notice gives a resident enough time to prepare the work area.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  69. [4082d2aa] FORGET
+     SOURCE · Confirm the user's available time before finalizing a service visit to the residence.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  70. [b8eb3581] FORGET
+     SOURCE · The local agent can compare payment records with notice times but cannot verify whether a residential service problem was resolved.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  71. [efcd0049] FORGET
+     SOURCE · The user has set a monthly limit in their budget record for spending other than living expenses.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  72. [7fbbcdca] FORGET
+     SOURCE · In a week when the user went grocery shopping and visited the bank separately, they made the same round trip twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  73. [62e12222] FORGET
+     SOURCE · The following week, the user completed both errands in one outing and reduced travel time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  74. [f782bab0] FORGET
+     SOURCE · When a bill alert arrived on the due date, the user postponed payment until after a meeting.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  75. [e5ec4286] FORGET
+     SOURCE · In a month when the user received an alert three days before the deadline, they finished payment before dinner.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  76. [9cc32162] FORGET
+     SOURCE · The user collected cash receipts in their wallet and entered all the amounts at once at the end of the month.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  77. [54e47fab] FORGET
+     SOURCE · After recording one large expense, the user ate out two fewer times that week.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  78. [6e89f6d1] FORGET
+     SOURCE · The user's older sister prefers to settle the jointly paid cost of a meal by electronic transfer rather than cash.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  79. [7299d8ce] FORGET
+     SOURCE · Confirm the amount and account with the user before creating an automatic payment schedule.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  80. [8ad9fae2] FORGET
+     SOURCE · The timing of payment processing and late-payment recording may differ by billing institution.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  81. [a285ec44] FORGET
+     SOURCE · The user's available days and times vary by week, making it difficult to apply last month's free time directly to the next appointment.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  82. [76dc55aa] FORGET
+     SOURCE · The user once canceled an appointment booked for the same weekday as in the previous month.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  83. [00c648ea] FORGET
+     SOURCE · When asked again about availability just before booking, the user provided three free times for that week.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  84. [22794b59] FORGET
+     SOURCE · On a day with two consecutive morning appointments, the user ate lunch at 3 p.m.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  85. [ada951c4] FORGET
+     SOURCE · On a day the user left an hour between appointments, they ate while traveling.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  86. [a8267e17] FORGET
+     SOURCE · After seeing a private reason written directly in a calendar title, the user removed the wording.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  87. [1ba7d05b] FORGET
+     SOURCE · The user checked that a calendar-sharing screen showed only the time and hid the details.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  88. [400ba75f] FORGET
+     SOURCE · When evening plans on the same day must change, the user's mother wants advance notice on the weekend morning.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  89. [6a10db90] FORGET
+     SOURCE · The local agent cannot know the private reason for unavailability from the unavailable time alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  90. [d3dcd4eb] FORGET
+     SOURCE · The user's shared calendar does not automatically reserve travel time between events.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  91. [407a0253] FORGET
+     SOURCE · The user renewed their local library membership in October 2024.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  92. [72519f2d] FORGET
+     SOURCE · On an evening walk, the user saw an unlit street and took a detour along a main road.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  93. [e5d3f151] FORGET
+     SOURCE · On a day the user chose a well-lit pedestrian route, the walk took 12 minutes longer than usual.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  94. [da20c238] FORGET
+     SOURCE · On a day the user sat by the library window, they heard vehicle noise with every page they read.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  95. [2be3db75] FORGET
+     SOURCE · On the next visit, the user sat farther inside and did not move for an hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  96. [132d7c7e] FORGET
+     SOURCE · The user wrote the due date of a borrowed book on paper and then lost the paper.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  97. [331ceb73] FORGET
+     SOURCE · After entering the due date on their phone, the user saw a reminder the day before and put the book in their bag.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  98. [96cbca0c] FORGET
+     SOURCE · Library staff expect a person requesting a replacement membership card to bring identity-verification material.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  99. [94cdaa32] FORGET
+     SOURCE · Check recent lighting and pedestrian conditions before proposing an evening walking route.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  100. [63241ea1] FORGET
+     SOURCE · The local agent can compare past reasons for detours but cannot directly observe current lighting and pedestrian conditions.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  101. [c13d6dd2] FORGET
+     SOURCE · The user changed their schedule once in November 2024 because of their mother's hospital visit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  102. [3ca1cdeb] FORGET
+     SOURCE · After seeing the reason for the schedule change written in a calendar invitation, the user asked for it to be removed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  103. [b6b47e1d] FORGET
+     SOURCE · The user was able to reschedule the appointment after providing only a new time, without a reason.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  104. [8a96bc5a] FORGET
+     SOURCE · On a day the user traveled in their father's car, they photographed the parking location.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  105. [bb75f2c1] FORGET
+     SOURCE · On the next visit, when the user did not take a photo, they walked one circuit of the parking garage while looking for the exit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  106. [be299c20] FORGET
+     SOURCE · After hearing preparation items from their mother by phone, the user omitted two items.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  107. [b0edc4e7] FORGET
+     SOURCE · After receiving the preparation items again by text, the user put all of them in their bag.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  108. [ab577c4a] FORGET
+     SOURCE · The user's mother does not want the reason for her visit disclosed in the user's external schedule.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  109. [dc187848] FORGET
+     SOURCE · Do not include the mother's reason for a visit when conveying the user's availability externally.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  110. [fd50397f] FORGET
+     SOURCE · Some daily-life services may operate for shorter hours during the year-end holiday period.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  111. [263b17b5] FORGET
+     SOURCE · The user used an accessible entrance at a clinic in December 2024.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  112. [42cf1f90] FORGET
+     SOURCE · On a day snow had accumulated and blocked the main-entrance ramp, the user went to a side entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  113. [a5e837f3] FORGET
+     SOURCE · The user learned on site that the elevator was under inspection and delayed the appointment.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  114. [628e9ad9] FORGET
+     SOURCE · The day before the next visit, the user called to check whether the elevator would be operating.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  115. [6ba25b6f] FORGET
+     SOURCE · The user waited for their turn in front of a ticket machine near the waiting chairs.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  116. [47e8d197] FORGET
+     SOURCE · On a day the user waited in a corridor without chairs, they leaned against the wall and changed position several times.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  117. [2295724e] FORGET
+     SOURCE · On a day their older sister accompanied them, the user found a place to sit immediately after reception.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  118. [0af1bc5b] FORGET
+     SOURCE · Reception staff expect that a first-time visitor may ask where the accessible entrance is.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  119. [dcd8887c] FORGET
+     SOURCE · The local agent cannot infer the user's condition from a record of using an accessible route alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  120. [0d247c7a] FORGET
+     SOURCE · Snow accumulation and snow-removal work can temporarily block an entrance route used under ordinary conditions.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  121. [1a00471d] FORGET
+     SOURCE · One of the user's identity documents needs renewal in the second half of 2025.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  122. [d381ed16] FORGET
+     SOURCE · The user postponed an application until the next day after spending time looking for document photos in scattered folders.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  123. [106a56ae] FORGET
+     SOURCE · After gathering the necessary copies in one folder, the user completed the renewal form in one sitting.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  124. [10e90bfd] FORGET
+     SOURCE · The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  125. [ca2d34bb] FORGET
+     SOURCE · On the next application, after comparing the name with the source document, the user did not receive a correction request.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  126. [239635f9] FORGET
+     SOURCE · The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  127. [72a2c0c2] FORGET
+     SOURCE · On the next application, the user recorded the expected issuance date separately in the calendar.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  128. [1b147939] FORGET
+     SOURCE · Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  129. [782cb981] FORGET
+     SOURCE · When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  130. [ea1b7c72] FORGET
+     SOURCE · The local agent cannot determine the current validity of an identity document without its expiration date.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  131. [e903c43e] FORGET
+     SOURCE · The user reviewed their emergency-contact list in February 2025.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  132. [d32a9eba] FORGET
+     SOURCE · When preparation instructions arrived as a long paragraph, the user missed two items.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  133. [b82b90bb] FORGET
+     SOURCE · After changing the same content into a checklist, the user marked every item they had prepared.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  134. [bba3e204] FORGET
+     SOURCE · The user called their mother on a weekend evening, but they spoke only briefly because the mother was out.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  135. [adf05fc7] FORGET
+     SOURCE · The user called again on Saturday morning the following week and spoke for 40 minutes.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  136. [2a5a2d13] FORGET
+     SOURCE · The user sent a text to an old number for an emergency contact and saw that delivery failed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  137. [207618e5] FORGET
+     SOURCE · After confirming the new number with their older sister, the user updated the contact list.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  138. [4d9d29fc] FORGET
+     SOURCE · For nonurgent contact, the user's older sister prefers to reply by text when available rather than take a call immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  139. [73e57579] FORGET
+     SOURCE · Before using an emergency contact, reconfirm the number and relationship information with the user.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  140. [1931a124] FORGET
+     SOURCE · The user feels that a reminder the day before an appointment gives them enough time to recheck preparation items.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  141. [19cbf27a] FORGET
+     SOURCE · The user stores prepared meals on the second shelf of the freezer.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  142. [a85f8f37] FORGET
+     SOURCE · The user went to the market without a shopping list and bought onions that were already at home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  143. [b7ad0617] FORGET
+     SOURCE · On a day the user shopped after checking a refrigerator photo, they did not make a duplicate purchase.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  144. [3d269173] FORGET
+     SOURCE · On a day the user made a spicy stew, they left part of one bowl uneaten.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  145. [7fb22f88] FORGET
+     SOURCE · The next time the user cooked it, they used half as much chili powder and finished the meal.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  146. [e21e8416] FORGET
+     SOURCE · When cooking with their younger brother, the user assigned the cooking sequence only verbally and they did the same task twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  147. [b2496b88] FORGET
+     SOURCE · The next time, the user and their younger brother split ingredient preparation and heat control and finished the meal 20 minutes earlier.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  148. [8274fc01] FORGET
+     SOURCE · When cooking together, the user's younger brother prefers to divide the cooking and dishwashing roles in advance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  149. [0d5e838e] FORGET
+     SOURCE · The local agent can compare responses across several meals, but it cannot conclude from one unfinished food item that the user dislikes that ingredient.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  150. [0507db4a] FORGET
+     SOURCE · The condition of frozen prepared food may vary with its packaging and storage duration.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  151. [c26711f5] FORGET
+     SOURCE · The user keeps the shared laundry-room access card in an entrance drawer.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  152. [0a7aebc7] FORGET
+     SOURCE · The user went downstairs 25 minutes after the laundry finished and received a note from another household.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  153. [c7ef29d8] FORGET
+     SOURCE · For the next load, the user set a reminder five minutes before the end and removed the laundry immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  154. [4ed60814] FORGET
+     SOURCE · The user washed light-colored clothes with new jeans, and color transferred onto white socks.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  155. [cf07d606] FORGET
+     SOURCE · The user later washed the new jeans separately, and the color of the other clothes did not change.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  156. [2097996e] FORGET
+     SOURCE · On a day the user did not check the dryer filter, the clothes needed another drying cycle.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  157. [f34fedd6] FORGET
+     SOURCE · On the next use, after emptying the filter, the user finished drying in one cycle.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  158. [6347479c] FORGET
+     SOURCE · The building manager judges that not leaving finished laundry for a long time is fair to other households.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  159. [ab0ddedd] FORGET
+     SOURCE · When creating a shared laundry-room reminder, base it on the end time of the machine the user started.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  160. [d6e2ca26] FORGET
+     SOURCE · Even if the local agent knows where the card is kept, it cannot know which machines in the shared laundry room are currently available.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  161. [03f0df8a] FORGET
+     SOURCE · The user keeps two potted herbs beside a south-facing window.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  162. [8094ec1d] FORGET
+     SOURCE · During a week when the user watered every day based only on the soil surface, the leaves of one plant turned yellow.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  163. [9c1245e6] FORGET
+     SOURCE · During a week when the user checked below the soil surface with a finger before watering, the plant grew new leaves.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  164. [67ecb99c] FORGET
+     SOURCE · On a day the user left the window open for a long time, strong wind knocked over one pot.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  165. [a2da43d6] FORGET
+     SOURCE · The next day, the user moved the pot inward from the windowsill so the same wind would not knock it over.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  166. [3e5be645] FORGET
+     SOURCE · The user put a plant-name label in a small pot received from their maternal aunt.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  167. [50b516da] FORGET
+     SOURCE · The user confused the care instructions for an unlabeled pot with those for another plant.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  168. [8ccef569] FORGET
+     SOURCE · The user's maternal aunt considers understanding the sunlight at a pot's location more important than watering frequency when caring for it.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  169. [63b1b94f] FORGET
+     SOURCE · Before creating a plant-care reminder, check each plant's name and most recent watering date.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  170. [00becb61] FORGET
+     SOURCE · The soil in the user's potted herbs beside the south-facing window dries at different rates depending on the season and amount of sunlight.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  171. [459f21d2] FORGET
+     SOURCE · The user keeps a portable fan charger on a living-room shelf.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  172. [fccfe6af] FORGET
+     SOURCE · On a hot day, the user worked with only the window open and lost focus in the afternoon.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  173. [576cdbcf] FORGET
+     SOURCE · In the room where the user closed the curtains the next morning, the temperature rose less.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  174. [acc1dc78] FORGET
+     SOURCE · The user took the portable fan out without charging it, and it turned off after an hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  175. [fc00bb25] FORGET
+     SOURCE · Before the next outing, the user charged it the night before and used the fan throughout the trip.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  176. [77426c2a] FORGET
+     SOURCE · On a hot weekend, the user was eating lunch in their father's yard and moved indoors.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  177. [e6dbd089] FORGET
+     SOURCE · When the user returned to the yard in the evening, shade and wind led them to stay another hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  178. [c2adc48d] FORGET
+     SOURCE · The user's father prefers to move an outdoor meal to the evening rather than proceed at midday when the temperature is high.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  179. [6f0aa466] FORGET
+     SOURCE · The local agent can compare past responses to heat but cannot know the current felt temperature without an indoor temperature record.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  180. [450f539c] FORGET
+     SOURCE · A room with a west-facing window can warm rapidly in the late afternoon.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  181. [cee265a9] FORGET
+     SOURCE · The user keeps a travel power bank in the first drawer beneath the desk.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  182. [08e750b7] FORGET
+     SOURCE · The user packed three pairs of shoes for a two-night trip but wore only one pair.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  183. [e71898cf] FORGET
+     SOURCE · For the next two-night trip, the user packed only one pair of walking shoes and reduced the bag's weight.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  184. [e4f5f0da] FORGET
+     SOURCE · On a trip when the user forgot a charging cable, they bought a new one after arrival.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  185. [41f9382b] FORGET
+     SOURCE · Before the next trip, the user checked charging items against a photo and packed all of them.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  186. [f897ea5d] FORGET
+     SOURCE · The user packed toiletries on the departure day and arrived 15 minutes late at the meeting place.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  187. [00345486] FORGET
+     SOURCE · The next time, the user closed the bag the night before and departed on time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  188. [0568db4b] FORGET
+     SOURCE · The user's older sister considers it safer to pack an extra cable even for a short trip to avoid charging problems.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  189. [f60e3469] FORGET
+     SOURCE · When creating a travel preparation list, confirm the trip length and actual activities with the user.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  190. [41d62fc4] FORGET
+     SOURCE · The local agent cannot establish what the next trip requires from the luggage used on the previous trip alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  191. [f6e3a289] FORGET
+     SOURCE · The user keeps packing tape for returns in an upper kitchen drawer.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  192. [333070cf] FORGET
+     SOURCE · The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  193. [6dcbf41b] FORGET
+     SOURCE · Before the next visit, the user checked the operating hours and arrived one hour before closing.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  194. [19e1b7a8] FORGET
+     SOURCE · The user went to the counter without closing a return box and had to go back to the packing station.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  195. [8dbaca8c] FORGET
+     SOURCE · For the next return, the user sealed the box at home and completed intake in one attempt.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  196. [d115a0eb] FORGET
+     SOURCE · The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  197. [b1e1cdf9] FORGET
+     SOURCE · The following week, after checking the locations on a map, the user visited nearby branches in sequence.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  198. [7ad889ee] FORGET
+     SOURCE · Postal staff expect a return-label barcode to arrive affixed flat, without a fold.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  199. [0d315ce8] FORGET
+     SOURCE · Before grouping errands into one outing, check each institution's location and operating hours that day.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  200. [24ef55ed] FORGET
+     SOURCE · Postal and financial counters may operate on different hours than usual around public holidays.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  201. [92943b6c] FORGET
+     SOURCE · The user keeps the book they are reading and a note-taking notebook on a small living-room desk.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  202. [a0f0856f] FORGET
+     SOURCE · While reading in the living room with the television on, the user read the same paragraph three times.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  203. [60bb195d] FORGET
+     SOURCE · The next day, after turning off the television, the user read 40 pages without interruption.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  204. [c7ae6da8] FORGET
+     SOURCE · On a day the phone was on the desk, the user stopped taking notes each time they checked a notification.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  205. [6537684a] FORGET
+     SOURCE · During the next reading period, the user left the phone in another room and did not check it for an hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  206. [223ebad5] FORGET
+     SOURCE · A note attached to a paper book fell out, and the user had to find their place again.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  207. [30bbbef7] FORGET
+     SOURCE · With the next book, the user recorded the page number in the notebook and resumed reading immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  208. [f1361875] FORGET
+     SOURCE · The user's father expects that lowering the television volume while the user reads will make it easier for the user to concentrate.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  209. [242c5c2c] FORGET
+     SOURCE · The local agent can summarize past reading environments and interruption records but cannot predict the next reading time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  210. [c01fcb2c] FORGET
+     SOURCE · The user feels that repeated notifications interrupt their flow of concentration.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  211. [d5a0c871] FORGET
+     SOURCE · The user keeps waterproof shoes for rainy days to the left of the entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  212. [4f7b4cfb] FORGET
+     SOURCE · On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  213. [d8997ee6] FORGET
+     SOURCE · On the next rainy day, the user wore waterproof shoes and their feet remained dry.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  214. [2b697a79] FORGET
+     SOURCE · On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  215. [72e3bff6] FORGET
+     SOURCE · The user wore the same shoes on two short outings before using them on a long walk.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  216. [fec4b925] FORGET
+     SOURCE · On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  217. [1b7f4d0c] FORGET
+     SOURCE · On a day the user put a folded wet umbrella in their bag, documents inside became wet.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  218. [85c181e4] FORGET
+     SOURCE · When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  219. [9a0ae330] FORGET
+     SOURCE · When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  220. [0329a14a] FORGET
+     SOURCE · Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  221. [1205cadb] FORGET
+     SOURCE · The user recorded a family dinner in the calendar for the final week of November.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  222. [cea10d23] FORGET
+     SOURCE · In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  223. [cc74e37e] FORGET
+     SOURCE · When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  224. [e7c87783] FORGET
+     SOURCE · At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  225. [4eaed86f] FORGET
+     SOURCE · On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  226. [99692417] FORGET
+     SOURCE · After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  227. [04d7099d] FORGET
+     SOURCE · On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  228. [170daa66] FORGET
+     SOURCE · The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  229. [650eb3cb] FORGET
+     SOURCE · Before scheduling a family meal, confirm the attendees' arrival times and the location with the user.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  230. [d1e67e56] FORGET
+     SOURCE · Available restaurant reservation times may diminish quickly during the year-end gathering season.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  231. [e6ec5359] FORGET
+     SOURCE · The user stores wrapping paper and empty gift boxes on the upper shelf of the bedroom closet.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  232. [914d33e6] FORGET
+     SOURCE · From photographs, the user discovered that they had given their mother the same type of kitchen item two years in a row.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  233. [a46168bd] FORGET
+     SOURCE · This year, the user went to the market with their mother and let her choose a needed item directly.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  234. [ec3dd934] FORGET
+     SOURCE · The user once ordered a gift late and had it delivered the day after the gathering.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  235. [b42cc961] FORGET
+     SOURCE · The next year, the user checked the expected delivery date and ordered one week before the gathering.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  236. [60255d91] FORGET
+     SOURCE · The user did not put names on wrapped boxes and handed their older sister and younger brother each other's gifts.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  237. [30a25768] FORGET
+     SOURCE · The next time the user wrapped gifts, they wrote the recipient on the bottom of each box.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  238. [27cf6174] FORGET
+     SOURCE · The user's younger brother welcomes a snack the family can share immediately more than an item for his use alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  239. [a9ee33d0] FORGET
+     SOURCE · The local agent can find past gift records and flag duplicates but cannot know what is needed this year.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  240. [82c607e2] FORGET
+     SOURCE · Year-end deliveries may take longer than usual or have their expected dates changed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  241. [2e133f85] FORGET
+     SOURCE · The user keeps gloves and scarves in a basket inside the entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  242. [c25dca71] FORGET
+     SOURCE · On a day the user could not find their gloves, they walked with their hands in their pockets and missed the bus.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  243. [23998e95] FORGET
+     SOURCE · Before the next outing, the user put the gloves in the entrance basket the night before and left on time.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  244. [db3da0c4] FORGET
+     SOURCE · On a snowy day, the user chose a shorter route but turned back at stairs that had not been cleared of snow.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  245. [a4cdd90e] FORGET
+     SOURCE · The next day, the user took a cleared sidewalk along the main road and avoided slippery sections.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  246. [ac457bd9] FORGET
+     SOURCE · The user fell asleep with the heat turned up, became too warm before dawn, and woke twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  247. [8db2c808] FORGET
+     SOURCE · The next night, the user turned down the heat and used one additional thin blanket.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  248. [8496fbcf] FORGET
+     SOURCE · On a morning with heavy snow, the user's father expects the user will worry about road conditions and sends a text before departure.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  249. [cf429a97] FORGET
+     SOURCE · Before proposing a winter travel route, check recent snow-clearing conditions and accessible entrances.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  250. [6ac59f8e] FORGET
+     SOURCE · The local agent cannot know the actual condition of the sidewalk the user will take from a weather forecast alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  251. [879eca58] FORGET
+     SOURCE · The user keeps basic repair tools in a box beneath the sink.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  252. [44c96c92] FORGET
+     SOURCE · On a day the faucet leaked, the user placed only a towel beneath it, and the floor became wet as well.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  253. [1eacf174] FORGET
+     SOURCE · After sending a photo to building management, the user finalized the time for a repair visit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  254. [a650ac45] FORGET
+     SOURCE · Before the technician's visit, the user emptied the area beneath the sink so work could begin immediately.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  255. [7ad4f36f] FORGET
+     SOURCE · On a day the user wrote the visit time only in the calendar and turned off the reminder, they heard the doorbell late.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  256. [8a67eab2] FORGET
+     SOURCE · For the next visit, the user enabled a reminder 30 minutes beforehand and answered immediately at the entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  257. [6ccaa646] FORGET
+     SOURCE · After the repair, the user called their maternal aunt to confirm that the spare key entrusted to her was still there.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  258. [5c12955d] FORGET
+     SOURCE · The user's maternal aunt considers it unsafe to hand the spare key to a repair technician without the user's explicit request.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  259. [6262af09] FORGET
+     SOURCE · Obtain the user's reconfirmation before scheduling an external worker to enter the residential unit.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  260. [8579c34f] FORGET
+     SOURCE · A multi-unit residential building's repair schedule may change because of emergency work or parts availability.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  261. [4e9e608a] FORGET
+     SOURCE · The user stores tax-related receipts in digital folders by year.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  262. [6dbe18b0] FORGET
+     SOURCE · The user found three paper receipts late and recalculated the expense total already prepared.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  263. [ae9c273d] FORGET
+     SOURCE · Starting the next month, the user photographed receipts on the day they were received and reduced omissions.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  264. [3e3a29e7] FORGET
+     SOURCE · The user named every file with only the photo date and spent a long time looking for a needed receipt.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  265. [7fcab6bf] FORGET
+     SOURCE · The user later included the expense category in the filename and found the receipt immediately through search.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  266. [f0e7a304] FORGET
+     SOURCE · While reviewing documents just before submission, the user discovered one blank signature field.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  267. [7599f5e8] FORGET
+     SOURCE · Before submitting an administrative document, the user checks the signature field as the final item on the checklist.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  268. [c0329da8] FORGET
+     SOURCE · Staff at a tax-support counter expect to receive an electronic copy in which every item is legible rather than a blurred or cropped photo.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  269. [940cd36e] FORGET
+     SOURCE · The local agent can organize receipts by date and category but cannot determine whether an expense is deductible.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  270. [11d30472] FORGET
+     SOURCE · The accepted scope and submission deadlines for administrative documents may vary under that year's guidance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  271. [4e00719b] FORGET
+     SOURCE · The user collects clothes for donation in a large bag beside the entrance.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  272. [2e5c59b5] FORGET
+     SOURCE · After emptying an entire drawer at once, the user could not find a charger they needed.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  273. [7c1e0061] FORGET
+     SOURCE · During the next organizing session, the user sorted items by type and put only items to be discarded in the bag.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  274. [713e0836] FORGET
+     SOURCE · Even after photographing unworn clothes, the user did not take them out again for one month.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  275. [c6cce3a9] FORGET
+     SOURCE · After moving those clothes to the donation bag, the user cleared one closet compartment.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  276. [8f3b5417] FORGET
+     SOURCE · The user nearly discarded an important paper with advertising and checked the recycling box again.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  277. [c17ebdc6] FORGET
+     SOURCE · During the next organizing session, the user kept a separate document box and did not mix the papers.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  278. [13354d77] FORGET
+     SOURCE · The user's mother asks the user to check whether she needs kitchen items in good condition before discarding them.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  279. [d6e06492] FORGET
+     SOURCE · Confirm with the user before marking a personal document or another person's property as a disposal candidate.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  280. [6dd726ca] FORGET
+     SOURCE · The local agent cannot determine an object's emotional meaning from frequency of use alone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  281. [d3bae967] FORGET
+     SOURCE · The user keeps a picnic mat on the bottom shelf of the entrance storage cabinet.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  282. [9781318c] FORGET
+     SOURCE · On a day the user went to the riverside, they sat in a place without shade and moved after an hour.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  283. [52516b95] FORGET
+     SOURCE · At the next outdoor meal, the user chose a place near a large tree and stayed for two hours.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  284. [220b4792] FORGET
+     SOURCE · On a hot day when the user brought only one bottle of water, they bought another drink partway through the outing.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  285. [a78048e5] FORGET
+     SOURCE · On the next outing, the user brought two small bottles of water after freezing them.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  286. [3e9c6094] FORGET
+     SOURCE · When meeting their maternal uncle at a park, the user and the uncle waited at different entrances for 15 minutes.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  287. [fc06cb3e] FORGET
+     SOURCE · For the next meeting, the user sent a photo of the entrance sign, and they met at the same place.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  288. [71bb4893] FORGET
+     SOURCE · For a park meeting, the user's maternal uncle prefers an entrance that requires less walking from the parking area.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  289. [6b55563f] FORGET
+     SOURCE · When making an outdoor plan, confirm the exact entrance and an alternative location in case of rain.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  290. [a4affce8] FORGET
+     SOURCE · Some park restrooms and drinking fountains may be closed seasonally.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  291. [19499576] FORGET
+     SOURCE · The user keeps four folding chairs for family barbecues in storage.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  292. [b2e4faa4] FORGET
+     SOURCE · When six family members gathered in a noisy indoor restaurant, the user asked several times for the person across from them to repeat what was said.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  293. [81cb553b] FORGET
+     SOURCE · The user held the next gathering in their father's yard and moved between seats while speaking with everyone.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  294. [4ed554fc] FORGET
+     SOURCE · On a day the user started the barbecue at midday, sunlight led them to finish the meal quickly.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  295. [17908f92] FORGET
+     SOURCE · The next time, the user started at 6 p.m. and remained outside until sunset.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  296. [cf9a6f44] FORGET
+     SOURCE · Because the side dishes brought by the user's mother and older sister had no labels, the user opened the same container twice.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  297. [e5a53777] FORGET
+     SOURCE · At the next gathering, the user wrote each food's name and who brought it on a small piece of paper.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  298. [aeda5725] FORGET
+     SOURCE · After a barbecue, the user's younger brother prefers to divide leftover food into small containers to take home rather than discard it.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  299. [7adff6cc] FORGET
+     SOURCE · The local agent can summarize preparation and responses from prior family barbecues but cannot know the next attendees or weather.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+  300. [4ea5443b] FORGET
+     SOURCE · The user's father's yard receives strong direct sunlight at midday; after 6 p.m., shade and wind lower the felt temperature.
+     RESULT · (forgotten)
+     WHY · No specific sharing purpose was supplied.
+
+The Source Context is unchanged.
+[36mSession · ad5273f8-1ce5-4a5e-9ef6-333071807a5f[0m

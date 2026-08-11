@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM SEVER · LOCAL CONTENT REVIEW                                                                                                                                                ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · task-3/local/personal-memory                                                                                                                                          ┃
+┃   CRITERIA · task-3/local/guardrails                                                                                                                                             ┃
+┃   RESULT · task-3/participant/subtractive-first · NOT CREATED                                                                                                                    ┃
+┃ REVIEWING · 300 SOURCE · 1 Context CRITERIA · 0 RESULT                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The Source contains detailed personal memories about the user’s family, health-related routines, home access and maintenance, scheduling, travel, finances, household activities ┃
+┃, preferences, and past experiences from January 2024 through June 2026.                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIED                                                                                                                                                                     ┃
+┃ All 300 Source Memories were evaluated in one contextual batch. All personal details, third-party information, preferences, policies, and historical observations were excluded  ┃
+┃because no specific sharing purpose was supplied, preventing a purpose-limited determination of what was necessary. Affected Source examples: “The user's mother's birthday falls ┃
+┃ in the third week of January.”, “At the user's last family meal out, noise from the next table made conversation nearly im…”, “At a barbecue at home in the same month, the user ┃
+┃ was comfortable because no one had to r…”, and 297 more. Main Criteria: “If the sharing purpose is not specific, ask the user to clarify it before creating candid…”. Exact Sour ┃
+┃ce-to-Criteria mappings, rationale, and alternatives remain inspectable in Items; the complete per-Memory outcome appears once in the full result view. The Source is unchanged.  ┃
+┃The Result Context has not been created.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED                                                                                                                                   ┃
+┃ This is the exact local result that Apply would materialize. The Source Context remains unchanged.                                                                               ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ − [FORGET] task-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [2cd0229d]                                                                        ┃
+┃             - The user's mother's birthday falls in the third week of January.                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃       ▸ − [FORGET] task-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [c62f1669]                                                                        ┃
+┃             - At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃       ▸ − [FORGET] task-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [674f4bdf]                                                                        ┃
+┃             - At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃       ▸ − [FORGET] task-3/local/personal-memory/2024/01 → task-3/participant/subtractive-first [21509788]                                                                        ┃
+┃             - During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Sever report                                                                                                                                           ^│
+│  SEVER DECISION The user's mother's birthday falls in the third week of January.                                                                                                 │
+│  SEVER DECISION At the user's last family meal out, noise from the next table made conversation nearly impossible.                                                               │
+│  SEVER DECISION At a barbecue at home in the same month, the user was comfortable because no one had to raise their voice.                                                       │
+│  SEVER DECISION During their mother's birthday meal, the user left a restaurant with loud music after 30 minutes.                                                                │
+│  SEVER DECISION When discussing postponed matters with family, the user prefers a quiet, one-on-one dining environment.                                                         v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/subtractive-first · NOT CREATED    Enter to change                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Sever action · APPLY is available. Enter to review before anything changes.                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A review & apply  H Help  Q close

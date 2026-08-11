@@ -228,3 +228,34 @@ The review appeared in `0.407` seconds, preservation in `0.430` seconds, and
 acceptance in `0.432` seconds. All 100 inputs remained separately
 provenance-bearing in the result. Neither the local guardrails nor the granted
 authority frame changed, and the provider-event counter remained `0`.
+
+## Task 3 Sever interaction log
+
+| Capture | Command or input | Visible state | Durable mutation |
+| --- | --- | --- | --- |
+| `103-task3-sever-exact-entry` | `mem sever --source task-3/local/personal-memory --criteria task-3/local/guardrails --save-as task-3/participant/subtractive-first --source-descendants --criteria-descendants` | Whole-frame 300-Source review, 75 descendant-inclusive Criteria Memories, and an uncreated Result | Saved exact-prewarm review session only |
+| `104-task3-sever-candidate-detail` | `Tab`, `Down`, `Enter` | First Source Memory, applicable purpose criterion, and selected `FORGET` recommendation | None |
+| `105-task3-sever-final-review` | `Escape`, `A` | All 300 required responses answered; final action remains non-mutating | None |
+| `106-task3-sever-exact-approval` | `Down` | Exact Apply card focused with an explicit Enter action | None |
+| `107-task3-sever-apply-receipt` | `Enter` | `EXACT PREWARM`, provider-not-called receipt and all 300 `FORGET` outcomes; the visible terminal ends at outcome 300 | Created the empty local Result; Source unchanged |
+| `108-task3-sever-empty-result-verification` | `mem show --context task-3/participant/subtractive-first` | Durable Result with zero Memories | None; read-only |
+| `109-task3-sever-source-verification` | `mem show --context task-3/local/personal-memory` | Source root and its year descendants remain attached; recursive binding verification still counts 300 Memories | None; read-only |
+| `110-task3-sever-undo-receipt` | `mem undo` | Command-unit removal receipt for the new zero-Memory Result | Removed the Result Context; Source unchanged |
+| `111-task3-sever-redo-receipt` | `mem redo` | Command-unit restoration receipt | Restored the same Result Context identity and application |
+| `112-task3-sever-restored-result-verification` | `mem show --context task-3/participant/subtractive-first` | Restored Result remains empty | None; read-only |
+| `113-task3-sever-action-log` | `mem log --actions --limit 35` | Exact approval, Sever completion, Undo, and Redo boundaries with no provider event | None; read-only |
+
+`task3-sever-replay-metrics.json` records `0.596` seconds to the complete
+review, `5.401` seconds through inspection and explicit Apply, `0.462` seconds
+for Undo, and `0.553` seconds for Redo. Every one of the 300 Source Memories
+received a `FORGET` disposition. The new Result therefore contains zero
+Memories, while the Source stayed at 300 and retained the identical full-frame
+digest. The provider-event counter remained `0`.
+
+This replay also exposed two interaction-boundary defects before the final
+capture. Closing a Resolution detail could clear its first staged choice when
+final review opened, and an old granted-Update receipt could mask a newer local
+Redo when the authority-side stack was empty. The focused regression fixes
+retain explicit review state and allow only the proven empty-stack fallback;
+revocation, authority drift, and exact-unit ordering failures still fail
+closed.

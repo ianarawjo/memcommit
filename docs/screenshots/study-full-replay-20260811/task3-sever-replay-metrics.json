@@ -1,0 +1,20 @@
+{
+  "command": "mem sever --source task-3/local/personal-memory --criteria task-3/local/guardrails --save-as task-3/participant/subtractive-first --source-descendants --criteria-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_review_seconds": 0.5956635830225423,
+  "elapsed_review_and_apply_seconds": 5.400551875005476,
+  "undo_seconds": 0.4615000829799101,
+  "redo_seconds": 0.5531218329851981,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "source_memories_before": 300,
+  "source_memories_after": 300,
+  "criteria_memories": 75,
+  "recommendations": {
+    "FORGET": 300
+  },
+  "output_memories": 0,
+  "source_frame_digest_before": "5d1b6ab48eeea6a5a6002344f82ceb979d7babd3450e5219c3512233d1cbc3bc",
+  "source_frame_digest_after": "5d1b6ab48eeea6a5a6002344f82ceb979d7babd3450e5219c3512233d1cbc3bc",
+  "origin": "EXACT_PREWARM"
+}
