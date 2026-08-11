@@ -265,6 +265,21 @@ def _start(
                 | set(criteria.excluded_query_context_names)
             ),
         )
+        # Study prewarms remain hidden artifacts. An exact hit is cloned into
+        # a fresh review only after the ordinary authority and frame freezes.
+        from memcommit.study_prewarm.sever import (
+            find_installed_exact_sever_prewarm,
+        )
+
+        prepared = find_installed_exact_sever_prewarm(
+            store=store,
+            source=source,
+            criteria=criteria,
+            output_name=output_name,
+        )
+        if prepared is not None:
+            progress.update("reusing exact prepared analysis", step=3)
+            return prepared
         progress.update("connecting provider", step=2)
         provider = (provider_factory or connect_codex_chatgpt_provider)()
         identity = getattr(provider, "identity", None)
@@ -733,6 +748,7 @@ def cmd(
             and not accept
         )
         session: SeverSession | None = None
+        exact_prewarm = False
         start_from_launcher = False
         if sessions_flag or bare_launcher:
             if not interactive:
@@ -813,6 +829,16 @@ def cmd(
                 source_descendants=source_descendants,
                 criteria_descendants=criteria_descendants,
             )
+            from memcommit.study_prewarm.sever import (
+                is_installed_exact_sever_request,
+            )
+
+            exact_prewarm = is_installed_exact_sever_request(
+                store=store,
+                source=session.source,
+                criteria=session.criteria,
+                output_name=session.output_name,
+            )
             session_store.save(session, expected_digest=None)
 
         if candidate is not None or choice is not None or comment is not None:
@@ -859,6 +885,8 @@ def cmd(
         elif sys.stdin.isatty() and sys.stdout.isatty():
             session = _run_workbench(store, session)
 
+        if exact_prewarm:
+            typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
         typer.echo(render_sever(session))
         typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
     except (

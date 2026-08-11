@@ -156,6 +156,9 @@ class StudyInitializationResult:
     declared_update_prewarms: int = 0
     installed_update_prewarms: int = 0
     skipped_update_prewarms: int = 0
+    declared_sever_prewarms: int = 0
+    installed_sever_prewarms: int = 0
+    skipped_sever_prewarms: int = 0
 
 
 @dataclass(frozen=True)
@@ -3912,6 +3915,7 @@ def _publish_study_run_pair(
             install_declared_compare_prewarms,
         )
         from memcommit.study_prewarm.update import install_declared_update_prewarms
+        from memcommit.study_prewarm.sever import install_declared_sever_prewarms
 
         install_declared_atomize_prewarms(
             store=MemoryStore(root=profile_store_dir(participant), create=False),
@@ -3926,6 +3930,12 @@ def _publish_study_run_pair(
             publish=False,
         )
         install_declared_update_prewarms(
+            store=MemoryStore(root=profile_store_dir(participant), create=False),
+            profile=participant,
+            registry_snapshot=updated,
+            publish=False,
+        )
+        install_declared_sever_prewarms(
             store=MemoryStore(root=profile_store_dir(participant), create=False),
             profile=participant,
             registry_snapshot=updated,
@@ -4065,6 +4075,7 @@ def init_study_profile(
     from memcommit.study_prewarm.atomize import install_declared_atomize_prewarms
     from memcommit.study_prewarm.compare import install_declared_compare_prewarms
     from memcommit.study_prewarm.update import install_declared_update_prewarms
+    from memcommit.study_prewarm.sever import install_declared_sever_prewarms
 
     try:
         participant_store = MemoryStore(
@@ -4087,6 +4098,11 @@ def init_study_profile(
             profile=initialization.profile,
             registry_snapshot=current_registry,
         )
+        sever_prewarms = install_declared_sever_prewarms(
+            store=participant_store,
+            profile=initialization.profile,
+            registry_snapshot=current_registry,
+        )
     except Exception as error:
         raise ProfileError(
             f"Study run {profile_name!r} was created, but its declared semantic "
@@ -4103,6 +4119,9 @@ def init_study_profile(
         declared_update_prewarms=update_prewarms.declared,
         installed_update_prewarms=update_prewarms.installed,
         skipped_update_prewarms=update_prewarms.skipped_configuration,
+        declared_sever_prewarms=sever_prewarms.declared,
+        installed_sever_prewarms=sever_prewarms.installed,
+        skipped_sever_prewarms=sever_prewarms.skipped_configuration,
     )
 
 

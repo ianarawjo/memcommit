@@ -1,0 +1,53 @@
+{
+  "artifact": {
+    "entry_key": "c85c9f0a87f2490497ce835956133d1e4822aff6cf80c6ee7e59098a390fee66",
+    "operation": "SEVER",
+    "policy": "EXACT_PREWARM",
+    "task": "task-3"
+  },
+  "basis": {
+    "criteria": "task-3/local/guardrails",
+    "criteria_frame_digest": "89b74e0f657608c5046aa8045806414cca18019bcba9989af1fb61261f99ab7c",
+    "criteria_memories": 75,
+    "descendant_inclusive": true,
+    "output": "task-3/participant/subtractive-first",
+    "source": "task-3/local/personal-memory",
+    "source_frame_digest": "5d1b6ab48eeea6a5a6002344f82ceb979d7babd3450e5219c3512233d1cbc3bc",
+    "source_memories": 300
+  },
+  "cold_preparation": {
+    "model": "gpt-5.6-sol",
+    "provider": "codex_chatgpt",
+    "provider_seconds": 192.178047333,
+    "reasoning": "medium",
+    "recommendations": {
+      "FORGET": 300
+    },
+    "session_uid": "983f41b7-0fc1-4433-89a0-84dd577e2537"
+  },
+  "fresh_run": {
+    "direct_lookup_max_ms": 8.178999996744096,
+    "direct_lookup_median_ms": 7.598416996188462,
+    "direct_lookup_repetitions": 20,
+    "foreground_cli_seconds": 0.43,
+    "init_study_seconds": 1.74,
+    "installed_declared_artifacts": 9,
+    "provider_calls": 0,
+    "public_origin": "ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED",
+    "review_session_uid": "26d7c3f2-dca9-45c9-a57f-abb2c47cc71e"
+  },
+  "materialization": {
+    "accept_seconds": 0.39,
+    "output_memories": 0,
+    "redo_verified": true,
+    "require_new_output_created": true,
+    "source_frame_digest_after": "5d1b6ab48eeea6a5a6002344f82ceb979d7babd3450e5219c3512233d1cbc3bc",
+    "source_memories_after": 300,
+    "undo_verified": true
+  },
+  "quality_boundary": {
+    "exact_reuse_only": true,
+    "source_addition_is_live": true,
+    "source_deletion_projection_implemented": false
+  }
+}

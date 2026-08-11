@@ -179,6 +179,18 @@ def cmd(
             )
             + "."
         )
+    if result.declared_sever_prewarms:
+        typer.echo(
+            "Declared Task 3 Sever prewarms "
+            f"{result.installed_sever_prewarms} installed"
+            + (
+                f" · {result.skipped_sever_prewarms} skipped for the current "
+                "provider configuration"
+                if result.skipped_sever_prewarms
+                else ""
+            )
+            + "."
+        )
     typer.echo(
         "Operational history starts empty; checkpoints, sessions, ad-hoc caches, "
         "locks, and run logs were not imported."
