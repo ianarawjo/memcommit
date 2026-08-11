@@ -1,0 +1,52 @@
+ MEM COMPARE · task-2/advisor1 ↔ task-2/advisor2                                                                                                                                    
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MEM COMPARE · SYMMETRIC PEERS                                                                                                                                                    ^┃
+┃Reference: task-2/advisor1 (layout only; no authority)                                                                                                                            ┃
+┃Compared:  task-2/advisor2                                                                                                                                                        ┃
+┃SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                                ┃
+┃Analysis: 6bbd2ff9 · EXACT PREWARM · SAVED · RETAINED                                                                                                                             ┃
+┃METRICS · MEMORIES 150 + 150 · RELATIONS 98 · POTENTIAL CONFLICTS 5                                                                                                               ┃
+┃EQUIVALENT 18 · COMPATIBLE 14 · SCOPED 26 · CONFLICT 5 · DISTINCT 35 · UNCLEAR 0                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT MEM UNDERSTOOD                                                                                                                                                               ┃
+┃The frames strongly align on evidence, ethics, feasibility, terminology, and review discipline, while adapting many recommendations to formative versus field settings. Material  ┃
+┃disagreements concern opening length, headings, em-dash use, participant targets, and budget-detail placement; each needs contextual grounding.                                   ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT BOTH CONTAIN · 32                                                                                                                                                            ┃
+┃Both emphasize traceable claims, bounded contributions, explicit methods, participant protections, feasible resources, consistent terminology, fair compensation, and coherent re ┃
+┃view logic.                                                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT DIFFERS · 31                                                                                                                                                                 ┃
+┃Formative and field contexts alter operational details, while incompatible advice remains on openings, headings, em dashes, sample targets, and budget presentation.              ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-2/advisor1 · 16 · not automatically a deficiency                                                                                                                     ┃
+┃The reference adds transferable-principle tests, formative process measures, analytic generalization, cumulative burden limits, lean prototypes, and iteration feasibility.       ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-2/advisor2 · 19 · not automatically a deficiency                                                                                                                     ┃
+┃The compared frame adds field-role authority, withdrawal safeguards, operational recovery, adoption and implementation outcomes, partner dependencies, and staff-cost separation. ┃
+┃                                                                                                                                                                                  ┃
+┃POTENTIAL CONFLICTS · 5                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃1. Opening-length rule. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening. The answer changes the  ┃
+┃opening’s maximum length and allocation of person, setting, problem, and consequence. Strict two sentences: Require the central problem and consequence within the first two sent ┃
+┃ences; Conditional third sentence: Allow a third sentence when concrete context is necessary for comprehension.                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃2. Navigation structure. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe opposing navigation structures for a two-page proposal. The choice directly controls page struct ┃
+┃ure, scanability, continuity, and space allocation. Descriptive headings: Use visible labels for the problem, response, and next steps; Continuous argument: Use linked paragraph ┃
+┃s without extra subheadings.                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃3. Em-dash policy. task-2/advisor1 ↔ task-2/advisor2: The frames set incompatible policies for em dashes. The answer determines whether any em dash can remain in the proposal. P ┃
+┃rohibit all: Replace every em dash with sentence breaks or ordinary punctuation; Permit deliberate use: Retain em dashes only when they carry an intentional interruption or cont ┃
+┃rast.                                                                                                                                                                            v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT   Complete Compare report                                                                                                                                               ^│
+│  SECTION  What Mem understood · 1                                                                                                                                                │
+│  SECTION  What both contain · 32                                                                                                                                                 │
+│  SECTION  What differs · 31                                                                                                                                                      │
+│  SECTION  Only in task-2/advisor1 · 16                                                                                                                                           │
+│  SECTION  Only in task-2/advisor2 · 19                                                                                                                                           │
+│  SECTION  Potential conflicts · 5                                                                                                                                                │
+│  ITEM     Opening-length rule                                                                                                                                                   v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

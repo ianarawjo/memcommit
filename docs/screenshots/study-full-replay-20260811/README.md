@@ -125,3 +125,18 @@ unchanged at `75` Memories and the granted baseline expanded from `300` to
 `375`. The 75 additions were routed across all six authoritative child
 Contexts; `task1-directional-meld-replay-metrics.json` records the exact
 per-owner counts. The provider-event counter remained `0`.
+
+## Task 2 Compare interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `44-task2-compare-exact-entry` | `mem compare --from task-2/advisor1 --to task-2/advisor2 --reference-descendants --compared-descendants` | None | Exact 150+150 report with 98 relations and five potential conflicts | None |
+| `45-task2-compare-relation-detail` | same | `Tab`, `End`, `Up` times 97, `Enter` | Opening-length conflict with exact claims from both advisors | None |
+| `46-task2-compare-close-receipt` | same | `Q` | Explicit close receipt | None |
+| `47-task2-compare-snapshot-verification` | same with `--snapshot` | None | Stable retained report and the exact symmetric Meld follow-up command | None; read-only |
+| `48-task2-compare-action-log` | `mem log --actions --limit 20` | None | Completed Compare attempts with no provider event | None; read-only |
+
+The full exact report appeared in `0.412` seconds. The retained analysis has
+`18` equivalent, `14` compatible, `26` scoped, `5` conflict, and `35`
+distinct groups. `task2-compare-replay-metrics.json` records the unchanged
+zero provider-event counter.

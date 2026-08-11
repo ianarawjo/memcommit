@@ -1,0 +1,247 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM COMPARE · task-2/advisor1 ↔ task-2/advisor2[0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃MEM COMPARE · SYMMETRIC PEERS[0m                                                                                                                                                    [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mReference: task-2/advisor1 (layout only; no authority)                                                                                                                           [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mCompared:  task-2/advisor2                                                                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mSCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mAnalysis: 6bbd2ff9 · EXACT PREWARM · SAVED · RETAINED                                                                                                                            [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mMETRICS · MEMORIES 150 + 150 · RELATIONS 98 · POTENTIAL CONFLICTS 5                                                                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mEQUIVALENT 18 · COMPATIBLE 14 · SCOPED 26 · CONFLICT 5 · DISTINCT 35 · UNCLEAR 0                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mWHAT MEM UNDERSTOOD                                                                                                                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mThe frames strongly align on evidence, ethics, feasibility, terminology, and review discipline, while adapting many recommendations to formative versus field settings. Material [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mdisagreements concern opening length, headings, em-dash use, participant targets, and budget-detail placement; each needs contextual grounding.                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mWHAT BOTH CONTAIN · 32                                                                                                                                                           [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mBoth emphasize traceable claims, bounded contributions, explicit methods, participant protections, feasible resources, consistent terminology, fair compensation, and coherent re[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mview logic.                                                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mWHAT DIFFERS · 31                                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mFormative and field contexts alter operational details, while incompatible advice remains on openings, headings, em dashes, sample targets, and budget presentation.             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mONLY IN task-2/advisor1 · 16 · not automatically a deficiency                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mThe reference adds transferable-principle tests, formative process measures, analytic generalization, cumulative burden limits, lean prototypes, and iteration feasibility.      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mONLY IN task-2/advisor2 · 19 · not automatically a deficiency                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mThe compared frame adds field-role authority, withdrawal safeguards, operational recovery, adoption and implementation outcomes, partner dependencies, and staff-cost separation.[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mPOTENTIAL CONFLICTS · 5                                                                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m1. Opening-length rule. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening. The answer changes the [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mopening’s maximum length and allocation of person, setting, problem, and consequence. Strict two sentences: Require the central problem and consequence within the first two sent[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mences; Conditional third sentence: Allow a third sentence when concrete context is necessary for comprehension.                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m2. Navigation structure. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe opposing navigation structures for a two-page proposal. The choice directly controls page struct[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mure, scanability, continuity, and space allocation. Descriptive headings: Use visible labels for the problem, response, and next steps; Continuous argument: Use linked paragraph[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0ms without extra subheadings.                                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m3. Em-dash policy. task-2/advisor1 ↔ task-2/advisor2: The frames set incompatible policies for em dashes. The answer determines whether any em dash can remain in the proposal. P[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mrohibit all: Replace every em dash with sentence breaks or ordinary punctuation; Permit deliberate use: Retain em dashes only when they carry an intentional interruption or cont[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mrast.                                                                                                                                                                            [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT   Complete Compare report[0m                                                                                                                                               [0;1m^[179C[0m│[0m
+[0m│  SECTION  What Mem understood · 1                                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SECTION  What both contain · 32                                                                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SECTION  What differs · 31                                                                                                                                                     [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SECTION  Only in task-2/advisor1 · 16                                                                                                                                          [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SECTION  Only in task-2/advisor2 · 19                                                                                                                                          [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  SECTION  Potential conflicts · 5                                                                                                                                               [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  ITEM     Opening-length rule                                                                                                                                                   [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·[178D[49A[C[0m[A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│MEM COMPARE · SYMMETRIC PEERS                                                                                                                                                    [0;1m^[179C[0m│[0m
+[0m│Reference: task-2/advisor1 (layout only; no authority)                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│Compared:  task-2/advisor2                                                                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│Analysis: 6bbd2ff9 · EXACT PREWARM · SAVED · RETAINED                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│METRICS · MEMORIES 150 + 150 · RELATIONS 98 · POTENTIAL CONFLICTS 5                                                                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│EQUIVALENT 18 · COMPATIBLE 14 · SCOPED 26 · CONFLICT 5 · DISTINCT 35 · UNCLEAR 0                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│WHAT MEM UNDERSTOOD                                                                                                                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│The frames strongly align on evidence, ethics, feasibility, terminology, and review discipline, while adapting many recommendations to formative versus field settings. Material [0;48;2;68;68;68m [179C[0m│[0m
+[0m│disagreements concern opening length, headings, em-dash use, participant targets, and budget-detail placement; each needs contextual grounding.                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│WHAT BOTH CONTAIN · 32                                                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│Both emphasize traceable claims, bounded contributions, explicit methods, participant protections, feasible resources, consistent terminology, fair compensation, and coherent re[0;48;2;68;68;68m [179C[0m│[0m
+[0m│view logic.                                                                                                                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│WHAT DIFFERS · 31                                                                                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│Formative and field contexts alter operational details, while incompatible advice remains on openings, headings, em dashes, sample targets, and budget presentation.             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ONLY IN task-2/advisor1 · 16 · not automatically a deficiency                                                                                                                    [0;48;2;68;68;68m [179C[0m│[0m
+[0m│The reference adds transferable-principle tests, formative process measures, analytic generalization, cumulative burden limits, lean prototypes, and iteration feasibility.      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ONLY IN task-2/advisor2 · 19 · not automatically a deficiency                                                                                                                    [0;48;2;68;68;68m [179C[0m│[0m
+[0m│The compared frame adds field-role authority, withdrawal safeguards, operational recovery, adoption and implementation outcomes, partner dependencies, and staff-cost separation.[0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│POTENTIAL CONFLICTS · 5                                                                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│1. Opening-length rule. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening. The answer changes the [0;48;2;68;68;68m [179C[0m│[0m
+[0m│opening’s maximum length and allocation of person, setting, problem, and consequence. Strict two sentences: Require the central problem and consequence within the first two sent[0;48;2;68;68;68m [179C[0m│[0m
+[0m│ences; Conditional third sentence: Allow a third sentence when concrete context is necessary for comprehension.                                                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│2. Navigation structure. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe opposing navigation structures for a two-page proposal. The choice directly controls page struct[0;48;2;68;68;68m [179C[0m│[0m
+[0m│ure, scanability, continuity, and space allocation. Descriptive headings: Use visible labels for the problem, response, and next steps; Continuous argument: Use linked paragraph[0;48;2;68;68;68m [179C[0m│[0m
+[0m│s without extra subheadings.                                                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│3. Em-dash policy. task-2/advisor1 ↔ task-2/advisor2: The frames set incompatible policies for em dashes. The answer determines whether any em dash can remain in the proposal. P[0;48;2;68;68;68m [179C[0m│[0m
+[0m│rohibit all: Replace every em dash with sentence breaks or ordinary punctuation; Permit deliberate use: Retain em dashes only when they carry an intentional interruption or cont[0;48;2;170;170;170m [179C[0m│[0m
+[0m│rast.                                                                                                                                                                            [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0;1;7m› REPORT   Complete Compare report[0m                                                                                                                                               [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  What Mem understood · 1                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  What both contain · 32                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  What differs · 31                                                                                                                                                     [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  Only in task-2/advisor1 · 16                                                                                                                                          [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  Only in task-2/advisor2 · 19                                                                                                                                          [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SECTION  Potential conflicts · 5                                                                                                                                               [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  ITEM     Opening-length rule                                                                                                                                                   [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[7C[0mIT[CMS · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter de[Cper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld [C· [C1[9A[C[0m[40A[0mR[CLATION · DISTINCT · RESOLVED[0m
+[C[0mState how each proposed contribution could alter a specific design or operational decision.[0m
+[C[0mOnly the compared frame [Cequires this contribution-level decision test.[0m
+[C[0m                                                                                  [0m
+[C[0m                                                     [0m
+[C[0m                                                                   [0m
+[C[0m                                                                                [0m
+
+[C[0m                   [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                                                                                                               [0m
+
+[C[0m                      [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m           [0m
+
+[C[0m                 [0m
+[C[0m                                                                                                                                                                    [0m
+
+[C[0m                                                             [0m
+[C[0m                                                                                                                                                                           [0m
+
+[C[0m                                                             [0m
+[C[0m                                                                                                                                                                                 [0m
+
+[C[0m                       [0m
+
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                                                                               [0m
+
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                            [0m
+
+[C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
+[C[0m     [0m
+
+
+[C[0m  R91 · DISTINCT · Separate participant compensation from labor costs for field staff performing operational duties.[0m
+[3C[0mR92 · SCOPED · Conduct a f[Ccused pre-submission review of problem, intervention, evaluation, and contribution logic.[59C[0;48;2;170;170;170m [0m
+[3C[0mR93 · SCOPED · Check th[Ct research questions connect to core prototype or system functions.[84C[0;48;2;170;170;170m [0m
+[3C[0mR94 · SCOPED · Check that evaluation or field tasks generate representative measures.[0m
+[3C[0mR95 · EQUIVALENT[C· Check that collected evidence can change specified design or operational decisions.[0m
+[3C[0mR96 · DISTINCT ·[CTrace e[Cch research question through formative data to its design-modification judgment.[70C[0;48;2;170;170;170m [0m
+[3C[0mR97 · DISTINCT · Walk through installation failures, interruptions, and recovery scenarios with field liaisons before submission.[46C[0;48;2;68;68;68m [0m
+[C[0;1;7m› R98 · DISTINCT · State how each proposed contribution could alter a specific design or operational decision.[110D[0m[47A[11C[0mCONFLI[5CUNRESOLVED[0m
+[C[0mThe frames presc[Cibe incompat[2Cle maxim[Cm lengths and sentenc[C roles f[Cr the proposal ope[Cing.[0m
+[3C[0me requires complete framing within tw[C sentences, whi[Ce the other permits and assigns essential context to a third sentence.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0;1;7m› R1 · CONFLICT · The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.[0m    [0m
+[4C[0m2 · COMPATIBLE · The primary research que[Ct[4Cshould[Cidentify its us[2Cs and concrete interaction or use envir[Cnment.[57C[0;48;2;68;68;68m [0m
+[4C[0m3 · EQUIVALENT · An[Cunfamiliar interac[4C pr[Ccedure needs one c[Cmpact vi[Cual showing step-transition conditions.[61C[0;48;2;68;68;68m [0m
+[4C[0m4 · SCOPED · The research schedule should use pha[Ces with linked d[Cliverables or milestones, specialized to design-centered or field-centered work.[0m
+[4C[0m5 · COMPATIBLE · Place the research gap close to the proposed des[Cgn[Cand practical contribution[C.    [0m
+[4C[0m6 · CONFL[CCT · The frames p[3Ccribe[Coppos[Cng[Cnavigation structures for[Ca two-pa[Ce proposal.             [70C[0;48;2;170;170;170m [0m
+[4C[0m7 · COMPATIBLE · P[Cace prelim[2Cary observational or[Ctechnical evidence[Cb[Csid[C feasibil[Cty[Cclaims.                               [46C[0;48;2;170;170;170m [0m
+[C[0m  R8 · EQUIVALENT · Limit the proposal to two primary HCI contributions readers must identify.                [7A[110D[0m[41A[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃RELATION · CONFLICT · UNRESOLVED[0m                                                                                                                                                 [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mThe frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mOne requires complete framing within two sentences, while the other permits and assigns essential context to a third sentence.                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m› task-2/advisor1 [44249c8a] [task-2/advisor1/structure] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before an[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0my supporting background.                                                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor1 [21371c6c] [task-2/advisor1/structure] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the prop[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mosed response.                                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor1 [8ecaec22] [task-2/advisor1/structure] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor1 [a4536b84] [task-2/advisor1/structure] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the e[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mxact problem being proposed.                                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor2 [e32f543b] [task-2/advisor2/structure] Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m to make the issue understandable.                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor2 [6bbb0f69] [task-2/advisor2/structure] Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-senten[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mce summary.                                                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor2 [0ac685f9] [task-2/advisor2/structure] Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  task-2/advisor2 [5567fb3c] [task-2/advisor2/structure] A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the prop[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mosal intends to change.                                                                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› R1 · CONFLICT · The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.[0m                                                                 [0;1m^[179C[0m│[0m
+[0m│  R2 · COMPATIBLE · The primary research question should identify its users and concrete interaction or use environment.                                                         [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  R3 · EQUIVALENT · An unfamiliar interaction procedure needs one compact visual showing step-transition conditions.                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  R4 · SCOPED · The research schedule should use phases with linked deliverables or milestones, specialized to design-centered or field-centered work.                           [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  R5 · COMPATIBLE · Place the research gap close to the proposed design and practical contributions.                                                                             [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  R6 · CONFLICT · The frames prescribe opposing navigation structures for a two-page proposal.                                                                                   [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  R7 · COMPATIBLE · Place preliminary observational or technical evidence beside feasibility claims.                                                                             [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  R8 · EQUIVALENT · Limit the proposal to two primary HCI contributions readers must identify.                                                                                   [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[7C[0mVI[CWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter d[Ceper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld[C ·[0m[K[49A[177D[0m[2A[J[0m[?7h[?1049l[?2004l[?12l[?25hCompare view closed.

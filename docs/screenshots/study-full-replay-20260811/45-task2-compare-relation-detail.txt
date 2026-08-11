@@ -1,0 +1,52 @@
+ MEM COMPARE · task-2/advisor1 ↔ task-2/advisor2                                                                                                                                    
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · CONFLICT · UNRESOLVED                                                                                                                                                 ^┃
+┃The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.                                                                                    ┃
+┃One requires complete framing within two sentences, while the other permits and assigns essential context to a third sentence.                                                    ┃
+┃› task-2/advisor1 [44249c8a] [task-2/advisor1/structure] Complete the problem framing within the first two sentences so the reader reaches the proposal's central issue before an ┃
+┃y supporting background.                                                                                                                                                          ┃
+┃  task-2/advisor1 [21371c6c] [task-2/advisor1/structure] Use the first sentence for the concrete problem and the second for its consequence; reserve later sentences for the prop ┃
+┃osed response.                                                                                                                                                                    ┃
+┃  task-2/advisor1 [8ecaec22] [task-2/advisor1/structure] Readers often decide what a proposal is about from its first two sentences before scanning the rest of the page.         ┃
+┃  task-2/advisor1 [a4536b84] [task-2/advisor1/structure] When setup continues past the second sentence, readers who are skimming often retain the background topic but miss the e ┃
+┃xact problem being proposed.                                                                                                                                                      ┃
+┃  task-2/advisor2 [e32f543b] [task-2/advisor2/structure] Allow the problem framing to extend through a third sentence when a concrete person, setting, or use situation is needed ┃
+┃ to make the issue understandable.                                                                                                                                                ┃
+┃  task-2/advisor2 [6bbb0f69] [task-2/advisor2/structure] Use the third sentence for the specific setting and consequence rather than compressing them into an abstract two-senten ┃
+┃ce summary.                                                                                                                                                                       ┃
+┃  task-2/advisor2 [0ac685f9] [task-2/advisor2/structure] Readers may misinterpret a compressed opening when the person, setting, or consequence is only implied.                  ┃
+┃  task-2/advisor2 [5567fb3c] [task-2/advisor2/structure] A two-sentence opening can become so general that readers understand the topic but cannot picture the situation the prop ┃
+┃osal intends to change.                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · CONFLICT · The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening.                                                                 ^│
+│  R2 · COMPATIBLE · The primary research question should identify its users and concrete interaction or use environment.                                                          │
+│  R3 · EQUIVALENT · An unfamiliar interaction procedure needs one compact visual showing step-transition conditions.                                                              │
+│  R4 · SCOPED · The research schedule should use phases with linked deliverables or milestones, specialized to design-centered or field-centered work.                            │
+│  R5 · COMPATIBLE · Place the research gap close to the proposed design and practical contributions.                                                                              │
+│  R6 · CONFLICT · The frames prescribe opposing navigation structures for a two-page proposal.                                                                                    │
+│  R7 · COMPATIBLE · Place preliminary observational or technical evidence beside feasibility claims.                                                                              │
+│  R8 · EQUIVALENT · Limit the proposal to two primary HCI contributions readers must identify.                                                                                   v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

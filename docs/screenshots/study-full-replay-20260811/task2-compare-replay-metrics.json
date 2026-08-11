@@ -1,0 +1,13 @@
+{
+  "command": "mem compare --from task-2/advisor1 --to task-2/advisor2 --reference-descendants --compared-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_report_seconds": 0.41189866699278355,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "input_memories": [
+    150,
+    150
+  ],
+  "relations": 98,
+  "origin": "EXACT_PREWARM"
+}
