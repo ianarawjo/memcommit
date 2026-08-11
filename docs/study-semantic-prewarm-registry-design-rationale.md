@@ -228,6 +228,17 @@ Memory was created before a participant response or the deterministic
 preservation control. The three result Context names and sessions remain
 separate so one year-pair choice cannot leak into another pair.
 
+### Task 3 rule-pair Compare basis
+
+The frozen rule pair is local `guardrails` (`75` Memories) against the readable
+authority-owned `transmission-guidance` frame (`25` Memories), both with
+descendants. Its compact decision-vector run completed in one Sol-medium call
+(`144.524` provider seconds), covered all `100` inputs, and produced `57`
+relations: `14 COMPATIBLE`, `2 SCOPED`, and `41 DISTINCT`. A fresh run installed
+the basis with a new Grant binding and reopened it in `1.599` ms with the
+analyzer forbidden. The public report labels it `EXACT PREWARM · SAVED ·
+RETAINED`; the artifact contains no portable Grant identity.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a
