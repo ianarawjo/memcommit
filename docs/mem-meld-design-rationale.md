@@ -1234,7 +1234,7 @@ The representative adapters use this rule differently:
 | Adapter | Initial bounded one-shot | Later calls |
 | --- | --- | --- |
 | Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
-| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the call then returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes over that basis. Without one, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
+| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the initial output schema cannot restate or rewrite that ledger and returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes. The host reattaches and validates the exact Compare relations. Without a saved basis, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
 | Context symmetric | A fresh exact ordered Compare is reused provider-free; otherwise one complete Compare call over the two bounded peer frames creates and saves the relation ledger before the Meld session is published | One call per user resolution turn; final materialization remains provider-free |
 
 This strategy was selected because relations are Context-dependent. Independent

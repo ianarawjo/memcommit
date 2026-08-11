@@ -826,6 +826,41 @@ def meld_output_schema(
     }
 
 
+def _directional_comparison_output_schema(
+    source_memory_ids: tuple[str, ...],
+    *,
+    target_context_count: int,
+) -> dict[str, object]:
+    """Return only Directional decisions when Compare already owns the ledger."""
+
+    complete = meld_output_schema(
+        source_memory_ids,
+        mode="DIRECTIONAL",
+        target_context_count=target_context_count,
+    )
+    properties = complete["properties"]
+    assert isinstance(properties, dict)
+    # Relations, source assignments, and imported issues are deterministic
+    # host input. Making those fields unrepresentable prevents a stochastic
+    # completion from rewriting the reviewed Compare basis.
+    return {
+        "type": "object",
+        "properties": {
+            "overview": properties["overview"],
+            "additional_issues": properties["issues"],
+            "results": properties["results"],
+            "ready_to_apply": properties["ready_to_apply"],
+        },
+        "required": [
+            "overview",
+            "additional_issues",
+            "results",
+            "ready_to_apply",
+        ],
+        "additionalProperties": False,
+    }
+
+
 def _prompt(
     payload: dict[str, object],
     *,
@@ -857,8 +892,8 @@ def _prompt(
             "authoritative BASELINE and mutation target. Preserve every "
             "BASELINE Memory unless supported INCOMING or user-turn evidence "
             "justifies an exact EDIT; supported novel evidence may produce "
-            "an ADD. Return the complete cumulative relation ledger and only "
-            "the exact material BASELINE changes. A fully equivalent meld may "
+            "an ADD. Return only the exact material BASELINE changes. A fully "
+            "equivalent meld may "
             "be ready with zero results; never manufacture a no-op EDIT. "
         )
         if directional
@@ -908,14 +943,13 @@ def _prompt(
     directional_comparison_contract = (
         (
             "The payload comparison_basis is the exact reviewed ordered "
-            "INCOMING-to-BASELINE Compare result. For this initial turn, copy "
-            "every comparison relation unchanged: preserve its relation_key, "
-            "kind, status, summary, reason, order, and exact member grouping. "
-            "Translate every basis member into exactly one source_assignment; "
-            "do not reclassify, split, combine, or omit a relation. Preserve every "
-            "comparison_basis issue unchanged, including its issue_key, "
-            "relation keys, priority, text, options, and order. You may add "
-            "only Directional-specific placement or materialization issues. "
+            "INCOMING-to-BASELINE Compare result. It is host-owned, read-only "
+            "input and will be attached to your decisions after this turn. Do "
+            "not copy, summarize, restate, reclassify, split, combine, or omit "
+            "its relations, source assignments, or imported issues in your "
+            "output. Return only a short overview, any genuinely new "
+            "Directional-specific placement or materialization issues in "
+            "additional_issues, and exact EDIT or ADD results. "
             "Use the frozen relation ledger to produce the exact Directional "
             "results; comparison_basis itself has no mutation authority. "
         )
@@ -940,18 +974,32 @@ def _prompt(
         if repair
         else ""
     )
+    relation_response_contract = (
+        (
+            "The host will preserve the complete comparison_basis relation "
+            "ledger and source coverage exactly; your output schema therefore "
+            "contains no relation or source-assignment fields. Reference only "
+            "the supplied relation_key values from comparison_basis when a "
+            "Directional issue or result needs relation evidence.\n"
+        )
+        if directional_comparison
+        else (
+            "In source_assignments, return exactly one row for every supplied "
+            "source Memory and assign it to exactly one returned relation_key. "
+            "Relation objects describe their groups and must not repeat "
+            "member-ID arrays. Return cross-source relations in "
+            "paired_relations and one-sided DISTINCT relations in "
+            "distinct_relations. A relation may contain one-to-many or "
+            "many-to-one members; do not enumerate a Cartesian product.\n"
+        )
+    )
     return (
         repair_contract
         + authority_contract
         + directional_comparison_contract
         + "\n"
-        "In source_assignments, return exactly one row for every supplied "
-        "source Memory and assign it to exactly one returned relation_key. "
-        "Relation objects describe their groups and must not repeat member-ID "
-        "arrays. Return cross-source relations in paired_relations and "
-        "one-sided DISTINCT relations in distinct_relations. A relation may "
-        "contain one-to-many or many-to-one members; "
-        "do not enumerate a Cartesian product. EQUIVALENT means the same "
+        + relation_response_contract
+        + "EQUIVALENT means the same "
         "underlying claim can be coalesced. COMPATIBLE means both can remain. "
         "SCOPED means an apparent difference is explained by an explicit "
         "condition that must be retained. CONFLICT means ordinary local "
@@ -972,7 +1020,7 @@ def _prompt(
         "comments are asserted dialogue evidence. They may confirm, extend, "
         "correct, preserve, or add knowledge. A USER_ADD result must cite at "
         "least one supplied grounded_turn_id and must not be attributed to "
-        "a source frame. Recompute the complete ledger after every turn; "
+        "a source frame. Recompute the complete ledger after every user turn; "
         "do not append a local answer to a stale result. Apply one issue-scoped "
         "comment to later COMPATIBLE, SCOPED, or CONFLICT issues only when the "
         "same stated rationale materially governs them; cite that turn and "
@@ -1663,6 +1711,65 @@ def _parse_assessment(
         raise MeldProviderError(str(error)) from error
 
 
+def _expand_directional_comparison_response(
+    raw: object,
+    *,
+    view: _ProviderView,
+) -> str:
+    """Reattach the trusted Compare ledger to one compact Directional result."""
+
+    if (
+        not isinstance(raw, str)
+        or not raw.strip()
+        or len(raw) > MELD_RESPONSE_CHAR_LIMIT
+    ):
+        raise MeldProviderError("Codex meld returned invalid structured output.")
+    try:
+        value = json.loads(raw, object_pairs_hook=_strict_json_object)
+    except (json.JSONDecodeError, ValueError) as error:
+        raise MeldProviderError(
+            "Codex meld returned invalid structured output."
+        ) from error
+    compact = _exact_dict(
+        value,
+        {"overview", "additional_issues", "results", "ready_to_apply"},
+        "directional comparison meld response",
+    )
+    basis = _exact_dict(
+        view.payload.get("comparison_basis"),
+        {
+            "overview",
+            "paired_relations",
+            "distinct_relations",
+            "issues",
+            "results",
+            "ready_to_apply",
+        },
+        "directional comparison basis",
+    )
+    additional_issues = _array(
+        compact["additional_issues"],
+        "directional meld additional issues",
+    )
+    imported_issues = _array(
+        basis["issues"],
+        "directional meld imported issues",
+    )
+    # The ordinary decoder remains the single authority for relation aliases,
+    # issue references, result ownership, and exact application invariants.
+    return json.dumps(
+        {
+            "overview": compact["overview"],
+            "paired_relations": basis["paired_relations"],
+            "distinct_relations": basis["distinct_relations"],
+            "issues": [*imported_issues, *additional_issues],
+            "results": compact["results"],
+            "ready_to_apply": compact["ready_to_apply"],
+        },
+        ensure_ascii=False,
+    )
+
+
 def assess_meld_turn(
     session: MeldSession,
     provider: MeldProvider,
@@ -1675,16 +1782,30 @@ def assess_meld_turn(
     source_memory_ids = tuple(view.memory_by_id)
     left_count = len(session.frames[0].memories)
     right_count = len(session.frames[1].memories)
+    directional_comparison = (
+        session.mode == "DIRECTIONAL"
+        and session.comparison_seed is not None
+        and session.current_turn.sequence == 0
+        and "comparison_basis" in view.payload
+    )
+    output_schema = (
+        _directional_comparison_output_schema(
+            source_memory_ids,
+            target_context_count=len(view.target_context_by_id) or 1,
+        )
+        if directional_comparison
+        else meld_output_schema(
+            source_memory_ids,
+            mode=session.mode,
+            target_context_count=len(view.target_context_by_id) or 1,
+        )
+    )
     plan = plan_semantic_execution(
         MELD_EXECUTION_POLICY,
         json_budget(
             view.payload,
             item_count=source_count,
-            output_schema=meld_output_schema(
-                source_memory_ids,
-                mode=session.mode,
-                target_context_count=len(view.target_context_by_id) or 1,
-            ),
+            output_schema=output_schema,
             expected_output_items=source_count,
             relation_edges=left_count * right_count,
         ),
@@ -1706,12 +1827,10 @@ def assess_meld_turn(
             ),
         ),
         operation="meld_contexts",
-        output_schema=meld_output_schema(
-            source_memory_ids,
-            mode=session.mode,
-            target_context_count=len(view.target_context_by_id) or 1,
-        ),
+        output_schema=output_schema,
     )
+    if directional_comparison:
+        response = _expand_directional_comparison_response(response, view=view)
     return _parse_assessment(response, session=session, view=view)
 
 

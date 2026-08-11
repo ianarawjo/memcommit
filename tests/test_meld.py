@@ -65,6 +65,7 @@ from memcommit.meld import (
 )
 from memcommit.meld_provider import (
     MELD_PAYLOAD_MARKER,
+    MeldProviderError,
     assess_meld_turn,
     meld_output_schema,
 )
@@ -1026,16 +1027,25 @@ class DirectionalCompareEchoProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "meld_contexts"
         assert "exact reviewed ordered INCOMING-to-BASELINE Compare" in prompt
+        assert set(output_schema["properties"]) == {
+            "overview",
+            "additional_issues",
+            "results",
+            "ready_to_apply",
+        }
+        assert "paired_relations" not in output_schema["properties"]
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         basis = payload["comparison_basis"]
         return json.dumps(
             {
-                **basis,
                 "overview": (
                     "The reviewed Compare ledger is retained while the "
                     "directional target remains unresolved."
                 ),
+                "additional_issues": [],
+                "results": basis["results"],
+                "ready_to_apply": basis["ready_to_apply"],
             }
         )
 
@@ -1075,7 +1085,7 @@ def test_directional_command_uses_exact_saved_compare_basis(
     assert "· IMPORTED" in result.output
 
 
-def test_directional_compare_seed_rejects_initial_relation_drift():
+def test_directional_compare_seed_output_cannot_restate_relation_drift():
     incoming = ops.init("direction/compare-drift/incoming")
     ops.add(incoming, "Pay participants in cash.")
     baseline = ops.init("direction/compare-drift/baseline")
@@ -1100,13 +1110,16 @@ def test_directional_compare_seed_rejects_initial_relation_drift():
                     output_schema=output_schema,
                 )
             )
-            value["paired_relations"][0]["summary"] = "A rewritten judgment."
+            value["paired_relations"] = [
+                {"summary": "A rewritten judgment."}
+            ]
             return json.dumps(value)
 
-    assessment = assess_meld_turn(session, DriftedCompareProvider())
-
-    with pytest.raises(MeldError, match="changed its Compare relation ledger"):
-        session.record_assessment(session.current_turn.uid, assessment)
+    with pytest.raises(
+        MeldProviderError,
+        match="directional comparison meld response",
+    ):
+        assess_meld_turn(session, DriftedCompareProvider())
 
 
 def test_compare_seed_adds_stable_helpful_materialization_after_required():
