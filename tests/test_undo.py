@@ -5,6 +5,7 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+from memcommit.command_history import CommandHistoryError
 from memcommit.cli import app
 from memcommit.history import build_history
 from memcommit.provenance import build_trace
@@ -160,6 +161,61 @@ def test_new_command_after_undo_clears_redo_stack(isolated_store):
 
     assert result.exit_code == 1
     assert "no recorded Context command to redo" in result.output
+
+
+def test_empty_stale_granted_receipt_does_not_mask_local_undo(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "notes")
+    invoke("add", "remove locally")
+    staged = type(
+        "StagedGrantedUpdate",
+        (),
+        {"status": "applied", "granted_target": object()},
+    )()
+    monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
+    monkeypatch.setattr(
+        "memcommit.commands.undo.restore_granted_update",
+        lambda *_args: (_ for _ in ()).throw(
+            CommandHistoryError(
+                "There is no recorded Context command to undo."
+            )
+        ),
+    )
+
+    result = invoke("undo")
+
+    assert result.exit_code == 0, result.output
+    assert "Undid command: mem add" in result.output
+
+
+def test_empty_stale_granted_receipt_does_not_mask_local_redo(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "notes")
+    invoke("add", "restore locally")
+    assert invoke("undo").exit_code == 0
+    staged = type(
+        "StagedGrantedUpdate",
+        (),
+        {"status": "undone", "granted_target": object()},
+    )()
+    monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
+    monkeypatch.setattr(
+        "memcommit.commands.redo.restore_granted_update",
+        lambda *_args: (_ for _ in ()).throw(
+            CommandHistoryError(
+                "There is no recorded Context command to redo."
+            )
+        ),
+    )
+
+    result = invoke("redo")
+
+    assert result.exit_code == 0, result.output
+    assert "Redid command: mem add" in result.output
 
 
 def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(

@@ -44,6 +44,13 @@ records retain their complete recovery contract.
 | Local or granted Update | Saved Update receipt, sometimes across Profile stores | Undo retains the exact receipt under `undone`; Redo restores `applied`. Granted-target restoration reverses the authority restore if participant receipt CAS fails |
 | Sever | Saved Sever session plus creation of a new output Context | Undo removes the exact Result from the ordinary namespace, returns the session to `REVIEWING`, and retains its Context record and complete checkpoint log in a private command archive. Redo restores the same Context identity, application receipt, and log before appending a `redo` checkpoint. |
 
+A retained granted-Update receipt may outlive the authority-side restoration
+stack that it once named. It must not mask a newer ordinary command in the
+active Profile. Undo and Redo therefore fall back to the active Profile's
+command stack only when the granted authority reports that its corresponding
+stack is empty. Revocation, authority drift, and exact-unit ordering failures
+still fail closed rather than substituting an unrelated local command.
+
 Read-only `mem diff` treats the saved Update receipt as one endpoint unit too.
 An Update may bind a granted Source, a granted Target, or both, so freshness
 inspection revalidates every present frozen Grant binding before comparing the

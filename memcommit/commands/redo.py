@@ -16,15 +16,21 @@ def cmd() -> None:
     store = MemoryStore()
     try:
         session = store.load_staged_update()
-        result = (
-            restore_granted_update(store, session, "redo")
-            if (
-                session is not None
-                and session.status in {"applied", "undone"}
-                and session.granted_target is not None
-            )
-            else store.restore_recent_context_command("redo")
-        )
+        if (
+            session is not None
+            and session.status in {"applied", "undone"}
+            and session.granted_target is not None
+        ):
+            try:
+                result = restore_granted_update(store, session, "redo")
+            except CommandHistoryError as error:
+                if str(error) != "There is no recorded Context command to redo.":
+                    raise
+                # A stale granted receipt can coexist with a newer local Undo.
+                # Fall back only when its authority stack is definitely empty.
+                result = store.restore_recent_context_command("redo")
+        else:
+            result = store.restore_recent_context_command("redo")
     except (
         CommandHistoryError,
         KeyError,

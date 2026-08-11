@@ -31,15 +31,21 @@ def cmd(
     store = MemoryStore()
     try:
         session = store.load_staged_update()
-        result = (
-            restore_granted_update(store, session, "undo")
-            if (
-                session is not None
-                and session.status == "applied"
-                and session.granted_target is not None
-            )
-            else store.restore_recent_context_command("undo")
-        )
+        if (
+            session is not None
+            and session.status == "applied"
+            and session.granted_target is not None
+        ):
+            try:
+                result = restore_granted_update(store, session, "undo")
+            except CommandHistoryError as error:
+                if str(error) != "There is no recorded Context command to undo.":
+                    raise
+                # An old participant receipt must not mask a newer local
+                # command. Other authority failures remain fail-closed.
+                result = store.restore_recent_context_command("undo")
+        else:
+            result = store.restore_recent_context_command("undo")
     except (
         CommandHistoryError,
         KeyError,
