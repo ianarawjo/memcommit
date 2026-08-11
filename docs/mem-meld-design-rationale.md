@@ -1237,6 +1237,13 @@ The representative adapters use this rule differently:
 | Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the initial output schema cannot restate or rewrite that ledger and returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes. The host reattaches and validates the exact Compare relations. Without a saved basis, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
 | Context symmetric | A fresh exact ordered Compare is reused provider-free; otherwise one complete Compare call over the two bounded peer frames creates and saves the relation ledger before the Meld session is published | One call per user resolution turn; final materialization remains provider-free |
 
+Reattachment uses the original typed Compare relation and imported-issue
+objects, not a decode of their provider-facing projection. That projection
+separates paired and one-sided relations for schema clarity and can therefore
+change their presentation order during a round trip. Serialization order is
+not provider evidence and must not make an unchanged host-owned basis appear
+semantically modified.
+
 This strategy was selected because relations are Context-dependent. Independent
 pair calls can produce mutually inconsistent decisions, miss that one
 clarification applies to several candidates, and multiply prompt and latency

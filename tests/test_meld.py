@@ -60,6 +60,7 @@ from memcommit.meld import (
     MeldCheckpointReceipt,
     MeldError,
     MeldSession,
+    directional_comparison_basis_assessment,
     meld_canonical_digest,
     meld_accounting,
 )
@@ -180,7 +181,7 @@ class Task2Provider:
                             "relation_key": "payment_relation",
                             "left_memory_ids": [left_id],
                             "right_memory_ids": [right_id],
-                            "kind": "CONFLICT",
+                            "kind": "SCOPED",
                             "status": "UNRESOLVED",
                             "summary": "Participant compensation differs.",
                             "reason": (
@@ -1120,6 +1121,96 @@ def test_directional_compare_seed_output_cannot_restate_relation_drift():
         match="directional comparison meld response",
     ):
         assess_meld_turn(session, DriftedCompareProvider())
+
+
+def test_directional_compare_seed_restores_mixed_relation_order():
+    incoming = ops.init("direction/compare-order/incoming")
+    left_one = ops.add(incoming, "Use the north entrance.")
+    left_two = ops.add(incoming, "Pay participants in cash.")
+    baseline = ops.init("direction/compare-order/baseline")
+    right_one = ops.add(baseline, "Pay participants by e-transfer.")
+    right_two = ops.add(baseline, "The library closes at 9 p.m.")
+
+    class MixedOrderCompareProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "compare_contexts"
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            left = payload["frames"][0]["memories"]
+            right = payload["frames"][1]["memories"]
+            return json.dumps(
+                {
+                    "overview": "One incoming claim is distinct, one conflicts, and one baseline claim is distinct.",
+                    "reports": {
+                        "both": "",
+                        "differences": "Only the payment guidance conflicts.",
+                        "reference_only": "The entrance guidance is incoming-only.",
+                        "compared_only": "The closing time is baseline-only.",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "incoming_distinct",
+                            "reference_memory_ids": [left[0]["memory_id"]],
+                            "compared_memory_ids": [],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "Entrance guidance appears only in incoming.",
+                            "reason": "No baseline Memory covers entrance access.",
+                        },
+                        {
+                            "relation_key": "payment_conflict",
+                            "reference_memory_ids": [left[1]["memory_id"]],
+                            "compared_memory_ids": [right[0]["memory_id"]],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "Payment methods conflict.",
+                            "reason": "The two methods govern the same payment.",
+                        },
+                        {
+                            "relation_key": "baseline_distinct",
+                            "reference_memory_ids": [],
+                            "compared_memory_ids": [right[1]["memory_id"]],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "Closing time appears only in baseline.",
+                            "reason": "No incoming Memory changes the closing time.",
+                        },
+                    ],
+                    "issues": [],
+                }
+            )
+
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(incoming, baseline),
+        MixedOrderCompareProvider(),
+    )
+    session = MeldSession.create_directional_from_comparison(
+        comparison,
+        incoming,
+        baseline,
+    )
+    session.start_initial_analysis()
+
+    assessment = assess_meld_turn(session, DirectionalCompareEchoProvider())
+    basis = directional_comparison_basis_assessment(
+        comparison,
+        (session.frames[0], session.frames[1]),
+    )
+
+    assert [relation.uid for relation in assessment.relations] == [
+        relation.uid for relation in basis.relations
+    ]
+    assert [relation.kind for relation in assessment.relations] == [
+        relation.kind for relation in basis.relations
+    ]
+    assert {relation.kind for relation in assessment.relations} == {
+        "DISTINCT",
+        "SCOPED",
+    }
+    assert {left_one.uid, left_two.uid, right_one.uid, right_two.uid} == {
+        member.memory_uid
+        for relation in assessment.relations
+        for member in relation.members
+    }
 
 
 def test_compare_seed_adds_stable_helpful_materialization_after_required():

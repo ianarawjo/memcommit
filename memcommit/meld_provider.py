@@ -1831,7 +1831,31 @@ def assess_meld_turn(
     )
     if directional_comparison:
         response = _expand_directional_comparison_response(response, view=view)
-    return _parse_assessment(response, session=session, view=view)
+    assessment = _parse_assessment(response, session=session, view=view)
+    if directional_comparison:
+        # The wire format groups paired and one-sided relations into separate
+        # arrays, so decoding can change their interleaved presentation order
+        # even when every record is byte-for-byte unchanged. The reviewed
+        # Compare objects are the authority; restore them directly rather than
+        # treating a serialization detail as semantic provider drift.
+        basis = directional_comparison_basis_assessment(
+            session.comparison_seed.analysis,
+            (session.frames[0], session.frames[1]),
+        )
+        imported_issue_uids = {issue.uid for issue in basis.issues}
+        assessment = replace(
+            assessment,
+            relations=basis.relations,
+            issues=(
+                *basis.issues,
+                *(
+                    issue
+                    for issue in assessment.issues
+                    if issue.uid not in imported_issue_uids
+                ),
+            ),
+        )
+    return assessment
 
 
 def repair_meld_assessment(
