@@ -1,0 +1,395 @@
+52 180
+MEM MELD · DIRECTIONAL
+INCOMING task-1/participant/construction-updates → BASELINE / TARGET task-1/campus-wiki
+SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS
+Compare: 74bf4d5f · IMPORTED
+State: APPLIED · Round: 1
+
+WHAT MEM UNDERSTOOD
+The construction updates add temporary, scope-specific guidance while preserving all ordinary baseline knowledge. The proposed meld materializes each incoming memory separately; optional consolidation remains unresolved but does not block the preservation-first result.
+
+RELATIONS · 51  ISSUES · 24  RESULTS · 75
+
+ACCOUNTING
+  Source coverage: 75/375
+  Relation coverage: 27/51
+  Final Memories: 75 · PRESERVE 75 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 24
+  Cross-relation results: 0
+  ✓ R1. SCOPED · The explicit construction condition preserves the ordinary route claims while suspending…
+  ✓ R2. SCOPED · The different end time is expressly limited to the construction period.
+  ✓ R3. SCOPED · Reconstruction explicitly makes the existing route unavailable while preserving accessibl…
+  ✓ R4. SCOPED · The credential restriction is tied to the changed construction access period.
+  ✓ R5. SCOPED · The temporary routing condition refines ordinary staff-only eligibility and service-route…
+  ✓ R6. SCOPED · Construction is an explicit temporary exception to published viewing availability.
+  ✓ R7. SCOPED · The construction period limits otherwise available reservation channels and confirmation…
+  ✓ R8. SCOPED · The temporary venue condition explains exclusion of closed spaces while retaining confirm…
+  ✓ R9. SCOPED · The compared claim applies the same behavioral expectation to a venue relocation conditio…
+  ✓ R10. SCOPED · The designated alternative loading point temporarily replaces familiar Main Building proc…
+  ✓ R11. SCOPED · Construction closes general access, permits controlled exceptions, and assigns temporary…
+  ✓ R12. SCOPED · The explicit period explains closure, foreseeable mistaken approaches, delivery disruptio…
+  ✓ R13. SCOPED · The temporary role is consistent with its ordinary visitor use, distinct access road, and…
+  ✓ R14. SCOPED · The temporary closure explains the replacement location and disruption of familiar evenin…
+  ✓ R15. SCOPED · The construction condition explains temporary 7 a.m.–11 p.m. service, increased demand, a…
+  ✓ R16. SCOPED · Construction is an explicit exception to its ordinary recess schedule.
+  ✓ R17. SCOPED · The temporary cafe closure does not alter the machine's staff eligibility restriction.
+  ✓ R18. SCOPED · The period-specific recommendation rule refines existing guidance duties without expandin…
+  ✓ R19. SCOPED · Alternate operation is a temporary constraint on the ordinary elevator system.
+  ✓ R20. SCOPED · The temporary delivery channel modifies ordinary desk-based maps, information, directions…
+  ✓ R21. SCOPED · The closure period explains why ordinarily listed restrooms no longer govern current dire…
+  ✓ R22. COMPATIBLE · Both frames materially impose the same evidence boundary; the construction wording narrow…
+  ✓ R23. SCOPED · The designated path uses ordinary step-free segments but gains a temporary official role…
+  ✓ R24. SCOPED · Construction identifies which otherwise comparable routes must temporarily be removed fro…
+  ✓ R25. DISTINCT · Only the compared frame states the construction event and its dates.
+  ✓ R26. DISTINCT · Only the compared frame states this desk-specific interruption and user consequence.
+  ✓ R27. DISTINCT · Only the compared frame supplies this operational interruption.
+  ✓ R28. DISTINCT · These ordinary physical-layout facts appear only in the reference.
+  ✓ R29. DISTINCT · These access-agent capability boundaries appear only in the reference.
+  ✓ R30. DISTINCT · These access-support safeguards appear only in the reference.
+  ✓ R31. DISTINCT · These schedule details appear only in the reference.
+  ✓ R32. DISTINCT · These ordinary visitor-behavior observations appear only in the reference.
+  ✓ R33. DISTINCT · These entrance-specific operating rules appear only in the reference.
+  ✓ R34. DISTINCT · These general entrance and accessibility rules appear only in the reference.
+  ✓ R35. DISTINCT · These venue-operation and layout facts are not addressed by the compared construction cla…
+  ✓ R36. DISTINCT · This seminar-room availability constraint appears only in the reference.
+  ✓ R37. DISTINCT · These ordinary event-administration policies appear only in the reference.
+  ✓ R38. DISTINCT · This event-information privacy boundary appears only in the reference.
+  ✓ R39. DISTINCT · These attendee-facing expectations appear only in the reference.
+  ✓ R40. DISTINCT · These ordinary parking-governance instructions appear only in the reference.
+  ✓ R41. DISTINCT · These ordinary parking-user expectations appear only in the reference.
+  ✓ R42. DISTINCT · These parking-agent capability boundaries appear only in the reference.
+  ✓ R43. DISTINCT · These specialized parking-facility facts appear only in the reference.
+  ✓ R44. DISTINCT · These parking-use rules appear only in the reference.
+  ✓ R45. DISTINCT · These operating-condition observations appear only in the reference.
+  ✓ R46. DISTINCT · These shuttle facts appear only in the reference.
+  ✓ R47. DISTINCT · The compared frame does not address dining-area operation.
+  ✓ R48. DISTINCT · These campus-amenity details remain one-sided information outside the compared closures.
+  ✓ R49. DISTINCT · These ordinary directory facts appear only in the reference.
+  ✓ R50. DISTINCT · These stable wayfinding facts appear only in the reference.
+  ✓ R51. DISTINCT · These route-condition and safety rules appear only in the reference.
+
+ISSUES
+›  1. [HELPFUL] Scoped · The explicit construction condition preserves the ordinary route claims while su…
+      WHY · Combining would couple temporary route closures and user impacts with ordinary route fact…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  2. [HELPFUL] Scoped · The different end time is expressly limited to the construction period.
+      WHY · Separation keeps the temporary 5:00 p.m. exception independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  3. [HELPFUL] Scoped · Reconstruction explicitly makes the existing route unavailable while preserving…
+      WHY · Separation preserves the construction condition and replacement route as independently re…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  4. [HELPFUL] Scoped · The credential restriction is tied to the changed construction access period.
+      WHY · Separation prevents a temporary restriction from obscuring the ordinary app option.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  5. [HELPFUL] Scoped · The temporary routing condition refines ordinary staff-only eligibility and serv…
+      WHY · Separation keeps temporary entrance requirements and related user impacts independently r…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  6. [HELPFUL] Scoped · Construction is an explicit temporary exception to published viewing availabilit…
+      WHY · Separation keeps the temporary exception independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  7. [HELPFUL] Scoped · The construction period limits otherwise available reservation channels and conf…
+      WHY · Separation keeps the temporary prohibition distinct from ordinary reservation procedures.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  8. [HELPFUL] Scoped · The temporary venue condition explains exclusion of closed spaces while retainin…
+      WHY · Separation keeps each alternative, closure condition, and capability boundary independent…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+›  9. [HELPFUL] Scoped · The compared claim applies the same behavioral expectation to a venue relocation…
+      WHY · Separation retains the temporary relocation consequence independently.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 10. [HELPFUL] Scoped · The designated alternative loading point temporarily replaces familiar Main Buil…
+      WHY · Separation keeps the venue-specific temporary procedure independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 11. [HELPFUL] Scoped · Construction closes general access, permits controlled exceptions, and assigns t…
+      WHY · Separation preserves each temporary condition and exception independently.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 12. [HELPFUL] Scoped · The explicit period explains closure, foreseeable mistaken approaches, delivery…
+      WHY · Separation keeps closure-period conditions and the planned restoration independently revi…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 13. [HELPFUL] Scoped · The temporary role is consistent with its ordinary visitor use, distinct access…
+      WHY · Separation keeps the temporary role and capability boundary independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 14. [HELPFUL] Scoped · The temporary closure explains the replacement location and disruption of famili…
+      WHY · Separation keeps the temporary closure and relocation independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 15. [HELPFUL] Scoped · The construction condition explains temporary 7 a.m.–11 p.m. service, increased…
+      WHY · Separation retains each temporary operating condition and material exception.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 16. [HELPFUL] Scoped · Construction is an explicit exception to its ordinary recess schedule.
+      WHY · Separation keeps the temporary closure independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 17. [HELPFUL] Scoped · The temporary cafe closure does not alter the machine's staff eligibility restri…
+      WHY · Separation retains the temporary closure without weakening the staff-only restriction.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 18. [HELPFUL] Scoped · The period-specific recommendation rule refines existing guidance duties without…
+      WHY · Separation keeps the temporary exclusion rule independently revisable without broadening…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 19. [HELPFUL] Scoped · Alternate operation is a temporary constraint on the ordinary elevator system.
+      WHY · Separation keeps the temporary operating constraint independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 20. [HELPFUL] Scoped · The temporary delivery channel modifies ordinary desk-based maps, information, d…
+      WHY · Separation keeps both temporary service changes independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 21. [HELPFUL] Scoped · The closure period explains why ordinarily listed restrooms no longer govern cur…
+      WHY · Separation preserves each floor, audience, destination, and directional condition indepen…
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 22. [HELPFUL] Compatible · Both frames materially impose the same evidence boundary; the construction w…
+      WHY · Separation keeps its immediate construction scope independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 23. [HELPFUL] Scoped · The designated path uses ordinary step-free segments but gains a temporary offic…
+      WHY · Separation keeps the temporary designation and additional checks independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+› 24. [HELPFUL] Scoped · Construction identifies which otherwise comparable routes must temporarily be re…
+      WHY · Separation keeps the temporary exclusions independently revisable.
+      ↳ 1. Keep separate
+      ↳ 2. Combine
+
+PROPOSED BASELINE CHANGES
+  +  1. [ADD · PRESERVE] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the scoped construction condition separately from ordinary passage guidance.
+  +  2. [ADD · PRESERVE] Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the scoped construction-period access time.
+  +  3. [ADD · PRESERVE] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the scoped reconstruction condition.
+  +  4. [ADD · PRESERVE] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the temporary replacement route.
+  +  5. [ADD · PRESERVE] Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the construction-specific credential restriction.
+  +  6. [ADD · PRESERVE] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the temporary staff-routing requirement.
+  +  7. [ADD · PRESERVE] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the scoped construction guidance priority.
+  +  8. [ADD · PRESERVE] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the construction-specific user consequence.
+  +  9. [ADD · PRESERVE] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the temporary accessible-route configuration.
+  + 10. [ADD · PRESERVE] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the construction-specific proactive guidance.
+  + 11. [ADD · PRESERVE] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance.
+       OWNER · task-1/campus-wiki/building-access
+       WHY · Preserves the construction-specific tour consequence.
+  + 12. [ADD · PRESERVE] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the temporary viewing exception.
+  + 13. [ADD · PRESERVE] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the temporary reservation restriction.
+  + 14. [ADD · PRESERVE] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves this designated alternative venue separately.
+  + 15. [ADD · PRESERVE] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves this designated alternative venue separately.
+  + 16. [ADD · PRESERVE] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the auditorium's temporary role.
+  + 17. [ADD · PRESERVE] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the scoped comparison rule.
+  + 18. [ADD · PRESERVE] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the scoped agent capability boundary.
+  + 19. [ADD · PRESERVE] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the relocation-specific visitor consequence.
+  + 20. [ADD · PRESERVE] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the temporary loading-point designation.
+  + 21. [ADD · PRESERVE] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.
+       OWNER · task-1/campus-wiki/event-relocations
+       WHY · Preserves the construction-specific operator consequence.
+  + 22. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the temporary garage closure.
+  + 23. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, the pedestrian entrance door to the underground parking garage is kept locked.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the temporary pedestrian-door condition.
+  + 24. [ADD · PRESERVE] Add campus-wiki/temporary-parking: During the construction period, instruct staff to use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the staff access exception.
+  + 25. [ADD · PRESERVE] Add campus-wiki/temporary-parking: Instruct construction/facilities personnel to access the underground parking garage through the controlled on-site access procedure that has been approved.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the controlled personnel-access exception.
+  + 26. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: The stairs from the Main Building down to the underground parking garage are closed to all users.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the complete stair closure.
+  + 27. [ADD · PRESERVE] Add campus-wiki/temporary-parking: The underground parking garage is used as a temporary storage area for construction materials.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the garage's temporary storage use.
+  + 28. [ADD · PRESERVE] Add campus-wiki/temporary-parking: After the clear-out, personal items left in the underground parking garage were moved to the lost and found center.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the distinct clear-out consequence.
+  + 29. [ADD · PRESERVE] Add campus-wiki/temporary-parking: Outdoor Parking Lot A connected to the Main Building is closed during the construction period.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the temporary Lot A closure.
+  + 30. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, Outdoor Parking Lot C operates as a temporary alternative parking lot for vehicles visiting the Main Building.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves Lot C's temporary alternative role.
+  + 31. [ADD · PRESERVE] Add campus-wiki/temporary-parking: Outdoor Parking Lot A is planned to reopen immediately after construction on the Main Building ends.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the planned restoration condition.
+  + 32. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, the sloped access road connecting Outdoor Parking Lot A and the Main Building underground parking garage is blocked.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the temporary access-road closure.
+  + 33. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: Based on posted information, the parking guidance agent may explain the closures of the underground parking garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C during the construction period.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the scoped parking-guidance authority.
+  + 34. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: During the construction period, the parking guidance agent may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the scoped capability boundary.
+  + 35. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: A visitor accustomed to parking at the Main Building may expect to be able to enter the underground parking garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and then search again for Outdoor Parking Lot C.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the construction-specific visitor consequence.
+  + 36. [ADD · PRESERVE] Modify campus-wiki/temporary-parking: Delivery drivers and external maintenance contractors accustomed to unloading in Outdoor Parking Lot A may approach the same point during the construction period and then reconfirm the delivery time or unloading location at the control line.
+       OWNER · task-1/campus-wiki/temporary-parking
+       WHY · Preserves the construction-specific delivery consequence.
+  + 37. [ADD · PRESERVE] Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary ATM closure.
+  + 38. [ADD · PRESERVE] Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary unattended-store closure.
+  + 39. [ADD · PRESERVE] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary ATM alternative.
+  + 40. [ADD · PRESERVE] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the time-bounded replacement-store direction.
+  + 41. [ADD · PRESERVE] Add campus-wiki/shop-updates: Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the material post-11 p.m. exception.
+  + 42. [ADD · PRESERVE] Modify campus-wiki/shop-updates: The Campus Store on the first floor of the Main Building is closed during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary Main Building Campus Store closure.
+  + 43. [ADD · PRESERVE] Modify campus-wiki/shop-updates: During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary Engineering Building store hours.
+  + 44. [ADD · PRESERVE] Add campus-wiki/shop-updates: The cafe on the first floor of the Main Building does not operate during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary cafe closure.
+  + 45. [ADD · PRESERVE] Add campus-wiki/shop-updates: During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the staff-only replacement direction.
+  + 46. [ADD · PRESERVE] Modify campus-wiki/shop-updates: A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the construction-specific ATM user consequence.
+  + 47. [ADD · PRESERVE] Modify campus-wiki/shop-updates: During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the scoped amenities recommendation rule.
+  + 48. [ADD · PRESERVE] Add campus-wiki/shop-updates: During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the temporary ATM route.
+  + 49. [ADD · PRESERVE] Modify campus-wiki/shop-updates: The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period.
+       OWNER · task-1/campus-wiki/shop-updates
+       WHY · Preserves the construction-specific demand expectation.
+  + 50. [ADD · PRESERVE] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Materializes distinct incoming construction evidence.
+  + 51. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the temporary elevator operating constraint.
+  + 52. [ADD · PRESERVE] Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the temporary desk suspension.
+  + 53. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the temporary replacement service channel.
+  + 54. [ADD · PRESERVE] Add campus-wiki/facility-updates: The general restroom on the first floor of the Main Building cannot be used during the construction period.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the floor-specific temporary closure.
+  + 55. [ADD · PRESERVE] Add campus-wiki/facility-updates: The general restroom on the second floor of the Main Building cannot be used during the construction period.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the floor-specific temporary closure.
+  + 56. [ADD · PRESERVE] Add campus-wiki/facility-updates: The general restroom on the third floor of the Main Building cannot be used during the construction period.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the floor-specific temporary closure.
+  + 57. [ADD · PRESERVE] Add campus-wiki/facility-updates: Because the general restrooms on the first through third floors of the Main Building are closed during the construction period, the nearest general restroom changes to the exhibition hall on the third floor of the West Complex.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the closure-conditioned nearest-restroom change.
+  + 58. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, direct students, staff, and members who cannot use the Main Building restrooms to the Central Library restrooms.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the audience-specific temporary direction.
+  + 59. [ADD · PRESERVE] Add campus-wiki/facility-updates: As a rule, direct general visitors who cannot use the Main Building restrooms during the construction period to restrooms outside the Main Building.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the general-visitor routing rule.
+  + 60. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, direct users who cannot use the accessible restroom in the Main Building to the Student Centre.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the accessible-restroom alternative.
+  + 61. [ADD · PRESERVE] Add campus-wiki/facility-updates: The first-floor Innovation Hub does not operate its consultation desk during the construction period.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Materializes the distinct desk-specific interruption.
+  + 62. [ADD · PRESERVE] Add campus-wiki/facility-updates: An Innovation Hub visitor accustomed to in-person consultation may expect to receive an immediate consultation at the first-floor desk during the construction period, see that the desk is closed, and then search again for the online consultation channel.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Materializes the distinct visitor consequence.
+  + 63. [ADD · PRESERVE] Add campus-wiki/facility-updates: Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Materializes the distinct operational interruption.
+  + 64. [ADD · PRESERVE] Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Materializes the distinct construction dates.
+  + 65. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, the facility guidance agent's response scope is limited to publicly disclosed operational impacts and it cannot verify or infer nonpublic types of work.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the compatible construction-specific evidence boundary.
+  + 66. [ADD · PRESERVE] Modify campus-wiki/facility-updates: Cleaning and security contract staff may find the designated service entrance during the construction period more burdensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.
+       OWNER · task-1/campus-wiki/facility-updates
+       WHY · Preserves the temporary staff-routing consequence.
+  + 67. [ADD · PRESERVE] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the scoped indoor-route closure.
+  + 68. [ADD · PRESERVE] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the scoped rear-entrance route closure.
+  + 69. [ADD · PRESERVE] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the temporary parking-to-library route closure.
+  + 70. [ADD · PRESERVE] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the scoped travel-burden consequence.
+  + 71. [ADD · PRESERVE] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the construction-specific directional instruction.
+  + 72. [ADD · PRESERVE] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the designated temporary accessible route.
+  + 73. [ADD · PRESERVE] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the temporary official-entrance designation.
+  + 74. [ADD · PRESERVE] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the scoped route-exclusion rule.
+  + 75. [ADD · PRESERVE] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.
+       OWNER · task-1/campus-wiki/route-changes
+       WHY · Preserves the condition-specific companion check.
+[33mRecovered the prior meld application; no duplicate checkpoint was created.[0m

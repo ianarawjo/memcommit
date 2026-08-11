@@ -1,0 +1,52 @@
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+┃ ╭─ REVIEW AND APPLY ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮^┃
+┃ │ No staged issue responses yet.                                                                                                                                               │ ┃
+┃ │ RESPONSES · 0/24 ANSWERED                                                                                                                                                    │ ┃
+┃ │ OPEN REVIEWS · OPTIONAL 24                                                                                                                                                   │ ┃
+┃ │ Nothing changes until the final action below is confirmed.                                                                                                                   │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ APPLY ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Apply Meld                                                                                                                                                                   │ ┃
+┃ │ Enter to apply the exact current proposal shown in the report.                                                                                                               │ ┃
+┃ │ Esc/Backspace returns without applying.                                                                                                                                      │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Meld report                                                                                                                                            ^│
+│  SCOPED         The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         │
+│  SCOPED         The different end time is expressly limited to the construction period.                                                                                          │
+│  SCOPED         Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                     │
+│  SCOPED         The credential restriction is tied to the changed construction access period.                                                                                    │
+│  SCOPED         The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                            │
+│  SCOPED         Construction is an explicit temporary exception to published viewing availability.                                                                               │
+│  SCOPED         The construction period limits otherwise available reservation channels and confirmation rules.                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Confirm final Meld action · APPLY is ready. Enter to apply now.                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ review  Tab switch  Enter apply  Esc/Backspace return G comment all  P preserve all  D defer  A review & apply  H Help  Q close

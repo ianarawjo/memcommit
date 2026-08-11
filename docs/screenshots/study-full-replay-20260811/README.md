@@ -104,3 +104,24 @@ review attempt, `0.097` second deterministic preserve-all step, and `0.128`
 second exact acceptance. The provider-event counter remained `0` throughout.
 The preservation branch is a lossless mechanics check, not a claim that a
 participant-guided semantic synthesis would choose the same 375-Memory result.
+
+## Task 1 directional Meld interaction log
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `36-task1-directional-meld-exact-entry` | `mem meld task-1/participant/construction-updates --left-descendants --into task-1/campus-wiki --right-descendants` | None | Directional 75-into-300 review with 51 relations, 24 optional issues, 75 changes, and complete Source coverage | Saved exact-prewarm proposal only |
+| `37-task1-directional-meld-relation-detail` | same | `Tab`, `Down`, `Enter` | First source-linked relation and its optional consolidation question | None |
+| `38-task1-directional-meld-final-review` | same | `Backspace`, `A` | Non-mutating final review with all 24 optional issues left open | None |
+| `39-task1-directional-meld-exact-approval` | same | `Down` | Exact Apply card focused; Enter is explicitly bound to apply | None |
+| `40-task1-directional-meld-apply-receipt` | same with `--accept` after the interactive Apply | `Enter`, followed by recovery verification | APPLIED report and no-duplicate-checkpoint receipt | The preceding approved turn added 75 owner-routed Memories; recovery changed nothing |
+| `41-task1-directional-meld-target-verification` | `mem show --context task-1/campus-wiki/building-access` | None | Standing baseline and new construction-scoped Memories coexist | None; read-only |
+| `42-task1-directional-meld-source-verification` | `mem show --context task-1/participant/construction-updates` | None | Original seven-child Source remains present | None; read-only |
+| `43-task1-directional-meld-action-log` | `mem log --actions --limit 25` | None | Review presentation, exact acceptance, completed Meld command, and no provider event | None; read-only |
+
+Before opening the captured review, the harness matched the saved session
+against the installed Task 1 directional artifact. The approved 180 by 52 PTY
+attempt completed in `4.422` seconds. Durable verification found the Source
+unchanged at `75` Memories and the granted baseline expanded from `300` to
+`375`. The 75 additions were routed across all six authoritative child
+Contexts; `task1-directional-meld-replay-metrics.json` records the exact
+per-owner counts. The provider-event counter remained `0`.

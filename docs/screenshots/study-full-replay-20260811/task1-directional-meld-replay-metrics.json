@@ -1,0 +1,23 @@
+{
+  "command": "mem meld task-1/participant/construction-updates --left-descendants --into task-1/campus-wiki --right-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "captured_review_and_apply_seconds": 4.421651417011162,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "incoming_memories_before": 75,
+  "incoming_memories_after": 75,
+  "baseline_memories_before": 300,
+  "baseline_memories_after": 375,
+  "relations": 51,
+  "issues": 24,
+  "proposals": 75,
+  "owner_counts": {
+    "task-1/campus-wiki/building-access": 11,
+    "task-1/campus-wiki/event-relocations": 10,
+    "task-1/campus-wiki/facility-updates": 17,
+    "task-1/campus-wiki/route-changes": 9,
+    "task-1/campus-wiki/shop-updates": 13,
+    "task-1/campus-wiki/temporary-parking": 15
+  },
+  "origin": "EXACT_PREWARM"
+}

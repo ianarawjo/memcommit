@@ -1,0 +1,51 @@
+Study actions · recent first · content-free                                                                                                                                         
+  [cd165a41/2] 2026-08-11 11:41:32 +0.018s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [cd165a41/1] 2026-08-11 11:41:32 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [d3204295/2] 2026-08-11 11:41:32 +0.036s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [d3204295/1] 2026-08-11 11:41:32 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [09dfe9f1/2] 2026-08-11 11:41:31 +0.188s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [09dfe9f1/1] 2026-08-11 11:41:31 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [d1416ed2/2] 2026-08-11 11:40:19 +0.190s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [d1416ed2/1] 2026-08-11 11:40:19 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=False · stdout_tty=False                                                                                                                           
+  [98af8ae2/2] 2026-08-11 11:40:11 +0.021s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [98af8ae2/1] 2026-08-11 11:40:11 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=log · stdin_tty=False · stdout_tty=False                                                                                                                            
+  [67795a87/12] 2026-08-11 11:40:04 +4.422s  COMMAND_FINISHED                                                                                                                       
+      status=COMPLETED                                                                                                                                                              
+  [67795a87/11] 2026-08-11 11:40:04 +4.245s  TUI_ACTION                                                                                                                             
+      action=ACCEPT · surface=resolution                                                                                                                                            
+  [67795a87/10] 2026-08-11 11:40:04 +4.244s  APPROVAL_ACCEPTED                                                                                                                      
+      action=ACCEPT · surface=resolution                                                                                                                                            
+  [67795a87/9] 2026-08-11 11:40:04 +4.234s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [67795a87/8] 2026-08-11 11:40:03 +3.516s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=down                                                                                                                               
+  [67795a87/7] 2026-08-11 11:40:03 +2.583s  APPROVAL_PRESENTED                                                                                                                      
+      action=REVIEW AND APPLY · surface=resolution                                                                                                                                  
+  [67795a87/6] 2026-08-11 11:40:03 +2.571s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False                                                                                             
+  [67795a87/5] 2026-08-11 11:40:02 +2.004s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-h                                                                                                                                
+  [67795a87/4] 2026-08-11 11:40:01 +0.967s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-m                                                                                                                                
+  [67795a87/3] 2026-08-11 11:40:01 +0.967s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=down                                                                                                                               
+  [67795a87/2] 2026-08-11 11:40:01 +0.966s  KEY                                                                                                                                     
+      count=1 · focus=FormattedTextControl · key=c-i                                                                                                                                
+  [67795a87/1] 2026-08-11 11:40:00 +0.000s  COMMAND_STARTED                                                                                                                         
+      operation=meld · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52                                                                                   
+  [2841950e/7] 2026-08-11 11:39:26 +2.305s  COMMAND_FINISHED                                                                                                                        
+      status=COMPLETED                                                                                                                                                              
+  [2841950e/6] 2026-08-11 11:39:26 +2.300s  TUI_ACTION                                                                                                                              
+      action=CLOSE · surface=resolution                                                                                                                                             
+  [2841950e/5] 2026-08-11 11:39:26 +2.298s  TEXT_INPUT                                                                                                                              
+      character_count=1 · focus=FormattedTextControl · line_break_count=0 · paste=False
