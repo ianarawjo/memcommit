@@ -1,0 +1,67 @@
+{
+  "artifact": {
+    "entry_key": "1ec52d93dc34b30bc420314d4e4a50d75c87d7ccf49e17b222adbd6bc5e914a6",
+    "operation": "MELD_DIRECTIONAL",
+    "policy": "EXACT_PREWARM",
+    "registry_entry_count_after_publication": 10,
+    "task": "task-1"
+  },
+  "basis": {
+    "baseline": "task-1/campus-wiki",
+    "baseline_memory_count": 300,
+    "include_descendants": [
+      true,
+      true
+    ],
+    "incoming": "task-1/participant/construction-updates",
+    "incoming_memory_count": 75,
+    "model": "gpt-5.6-sol",
+    "provider": "codex_chatgpt",
+    "reasoning": "medium"
+  },
+  "contract_recovery": {
+    "first_failed_wall_seconds": 375.21,
+    "first_failure": "provider restated the imported Compare relation ledger; no session was published",
+    "second_compact_provider_seconds": 215.47488079199684,
+    "second_compact_wall_seconds": 216.03,
+    "second_failure": "provider-facing relation serialization did not preserve typed member ordering; no session was published",
+    "successful_provider_seconds": 205.32659662500373,
+    "successful_wall_seconds": 206.01
+  },
+  "live_success": {
+    "application_wall_seconds": 0.64,
+    "baseline_memory_count_after_application": 375,
+    "issues": {
+      "helpful": 24,
+      "required": 0
+    },
+    "proposal_count": 75,
+    "proposal_dispositions": {
+      "PRESERVE": 75
+    },
+    "proposal_operations": {
+      "ADD": 75
+    },
+    "relation_count": 51,
+    "session_uid": "7da14cbb-6df2-4867-aacf-b18290a605ae"
+  },
+  "prewarm_proof": {
+    "accept_wall_seconds": 0.63,
+    "baseline_memory_count_after_application": 375,
+    "foreground_open_wall_seconds": 0.63,
+    "init_study_wall_seconds": 2.03,
+    "participant_profile": "task1-directional-prewarm-proof2-20260811",
+    "participant_profile_uid": "d0124b28-8605-4981-b062-027ac5805512",
+    "provider_events": 0,
+    "study_action_events": 6,
+    "visible_origin": "ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED"
+  },
+  "scope_limits": {
+    "changed_description_frame_compare_seed_model_reasoning_or_scope": "LIVE",
+    "later_participant_comment": "LIVE",
+    "participant_undo_redo_for_granted_authority_checkpoint": "not exposed by the current participant Context-command history",
+    "portable": "semantic assessment and durable evidence identities",
+    "rebound_per_run": "frame aliases, Context fingerprints, and Grant identities"
+  },
+  "schema_version": 1
+}

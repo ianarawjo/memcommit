@@ -5,13 +5,12 @@
 This note defines a study-design registry for moving known long semantic work
 out of participant-facing time. It is a cache-hit eligibility list, never an
 operation allowlist. The implemented production slices now install the
-declared Compare, Tutorial Atomize, Task 1 Update, and Task 3 Sever artifacts
-when `init-study` creates a run. Compare also projects declared opposite-side
-descendant subsets from each exact seed. Symmetric Meld starts reuse the exact
-Compare ledgers without a second semantic cache. Directional Meld remains live
-after its current exact attempt failed its semantic quality gate. The registry
-itself never runs a provider, and an unlisted operation remains available
-through its ordinary live path.
+declared Compare, Tutorial Atomize, Task 1 Update, Task 1 Directional Meld, and
+Task 3 Sever artifacts when `init-study` creates a run. Compare also projects
+declared opposite-side descendant subsets from each exact seed. Symmetric Meld
+starts reuse the exact Compare ledgers without a second semantic cache. The
+registry itself never runs a provider, and an unlisted operation remains
+available through its ordinary live path.
 
 ## Implemented first slice and measured boundary
 
@@ -69,14 +68,14 @@ configuration drift, or `--refresh` takes the ordinary live path. One actual
 groups in `0.46` wall-clock seconds including process startup, with zero
 provider calls and complete `26/26` primary-ledger coverage.
 
-The production transfer order after the Atomize slice is:
+The implemented production transfer order after the Atomize slice was:
 
 1. add exact Update proposal reuse, preserving Source-to-Target direction;
 2. record Impact as the deterministic projection of its owning typed proposal
    rather than creating another semantic cache;
 3. verify that symmetric Meld opens provider-free from the installed exact
    Compare basis while keeping participant-authored responses live;
-4. add Task 1 directional Meld as a separate exact raw-response contract; and
+4. add Task 1 directional Meld as a separate exact assessment contract; and
 5. add Task 3 Sever as an exact whole-Source plus whole-Criteria contract.
 
 ### Tutorial Atomize exact prewarm
@@ -252,17 +251,43 @@ provider-free preservation control covered all `100` Source Memories in
 was changed. A directional rule-to-rule merge remains a different, undeclared
 operation.
 
-### Task 1 directional Meld quality gate
+### Task 1 exact directional Meld basis
 
-The current exact Task 1 directional basis is not prewarmed. Three older
-directional sessions were rejected because their Source or Baseline digest no
-longer matches the frozen `75:300` inputs. A fresh Sol-medium attempt then ran
-for `375.21` seconds but failed the production decoder because turn zero
-changed its imported Compare relation ledger. No session or partial proposal
-was published. This is a semantic-contract failure, not a latency miss that can
-be hidden by caching. Directional Meld therefore remains `LIVE · UNPREPARED`
-until a fresh response preserves the exact relation ledger and passes owner,
-provenance, `EDIT`/`ADD`, and application checks.
+The first fresh Sol-medium attempt ran for `375.21` seconds and failed the
+production decoder because the response restated the imported Compare relation
+ledger differently. No session or partial proposal was published. The output
+contract was then narrowed so the provider returns only its overview,
+additional issues, owner-routed `EDIT`/`ADD` results, and readiness. The host
+reattaches the exact typed Compare relations and imported issues. This matters
+because the provider-facing left/right alias arrays cannot preserve the typed
+relation's original cross-side member interleaving; that serialization detail
+is not a new semantic judgment.
+
+A second compact call completed in `215.475` provider seconds but exposed this
+host round-trip mismatch and again published nothing. After typed-basis
+reattachment, the third call completed in `205.327` provider seconds (`206.01`
+wall seconds), passed every owner, provenance, preservation, and application
+invariant, and produced `51` exact relations, `24` HELPFUL issues, and `75`
+`ADD/PRESERVE` changes. Exact acceptance applied all `75` changes in `0.64`
+seconds and grew the authority-owned baseline from `300` to `375` Memories.
+
+The portable prewarm retains that validated semantic assessment but removes
+application state and old Grant bindings. `init-study` stores only a hidden
+receipt after matching the exact task description, full ordered Memory and
+owner ledgers, descendant scopes, Compare seed, provider contract, model, and
+reasoning setting. Generated Study Grants can change non-Memory Context-record
+digests between runs, so setup does not pretend those run-local graph records
+are portable. It proves the complete semantic ledgers and Compare seed, then
+reattaches current frame aliases, Context fingerprints, and Grant identities;
+Meld's ordinary save and apply checks remain authoritative.
+
+The proof run installed all ten declared artifacts in `2.03` seconds. Its exact
+`construction-updates → campus-wiki` command opened the `75:300` proposal in
+`0.63` wall seconds with zero provider events and visibly rendered
+`ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`. Exact acceptance also took
+`0.63` seconds and reproduced the `375`-Memory post-image. Participant-authored
+comments, reversed direction, changed inputs, and undeclared routes remain
+live.
 
 ### Task 3 exact Sever basis
 
@@ -282,7 +307,9 @@ exact public command is issued, the semantic decisions are rebound to the
 current run and cloned under a fresh session and candidate UID set. The public
 report discloses `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`.
 
-A fresh run installed all nine declared semantic artifacts in `1.74` seconds.
+A prior fresh run installed the first nine declared semantic artifacts in
+`1.74` seconds; the ten-artifact Directional Meld proof above supersedes that
+count while retaining the earlier timing as rollout history.
 The actual `300:75` Sever command rendered in `0.43` seconds, with no provider
 events in the Study action ledger. Twenty direct exact lookups had a `7.598 ms`
 median and `8.179 ms` maximum. Applying the all-forget recommendation created
@@ -387,7 +414,7 @@ The current recommended draft is:
 | Compare | ☐ | ☑ | ☑ | ☑ | ☑ | ☐ | ☐ |
 | Update | ☐ | ☑ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Meld — symmetric | ☐ | ☑ | ☑ | ☑ | ☑ | ☐ | ☐ |
-| Meld — directional | ☐ | △ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Meld — directional | ☐ | ☑ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Atomize | ☑ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Refine | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Forget | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
@@ -395,10 +422,8 @@ The current recommended draft is:
 | Impact | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☐ |
 
 `☑` means that one or more exact bases for that Task and operation are prepared
-and disclosed. `△` means the route was attempted but remains live because the
-candidate failed its production semantic contract. Impact is keyed to the
-exact prepared operation proposal rather than to a vaguely similar Context
-pair. `☐` means that the current protocol has no declared fixed
+and disclosed. Impact is keyed to the exact prepared operation proposal rather
+than to a vaguely similar Context pair. `☐` means that the current protocol has no declared fixed
 participant-path input for prewarming; it does not mean the operation is
 unavailable or technically uncacheable.
 
@@ -681,7 +706,7 @@ earlier all-pairs graph sidecars.
 | Compare | Store one canonical whole-pair relation artifact per declared basis. Project only a requested left subset versus right subset, repair relation sides and coverage, and label the result projected. | Extend `test_compare_prewarm_projection.py`: exact hit, subset coverage, group-count bound, same-side rejection, add/edit miss, stale ruleset miss, and zero partial publication. |
 | Update | **Task 1 exact basis implemented.** Store an ordered Source-to-Target action proposal keyed by both complete revisions, scopes, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Keep partial projection experimental until repeated fresh-partial controls show that surviving actions remain supported. | Exact reuse, Source change, configuration skip, current owner/provenance rebinding, existing multi-owner apply, and public undo/redo are covered. Projected-versus-fresh action support remains future work. |
 | Symmetric Meld | **Task 1, Task 2, and all declared Task 3 initial paths verified.** Reuse the exact peer Compare seed, bind only to a valid empty new C, and keep participant-authored synthesis turns live. Prepare partial Melds exactly unless a later claim-provenance projection passes the quality gate. | Exact basis reuse, complete provenance coverage, empty-C precondition, provider-free preserve-all, and exact apply are verified for Task 1, Task 2, every year pair, and the rule pair. Live synthesis quality and partial controls remain. |
-| Directional Meld | **Task 1 candidate rejected by the production quality gate.** The attempted `construction-updates` `INCOMING` to `campus-wiki` `BASELINE` response changed its imported Compare relation ledger, so no artifact was published. | The failed attempt is recorded with zero partial publication. Exact reuse, owner/action checks, recovery, and fresh-partial comparison remain blocked until a contract-valid basis exists. |
+| Directional Meld | **Task 1 exact basis implemented and verified.** The compact provider contract keeps the Compare ledger host-owned; the validated `75:300` assessment is rebound only to the exact current frame, Compare seed, task description, configuration, and Grants. | Live generation passed all invariants in `206.01` seconds, exact cache open and apply each took `0.63` seconds with zero provider events, and the target grew `300→375`. Participant comments, reversed direction, changed inputs, participant-visible cross-profile undo history, and fresh-partial comparison remain separate work. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
 | Sever | **Task 3 exact basis implemented.** Store exact whole-Source plus exact ordinary-Criteria decisions as a hidden artifact, clone a fresh review only after current authority and frame validation, and keep changed inputs live. | Exact hit, configuration skip, Source-addition and output-name miss, complete disposition, provider-forbidden start, hidden session catalogue, Source unchanged, require-new output, and apply/undo/redo are verified. Source-deletion projection and a changed-Criteria live E2E control remain. |
 | Tutorial Atomize | **Implemented.** Store only the exact frozen practice Source and instruction analysis in Atomize's existing durable slot; create fresh run-local review state. | Exact reopen without provider, Source or instruction change miss, complete source provenance, configuration skip, atomic installation rollback, and no mutation before its existing review boundary. |

@@ -3286,12 +3286,43 @@ def cmd(
                     )
                 )
                 session.start_initial_analysis()
-                session = _assess_and_save(
-                    store=store,
-                    session=session,
-                    provider_factory=connect_codex_chatgpt_provider,
-                    expected_session_digest=None,
+                from memcommit.study_prewarm.meld_directional import (
+                    find_installed_exact_directional_meld_prewarm,
                 )
+
+                prepared = find_installed_exact_directional_meld_prewarm(
+                    store=store,
+                    current=session,
+                )
+                exact_directional_prewarm = prepared is not None
+                if prepared is None:
+                    session = _assess_and_save(
+                        store=store,
+                        session=session,
+                        provider_factory=connect_codex_chatgpt_provider,
+                        expected_session_digest=None,
+                    )
+                else:
+                    session = prepared
+                    _assert_source_bindings(session, left_ctx, right_ctx)
+                    _assert_unapplied_target(session, right_ctx)
+                    if session.granted_target is not None:
+                        with authority_grant_snapshot_lock() as registry:
+                            revalidate_granted_context_binding(
+                                session.granted_target,
+                                registry=registry,
+                            )
+                            assessment = session.current_assessment
+                            assert assessment is not None
+                            _validate_owner_aware_grant_permissions(
+                                session,
+                                assessment.proposals,
+                                registry=registry,
+                            )
+                    store.save_meld_session(
+                        session,
+                        expected_session_digest=None,
+                    )
             else:
                 assert left_access is not None
                 assert right_access is not None
@@ -3346,6 +3377,8 @@ def cmd(
                     session=session,
                     provider_factory=connect_codex_chatgpt_provider,
                 )
+            if requested_mode == "DIRECTIONAL" and exact_directional_prewarm:
+                typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
             typer.echo(render_meld_session(session))
             return
 

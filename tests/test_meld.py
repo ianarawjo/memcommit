@@ -1202,6 +1202,9 @@ def test_directional_compare_seed_restores_mixed_relation_order():
     assert [relation.kind for relation in assessment.relations] == [
         relation.kind for relation in basis.relations
     ]
+    assert [relation.to_dict() for relation in assessment.relations] == [
+        relation.to_dict() for relation in basis.relations
+    ]
     assert {relation.kind for relation in assessment.relations} == {
         "DISTINCT",
         "SCOPED",

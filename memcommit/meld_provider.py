@@ -44,6 +44,10 @@ MELD_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 MELD_RESPONSE_CHAR_LIMIT = 1_000_000
 MELD_KEY_LIMIT = 100
 MELD_OPTION_LIMIT = 5
+# Exact Study prewarms bind to the provider-facing decision contract, not only
+# Meld's durable schema. Changing the compact fields or their meaning must make
+# an older prepared assessment miss instead of silently reusing it.
+MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION = "directional-compare-decisions-v2"
 
 MELD_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="meld_contexts",
@@ -1833,11 +1837,11 @@ def assess_meld_turn(
         response = _expand_directional_comparison_response(response, view=view)
     assessment = _parse_assessment(response, session=session, view=view)
     if directional_comparison:
-        # The wire format groups paired and one-sided relations into separate
-        # arrays, so decoding can change their interleaved presentation order
-        # even when every record is byte-for-byte unchanged. The reviewed
-        # Compare objects are the authority; restore them directly rather than
-        # treating a serialization detail as semantic provider drift.
+        # The wire format separates relation members into left/right alias
+        # arrays and separates paired/one-sided records. Decoding therefore
+        # canonicalizes side grouping and can lose the typed basis's original
+        # cross-side member interleaving (as well as relation presentation
+        # order). The reviewed Compare objects remain the authority.
         basis = directional_comparison_basis_assessment(
             session.comparison_seed.analysis,
             (session.frames[0], session.frames[1]),

@@ -37,6 +37,13 @@ Directional Meld still performs one authority-specific aggregate
 materialization call, but when an exact current ordered
 `INCOMING → BASELINE` Compare artifact exists it freezes that reviewed relation
 ledger as the call's basis instead of asking Meld to classify the pair again.
+For the fixed Task 1 Study route, a separately declared exact Directional Meld
+artifact can also supply this first materialization assessment with no provider
+call. Its hidden setup receipt becomes an ordinary visible Meld session only
+after the participant invokes the exact descendant-inclusive command. Any task
+description, frame, Compare seed, provider-contract, model, reasoning, or scope
+change misses and retains the live aggregate path; later participant comments
+always remain live.
 Absence retains the schema-6 direct-analysis path for already supported
 workflows; a present but stale basis fails closed rather than being silently
 ignored. Symmetric meld adds a complete result to an empty third Context.
@@ -1239,10 +1246,12 @@ The representative adapters use this rule differently:
 
 Reattachment uses the original typed Compare relation and imported-issue
 objects, not a decode of their provider-facing projection. That projection
-separates paired and one-sided relations for schema clarity and can therefore
-change their presentation order during a round trip. Serialization order is
-not provider evidence and must not make an unchanged host-owned basis appear
-semantically modified.
+separates every relation's members into left and right alias arrays and also
+separates paired and one-sided records. A decode can therefore canonicalize
+side grouping, losing the typed relation's original cross-side member
+interleaving, and can change relation presentation order. Neither serialization
+order is provider evidence, so the host restores the validated typed basis
+before applying the ordinary Meld invariants.
 
 This strategy was selected because relations are Context-dependent. Independent
 pair calls can produce mutually inconsistent decisions, miss that one
