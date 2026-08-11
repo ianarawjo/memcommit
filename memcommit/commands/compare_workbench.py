@@ -270,6 +270,7 @@ def run_compare_workbench(
     analysis: ComparisonAnalysis,
     *,
     report_text: str | None = None,
+    allow_meld: bool = True,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -671,6 +672,8 @@ def run_compare_workbench(
 
     @bindings.add("m", eager=True)
     def _meld(event) -> None:
+        if not allow_meld:
+            return
         event.app.exit(result=CompareWorkbenchReceipt(action="meld"))
 
     @bindings.add("b", eager=True)
@@ -737,8 +740,9 @@ def run_compare_workbench(
                 f" FOCUS {navigation.pane.upper()} · "
                 "B/Esc/Backspace back · H Help · Q close · "
                 "Tab switch · ↑↓ section/item · Enter deeper · ←→ source · "
-                "PgUp/PgDn page · Home/End · R rationale · L ledger · M meld"
-                f"  ·  {navigation.row_index + 1}/{len(rows)}"
+                "PgUp/PgDn page · Home/End · R rationale · L ledger"
+                + (" · M meld" if allow_meld else "")
+                + f"  ·  {navigation.row_index + 1}/{len(rows)}"
             )
         ),
         height=Dimension.exact(1),

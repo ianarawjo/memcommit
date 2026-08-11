@@ -1,0 +1,11 @@
+{
+  "analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0",
+  "baseline_profile_name": "study-baseline",
+  "entry_key": "4ccf1c788ef2a965600108d1b92720c8432bb3fe21ac3404b45f4e445c8f0f09",
+  "kind": "STUDY_COMPARE_PREWARM_PUBLICATION_RECEIPT",
+  "operation": "COMPARE",
+  "provider_calls": 0,
+  "schema_version": 1,
+  "semantic_content_in_receipt": false,
+  "task": "task-2"
+}

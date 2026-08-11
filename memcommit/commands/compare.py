@@ -71,6 +71,11 @@ from memcommit.rationale_scope import (
     resolve_rationale_target,
 )
 from memcommit.store import MemoryStore
+from memcommit.study_prewarm.compare import (
+    is_installed_compare_prewarm,
+    project_declared_compare_analysis,
+)
+from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 
 
 # A full Task 1 subtree Compare is one intentionally indivisible relation
@@ -152,6 +157,7 @@ def _header_lines(
     analysis: ComparisonAnalysis,
     *,
     reused: bool,
+    origin: str | None,
     durable: bool,
     retention: AnalysisRetention | None,
 ) -> list[str]:
@@ -159,6 +165,15 @@ def _header_lines(
     counts = Counter(relation.kind for relation in analysis.relations)
     read_grant_label = source_display_text(
         SourceDisplayFacts(access=SourceAccess.READ_GRANT)
+    )
+    analysis_state = (
+        "EXACT PREWARM"
+        if origin == "EXACT_PREWARM"
+        else "PROJECTED"
+        if origin == "PROJECTED"
+        else "REUSED"
+        if reused
+        else "NEW"
     )
     return [
         "MEM COMPARE · SYMMETRIC PEERS",
@@ -183,8 +198,11 @@ def _header_lines(
         ),
         (
             f"Analysis: {analysis.uid[:8]} · "
-            f"{'REUSED' if reused else 'NEW'}"
+            + analysis_state
             + (
+                " · NOT SAVED · PREVIEW"
+                if origin == "PROJECTED"
+                else
                 " · SAVED · RETAINED"
                 if retention == "RETAINED"
                 else f" · SAVED · {read_grant_label} BOUND"
@@ -261,6 +279,7 @@ def render_comparison(
     analysis: ComparisonAnalysis,
     *,
     reused: bool,
+    origin: str | None = None,
     ledger: bool = False,
     durable: bool = True,
     retention: AnalysisRetention | None = None,
@@ -275,6 +294,7 @@ def render_comparison(
     lines = _header_lines(
         analysis,
         reused=reused,
+        origin=origin,
         durable=durable,
         retention=retention,
     )
@@ -331,7 +351,17 @@ def render_comparison(
             )
         if analysis.issues:
             lines.extend(_potential_conflict_lines(analysis, numbered))
-        compare_argv = ["mem", "compare", "--to", compared.context_name]
+        # A saved or projected report can be reopened while the global current
+        # Context points elsewhere. Preserve both canonical endpoints so the
+        # displayed ledger command cannot silently change its reference side.
+        compare_argv = [
+            "mem",
+            "compare",
+            "--from",
+            reference.context_name,
+            "--to",
+            compared.context_name,
+        ]
         meld_argv = [
             "mem",
             "meld",
@@ -449,6 +479,11 @@ def _resume_selected_comparison(
         store=store,
         analysis=analysis,
         reused=True,
+        origin=(
+            "EXACT_PREWARM"
+            if is_installed_compare_prewarm(store, analysis)
+            else "SAVED_REUSE"
+        ),
         ledger=ledger,
         snapshot=snapshot,
     )
@@ -524,6 +559,7 @@ def _present_comparison(
     store: MemoryStore,
     analysis: ComparisonAnalysis,
     reused: bool,
+    origin: str | None = None,
     ledger: bool,
     snapshot: bool,
     durable: bool = True,
@@ -535,6 +571,7 @@ def _present_comparison(
             render_comparison(
                 analysis,
                 reused=reused,
+                origin=origin,
                 ledger=ledger,
                 durable=durable,
                 retention=retention,
@@ -547,15 +584,18 @@ def _present_comparison(
         report_text=render_comparison(
             analysis,
             reused=reused,
+            origin=origin,
             durable=durable,
             retention=retention,
         ),
+        allow_meld=durable and origin != "PROJECTED",
     )
     if receipt.action == "ledger":
         typer.echo(
             render_comparison(
                 analysis,
                 reused=True,
+                origin=origin,
                 ledger=True,
                 durable=durable,
                 retention=retention,
@@ -763,6 +803,7 @@ def cmd(
                 compared_access,
                 include_descendants=compared_descendants,
             )
+            profile_registry = registry
         if reference.uid == compared.uid or reference.name == compared.name:
             raise CompareCommandError("Compare requires two distinct Contexts.")
 
@@ -804,11 +845,22 @@ def cmd(
             ),
             refresh=refresh,
             analyze=analyze_input,
+            project=lambda comparison_input: project_declared_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=current_name,
+                registry_snapshot=profile_registry,
+            ),
         )
         _present_comparison(
             store=store,
             analysis=execution.analysis,
             reused=execution.reused,
+            origin=(
+                "EXACT_PREWARM"
+                if is_installed_compare_prewarm(store, execution.analysis)
+                else execution.origin
+            ),
             ledger=ledger,
             snapshot=snapshot,
             durable=execution.durable,
@@ -826,6 +878,7 @@ def cmd(
         ProfileError,
         QueryProviderError,
         RationaleError,
+        StudyPrewarmRegistryError,
         ValueError,
     ) as error:
         typer.secho(

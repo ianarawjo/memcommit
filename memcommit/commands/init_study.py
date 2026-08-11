@@ -143,8 +143,20 @@ def cmd(
         "Task-owned and granted-memory data were copied into isolated run "
         "Profiles and connected with real authority grants."
     )
+    if result.declared_compare_prewarms:
+        typer.echo(
+            "Declared Compare prewarms "
+            f"{result.installed_compare_prewarms} installed"
+            + (
+                f" · {result.skipped_compare_prewarms} skipped for the current "
+                "provider configuration"
+                if result.skipped_compare_prewarms
+                else ""
+            )
+            + "."
+        )
     typer.echo(
-        "Operational history starts empty; checkpoints, sessions, caches, locks, "
-        "and run logs were not imported."
+        "Operational history starts empty; checkpoints, sessions, ad-hoc caches, "
+        "locks, and run logs were not imported."
     )
     typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))

@@ -1,0 +1,39 @@
+{
+  "analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0",
+  "compared": {
+    "context_digest": "6a5acf3c3c5051c72522891e33e6d88c3ef7dc45302a84c6336a299ae41e6aed",
+    "context_uid": "13a0a0d6-bbde-51c7-a745-1f7ffafb8098",
+    "granted": true,
+    "include_descendants": true,
+    "memory_count": 150,
+    "name": "task-2/advisor2"
+  },
+  "created_at": "2026-08-10T22:39:48.638572Z",
+  "durable": true,
+  "elapsed_seconds": 0.005779250001069158,
+  "host_seconds": 0.005779250001069158,
+  "kind": "STUDY_COMPARE_PREWARM",
+  "observed_provider": null,
+  "profile_name": "study-20260810T180141Z-641b669e",
+  "provider_calls": 0,
+  "provider_run": null,
+  "provider_seconds": 0.0,
+  "receipt_uid": "d6344881-76bb-4b14-8c27-7a138a44a359",
+  "reference": {
+    "context_digest": "2556a96d4bda4852f4209077e6c423e62f31bb63bf1eb9afadfa89c7e0659b13",
+    "context_uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+    "granted": true,
+    "include_descendants": true,
+    "memory_count": 150,
+    "name": "task-2/advisor1"
+  },
+  "refresh_requested": false,
+  "requested_model": "gpt-5.6-sol",
+  "requested_provider": "codex_chatgpt",
+  "requested_reasoning": "medium",
+  "retention": "RETAINED",
+  "reused": true,
+  "ruleset_version": "peer-relations-v3",
+  "schema_version": 1,
+  "semantic_content_in_receipt": false
+}

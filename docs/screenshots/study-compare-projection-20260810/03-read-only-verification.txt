@@ -1,0 +1,37 @@
+Compare view closed.
+
+CAPTURE GATE · PRESS V FOR READ-ONLY SNAPSHOT
+v
+
+$ mem compare --from task-2/advisor1/style --to task-2/advisor2/style --snapshot
+MEM COMPARE · SYMMETRIC PEERS
+Reference: task-2/advisor1/style (layout only; no authority)
+Compared:  task-2/advisor2/style
+SCOPE · REFERENCE SELECTED GRAPH ONLY · COMPARED SELECTED GRAPH ONLY
+Analysis: a42705cf · PROJECTED · NOT SAVED · PREVIEW
+METRICS · MEMORIES 13 + 13 · RELATIONS 5 · POTENTIAL CONFLICTS 1
+EQUIVALENT 1 · COMPATIBLE 0 · SCOPED 3 · CONFLICT 1 · DISTINCT 0 · UNCLEAR 0
+
+WHAT MEM UNDERSTOOD
+Projection of a declared parent comparison over 26 surviving Memories. No fresh semantic reanalysis was performed.
+
+WHAT BOTH CONTAIN · 1
+Projected from the declared parent comparison. 1 surviving shared relation group(s) are shown without fresh semantic reanalysis.
+
+WHAT DIFFERS · 4
+Projected from the declared parent comparison. 4 surviving difference relation group(s) are shown without fresh semantic reanalysis.
+
+POTENTIAL CONFLICTS · 1
+
+1. Em-dash policy. task-2/advisor1/style ↔ task-2/advisor2/style: The frames set incompatible policies for em dashes. The answer determines whether any em dash can remain in the pr
+oposal. Prohibit all: Replace every em dash with sentence breaks or ordinary punctuation; Permit deliberate use: Retain em dashes only when they carry an intentional interruption o
+r contrast.
+
+The complete source-linked relation ledger was not saved. Re-run it with:
+  mem compare --from task-2/advisor1/style --to task-2/advisor2/style --ledger
+
+READ-ONLY CONTRACT CHECK
+  PTY · 180 columns × 52 rows
+  PROVIDER CALLS · 0
+  ORIGIN · PROJECTED PREVIEW
+  INPUT · 13 + 13 MEMORIES

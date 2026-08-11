@@ -1,0 +1,22 @@
+{
+  "analysis_digest": "62a055eb3a3d5be36844544f655df4c7db17b2596b33c2046df73697118cc2e9",
+  "analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0",
+  "authority_profile_uid": "c694f340-80ec-494c-b277-c4be6056ecc4",
+  "command": "python -m memcommit.cli compare --from task-2/advisor1 --to task-2/advisor2 --reference-descendants --compared-descendants --snapshot",
+  "compared_memory_count": 150,
+  "foreground_wall_seconds": 0.44,
+  "grant_uids": [
+    "78f703f9-9258-5784-a117-ebb688d6fe25",
+    "be35fc31-d3f6-51f8-8a72-8085ec840035"
+  ],
+  "installed_compare_prewarms": 1,
+  "kind": "STUDY_COMPARE_EXACT_PREWARM_FOREGROUND_PROOF",
+  "participant_profile_name": "study-prewarm-proof-20260810",
+  "participant_profile_uid": "683468b8-6310-4e46-8f85-6eff5823bb47",
+  "provider_calls": 0,
+  "reference_memory_count": 150,
+  "rendered_origin": "EXACT PREWARM",
+  "retention": "RETAINED",
+  "schema_version": 1,
+  "semantic_content_in_receipt": false
+}

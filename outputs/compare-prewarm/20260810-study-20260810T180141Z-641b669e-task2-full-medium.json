@@ -1,0 +1,60 @@
+{
+  "analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0",
+  "compared": {
+    "context_digest": "6a5acf3c3c5051c72522891e33e6d88c3ef7dc45302a84c6336a299ae41e6aed",
+    "context_uid": "13a0a0d6-bbde-51c7-a745-1f7ffafb8098",
+    "granted": true,
+    "include_descendants": true,
+    "memory_count": 150,
+    "name": "task-2/advisor2"
+  },
+  "created_at": "2026-08-10T22:39:31.437559Z",
+  "durable": true,
+  "elapsed_seconds": 256.20008016598877,
+  "host_seconds": 0.10293887398438528,
+  "kind": "STUDY_COMPARE_PREWARM",
+  "observed_provider": {
+    "endpoint": null,
+    "model": "gpt-5.6-sol",
+    "model_digest": null,
+    "provider": "codex_chatgpt",
+    "reasoning_effort": "medium",
+    "runtime": "codex-cli"
+  },
+  "profile_name": "study-20260810T180141Z-641b669e",
+  "provider_calls": 1,
+  "provider_run": {
+    "completion_tokens": null,
+    "identity": {
+      "endpoint": null,
+      "model": "gpt-5.6-sol",
+      "model_digest": null,
+      "provider": "codex_chatgpt",
+      "reasoning_effort": "medium",
+      "runtime": "codex-cli"
+    },
+    "operation": "compare_contexts",
+    "prompt_tokens": null,
+    "upstream_model": "gpt-5.6-sol",
+    "upstream_provider": "openai-codex"
+  },
+  "provider_seconds": 256.0971412920044,
+  "receipt_uid": "59933c8a-f5fa-406e-9334-a1e96c2e3563",
+  "reference": {
+    "context_digest": "2556a96d4bda4852f4209077e6c423e62f31bb63bf1eb9afadfa89c7e0659b13",
+    "context_uid": "fdc991fe-01c0-5949-85b3-1937c4ea1fbe",
+    "granted": true,
+    "include_descendants": true,
+    "memory_count": 150,
+    "name": "task-2/advisor1"
+  },
+  "refresh_requested": false,
+  "requested_model": "gpt-5.6-sol",
+  "requested_provider": "codex_chatgpt",
+  "requested_reasoning": "medium",
+  "retention": "RETAINED",
+  "reused": false,
+  "ruleset_version": "peer-relations-v3",
+  "schema_version": 1,
+  "semantic_content_in_receipt": false
+}

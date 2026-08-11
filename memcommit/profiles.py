@@ -147,6 +147,9 @@ class StudyInitializationResult:
     authority_inspection: StoreInspection
     baseline_profile_name: str
     active_profile_name: str
+    declared_compare_prewarms: int = 0
+    installed_compare_prewarms: int = 0
+    skipped_compare_prewarms: int = 0
 
 
 @dataclass(frozen=True)
@@ -268,6 +271,10 @@ _STUDY_PROFILE_OPTIONAL_SOURCE_FIELDS = {
 _LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION = 1
 _BASELINE_TOP_LEVEL_DIRECTORIES = (
     "query-sources",
+    # Unlike ordinary runtime caches, this directory is an explicitly
+    # declared Study fixture whose exact artifacts are rebound to each new
+    # run's authority before participant interaction.
+    "study-semantic-prewarm",
     "translation-views",
 )
 
@@ -3768,6 +3775,23 @@ def _compose_study_run_pair(
     return merged
 
 
+def _copy_declared_study_prewarms(
+    baseline_root: Path,
+    participant_root: Path,
+) -> None:
+    """Copy only the baseline-declared semantic fixture into one new run."""
+
+    name = "study-semantic-prewarm"
+    source = baseline_root / name
+    if not source.exists():
+        return
+    _assert_plain_tree(source, label="Study semantic prewarm fixture")
+    destination = participant_root / name
+    if destination.exists() or destination.is_symlink():
+        raise ProfileError("Study semantic prewarm destination is occupied.")
+    shutil.copytree(source, destination, symlinks=True, copy_function=shutil.copy2)
+
+
 def _publish_study_run_pair(
     registry: ProfileRegistry,
     *,
@@ -3822,6 +3846,10 @@ def _publish_study_run_pair(
             participant_root=participant_staging,
             authority_root=authority_staging,
         )
+        _copy_declared_study_prewarms(
+            profile_store_dir(baseline),
+            participant_staging,
+        )
         profiles_by_name: dict[str, ProfileEntry] = {}
         roots_by_name: dict[str, Path] = {}
         for package in merged.values():
@@ -3870,6 +3898,20 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
+        # Validate before the registry generation becomes visible. Actual
+        # persistence happens after releasing this registry lock because the
+        # production Compare save boundary acquires the same guard itself.
+        from memcommit.store import MemoryStore
+        from memcommit.study_prewarm.compare import (
+            install_declared_compare_prewarms,
+        )
+
+        install_declared_compare_prewarms(
+            store=MemoryStore(root=profile_store_dir(participant), create=False),
+            profile=participant,
+            registry_snapshot=updated,
+            publish=False,
+        )
         try:
             _write_registry(updated)
         except Exception as error:
@@ -3983,7 +4025,7 @@ def init_study_profile(
             after = baseline_store_digest(source_root)
             if before != after:
                 raise ProfileError("Study baseline changed during initialization.")
-            return _publish_study_run_pair(
+            initialization = _publish_study_run_pair(
                 registry,
                 baseline=baseline,
                 packages=packages,
@@ -3995,6 +4037,34 @@ def init_study_profile(
         finally:
             if staging.exists() and not staging.is_symlink():
                 shutil.rmtree(staging)
+
+    # The new registry generation is now visible and the outer registry guard
+    # has been released. Install through the ordinary Compare save boundary so
+    # it can acquire that guard, revalidate current Grants, and write a fresh
+    # run-local binding without deadlocking init-study.
+    from memcommit.store import MemoryStore
+    from memcommit.study_prewarm.compare import install_declared_compare_prewarms
+
+    try:
+        prewarms = install_declared_compare_prewarms(
+            store=MemoryStore(
+                root=profile_store_dir(initialization.profile),
+                create=False,
+            ),
+            profile=initialization.profile,
+            registry_snapshot=load_profile_registry(),
+        )
+    except Exception as error:
+        raise ProfileError(
+            f"Study run {profile_name!r} was created, but its declared Compare "
+            f"prewarm could not be installed: {error}"
+        ) from error
+    return replace(
+        initialization,
+        declared_compare_prewarms=prewarms.declared,
+        installed_compare_prewarms=prewarms.installed,
+        skipped_compare_prewarms=prewarms.skipped_configuration,
+    )
 
 
 def generate_study_profile_name(

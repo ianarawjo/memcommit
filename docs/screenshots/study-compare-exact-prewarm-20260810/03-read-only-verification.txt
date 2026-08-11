@@ -1,0 +1,51 @@
+EQUIVALENT 18 · COMPATIBLE 14 · SCOPED 26 · CONFLICT 5 · DISTINCT 35 · UNCLEAR 0
+
+WHAT MEM UNDERSTOOD
+The frames strongly align on evidence, ethics, feasibility, terminology, and review discipline, while adapting many recommendations to formative versus field settings. Material dis
+agreements concern opening length, headings, em-dash use, participant targets, and budget-detail placement; each needs contextual grounding.
+
+WHAT BOTH CONTAIN · 32
+Both emphasize traceable claims, bounded contributions, explicit methods, participant protections, feasible resources, consistent terminology, fair compensation, and coherent revie
+w logic.
+
+WHAT DIFFERS · 31
+Formative and field contexts alter operational details, while incompatible advice remains on openings, headings, em dashes, sample targets, and budget presentation.
+
+ONLY IN task-2/advisor1 · 16 · not automatically a deficiency
+The reference adds transferable-principle tests, formative process measures, analytic generalization, cumulative burden limits, lean prototypes, and iteration feasibility.
+
+ONLY IN task-2/advisor2 · 19 · not automatically a deficiency
+The compared frame adds field-role authority, withdrawal safeguards, operational recovery, adoption and implementation outcomes, partner dependencies, and staff-cost separation.
+
+POTENTIAL CONFLICTS · 5
+
+1. Opening-length rule. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible maximum lengths and sentence roles for the proposal opening. The answer changes the ope
+ning’s maximum length and allocation of person, setting, problem, and consequence. Strict two sentences: Require the central problem and consequence within the first two sentences;
+ Conditional third sentence: Allow a third sentence when concrete context is necessary for comprehension.
+
+2. Navigation structure. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe opposing navigation structures for a two-page proposal. The choice directly controls page structure
+, scanability, continuity, and space allocation. Descriptive headings: Use visible labels for the problem, response, and next steps; Continuous argument: Use linked paragraphs with
+out extra subheadings.
+
+3. Em-dash policy. task-2/advisor1 ↔ task-2/advisor2: The frames set incompatible policies for em dashes. The answer determines whether any em dash can remain in the proposal. Proh
+ibit all: Replace every em dash with sentence breaks or ordinary punctuation; Permit deliberate use: Retain em dashes only when they carry an intentional interruption or contrast.
+
+4. Participant target. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible participant-target policies for planning workload and budget. The decision changes the s
+chedule, workload, budget calculations, and deliverable commitments. Exact target: Plan all resources and shortfall handling around one participant number; Bounded range: Define op
+erationally distinct minimum and maximum participant cases.
+
+5. Budget-detail location. task-2/advisor1 ↔ task-2/advisor2: The frames prescribe incompatible locations for detailed budget arithmetic and estimate assumptions. The answer contro
+ls whether budget evidence is adjacent to activities or separated to preserve narrative space. Main-text detail: Keep estimate bases beside the activities and requested amounts; Se
+parate table: Keep only totals and major categories in prose and place arithmetic in a table or appendix.
+
+The complete source-linked relation ledger is saved. Inspect it with:
+  mem compare --from task-2/advisor1 --to task-2/advisor2 --reference-descendants --compared-descendants --ledger
+
+Create a new result Context and review both sources with Meld:
+  mem meld task-2/advisor1 task-2/advisor2 --left-descendants --right-descendants --to RESULT_CONTEXT
+
+READ-ONLY CONTRACT CHECK
+  PTY · 180 columns × 52 rows
+  PROVIDER CALLS · 0
+  ORIGIN · EXACT PREWARM
+  INPUT · 150 + 150 MEMORIES

@@ -1,0 +1,39 @@
+{
+  "kind": "STUDY_COMPARE_PROJECTION_PROOF",
+  "schema_version": 1,
+  "recorded_at": "2026-08-10T23:06:07-04:00",
+  "profile": "study-prewarm-proof-20260810",
+  "command": "mem compare --from task-2/advisor1/style --to task-2/advisor2/style --snapshot",
+  "parent_basis": {
+    "reference": "task-2/advisor1",
+    "compared": "task-2/advisor2",
+    "source_counts": [150, 150],
+    "analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0"
+  },
+  "projected_request": {
+    "reference": "task-2/advisor1/style",
+    "compared": "task-2/advisor2/style",
+    "source_counts": [13, 13]
+  },
+  "result": {
+    "analysis_uid_prefix": "47b8b307",
+    "origin": "PROJECTED",
+    "durable": false,
+    "provider_calls": 0,
+    "foreground_wall_seconds": 0.46,
+    "relation_count": 5,
+    "issue_count": 1,
+    "covered_memories": 26,
+    "expected_memories": 26,
+    "display_label": "PROJECTED · NOT SAVED · PREVIEW"
+  },
+  "policy": {
+    "semantic_loss_accepted_for_study_latency": true,
+    "may_seed_meld": false,
+    "saved_in_compare_sessions": false,
+    "addition_or_edit": "LIVE",
+    "same_parent_side": "LIVE",
+    "cross_task": "LIVE",
+    "refresh": "LIVE"
+  }
+}

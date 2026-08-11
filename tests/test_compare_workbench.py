@@ -172,6 +172,21 @@ def test_overview_has_no_synthetic_rationale_target():
     assert receipt.action == "close"
 
 
+def test_projected_preview_disables_meld_action():
+    analysis, _left, _right = _analysis()
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("mq")
+        receipt = run_compare_workbench(
+            analysis,
+            allow_meld=False,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt.action == "close"
+
+
 def test_report_sections_precede_issues_and_relation_ledger():
     analysis, _left, _right = _analysis()
 

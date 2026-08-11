@@ -104,10 +104,11 @@ def revalidate_granted_context_binding(
     *,
     required_permission: str = "READ",
     registry: ProfileRegistry | None = None,
+    active_store: MemoryStore | None = None,
 ) -> ContextAccess:
     """Resolve one frozen artifact binding against the active grant registry."""
 
-    active_store = MemoryStore()
+    active_store = active_store or MemoryStore()
     registry = registry or load_profile_registry()
     if registry.active.uid != binding.grantee_profile_uid:
         raise ProfileError(
