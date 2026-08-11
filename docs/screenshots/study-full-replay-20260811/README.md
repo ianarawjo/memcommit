@@ -194,3 +194,19 @@ Each six-capture pair follows the same order: `exact-entry`, `issue-detail`,
 seconds. Preservation took `0.490`, `0.470`, and `0.458` seconds; acceptance
 took `0.536`, `0.505`, and `0.506` seconds. All three branches covered every
 input and retained the exact relation basis without a provider event.
+
+## Task 3 rule-pair Compare interaction log
+
+| Capture | Command or input | Visible state | Durable mutation |
+| --- | --- | --- | --- |
+| `90-task3-rule-compare-exact-entry` | `mem compare --from task-3/local/guardrails --to task-3/remote/government/healthcare-agent/info-request/transmission-guidance --reference-descendants --compared-descendants` | Exact local-to-granted 75+25 report with 57 relations | None |
+| `91-task3-rule-compare-relation-detail` | `Tab`, `End`, `Up` times 56, `Enter` | Scoped relation between general purpose minimization and healthcare-specific review | None |
+| `92-task3-rule-compare-close-receipt` | `Q` | Explicit close receipt | None |
+| `93-task3-rule-compare-snapshot-verification` | same Compare with `--snapshot` | Stable retained analysis and follow-up symmetric Meld command | None; read-only |
+| `94-task3-rule-compare-action-log` | `mem log --actions --limit 20` | Completed Compare commands with no provider event | None; read-only |
+
+The exact mixed-authority report appeared in `0.376` seconds. Its 57 groups
+retain `14` compatible, `2` scoped, and `41` distinct relations. The installed
+artifact was rebound to the fresh Study Grant before this participant-facing
+lookup; `task3-rule-compare-replay-metrics.json` records the zero provider
+events.

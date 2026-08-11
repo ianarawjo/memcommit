@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/guardrails ↔ task-3/remote/government/healthcare-agent/info-request/transmission-guidance                                                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MEM COMPARE · SYMMETRIC PEERS                                                                                                                                                    ^┃
+┃Reference: task-3/local/guardrails (layout only; no authority)                                                                                                                    ┃
+┃Compared:  task-3/remote/government/healthcare-agent/info-request/transmission-guidance                                                                                           ┃
+┃SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                                ┃
+┃Analysis: 9de1c904 · EXACT PREWARM · SAVED · RETAINED                                                                                                                             ┃
+┃METRICS · MEMORIES 75 + 25 · RELATIONS 57 · POTENTIAL CONFLICTS 0                                                                                                                 ┃
+┃EQUIVALENT 0 · COMPATIBLE 14 · SCOPED 2 · CONFLICT 0 · DISTINCT 41 · UNCLEAR 0                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT MEM UNDERSTOOD                                                                                                                                                               ┃
+┃Prepared comparison of the declared Task 3 rule frames.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT BOTH CONTAIN · 14                                                                                                                                                            ┃
+┃14 shared or compatible relation groups.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃WHAT DIFFERS · 2                                                                                                                                                                  ┃
+┃2 scoped, conflicting, or unclear relation groups.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-3/local/guardrails · 34 · not automatically a deficiency                                                                                                             ┃
+┃Distinct local guardrails remain separate.                                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ONLY IN task-3/remote/government/healthcare-agent/info-request/transmission-guidance · 7 · not automatically a deficiency                                                         ┃
+┃Distinct transmission rules remain separate.                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃The complete source-linked relation ledger is saved. Inspect it with:                                                                                                             ┃
+┃  mem compare --from task-3/local/guardrails --to task-3/remote/government/healthcare-agent/info-request/transmission-guidance --reference-descendants --compared-descendants --l ┃
+┃edger                                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃Create a new result Context and review both sources with Meld:                                                                                                                    ┃
+┃  mem meld task-3/local/guardrails task-3/remote/government/healthcare-agent/info-request/transmission-guidance --left-descendants --right-descendants --to RESULT_CONTEXT        ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT   Complete Compare report                                                                                                                                               ^│
+│  SECTION  What Mem understood · 1                                                                                                                                                │
+│  SECTION  What both contain · 14                                                                                                                                                 │
+│  SECTION  What differs · 2                                                                                                                                                       │
+│  SECTION  Only in task-3/local/guardrails · 34                                                                                                                                   │
+│  SECTION  Only in task-3/remote/government/healthcare-agent/info-request/transmission-guidance · 7                                                                               │
+│  LEDGER   Relation ledger · 57                                                                                                                                                   │
+│  R1 · SCOPED · The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                             v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

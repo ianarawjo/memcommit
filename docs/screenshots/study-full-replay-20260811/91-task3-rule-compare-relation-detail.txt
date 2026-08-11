@@ -1,0 +1,52 @@
+ MEM COMPARE · task-3/local/guardrails ↔ task-3/remote/government/healthcare-agent/info-request/transmission-guidance                                                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃RELATION · SCOPED · RESOLVED                                                                                                                                                     ^┃
+┃The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                                              ┃
+┃The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                                              ┃
+┃› task-3/local/guardrails [c971c24d] [task-3/local/guardrails/purpose-and-scope] Include only Memories needed for the current sharing purpose confirmed by the user.              ┃
+┃  task-3/local/guardrails [75944d44] [task-3/local/guardrails/purpose-and-scope] Exclude details not needed for the current purpose from the sharing candidate.                   ┃
+┃  task-3/local/guardrails [4004ad20] [task-3/local/guardrails/retention-and-revocation] Do not convey the content of an excluded Memory to the recipient.                         ┃
+┃  task-3/local/guardrails [98c510fb] [task-3/local/guardrails/minimization-and-redaction] Select only the smallest Memory unit needed for the current purpose.                    ┃
+┃  task-3/remote/government/healthcare-agent/info-request/transmission-guidance [b696bf85] [task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-gu ┃
+┃idance] Consider whether each detail is necessary for the healthcare-support purpose under review, and flag unrelated personal details for exclusion from the outbound draft.     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› R1 · SCOPED · The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                             ^│
+│  R2 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                             │
+│  R3 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                             │
+│  R4 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                             │
+│  R5 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                             │
+│  R6 · COMPATIBLE · The prepared graph recorded this relation without additional prose.                                                                                           │
+│  R7 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                             │
+│  R8 · DISTINCT · The prepared graph recorded this relation without additional prose.                                                                                            v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · B/Esc/Backspace back · H Help · Q close · Tab switch · ↑↓ section/item · Enter deeper · ←→ source · PgUp/PgDn page · Home/End · R rationale · L ledger · M meld  ·

@@ -1,0 +1,13 @@
+{
+  "command": "mem compare --from task-3/local/guardrails --to task-3/remote/government/healthcare-agent/info-request/transmission-guidance --reference-descendants --compared-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "elapsed_to_report_seconds": 0.37562279199482873,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "input_memories": [
+    75,
+    25
+  ],
+  "relations": 57,
+  "origin": "EXACT_PREWARM"
+}
