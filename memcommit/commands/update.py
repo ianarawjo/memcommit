@@ -556,6 +556,12 @@ def cmd(
                 )
             ):
                 session = cached.with_status("staged")
+                from memcommit.study_prewarm.update import is_installed_update_prewarm
+
+                if is_installed_update_prewarm(store, cached):
+                    typer.echo(
+                        "EXACT PREWARM · UPDATE PLAN REUSED · provider was not called."
+                    )
             else:
                 session = _plan_update_with_wait(
                     source,

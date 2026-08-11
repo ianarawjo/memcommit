@@ -1,0 +1,41 @@
+{
+  "applied": {
+    "command_seconds": 0.531,
+    "source_digest_unchanged": true,
+    "target_digest_after": "a912cb3c4accd84472d8464b05994fae275ceb95e9eb6dec35cf056accedaa9c",
+    "target_digest_before": "dd78a0bbec077f8012702f57f0f9d9a3753e2ae44807388dcafbea5bcc8803aa",
+    "target_memories_after": 342,
+    "target_memories_before": 300,
+    "undo_redo_verified": true
+  },
+  "artifact": {
+    "key": "06113157d19cabeb78a821a0731d74af1f5e18db108e3c9b7291617b51dc98f2",
+    "operation_digest": "df5381c4f8fcbd4edad19a9de3f734eb5870fc0673deba769e04305bedfc3467",
+    "session_uid": "fd652474-c32d-4bf2-a616-dd9a86feb545"
+  },
+  "basis": {
+    "source": "task-1/participant/construction-updates",
+    "source_include_descendants": true,
+    "source_memories": 75,
+    "target": "task-1/campus-wiki",
+    "target_include_descendants": true,
+    "target_memories": 300
+  },
+  "cold": {
+    "model": "gpt-5.6-sol",
+    "operations": {"add": 42, "edit": 32, "remove": 0, "total": 74},
+    "provider": "codex_chatgpt",
+    "reasoning": "medium",
+    "seconds": 134.729714
+  },
+  "foreground": {
+    "direct_reads": 10,
+    "direct_reads_max_ms": 5.066,
+    "direct_reads_median_ms": 0.786,
+    "impact_cli_seconds": 0.376,
+    "init_study_seconds": 1.272,
+    "provider_calls": 0
+  },
+  "kind": "STUDY_UPDATE_EXACT_PREWARM_EVIDENCE",
+  "schema_version": 1
+}

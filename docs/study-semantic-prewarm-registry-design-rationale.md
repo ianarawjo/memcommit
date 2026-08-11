@@ -139,6 +139,37 @@ Sever subset projection also remains disabled until each operation's frozen
 fresh-partial campaign passes its own authority, coverage, provenance, and
 semantic-usefulness gates.
 
+### Task 1 directional Update basis
+
+Task 1 Update now installs one exact descendant-inclusive
+`construction-updates → campus-wiki` proposal into the ordinary
+`impact-plan.json` slot. The portable artifact excludes run-local Grant and
+Profile identities. Setup authorizes the current transfer, reloads both full
+frames, verifies their exhaustive semantic payload digests and every operation
+owner and Source reference, then freezes the new run's Grant binding and
+Context fingerprints. This rebinding matters because Study setup regenerates
+run-local graph bindings even when every Memory UID and content value is
+unchanged.
+
+The retained Sol-medium preparation took `134.730` seconds for the `75:300`
+basis and produced `74` target actions: `32 EDIT`, `42 ADD`, and `0 REMOVE`.
+A fresh Study run installed two Compare bases, the Tutorial Atomize basis, and
+this Update basis in `1.27` seconds. Its complete saved Update Impact rendered
+in `0.38` seconds; ten direct validated reads had a `0.786 ms` median and
+`5.066 ms` maximum. The public Update command disclosed `EXACT PREWARM`, called
+no provider, and applied all `74` actions in `0.53` seconds. The target grew
+from `300` to `342` Memories, the Source digest remained unchanged, and public
+Undo/Redo restored and reapplied the same `32` edits and `42` additions.
+
+This artifact is directional and exact. Reversing the endpoints, changing
+either semantic input digest, changing descendant scope, task description,
+provider contract, model, or reasoning setting is a miss. Setup stores only a
+non-mutating Impact proposal; review and application continue through Update's
+ordinary authority, CAS, checkpoint, Undo, and Redo boundaries. Generic Update
+subset projection remains outside this step because filtering a full proposal
+cannot discover actions whose meaning changes when evidence or an existing
+Target Memory disappears.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a
@@ -519,7 +550,7 @@ earlier all-pairs graph sidecars.
 | --- | --- | --- |
 | Registry and lookup | Persist the frozen matrix, exact basis keys, preparation status, offline provider time, and allowed `EXACT_PREWARM` or projection route. Lookup is an optimization decision, never operation authorization. | A checked exact key hits with zero provider calls; an unchecked route, wrong operation mode, changed digest, or unlisted key takes the ordinary live path. No unrelated output file is searched. |
 | Compare | Store one canonical whole-pair relation artifact per declared basis. Project only a requested left subset versus right subset, repair relation sides and coverage, and label the result projected. | Extend `test_compare_prewarm_projection.py`: exact hit, subset coverage, group-count bound, same-side rejection, add/edit miss, stale ruleset miss, and zero partial publication. |
-| Update | Store an ordered Source-to-Target action proposal keyed by both complete revisions, scopes, authority, task description, and operation contract. Keep partial projection experimental until the repeated fresh-partial quality controls show that surviving actions remain supported; otherwise store separately prepared exact partial proposals. | Extend Update tests for exact reuse, descendant owner routing, complete Source coverage, no duplicate target action, source/target change miss, atomic multi-owner apply, undo/redo, no mutation on validation failure, and projected-versus-fresh action support. |
+| Update | **Task 1 exact basis implemented.** Store an ordered Source-to-Target action proposal keyed by both complete revisions, scopes, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Keep partial projection experimental until repeated fresh-partial controls show that surviving actions remain supported. | Exact reuse, Source change, configuration skip, current owner/provenance rebinding, existing multi-owner apply, and public undo/redo are covered. Projected-versus-fresh action support remains future work. |
 | Symmetric Meld | Store the exact peer Compare seed and prepared peer-result proposal separately from target application. Bind only to a valid empty new C under the declared target contract. Prepare partial Melds exactly unless a later claim-provenance projection passes the quality gate. | Exact A+B basis reuse, complete peer provenance, both peers unchanged, empty-C precondition, provider-free prepared reopen, fresh-partial quality comparison, apply/undo/redo, and rejection of directional artifacts. |
 | Directional Meld | For Task 1 only, store the exact `construction-updates` `INCOMING` to `campus-wiki` `BASELINE` proposal. Its key includes order, baseline digest, owners, scopes, and baseline mutation target. Prepare partial directional proposals exactly by default. | Exact reuse, incoming read-only, only baseline owners changed, `EDIT`/`ADD` only, no `DELETE`, exact recovery, fresh-partial quality comparison, changed baseline miss, and rejection of symmetric artifacts. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
