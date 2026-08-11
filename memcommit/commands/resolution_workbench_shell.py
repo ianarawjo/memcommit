@@ -3409,7 +3409,11 @@ def run_resolution_workbench_shell(
     def open_final_review() -> None:
         """Open the non-mutating review before a whole-set or apply action."""
 
-        save_draft()
+        # A split report has no open response editor. Saving there would copy
+        # the navigation sentinel (no selected option) over the first item's
+        # already-staged durable choice after its detail was closed.
+        if not split_viewer_items or response_visible():
+            save_draft()
         active_view = current_view()
         todo = session_todo_view(
             active_view,

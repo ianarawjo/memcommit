@@ -1876,6 +1876,40 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
     assert action.kind == "ACCEPT"
 
 
+def test_review_after_closing_detail_preserves_its_staged_choice():
+    option = ResolutionOption(
+        "recommended",
+        "Use recommendation",
+        "Keep the staged semantic recommendation.",
+    )
+    answered = replace(
+        _item("required", options=(option,)),
+        response_state="ANSWERED",
+        selected_option_uid=option.uid,
+    )
+    view = replace(
+        _view(answered),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Inspect the staged answer, return to the report, then cross both
+        # explicit review stops. Closing detail must not clear the answer.
+        pipe_input.send_text("\t\x1b[B\r\x1ba\x1b[B\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "ACCEPT"
+
+
 def test_final_review_cards_focus_their_complete_semantic_content():
     view = replace(
         _view(),
