@@ -1,0 +1,9 @@
+{
+  "kind": "STUDY_MELD_TASK3_YEAR_EXACT_EVIDENCE",
+  "pairs": [
+    {"left": "2024", "right": "2025", "relations": 119, "issues": 7, "foreground_seconds": 0.425, "provider_calls": 0},
+    {"left": "2024", "right": "2026", "relations": 96, "issues": 10, "foreground_seconds": 0.409, "provider_calls": 0},
+    {"left": "2025", "right": "2026", "relations": 102, "issues": 2, "foreground_seconds": 0.411, "provider_calls": 0}
+  ],
+  "schema_version": 1
+}

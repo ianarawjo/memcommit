@@ -217,6 +217,17 @@ Task 3 pairs: Compare save/load now honors the explicitly supplied
 previous global active-store path. Granted Task 1/2 storage had hidden that
 boundary error.
 
+### Task 3 year-pair symmetric Meld transfer
+
+Each declared year Compare now initializes its own symmetric Meld session with
+an explicit empty result Context and no Meld provider call. `2024+2025`,
+`2024+2026`, and `2025+2026` opened in `0.425`, `0.409`, and `0.411` seconds,
+retaining `119`, `96`, and `102` relation groups. The operation adapter derived
+`7`, `10`, and `2` review issues from those exact relation ledgers. No result
+Memory was created before a participant response or the deterministic
+preservation control. The three result Context names and sessions remain
+separate so one year-pair choice cannot leak into another pair.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a
