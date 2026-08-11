@@ -1,0 +1,51 @@
+  + 355. [PRESERVE] [task-1/campus-wiki/facility-updates] A shared printing station available to students is on the fourth floor of the Main Building.                              
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 356. [PRESERVE] [task-1/campus-wiki/facility-updates] The research labs on the fifth floor of the Main Building are not spaces open to the general public.                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 357. [PRESERVE] [task-1/campus-wiki/facility-updates] The collaborative research lab on the sixth floor of the Main Building is used by authorized research members.            
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 358. [PRESERVE] [task-1/campus-wiki/facility-updates] Consultations with the research support office on the seventh floor of the Main Building follow the posted appointment pro
+cess.                                                                                                                                                                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 359. [PRESERVE] [task-1/campus-wiki/facility-updates] Visitors to staff offices on the eighth floor of the Main Building expect the staff member with whom they have an appointm
+ent to be in the office at the scheduled time.                                                                                                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 360. [PRESERVE] [task-1/campus-wiki/facility-updates] Public administrative services on the ninth floor of the Main Building are provided during each department's operating hou
+rs.                                                                                                                                                                                 
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 361. [PRESERVE] [task-1/campus-wiki/facility-updates] The floor directory agent can describe the floors and space names of published facilities.                                
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 362. [PRESERVE] [task-1/campus-wiki/facility-updates] The floor directory agent cannot check the current occupancy status of meeting rooms.                                     
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 363. [PRESERVE] [task-1/campus-wiki/facility-updates] First-time visitors are more familiar with department names than floor numbers and can more easily understand directions c
+entered on department names.                                                                                                                                                        
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 364. [PRESERVE] [task-1/campus-wiki/facility-updates] On public holidays, some administrative offices may not operate even when the Main Building is open.                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 365. [PRESERVE] [task-1/campus-wiki/route-changes] With your back to the main entrance, the Humanities Building is on the right.                                                
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 366. [PRESERVE] [task-1/campus-wiki/route-changes] The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the ri
+ght side of the Main Building.                                                                                                                                                      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 367. [PRESERVE] [task-1/campus-wiki/route-changes] The above-ground route between the Main Building and the Central Library has a rest bench midway.                            
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 368. [PRESERVE] [task-1/campus-wiki/route-changes] First-time visitors find directions based on visible facilities easier to understand than directions based on building number
+s.                                                                                                                                                                                  
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 369. [PRESERVE] [task-1/campus-wiki/route-changes] Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entra
+nce and third-floor rear entrance.                                                                                                                                                  
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 370. [PRESERVE] [task-1/campus-wiki/route-changes] A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.                    
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 371. [PRESERVE] [task-1/campus-wiki/route-changes] Bicycle users dismount at the designated rack on the edge of Solbit Plaza and proceed on foot.                               
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 372. [PRESERVE] [task-1/campus-wiki/route-changes] When it rains or snows, travel time on sloped outdoor pedestrian paths may be longer than usual.                             
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 373. [PRESERVE] [task-1/campus-wiki/route-changes] Snow removal personnel judge that when it snows, major accessible routes must be cleared before other pedestrian paths.      
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 374. [PRESERVE] [task-1/campus-wiki/route-changes] During class change times, pedestrian traffic increases between the third floor of the Main Building and the Central Library.
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+  + 375. [PRESERVE] [task-1/campus-wiki/route-changes] In an emergency, instruct people to follow on-site evacuation signs and safety personnel's directions rather than general way
+finding guidance.                                                                                                                                                                   
+       WHY · The user requested that this supported source distinction remain independently revisable.                                                                              
+Applied 375 meld results in checkpoint [9301cd19].

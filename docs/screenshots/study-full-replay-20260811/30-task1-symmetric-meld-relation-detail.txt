@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ SCOPED 1/24                                                                                                                                                                      ┃
+┃ The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                         ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 24                                                                                                                                            ┃
+┃ SOURCE RELATION · R1                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ SCOPED · RESOLVED                                                                                                                                                                ┃
+┃The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · FROM task-1/participant/construction-updates                                                                                                                           ┃
+┃   [8b077f2a] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.                               ┃
+┃   [2d8e8c75] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass        ┃
+┃              through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.                   ┃
+┃   [ebc1d272] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that     ┃
+┃              they cannot use that route during the construction period.                                                                                                         v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ Should these source Memories remain separately editable, or can they become one independently revisable Memory without losing any supported detail?                              │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Keep separately                                                                                                                                                              │
+│  Preserve each independently useful source Memory as its own target Memory.                                                                                                      │
+│                                                                                                                                                                                  │
+│  2. Combine if lossless                                                                                                                                                          │
+│  Combine these members only if one atomic target Memory retains every supported condition, scope, audience, modality, rate, and exception.                                      v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› SCOPED         The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         │
+│  SCOPED         The different end time is expressly limited to the construction period.                                                                                          │
+│  SCOPED         Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                     │
+│  SCOPED         The credential restriction is tied to the changed construction access period.                                                                                    │
+│  SCOPED         The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                           v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-1/participant/symmetric-replay-result · CURRENT TARGET    Enter to change                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

@@ -1,0 +1,51 @@
+  [memory ae124d66] [task-1/campus-wiki/facility-updates] The student support administration office is on the second floor of the Main Building.                                    
+  [memory 908dfbcb] [task-1/campus-wiki/facility-updates] A shared consultation room is on the second floor of the Main Building.                                                   
+  [memory 0ddcaa33] [task-1/campus-wiki/facility-updates] A connecting corridor toward the Central Library is on the third floor of the Main Building.                              
+  [memory 4e777c28] [task-1/campus-wiki/facility-updates] A seminar room is on the third floor of the Main Building.                                                                
+  [memory 08df2ffa] [task-1/campus-wiki/facility-updates] Department offices are on the fourth floor of the Main Building.                                                          
+  [memory 571000ac] [task-1/campus-wiki/facility-updates] A shared meeting room is on the fourth floor of the Main Building.                                                        
+  [memory a149bf85] [task-1/campus-wiki/facility-updates] Research labs are on the fifth floor of the Main Building.                                                                
+  [memory 0be5fda7] [task-1/campus-wiki/facility-updates] A seminar room is on the fifth floor of the Main Building.                                                                
+  [memory 09b30109] [task-1/campus-wiki/facility-updates] Some seminar rooms on the fifth floor of the Main Building are also used for classes.                                     
+  [memory d727c3d0] [task-1/campus-wiki/facility-updates] A collaborative research lab is on the sixth floor of the Main Building.                                                  
+  [memory 98b1e5f4] [task-1/campus-wiki/facility-updates] A seminar room is on the sixth floor of the Main Building.                                                                
+  [memory d9554893] [task-1/campus-wiki/facility-updates] Some seminar rooms on the sixth floor of the Main Building are also used for classes.                                     
+  [memory b2420a57] [task-1/campus-wiki/facility-updates] The research support office is on the seventh floor of the Main Building.                                                 
+  [memory ad82d4fe] [task-1/campus-wiki/facility-updates] A shared workspace for researchers is on the seventh floor of the Main Building.                                          
+  [memory bcc86a33] [task-1/campus-wiki/facility-updates] Staff offices are on the eighth floor of the Main Building.                                                               
+  [memory 91481ec3] [task-1/campus-wiki/facility-updates] A small meeting room is on the eighth floor of the Main Building.                                                         
+  [memory ea8fbf95] [task-1/campus-wiki/facility-updates] Administrative offices are on the ninth floor of the Main Building.                                                       
+  [memory cf4eacbf] [task-1/campus-wiki/facility-updates] A support room for tenth-floor events is on the ninth floor of the Main Building.                                         
+  [memory 5eaa2562] [task-1/campus-wiki/facility-updates] An event preparation room is on the tenth floor of the Main Building.                                                     
+  [memory 3ad1d0f0] [task-1/campus-wiki/facility-updates] The elevator lobby on the second floor of the Main Building is near the student support administration office.            
+  [memory 08c08b11] [task-1/campus-wiki/facility-updates] The elevator lobby on the third floor of the Main Building is near the corridor toward the Central Library.               
+  [memory 212f9065] [task-1/campus-wiki/facility-updates] The names of the department offices on the fourth floor of the Main Building are displayed on the floor directory.        
+  [memory 6fbd9287] [task-1/campus-wiki/facility-updates] A shared printing station available to students is on the fourth floor of the Main Building.                              
+  [memory c5908d88] [task-1/campus-wiki/facility-updates] The research labs on the fifth floor of the Main Building are not spaces open to the general public.                      
+  [memory b255d252] [task-1/campus-wiki/facility-updates] The collaborative research lab on the sixth floor of the Main Building is used by authorized research members.            
+  [memory a8123dc1] [task-1/campus-wiki/facility-updates] Consultations with the research support office on the seventh floor of the Main Building follow the posted appointment pro
+cess.                                                                                                                                                                               
+  [memory a1a1d5bb] [task-1/campus-wiki/facility-updates] Visitors to staff offices on the eighth floor of the Main Building expect the staff member with whom they have an appointm
+ent to be in the office at the scheduled time.                                                                                                                                      
+  [memory 337957bb] [task-1/campus-wiki/facility-updates] Public administrative services on the ninth floor of the Main Building are provided during each department's operating hou
+rs.                                                                                                                                                                                 
+  [memory d1e679de] [task-1/campus-wiki/facility-updates] The floor directory agent can describe the floors and space names of published facilities.                                
+  [memory bdba710b] [task-1/campus-wiki/facility-updates] The floor directory agent cannot check the current occupancy status of meeting rooms.                                     
+  [memory 27313218] [task-1/campus-wiki/facility-updates] First-time visitors are more familiar with department names than floor numbers and can more easily understand directions c
+entered on department names.                                                                                                                                                        
+  [memory 56ede96b] [task-1/campus-wiki/facility-updates] On public holidays, some administrative offices may not operate even when the Main Building is open.                      
+  [memory b20acc9c] [task-1/campus-wiki/route-changes] With your back to the main entrance, the Humanities Building is on the right.                                                
+  [memory b405432e] [task-1/campus-wiki/route-changes] The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the ri
+ght side of the Main Building.                                                                                                                                                      
+  [memory 07dfefb3] [task-1/campus-wiki/route-changes] The above-ground route between the Main Building and the Central Library has a rest bench midway.                            
+  [memory 6a7a7d99] [task-1/campus-wiki/route-changes] First-time visitors find directions based on visible facilities easier to understand than directions based on building number
+s.                                                                                                                                                                                  
+  [memory fb170aa0] [task-1/campus-wiki/route-changes] Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entra
+nce and third-floor rear entrance.                                                                                                                                                  
+  [memory fff5de4d] [task-1/campus-wiki/route-changes] A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.                    
+  [memory 79cfa2f6] [task-1/campus-wiki/route-changes] Bicycle users dismount at the designated rack on the edge of Solbit Plaza and proceed on foot.                               
+  [memory c460f32d] [task-1/campus-wiki/route-changes] When it rains or snows, travel time on sloped outdoor pedestrian paths may be longer than usual.                             
+  [memory a0696d5e] [task-1/campus-wiki/route-changes] Snow removal personnel judge that when it snows, major accessible routes must be cleared before other pedestrian paths.      
+  [memory c5b76555] [task-1/campus-wiki/route-changes] During class change times, pedestrian traffic increases between the third floor of the Main Building and the Central Library.
+  [memory 7479815c] [task-1/campus-wiki/route-changes] In an emergency, instruct people to follow on-site evacuation signs and safety personnel's directions rather than general way
+finding guidance.

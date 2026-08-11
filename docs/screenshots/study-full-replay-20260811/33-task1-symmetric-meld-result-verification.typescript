@@ -1,0 +1,380 @@
+52 180
+[1mContext: task-1/participant/symmetric-replay-result[0m
+  Memories 375  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory e4d37af7] [2m[task-1/campus-wiki/building-access] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.[0m
+  [memory 917e4dc2] [2m[task-1/campus-wiki/building-access] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level.[0m
+  [memory d4dd6901] [2m[task-1/campus-wiki/building-access] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.[0m
+  [memory 4dafc8ca] [2m[task-1/campus-wiki/building-access] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.[0m
+  [memory b9f546ee] [2m[task-1/campus-wiki/facility-updates] The rear entrance is on the third floor of the Main Building.[0m
+  [memory eeaf3f1e] [2m[task-1/campus-wiki/route-changes] The rear entrance on the third floor of the Main Building connects directly to the pedestrian route leading to the Central Library.[0m
+  [memory 779bda1d] [2m[task-1/campus-wiki/route-changes] In summer, students prefer the air-conditioned indoor route from the first to the third floor of the Main Building over the outdoor route.[0m
+  [memory ee5d9d4f] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.[0m
+  [memory 06e65aa7] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.[0m
+  [memory 49c87075] [2m[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that they cannot use that route during the construction period.[0m
+  [memory b929fcbd] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction period and lead the visiting group to the closed third-floor rear entrance.[0m
+  [memory 67c1784d] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used during the construction period.[0m
+  [memory f759655c] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.[0m
+  [memory 22a3fdae] [2m[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.[0m
+  [memory c1c309ff] [2m[task-1/campus-wiki/building-access] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.[0m
+  [memory aa98ccf4] [2m[task-1/campus-wiki/building-access] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.[0m
+  [memory 5d105315] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.[0m
+  [memory d05fd051] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance and the closure of the third-floor rear entrance.[0m
+  [memory 2fc5ab55] [2m[task-1/campus-wiki/building-access] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.[0m
+  [memory 60becedd] [2m[task-1/campus-wiki/building-access] Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance.[0m
+  [memory d823d7e9] [2m[task-1/campus-wiki/building-access] Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected.[0m
+  [memory 80b23a16] [2m[task-1/campus-wiki/building-access] Visitors using strollers may use the accessible route beside the main entrance.[0m
+  [memory 4e2f1f0c] [2m[task-1/campus-wiki/building-access] The accessible entrance beside the main entrance has an automatic door.[0m
+  [memory d98830d3] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.[0m
+  [memory b203a82e] [2m[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.[0m
+  [memory 0eb4a0a0] [2m[task-1/participant/construction-updates/building-access] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby.[0m
+  [memory d8b8787a] [2m[task-1/campus-wiki/building-access] Instruct students eligible for access after regular opening hours to use a physical NFC student ID card or the registered app.[0m
+  [memory 2b892816] [2m[task-1/campus-wiki/building-access] Nighttime access to the Main Building follows an eligibility policy separate from general opening.[0m
+  [memory ab0def67] [2m[task-1/campus-wiki/building-access] Support for mobile access authentication may vary by campus building.[0m
+  [memory 0827a5af] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.[0m
+  [memory b28909f4] [2m[task-1/campus-wiki/building-access] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.[0m
+  [memory 27b58dff] [2m[task-1/campus-wiki/building-access] Valid staff access eligibility is required to use the staff-only entrance.[0m
+  [memory b50cdbfa] [2m[task-1/campus-wiki/facility-updates] Cleaning and security contractor staff prefer service routes separated from general users during shift changes.[0m
+  [memory eaf85383] [2m[task-1/campus-wiki/route-changes] Delivery drivers consider designated service routes that do not mix with pedestrians more predictable and safer.[0m
+  [memory d5074958] [2m[task-1/campus-wiki/route-changes] Do not recommend staff-only passages as detours to general users.[0m
+  [memory 7c3d979c] [2m[task-1/participant/construction-updates/building-access] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead of the third-floor rear entrance.[0m
+  [memory 3ca60546] [2m[task-1/participant/construction-updates/facility-updates] Modify campus-wiki/facility-updates: Cleaning and security contract staff may find the designated service entrance during the construction period more burdensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.[0m
+  [memory 7210a591] [2m[task-1/campus-wiki/event-relocations] The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess.[0m
+  [memory 7d5e8460] [2m[task-1/campus-wiki/event-relocations] Exhibition viewing hours on the tenth floor of the Main Building are published separately from the usage hours for reserved events.[0m
+  [memory 46345aa1] [2m[task-1/campus-wiki/facility-updates] An exhibition and event hall is on the tenth floor of the Main Building.[0m
+  [memory bf035854] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.[0m
+  [memory d1212525] [2m[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building can be reserved for external events.[0m
+  [memory a41fb8b9] [2m[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building can be reserved for campus meetings.[0m
+  [memory 75de1763] [2m[task-1/campus-wiki/event-relocations] Submit event space reservation requests through the campus space reservation portal.[0m
+  [memory 53396833] [2m[task-1/campus-wiki/event-relocations] A space reservation is confirmed after an approval confirmation is issued.[0m
+  [memory 7e8c9c89] [2m[task-1/campus-wiki/event-relocations] Space use for recurring events must be approved again each semester.[0m
+  [memory b6d66755] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.[0m
+  [memory 0270a5c7] [2m[task-1/campus-wiki/event-relocations] The auditorium in the separate building east of the Main Building does not share equipment with the Main Building's event facilities.[0m
+  [memory d85a2cf1] [2m[task-1/campus-wiki/event-relocations] The auditorium in the separate building east of the Main Building does not share an entrance with the Main Building's event facilities.[0m
+  [memory 3bb24260] [2m[task-1/campus-wiki/event-relocations] Present only spaces confirmed to be operating as alternative event venues.[0m
+  [memory e136b0a6] [2m[task-1/campus-wiki/event-relocations] Do not present a space whose available schedule has not been checked as though it were a confirmed reservation.[0m
+  [memory bcce3838] [2m[task-1/campus-wiki/event-relocations] The event information agent can compare published event spaces.[0m
+  [memory 96e76813] [2m[task-1/campus-wiki/event-relocations] The event information agent can compare published operating hours.[0m
+  [memory 59b67e00] [2m[task-1/campus-wiki/event-relocations] The event information agent cannot create reservations.[0m
+  [memory 573bafdf] [2m[task-1/campus-wiki/event-relocations] The event information agent cannot guarantee remaining seat availability.[0m
+  [memory f1d3a93c] [2m[task-1/campus-wiki/event-relocations] The names and capacities of reservable campus spaces are published in the public space directory.[0m
+  [memory d7f755a3] [2m[task-1/campus-wiki/event-relocations] The event information agent can compare the capacities of spaces in the public directory.[0m
+  [memory b01b3c9a] [2m[task-1/campus-wiki/event-relocations] The event information agent cannot guarantee when a reservation under review will be approved.[0m
+  [memory 6842674a] [2m[task-1/campus-wiki/event-relocations] The small seminar rooms in the Main Building have lower capacities than the auditorium in the separate building.[0m
+  [memory a985e1a2] [2m[task-1/campus-wiki/event-relocations] The auditorium in the separate building has an event information desk separate from the Main Building.[0m
+  [memory 8558ee4b] [2m[task-1/campus-wiki/event-relocations] Spaces that can be reserved on weekdays may not operate on public holidays.[0m
+  [memory 544cbb29] [2m[task-1/campus-wiki/event-relocations] If space names appear identical, check the building name and floor together.[0m
+  [memory b26e252c] [2m[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main Building event venues.[0m
+  [memory 44962652] [2m[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an alternative to Main Building event venues.[0m
+  [memory caaf841e] [2m[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event space for Main Building events.[0m
+  [memory 97065359] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from comparison candidates and compare only designated alternative spaces.[0m
+  [memory e8b8c5e2] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building event venues and may provide only the reservation channel for each alternative space.[0m
+  [memory 97e0941b] [2m[task-1/campus-wiki/event-relocations] External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again.[0m
+  [memory 25da85fd] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.[0m
+  [memory 6a531bd1] [2m[task-1/campus-wiki/event-relocations] External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event.[0m
+  [memory 5bd7c41f] [2m[task-1/campus-wiki/event-relocations] Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation.[0m
+  [memory 38111c9b] [2m[task-1/campus-wiki/event-relocations] External event vendors expect the campus sponsoring department to confirm the loading time and route.[0m
+  [memory f4c9bed3] [2m[task-1/participant/construction-updates/event-relocations] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is converted into the loading point for event equipment relocated from the Main Building.[0m
+  [memory 20ee53fa] [2m[task-1/participant/construction-updates/event-relocations] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.[0m
+  [memory 80043fa1] [2m[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot A to the left of the Main Building is connected to the Main Building underground parking garage by an inclined access road.[0m
+  [memory 623bd8e2] [2m[task-1/campus-wiki/temporary-parking] General vehicles may enter and park in the Main Building underground parking garage during operating hours.[0m
+  [memory f2c55759] [2m[task-1/campus-wiki/temporary-parking] The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.[0m
+  [memory 0ab3c88d] [2m[task-1/campus-wiki/temporary-parking] The interior stairs leading down from the Main Building lobby to the underground parking garage are available during operating hours.[0m
+  [memory 988b86c4] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the underground parking garage cannot be used for general parking.[0m
+  [memory 572af330] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the pedestrian entrance door to the underground parking garage is kept locked.[0m
+  [memory 772b6ea9] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: During the construction period, instruct staff to use a physical access card to pass through the locked pedestrian entrance door to the underground parking garage.[0m
+  [memory 4f4b02ec] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Instruct construction/facilities personnel to access the underground parking garage through the controlled on-site access procedure that has been approved.[0m
+  [memory ed99260c] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: The stairs from the Main Building down to the underground parking garage are closed to all users.[0m
+  [memory 1a43211d] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: The underground parking garage is used as a temporary storage area for construction materials.[0m
+  [memory 9130a794] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: After the clear-out, personal items left in the underground parking garage were moved to the lost and found center.[0m
+  [memory fd5118de] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the sloped access road connecting Outdoor Parking Lot A and the Main Building underground parking garage is blocked.[0m
+  [memory 90ab088b] [2m[task-1/campus-wiki/temporary-parking] The Outdoor Parking Lot A–Main Building–Central Library route is normally one of the shortest routes to the library after parking.[0m
+  [memory f454a6c0] [2m[task-1/campus-wiki/temporary-parking] Delivery drivers and external maintenance providers sometimes expect to be able to load and unload briefly at the edge of Outdoor Parking Lot A.[0m
+  [memory 692d14b6] [2m[task-1/campus-wiki/temporary-parking] First-time visiting drivers sometimes confuse Outdoor Parking Lot A with Outdoor Parking Lot C.[0m
+  [memory ec2ba2df] [2m[task-1/campus-wiki/route-changes] With your back to the main entrance, Outdoor Parking Lot A is on the left.[0m
+  [memory 096b9c7a] [2m[task-1/campus-wiki/route-changes] The Outdoor Parking Lot A–Main Building–Central Library route is usually short.[0m
+  [memory 10f5b18a] [2m[task-1/campus-wiki/route-changes] The Outdoor Parking Lot A–Main Building–Central Library route has a long indoor section.[0m
+  [memory c26ed318] [2m[task-1/campus-wiki/route-changes] Students going to the library after parking prefer the familiar, short Outdoor Parking Lot A–Main Building–Central Library route.[0m
+  [memory 151784fb] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Outdoor Parking Lot A connected to the Main Building is closed during the construction period.[0m
+  [memory bc502467] [2m[task-1/participant/construction-updates/temporary-parking] Add campus-wiki/temporary-parking: Outdoor Parking Lot A is planned to reopen immediately after construction on the Main Building ends.[0m
+  [memory 7b8208c6] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: A visitor accustomed to parking at the Main Building may expect to be able to enter the underground parking garage or Outdoor Parking Lot A during the construction period, drive as far as the closed access road, and then search again for Outdoor Parking Lot C.[0m
+  [memory 7cd38146] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: Delivery drivers and external maintenance contractors accustomed to unloading in Outdoor Parking Lot A may approach the same point during the construction period and then reconfirm the delivery time or unloading location at the control line.[0m
+  [memory ef701954] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.[0m
+  [memory 8ed6e278] [2m[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C uses an access road separate from the Main Building underground parking garage.[0m
+  [memory b69028ca] [2m[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C is outside the Main Building construction zone.[0m
+  [memory 607d8fa2] [2m[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C accepts visitor vehicles during posted operating hours.[0m
+  [memory 62e9ea85] [2m[task-1/campus-wiki/temporary-parking] The accessible parking area in Outdoor Parking Lot C is near the walkway toward the Student Centre.[0m
+  [memory 01e976b6] [2m[task-1/campus-wiki/temporary-parking] Outdoor Parking Lot C has electric vehicle charging spaces.[0m
+  [memory 7f479429] [2m[task-1/campus-wiki/temporary-parking] The West Gate stop is on the walkway outside Outdoor Parking Lot C.[0m
+  [memory d25d8bd3] [2m[task-1/campus-wiki/temporary-parking] The dedicated car-sharing spaces in Outdoor Parking Lot C are identified by signs.[0m
+  [memory f86a7bc9] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, Outdoor Parking Lot C operates as a temporary alternative parking lot for vehicles visiting the Main Building.[0m
+  [memory 2959dfbc] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: Based on posted information, the parking guidance agent may explain the closures of the underground parking garage and Outdoor Parking Lot A and the alternative use of Outdoor Parking Lot C during the construction period.[0m
+  [memory aa1a221c] [2m[task-1/participant/construction-updates/temporary-parking] Modify campus-wiki/temporary-parking: During the construction period, the parking guidance agent may explain the location of Outdoor Parking Lot C but cannot check or guarantee available spaces at the time of an inquiry.[0m
+  [memory e09ac089] [2m[task-1/campus-wiki/shop-updates] The ATM in the West Complex is separate from the ATM inside the Main Building.[0m
+  [memory af3d2b6b] [2m[task-1/campus-wiki/shop-updates] The ATM in the West Complex is in the building next to Outdoor Parking Lot A.[0m
+  [memory 1cc61714] [2m[task-1/campus-wiki/shop-updates] Students who need cash in the evening often expect that they can use the Main Building ATM at any time.[0m
+  [memory 46ac16e2] [2m[task-1/campus-wiki/shop-updates] Do not treat the facilities in the West Complex and the facilities in the Main Building as the same place.[0m
+  [memory 61880ce5] [2m[task-1/campus-wiki/shop-updates] The ATMs in the Main Building and the West Complex are managed by different operators.[0m
+  [memory 4150b3ac] [2m[task-1/campus-wiki/shop-updates] The amenities information agent cannot access ATM transaction history or determine the cause of transaction errors.[0m
+  [memory a9bc91f6] [2m[task-1/campus-wiki/shop-updates] Contact the operator of the relevant ATM regarding a retained ATM card or transaction error.[0m
+  [memory 22b787a5] [2m[task-1/campus-wiki/route-changes] With your back to the main entrance, the West Complex is on the left.[0m
+  [memory 7fd62dbf] [2m[task-1/campus-wiki/route-changes] There is an above-ground pedestrian path from the West Complex to the Main Building's main entrance.[0m
+  [memory c91c1d49] [2m[task-1/campus-wiki/route-changes] Solbit Plaza is between the Main Building's main entrance and the West Complex.[0m
+  [memory a3bb7182] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The ATM on the first floor of the Main Building is closed during the construction period.[0m
+  [memory 79a466ad] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building ATM to the ATM on the first floor of the West Complex.[0m
+  [memory 0cbcca59] [2m[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: A student who used the Main Building ATM in the evening may expect to be able to withdraw cash at the same location during the construction period, come to the Main Building, and then have to find the West Complex ATM.[0m
+  [memory 01db734a] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, the route for ATM use changes from the first floor of the Main Building to the first floor of the West Complex without passing through the Main Building construction zone.[0m
+  [memory ce36e654] [2m[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store's usual operating hours during recess are from 9:00 a.m. to 6:00 p.m.[0m
+  [memory 14b19a3f] [2m[task-1/campus-wiki/shop-updates] Students who need basic items late at night expect the 24-hour store in the Main Building to be open.[0m
+  [memory 7705f9c2] [2m[task-1/campus-wiki/shop-updates] The Campus Store contractor incorporates students' tendency to use the Main Building ATM and the 24-hour store together in the evening into demand planning.[0m
+  [memory edef9cee] [2m[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store sells school supplies and basic household goods.[0m
+  [memory 1762654b] [2m[task-1/campus-wiki/shop-updates] The Engineering Building Campus Store is in a separate building from the Main Building and can be reached by a public pedestrian route that does not pass through the Main Building.[0m
+  [memory 225b6515] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The 24-hour unattended store on the first floor of the Main Building is closed during the construction period.[0m
+  [memory 618ee458] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the construction period, direct users of the Main Building's 24-hour store to the Campus Store in the Engineering Building between 7:00 a.m. and 11:00 p.m.[0m
+  [memory 600d9c7a] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: Explain that after 11:00 p.m. there is no alternative on-campus store to replace the 24-hour unattended store in the Main Building.[0m
+  [memory e744881c] [2m[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: During the construction period, the Campus Store in the Engineering Building operates from 7:00 a.m. to 11:00 p.m.[0m
+  [memory 0eda4a7b] [2m[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: The concessionaire operating the Campus Store in the Engineering Building may expect more alternative users because of the closure of Main Building facilities and seek to increase evening staffing and inventory above normal levels during the construction period.[0m
+  [memory b4234d1c] [2m[task-1/campus-wiki/shop-updates] The Campus Store on the first floor of the Main Building operates from 7:00 a.m. to 11:00 p.m. even during recess.[0m
+  [memory c0663257] [2m[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: The Campus Store on the first floor of the Main Building is closed during the construction period.[0m
+  [memory aaa5db04] [2m[task-1/campus-wiki/shop-updates] The cafe on the first floor of the Main Building operates during summer break as well.[0m
+  [memory 4e0d1590] [2m[task-1/campus-wiki/shop-updates] There is a coffee machine inside the Innovation Hub on the first floor of the Main Building.[0m
+  [memory b2335d01] [2m[task-1/campus-wiki/shop-updates] Only staff may use the coffee machine inside the Innovation Hub on the first floor of the Main Building.[0m
+  [memory 225daf65] [2m[task-1/campus-wiki/facility-updates] The Innovation Hub is on the first floor of the Main Building.[0m
+  [memory 66257de5] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: The cafe on the first floor of the Main Building does not operate during the construction period.[0m
+  [memory 8c4fbec5] [2m[task-1/participant/construction-updates/shop-updates] Add campus-wiki/shop-updates: During the cafe closure, instruct only staff to use the coffee machine inside the first-floor Innovation Hub.[0m
+  [memory 7c343fc8] [2m[task-1/campus-wiki/shop-updates] Identify and provide guidance to an alternative location of the same type as the closed facility.[0m
+  [memory ada658fc] [2m[task-1/campus-wiki/shop-updates] The amenities information agent can answer with posted locations.[0m
+  [memory 4129b617] [2m[task-1/campus-wiki/shop-updates] The amenities information agent can answer with posted operating hours.[0m
+  [memory 1822bec0] [2m[task-1/campus-wiki/shop-updates] The amenities information agent cannot check product inventory.[0m
+  [memory e02381e6] [2m[task-1/campus-wiki/shop-updates] The amenities information agent cannot check whether payment is available.[0m
+  [memory e46bac19] [2m[task-1/campus-wiki/shop-updates] The amenities information agent cannot check unexpected closures on the day.[0m
+  [memory 41cee949] [2m[task-1/campus-wiki/shop-updates] The amenities information agent cannot access a user's purchase history.[0m
+  [memory 87fcd4ab] [2m[task-1/campus-wiki/shop-updates] The food and beverage information agent must not infer ingredient composition that is not listed on the menu.[0m
+  [memory ef44724a] [2m[task-1/campus-wiki/shop-updates] The operating hours of each campus shop and food and beverage facility may vary on public holidays.[0m
+  [memory d859e306] [2m[task-1/campus-wiki/shop-updates] Check the relevant store's official notice for extended operating hours during exam periods.[0m
+  [memory 06b84ea1] [2m[task-1/campus-wiki/shop-updates] The store operator determines product inventory and availability for sale.[0m
+  [memory dc470417] [2m[task-1/campus-wiki/shop-updates] Direct users to report service issues to the relevant facility's posted contact point.[0m
+  [memory a114649c] [2m[task-1/participant/construction-updates/shop-updates] Modify campus-wiki/shop-updates: During the construction period, the amenities guidance agent may exclude the closed Main Building ATM, unattended store, Campus Store, and cafe from recommendations and provide guidance only to posted alternative facilities.[0m
+  [memory a474631a] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.[0m
+  [memory faabb716] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.[0m
+  [memory d4060287] [2m[task-1/campus-wiki/facility-updates] The elevators in the Main Building connect the underground parking level through the tenth floor.[0m
+  [memory f9ecea3e] [2m[task-1/campus-wiki/route-changes] Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.[0m
+  [memory dabfbd83] [2m[task-1/campus-wiki/route-changes] The elevator closest to the Main Building's main entrance is inside the first-floor lobby.[0m
+  [memory 6e1a9bac] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.[0m
+  [memory b59e0425] [2m[task-1/campus-wiki/shop-updates] The operating hours of the visitor services desk are posted on the Main Building information page.[0m
+  [memory 83b8b41d] [2m[task-1/campus-wiki/shop-updates] The visitor services desk provides campus maps and public facility information.[0m
+  [memory 1c1811c9] [2m[task-1/campus-wiki/shop-updates] General facility inquiries can be submitted through the public online inquiry form.[0m
+  [memory 5c137ce6] [2m[task-1/campus-wiki/facility-updates] First-time visitors expect to be able to receive immediate directions to their destination at the visitor services desk on the first floor.[0m
+  [memory 737643d1] [2m[task-1/campus-wiki/facility-updates] The main entrance lobby is on the first floor of the Main Building.[0m
+  [memory 81de7cc8] [2m[task-1/campus-wiki/facility-updates] The visitor services desk is on the first floor of the Main Building.[0m
+  [memory b6e0ad24] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period.[0m
+  [memory 8592a6b5] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal.[0m
+  [memory 03b0977f] [2m[task-1/campus-wiki/facility-updates] A general restroom is on the second floor of the Main Building.[0m
+  [memory ba427a69] [2m[task-1/campus-wiki/facility-updates] An accessible restroom is on the second floor of the Main Building.[0m
+  [memory e5b50ade] [2m[task-1/campus-wiki/facility-updates] A general restroom is on the third floor of the Main Building.[0m
+  [memory 3b7822bc] [2m[task-1/campus-wiki/facility-updates] An accessible restroom is on the third floor of the Main Building.[0m
+  [memory 3bd9147a] [2m[task-1/campus-wiki/facility-updates] A general restroom is on the first floor of the Main Building.[0m
+  [memory 68610c80] [2m[task-1/campus-wiki/facility-updates] An accessible restroom is on the first floor of the Main Building.[0m
+  [memory 6e71a82b] [2m[task-1/campus-wiki/route-changes] The Student Centre is behind the Central Library.[0m
+  [memory 09c79ab8] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the first floor of the Main Building cannot be used during the construction period.[0m
+  [memory e58d23c6] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the second floor of the Main Building cannot be used during the construction period.[0m
+  [memory 4c2cf8b4] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The general restroom on the third floor of the Main Building cannot be used during the construction period.[0m
+  [memory 2d55ea1c] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: Because the general restrooms on the first through third floors of the Main Building are closed during the construction period, the nearest general restroom changes to the exhibition hall on the third floor of the West Complex.[0m
+  [memory 3e01e5fd] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, direct students, staff, and members who cannot use the Main Building restrooms to the Central Library restrooms.[0m
+  [memory 09ec397d] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: As a rule, direct general visitors who cannot use the Main Building restrooms during the construction period to restrooms outside the Main Building.[0m
+  [memory 08926264] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, direct users who cannot use the accessible restroom in the Main Building to the Student Centre.[0m
+  [memory a5ac4ee2] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take the accessible route to the left as viewed from the Main Building.[0m
+  [memory 5f4446dd] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: The first-floor Innovation Hub does not operate its consultation desk during the construction period.[0m
+  [memory fd42b6dc] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: An Innovation Hub visitor accustomed to in-person consultation may expect to receive an immediate consultation at the first-floor desk during the construction period, see that the desk is closed, and then search again for the online consultation channel.[0m
+  [memory a25aed5d] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.[0m
+  [memory 9ddfa2ac] [2m[task-1/campus-wiki/facility-updates] Provide guidance after checking both the published floor-by-floor facilities and temporary operation notices.[0m
+  [memory 5ed62530] [2m[task-1/campus-wiki/facility-updates] Do not infer the scope of nonpublic construction.[0m
+  [memory c9627b5a] [2m[task-1/campus-wiki/facility-updates] Do not infer the results of on-site inspections.[0m
+  [memory 9acc99ab] [2m[task-1/campus-wiki/facility-updates] The floor directory agent cannot verify in real time, at the time of an inquiry, whether published floor-by-floor information matches the actual layout.[0m
+  [memory c3137a94] [2m[task-1/participant/construction-updates/facility-updates] Add campus-wiki/facility-updates: During the construction period, the facility guidance agent's response scope is limited to publicly disclosed operational impacts and it cannot verify or infer nonpublic types of work.[0m
+  [memory eec0a0da] [2m[task-1/campus-wiki/route-changes] The route from Outdoor Parking Lot C through the Student Centre accessible entrance to the west entrance of the Central Library does not pass through the Main Building.[0m
+  [memory 479ca59b] [2m[task-1/campus-wiki/route-changes] Explain the distinction between the standard shortest route and the accessible route.[0m
+  [memory 24868be2] [2m[task-1/campus-wiki/route-changes] There is no continuous accessible route that a wheelchair can use in the direction of the stairs on the right side of the Main Building.[0m
+  [memory 10a59476] [2m[task-1/campus-wiki/route-changes] The detour from the stairs on the right side of the Main Building to the Student Centre is long.[0m
+  [memory 7e057e15] [2m[task-1/campus-wiki/route-changes] Mobility support companions prefer the indoor route through the Main Building to the Central Library because it is less affected by weather.[0m
+  [memory 32284ae7] [2m[task-1/campus-wiki/route-changes] The public campus map shows building entrances and pedestrian paths between buildings.[0m
+  [memory b0e9027b] [2m[task-1/campus-wiki/route-changes] The public campus map separately marks step-free accessible routes.[0m
+  [memory caedf93b] [2m[task-1/campus-wiki/route-changes] The pedestrian path in front of the Main Building's main entrance has a sign indicating the direction of the accessible route.[0m
+  [memory a17d7323] [2m[task-1/campus-wiki/route-changes] A step-free pedestrian path runs from Outdoor Parking Lot C to the Student Centre accessible entrance.[0m
+  [memory 231eda65] [2m[task-1/campus-wiki/route-changes] An accessible route runs from the Student Centre to the west entrance of the Central Library.[0m
+  [memory 0c47c1bf] [2m[task-1/campus-wiki/route-changes] The escalator route in the Main Building includes a section where stairs cannot be avoided.[0m
+  [memory 3be49801] [2m[task-1/campus-wiki/route-changes] When step-free travel is required, direct people to the elevator route rather than the escalator route.[0m
+  [memory f3235caf] [2m[task-1/campus-wiki/route-changes] If the shortest route has stairs, also present an available accessible route.[0m
+  [memory 7577f1e0] [2m[task-1/campus-wiki/route-changes] There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library.[0m
+  [memory cf7fe369] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Student Centre accessible entrance–Central Library west entrance.[0m
+  [memory abd6fdaf] [2m[task-1/participant/construction-updates/route-changes] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the closed connecting route through the Main Building.[0m
+  [memory 5061a9ad] [2m[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.[0m
+  [memory fc33d754] [2m[task-1/campus-wiki/route-changes] Recommend only routes that are currently confirmed to be open.[0m
+  [memory ddd5033e] [2m[task-1/campus-wiki/route-changes] The route guidance agent can compare routes using stored geographic information.[0m
+  [memory e69306e1] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot check congestion in real time.[0m
+  [memory 0aeee696] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot check for movable obstacles.[0m
+  [memory 3cba2dbc] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot check in real time for newly installed temporary signs or movable control barriers at the time of inquiry.[0m
+  [memory 718f6940] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot check on-site congestion in real time and can compare posted detours to identify routes with fewer branches.[0m
+  [memory 3032d7ec] [2m[task-1/campus-wiki/route-changes] The route guidance agent can distinguish stair routes from elevator routes on the public map.[0m
+  [memory 8e36d92f] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot measure on-site pedestrian traffic at the time of inquiry.[0m
+  [memory d3f73317] [2m[task-1/campus-wiki/route-changes] The route guidance agent cannot guarantee an individual user's travel time.[0m
+  [memory 8839b11a] [2m[task-1/campus-wiki/route-changes] Check the current notice for the destination entrance before giving directions.[0m
+  [memory 627ab58d] [2m[task-1/campus-wiki/route-changes] Do not suggest informal shortcuts that are not on the public map as default routes.[0m
+  [memory a4f6af1c] [2m[task-1/participant/construction-updates/route-changes] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.[0m
+  [memory 9e4936cb] [2m[task-1/campus-wiki/building-access] The Main Building main entrance is on the first floor.[0m
+  [memory 0a4cdaab] [2m[task-1/campus-wiki/building-access] The escalator inside the Main Building connects the first through third floors.[0m
+  [memory cb330ddb] [2m[task-1/campus-wiki/building-access] The vestibule inside the main entrance is between the outside and the lobby.[0m
+  [memory 4f7b27f7] [2m[task-1/campus-wiki/building-access] The access information agent can explain the posted opening hours.[0m
+  [memory 79f7932f] [2m[task-1/campus-wiki/building-access] The access information agent can explain the posted access eligibility requirements.[0m
+  [memory ceacd222] [2m[task-1/campus-wiki/building-access] The access information agent cannot issue access credentials.[0m
+  [memory 78b6c744] [2m[task-1/campus-wiki/building-access] The access information agent cannot unlock locked doors.[0m
+  [memory eaa76deb] [2m[task-1/campus-wiki/building-access] The access information agent can explain the difference between the normal uses of the front and rear entrances.[0m
+  [memory f30f25ad] [2m[task-1/campus-wiki/building-access] The access information agent cannot check the physical lock state in real time at the time of an inquiry.[0m
+  [memory 5fb0cb6c] [2m[task-1/campus-wiki/building-access] If access authentication fails, check the posted contact information for the responsible office before providing guidance.[0m
+  [memory 55e23c56] [2m[task-1/campus-wiki/building-access] Do not guess an unverified contact number.[0m
+  [memory 903828cb] [2m[task-1/campus-wiki/building-access] If the posted operating hours differ from the access signage on site, instruct people to follow the on-site signage.[0m
+  [memory 9f74e0fc] [2m[task-1/campus-wiki/building-access] Do not suggest that a person without access eligibility follow another authenticated user inside.[0m
+  [memory f65f19b7] [2m[task-1/campus-wiki/building-access] Borrowed visitor access passes must be returned to the information desk before leaving the Main Building.[0m
+  [memory 8693d04d] [2m[task-1/campus-wiki/building-access] Direct users who have lost their access credentials to the posted access support desk.[0m
+  [memory 231b47c2] [2m[task-1/campus-wiki/building-access] The validity of campus-issued access eligibility depends on the user's affiliation status.[0m
+  [memory 1630a571] [2m[task-1/campus-wiki/building-access] If an item left at an entrance obstructs passage, report it through the facilities reporting agent.[0m
+  [memory 1ea73246] [2m[task-1/campus-wiki/building-access] Direct visitors who need on-site access support to the first-floor information desk.[0m
+  [memory 447988cf] [2m[task-1/campus-wiki/building-access] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m.[0m
+  [memory 48401bcc] [2m[task-1/campus-wiki/building-access] The start of regular opening hours for the Main Building main entrance during recess is 8 a.m.[0m
+  [memory 7b70dc64] [2m[task-1/campus-wiki/building-access] The Main Building's regular weekend opening hours are posted separately in the weekend operating schedule.[0m
+  [memory 70eff449] [2m[task-1/campus-wiki/building-access] The Main Building's holiday access hours may differ from regular operating hours.[0m
+  [memory f8d8e110] [2m[task-1/campus-wiki/building-access] First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors.[0m
+  [memory dea20b0e] [2m[task-1/campus-wiki/building-access] Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a different entrance.[0m
+  [memory afdf773d] [2m[task-1/campus-wiki/building-access] Group-tour visitors often expect their tour leader to wait in the first-floor main entrance lobby.[0m
+  [memory 31f4393a] [2m[task-1/campus-wiki/building-access] Student groups expect to be able to meet their party immediately in the main entrance lobby during large visits.[0m
+  [memory 4cabb4a3] [2m[task-1/campus-wiki/building-access] The Main Building service entrance is used for preregistered deliveries and facilities work.[0m
+  [memory b0a4d666] [2m[task-1/campus-wiki/building-access] Emergency exits are doors for emergency evacuation and are not regular entrances for general access.[0m
+  [memory 97de0bee] [2m[task-1/campus-wiki/building-access] External workers may confuse the separate check-in procedure at the service entrance with the general visitor procedure.[0m
+  [memory 6b375d43] [2m[task-1/campus-wiki/building-access] Registered visitors to public events use the entrance designated in the event information.[0m
+  [memory 773fbc92] [2m[task-1/campus-wiki/building-access] The hours when an event-only entrance is available follow the schedule for that event.[0m
+  [memory c44fb7ad] [2m[task-1/campus-wiki/building-access] The automatic door at the Main Building main entrance operates during regular opening hours.[0m
+  [memory e838dc91] [2m[task-1/campus-wiki/building-access] Service animals may use the Main Building's general entrances together with their users.[0m
+  [memory 9e10f086] [2m[task-1/campus-wiki/building-access] Instruct people not to ride bicycles or personal mobility devices inside the Main Building.[0m
+  [memory 155919ee] [2m[task-1/campus-wiki/event-relocations] The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess.[0m
+  [memory 0ce72ba9] [2m[task-1/campus-wiki/event-relocations] The meeting space on the first floor of the Main Building has a flexible area without fixed seating.[0m
+  [memory 43e21830] [2m[task-1/campus-wiki/event-relocations] Some seminar rooms on the fifth floor of the Main Building are also used for regularly scheduled classes.[0m
+  [memory 51572263] [2m[task-1/campus-wiki/event-relocations] Some seminar rooms on the sixth floor of the Main Building are also used for regularly scheduled classes.[0m
+  [memory 1e127eb3] [2m[task-1/campus-wiki/event-relocations] Check class schedules before presenting any seminar rooms on the fifth and sixth floors of the Main Building as alternative event rooms.[0m
+  [memory 241e5be4] [2m[task-1/campus-wiki/event-relocations] Event organizers must confirm that the capacity is appropriate for the expected number of attendees.[0m
+  [memory bc6ce156] [2m[task-1/campus-wiki/event-relocations] Events that require accessible seating can indicate that need in the reservation request.[0m
+  [memory d33d68b0] [2m[task-1/campus-wiki/event-relocations] Campus event reservations by external organizations require a campus sponsoring department.[0m
+  [memory ab5dc9f4] [2m[task-1/campus-wiki/event-relocations] Student organization event reservations must be requested through a registered organization account.[0m
+  [memory 67f565f3] [2m[task-1/campus-wiki/event-relocations] The reservation time includes the time needed for event setup and teardown.[0m
+  [memory 7fb672ad] [2m[task-1/campus-wiki/event-relocations] After the event ends, return moved furniture to the space's default arrangement.[0m
+  [memory 9e2030e3] [2m[task-1/campus-wiki/event-relocations] Check the usage rules for each space to determine whether food may be brought in.[0m
+  [memory 0b8a92f9] [2m[task-1/campus-wiki/event-relocations] Request event audio and video support separately from the space reservation.[0m
+  [memory 4f31e4f8] [2m[task-1/campus-wiki/event-relocations] Install temporary event signs so they do not obstruct passageways or emergency exits.[0m
+  [memory 60ef8de2] [2m[task-1/campus-wiki/event-relocations] Check both the official event schedule and facilities notices to confirm whether a space is operating that day.[0m
+  [memory 4395d394] [2m[task-1/campus-wiki/event-relocations] Do not present a temporarily held space as a confirmed reserved space.[0m
+  [memory 6edd67d8] [2m[task-1/campus-wiki/event-relocations] Canceled public events are marked as canceled on the official event schedule.[0m
+  [memory 97fd9960] [2m[task-1/campus-wiki/event-relocations] Emergency safety measures take priority over approved space reservations.[0m
+  [memory e21677f9] [2m[task-1/campus-wiki/event-relocations] Turn in items found at an event venue to the information desk in that building.[0m
+  [memory 9553790f] [2m[task-1/campus-wiki/event-relocations] The event information agent cannot access private participant lists.[0m
+  [memory d3b03336] [2m[task-1/campus-wiki/event-relocations] Distinguish between public event information and private participant information when providing guidance.[0m
+  [memory ad72fc2b] [2m[task-1/campus-wiki/event-relocations] Visitors attending external events often expect that they can enter the building any time before the event begins.[0m
+  [memory f313a57b] [2m[task-1/campus-wiki/event-relocations] Attendees who need event accessibility support may easily miss the advance contact requirement because they expect the necessary support to be prepared without a separate request.[0m
+  [memory 331daf7a] [2m[task-1/campus-wiki/event-relocations] Event organizers expect the permitted scope of photography to be clearly communicated to attendees in advance.[0m
+  [memory b3c09cbe] [2m[task-1/campus-wiki/temporary-parking] Do not generalize the closure of one parking area into a campus-wide parking ban.[0m
+  [memory 58e9fcad] [2m[task-1/campus-wiki/temporary-parking] Check separately for available alternative parking areas.[0m
+  [memory 7da43c3a] [2m[task-1/campus-wiki/temporary-parking] Instructions for registering visitor vehicles are posted on the sign at the parking area entrance.[0m
+  [memory 388ffe14] [2m[task-1/campus-wiki/temporary-parking] Do not generalize the full status of one parking lot to another parking lot.[0m
+  [memory 0fdcb45e] [2m[task-1/campus-wiki/temporary-parking] Report vehicles blocking passageways or accessible parking areas to the parking management office.[0m
+  [memory 291f0732] [2m[task-1/campus-wiki/temporary-parking] First-time visiting drivers often expect there to be general parking spaces in the parking lot closest to the Main Building.[0m
+  [memory 931c7963] [2m[task-1/campus-wiki/temporary-parking] Visitors who need mobility assistance expect a safe pickup and drop-off point near the accessible entrance.[0m
+  [memory 0989952b] [2m[task-1/campus-wiki/temporary-parking] Visitors with luggage expect to be able to load and unload briefly near the Main Building entrance.[0m
+  [memory a17ac28e] [2m[task-1/campus-wiki/temporary-parking] Staff often expect that their access authorization also allows them to use the parking lot adjacent to the Main Building.[0m
+  [memory 31632ca3] [2m[task-1/campus-wiki/temporary-parking] Staff who need mobility assistance give priority to pickup and drop-off points near an accessible entrance.[0m
+  [memory 2a2c811d] [2m[task-1/campus-wiki/temporary-parking] Staff transporting equipment prefer a loading and unloading point close to the destination space.[0m
+  [memory 469d6e2e] [2m[task-1/campus-wiki/temporary-parking] The parking information agent can explain posted open statuses.[0m
+  [memory 8627215b] [2m[task-1/campus-wiki/temporary-parking] The parking information agent can explain posted connecting routes.[0m
+  [memory 893c5204] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot check real-time space availability.[0m
+  [memory f311f287] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot guarantee when on-site controls will be lifted.[0m
+  [memory 5da0f4ca] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot check in real time whether on-site control signs have been installed and determines availability using only posted parking-space statuses.[0m
+  [memory ba3b2771] [2m[task-1/campus-wiki/temporary-parking] The parking information agent can explain parking lot access roads shown on the public map.[0m
+  [memory d319aa40] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot register a visitor vehicle on the visitor's behalf.[0m
+  [memory 0cf4b53a] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot waive parking fees.[0m
+  [memory d307580d] [2m[task-1/campus-wiki/temporary-parking] Check official parking notices for weather-related parking restrictions.[0m
+  [memory e9cfd309] [2m[task-1/campus-wiki/temporary-parking] A valid parking permit is required to use accessible parking areas.[0m
+  [memory df69cfba] [2m[task-1/campus-wiki/temporary-parking] An accessible pickup and drop-off zone is marked in front of the Main Building's main entrance.[0m
+  [memory a989a803] [2m[task-1/campus-wiki/temporary-parking] The pickup and drop-off zone in front of the Main Building's main entrance is not a long-term parking space.[0m
+  [memory 445c719d] [2m[task-1/campus-wiki/temporary-parking] The maximum use time for short-term loading and unloading spaces is indicated on on-site signs.[0m
+  [memory 2db2d5cf] [2m[task-1/campus-wiki/temporary-parking] Motorcycles park in the motorcycle areas marked on the campus map.[0m
+  [memory 624969c5] [2m[task-1/campus-wiki/temporary-parking] Bicycles are parked at designated bicycle racks, not in vehicle parking spaces.[0m
+  [memory 9c86c32c] [2m[task-1/campus-wiki/temporary-parking] Electric vehicle charging spaces are for vehicles that are charging.[0m
+  [memory 37870247] [2m[task-1/campus-wiki/temporary-parking] Visitor parking fees are displayed on the parking registration screen.[0m
+  [memory 768c4eef] [2m[task-1/campus-wiki/temporary-parking] The parking information agent cannot infer unposted discounted fees.[0m
+  [memory 5d7624e9] [2m[task-1/campus-wiki/temporary-parking] Parking operating hours on public holidays may differ from weekday operating hours.[0m
+  [memory 3accf3e5] [2m[task-1/campus-wiki/temporary-parking] Valid parking authorization does not guarantee the availability of a specific parking space.[0m
+  [memory 424adc71] [2m[task-1/campus-wiki/temporary-parking] Parts of outdoor parking lots may be temporarily restricted during heavy snow or icy conditions.[0m
+  [memory 8cdc0845] [2m[task-1/campus-wiki/temporary-parking] On days with large public events, parking demand near the event venue increases.[0m
+  [memory 545214aa] [2m[task-1/campus-wiki/temporary-parking] Drivers who need mobility assistance expect a step-free accessible route from the parking space to the destination.[0m
+  [memory caaf11df] [2m[task-1/campus-wiki/temporary-parking] The campus shuttle stops at the shuttle stop in front of the Student Centre.[0m
+  [memory 8d56d879] [2m[task-1/campus-wiki/temporary-parking] Campus shuttle operating hours vary between academic terms and recess periods.[0m
+  [memory 377c34b5] [2m[task-1/campus-wiki/shop-updates] The dining area on the first floor of the Main Building operates during summer break as well.[0m
+  [memory e591c164] [2m[task-1/campus-wiki/shop-updates] The return conditions for the Main Building Campus Store are posted in the store's receipt guidance.[0m
+  [memory 563c9a93] [2m[task-1/campus-wiki/shop-updates] Each store determines the prices of products sold at the Campus Store.[0m
+  [memory f6fff9ef] [2m[task-1/campus-wiki/shop-updates] The Main Building dining area's menu for the day is posted on the menu board at the entrance.[0m
+  [memory 9b873353] [2m[task-1/campus-wiki/shop-updates] Labels for major allergens in the dining menu can be found on the menu board.[0m
+  [memory e7f1e33f] [2m[task-1/campus-wiki/shop-updates] The food and beverage information agent cannot guarantee that there is no cross-contact in the food preparation area.[0m
+  [memory 107403fd] [2m[task-1/campus-wiki/shop-updates] Vegetarian options are indicated by dietary symbols on the menu board for the day.[0m
+  [memory 649682b9] [2m[task-1/campus-wiki/shop-updates] There is a water fountain for filling personal water bottles on the first floor of the Main Building.[0m
+  [memory 6e85e678] [2m[task-1/campus-wiki/shop-updates] General seating at the Main Building cafe cannot be reserved individually.[0m
+  [memory c3f55d1b] [2m[task-1/campus-wiki/shop-updates] The common lounge in the Student Centre has a microwave that users can use.[0m
+  [memory e97f7f23] [2m[task-1/campus-wiki/shop-updates] There is a beverage vending machine on the second floor of the Main Building.[0m
+  [memory bca15203] [2m[task-1/campus-wiki/shop-updates] There is a snack vending machine on the fifth floor of the Main Building.[0m
+  [memory ea7f836d] [2m[task-1/campus-wiki/shop-updates] Student support services that handle personal records require identity verification.[0m
+  [memory 997c75e1] [2m[task-1/campus-wiki/shop-updates] Visitors can use the campus's public guest network.[0m
+  [memory 526fb348] [2m[task-1/campus-wiki/shop-updates] Instructions for connecting to the guest network are posted in the visitor services information.[0m
+  [memory 54ba1194] [2m[task-1/campus-wiki/shop-updates] Students with long intervals between classes prefer the dining area on the first floor of the Main Building as a comfortable place to wait.[0m
+  [memory 4660db15] [2m[task-1/campus-wiki/shop-updates] External visitors often expect to be able to use a cafe in the same building as a public event.[0m
+  [memory 00001a8c] [2m[task-1/campus-wiki/shop-updates] The reusable container return bin is next to the exit of the dining area on the first floor of the Main Building.[0m
+  [memory baeff46e] [2m[task-1/campus-wiki/shop-updates] The Main Building dining area has wheelchair-accessible seating.[0m
+  [memory ae124d66] [2m[task-1/campus-wiki/facility-updates] The student support administration office is on the second floor of the Main Building.[0m
+  [memory 908dfbcb] [2m[task-1/campus-wiki/facility-updates] A shared consultation room is on the second floor of the Main Building.[0m
+  [memory 0ddcaa33] [2m[task-1/campus-wiki/facility-updates] A connecting corridor toward the Central Library is on the third floor of the Main Building.[0m
+  [memory 4e777c28] [2m[task-1/campus-wiki/facility-updates] A seminar room is on the third floor of the Main Building.[0m
+  [memory 08df2ffa] [2m[task-1/campus-wiki/facility-updates] Department offices are on the fourth floor of the Main Building.[0m
+  [memory 571000ac] [2m[task-1/campus-wiki/facility-updates] A shared meeting room is on the fourth floor of the Main Building.[0m
+  [memory a149bf85] [2m[task-1/campus-wiki/facility-updates] Research labs are on the fifth floor of the Main Building.[0m
+  [memory 0be5fda7] [2m[task-1/campus-wiki/facility-updates] A seminar room is on the fifth floor of the Main Building.[0m
+  [memory 09b30109] [2m[task-1/campus-wiki/facility-updates] Some seminar rooms on the fifth floor of the Main Building are also used for classes.[0m
+  [memory d727c3d0] [2m[task-1/campus-wiki/facility-updates] A collaborative research lab is on the sixth floor of the Main Building.[0m
+  [memory 98b1e5f4] [2m[task-1/campus-wiki/facility-updates] A seminar room is on the sixth floor of the Main Building.[0m
+  [memory d9554893] [2m[task-1/campus-wiki/facility-updates] Some seminar rooms on the sixth floor of the Main Building are also used for classes.[0m
+  [memory b2420a57] [2m[task-1/campus-wiki/facility-updates] The research support office is on the seventh floor of the Main Building.[0m
+  [memory ad82d4fe] [2m[task-1/campus-wiki/facility-updates] A shared workspace for researchers is on the seventh floor of the Main Building.[0m
+  [memory bcc86a33] [2m[task-1/campus-wiki/facility-updates] Staff offices are on the eighth floor of the Main Building.[0m
+  [memory 91481ec3] [2m[task-1/campus-wiki/facility-updates] A small meeting room is on the eighth floor of the Main Building.[0m
+  [memory ea8fbf95] [2m[task-1/campus-wiki/facility-updates] Administrative offices are on the ninth floor of the Main Building.[0m
+  [memory cf4eacbf] [2m[task-1/campus-wiki/facility-updates] A support room for tenth-floor events is on the ninth floor of the Main Building.[0m
+  [memory 5eaa2562] [2m[task-1/campus-wiki/facility-updates] An event preparation room is on the tenth floor of the Main Building.[0m
+  [memory 3ad1d0f0] [2m[task-1/campus-wiki/facility-updates] The elevator lobby on the second floor of the Main Building is near the student support administration office.[0m
+  [memory 08c08b11] [2m[task-1/campus-wiki/facility-updates] The elevator lobby on the third floor of the Main Building is near the corridor toward the Central Library.[0m
+  [memory 212f9065] [2m[task-1/campus-wiki/facility-updates] The names of the department offices on the fourth floor of the Main Building are displayed on the floor directory.[0m
+  [memory 6fbd9287] [2m[task-1/campus-wiki/facility-updates] A shared printing station available to students is on the fourth floor of the Main Building.[0m
+  [memory c5908d88] [2m[task-1/campus-wiki/facility-updates] The research labs on the fifth floor of the Main Building are not spaces open to the general public.[0m
+  [memory b255d252] [2m[task-1/campus-wiki/facility-updates] The collaborative research lab on the sixth floor of the Main Building is used by authorized research members.[0m
+  [memory a8123dc1] [2m[task-1/campus-wiki/facility-updates] Consultations with the research support office on the seventh floor of the Main Building follow the posted appointment process.[0m
+  [memory a1a1d5bb] [2m[task-1/campus-wiki/facility-updates] Visitors to staff offices on the eighth floor of the Main Building expect the staff member with whom they have an appointment to be in the office at the scheduled time.[0m
+  [memory 337957bb] [2m[task-1/campus-wiki/facility-updates] Public administrative services on the ninth floor of the Main Building are provided during each department's operating hours.[0m
+  [memory d1e679de] [2m[task-1/campus-wiki/facility-updates] The floor directory agent can describe the floors and space names of published facilities.[0m
+  [memory bdba710b] [2m[task-1/campus-wiki/facility-updates] The floor directory agent cannot check the current occupancy status of meeting rooms.[0m
+  [memory 27313218] [2m[task-1/campus-wiki/facility-updates] First-time visitors are more familiar with department names than floor numbers and can more easily understand directions centered on department names.[0m
+  [memory 56ede96b] [2m[task-1/campus-wiki/facility-updates] On public holidays, some administrative offices may not operate even when the Main Building is open.[0m
+  [memory b20acc9c] [2m[task-1/campus-wiki/route-changes] With your back to the main entrance, the Humanities Building is on the right.[0m
+  [memory b405432e] [2m[task-1/campus-wiki/route-changes] The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the right side of the Main Building.[0m
+  [memory 07dfefb3] [2m[task-1/campus-wiki/route-changes] The above-ground route between the Main Building and the Central Library has a rest bench midway.[0m
+  [memory 6a7a7d99] [2m[task-1/campus-wiki/route-changes] First-time visitors find directions based on visible facilities easier to understand than directions based on building numbers.[0m
+  [memory fb170aa0] [2m[task-1/campus-wiki/route-changes] Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance.[0m
+  [memory fff5de4d] [2m[task-1/campus-wiki/route-changes] A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.[0m
+  [memory 79cfa2f6] [2m[task-1/campus-wiki/route-changes] Bicycle users dismount at the designated rack on the edge of Solbit Plaza and proceed on foot.[0m
+  [memory c460f32d] [2m[task-1/campus-wiki/route-changes] When it rains or snows, travel time on sloped outdoor pedestrian paths may be longer than usual.[0m
+  [memory a0696d5e] [2m[task-1/campus-wiki/route-changes] Snow removal personnel judge that when it snows, major accessible routes must be cleared before other pedestrian paths.[0m
+  [memory c5b76555] [2m[task-1/campus-wiki/route-changes] During class change times, pedestrian traffic increases between the third floor of the Main Building and the Central Library.[0m
+  [memory 7479815c] [2m[task-1/campus-wiki/route-changes] In an emergency, instruct people to follow on-site evacuation signs and safety personnel's directions rather than general wayfinding guidance.[0m

@@ -1,0 +1,17 @@
+{
+  "result_creation_command": "mem meld task-1/participant/construction-updates task-1/campus-wiki --left-descendants --right-descendants --to task-1/participant/symmetric-replay-result",
+  "captured_resume_command": "mem meld task-1/participant/construction-updates task-1/campus-wiki --left-descendants --right-descendants",
+  "profile": "study-snapshot-replay-20260811",
+  "review_attempt_seconds": 1.9230642080074176,
+  "preserve_all_seconds": 0.0965145000081975,
+  "accept_seconds": 0.1278643749828916,
+  "provider_events_before": 0,
+  "provider_events_after": 0,
+  "left_memories": 75,
+  "right_memories": 300,
+  "relations": 51,
+  "result_memories": 375,
+  "origin": "EXACT_PREWARM_COMPARE_BASIS",
+  "current_before": "practice/source-atomized",
+  "current_after": "practice/source-atomized"
+}

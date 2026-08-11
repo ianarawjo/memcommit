@@ -78,3 +78,29 @@ The exact analysis remains retained under the run-local current Grant binding.
 operations, applied 342-Memory target, and exact 300-Memory digest restoration.
 Undo is part of this replay's isolation protocol: it lets the later Task 1
 Directional Meld exercise its own exact prewarm against the unchanged fixture.
+
+## Task 1 symmetric Meld interaction log
+
+The result Context was created by
+`mem meld task-1/participant/construction-updates task-1/campus-wiki
+--left-descendants --right-descendants --to
+task-1/participant/symmetric-replay-result`. The captured review reopens that
+target-bound session after switching to the result Context, as required by the
+ordinary symmetric Meld resume contract.
+
+| Capture | Command | Preceding input | Visible state | Durable mutation |
+| --- | --- | --- | --- | --- |
+| `28-task1-symmetric-meld-target-switch` | `mem switch task-1/participant/symmetric-replay-result` | None | The empty symmetric result becomes current | Current-Context pointer only |
+| `29-task1-symmetric-meld-exact-entry` | `mem meld task-1/participant/construction-updates task-1/campus-wiki --left-descendants --right-descendants` | None | Exact 75+300 Compare basis, 51 relations, 24 optional issues, and zero proposed result Memories | None |
+| `30-task1-symmetric-meld-relation-detail` | same | `Tab`, `Down`, `Enter` | First scoped relation with exact source claims and two participant response choices | None |
+| `31-task1-symmetric-meld-preserve-all` | same with `--preserve-all` | None | Deterministic 375/375 Source and 51/51 relation coverage; exact accept command exposed | Saved ready proposal only |
+| `32-task1-symmetric-meld-accept-receipt` | same with `--accept` | None | Green checkpoint receipt for all 375 Meld results | Materialized 375 result Memories |
+| `33-task1-symmetric-meld-result-verification` | `mem show --context task-1/participant/symmetric-replay-result` | None | Durable result contents; the raw stream begins with `Memories 375` | None; read-only |
+| `34-task1-symmetric-meld-action-log` | `mem log --actions --limit 30` | None | Three completed Meld attempts at 180 by 52 with no provider event | None; read-only |
+| `35-task1-symmetric-meld-current-restored` | `mem switch practice/source-atomized` | None | Tutorial output restored as the current Context | Current-Context pointer only |
+
+`task1-symmetric-meld-replay-metrics.json` records a `1.923` second captured
+review attempt, `0.097` second deterministic preserve-all step, and `0.128`
+second exact acceptance. The provider-event counter remained `0` throughout.
+The preservation branch is a lossless mechanics check, not a claim that a
+participant-guided semantic synthesis would choose the same 375-Memory result.

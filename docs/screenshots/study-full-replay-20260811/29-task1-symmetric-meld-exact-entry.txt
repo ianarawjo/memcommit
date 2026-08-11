@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ╭─ MEM COMPARE · SYMMETRIC PEERS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮^┃
+┃ │ CONTEXT LOCATIONS                                                                                                                                                            │ ┃
+┃ │   SOURCE A · task-1/participant/construction-updates                                                                                                                         │ ┃
+┃ │   SOURCE B · task-1/campus-wiki                                                                                                                                              │ ┃
+┃ │   RESULT · task-1/participant/symmetric-replay-result                                                                                                                        │ ┃
+┃ │ Reference: task-1/participant/construction-updates (layout only; no authority)                                                                                               │ ┃
+┃ │ Compared: task-1/campus-wiki                                                                                                                                                 │ ┃
+┃ │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                           │ ┃
+┃ │ Analysis: 74bf4d5f · REUSED                                                                                                                                                  │ ┃
+┃ │ METRICS · MEMORIES 75 + 300 · RELATIONS 51 · POTENTIAL CONFLICTS 0                                                                                                           │ ┃
+┃ │ EQUIVALENT 0 · COMPATIBLE 1 · SCOPED 23 · CONFLICT 0 · DISTINCT 27 · UNCLEAR 0                                                                                               │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT MEM UNDERSTOOD ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ The exact Task 1 peer basis was prepared before participant interaction. The report preserves every source disposition without a foreground provider call.                   │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT BOTH CONTAIN · 1 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 1 prepared shared relation group(s).                                                                                                                                         │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ WHAT DIFFERS · 23 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ 23 prepared difference relation group(s).                                                                                                                                    │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-1/participant/construction-updates · 3 · not automatically a deficiency ───────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Prepared one-sided reference dispositions are included in 27 distinct group(s).                                                                                              │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ ╭─ ONLY IN task-1/campus-wiki · 24 · not automatically a deficiency ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮ ┃
+┃ │ Prepared one-sided compared dispositions are included in the same distinct-group ledger.                                                                                     │ ┃
+┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSED TARGET MEMORIES · 0                                                                                                                                                     ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Compare report                                                                                                                                         ^│
+│  SCOPED         The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         │
+│  SCOPED         The different end time is expressly limited to the construction period.                                                                                          │
+│  SCOPED         Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                     │
+│  SCOPED         The credential restriction is tied to the changed construction access period.                                                                                    │
+│  SCOPED         The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                           v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-1/participant/symmetric-replay-result · CURRENT TARGET    Enter to change                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close
