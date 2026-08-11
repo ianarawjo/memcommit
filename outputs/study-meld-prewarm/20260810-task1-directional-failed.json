@@ -1,0 +1,11 @@
+{
+  "basis": {"baseline_memories": 300, "incoming_memories": 75},
+  "error": "Directional meld turn zero changed its Compare relation ledger.",
+  "foreground_artifact_published": false,
+  "kind": "STUDY_MELD_DIRECTIONAL_FAILED_EVIDENCE",
+  "model": "gpt-5.6-sol",
+  "reasoning": "medium",
+  "schema_version": 1,
+  "seconds": 375.21,
+  "status": "LIVE_UNPREPARED"
+}

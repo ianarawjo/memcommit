@@ -250,6 +250,18 @@ provider-free preservation control covered all `100` Source Memories in
 was changed. A directional rule-to-rule merge remains a different, undeclared
 operation.
 
+### Task 1 directional Meld quality gate
+
+The current exact Task 1 directional basis is not prewarmed. Three older
+directional sessions were rejected because their Source or Baseline digest no
+longer matches the frozen `75:300` inputs. A fresh Sol-medium attempt then ran
+for `375.21` seconds but failed the production decoder because turn zero
+changed its imported Compare relation ledger. No session or partial proposal
+was published. This is a semantic-contract failure, not a latency miss that can
+be hidden by caching. Directional Meld therefore remains `LIVE · UNPREPARED`
+until a fresh response preserves the exact relation ledger and passes owner,
+provenance, `EDIT`/`ADD`, and application checks.
+
 ## Relationship to the earlier FIT idea
 
 The surviving repository account of the earlier `fit` notes describes a
