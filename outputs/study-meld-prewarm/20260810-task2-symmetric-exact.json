@@ -1,0 +1,29 @@
+{
+  "apply": {
+    "input_memories": 300,
+    "result_context": "task-2/participant/meld-result",
+    "result_memories": 249,
+    "seconds": 0.469
+  },
+  "basis": {
+    "compare_analysis_uid": "6bbd2ff9-3b5f-4a09-b333-7669224ed5f0",
+    "left": "task-2/advisor1",
+    "left_memories": 150,
+    "right": "task-2/advisor2",
+    "right_memories": 150
+  },
+  "initial": {
+    "issues": 45,
+    "provider_calls": 0,
+    "relations": 98,
+    "required_conflicts": 5,
+    "seconds": 0.524,
+    "state": "AWAITING_REPLY"
+  },
+  "kind": "STUDY_MELD_SYMMETRIC_EXACT_EVIDENCE",
+  "preserve_all": {
+    "provider_calls": 0,
+    "seconds": 0.443
+  },
+  "schema_version": 1
+}
