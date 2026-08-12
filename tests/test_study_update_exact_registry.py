@@ -4,11 +4,15 @@ from datetime import datetime, timezone
 import uuid
 
 import pytest
+from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
+from memcommit.commands import update as update_command
+from memcommit.cli import app
 from memcommit.config import Config
-from memcommit.context import Memory
+from memcommit.context import Context, Memory
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
@@ -21,10 +25,17 @@ from memcommit.study_prewarm.registry import (
 )
 from memcommit.study_prewarm.update import (
     build_update_prewarm_artifact,
+    find_installed_equivalent_update_prewarm,
+    find_installed_projectable_update_prewarm,
     install_declared_update_prewarms,
+    installed_update_prewarm_origin,
     is_installed_update_prewarm,
+    record_equivalent_update_prewarm,
 )
 from memcommit.update import AddOperation, UpdateSession, collect_update_inputs
+
+
+runner = CliRunner()
 
 
 def _profile(baseline_uid: str) -> ProfileEntry:
@@ -176,3 +187,210 @@ def test_update_registry_configuration_mismatch_is_a_clean_skip(
     assert result.installed == 0
     assert result.skipped_configuration == 1
     assert store.load_impact_plan() is None
+
+
+def test_update_empty_source_parent_reuses_exact_plan(
+    isolated_store, tmp_path, monkeypatch
+):
+    store, profile, registry, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    parent = ops.init("task-1/participant")
+    store.create_context(parent)
+    source = load_context_scope(store, parent.name, include_descendants=True)
+    target = load_context_scope(
+        store,
+        "task-1/campus-wiki",
+        include_descendants=True,
+    )
+
+    match = find_installed_equivalent_update_prewarm(
+        store=store,
+        source=source,
+        target=target,
+        granted_source=None,
+        granted_target=None,
+        registry_snapshot=registry,
+    )
+
+    assert match is not None
+    assert match.session.source_name == parent.name
+    assert match.session.operations == _prepared.operations
+    record_equivalent_update_prewarm(
+        store,
+        entry_key=match.entry_key,
+        session=match.session,
+        prepared_source_name=match.prepared_source_name,
+    )
+    assert (
+        installed_update_prewarm_origin(store, match.session)
+        == "EQUIVALENT_SCOPE_PREWARM"
+    )
+
+
+def test_update_empty_source_parent_cli_never_plans_live(
+    isolated_store, tmp_path, monkeypatch
+):
+    store, profile, registry, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    parent = ops.init("task-1/participant")
+    store.create_context(parent)
+    monkeypatch.setattr(
+        update_command,
+        "_plan_update_with_wait",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("transparent Update scope planned live")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "update",
+            "--from",
+            parent.name,
+            "--to",
+            "task-1/campus-wiki",
+            "--source-descendants",
+            "--target-descendants",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert (
+        "EQUIVALENT SCOPE PREWARM · UPDATE PLAN REUSED · provider was not called."
+        in result.output
+    )
+    target = store.load_direct("task-1/campus-wiki")
+    assert "The library entrance moves north on Monday." in {
+        item.content for item in target.iter_items() if isinstance(item, Memory)
+    }
+
+
+@pytest.mark.parametrize(
+    ("source_descendants", "target_descendants"),
+    [(False, False), (False, True), (True, False), (True, True)],
+)
+def test_update_equal_evidence_ignores_locator_scope_flags(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+    source_descendants,
+    target_descendants,
+):
+    store, profile, registry, prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+
+    match = find_installed_projectable_update_prewarm(
+        store=store,
+        source=store.load_direct("task-1/participant/construction-updates"),
+        target=store.load_direct("task-1/campus-wiki"),
+        source_include_descendants=source_descendants,
+        target_include_descendants=target_descendants,
+        granted_source=None,
+        granted_target=None,
+        registry_snapshot=registry,
+    )
+
+    assert match is not None
+    assert match.origin == "EQUIVALENT_SCOPE_PREWARM"
+    assert match.session.operations == prepared.operations
+    assert match.session.source_include_descendants is source_descendants
+    assert match.session.target_include_descendants is target_descendants
+
+
+def test_update_empty_source_subset_projects_to_empty_plan(
+    isolated_store, tmp_path, monkeypatch
+):
+    store, profile, registry, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    empty = ops.init("task-1/participant/empty-selection")
+    store.create_context(empty)
+
+    match = find_installed_projectable_update_prewarm(
+        store=store,
+        source=empty,
+        target=store.load_direct("task-1/campus-wiki"),
+        source_include_descendants=False,
+        target_include_descendants=False,
+        granted_source=None,
+        granted_target=None,
+        registry_snapshot=registry,
+    )
+
+    assert match is not None
+    assert match.origin == "PROJECTED_PREWARM"
+    assert match.session.operations == ()
+
+
+@pytest.mark.parametrize("violation", ["memory", "unrelated", "target"])
+def test_update_scope_equivalence_rejects_nontransparent_requests(
+    isolated_store, tmp_path, monkeypatch, violation
+):
+    store, profile, registry, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    source_name = (
+        "task-1/unrelated-source"
+        if violation == "unrelated"
+        else "task-1/participant"
+    )
+    parent = ops.init(source_name)
+    if violation == "memory":
+        ops.add(parent, "A wrapper-local source claim.")
+    elif violation == "unrelated":
+        exact_source = store.load_direct(
+            "task-1/participant/construction-updates"
+        )
+        source_memory = next(
+            item for item in exact_source.iter_items() if isinstance(item, Memory)
+        )
+        parent.add(Memory(uid=source_memory.uid, content=source_memory.content))
+    store.create_context(parent)
+    source = load_context_scope(store, parent.name, include_descendants=True)
+    target = load_context_scope(
+        store,
+        "task-1/campus-wiki",
+        include_descendants=True,
+    )
+    if violation == "target":
+        target = Context(uid=target.uid, name="task-1/other-target")
+
+    match = find_installed_equivalent_update_prewarm(
+        store=store,
+        source=source,
+        target=target,
+        granted_source=None,
+        granted_target=None,
+        registry_snapshot=registry,
+    )
+
+    assert match is None

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ SCOPED 1/16                                                                                                                                                                      ┃
+┃ The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                                             ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 16                                                                                                                                            ┃
+┃ SOURCE RELATION · R1                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ SCOPED · RESOLVED                                                                                                                                                                ┃
+┃The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · FROM task-3/local/guardrails                                                                                                                                           ┃
+┃   [c971c24d] Include only Memories needed for the current sharing purpose confirmed by the user.                                                                                 ┃
+┃   [75944d44] Exclude details not needed for the current purpose from the sharing candidate.                                                                                      ┃
+┃   [4004ad20] Do not convey the content of an excluded Memory to the recipient.                                                                                                   ┃
+┃   [98c510fb] Select only the smallest Memory unit needed for the current purpose.                                                                                                ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ Should these source Memories remain separately editable, or can they become one independently revisable Memory without losing any supported detail?                              │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Keep separately                                                                                                                                                              │
+│  Preserve each independently useful source Memory as its own target Memory.                                                                                                      │
+│                                                                                                                                                                                  │
+│  2. Combine if lossless                                                                                                                                                          │
+│  Combine these members only if one atomic target Memory retains every supported condition, scope, audience, modality, rate, and exception.                                      v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› SCOPED         The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                             │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                              │
+│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│task-3/participant/rule-child-equivalent-result · CURRENT TARGET    Enter to change                                                                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

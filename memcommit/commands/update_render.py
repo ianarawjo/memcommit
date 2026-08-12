@@ -93,6 +93,7 @@ def review_update_application(
     session: UpdateSession,
     *,
     incorporate: Callable[[UpdateSession, str], UpdateSession],
+    analysis_origin: str | None = None,
 ) -> UpdateSession | None:
     """Return the exact accepted revision, or None when final Apply is closed."""
 
@@ -100,6 +101,19 @@ def review_update_application(
     while True:
         view = replace(
             _view(current, staged=True, applied=False),
+            status=(
+                "STAGED · "
+                + (
+                    "EXACT PREWARM"
+                    if analysis_origin == "EXACT_PREWARM"
+                    else "PROJECTED PREWARM"
+                    if analysis_origin == "PROJECTED_PREWARM"
+                    else "EQUIVALENT SCOPE PREWARM"
+                )
+                + " · PROVIDER NOT CALLED"
+                if analysis_origin is not None
+                else "STAGED"
+            ),
             capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
             accept_enabled=True,
         )
@@ -131,6 +145,9 @@ def review_update_application(
             return current
         if action.kind == "SUBMIT_ALL":
             current = incorporate(current, action.comment)
+            # The revised plan came from a new semantic turn, so the original
+            # provider-free cache origin no longer describes what is visible.
+            analysis_origin = None
             continue
         return None
 

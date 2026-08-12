@@ -1,0 +1,51 @@
+       WHY · Materializes the distinct visitor consequence.                                                                                                                         
+  + 63. [ADD · PRESERVE] Add campus-wiki/facility-updates: Air conditioning is occasionally interrupted for five to ten minutes for facility inspections.                           
+       OWNER · task-1/campus-wiki/facility-updates                                                                                                                                  
+       WHY · Materializes the distinct operational interruption.                                                                                                                    
+  + 64. [ADD · PRESERVE] Add campus-wiki/facility-updates: The construction period runs from June 24 through August 23.                                                             
+       OWNER · task-1/campus-wiki/facility-updates                                                                                                                                  
+       WHY · Materializes the distinct construction dates.                                                                                                                          
+  + 65. [ADD · PRESERVE] Add campus-wiki/facility-updates: During the construction period, the facility guidance agent's response scope is limited to publicly disclosed operational
+ impacts and it cannot verify or infer nonpublic types of work.                                                                                                                     
+       OWNER · task-1/campus-wiki/facility-updates                                                                                                                                  
+       WHY · Preserves the compatible construction-specific evidence boundary.                                                                                                      
+  + 66. [ADD · PRESERVE] Modify campus-wiki/facility-updates: Cleaning and security contract staff may find the designated service entrance during the construction period more burd
+ensome than the familiar lobby shift change and may go to the wrong entrance at the start of a shift.                                                                               
+       OWNER · task-1/campus-wiki/facility-updates                                                                                                                                  
+       WHY · Preserves the temporary staff-routing consequence.                                                                                                                     
+  + 67. [ADD · PRESERVE] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be us
+ed during the construction period.                                                                                                                                                  
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the scoped indoor-route closure.                                                                                                                             
+  + 68. [ADD · PRESERVE] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.               
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the scoped rear-entrance route closure.                                                                                                                      
+  + 69. [ADD · PRESERVE] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.                     
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the temporary parking-to-library route closure.                                                                                                              
+  + 70. [ADD · PRESERVE] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial hea
+t and travel burden when redirected to an outdoor alternative route during the construction period.                                                                                 
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the scoped travel-burden consequence.                                                                                                                        
+  + 71. [ADD · PRESERVE] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to
+ take the accessible route to the left as viewed from the Main Building.                                                                                                            
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the construction-specific directional instruction.                                                                                                           
+  + 72. [ADD · PRESERVE] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–
+Student Centre accessible entrance–Central Library west entrance.                                                                                                                   
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the designated temporary accessible route.                                                                                                                   
+  + 73. [ADD · PRESERVE] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the
+ closed connecting route through the Main Building.                                                                                                                                 
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the temporary official-entrance designation.                                                                                                                 
+  + 74. [ADD · PRESERVE] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass t
+hrough the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.                                                                
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the scoped route-exclusion rule.                                                                                                                             
+  + 75. [ADD · PRESERVE] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion m
+ay reconfirm the distance and slope of the alternative accessible route before accompanying the user.                                                                               
+       OWNER · task-1/campus-wiki/route-changes                                                                                                                                     
+       WHY · Preserves the condition-specific companion check.                                                                                                                      
+                                                                                                                                                                                    
+Apply exactly this proposal: mem meld task-1/participant --left-descendants --into task-1/campus-wiki --right-descendants --accept

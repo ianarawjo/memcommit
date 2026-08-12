@@ -25,6 +25,7 @@ from memcommit.commands.comparison_execution import (
     comparison_wait_view,
     connect_comparison_provider,
     ensure_comparison_analysis,
+    install_prepared_comparison_analysis,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
@@ -94,7 +95,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.profile_config import ProfileConfigError
+from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import (
     ProfileError,
     authority_grant_snapshot_lock,
@@ -109,6 +110,7 @@ from memcommit.store import (
     context_record_digest,
     validate_context_name,
 )
+from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 
 
 # A full 150 + 150 Task 2 Meld must return a complete relation ledger and
@@ -307,7 +309,34 @@ def _ensure_symmetric_comparison(
 ) -> ComparisonAnalysis:
     """Return the exact durable LEFT→RIGHT basis, creating it when needed."""
 
-    return ensure_comparison_analysis(
+    from memcommit.study_prewarm.compare import (
+        EquivalentComparePrewarmMatch,
+        find_declared_equivalent_compare_analysis,
+        find_declared_projected_compare_analysis,
+        record_equivalent_compare_prewarm,
+        record_projected_compare_prewarm,
+    )
+
+    equivalent_match: EquivalentComparePrewarmMatch | None = None
+
+    def equivalent(comparison_input):
+        nonlocal equivalent_match
+        equivalent_match = find_declared_equivalent_compare_analysis(
+            store=store,
+            comparison_input=comparison_input,
+            current_name=current_name,
+            registry_snapshot=load_profile_registry(),
+        )
+        if equivalent_match is None:
+            equivalent_match = find_declared_projected_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=current_name,
+                registry_snapshot=load_profile_registry(),
+            )
+        return equivalent_match.analysis if equivalent_match is not None else None
+
+    execution = ensure_comparison_analysis(
         store=store,
         reference_access=left_access,
         compared_access=right_access,
@@ -320,13 +349,34 @@ def _ensure_symmetric_comparison(
             comparison_input,
             target_name=target_name,
         ),
-    ).analysis
+        equivalent=equivalent,
+    )
+    if (
+        execution.origin == "EQUIVALENT_SCOPE_PREWARM"
+        and equivalent_match is not None
+    ):
+        recorder = (
+            record_projected_compare_prewarm
+            if equivalent_match.origin == "PROJECTED_PREWARM"
+            else record_equivalent_compare_prewarm
+        )
+        recorder(
+            store,
+            entry_key=equivalent_match.entry_key,
+            analysis=execution.analysis,
+            prepared_context_names=equivalent_match.prepared_context_names,
+        )
+    return execution.analysis
 
 
 def _load_directional_comparison(
     *,
+    store: MemoryStore,
+    incoming_access: ContextAccess,
+    baseline_access: ContextAccess,
     incoming: Context,
     baseline: Context,
+    current_name: str | None,
     include_descendants: tuple[bool, bool] = (False, False),
 ) -> ComparisonAnalysis | None:
     """Load an exact ordered basis when present, retaining legacy fallback.
@@ -340,7 +390,7 @@ def _load_directional_comparison(
         analysis = load_comparison_analysis(incoming.uid, baseline.uid)
         if analysis is None:
             artifact = load_granted_comparison_artifact(
-                MemoryStore(create=False),
+                store,
                 incoming.uid,
                 baseline.uid,
             )
@@ -356,7 +406,49 @@ def _load_directional_comparison(
             directional=True,
         ) from error
     if analysis is None:
-        return None
+        comparison_input = ComparisonInput.from_contexts(
+            incoming,
+            baseline,
+            reference_descendants=include_descendants[0],
+            compared_descendants=include_descendants[1],
+        )
+        from memcommit.study_prewarm.compare import (
+            record_equivalent_compare_prewarm,
+            record_projected_compare_prewarm,
+        )
+        from memcommit.study_prewarm.meld_directional import (
+            find_installed_equivalent_directional_comparison,
+        )
+
+        equivalent = find_installed_equivalent_directional_comparison(
+            store=store,
+            comparison_input=comparison_input,
+            registry_snapshot=load_profile_registry(),
+        )
+        if equivalent is None:
+            return None
+        installed = install_prepared_comparison_analysis(
+            store=store,
+            reference_access=incoming_access,
+            compared_access=baseline_access,
+            reference=incoming,
+            compared=baseline,
+            current_name=current_name,
+            include_descendants=include_descendants,
+            analysis=equivalent.analysis,
+        )
+        recorder = (
+            record_projected_compare_prewarm
+            if equivalent.origin == "PROJECTED_PREWARM"
+            else record_equivalent_compare_prewarm
+        )
+        recorder(
+            store,
+            entry_key=equivalent.entry_key,
+            analysis=installed.analysis,
+            prepared_context_names=equivalent.prepared_context_names,
+        )
+        return installed.analysis
     if (
         not analysis.matches(incoming, baseline)
         or analysis.include_descendants != include_descendants
@@ -2357,10 +2449,20 @@ def _run_interactive(
     session: MeldSession,
     provider_factory,
     allow_apply: bool = True,
+    analysis_origin: str | None = None,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
     from memcommit.commands.resolution_workbench_shell import ResolutionDestination
 
+    if analysis_origin is None and session.comparison_seed is not None:
+        from memcommit.study_prewarm.compare import (
+            installed_compare_prewarm_origin,
+        )
+
+        analysis_origin = installed_compare_prewarm_origin(
+            store,
+            session.comparison_seed.analysis,
+        )
     navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
         def validate_destination(name: str) -> None:
@@ -2395,6 +2497,7 @@ def _run_interactive(
             navigation=navigation,
             review_only=not allow_apply,
             destination=destination,
+            analysis_origin=analysis_origin,
         )
         if action is None:
             break
@@ -3248,6 +3351,7 @@ def cmd(
                     project=requested_mode != "DIRECTIONAL",
                 )
             )
+            meld_analysis_origin: str | None = None
             if requested_mode == "DIRECTIONAL":
                 granted_incoming = (
                     freeze_granted_context_binding(left_access)
@@ -3260,8 +3364,30 @@ def cmd(
                     else None
                 )
                 comparison = _load_directional_comparison(
+                    store=store,
+                    incoming_access=(
+                        left_access
+                        if left_access is not None
+                        else resolve_context_access(
+                            store,
+                            left_name,
+                            current_name=current_name,
+                            required_permission="READ",
+                        )
+                    ),
+                    baseline_access=(
+                        right_access
+                        if right_access is not None
+                        else resolve_context_access(
+                            store,
+                            right_name,
+                            current_name=current_name,
+                            required_permission="READ",
+                        )
+                    ),
                     incoming=recursive_comparison_projection(left_ctx),
                     baseline=recursive_comparison_projection(right_ctx),
+                    current_name=current_name,
                     include_descendants=(
                         left_descendants,
                         right_descendants,
@@ -3287,15 +3413,19 @@ def cmd(
                 )
                 session.start_initial_analysis()
                 from memcommit.study_prewarm.meld_directional import (
-                    find_installed_exact_directional_meld_prewarm,
+                    find_installed_directional_meld_prewarm,
                 )
 
-                prepared = find_installed_exact_directional_meld_prewarm(
+                prewarm = find_installed_directional_meld_prewarm(
                     store=store,
                     current=session,
+                    registry_snapshot=load_profile_registry(),
                 )
-                exact_directional_prewarm = prepared is not None
-                if prepared is None:
+                directional_prewarm_origin = (
+                    prewarm.origin if prewarm is not None else None
+                )
+                meld_analysis_origin = directional_prewarm_origin
+                if prewarm is None:
                     session = _assess_and_save(
                         store=store,
                         session=session,
@@ -3303,7 +3433,7 @@ def cmd(
                         expected_session_digest=None,
                     )
                 else:
-                    session = prepared
+                    session = prewarm.session
                     _assert_source_bindings(session, left_ctx, right_ctx)
                     _assert_unapplied_target(session, right_ctx)
                     if session.granted_target is not None:
@@ -3338,6 +3468,14 @@ def cmd(
                         left_descendants,
                         right_descendants,
                     ),
+                )
+                from memcommit.study_prewarm.compare import (
+                    installed_compare_prewarm_origin,
+                )
+
+                meld_analysis_origin = installed_compare_prewarm_origin(
+                    store,
+                    comparison,
                 )
                 session = MeldSession.create_symmetric_from_comparison(
                     comparison,
@@ -3376,9 +3514,18 @@ def cmd(
                     store=store,
                     session=session,
                     provider_factory=connect_codex_chatgpt_provider,
+                    analysis_origin=meld_analysis_origin,
                 )
-            if requested_mode == "DIRECTIONAL" and exact_directional_prewarm:
-                typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
+            if requested_mode == "DIRECTIONAL" and directional_prewarm_origin:
+                label = (
+                    "EXACT PREWARM"
+                    if directional_prewarm_origin == "EXACT_PREWARM"
+                    else "EQUIVALENT SCOPE PREWARM"
+                    if directional_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
+                    else "PROJECTED PREWARM"
+                )
+                phase = "INITIAL ANALYSIS" if len(session.turns) > 1 else "ANALYSIS"
+                typer.echo(f"{phase} · {label} · PROVIDER NOT CALLED")
             typer.echo(render_meld_session(session))
             return
 
@@ -3464,8 +3611,12 @@ def cmd(
                     else None
                 )
                 comparison = _load_directional_comparison(
+                    store=store,
+                    incoming_access=restart_left_access,
+                    baseline_access=restart_right_access,
                     incoming=recursive_comparison_projection(left_ctx),
                     baseline=recursive_comparison_projection(right_ctx),
+                    current_name=current_name,
                     include_descendants=(
                         left_descendants,
                         right_descendants,
@@ -3717,6 +3868,7 @@ def cmd(
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
+        StudyPrewarmRegistryError,
     ) as error:
         typer.secho(f"Meld error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

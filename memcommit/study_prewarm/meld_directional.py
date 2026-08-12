@@ -18,7 +18,7 @@ from memcommit.commands.granted_context import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.comparison import COMPARISON_RULESET_VERSION
+from memcommit.comparison import COMPARISON_RULESET_VERSION, ComparisonInput
 from memcommit.config import Config
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
@@ -34,17 +34,32 @@ from memcommit.meld import (
     MeldFrame,
     MeldAssessment,
     MeldSession,
+    directional_comparison_basis_assessment,
 )
 from memcommit.meld_provider import MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION
 from memcommit.granted_comparison_store import recursive_comparison_projection
-from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.profile_config import (
+    ProfileEntry,
+    ProfileRegistry,
+    load_profile_registry,
+    study_run_identity,
+)
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.compare import INSTALLATIONS_DIRECTORY_NAME
+from memcommit.study_prewarm.compare import (
+    EquivalentComparePrewarmMatch,
+    project_prepared_compare_analysis,
+    rebind_equivalent_compare_analysis,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
     load_registry,
     payload_digest,
+)
+from memcommit.study_prewarm.scope_equivalence import (
+    transparent_context_scope_matches,
+    transparent_scope_evidence_matches,
 )
 
 
@@ -62,6 +77,15 @@ class DirectionalMeldPrewarmInstallResult:
     installed: int
     skipped_configuration: int
     entry_keys: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class DirectionalMeldPrewarmMatch:
+    """A ready Directional assessment and its visible reuse origin."""
+
+    entry_key: str
+    session: MeldSession
+    origin: str
 
 
 def _portable_session(session: MeldSession) -> MeldSession:
@@ -363,12 +387,81 @@ def _semantic_request_matches(prepared: MeldSession, current: MeldSession) -> bo
     )
 
 
+def _meld_frame_evidence(frame: MeldFrame) -> tuple[tuple[object, ...], ...]:
+    return tuple(
+        (
+            memory.uid,
+            memory.position,
+            memory.content_digest,
+            memory.content,
+            memory.owner_context_uid,
+            memory.owner_context_name,
+        )
+        for memory in frame.memories
+    )
+
+
+def _equivalent_semantic_request_matches(
+    prepared: MeldSession,
+    current: MeldSession,
+) -> bool:
+    """Match a Directional request whose INCOMING root is an empty wrapper."""
+
+    if (
+        prepared.mode != "DIRECTIONAL"
+        or current.mode != "DIRECTIONAL"
+        or prepared.schema_version
+        != current.schema_version
+        != MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+        # The baseline frame below proves the complete current target graph.
+        # Its aggregate digest may change across regenerated Study Grant
+        # bindings, as it already may in the exact portable matcher.
+        or prepared.target.context_uid != current.target.context_uid
+        or prepared.target.context_name != current.target.context_name
+        or _semantic_frame_identity(prepared.frames[1])
+        != _semantic_frame_identity(current.frames[1])
+        or prepared.comparison_seed is None
+        or current.comparison_seed is None
+        or not transparent_scope_evidence_matches(
+            prepared_root=prepared.frames[0].context_name,
+            current_root=current.frames[0].context_name,
+            prepared_evidence=_meld_frame_evidence(prepared.frames[0]),
+            current_evidence=_meld_frame_evidence(current.frames[0]),
+        )
+    ):
+        return False
+    rebound_analysis = rebind_equivalent_compare_analysis(
+        prepared.comparison_seed.analysis,
+        ComparisonInput(
+            uid=current.comparison_seed.analysis.uid,
+            created_at=current.comparison_seed.analysis.created_at,
+            ruleset_version=current.comparison_seed.analysis.ruleset_version,
+            frames=current.comparison_seed.analysis.frames,
+            include_descendants=current.comparison_seed.analysis.include_descendants,
+        ),
+        owner_evidence_proven=(True, False),
+    )
+    return bool(
+        rebound_analysis is not None
+        and rebound_analysis.to_dict()
+        == current.comparison_seed.analysis.to_dict()
+    )
+
+
 def _rebind_prepared_session(
-    prepared: MeldSession, *, current: MeldSession
+    prepared: MeldSession,
+    *,
+    current: MeldSession,
+    equivalent_scope: bool = False,
 ) -> MeldSession:
     """Map session-local frame aliases onto the complete current frame."""
 
-    if not _semantic_request_matches(prepared, current):
+    matches = (
+        _equivalent_semantic_request_matches(prepared, current)
+        if equivalent_scope
+        else _semantic_request_matches(prepared, current)
+    )
+    if not matches:
         raise StudyPrewarmRegistryError(
             "Declared Directional Meld prewarm does not match current inputs."
         )
@@ -405,6 +498,129 @@ def _rebind_prepared_session(
         ) from error
 
 
+def _project_prepared_session(
+    prepared: MeldSession,
+    *,
+    current: MeldSession,
+) -> MeldSession | None:
+    """Project one ready action ledger onto the current Compare subset."""
+
+    if (
+        prepared.comparison_seed is None
+        or current.comparison_seed is None
+        or current.current_turn is None
+    ):
+        return None
+    prepared_assessment = prepared.current_assessment
+    if prepared_assessment is None:
+        return None
+    basis = directional_comparison_basis_assessment(
+        current.comparison_seed.analysis,
+        (current.frames[0], current.frames[1]),
+    )
+    frame_uid_map = {
+        prior.uid: replacement.uid
+        for prior, replacement in zip(prepared.frames, current.frames, strict=True)
+    }
+    current_keys = {
+        (frame.uid, memory.uid)
+        for frame in current.frames
+        for memory in frame.memories
+    }
+    current_owner_keys = {
+        (context.uid, context.name)
+        for context in (current.frames[1].contexts or ())
+    }
+    parent_relations = {
+        relation.uid: {
+            (member.frame_uid, member.memory_uid) for member in relation.members
+        }
+        for relation in prepared_assessment.relations
+    }
+    projected_relation_by_parent: dict[str, str] = {}
+    for relation in basis.relations:
+        current_members = {
+            (member.frame_uid, member.memory_uid) for member in relation.members
+        }
+        origins = [
+            relation_uid
+            for relation_uid, members in parent_relations.items()
+            if current_members
+            <= {
+                (frame_uid_map[frame_uid], memory_uid)
+                for frame_uid, memory_uid in members
+            }
+            and current_members
+            & {
+                (frame_uid_map[frame_uid], memory_uid)
+                for frame_uid, memory_uid in members
+            }
+        ]
+        if len(origins) != 1:
+            return None
+        projected_relation_by_parent[origins[0]] = relation.uid
+
+    proposals = []
+    for proposal in prepared_assessment.proposals:
+        source_members = tuple(
+            replace(member, frame_uid=frame_uid_map[member.frame_uid])
+            for member in proposal.source_members
+            if (frame_uid_map[member.frame_uid], member.memory_uid) in current_keys
+        )
+        relation_uids = tuple(
+            projected_relation_by_parent[relation_uid]
+            for relation_uid in proposal.relation_uids
+            if relation_uid in projected_relation_by_parent
+        )
+        if not source_members or len(relation_uids) != len(proposal.relation_uids):
+            continue
+        owner_uid = proposal.owner_context_uid
+        owner_name = proposal.owner_context_name
+        if (owner_uid, owner_name) not in current_owner_keys:
+            if proposal.operation != "ADD" or proposal.disposition != "PRESERVE":
+                continue
+            # Selecting a narrower BASELINE explicitly changes placement. An
+            # exact preservation ADD can therefore be reparented to that
+            # selected root without changing its content or semantic decision.
+            # EDIT and synthesized results still require their original owner.
+            owner_uid = current.frames[1].context_uid
+            owner_name = current.frames[1].context_name
+        proposals.append(
+            replace(
+                proposal,
+                relation_uids=relation_uids,
+                source_members=source_members,
+                owner_context_uid=owner_uid,
+                owner_context_name=owner_name,
+            )
+        )
+    ready = not any(
+        issue.priority == "REQUIRED" for issue in basis.issues
+    ) and not any(relation.status == "UNRESOLVED" for relation in basis.relations)
+    assessment = MeldAssessment(
+        overview=(
+            "Projected from the declared Directional Meld basis over the "
+            "surviving Compare relation ledger. No provider call was made."
+        ),
+        relations=basis.relations,
+        issues=basis.issues,
+        proposals=tuple(proposals),
+        ready_to_apply=ready,
+    )
+    turn = replace(current.current_turn, assessment=assessment)
+    try:
+        return MeldSession.from_dict(
+            replace(
+                current,
+                state="READY_TO_APPLY" if ready else "AWAITING_REPLY",
+                turns=(turn,),
+            ).to_dict()
+        )
+    except MeldError:
+        # Coverage, ownership, and relation validation remain authoritative.
+        return None
+
+
 def _load_complete_context(access, *, registry_snapshot: ProfileRegistry) -> Context:
     reader = (
         GrantedReadStore(access, registry=registry_snapshot)
@@ -416,6 +632,22 @@ def _load_complete_context(access, *, registry_snapshot: ProfileRegistry) -> Con
         access.display_name if access.is_granted else access.context_name,
         include_descendants=True,
     )
+
+
+def _load_named_complete_context(
+    *,
+    store: MemoryStore,
+    name: str,
+    registry_snapshot: ProfileRegistry,
+) -> Context:
+    access = resolve_context_access(
+        store,
+        name,
+        current_name=store.current_context_name(),
+        required_permission="READ",
+        registry=registry_snapshot,
+    )
+    return _load_complete_context(access, registry_snapshot=registry_snapshot)
 
 
 def _current_request(
@@ -535,16 +767,103 @@ def install_declared_directional_meld_prewarms(
     )
 
 
-def find_installed_exact_directional_meld_prewarm(
-    *, store: MemoryStore, current: MeldSession
-) -> MeldSession | None:
-    """Return the exact ready proposal, or ``None`` so Meld runs live."""
+def find_installed_equivalent_directional_comparison(
+    *,
+    store: MemoryStore,
+    comparison_input: ComparisonInput,
+    registry_snapshot: ProfileRegistry | None = None,
+) -> EquivalentComparePrewarmMatch | None:
+    """Reuse the installed Directional artifact's Compare seed after re-rooting."""
 
     registry = load_registry(store.store_dir)
     if registry is None:
         return None
+    profile_registry = registry_snapshot or load_profile_registry()
     configured = _configured_semantic_identity()
-    matches: list[MeldSession] = []
+    matches: list[EquivalentComparePrewarmMatch] = []
+    for entry in registry.entries:
+        if not entry.enabled or entry.operation != "MELD_DIRECTIONAL":
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        prepared, description = _validate_artifact(artifact, entry_key=entry.key)
+        if (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        ) != configured:
+            continue
+        try:
+            _validate_description(store, description)
+            canonical = _current_request(
+                store=store,
+                registry_snapshot=profile_registry,
+                prepared=prepared,
+            )
+            if not _receipt_matches(store, entry_key=entry.key, session=canonical):
+                continue
+            assert prepared.comparison_seed is not None
+            old_analysis = prepared.comparison_seed.analysis
+            owner_evidence = (False, False)
+            for index in range(2):
+                old_scope = _load_named_complete_context(
+                    store=store,
+                    name=old_analysis.frames[index].context_name,
+                    registry_snapshot=profile_registry,
+                )
+                new_scope = _load_named_complete_context(
+                    store=store,
+                    name=comparison_input.frames[index].context_name,
+                    registry_snapshot=profile_registry,
+                )
+                owner_evidence = (
+                    *owner_evidence[:index],
+                    transparent_context_scope_matches(old_scope, new_scope),
+                    *owner_evidence[index + 1 :],
+                )
+            rebound = rebind_equivalent_compare_analysis(
+                old_analysis,
+                comparison_input,
+                owner_evidence_proven=owner_evidence,
+            )
+            origin = "EQUIVALENT_SCOPE_PREWARM"
+            if rebound is None:
+                rebound = project_prepared_compare_analysis(
+                    old_analysis,
+                    comparison_input,
+                    required_orientation=(0, 1),
+                )
+                origin = "PROJECTED_PREWARM"
+        except (OSError, StudyPrewarmRegistryError, ValueError):
+            continue
+        if rebound is not None:
+            matches.append(
+                EquivalentComparePrewarmMatch(
+                    entry_key=entry.key,
+                    analysis=rebound,
+                    prepared_context_names=(
+                        old_analysis.frames[0].context_name,
+                        old_analysis.frames[1].context_name,
+                    ),
+                    origin=origin,
+                )
+            )
+    return matches[0] if len(matches) == 1 else None
+
+
+def find_installed_directional_meld_prewarm(
+    *,
+    store: MemoryStore,
+    current: MeldSession,
+    registry_snapshot: ProfileRegistry | None = None,
+) -> DirectionalMeldPrewarmMatch | None:
+    """Return one exact or transparently re-rooted ready proposal."""
+
+    registry = load_registry(store.store_dir)
+    if registry is None:
+        return None
+    profile_registry = registry_snapshot or load_profile_registry()
+    configured = _configured_semantic_identity()
+    matches: list[DirectionalMeldPrewarmMatch] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "MELD_DIRECTIONAL":
             continue
@@ -562,12 +881,65 @@ def find_installed_exact_directional_meld_prewarm(
             # A post-setup task edit is an ordinary exact miss; live Meld
             # remains available for the complete changed frame.
             continue
-        if not _receipt_matches(store, entry_key=entry.key, session=current):
-            continue
-        if not _semantic_request_matches(prepared, current):
-            continue
         try:
-            matches.append(_rebind_prepared_session(prepared, current=current))
+            canonical = _current_request(
+                store=store,
+                registry_snapshot=profile_registry,
+                prepared=prepared,
+            )
+        except StudyPrewarmRegistryError:
+            # Drift in the installed exact frame invalidates both exact and
+            # equivalent reuse. The complete changed request remains live.
+            continue
+        if not _receipt_matches(store, entry_key=entry.key, session=canonical):
+            continue
+        exact = _semantic_request_matches(prepared, current)
+        equivalent = False
+        if not exact:
+            try:
+                old_scope = _load_named_complete_context(
+                    store=store,
+                    name=prepared.frames[0].context_name,
+                    registry_snapshot=profile_registry,
+                )
+                new_scope = _load_named_complete_context(
+                    store=store,
+                    name=current.frames[0].context_name,
+                    registry_snapshot=profile_registry,
+                )
+                equivalent = transparent_context_scope_matches(
+                    old_scope,
+                    new_scope,
+                ) and _equivalent_semantic_request_matches(prepared, current)
+            except (OSError, StudyPrewarmRegistryError, ValueError):
+                equivalent = False
+        projected = None
+        if not exact and not equivalent:
+            projected = _project_prepared_session(prepared, current=current)
+            if projected is None:
+                continue
+        try:
+            matches.append(
+                DirectionalMeldPrewarmMatch(
+                    entry_key=entry.key,
+                    session=(
+                        projected
+                        if projected is not None
+                        else _rebind_prepared_session(
+                            prepared,
+                            current=current,
+                            equivalent_scope=equivalent,
+                        )
+                    ),
+                    origin=(
+                        "EXACT_PREWARM"
+                        if exact
+                        else "EQUIVALENT_SCOPE_PREWARM"
+                        if equivalent
+                        else "PROJECTED_PREWARM"
+                    ),
+                )
+            )
         except MeldError as error:
             raise StudyPrewarmRegistryError(
                 "Directional Meld prewarm could not be rebound."
@@ -577,3 +949,16 @@ def find_installed_exact_directional_meld_prewarm(
             "Multiple Directional Meld prewarms match the same frozen request."
         )
     return matches[0] if matches else None
+
+
+def find_installed_exact_directional_meld_prewarm(
+    *, store: MemoryStore, current: MeldSession
+) -> MeldSession | None:
+    """Compatibility facade retaining the historical exact-only contract."""
+
+    match = find_installed_directional_meld_prewarm(store=store, current=current)
+    return (
+        match.session
+        if match is not None and match.origin == "EXACT_PREWARM"
+        else None
+    )

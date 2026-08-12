@@ -1,0 +1,51 @@
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+›  8. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+›  9. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 10. [HELPFUL] Scoped · The reference requires exact recipient verification before approval, while the c…                                                                          
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 11. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 12. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 13. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 14. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 15. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+› 16. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.                                                                                    
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…                                                                              
+      ↳ 1. Keep separately                                                                                                                                                          
+      ↳ 2. Combine if lossless                                                                                                                                                      
+                                                                                                                                                                                    
+PROPOSED TARGET MEMORIES                                                                                                                                                            
+  (none until required issues are grounded)                                                                                                                                         
+                                                                                                                                                                                    
+Resolve one: mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --
+issue N --comment TEXT                                                                                                                                                              
+Guide all:  mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --c
+omment TEXT                                                                                                                                                                         
+Preserve:   mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --p
+reserve-all                                                                                                                                                                         
+Defer:      mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --d
+efer-all

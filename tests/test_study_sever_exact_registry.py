@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timezone
 import uuid
 
@@ -18,7 +19,7 @@ from memcommit.profile_config import (
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.sever import SeverCandidate, SeverSession
+from memcommit.sever import SeverCandidate, SeverSession, sever_frame_digest
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import (
@@ -32,6 +33,7 @@ from memcommit.study_prewarm.sever import (
     SOURCE_NAME,
     build_sever_prewarm_artifact,
     find_installed_exact_sever_prewarm,
+    find_installed_projectable_sever_prewarm,
     install_declared_sever_prewarms,
 )
 
@@ -330,3 +332,56 @@ def test_sever_runtime_addition_and_output_change_are_cache_misses(
         )
         is None
     )
+
+
+def _subset_binding(binding, memories):
+    memories = tuple(memories)
+    return replace(
+        binding,
+        memories=memories,
+        frame_digest=sever_frame_digest(
+            root_uid=binding.root_uid,
+            root_name=binding.root_name,
+            contexts=binding.contexts,
+            memories=memories,
+            include_descendants=binding.include_descendants,
+        ),
+    )
+
+
+def test_sever_projects_only_when_every_selected_decision_keeps_its_support(
+    isolated_store, tmp_path, monkeypatch
+):
+    store, profile, registry, _prepared, source, criteria = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_sever_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    secret, preference = source.memories
+    empty_criteria = _subset_binding(criteria, ())
+
+    supported = find_installed_projectable_sever_prewarm(
+        store=store,
+        source=_subset_binding(source, (preference,)),
+        criteria=empty_criteria,
+        output_name=OUTPUT_NAME,
+    )
+    unsupported = find_installed_projectable_sever_prewarm(
+        store=store,
+        source=_subset_binding(source, (secret,)),
+        criteria=empty_criteria,
+        output_name=OUTPUT_NAME,
+    )
+
+    assert supported is not None
+    assert supported.origin == "PROJECTED_PREWARM"
+    assert [item.source_memory_uid for item in supported.session.candidates] == [
+        preference.uid
+    ]
+    assert unsupported is not None
+    assert unsupported.origin == "PROJECTED_PREWARM"
+    assert unsupported.session.candidates[0].recommendation == "KEEP_AS_WRITTEN"
+    assert unsupported.session.candidates[0].criterion_memory_uids == ()

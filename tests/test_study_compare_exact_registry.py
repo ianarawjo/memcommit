@@ -8,6 +8,7 @@ import pytest
 import memcommit.config as config_module
 import memcommit.ops as ops
 import memcommit.store as store_module
+from memcommit.commands import meld as meld_command
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.comparison_execution import ensure_comparison_analysis
 from memcommit.commands.granted_context import ContextAccess
@@ -21,6 +22,8 @@ from memcommit.comparison import (
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.config import Config
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.loading import load_context_scope
+from memcommit.granted_comparison_store import recursive_comparison_projection
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
@@ -29,9 +32,12 @@ from memcommit.profile_config import (
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.compare import (
     build_compare_prewarm_artifact,
+    find_declared_equivalent_compare_analysis,
     install_declared_compare_prewarms,
+    installed_compare_prewarm_origin,
     is_installed_compare_prewarm,
     project_declared_compare_analysis,
+    record_equivalent_compare_prewarm,
 )
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
@@ -537,3 +543,220 @@ def test_refresh_bypasses_available_projection_and_runs_live_once(
     assert execution.origin == "LIVE"
     assert execution.durable is True
     assert load_comparison_analysis(left.uid, right.uid) is not None
+
+
+def test_empty_ancestor_scope_reuses_exact_task1_ledger_durably(
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, reference, compared, prepared = _fixture(
+        tmp_path,
+        monkeypatch,
+        task="task-1",
+    )
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    parent = ops.init("task-1/participant")
+    store.create_context(parent)
+    current_reference = recursive_comparison_projection(
+        load_context_scope(store, parent.name, include_descendants=True)
+    )
+    current_compared = recursive_comparison_projection(
+        load_context_scope(store, compared.name, include_descendants=True)
+    )
+    matched = None
+
+    def equivalent(comparison_input):
+        nonlocal matched
+        matched = find_declared_equivalent_compare_analysis(
+            store=store,
+            comparison_input=comparison_input,
+            current_name=parent.name,
+            registry_snapshot=registry,
+        )
+        return matched.analysis if matched is not None else None
+
+    execution = ensure_comparison_analysis(
+        store=store,
+        reference_access=_access(store, parent),
+        compared_access=_access(store, compared),
+        reference=current_reference,
+        compared=current_compared,
+        current_name=parent.name,
+        include_descendants=(True, True),
+        require_durable=True,
+        analyze=lambda _input: (_ for _ in ()).throw(
+            AssertionError("transparent Task 1 scope called the analyzer")
+        ),
+        equivalent=equivalent,
+    )
+
+    assert matched is not None
+    assert execution.origin == "EQUIVALENT_SCOPE_PREWARM"
+    assert execution.durable is True
+    assert execution.analysis.uid != prepared.uid
+    assert {
+        member.memory_uid
+        for relation in execution.analysis.relations
+        for member in relation.members
+    } == {
+        memory.uid
+        for frame in execution.analysis.frames
+        for memory in frame.memories
+    }
+    record_equivalent_compare_prewarm(
+        store,
+        entry_key=matched.entry_key,
+        analysis=execution.analysis,
+        prepared_context_names=matched.prepared_context_names,
+    )
+    assert (
+        installed_compare_prewarm_origin(store, execution.analysis)
+        == "EQUIVALENT_SCOPE_PREWARM"
+    )
+
+
+@pytest.mark.parametrize("violation", ["memory", "unrelated"])
+def test_equivalent_compare_rejects_nontransparent_task1_scopes(
+    tmp_path,
+    monkeypatch,
+    violation,
+):
+    store, profile, registry, reference, compared, _prepared = _fixture(
+        tmp_path,
+        monkeypatch,
+        task="task-1",
+    )
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    parent_name = (
+        "task-1/unrelated" if violation == "unrelated" else "task-1/participant"
+    )
+    parent = ops.init(parent_name)
+    if violation == "memory":
+        ops.add(parent, "A wrapper-local claim changes provider evidence.")
+    elif violation == "unrelated":
+        source_memory = next(
+            item for item in reference.iter_items() if isinstance(item, Memory)
+        )
+        parent.add(
+            Memory(uid=source_memory.uid, content=source_memory.content)
+        )
+    store.create_context(parent)
+    current_reference = recursive_comparison_projection(
+        load_context_scope(store, parent.name, include_descendants=True)
+    )
+    comparison_input = ComparisonInput.from_contexts(
+        current_reference,
+        recursive_comparison_projection(
+            load_context_scope(store, compared.name, include_descendants=True)
+        ),
+        reference_descendants=True,
+        compared_descendants=True,
+    )
+
+    match = find_declared_equivalent_compare_analysis(
+        store=store,
+        comparison_input=comparison_input,
+        current_name=parent.name,
+        registry_snapshot=registry,
+    )
+
+    assert match is None
+
+
+def test_task3_child_scope_supplies_durable_symmetric_meld_basis(
+    tmp_path,
+    monkeypatch,
+):
+    root = tmp_path / "run"
+    monkeypatch.setattr(store_module, "STORE_DIR", root)
+    monkeypatch.setattr(config_module, "CONFIG_FILE", tmp_path / "config.json")
+    Config().update(
+        {
+            "semantic_provider": "codex_chatgpt",
+            "codex_chatgpt_model": "gpt-5.6-sol",
+            "codex_chatgpt_reasoning_effort": "medium",
+        }
+    )
+    store = MemoryStore(root=root)
+    description = ops.init("task-3/description")
+    parent = ops.init(
+        "task-3/remote/government/healthcare-agent/info-request/"
+        "transmission-guidance"
+    )
+    child = ops.init(parent.name + "/public-guidance")
+    sibling = ops.init(parent.name + "/private-guidance")
+    peer = ops.init("task-3/remote/private/response")
+    ops.add(description, "Compare public transmission guidance with a response.")
+    ops.add(child, "Public guidance permits this transmission after verification.")
+    ops.add(sibling, "Private guidance requires an additional approval.")
+    ops.add(peer, "The response records the verified transmission.")
+    for context in (description, parent, child, sibling, peer):
+        store.create_context(context)
+    prepared_left = recursive_comparison_projection(
+        load_context_scope(store, parent.name, include_descendants=True)
+    )
+    prepared = _analysis(prepared_left, peer)
+    baseline_uid = str(uuid.uuid4())
+    profile = _profile(baseline_uid)
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=profile.uid,
+        profiles=(profile,),
+    )
+    key, artifact = build_compare_prewarm_artifact(
+        task="task-3",
+        task_description=description,
+        analysis=prepared,
+        provider="codex_chatgpt",
+        model="gpt-5.6-sol",
+        reasoning="medium",
+        offline_provider_seconds=91.0,
+    )
+    publish_artifact(
+        root,
+        baseline_profile_uid=baseline_uid,
+        operation="COMPARE",
+        task="task-3",
+        key=key,
+        artifact=artifact,
+    )
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "load_profile_registry",
+        lambda: registry,
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "_analyze_symmetric_comparison_basis",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("Task 3 child Symmetric Meld called the analyzer")
+        ),
+    )
+
+    analysis = meld_command._ensure_symmetric_comparison(
+        store=store,
+        left_access=_access(store, child),
+        right_access=_access(store, peer),
+        left=child,
+        right=peer,
+        target_name="task-3/result",
+        current_name=child.name,
+        include_descendants=(True, True),
+    )
+
+    assert [frame.context_name for frame in analysis.frames] == [child.name, peer.name]
+    assert load_comparison_analysis(child.uid, peer.uid) is not None
+    assert installed_compare_prewarm_origin(store, analysis) == "PROJECTED_PREWARM"

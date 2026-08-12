@@ -1,0 +1,251 @@
+52 180
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃ ╭─ MEM COMPARE · SYMMETRIC PEERS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ CONTEXT LOCATIONS                                                                                                                                                            │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │   SOURCE A · task-3/local/guardrails                                                                                                                                         │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │   SOURCE B · task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance                                                                    │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │   RESULT · task-3/participant/rule-child-equivalent-result                                                                                                                   │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ ANALYSIS ORIGIN · EQUIVALENT SCOPE PREWARM · PROVIDER NOT CALLED                                                                                                             │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Reference: task-3/local/guardrails (layout only; no authority)                                                                                                               │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Compared: task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance                                                                       │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED + ALL DESCENDANTS                                                                                           │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Analysis: ef88ceb1 · EQUIVALENT SCOPE PREWARM                                                                                                                                │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ METRICS · MEMORIES 75 + 25 · RELATIONS 57 · POTENTIAL CONFLICTS 0                                                                                                            │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ EQUIVALENT 0 · COMPATIBLE 14 · SCOPED 2 · CONFLICT 0 · DISTINCT 41 · UNCLEAR 0                                                                                               │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╭─ WHAT MEM UNDERSTOOD ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Prepared comparison of the declared Task 3 rule frames.                                                                                                                      │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╭─ WHAT BOTH CONTAIN · 14 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ 14 shared or compatible relation groups.                                                                                                                                     │[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╭─ WHAT DIFFERS · 2 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ 2 scoped, conflicting, or unclear relation groups.                                                                                                                           │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╭─ ONLY IN task-3/local/guardrails · 34 · not automatically a deficiency ──────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Distinct local guardrails remain separate.                                                                                                                                   │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╭─ ONLY IN task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance · 7 · not automatically a deficiency ──────────────────────────────────╮[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m │ Distinct transmission rules remain separate.                                                                                                                                 │[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;170;170;170m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247;1m PROPOSED TARGET MEMORIES · 0[0m                                                                                                                                                    [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Compare report[0m                                                                                                                                         [0;1m^[179C[0m│[0m
+[0m│  SCOPED         The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  COMPATIBLE     The prepared graph recorded this relation without additional prose.                                                                                             [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│task-3/participant/rule-child-equivalent-result · CURRENT TARGET    Enter to change                                                                                               [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close[176D[51A[0m[?25l[0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m SCOPED 1/16                                                                                                                                                                     [0m
+[C[0;38;2;255;255;255;1m The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.[0m                                            [0m
+[C[0m [HELPFUL] OPEN                                                                                                                                                                  [0m
+[C[0m REVIEW SET · REQUIRED 0 · OPTIONAL 16                                                                                                                                           [0m
+[C[0;38;2;255;255;255;1m SOURCE RELATION · R1[0m                                                                                                                                                            [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0;38;2;139;213;255;1m CLASSIFICATION[0m                                                                                                                                                                  [0m
+[C[0;38;2;139;213;255m SCOPED · RESOLVED[0m                                                                                                                                                               [0m
+[C[0;38;2;139;213;255mThe compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.[0m                                             [0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0;38;2;255;255;255;1m SOURCE CLAIMS[0m                                                                                                                                                                   [0;48;2;68;68;68m [0m
+[C[0m                                                                                                                                                                                 [0;48;2;170;170;170m [0m
+[C[0;38;2;255;255;255;1m CLAIM 1 · FROM task-3/local/guardrails[138C[0;48;2;170;170;170m [0m
+[C[0m   [c971c24d] [0;38;2;202;211;245mInclude only Memories needed for the current sharing purpose confirmed by the user.[0m                                                                                [0;48;2;170;170;170m [0m
+[C[0m   [75944d44] [0;38;2;202;211;245mExclude details not needed for the current purpose from the sharing candidate.[0m                                                                                     [0;48;2;170;170;170m [0m
+[C[0m   [4004ad20] [0;38;2;202;211;245mDo not convey the content of an excluded Memory to the recipient.[0m                                                                                                  [0;48;2;170;170;170m [0m
+[C[0m   [98c510fb] [0;38;2;202;211;245mSelect only the smallest Memory unit needed for the current purpose.[95C[0;48;2;170;170;170m [0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;255;255;255;1m RESOLUTION QUESTION[0m                                                                                                                                                             [0;1m^[179C[0m│[0m
+[0m│[0;38;2;244;245;247m Should these source Memories remain separately editable, or can they become one independently revisable Memory without losing any supported detail?[0m                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255;1m PROPOSED RESOLUTIONS[0m                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ ↑/↓ move through choices and Response · Enter select                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  1. Keep separately                                                                                                                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  Preserve each independently useful source Memory as its own target Memory.                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  2. Combine if lossless                                                                                                                                                         [0;48;2;170;170;170m [179C[0m│[0m
+[0m│  Combine these members only if one atomic target Memory retains every supported condition, scope, audience, modality, rate, and exception.                                      [0;1mv[179C[0m│[0m
+[0m│[0;38;2;244;245;247m┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│›                                                                                                                                                                              [0;1m^[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;38;2;244;245;247;48;2;68;68;68m [0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m│                                                                                                                                                                               [0;1mv[0;38;2;244;245;247m│[179C[0m│[0m
+[0m│[0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+[C[0m  REPORT         Complete Compare report[0m
+[C[0;1m› SCOPED         The compared claim applies specifically to healthcare-support review, while the reference states general purpose-based minimization.[0m
+
+
+
+
+
+
+
+
+
+
+
+[5C[0msection/item  Tab switch[2C←/→ option  Enter choo[Ce/other  C send/comment  Esc/Backspace report G comment all  P[Cpreserv[C all  D[Cdefer  A[Crevi[Cw & apply  H[CHelp  Q[Cclose[0m[K[45A[172D[0m[6A[J[0m[?7h[?1049l[?2004lMEM MELD · SYMMETRIC
+task-3/local/guardrails + task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance → task-3/participant/rule-child-equivalent-result
+SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED + ALL DESCENDANTS
+Compare: ef88ceb1 · IMPORTED
+State: AWAITING_REPLY · Round: 1
+
+WHAT MEM UNDERSTOOD
+Prepared comparison of the declared Task 3 rule frames.
+
+RELATIONS · 57  ISSUES · 16  RESULTS · 0
+
+ACCOUNTING
+  Source coverage: 0/100
+  Relation coverage: 0/57
+  Final Memories: 0 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 0 · HELPFUL 16
+  Cross-relation results: 0
+  ✓ R1. SCOPED · The compared claim applies specifically to healthcare-support review, while the reference…
+  ✓ R2. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R3. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R4. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R5. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R6. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R7. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R8. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R9. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R10. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R11. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R12. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R13. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R14. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R15. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R16. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R17. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R18. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R19. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R20. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R21. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R22. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R23. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R24. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R25. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R26. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R27. SCOPED · The reference requires exact recipient verification before approval, while the compared c…
+  ✓ R28. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R29. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R30. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R31. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R32. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R33. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R34. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R35. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R36. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R37. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R38. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R39. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R40. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R41. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R42. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R43. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R44. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R45. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R46. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R47. COMPATIBLE · The prepared graph recorded this relation without additional prose.
+  ✓ R48. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R49. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R50. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R51. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R52. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R53. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R54. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R55. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R56. DISTINCT · The prepared graph recorded this relation without additional prose.
+  ✓ R57. DISTINCT · The prepared graph recorded this relation without additional prose.
+
+ISSUES
+›  1. [HELPFUL] Scoped · The compared claim applies specifically to healthcare-support review, while the…
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  2. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  3. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  4. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  5. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  6. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  7. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  8. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+›  9. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 10. [HELPFUL] Scoped · The reference requires exact recipient verification before approval, while the c…
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 11. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 12. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 13. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 14. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 15. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+› 16. [HELPFUL] Compatible · The prepared graph recorded this relation without additional prose.
+      WHY · Keeping them separate preserves independent revision; combining them reduces repetition o…
+      ↳ 1. Keep separately
+      ↳ 2. Combine if lossless
+
+PROPOSED TARGET MEMORIES
+  (none until required issues are grounded)
+
+Resolve one: mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --issue N --comment TEXT
+Guide all:  mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --comment TEXT
+Preserve:   mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --preserve-all
+Defer:      mem meld task-3/local/guardrails --left-descendants task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance --right-descendants --defer-all

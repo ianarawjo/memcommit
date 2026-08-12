@@ -43,6 +43,7 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore
+from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.update import (
     GrantedUpdateTarget,
     UpdateError,
@@ -542,6 +543,17 @@ def cmd(
         cached = None
 
     try:
+        update_prewarm_match = None
+        update_analysis_origin: str | None = None
+        if session is not None:
+            from memcommit.study_prewarm.update import (
+                installed_update_prewarm_origin,
+            )
+
+            update_analysis_origin = installed_update_prewarm_origin(
+                store,
+                session,
+            )
         if session is None:
             if (
                 cached is not None
@@ -556,21 +568,58 @@ def cmd(
                 )
             ):
                 session = cached.with_status("staged")
-                from memcommit.study_prewarm.update import is_installed_update_prewarm
+                from memcommit.study_prewarm.update import (
+                    installed_update_prewarm_origin,
+                )
 
-                if is_installed_update_prewarm(store, cached):
+                origin = installed_update_prewarm_origin(store, cached)
+                if origin is not None:
+                    update_analysis_origin = origin
+                    label = (
+                        "EXACT PREWARM"
+                        if origin == "EXACT_PREWARM"
+                        else "PROJECTED PREWARM"
+                        if origin == "PROJECTED_PREWARM"
+                        else "EQUIVALENT SCOPE PREWARM"
+                    )
                     typer.echo(
-                        "EXACT PREWARM · UPDATE PLAN REUSED · provider was not called."
+                        f"{label} · UPDATE PLAN REUSED · provider was not called."
                     )
             else:
-                session = _plan_update_with_wait(
-                    source,
-                    target,
-                    source_descendants=source_descendants,
-                    target_descendants=target_descendants,
+                from memcommit.study_prewarm.update import (
+                    find_installed_projectable_update_prewarm,
+                )
+
+                update_prewarm_match = find_installed_projectable_update_prewarm(
+                    store=store,
+                    source=source,
+                    target=target,
+                    source_include_descendants=source_descendants,
+                    target_include_descendants=target_descendants,
                     granted_source=granted_source,
                     granted_target=granted_target,
                 )
+                if update_prewarm_match is not None:
+                    session = update_prewarm_match.session.with_status("staged")
+                    update_analysis_origin = update_prewarm_match.origin
+                    label = (
+                        "EQUIVALENT SCOPE PREWARM"
+                        if update_prewarm_match.origin
+                        == "EQUIVALENT_SCOPE_PREWARM"
+                        else "PROJECTED PREWARM"
+                    )
+                    typer.echo(
+                        f"{label} · UPDATE PLAN REUSED · provider was not called."
+                    )
+                else:
+                    session = _plan_update_with_wait(
+                        source,
+                        target,
+                        source_descendants=source_descendants,
+                        target_descendants=target_descendants,
+                        granted_source=granted_source,
+                        granted_target=granted_target,
+                    )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
             # another between planning and local application.
@@ -578,6 +627,26 @@ def cmd(
                 session,
                 expected_current=existing,
             )
+            if update_prewarm_match is not None:
+                from memcommit.study_prewarm.update import (
+                    record_equivalent_update_prewarm,
+                    record_projected_update_prewarm,
+                )
+
+                recorder = (
+                    record_equivalent_update_prewarm
+                    if update_prewarm_match.origin
+                    == "EQUIVALENT_SCOPE_PREWARM"
+                    else record_projected_update_prewarm
+                )
+                recorder(
+                    store,
+                    entry_key=update_prewarm_match.entry_key,
+                    session=session,
+                    prepared_source_name=(
+                        update_prewarm_match.prepared_source_name
+                    ),
+                )
         if _interactive_terminal():
 
             def incorporate_comments(
@@ -595,10 +664,17 @@ def cmd(
                 store.save_staged_update(revised, expected_current=current)
                 return revised
 
-            reviewed = review_update_application(
-                session,
-                incorporate=incorporate_comments,
-            )
+            if update_analysis_origin is None:
+                reviewed = review_update_application(
+                    session,
+                    incorporate=incorporate_comments,
+                )
+            else:
+                reviewed = review_update_application(
+                    session,
+                    incorporate=incorporate_comments,
+                    analysis_origin=update_analysis_origin,
+                )
             if reviewed is None:
                 current = store.load_staged_update() or session
                 render_plan(current, staged=True)
@@ -617,6 +693,7 @@ def cmd(
         ProfileError,
         QueryProviderError,
         RuntimeError,
+        StudyPrewarmRegistryError,
         UpdateError,
         ValueError,
     ) as error:

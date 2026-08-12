@@ -13,7 +13,7 @@ from memcommit.commands.comparison_execution import (
     install_prepared_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
@@ -27,6 +27,7 @@ from memcommit.comparison import (
 from memcommit.comparison_provider import COMPARISON_PROVIDER_CONTRACT_VERSION
 from memcommit.config import Config
 from memcommit.context import Context
+from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -39,6 +40,10 @@ from memcommit.study_prewarm.registry import (
     payload_digest,
     load_artifact,
     load_registry,
+)
+from memcommit.study_prewarm.scope_equivalence import (
+    transparent_context_scope_matches,
+    transparent_scope_evidence_matches,
 )
 
 if TYPE_CHECKING:
@@ -58,8 +63,22 @@ class ComparePrewarmInstallResult:
     analysis_uids: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class EquivalentComparePrewarmMatch:
+    """One exact semantic ledger rebound to a transparent Context root."""
+
+    entry_key: str
+    analysis: ComparisonAnalysis
+    prepared_context_names: tuple[str, str]
+    origin: str = "EQUIVALENT_SCOPE_PREWARM"
+
+
 def _same_or_descendant_name(name: str, parent: str) -> bool:
-    return name == parent or name.startswith(parent + "/")
+    # The selected locator may sit above or below the prepared root.  The
+    # Memory ledger below, rather than depth, decides whether it is reusable.
+    return name == parent or name.startswith(parent + "/") or parent.startswith(
+        name + "/"
+    )
 
 
 def _requested_frame_is_parent_subset(requested, parent) -> bool:
@@ -106,6 +125,184 @@ def _projection_orientation(
         ):
             matches.append(orientation)
     return matches[0] if len(matches) == 1 else None
+
+
+def _comparison_frame_evidence(frame) -> tuple[tuple[object, ...], ...]:
+    """Return every provider-visible Memory field except the frame root."""
+
+    return tuple(
+        (
+            memory.uid,
+            memory.position,
+            memory.content_digest,
+            memory.content,
+        )
+        for memory in frame.memories
+    )
+
+
+def _equivalent_scope_frames(
+    prepared: ComparisonAnalysis,
+    current: ComparisonInput | ComparisonAnalysis,
+    *,
+    owner_evidence_proven: tuple[bool, bool] = (False, False),
+) -> bool:
+    """Match the same ordered two-frame evidence under a lexical re-root."""
+
+    aliased = prepared.include_descendants != current.include_descendants
+    for index, (old, new) in enumerate(
+        zip(prepared.frames, current.frames, strict=True)
+    ):
+        old_evidence = _comparison_frame_evidence(old)
+        new_evidence = _comparison_frame_evidence(new)
+        if (
+            old.context_uid == new.context_uid
+            and old.context_name == new.context_name
+            and old.context_digest == new.context_digest
+            and old_evidence == new_evidence
+        ):
+            continue
+        # Recursive Compare projection decorates descendant content with its
+        # owner name when the selected root is an ancestor. The live loaded
+        # scopes prove raw content and owner equality before that encoding may
+        # be ignored; durable Memory identity and order still remain exact.
+        projected_evidence_matches = owner_evidence_proven[index] and (
+            tuple((row[0], row[1]) for row in old_evidence)
+            == tuple((row[0], row[1]) for row in new_evidence)
+        )
+        if not (
+            transparent_scope_evidence_matches(
+                prepared_root=old.context_name,
+                current_root=new.context_name,
+                prepared_evidence=old_evidence,
+                current_evidence=new_evidence,
+            )
+            or (
+                projected_evidence_matches
+                and transparent_scope_evidence_matches(
+                    prepared_root=old.context_name,
+                    current_root=new.context_name,
+                    prepared_evidence=(),
+                    current_evidence=(),
+                )
+            )
+        ):
+            return False
+        aliased = True
+    return aliased
+
+
+def rebind_equivalent_compare_analysis(
+    prepared: ComparisonAnalysis,
+    current: ComparisonInput,
+    *,
+    owner_evidence_proven: tuple[bool, bool] = (False, False),
+) -> ComparisonAnalysis | None:
+    """Rebind an unchanged exhaustive ledger to current frame identities.
+
+    No relation is filtered or reclassified.  This distinguishes transparent
+    scope reuse from the intentionally lossy parent-subset projection below.
+    """
+
+    if not _equivalent_scope_frames(
+        prepared,
+        current,
+        owner_evidence_proven=owner_evidence_proven,
+    ):
+        return None
+    frame_uid_map = {
+        old.uid: new.uid
+        for old, new in zip(prepared.frames, current.frames, strict=True)
+    }
+    relations: list[ComparisonRelation] = []
+    for relation in prepared.relations:
+        value = relation.to_dict()
+        value["members"] = [
+            {
+                "frame_uid": frame_uid_map[member.frame_uid],
+                "memory_uid": member.memory_uid,
+            }
+            for member in relation.members
+        ]
+        relations.append(ComparisonRelation.from_dict(value))
+    if prepared.reports is None:
+        raise StudyPrewarmRegistryError(
+            "Equivalent Compare prewarm is missing current reports."
+        )
+    return ComparisonAnalysis.create(
+        current,
+        overview=prepared.overview,
+        reports=prepared.reports,
+        relations=relations,
+        issues=prepared.issues,
+    )
+
+
+def _load_complete_scope(
+    *,
+    store: MemoryStore,
+    name: str,
+    current_name: str | None,
+    registry_snapshot: ProfileRegistry,
+) -> Context:
+    access = resolve_context_access(
+        store,
+        name,
+        current_name=current_name,
+        required_permission="READ",
+        registry=registry_snapshot,
+    )
+    reader = (
+        GrantedReadStore(access, registry=registry_snapshot)
+        if access.is_granted
+        else access.store
+    )
+    return load_context_scope(
+        reader,
+        access.display_name if access.is_granted else access.context_name,
+        include_descendants=True,
+    )
+
+
+def _owner_evidence_matches(
+    *,
+    store: MemoryStore,
+    prepared: ComparisonAnalysis,
+    current: ComparisonInput,
+    current_name: str | None,
+    registry_snapshot: ProfileRegistry,
+) -> tuple[bool, bool]:
+    matches: list[bool] = []
+    for old, new, descendants in zip(
+        prepared.frames,
+        current.frames,
+        current.include_descendants,
+        strict=True,
+    ):
+        if old.context_name == new.context_name:
+            matches.append(False)
+            continue
+        if not descendants:
+            matches.append(False)
+            continue
+        try:
+            old_scope = _load_complete_scope(
+                store=store,
+                name=old.context_name,
+                current_name=current_name,
+                registry_snapshot=registry_snapshot,
+            )
+            new_scope = _load_complete_scope(
+                store=store,
+                name=new.context_name,
+                current_name=current_name,
+                registry_snapshot=registry_snapshot,
+            )
+        except (OSError, ValueError):
+            matches.append(False)
+            continue
+        matches.append(transparent_context_scope_matches(old_scope, new_scope))
+    return matches[0], matches[1]
 
 
 def _projection_reports(
@@ -266,6 +463,22 @@ def _project_analysis(
         relations=relations,
         issues=projected_issues,
     )
+
+
+def project_prepared_compare_analysis(
+    parent: ComparisonAnalysis,
+    requested: ComparisonInput,
+    *,
+    required_orientation: tuple[int, int] | None = None,
+) -> ComparisonAnalysis | None:
+    """Project a validated basis after an adapter has authorized its origin."""
+
+    orientation = _projection_orientation(requested, parent)
+    if orientation is None or (
+        required_orientation is not None and orientation != required_orientation
+    ):
+        return None
+    return _project_analysis(parent, requested, orientation)
 
 
 def _compare_key_material(
@@ -478,13 +691,100 @@ def _validate_artifact(
     return analysis, description
 
 
-def project_declared_compare_analysis(
+def find_declared_equivalent_compare_analysis(
     *,
     store: MemoryStore,
     comparison_input: ComparisonInput,
     current_name: str | None,
     registry_snapshot: ProfileRegistry,
-) -> ComparisonAnalysis | None:
+) -> EquivalentComparePrewarmMatch | None:
+    """Find one installed exact ledger with only a transparent root change."""
+
+    registry = load_registry(store.store_dir)
+    if registry is None:
+        return None
+    task = _task_root(comparison_input.frames[0].context_name)
+    if (
+        task is None
+        or _task_root(comparison_input.frames[1].context_name) != task
+    ):
+        return None
+    provider, model, reasoning = _configured_semantic_identity()
+    candidates: list[EquivalentComparePrewarmMatch] = []
+    for entry in registry.entries:
+        if (
+            not entry.enabled
+            or entry.operation != "COMPARE"
+            or entry.task != task
+        ):
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        prepared, description = _validate_artifact(
+            artifact,
+            entry_key=entry.key,
+            entry_task=entry.task,
+        )
+        if (
+            artifact.get("provider") != provider
+            or artifact.get("model") != model
+            or artifact.get("reasoning") != reasoning
+            or not is_installed_compare_prewarm(store, prepared)
+        ):
+            continue
+        description_access = resolve_context_access(
+            store,
+            str(description["name"]),
+            current_name=current_name,
+            required_permission="READ",
+            registry=registry_snapshot,
+        )
+        current_description = load_comparison_context(
+            description_access,
+            registry=registry_snapshot,
+        )
+        if (
+            current_description.uid != description["context_uid"]
+            or context_record_digest(current_description)
+            != description["context_digest"]
+        ):
+            continue
+        owner_evidence = _owner_evidence_matches(
+            store=store,
+            prepared=prepared,
+            current=comparison_input,
+            current_name=current_name,
+            registry_snapshot=registry_snapshot,
+        )
+        rebound = rebind_equivalent_compare_analysis(
+            prepared,
+            comparison_input,
+            owner_evidence_proven=owner_evidence,
+        )
+        if rebound is None:
+            continue
+        candidates.append(
+            EquivalentComparePrewarmMatch(
+                entry_key=entry.key,
+                analysis=rebound,
+                prepared_context_names=(
+                    prepared.frames[0].context_name,
+                    prepared.frames[1].context_name,
+                ),
+            )
+        )
+    if len(candidates) != 1:
+        # An ambiguous semantic origin is not selected by registry order.
+        return None
+    return candidates[0]
+
+
+def find_declared_projected_compare_analysis(
+    *,
+    store: MemoryStore,
+    comparison_input: ComparisonInput,
+    current_name: str | None,
+    registry_snapshot: ProfileRegistry,
+) -> EquivalentComparePrewarmMatch | None:
     """Project one declared opposite-side parent ledger onto current subsets.
 
     This is deliberately a Study-only, ephemeral shortcut. It accepts deleted
@@ -511,7 +811,9 @@ def project_declared_compare_analysis(
     ):
         return None
     provider, model, reasoning = _configured_semantic_identity()
-    candidates: list[tuple[int, str, ComparisonAnalysis]] = []
+    candidates: list[
+        tuple[int, str, ComparisonAnalysis, tuple[str, str]]
+    ] = []
     for entry in registry.entries:
         if (
             not entry.enabled
@@ -574,7 +876,14 @@ def project_declared_compare_analysis(
             continue
         projected = _project_analysis(parent, comparison_input, orientation)
         parent_size = sum(len(frame.memories) for frame in parent.frames)
-        candidates.append((parent_size, entry.key, projected))
+        candidates.append(
+            (
+                parent_size,
+                entry.key,
+                projected,
+                (parent.frames[0].context_name, parent.frames[1].context_name),
+            )
+        )
 
     if not candidates:
         return None
@@ -584,7 +893,31 @@ def project_declared_compare_analysis(
         # ambiguous. Use the ordinary live path instead of selecting one by
         # registry order.
         return None
-    return candidates[0][2]
+    _, entry_key, analysis, prepared_names = candidates[0]
+    return EquivalentComparePrewarmMatch(
+        entry_key=entry_key,
+        analysis=analysis,
+        prepared_context_names=prepared_names,
+        origin="PROJECTED_PREWARM",
+    )
+
+
+def project_declared_compare_analysis(
+    *,
+    store: MemoryStore,
+    comparison_input: ComparisonInput,
+    current_name: str | None,
+    registry_snapshot: ProfileRegistry,
+) -> ComparisonAnalysis | None:
+    """Compatibility facade for the ordinary ephemeral Compare path."""
+
+    match = find_declared_projected_compare_analysis(
+        store=store,
+        comparison_input=comparison_input,
+        current_name=current_name,
+        registry_snapshot=registry_snapshot,
+    )
+    return match.analysis if match is not None else None
 
 
 def _installation_path(store: MemoryStore, analysis_uid: str) -> Path:
@@ -614,6 +947,66 @@ def _record_installation(
     )
 
 
+def record_equivalent_compare_prewarm(
+    store: MemoryStore,
+    *,
+    entry_key: str,
+    analysis: ComparisonAnalysis,
+    prepared_context_names: tuple[str, str],
+) -> None:
+    """Record a durable provider-free rebind after Compare saves it."""
+
+    path = _installation_path(store, analysis.uid)
+    if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
+        raise StudyPrewarmRegistryError("Compare prewarm receipt directory is unsafe.")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    _write_json_atomic(
+        path,
+        {
+            "kind": "STUDY_COMPARE_EQUIVALENT_SCOPE_PREWARM",
+            "schema_version": 1,
+            "installed_at": datetime.now(timezone.utc).isoformat(),
+            "entry_key": entry_key,
+            "analysis_uid": analysis.uid,
+            "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
+            "prepared_context_names": list(prepared_context_names),
+            "current_context_names": [
+                frame.context_name for frame in analysis.frames
+            ],
+        },
+    )
+
+
+def record_projected_compare_prewarm(
+    store: MemoryStore,
+    *,
+    entry_key: str,
+    analysis: ComparisonAnalysis,
+    prepared_context_names: tuple[str, str],
+) -> None:
+    """Record a durable subset ledger used as a Meld prerequisite."""
+
+    path = _installation_path(store, analysis.uid)
+    if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
+        raise StudyPrewarmRegistryError("Compare prewarm receipt directory is unsafe.")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    _write_json_atomic(
+        path,
+        {
+            "kind": "STUDY_COMPARE_PROJECTED_PREWARM",
+            "schema_version": 1,
+            "installed_at": datetime.now(timezone.utc).isoformat(),
+            "entry_key": entry_key,
+            "analysis_uid": analysis.uid,
+            "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
+            "prepared_context_names": list(prepared_context_names),
+            "current_context_names": [
+                frame.context_name for frame in analysis.frames
+            ],
+        },
+    )
+
+
 def is_installed_compare_prewarm(
     store: MemoryStore,
     analysis: ComparisonAnalysis,
@@ -635,6 +1028,44 @@ def is_installed_compare_prewarm(
         and value.get("analysis_digest")
         == comparison_canonical_digest(analysis.to_dict())
     )
+
+
+def installed_compare_prewarm_origin(
+    store: MemoryStore,
+    analysis: ComparisonAnalysis,
+) -> str | None:
+    """Return the visible exact or transparent prewarm origin, if retained."""
+
+    if is_installed_compare_prewarm(store, analysis):
+        return "EXACT_PREWARM"
+    path = _installation_path(store, analysis.uid)
+    if not path.exists():
+        return None
+    if not path.is_file() or path.is_symlink():
+        raise StudyPrewarmRegistryError("Compare prewarm receipt is unsafe.")
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise StudyPrewarmRegistryError("Compare prewarm receipt is invalid.") from error
+    if not isinstance(value, dict):
+        return None
+    if (
+        value.get("kind") == "STUDY_COMPARE_EQUIVALENT_SCOPE_PREWARM"
+        and value.get("schema_version") == 1
+        and value.get("analysis_uid") == analysis.uid
+        and value.get("analysis_digest")
+        == comparison_canonical_digest(analysis.to_dict())
+    ):
+        return "EQUIVALENT_SCOPE_PREWARM"
+    if (
+        value.get("kind") == "STUDY_COMPARE_PROJECTED_PREWARM"
+        and value.get("schema_version") == 1
+        and value.get("analysis_uid") == analysis.uid
+        and value.get("analysis_digest")
+        == comparison_canonical_digest(analysis.to_dict())
+    ):
+        return "PROJECTED_PREWARM"
+    return None
 
 
 def install_declared_compare_prewarms(

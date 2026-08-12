@@ -161,6 +161,24 @@ Granted inputs retain the existing derived-work checks: `READ`, the required
 `SAVE_ANALYSIS` for retained exact frames. Query-only authority never becomes
 ordinary Memory input.
 
+### Study prewarm subset projection
+
+The declared Task 3 `300 × 75` Sever artifact is also a basis for unchanged
+subsets. Runtime lookup compares ordered `(Memory UID, owner name, content)`
+ledgers, not raw root depth or descendant flags. Additions, edits, reordered
+identities, cross-task inputs, output-name changes, and configuration drift
+remain misses.
+
+A projected review still contains exactly one candidate for every selected
+Source Memory. If all Criteria cited by the prepared candidate survive, the
+candidate is rebound unchanged. If cited support was removed, the projection
+uses `KEEP_AS_WRITTEN`, exact Source content, and no criterion citation. This
+is the conservative consequence of deleting a filtering rule; it avoids both
+applying an absent rule and making an ungrounded replacement transformation.
+The fresh review and candidate UIDs, `PROJECTED PREWARM` label, complete
+coverage validation, authority checks, require-new output, and application CAS
+remain mandatory.
+
 ## Persistence and application
 
 A version-3 Sever session retains exact Source and Criteria frames, Context identities

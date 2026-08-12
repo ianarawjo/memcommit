@@ -36,6 +36,9 @@ from memcommit.study_prewarm.registry import (
     load_registry,
     payload_digest,
 )
+from memcommit.study_prewarm.scope_equivalence import (
+    ordered_scope_evidence_relation,
+)
 
 
 SEVER_ARTIFACT_KIND = "STUDY_SEVER_EXACT_PREWARM"
@@ -53,6 +56,14 @@ class SeverPrewarmInstallResult:
     installed: int
     skipped_configuration: int
     entry_keys: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class SeverPrewarmMatch:
+    """One complete candidate ledger rebound onto an unchanged source subset."""
+
+    session: SeverSession
+    origin: str
 
 
 def _portable_session(session: SeverSession) -> SeverSession:
@@ -322,6 +333,97 @@ def _fresh_review(
     )
 
 
+def _memory_evidence(binding: SeverContextBinding) -> tuple[tuple[str, str, str], ...]:
+    return tuple(
+        (memory.uid, memory.context_name, memory.content)
+        for memory in binding.memories
+    )
+
+
+def _project_review(
+    prepared: SeverSession,
+    *,
+    source: SeverContextBinding,
+    criteria: SeverContextBinding,
+) -> tuple[SeverSession, str] | None:
+    """Filter decisions only when their complete semantic support survives."""
+
+    source_relation = ordered_scope_evidence_relation(
+        _memory_evidence(prepared.source),
+        _memory_evidence(source),
+    )
+    criteria_relation = ordered_scope_evidence_relation(
+        _memory_evidence(prepared.criteria),
+        _memory_evidence(criteria),
+    )
+    if source_relation is None or criteria_relation is None or not source.memories:
+        return None
+    source_uids = {memory.uid for memory in source.memories}
+    criterion_uids = {memory.uid for memory in criteria.memories}
+    prepared_by_source = {
+        candidate.source_memory_uid: candidate
+        for candidate in prepared.candidates
+    }
+    source_by_uid = {memory.uid: memory for memory in source.memories}
+    if not source_uids <= set(prepared_by_source):
+        return None
+    candidates = tuple(
+        candidate
+        if set(candidate.criterion_memory_uids) <= criterion_uids
+        else replace(
+            candidate,
+            recommendation="KEEP_AS_WRITTEN",
+            proposed_content=source_by_uid[source_uid].content,
+            rationale=(
+                "The requested Criteria subset removes prepared support for "
+                "this transformation, so the Source is preserved as written."
+            ),
+            criterion_memory_uids=(),
+        )
+        for source_uid in (memory.uid for memory in source.memories)
+        for candidate in (prepared_by_source[source_uid],)
+    )
+    session_uid = str(uuid.uuid4())
+    candidates = tuple(
+        replace(
+            candidate,
+            uid=str(uuid.uuid5(uuid.UUID(session_uid), candidate.source_memory_uid)),
+            selection="RECOMMENDED",
+            custom_content="",
+        )
+        for candidate in candidates
+    )
+    summary = prepared.applied_summary
+    if summary is not None and (
+        not set(summary.source_memory_uids) <= source_uids
+        or not set(summary.criterion_memory_uids) <= criterion_uids
+    ):
+        summary = None
+    projected = replace(
+        prepared,
+        uid=session_uid,
+        revision=1,
+        state="REVIEWING",
+        source=source,
+        criteria=criteria,
+        overview=(
+            prepared.overview
+            if source_relation == criteria_relation == "EQUAL"
+            else "Projected from the declared Sever basis; every displayed "
+            "Source decision retains all of its cited Criteria support."
+        ),
+        candidates=candidates,
+        applied_summary=summary,
+        application=None,
+    )
+    # Round-trip through validation so projection can never publish partial
+    # Source coverage or dangling Criteria references.
+    validated = SeverSession.from_dict(projected.to_dict())
+    return validated, (
+        "EQUIVALENT_SCOPE_PREWARM"
+        if source_relation == criteria_relation == "EQUAL"
+        else "PROJECTED_PREWARM"
+    )
 def _validate_description(store: MemoryStore, description: dict[str, str]) -> None:
     current = store.load_direct(description["name"])
     if (
@@ -474,6 +576,102 @@ def find_installed_exact_sever_prewarm(
             "Multiple declared Sever prewarms match the same frozen request."
         )
     return matches[0] if matches else None
+
+
+def find_installed_projectable_sever_prewarm(
+    *,
+    store: MemoryStore,
+    source: SeverContextBinding,
+    criteria: SeverContextBinding,
+    output_name: str,
+) -> SeverPrewarmMatch | None:
+    """Return an equal or support-preserving subset review without inference."""
+
+    registry = load_registry(store.store_dir)
+    if registry is None or not (
+        source.root_name.startswith(TASK + "/")
+        and criteria.root_name.startswith(TASK + "/")
+    ):
+        return None
+    provider_identity = _configured_semantic_identity()
+    matches: list[SeverPrewarmMatch] = []
+    for entry in registry.entries:
+        if not entry.enabled or entry.operation != "SEVER":
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        prepared, description = _validate_artifact(artifact, entry_key=entry.key)
+        if (
+            (
+                artifact.get("provider"),
+                artifact.get("model"),
+                artifact.get("reasoning"),
+            )
+            != provider_identity
+            or prepared.output_name != output_name
+        ):
+            continue
+        try:
+            _validate_description(store, description)
+            from memcommit.commands.sever import _capture_binding
+
+            current_name = store.current_context_name()
+            canonical_source = _capture_binding(
+                resolve_context_access(
+                    store,
+                    SOURCE_NAME,
+                    current_name=current_name,
+                    required_permission="READ",
+                ),
+                include_descendants=True,
+            )
+            canonical_criteria = _capture_binding(
+                resolve_context_access(
+                    store,
+                    CRITERIA_NAME,
+                    current_name=current_name,
+                    required_permission="READ",
+                ),
+                include_descendants=True,
+            )
+        except (OSError, StudyPrewarmRegistryError, ValueError):
+            continue
+        if not _receipt_matches(
+            store,
+            entry_key=entry.key,
+            source=canonical_source,
+            criteria=canonical_criteria,
+        ):
+            continue
+        projected = _project_review(
+            prepared,
+            source=source,
+            criteria=criteria,
+        )
+        if projected is None:
+            continue
+        session, origin = projected
+        matches.append(SeverPrewarmMatch(session=session, origin=origin))
+    if len(matches) > 1:
+        raise StudyPrewarmRegistryError(
+            "Multiple declared Sever prewarms match the same frozen request."
+        )
+    return matches[0] if matches else None
+
+
+def installed_sever_request_origin(
+    *,
+    store: MemoryStore,
+    source: SeverContextBinding,
+    criteria: SeverContextBinding,
+    output_name: str,
+) -> str | None:
+    match = find_installed_projectable_sever_prewarm(
+        store=store,
+        source=source,
+        criteria=criteria,
+        output_name=output_name,
+    )
+    return match.origin if match is not None else None
 
 
 def is_installed_exact_sever_request(

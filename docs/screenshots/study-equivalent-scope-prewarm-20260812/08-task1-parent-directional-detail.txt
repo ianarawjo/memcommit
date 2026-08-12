@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ SCOPED 1/24                                                                                                                                                                      ┃
+┃ The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                         ┃
+┃ [HELPFUL] OPEN                                                                                                                                                                   ┃
+┃ REVIEW SET · REQUIRED 0 · OPTIONAL 24                                                                                                                                            ┃
+┃ SOURCE RELATION · R1                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ CLASSIFICATION                                                                                                                                                                   ┃
+┃ SCOPED · RESOLVED                                                                                                                                                                ┃
+┃The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE CLAIMS                                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CLAIM 1 · INCOMING · FROM task-1/participant                                                                                                                                     ┃
+┃   [8b077f2a] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.                               ┃
+┃   [2d8e8c75] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass        ┃
+┃              through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.                   ┃
+┃   [ebc1d272] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance that     ┃
+┃              they cannot use that route during the construction period.                                                                                                          ┃
+┃   [31f5b67b] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the construction        ┃
+┃              period and lead the visiting group to the closed third-floor rear entrance.                                                                                         ┃
+┃   [8017409a] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used      v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
+│ RESOLUTION QUESTION                                                                                                                                                             ^│
+│ Should the ordinary and construction-specific passage guidance remain independently revisable or be combined?                                                                    │
+│ PROPOSED RESOLUTIONS                                                                                                                                                             │
+│ ↑/↓ move through choices and Response · Enter select                                                                                                                             │
+│  1. Keep separate                                                                                                                                                                │
+│  Preserve each construction-specific memory separately from the baseline memories.                                                                                               │
+│                                                                                                                                                                                  │
+│  2. Combine                                                                                                                                                                      │
+│  Combine the scoped construction and ordinary route claims into independently revisable synthesized results.                                                                    v│
+│┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐│
+││›                                                                                                                                                                              ^││
+││                                                                                                                                                                                ││
+││                                                                                                                                                                               v││
+│└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Meld report                                                                                                                                            ^│
+│› SCOPED         The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         │
+│  SCOPED         The different end time is expressly limited to the construction period.                                                                                          │
+│  SCOPED         Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                     │
+│  SCOPED         The credential restriction is tied to the changed construction access period.                                                                                    │
+│  SCOPED         The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                           v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · APPLY is available. Enter to review before anything changes.                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close

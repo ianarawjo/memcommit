@@ -268,18 +268,18 @@ def _start(
         # Study prewarms remain hidden artifacts. An exact hit is cloned into
         # a fresh review only after the ordinary authority and frame freezes.
         from memcommit.study_prewarm.sever import (
-            find_installed_exact_sever_prewarm,
+            find_installed_projectable_sever_prewarm,
         )
 
-        prepared = find_installed_exact_sever_prewarm(
+        prewarm = find_installed_projectable_sever_prewarm(
             store=store,
             source=source,
             criteria=criteria,
             output_name=output_name,
         )
-        if prepared is not None:
-            progress.update("reusing exact prepared analysis", step=3)
-            return prepared
+        if prewarm is not None:
+            progress.update("reusing prepared analysis", step=3)
+            return prewarm.session
         progress.update("connecting provider", step=2)
         provider = (provider_factory or connect_codex_chatgpt_provider)()
         identity = getattr(provider, "identity", None)
@@ -748,7 +748,7 @@ def cmd(
             and not accept
         )
         session: SeverSession | None = None
-        exact_prewarm = False
+        sever_prewarm_origin: str | None = None
         start_from_launcher = False
         if sessions_flag or bare_launcher:
             if not interactive:
@@ -829,11 +829,9 @@ def cmd(
                 source_descendants=source_descendants,
                 criteria_descendants=criteria_descendants,
             )
-            from memcommit.study_prewarm.sever import (
-                is_installed_exact_sever_request,
-            )
+            from memcommit.study_prewarm.sever import installed_sever_request_origin
 
-            exact_prewarm = is_installed_exact_sever_request(
+            sever_prewarm_origin = installed_sever_request_origin(
                 store=store,
                 source=session.source,
                 criteria=session.criteria,
@@ -885,8 +883,19 @@ def cmd(
         elif sys.stdin.isatty() and sys.stdout.isatty():
             session = _run_workbench(store, session)
 
-        if exact_prewarm:
-            typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
+        if sever_prewarm_origin:
+            label = (
+                "EXACT PREWARM"
+                if sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
+                and session.source.root_name == "task-3/local/personal-memory"
+                and session.criteria.root_name == "task-3/local/guardrails"
+                and session.source.include_descendants
+                and session.criteria.include_descendants
+                else "EQUIVALENT SCOPE PREWARM"
+                if sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
+                else "PROJECTED PREWARM"
+            )
+            typer.echo(f"ANALYSIS · {label} · PROVIDER NOT CALLED")
         typer.echo(render_sever(session))
         typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
     except (

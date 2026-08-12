@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM MELD · DIRECTIONAL                                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   INCOMING · task-1/participant                                                                                                                                                  ┃
+┃   BASELINE / TARGET · task-1/campus-wiki                                                                                                                                         ┃
+┃ READY_TO_APPLY · EQUIVALENT SCOPE PREWARM · PROVIDER NOT CALLED · DIRECTIONAL MODE · 51 RELATIONS · 0 required + 24 helpful ISSUES · 75 CHANGES · 75/375 SOURCE COVERAGE         ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The construction updates add temporary, scope-specific guidance while preserving all ordinary baseline knowledge. The proposed meld materializes each incoming memory separately ┃
+┃; optional consolidation remains unresolved but does not block the preservation-first result.                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ ACCOUNTING                                                                                                                                                                       ┃
+┃ Source coverage · 75/375                                                                                                                                                         ┃
+┃Relation coverage · 27/51                                                                                                                                                         ┃
+┃Final Memories · 75 (PRESERVE 75 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0)                                                                                                        ┃
+┃Open issues · REQUIRED 0 · HELPFUL 24                                                                                                                                             ┃
+┃Cross-relation results · 0                                                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ISSUES · 24                                                                                                                                                                      ┃
+┃ SCOPED 1 · The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                              ┃
+┃ [HELPFUL] Combining would couple temporary route closures and user impacts with ordinary route facts.                                                                            ┃
+┃ QUESTION · Should the ordinary and construction-specific passage guidance remain independently revisable or be combined?                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ SCOPED 2 · The different end time is expressly limited to the construction period.                                                                                               ┃
+┃ [HELPFUL] Separation keeps the temporary 5:00 p.m. exception independently revisable.                                                                                            ┃
+┃ QUESTION · Should the construction-period closing time remain separate from ordinary opening hours or be combined?                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ SCOPED 3 · Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                          ┃
+┃ [HELPFUL] Separation preserves the construction condition and replacement route as independently revisable knowledge.                                                            ┃
+┃ QUESTION · Should the reconstructed and temporary accessible-route claims remain separate from the ordinary route facts or be combined?                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ SCOPED 4 · The credential restriction is tied to the changed construction access period.                                                                                         ┃
+┃ [HELPFUL] Separation prevents a temporary restriction from obscuring the ordinary app option.                                                                                    ┃
+┃ QUESTION · Should the construction-period physical-card restriction remain separate from ordinary credential guidance or be combined?                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ SCOPED 5 · The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                                 ┃
+┃ [HELPFUL] Separation keeps temporary entrance requirements and related user impacts independently revisable.                                                                     ┃
+┃ QUESTION · Should temporary staff-routing guidance remain separate from ordinary staff and service-route rules or be combined?                                                  v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Meld report                                                                                                                                            ^│
+│  SCOPED         The explicit construction condition preserves the ordinary route claims while suspending their use and explaining affected expectations.                         │
+│  SCOPED         The different end time is expressly limited to the construction period.                                                                                          │
+│  SCOPED         Reconstruction explicitly makes the existing route unavailable while preserving accessible lobby entry through a substitute.                                     │
+│  SCOPED         The credential restriction is tied to the changed construction access period.                                                                                    │
+│  SCOPED         The temporary routing condition refines ordinary staff-only eligibility and service-route separation.                                                           v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · APPLY is available. Enter to review before anything changes.                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close

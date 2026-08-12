@@ -1,0 +1,2 @@
+52 180                                                                                                                                                                              
+Meld error: capture provider stopper: live Directional analysis required
