@@ -122,7 +122,7 @@ def _fixture(tmp_path, monkeypatch, root):
     return store, profile, registry, session
 
 
-def test_exact_update_registry_installs_into_ordinary_impact_slot(
+def test_exact_update_registry_installs_hidden_receipt_then_materializes(
     isolated_store, tmp_path, monkeypatch
 ):
     store, profile, registry, prepared = _fixture(
@@ -139,13 +139,64 @@ def test_exact_update_registry_installs_into_ordinary_impact_slot(
     assert result.declared == 1
     assert result.installed == 1
     assert result.skipped_configuration == 0
-    assert cached is not None
-    assert cached.to_dict() == prepared.to_dict()
-    assert is_installed_update_prewarm(store, cached)
+    assert cached is None
+    match = find_installed_projectable_update_prewarm(
+        store=store,
+        source=store.load_direct("task-1/participant/construction-updates"),
+        target=store.load_direct("task-1/campus-wiki"),
+        source_include_descendants=True,
+        target_include_descendants=True,
+        granted_source=None,
+        granted_target=None,
+        registry_snapshot=registry,
+    )
+    assert match is not None
+    assert match.origin == "EXACT_PREWARM"
+    assert match.session.to_dict() == prepared.to_dict()
     assert store.load_staged_update() is None
     assert store.load("task-1/campus-wiki").to_dict() == store.load_direct(
         "task-1/campus-wiki"
     ).to_dict()
+
+
+def test_exact_update_impact_materializes_hidden_receipt_without_provider(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_update_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    assert store.load_impact_plan() is None
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("hidden exact Update receipt opened a provider")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "impact",
+            "--from",
+            "task-1/participant/construction-updates",
+            "--to",
+            "task-1/campus-wiki",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "EXACT PREWARM · UPDATE IMPACT MATERIALIZED" in result.output
+    cached = store.load_impact_plan()
+    assert cached is not None
+    assert cached.to_dict() == prepared.to_dict()
+    assert is_installed_update_prewarm(store, cached)
 
 
 def test_exact_update_registry_rejects_changed_source_before_publication(
@@ -310,7 +361,11 @@ def test_update_equal_evidence_ignores_locator_scope_flags(
     )
 
     assert match is not None
-    assert match.origin == "EQUIVALENT_SCOPE_PREWARM"
+    assert match.origin == (
+        "EXACT_PREWARM"
+        if source_descendants and target_descendants
+        else "EQUIVALENT_SCOPE_PREWARM"
+    )
     assert match.session.operations == prepared.operations
     assert match.session.source_include_descendants is source_descendants
     assert match.session.target_include_descendants is target_descendants

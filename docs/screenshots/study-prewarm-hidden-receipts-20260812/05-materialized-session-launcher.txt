@@ -1,0 +1,52 @@
+ MEM ATOMIZE · SESSIONS · RECENT FIRST · ALL                                                                                                                                        
+ PROFILE · authoring                                                                                                                                                                
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-hidden-receipt-4afn0e79/.mem                                                                                  
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + Add new Atomize session                                                                                                                                                        ^
+› 2026-08-12 13:12Z  practice/source  [CURRENT]  practice/source → practice/source-atomized · 1 → 2 Memories · 1 issues                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         atomize                                                                                                                                                              ^
+ Key          dadfeb24-9428-4f32-b727-cef2f93bad02                                                                                                                                  
+ Title        practice/source                                                                                                                                                       
+ Status       CURRENT                                                                                                                                                               
+ Context      practice/source                                                                                                                                                       
+ Modified     2026-08-12 13:12Z                                                                                                                                                     
+ Summary      practice/source → practice/source-atomized · 1 → 2 Memories · 1 issues                                                                                                
+ Detail       Analysis dadfeb24-9428-4f32-b727-cef2f93bad02                                                                                                                         
+              Source Context practice/source [992ea59b-ec5b-4748-aa0b-093e1d6b0797]                                                                                                 
+              Planned Output practice/source-atomized · REQUIRE NEW                                                                                                                 
+              Picker selection uses the frozen analysis UID and revalidates it without provider or refresh. The shown argv is only the nearest public route and is not executed by  
+the picker.                                                                                                                                                                         
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N Add new Atomize session  Esc/q cancel  ·  2/2

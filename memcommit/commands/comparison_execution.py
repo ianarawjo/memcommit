@@ -180,6 +180,7 @@ def ensure_comparison_analysis(
     refresh: bool = False,
     require_durable: bool = False,
     analyze: Callable[[ComparisonInput], ComparisonAnalysis],
+    equivalent: Callable[[ComparisonInput], ComparisonAnalysis | None] | None = None,
     project: Callable[[ComparisonInput], ComparisonAnalysis | None] | None = None,
 ) -> ComparisonExecutionResult:
     """Reuse or create the exact ordered basis without changing current state.
@@ -249,9 +250,28 @@ def ensure_comparison_analysis(
         reference_descendants=include_descendants[0],
         compared_descendants=include_descendants[1],
     )
+    equivalent_analysis = (
+        equivalent(comparison_input)
+        if equivalent is not None and not refresh
+        else None
+    )
+    if equivalent_analysis is not None and (
+        equivalent_analysis.ruleset_version != COMPARISON_RULESET_VERSION
+        or equivalent_analysis.include_descendants != include_descendants
+        or not equivalent_analysis.matches(reference, compared)
+    ):
+        raise ComparisonError(
+            "Equivalent Compare prewarm does not match the current frames, "
+            "scope, or ruleset."
+        )
     projected = (
         project(comparison_input)
-        if project is not None and not refresh and not require_durable
+        if (
+            equivalent_analysis is None
+            and project is not None
+            and not refresh
+            and not require_durable
+        )
         else None
     )
     if projected is not None:
@@ -308,7 +328,12 @@ def ensure_comparison_analysis(
             retention=None,
             origin="PROJECTED",
         )
-    analysis = analyze(comparison_input)
+    analysis = equivalent_analysis or analyze(comparison_input)
+    analysis_origin = (
+        "EQUIVALENT_SCOPE_PREWARM"
+        if equivalent_analysis is not None
+        else "LIVE"
+    )
 
     if granted:
         with authority_grant_snapshot_lock() as registry:
@@ -357,10 +382,10 @@ def ensure_comparison_analysis(
                 )
         return ComparisonExecutionResult(
             analysis=analysis,
-            reused=False,
+            reused=equivalent_analysis is not None,
             durable=current_retention is not None,
             retention=current_retention,
-            origin="LIVE",
+            origin=analysis_origin,
         )
 
     save_comparison_analysis(
@@ -370,10 +395,10 @@ def ensure_comparison_analysis(
     )
     return ComparisonExecutionResult(
         analysis=analysis,
-        reused=False,
+        reused=equivalent_analysis is not None,
         durable=True,
         retention=None,
-        origin="LIVE",
+        origin=analysis_origin,
     )
 
 
@@ -394,7 +419,7 @@ def install_prepared_comparison_analysis(
     same immutable baseline, but its Grant wrapper is not. The ordinary
     execution boundary therefore resolves current authority, rechecks the
     complete current frames under lock, and writes a new run-local binding.
-    No provider is connected by this setup-only path.
+    No provider is connected by this prepared-materialization path.
     """
 
     if not isinstance(analysis, ComparisonAnalysis):

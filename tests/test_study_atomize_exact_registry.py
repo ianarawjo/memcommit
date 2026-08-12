@@ -22,6 +22,7 @@ from memcommit.profile_config import (
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import (
     build_atomize_prewarm_artifact,
+    find_declared_atomize_prewarm,
     install_declared_atomize_prewarms,
     is_installed_atomize_prewarm,
 )
@@ -160,10 +161,18 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
         provider_calls += 1
         raise AssertionError("exact Atomize prewarm opened a provider")
 
+    assert store.load_atomize_analysis(source.uid) is None
+    match = find_declared_atomize_prewarm(
+        store=store,
+        context=store.load_direct(source.name),
+    )
+    assert match is not None
     opened = open_or_create_atomize_workbench(
         store=store,
         ctx=store.load_direct(source.name),
         provider_factory=forbidden,
+        prepared_analysis=match.analysis,
+        output_context_name=match.output_context_name,
     )
 
     assert installed.declared == 1
@@ -172,6 +181,7 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
     assert provider_calls == 0
     assert opened.analysis.to_dict() == prepared.to_dict()
     assert opened.created_analysis is False
+    assert opened.materialized_prepared is True
     assert opened.workbench.output_context_name == "practice/source-atomized"
     assert is_installed_atomize_prewarm(store, opened.analysis)
 
@@ -268,6 +278,13 @@ def test_exact_atomize_installation_rolls_back_partial_workbench_save(
     store, profile, registry, source, _prepared = _fixture(
         tmp_path, monkeypatch, isolated_store
     )
+    install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    match = find_declared_atomize_prewarm(store=store, context=source)
+    assert match is not None
     monkeypatch.setattr(
         store,
         "save_atomize_workbench",
@@ -275,10 +292,14 @@ def test_exact_atomize_installation_rolls_back_partial_workbench_save(
     )
 
     with pytest.raises(OSError, match="injected save failure"):
-        install_declared_atomize_prewarms(
+        open_or_create_atomize_workbench(
             store=store,
-            profile=profile,
-            registry_snapshot=registry,
+            ctx=source,
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("materialization opened a provider")
+            ),
+            prepared_analysis=match.analysis,
+            output_context_name=match.output_context_name,
         )
 
     assert store.load_atomize_analysis(source.uid) is None

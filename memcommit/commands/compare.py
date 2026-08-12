@@ -72,8 +72,12 @@ from memcommit.rationale_scope import (
 )
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.compare import (
-    is_installed_compare_prewarm,
+    EquivalentComparePrewarmMatch,
+    find_declared_equivalent_compare_analysis,
+    installed_compare_prewarm_origin,
     project_declared_compare_analysis,
+    record_equivalent_compare_prewarm,
+    record_exact_compare_prewarm,
 )
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 
@@ -169,6 +173,8 @@ def _header_lines(
     analysis_state = (
         "EXACT PREWARM"
         if origin == "EXACT_PREWARM"
+        else "EQUIVALENT SCOPE PREWARM"
+        if origin == "EQUIVALENT_SCOPE_PREWARM"
         else "PROJECTED"
         if origin == "PROJECTED"
         else "REUSED"
@@ -479,11 +485,7 @@ def _resume_selected_comparison(
         store=store,
         analysis=analysis,
         reused=True,
-        origin=(
-            "EXACT_PREWARM"
-            if is_installed_compare_prewarm(store, analysis)
-            else "SAVED_REUSE"
-        ),
+        origin=installed_compare_prewarm_origin(store, analysis) or "SAVED_REUSE",
         ledger=ledger,
         snapshot=snapshot,
     )
@@ -832,6 +834,22 @@ def cmd(
                 context_view=_comparison_wait_view(comparison_input),
             )
 
+        equivalent_match: EquivalentComparePrewarmMatch | None = None
+
+        def equivalent(comparison_input):
+            nonlocal equivalent_match
+            equivalent_match = find_declared_equivalent_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=current_name,
+                registry_snapshot=profile_registry,
+            )
+            return (
+                equivalent_match.analysis
+                if equivalent_match is not None
+                else None
+            )
+
         execution = ensure_comparison_analysis(
             store=store,
             reference_access=reference_access,
@@ -845,6 +863,7 @@ def cmd(
             ),
             refresh=refresh,
             analyze=analyze_input,
+            equivalent=equivalent,
             project=lambda comparison_input: project_declared_compare_analysis(
                 store=store,
                 comparison_input=comparison_input,
@@ -852,14 +871,32 @@ def cmd(
                 registry_snapshot=profile_registry,
             ),
         )
+        if (
+            execution.origin == "EQUIVALENT_SCOPE_PREWARM"
+            and equivalent_match is not None
+        ):
+            if equivalent_match.origin == "EXACT_PREWARM":
+                record_exact_compare_prewarm(
+                    store,
+                    entry_key=equivalent_match.entry_key,
+                    analysis=execution.analysis,
+                )
+            else:
+                record_equivalent_compare_prewarm(
+                    store,
+                    entry_key=equivalent_match.entry_key,
+                    analysis=execution.analysis,
+                    prepared_context_names=(
+                        equivalent_match.prepared_context_names
+                    ),
+                )
         _present_comparison(
             store=store,
             analysis=execution.analysis,
             reused=execution.reused,
             origin=(
-                "EXACT_PREWARM"
-                if is_installed_compare_prewarm(store, execution.analysis)
-                else execution.origin
+                installed_compare_prewarm_origin(store, execution.analysis)
+                or execution.origin
             ),
             ledger=ledger,
             snapshot=snapshot,

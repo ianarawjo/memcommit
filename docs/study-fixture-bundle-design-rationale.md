@@ -77,9 +77,9 @@ The current corpus contains:
 | 3 | 301 | 100 | 75 | 476 |
 | Total | 378 | 700 | 228 | 1,306 |
 
-The editable baseline additionally contains four participant-only rehearsal
+The editable baseline additionally contains three participant-only rehearsal
 Memories under `practice/description` and `practice/source`, bringing the
-composed baseline to 1,310 ordinary Memories. They are not part of any Task
+composed baseline to 1,309 ordinary Memories. They are not part of any Task
 corpus or authority package and therefore do not change the reviewed Task
 counts above.
 
@@ -89,16 +89,15 @@ input. Spreadsheet views are regenerated from the current parsed corpus.
 ## Ordinary Context mapping
 
 Every `init-study` participant Profile receives two separate local rehearsal
-Contexts. `practice/description` contains an overview Memory, a task Memory,
-and a provenance Memory. The overview introduces MemLab and the
+Contexts. `practice/description` contains an overview Memory and a task Memory.
+The overview introduces MemLab and the
 three Study situations. The task directs the participant to use the grouped
 `mem help` browser to discover the atomization operation, review its proposal,
-and save the result as `practice/source-atomized`. The provenance Memory marks
-the editing request as synthetic without placing that note in the analysis
-target. `practice/source` contains the one composite Memory to analyze.
-Separating instruction and provenance from source prevents either from
-becoming Atomize evidence while still requiring the participant to learn the
-help structure rather than receiving an exact command.
+and save the result as `practice/source-atomized`. `practice/source` contains
+the one composite Memory to analyze. Separating the instruction from the source
+prevents it from becoming Atomize evidence while still requiring the
+participant to learn the help structure rather than receiving an exact
+command.
 
 Both Contexts exist solely for onboarding. Keeping them outside `task-1`,
 `task-2`, and `task-3` prevents rehearsal analyses, workbenches, and any
@@ -109,7 +108,7 @@ A baseline created before this fixture existed is still accepted by
 `init-study`; the new run receives the canonical practice fixture without
 mutating that older baseline.
 
-The three description Memories are:
+The two description Memories are:
 
 ```text
 MemLab is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
@@ -119,10 +118,6 @@ In this study, you will use MemLab in three different situations, each involving
 
 ```text
 Before beginning the three study tasks, complete a short practice exercise to become familiar with how MemLab organizes and presents its commands. The informal editing request in `practice/source` combines several constraints in a single Memory. Divide it into appropriate atomic Memories without adding instructions or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
-```
-
-```text
-The practice source is a synthetic editing request supplied for this study. It has no external bibliographic source.
 ```
 
 The source Memory is the following English editing request:
@@ -138,6 +133,18 @@ to the Study's agent-memory and instruction-refinement setting than the former
 historical quotation. Atomize should preserve the informal source wording as
 evidence and separate its requirements; the rehearsal does not ask the model
 to perform the requested rewrite.
+
+The earlier fixture included a third provenance-only description Memory. It
+was retired because it added a non-actionable row to the participant's
+onboarding Context without affecting the Atomize target or task contract. New
+fixtures do not create it. When a new run is initialized from an older editable
+baseline, snapshotting removes that one deterministic legacy Memory from the
+run copy without mutating the baseline itself; other baseline edits remain
+preserved. A retained Tutorial Atomize prewarm that was prepared against the
+older description remains admissible only when temporarily reconstructing that
+exact retired Memory makes its full description digest match. The compatibility
+check never persists or renders the reconstructed Memory, and any other
+instruction difference still fails closed.
 
 A cold production Atomize check used `gpt-5.6-sol` with reasoning `medium`.
 The first English draft used the phrase `preserve its meaning`; the provider
@@ -158,11 +165,13 @@ these eight children:
 8. `Keep the writing concise while giving it a minimally formal tone.`
 
 This cold check is the frozen semantic basis for the tutorial prewarm. The
-validated analysis is published separately into the Study semantic registry
-and installed into each new participant run's ordinary Atomize slot. The
-participant still performs the full Atomize review and explicit application
-workflow, but does not wait for the fixed provider analysis. Any change to the
-Source or tutorial instruction invalidates the exact binding.
+validated analysis is published separately into the Study semantic registry.
+Each new participant run receives only a hidden validation receipt; the first
+explicit matching command materializes the ordinary Atomize analysis and blank
+workbench. The participant still performs the full Atomize review and explicit
+application workflow, but does not wait for the fixed provider analysis and
+does not begin with a pre-existing visible session. Any change to the Source or
+tutorial instruction invalidates the exact binding.
 
 Each Task Profile also owns one participant-facing description Memory directly
 under `description`. Its English body is the previously authored Task

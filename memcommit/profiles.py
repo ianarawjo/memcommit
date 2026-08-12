@@ -242,9 +242,11 @@ _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "for atomization, and use it to review the proposed atomization and save "
     "the result as `practice/source-atomized`."
 )
-_STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT = (
-    "The practice source is a synthetic editing request supplied for this "
-    "study. It has no external bibliographic source."
+_LEGACY_STUDY_PRACTICE_PROVENANCE_UID = str(
+    uuid.uuid5(
+        uuid.NAMESPACE_URL,
+        "memcommit:study:practice/description:reference-memory",
+    )
 )
 _STUDY_PRACTICE_SOURCE = "practice/source"
 _STUDY_PRACTICE_SOURCE_CONTENT = (
@@ -2908,17 +2910,6 @@ def _study_practice_contexts() -> tuple[Context, ...]:
             content=_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
         )
     )
-    description.add(
-        Memory(
-            uid=str(
-                uuid.uuid5(
-                    uuid.NAMESPACE_URL,
-                    "memcommit:study:practice/description:reference-memory",
-                )
-            ),
-            content=_STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
-        )
-    )
     source = Context(
         uid=str(
             uuid.uuid5(
@@ -2944,6 +2935,27 @@ def _study_practice_contexts() -> tuple[Context, ...]:
 
 def _is_study_practice_name(name: str) -> bool:
     return name == _STUDY_PRACTICE_ROOT or name.startswith(_STUDY_PRACTICE_ROOT + "/")
+
+
+def _without_legacy_study_practice_provenance(
+    contexts: dict[str, Context],
+) -> dict[str, Context]:
+    """Exclude the retired practice note without editing the source baseline."""
+
+    description = contexts.get(_STUDY_PRACTICE_DESCRIPTION)
+    if (
+        description is None
+        or _LEGACY_STUDY_PRACTICE_PROVENANCE_UID not in description.memories
+    ):
+        return contexts
+    # Existing editable baselines can still contain the deterministic legacy
+    # Memory. Snapshot a sanitized copy so new runs omit it while the baseline
+    # remains untouched and independently recoverable.
+    sanitized = dict(contexts)
+    sanitized_description = copy.deepcopy(description)
+    sanitized_description.remove(_LEGACY_STUDY_PRACTICE_PROVENANCE_UID)
+    sanitized[_STUDY_PRACTICE_DESCRIPTION] = sanitized_description
+    return sanitized
 
 
 def _remap_context_records(
@@ -3559,6 +3571,7 @@ def _snapshot_study_baseline(
                         context.name: context for context in _study_practice_contexts()
                     }
                 )
+                practice = _without_legacy_study_practice_provenance(practice)
                 selected.update(practice)
             if not selected:
                 raise ProfileError(f"Study baseline branch {branch!r} is empty.")
@@ -3907,9 +3920,9 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
-        # Validate before the registry generation becomes visible. Actual
-        # persistence happens after releasing this registry lock because the
-        # production Compare save boundary acquires the same guard itself.
+        # Validate before the registry generation becomes visible. Hidden
+        # receipts are persisted after releasing this lock so the new active
+        # Profile and regenerated Grants are the identities they attest to.
         from memcommit.store import MemoryStore
         from memcommit.study_prewarm.atomize import (
             install_declared_atomize_prewarms,
@@ -4080,9 +4093,9 @@ def init_study_profile(
                 shutil.rmtree(staging)
 
     # The new registry generation is now visible and the outer registry guard
-    # has been released. Install through each operation's ordinary durable
-    # boundary so current identities and Grants can be revalidated without
-    # deadlocking init-study.
+    # has been released. Revalidate current identities and Grants, then write
+    # only hidden entry-key receipts. Ordinary operation state is materialized
+    # through each command's durable boundary on first explicit use.
     from memcommit.store import MemoryStore
     from memcommit.study_prewarm.atomize import install_declared_atomize_prewarms
     from memcommit.study_prewarm.compare import install_declared_compare_prewarms

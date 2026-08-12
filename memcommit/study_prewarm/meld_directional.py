@@ -45,7 +45,11 @@ from memcommit.profile_config import (
     study_run_identity,
 )
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.compare import INSTALLATIONS_DIRECTORY_NAME
+from memcommit.study_prewarm.installations import (
+    INSTALLATIONS_DIRECTORY_NAME,
+    declared_installation_matches,
+    record_declared_installation,
+)
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
     project_prepared_compare_analysis,
@@ -309,6 +313,15 @@ def _receipt_path(store: MemoryStore, entry_key: str) -> Path:
     )
 
 
+def _installation_evidence(session: MeldSession) -> dict[str, str]:
+    assert session.comparison_seed is not None
+    return {
+        "incoming_frame_digest": session.frames[0].context_digest,
+        "baseline_frame_digest": session.frames[1].context_digest,
+        "comparison_seed_digest": session.comparison_seed.analysis_digest,
+    }
+
+
 def _record_installation(
     store: MemoryStore, *, entry_key: str, session: MeldSession
 ) -> None:
@@ -336,6 +349,23 @@ def _record_installation(
 def _receipt_matches(
     store: MemoryStore, *, entry_key: str, session: MeldSession
 ) -> bool:
+    registry = load_registry(store.store_dir)
+    if registry is not None:
+        entry = next(
+            (
+                item
+                for item in registry.entries
+                if item.key == entry_key
+                and item.operation == "MELD_DIRECTIONAL"
+            ),
+            None,
+        )
+        if entry is not None and declared_installation_matches(
+            store,
+            entry=entry,
+            evidence=_installation_evidence(session),
+        ):
+            return True
     path = _receipt_path(store, entry_key)
     if not path.exists():
         return False
@@ -760,7 +790,11 @@ def install_declared_directional_meld_prewarms(
         )
         _rebind_prepared_session(prepared, current=current)
         if publish:
-            _record_installation(store, entry_key=entry.key, session=current)
+            record_declared_installation(
+                store,
+                entry=entry,
+                evidence=_installation_evidence(current),
+            )
             installed.append(entry.key)
     return DirectionalMeldPrewarmInstallResult(
         declared, len(installed), skipped, tuple(installed)

@@ -1,0 +1,4 @@
+Saved analysis [dadfeb24]: EXACT PREWARM · CURRENT. Materialized on first use; the provider was not called.                                                                         
+Apply the planned Output with: mem atomize --save                                                                                                                                   
+  INPUT  practice/source                                                                                                                                                            
+  OUTPUT practice/source-atomized · NOT CREATED

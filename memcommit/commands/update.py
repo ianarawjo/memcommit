@@ -603,7 +603,9 @@ def cmd(
                     session = update_prewarm_match.session.with_status("staged")
                     update_analysis_origin = update_prewarm_match.origin
                     label = (
-                        "EQUIVALENT SCOPE PREWARM"
+                        "EXACT PREWARM"
+                        if update_prewarm_match.origin == "EXACT_PREWARM"
+                        else "EQUIVALENT SCOPE PREWARM"
                         if update_prewarm_match.origin
                         == "EQUIVALENT_SCOPE_PREWARM"
                         else "PROJECTED PREWARM"
@@ -630,11 +632,14 @@ def cmd(
             if update_prewarm_match is not None:
                 from memcommit.study_prewarm.update import (
                     record_equivalent_update_prewarm,
+                    record_exact_update_prewarm,
                     record_projected_update_prewarm,
                 )
 
                 recorder = (
-                    record_equivalent_update_prewarm
+                    record_exact_update_prewarm
+                    if update_prewarm_match.origin == "EXACT_PREWARM"
+                    else record_equivalent_update_prewarm
                     if update_prewarm_match.origin
                     == "EQUIVALENT_SCOPE_PREWARM"
                     else record_projected_update_prewarm

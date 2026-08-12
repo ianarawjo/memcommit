@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass
-from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -14,13 +14,16 @@ from memcommit.atomize import (
     AtomizeAnalysisSession,
     atomize_analysis_matches_context,
 )
-from memcommit.atomize_workflow import install_prepared_atomize_analysis
 from memcommit.config import Config
-from memcommit.context import Context
+from memcommit.context import Context, Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.review import direct_context_digest
-from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.compare import INSTALLATIONS_DIRECTORY_NAME
+from memcommit.store import MemoryStore, context_record_digest
+from memcommit.study_prewarm.installations import (
+    INSTALLATIONS_DIRECTORY_NAME,
+    declared_installation_matches,
+    record_declared_installation,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -31,6 +34,11 @@ from memcommit.study_prewarm.registry import (
 
 ATOMIZE_ARTIFACT_KIND = "STUDY_ATOMIZE_EXACT_PREWARM"
 ATOMIZE_ARTIFACT_SCHEMA_VERSION = 1
+_LEGACY_PRACTICE_PROVENANCE_UID = "5faaf0a4-d5b8-54d0-af25-c056e9058c98"
+_LEGACY_PRACTICE_PROVENANCE_CONTENT = (
+    "The practice source is a synthetic editing request supplied for this "
+    "study. It has no external bibliographic source."
+)
 
 
 @dataclass(frozen=True)
@@ -39,6 +47,15 @@ class AtomizePrewarmInstallResult:
     installed: int
     skipped_configuration: int
     analysis_uids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class AtomizePrewarmMatch:
+    """One installed hidden artifact ready for first-use materialization."""
+
+    entry_key: str
+    analysis: AtomizeAnalysisSession
+    output_context_name: str
 
 
 def _content_digest(value: str) -> str:
@@ -70,6 +87,30 @@ def _analysis_has_complete_source_ledger(
         == list(range(len(analysis.items)))
         and analysis.context_digest == _analysis_source_digest(analysis)
     )
+
+
+def _description_matches_prepared_digest(
+    description: Context,
+    prepared_digest: str,
+) -> bool:
+    if context_record_digest(description) == prepared_digest:
+        return True
+    if (
+        description.name != "practice/description"
+        or _LEGACY_PRACTICE_PROVENANCE_UID in description.memories
+    ):
+        return False
+    # Older retained artifacts bound the same instruction plus one retired
+    # provenance-only Memory. Reconstruct it only in memory for an exact digest
+    # comparison; it must never be saved back into the participant Context.
+    legacy_description = copy.deepcopy(description)
+    legacy_description.add(
+        Memory(
+            uid=_LEGACY_PRACTICE_PROVENANCE_UID,
+            content=_LEGACY_PRACTICE_PROVENANCE_CONTENT,
+        )
+    )
+    return context_record_digest(legacy_description) == prepared_digest
 
 
 def _key_material(
@@ -274,49 +315,127 @@ def _installation_path(store: MemoryStore, analysis_uid: str) -> Path:
     )
 
 
-def _record_installation(
-    store: MemoryStore,
+def _installation_evidence(
     *,
-    entry_key: str,
     analysis: AtomizeAnalysisSession,
-) -> None:
-    path = _installation_path(store, analysis.uid)
-    if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
-        raise StudyPrewarmRegistryError("Atomize prewarm receipt directory is unsafe.")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    _write_json_atomic(
-        path,
-        {
-            "kind": "STUDY_ATOMIZE_PREWARM_INSTALLATION",
-            "schema_version": 1,
-            "installed_at": datetime.now(timezone.utc).isoformat(),
-            "entry_key": entry_key,
-            "analysis_uid": analysis.uid,
-            "analysis_digest": _analysis_digest(analysis),
-        },
-    )
+    description: dict[str, str],
+) -> dict[str, str]:
+    return {
+        "analysis_digest": _analysis_digest(analysis),
+        "source_context_uid": analysis.context_uid,
+        "source_context_digest": analysis.context_digest,
+        "description_context_uid": description["context_uid"],
+        "description_context_digest": description["context_digest"],
+    }
 
 
 def is_installed_atomize_prewarm(
     store: MemoryStore,
     analysis: AtomizeAnalysisSession,
 ) -> bool:
+    """Recognize a legacy materialized receipt or the installed artifact."""
+
     path = _installation_path(store, analysis.uid)
-    if not path.exists():
+    if path.exists():
+        if not path.is_file() or path.is_symlink():
+            raise StudyPrewarmRegistryError("Atomize prewarm receipt is unsafe.")
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise StudyPrewarmRegistryError(
+                "Atomize prewarm receipt is invalid."
+            ) from error
+        if (
+            isinstance(value, dict)
+            and value.get("kind") == "STUDY_ATOMIZE_PREWARM_INSTALLATION"
+            and value.get("schema_version") == 1
+            and value.get("analysis_uid") == analysis.uid
+            and value.get("analysis_digest") == _analysis_digest(analysis)
+        ):
+            return True
+
+    registry = load_registry(store.store_dir)
+    if registry is None:
         return False
-    if not path.is_file() or path.is_symlink():
-        raise StudyPrewarmRegistryError("Atomize prewarm receipt is unsafe.")
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as error:
-        raise StudyPrewarmRegistryError("Atomize prewarm receipt is invalid.") from error
-    return bool(
-        isinstance(value, dict)
-        and value.get("kind") == "STUDY_ATOMIZE_PREWARM_INSTALLATION"
-        and value.get("schema_version") == 1
-        and value.get("analysis_uid") == analysis.uid
-        and value.get("analysis_digest") == _analysis_digest(analysis)
-    )
+    for entry in registry.entries:
+        if not entry.enabled or entry.operation != "ATOMIZE":
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        prepared, description = _validate_artifact(artifact, entry_key=entry.key)
+        if prepared != analysis:
+            continue
+        if declared_installation_matches(
+            store,
+            entry=entry,
+            evidence=_installation_evidence(
+                analysis=prepared,
+                description=description,
+            ),
+        ):
+            return True
+    return False
+
+
+def find_declared_atomize_prewarm(
+    *,
+    store: MemoryStore,
+    context: Context,
+) -> AtomizePrewarmMatch | None:
+    """Resolve one hidden exact artifact without publishing ordinary state."""
+
+    registry = load_registry(store.store_dir)
+    if registry is None:
+        return None
+    provider, model, reasoning = _configured_semantic_identity()
+    matches: list[AtomizePrewarmMatch] = []
+    for entry in registry.entries:
+        if not entry.enabled or entry.operation != "ATOMIZE":
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        analysis, description = _validate_artifact(artifact, entry_key=entry.key)
+        if (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        ) != (provider, model, reasoning):
+            continue
+        if not declared_installation_matches(
+            store,
+            entry=entry,
+            evidence=_installation_evidence(
+                analysis=analysis,
+                description=description,
+            ),
+        ):
+            continue
+        current_description = store.load_direct(description["name"])
+        if (
+            current_description.uid != description["context_uid"]
+            or not _description_matches_prepared_digest(
+                current_description,
+                description["context_digest"],
+            )
+        ):
+            continue
+        if (
+            context.uid != analysis.context_uid
+            or context.name != analysis.context_name
+            or direct_context_digest(context) != analysis.context_digest
+            or not atomize_analysis_matches_context(analysis, context)
+        ):
+            continue
+        matches.append(
+            AtomizePrewarmMatch(
+                entry_key=entry.key,
+                analysis=analysis,
+                output_context_name="practice/source-atomized",
+            )
+        )
+    if len(matches) > 1:
+        raise StudyPrewarmRegistryError(
+            "Multiple declared Atomize prewarms match the current Source."
+        )
+    return matches[0] if matches else None
 
 
 def install_declared_atomize_prewarms(
@@ -326,7 +445,7 @@ def install_declared_atomize_prewarms(
     registry_snapshot: ProfileRegistry,
     publish: bool = True,
 ) -> AtomizePrewarmInstallResult:
-    """Install the exact tutorial seed into the production Atomize slot."""
+    """Validate the tutorial seed and install only its hidden receipt."""
 
     registry = load_registry(store.store_dir)
     if registry is None:
@@ -341,7 +460,7 @@ def install_declared_atomize_prewarms(
             "Study prewarm registry belongs to a different baseline."
         )
     provider, model, reasoning = _configured_semantic_identity()
-    installed: list[str] = []
+    installed = 0
     declared = 0
     skipped = 0
     for entry in registry.entries:
@@ -366,8 +485,10 @@ def install_declared_atomize_prewarms(
         current_description = store.load_direct(description["name"])
         if (
             current_description.uid != description["context_uid"]
-            or context_record_digest(current_description)
-            != description["context_digest"]
+            or not _description_matches_prepared_digest(
+                current_description,
+                description["context_digest"],
+            )
         ):
             raise StudyPrewarmRegistryError(
                 "Tutorial instruction changed after Atomize was prepared."
@@ -380,21 +501,19 @@ def install_declared_atomize_prewarms(
                 "Declared Atomize prewarm does not match the current Source."
             )
         if publish:
-            opened = install_prepared_atomize_analysis(
-                store=store,
-                ctx=source,
-                analysis=analysis,
-                output_context_name="practice/source-atomized",
-            )
-            _record_installation(
+            record_declared_installation(
                 store,
-                entry_key=entry.key,
-                analysis=opened.analysis,
+                entry=entry,
+                evidence=_installation_evidence(
+                    analysis=analysis,
+                    description=description,
+                ),
             )
-            installed.append(opened.analysis.uid)
+            installed += 1
     return AtomizePrewarmInstallResult(
         declared=declared,
-        installed=len(installed),
+        installed=installed,
         skipped_configuration=skipped,
-        analysis_uids=tuple(installed),
+        # A hidden receipt intentionally has no ordinary session identity.
+        analysis_uids=(),
     )

@@ -314,6 +314,7 @@ def _ensure_symmetric_comparison(
         find_declared_equivalent_compare_analysis,
         find_declared_projected_compare_analysis,
         record_equivalent_compare_prewarm,
+        record_exact_compare_prewarm,
         record_projected_compare_prewarm,
     )
 
@@ -355,17 +356,24 @@ def _ensure_symmetric_comparison(
         execution.origin == "EQUIVALENT_SCOPE_PREWARM"
         and equivalent_match is not None
     ):
-        recorder = (
-            record_projected_compare_prewarm
-            if equivalent_match.origin == "PROJECTED_PREWARM"
-            else record_equivalent_compare_prewarm
-        )
-        recorder(
-            store,
-            entry_key=equivalent_match.entry_key,
-            analysis=execution.analysis,
-            prepared_context_names=equivalent_match.prepared_context_names,
-        )
+        if equivalent_match.origin == "EXACT_PREWARM":
+            record_exact_compare_prewarm(
+                store,
+                entry_key=equivalent_match.entry_key,
+                analysis=execution.analysis,
+            )
+        else:
+            recorder = (
+                record_projected_compare_prewarm
+                if equivalent_match.origin == "PROJECTED_PREWARM"
+                else record_equivalent_compare_prewarm
+            )
+            recorder(
+                store,
+                entry_key=equivalent_match.entry_key,
+                analysis=execution.analysis,
+                prepared_context_names=equivalent_match.prepared_context_names,
+            )
     return execution.analysis
 
 

@@ -57,7 +57,10 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore, context_record_digest
-from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
+from memcommit.study_prewarm.atomize import (
+    find_declared_atomize_prewarm,
+    is_installed_atomize_prewarm,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -960,6 +963,22 @@ def cmd(
                     bold=True,
                 )
                 return
+            atomize_prewarm = (
+                find_declared_atomize_prewarm(
+                    store=store,
+                    context=direct_ctx,
+                )
+                if session is None
+                else None
+            )
+            effective_output_name = (
+                output_name
+                or (
+                    atomize_prewarm.output_context_name
+                    if atomize_prewarm is not None
+                    else None
+                )
+            )
             with progressing_provider_factory(
                 "ATOMIZE",
                 "analyzing memory structure",
@@ -969,7 +988,12 @@ def cmd(
                     store=store,
                     ctx=direct_ctx,
                     provider_factory=provider_factory,
-                    output_context_name=output_name,
+                    output_context_name=effective_output_name,
+                    prepared_analysis=(
+                        atomize_prewarm.analysis
+                        if atomize_prewarm is not None
+                        else None
+                    ),
                 )
             session = opened.analysis
             planned_output = opened.workbench.output_context_name or name
@@ -1051,7 +1075,11 @@ def cmd(
                                 if exact_prewarm
                                 else "CURRENT. "
                             )
-                            + "Resumed; the provider was not called."
+                            + (
+                                "Materialized on first use; the provider was not called."
+                                if opened.materialized_prepared
+                                else "Resumed; the provider was not called."
+                            )
                         )
                     ),
                     fg=typer.colors.CYAN,

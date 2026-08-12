@@ -26,7 +26,6 @@ REGISTRY_POLICY_VERSION = "declared-exact-v1"
 PrewarmOperation = Literal[
     "COMPARE",
     "UPDATE",
-    "MELD_SYMMETRIC",
     "MELD_DIRECTIONAL",
     "SEVER",
     "ATOMIZE",
@@ -120,7 +119,6 @@ class StudyPrewarmEntry:
             not in {
                 "COMPARE",
                 "UPDATE",
-                "MELD_SYMMETRIC",
                 "MELD_DIRECTIONAL",
                 "SEVER",
                 "ATOMIZE",

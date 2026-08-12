@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM ATOMIZE                                                                                                                                                                     ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · practice/source                                                                                                                                                       ┃
+┃   OUTPUT · practice/source-atomized · NOT CREATED                                                                                                                                ┃
+┃ READY_TO_APPLY_AS_IS · 1 SOURCE MEMORIES · 2 PROJECTED MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The request contains two editing constraints.                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CHANGED                                                                                                                                                                          ┃
+┃ The constraints are separated without additions.                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ UNRESOLVED                                                                                                                                                                       ┃
+┃ (none)                                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 1                                                                                                                                                          ┃
+┃ SUGGESTED SPLIT 1 · Keep the wording concise. Preserve the original meaning.                                                                                                     ┃
+┃ [REVIEW] Each sentence is independently revisable.                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY AS IS is available. Enter to review before anything changes.                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Atomize report                                                                                                                                         ^│
+│  SUGGESTED SPLIT Keep the wording concise. Preserve the original meaning.                                                                                                        │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| SAVE LOCATION |─────────────────────────────────────────────────────────────────────────────────┐
+│practice/source-atomized · NOT CREATED    Enter to change                                                                                                                         │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Atomize action · APPLY AS IS is available. Enter to review before anything changes.                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  S sort  H Help  Q close

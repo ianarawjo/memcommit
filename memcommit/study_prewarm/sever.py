@@ -29,7 +29,11 @@ from memcommit.store import (
     context_record_digest,
     validate_context_name,
 )
-from memcommit.study_prewarm.compare import INSTALLATIONS_DIRECTORY_NAME
+from memcommit.study_prewarm.installations import (
+    INSTALLATIONS_DIRECTORY_NAME,
+    declared_installation_matches,
+    record_declared_installation,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -243,6 +247,16 @@ def _receipt_path(store: MemoryStore, entry_key: str) -> Path:
     return store.store_dir / INSTALLATIONS_DIRECTORY_NAME / f"sever-{entry_key}.json"
 
 
+def _installation_evidence(
+    source: SeverContextBinding,
+    criteria: SeverContextBinding,
+) -> dict[str, str]:
+    return {
+        "source_frame_digest": source.frame_digest,
+        "criteria_frame_digest": criteria.frame_digest,
+    }
+
+
 def _record_installation(
     store: MemoryStore,
     *,
@@ -274,6 +288,22 @@ def _receipt_matches(
     source: SeverContextBinding,
     criteria: SeverContextBinding,
 ) -> bool:
+    registry = load_registry(store.store_dir)
+    if registry is not None:
+        entry = next(
+            (
+                item
+                for item in registry.entries
+                if item.key == entry_key and item.operation == "SEVER"
+            ),
+            None,
+        )
+        if entry is not None and declared_installation_matches(
+            store,
+            entry=entry,
+            evidence=_installation_evidence(source, criteria),
+        ):
+            return True
     path = _receipt_path(store, entry_key)
     if not path.exists():
         return False
@@ -497,11 +527,10 @@ def install_declared_sever_prewarms(
         criteria = _capture_binding(criteria_access, include_descendants=True)
         _fresh_review(prepared, source=source, criteria=criteria)
         if publish:
-            _record_installation(
+            record_declared_installation(
                 store,
-                entry_key=entry.key,
-                source=source,
-                criteria=criteria,
+                entry=entry,
+                evidence=_installation_evidence(source, criteria),
             )
             installed.append(entry.key)
     return SeverPrewarmInstallResult(

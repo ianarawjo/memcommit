@@ -7,9 +7,15 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
+import memcommit.profiles as profiles_module
+import memcommit.study_prewarm.atomize as atomize_prewarm_module
 from memcommit.cli import app
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.commands.comparison_execution import load_comparison_context
+from memcommit.commands.comparison_execution import ensure_comparison_analysis
+from memcommit.commands.atomize_sessions import atomize_session_entries
+from memcommit.commands.compare_sessions import comparison_session_entries
+from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.granted_context import resolve_context_access
 from memcommit.comparison import (
     ComparisonAnalysis,
@@ -19,12 +25,19 @@ from memcommit.comparison import (
     ComparisonReports,
 )
 from memcommit.config import Config
+from memcommit.context import Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
 from memcommit.profile_config import load_profile_registry, profile_store_dir
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.atomize import build_atomize_prewarm_artifact
-from memcommit.study_prewarm.compare import build_compare_prewarm_artifact
+from memcommit.study_prewarm.atomize import (
+    build_atomize_prewarm_artifact,
+    find_declared_atomize_prewarm,
+)
+from memcommit.study_prewarm.compare import (
+    build_compare_prewarm_artifact,
+    find_declared_equivalent_compare_analysis,
+)
 from memcommit.study_prewarm.registry import publish_artifact
 
 
@@ -180,6 +193,15 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     )
     practice_source = first_store.load_direct("practice/source")
     practice_description = first_store.load_direct("practice/description")
+    legacy_provenance = Memory(
+        uid=profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID,
+        content=atomize_prewarm_module._LEGACY_PRACTICE_PROVENANCE_CONTENT,
+    )
+    practice_description.add(legacy_provenance)
+    baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
+    baseline_description = baseline_store.load_direct("practice/description")
+    baseline_description.add(legacy_provenance)
+    baseline_store.save(baseline_description)
     atomize_analysis = create_atomize_analysis(
         practice_source,
         impact_atomize(practice_source, _TutorialAtomizeProvider),
@@ -204,11 +226,86 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     initialized = runner.invoke(app, ["init-study", "seed-target"])
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
-    assert "Declared Compare prewarms 1 installed." in initialized.output
-    assert "Declared Tutorial Atomize prewarms 1 installed." in initialized.output
+    assert (
+        "Declared Compare prewarms 1 hidden receipts installed."
+        in initialized.output
+    )
+    assert (
+        "Declared Tutorial Atomize prewarms 1 hidden receipts installed."
+        in initialized.output
+    )
     second_registry = load_profile_registry()
     second = second_registry.active
     second_store = MemoryStore(root=profile_store_dir(second), create=False)
+    saved = load_granted_comparison_artifact(
+        second_store,
+        analysis.frames[0].context_uid,
+        analysis.frames[1].context_uid,
+    )
+    assert saved is None
+    assert comparison_session_entries(second_store) == ()
+    assert atomize_session_entries(second_store) == ()
+    assert second_store.load_impact_plan() is None
+    assert second_store.load_staged_update() is None
+    assert second_store.load_atomize_analysis(practice_source.uid) is None
+
+    current_source = second_store.load_direct("practice/source")
+    atomize_match = find_declared_atomize_prewarm(
+        store=second_store,
+        context=current_source,
+    )
+    assert atomize_match is not None
+    opened_atomize = open_or_create_atomize_workbench(
+        store=second_store,
+        ctx=current_source,
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("lazy Atomize materialization opened a provider")
+        ),
+        prepared_analysis=atomize_match.analysis,
+        output_context_name=atomize_match.output_context_name,
+    )
+    assert opened_atomize.materialized_prepared is True
+
+    current_name = second_store.current_context_name()
+    compare_accesses = tuple(
+        resolve_context_access(
+            second_store,
+            name,
+            current_name=current_name,
+            required_permission="READ",
+            registry=second_registry,
+        )
+        for name in ("task-2/advisor1", "task-2/advisor2")
+    )
+    compare_contexts = tuple(
+        load_comparison_context(access, include_descendants=True)
+        for access in compare_accesses
+    )
+
+    def exact_compare(comparison_input):
+        match = find_declared_equivalent_compare_analysis(
+            store=second_store,
+            comparison_input=comparison_input,
+            current_name=current_name,
+            registry_snapshot=second_registry,
+        )
+        assert match is not None
+        return match.analysis
+
+    execution = ensure_comparison_analysis(
+        store=second_store,
+        reference_access=compare_accesses[0],
+        compared_access=compare_accesses[1],
+        reference=compare_contexts[0],
+        compared=compare_contexts[1],
+        current_name=current_name,
+        include_descendants=(True, True),
+        analyze=lambda _input: (_ for _ in ()).throw(
+            AssertionError("lazy Compare materialization opened a provider")
+        ),
+        equivalent=exact_compare,
+    )
+    assert execution.analysis.to_dict() == analysis.to_dict()
     saved = load_granted_comparison_artifact(
         second_store,
         analysis.frames[0].context_uid,
@@ -225,6 +322,11 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     saved_atomize = second_store.load_atomize_analysis(practice_source.uid)
     assert saved_atomize is not None
     assert saved_atomize.to_dict() == atomize_analysis.to_dict()
+    copied_description = second_store.load_direct("practice/description")
+    assert (
+        profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID
+        not in copied_description.memories
+    )
     atomize_workbench = second_store.load_atomize_workbench(saved_atomize)
     assert atomize_workbench is not None
     assert atomize_workbench.output_context_name == "practice/source-atomized"

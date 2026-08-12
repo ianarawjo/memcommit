@@ -146,7 +146,7 @@ def cmd(
     if result.declared_compare_prewarms:
         typer.echo(
             "Declared Compare prewarms "
-            f"{result.installed_compare_prewarms} installed"
+            f"{result.installed_compare_prewarms} hidden receipts installed"
             + (
                 f" · {result.skipped_compare_prewarms} skipped for the current "
                 "provider configuration"
@@ -158,7 +158,7 @@ def cmd(
     if result.declared_atomize_prewarms:
         typer.echo(
             "Declared Tutorial Atomize prewarms "
-            f"{result.installed_atomize_prewarms} installed"
+            f"{result.installed_atomize_prewarms} hidden receipts installed"
             + (
                 f" · {result.skipped_atomize_prewarms} skipped for the current "
                 "provider configuration"
@@ -170,7 +170,7 @@ def cmd(
     if result.declared_update_prewarms:
         typer.echo(
             "Declared Task 1 Update prewarms "
-            f"{result.installed_update_prewarms} installed"
+            f"{result.installed_update_prewarms} hidden receipts installed"
             + (
                 f" · {result.skipped_update_prewarms} skipped for the current "
                 "provider configuration"
@@ -182,7 +182,7 @@ def cmd(
     if result.declared_sever_prewarms:
         typer.echo(
             "Declared Task 3 Sever prewarms "
-            f"{result.installed_sever_prewarms} installed"
+            f"{result.installed_sever_prewarms} hidden receipts installed"
             + (
                 f" · {result.skipped_sever_prewarms} skipped for the current "
                 "provider configuration"
@@ -194,7 +194,7 @@ def cmd(
     if result.declared_directional_meld_prewarms:
         typer.echo(
             "Declared Task 1 Directional Meld prewarms "
-            f"{result.installed_directional_meld_prewarms} installed"
+            f"{result.installed_directional_meld_prewarms} hidden receipts installed"
             + (
                 f" · {result.skipped_directional_meld_prewarms} skipped for the "
                 "current provider configuration"
@@ -204,7 +204,8 @@ def cmd(
             + "."
         )
     typer.echo(
-        "Operational history starts empty; checkpoints, sessions, ad-hoc caches, "
+        "Operational history starts empty; declared caches remain hidden until "
+        "the first matching operation. Checkpoints, sessions, ad-hoc caches, "
         "locks, and run logs were not imported."
     )
     typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))

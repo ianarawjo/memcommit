@@ -63,6 +63,8 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore
+from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
+from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.update import UpdateError, plan_update, session_matches
 from memcommit.update_endpoints import resolve_update_endpoints
 
@@ -415,42 +417,64 @@ def _directional_impact(
             current_name=current_name,
         )
         authorize_derived_transfer(source_access, target_access)
-        with CommandProgress(
-            "IMPACT UPDATE",
-            "connecting provider",
-            total=2,
-        ) as progress:
-            # Authenticate before opening authority-owned Memory content.
-            provider = connect_codex_chatgpt_provider()
-            progress.update("planning memory changes", step=2)
-            source = (
-                GrantedReadStore(source_access).load(source_access.display_name)
-                if source_access.is_granted
-                else store.load(source_access.context_name)
+        source = (
+            GrantedReadStore(source_access).load(source_access.display_name)
+            if source_access.is_granted
+            else store.load(source_access.context_name)
+        )
+        target = (
+            GrantedReadStore(target_access).load(target_access.display_name)
+            if target_access.is_granted
+            else store.load(target_access.context_name)
+        )
+        granted_source = (
+            freeze_granted_update_target(source_access)
+            if source_access.is_granted
+            else None
+        )
+        granted_target = (
+            freeze_granted_update_target(target_access)
+            if target_access.is_granted
+            else None
+        )
+        from memcommit.study_prewarm.update import (
+            find_installed_projectable_update_prewarm,
+        )
+
+        update_prewarm_match = find_installed_projectable_update_prewarm(
+            store=store,
+            source=source,
+            target=target,
+            source_include_descendants=True,
+            target_include_descendants=True,
+            granted_source=granted_source,
+            granted_target=granted_target,
+        )
+        if update_prewarm_match is not None:
+            session = update_prewarm_match.session.with_status("impact")
+            label = update_prewarm_match.origin.replace("_", " ")
+            typer.echo(
+                f"{label} · UPDATE IMPACT MATERIALIZED · provider was not called."
             )
-            target = (
-                GrantedReadStore(target_access).load(target_access.display_name)
-                if target_access.is_granted
-                else store.load(target_access.context_name)
-            )
-            granted_source = (
-                freeze_granted_update_target(source_access)
-                if source_access.is_granted
-                else None
-            )
-            granted_target = (
-                freeze_granted_update_target(target_access)
-                if target_access.is_granted
-                else None
-            )
-            session = plan_update(
-                source,
-                target,
-                lambda: provider,
-                status="impact",
-                granted_source=granted_source,
-                granted_target=granted_target,
-            )
+        else:
+            with CommandProgress(
+                "IMPACT UPDATE",
+                "connecting provider",
+                total=2,
+            ) as progress:
+                # Live planning authenticates the provider before opening any
+                # authority-owned content for disclosure. Hidden receipts need
+                # no provider connection and remain within local authority.
+                provider = connect_codex_chatgpt_provider()
+                progress.update("planning memory changes", step=2)
+                session = plan_update(
+                    source,
+                    target,
+                    lambda: provider,
+                    status="impact",
+                    granted_source=granted_source,
+                    granted_target=granted_target,
+                )
 
         # Provider latency is not an authorization lease. Re-resolve both
         # endpoints and rebuild both projections before publishing the plan.
@@ -507,12 +531,36 @@ def _directional_impact(
                     "no preview was saved."
                 )
             store.save_impact_plan(session)
+            if update_prewarm_match is not None:
+                from memcommit.study_prewarm.update import (
+                    record_equivalent_update_prewarm,
+                    record_exact_update_prewarm,
+                    record_projected_update_prewarm,
+                )
+
+                recorder = (
+                    record_exact_update_prewarm
+                    if update_prewarm_match.origin == "EXACT_PREWARM"
+                    else record_equivalent_update_prewarm
+                    if update_prewarm_match.origin
+                    == "EQUIVALENT_SCOPE_PREWARM"
+                    else record_projected_update_prewarm
+                )
+                recorder(
+                    store,
+                    entry_key=update_prewarm_match.entry_key,
+                    session=session,
+                    prepared_source_name=(
+                        update_prewarm_match.prepared_source_name
+                    ),
+                )
     except (
         OSError,
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
         RuntimeError,
+        StudyPrewarmRegistryError,
         UpdateError,
         ValueError,
     ) as error:
@@ -653,6 +701,11 @@ def _atomize_impact(
                     "running; no preview was saved."
                 )
 
+        atomize_prewarm = (
+            find_declared_atomize_prewarm(store=store, context=ctx)
+            if not refresh and not with_review
+            else None
+        )
         with progressing_provider_factory(
             "IMPACT ATOMIZE",
             "analyzing memory structure",
@@ -668,6 +721,16 @@ def _atomize_impact(
                 source_review_uid=source_review_uid,
                 source_review_digest=source_review_digest,
                 validate_before_save=validate_review_before_save,
+                output_context_name=(
+                    atomize_prewarm.output_context_name
+                    if atomize_prewarm is not None
+                    else None
+                ),
+                prepared_analysis=(
+                    atomize_prewarm.analysis
+                    if atomize_prewarm is not None
+                    else None
+                ),
             )
         analysis = opened.analysis
         workbench = opened.workbench
@@ -703,7 +766,13 @@ def _atomize_impact(
             )
         except ReviewCancelled:
             typer.echo("Atomize workbench saved. No Memory changes applied.")
-    if opened.created_analysis:
+    if opened.materialized_prepared:
+        typer.secho(
+            f"Exact prewarm materialized [{analysis.uid[:8]}] on first use; "
+            "the provider was not called.",
+            fg=typer.colors.CYAN,
+        )
+    elif opened.created_analysis:
         typer.secho(
             f"Analysis saved [{analysis.uid[:8]}] for mem trace/rationale.",
             fg=typer.colors.CYAN,

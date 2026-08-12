@@ -9,10 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.commands.comparison_execution import (
-    install_prepared_comparison_analysis,
-    load_comparison_context,
-)
+from memcommit.commands.comparison_execution import load_comparison_context
 from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
@@ -35,6 +32,11 @@ from memcommit.derived_policy import (
 )
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
+from memcommit.study_prewarm.installations import (
+    INSTALLATIONS_DIRECTORY_NAME,
+    declared_installation_matches,
+    record_declared_installation,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     payload_digest,
@@ -52,7 +54,6 @@ if TYPE_CHECKING:
 
 COMPARE_ARTIFACT_KIND = "STUDY_COMPARE_EXACT_PREWARM"
 COMPARE_ARTIFACT_SCHEMA_VERSION = 1
-INSTALLATIONS_DIRECTORY_NAME = "study-prewarm-installations"
 
 
 @dataclass(frozen=True)
@@ -138,6 +139,22 @@ def _comparison_frame_evidence(frame) -> tuple[tuple[object, ...], ...]:
             memory.content,
         )
         for memory in frame.memories
+    )
+
+
+def _exact_input_matches(
+    prepared: ComparisonAnalysis,
+    current: ComparisonInput,
+) -> bool:
+    return bool(
+        prepared.include_descendants == current.include_descendants
+        and all(
+            old.context_uid == new.context_uid
+            and old.context_name == new.context_name
+            and old.context_digest == new.context_digest
+            and _comparison_frame_evidence(old) == _comparison_frame_evidence(new)
+            for old, new in zip(prepared.frames, current.frames, strict=True)
+        )
     )
 
 
@@ -728,7 +745,12 @@ def find_declared_equivalent_compare_analysis(
             artifact.get("provider") != provider
             or artifact.get("model") != model
             or artifact.get("reasoning") != reasoning
-            or not is_installed_compare_prewarm(store, prepared)
+            or not _declared_compare_installation_matches(
+                store,
+                entry=entry,
+                analysis=prepared,
+                description=description,
+            )
         ):
             continue
         description_access = resolve_context_access(
@@ -748,18 +770,22 @@ def find_declared_equivalent_compare_analysis(
             != description["context_digest"]
         ):
             continue
-        owner_evidence = _owner_evidence_matches(
-            store=store,
-            prepared=prepared,
-            current=comparison_input,
-            current_name=current_name,
-            registry_snapshot=registry_snapshot,
-        )
-        rebound = rebind_equivalent_compare_analysis(
-            prepared,
-            comparison_input,
-            owner_evidence_proven=owner_evidence,
-        )
+        exact = _exact_input_matches(prepared, comparison_input)
+        if exact:
+            rebound = prepared
+        else:
+            owner_evidence = _owner_evidence_matches(
+                store=store,
+                prepared=prepared,
+                current=comparison_input,
+                current_name=current_name,
+                registry_snapshot=registry_snapshot,
+            )
+            rebound = rebind_equivalent_compare_analysis(
+                prepared,
+                comparison_input,
+                owner_evidence_proven=owner_evidence,
+            )
         if rebound is None:
             continue
         candidates.append(
@@ -769,6 +795,11 @@ def find_declared_equivalent_compare_analysis(
                 prepared_context_names=(
                     prepared.frames[0].context_name,
                     prepared.frames[1].context_name,
+                ),
+                origin=(
+                    "EXACT_PREWARM"
+                    if exact
+                    else "EQUIVALENT_SCOPE_PREWARM"
                 ),
             )
         )
@@ -831,6 +862,12 @@ def find_declared_projected_compare_analysis(
             artifact.get("provider") != provider
             or artifact.get("model") != model
             or artifact.get("reasoning") != reasoning
+            or not _declared_compare_installation_matches(
+                store,
+                entry=entry,
+                analysis=parent,
+                description=description,
+            )
         ):
             continue
         description_access = resolve_context_access(
@@ -924,6 +961,37 @@ def _installation_path(store: MemoryStore, analysis_uid: str) -> Path:
     return store.store_dir / INSTALLATIONS_DIRECTORY_NAME / f"{analysis_uid}.json"
 
 
+def _installation_evidence(
+    *,
+    analysis: ComparisonAnalysis,
+    description: dict[str, str],
+) -> dict[str, str]:
+    return {
+        "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
+        "description_context_uid": description["context_uid"],
+        "description_context_digest": description["context_digest"],
+    }
+
+
+def _declared_compare_installation_matches(
+    store: MemoryStore,
+    *,
+    entry,
+    analysis: ComparisonAnalysis,
+    description: dict[str, str],
+) -> bool:
+    # The legacy materialized receipt remains readable for already-created
+    # Study runs; new runs use only the entry-key hidden receipt until first use.
+    return declared_installation_matches(
+        store,
+        entry=entry,
+        evidence=_installation_evidence(
+            analysis=analysis,
+            description=description,
+        ),
+    ) or is_installed_compare_prewarm(store, analysis)
+
+
 def _record_installation(
     store: MemoryStore,
     *,
@@ -945,6 +1013,17 @@ def _record_installation(
             "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
         },
     )
+
+
+def record_exact_compare_prewarm(
+    store: MemoryStore,
+    *,
+    entry_key: str,
+    analysis: ComparisonAnalysis,
+) -> None:
+    """Record the ordinary analysis created by first-use materialization."""
+
+    _record_installation(store, entry_key=entry_key, analysis=analysis)
 
 
 def record_equivalent_compare_prewarm(
@@ -1012,22 +1091,49 @@ def is_installed_compare_prewarm(
     analysis: ComparisonAnalysis,
 ) -> bool:
     path = _installation_path(store, analysis.uid)
-    if not path.exists():
+    if path.exists():
+        if not path.is_file() or path.is_symlink():
+            raise StudyPrewarmRegistryError("Compare prewarm receipt is unsafe.")
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise StudyPrewarmRegistryError(
+                "Compare prewarm receipt is invalid."
+            ) from error
+        if (
+            isinstance(value, dict)
+            and value.get("kind") == "STUDY_COMPARE_PREWARM_INSTALLATION"
+            and value.get("schema_version") == 1
+            and value.get("analysis_uid") == analysis.uid
+            and value.get("analysis_digest")
+            == comparison_canonical_digest(analysis.to_dict())
+        ):
+            return True
+
+    registry = load_registry(store.store_dir)
+    if registry is None:
         return False
-    if not path.is_file() or path.is_symlink():
-        raise StudyPrewarmRegistryError("Compare prewarm receipt is unsafe.")
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as error:
-        raise StudyPrewarmRegistryError("Compare prewarm receipt is invalid.") from error
-    return bool(
-        isinstance(value, dict)
-        and value.get("kind") == "STUDY_COMPARE_PREWARM_INSTALLATION"
-        and value.get("schema_version") == 1
-        and value.get("analysis_uid") == analysis.uid
-        and value.get("analysis_digest")
-        == comparison_canonical_digest(analysis.to_dict())
-    )
+    for entry in registry.entries:
+        if not entry.enabled or entry.operation != "COMPARE":
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        prepared, description = _validate_artifact(
+            artifact,
+            entry_key=entry.key,
+            entry_task=entry.task,
+        )
+        if prepared != analysis:
+            continue
+        if declared_installation_matches(
+            store,
+            entry=entry,
+            evidence=_installation_evidence(
+                analysis=prepared,
+                description=description,
+            ),
+        ):
+            return True
+    return False
 
 
 def installed_compare_prewarm_origin(
@@ -1075,7 +1181,7 @@ def install_declared_compare_prewarms(
     registry_snapshot: ProfileRegistry,
     publish: bool = True,
 ) -> ComparePrewarmInstallResult:
-    """Install exact Compare seeds using this run's current Grant bindings.
+    """Validate exact Compare seeds and install hidden receipts.
 
     The portable artifact contains no old Grant wrapper. Every Source is
     resolved and loaded from the new run before the production Compare CAS
@@ -1096,7 +1202,7 @@ def install_declared_compare_prewarms(
         )
     provider, model, reasoning = _configured_semantic_identity()
     current_name = store.current_context_name()
-    installed: list[str] = []
+    installed = 0
     declared = 0
     skipped = 0
     for entry in registry.entries:
@@ -1169,25 +1275,18 @@ def install_declared_compare_prewarms(
         if retention is not None:
             authorize_analysis_save(accesses, retention=retention)
         if publish:
-            execution = install_prepared_comparison_analysis(
-                store=store,
-                reference_access=accesses[0],
-                compared_access=accesses[1],
-                reference=contexts[0],
-                compared=contexts[1],
-                current_name=current_name,
-                include_descendants=analysis.include_descendants,
-                analysis=analysis,
-            )
-            _record_installation(
+            record_declared_installation(
                 store,
-                entry_key=entry.key,
-                analysis=execution.analysis,
+                entry=entry,
+                evidence=_installation_evidence(
+                    analysis=analysis,
+                    description=description,
+                ),
             )
-            installed.append(execution.analysis.uid)
+            installed += 1
     return ComparePrewarmInstallResult(
         declared=declared,
-        installed=len(installed),
+        installed=installed,
         skipped_configuration=skipped,
-        analysis_uids=tuple(installed),
+        analysis_uids=(),
     )

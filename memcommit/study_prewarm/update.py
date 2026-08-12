@@ -24,7 +24,11 @@ from memcommit.profile_config import (
     study_run_identity,
 )
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
-from memcommit.study_prewarm.compare import INSTALLATIONS_DIRECTORY_NAME
+from memcommit.study_prewarm.installations import (
+    INSTALLATIONS_DIRECTORY_NAME,
+    declared_installation_matches,
+    record_declared_installation,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -238,6 +242,22 @@ def _installation_path(store: MemoryStore, session_uid: str) -> Path:
     return store.store_dir / INSTALLATIONS_DIRECTORY_NAME / f"update-{session_uid}.json"
 
 
+def _installation_evidence(
+    *,
+    session: UpdateSession,
+    description: dict[str, str],
+) -> dict[str, str]:
+    return {
+        "operation_digest": operation_digest(session.operations),
+        "source_context_uid": session.source_uid,
+        "source_context_digest": session.source_digest,
+        "target_context_uid": session.target_uid,
+        "target_context_digest": session.target_digest,
+        "description_context_uid": description["context_uid"],
+        "description_context_digest": description["context_digest"],
+    }
+
+
 def _record_installation(store: MemoryStore, *, entry_key: str, session: UpdateSession) -> None:
     path = _installation_path(store, session.uid)
     if path.parent.exists() and (not path.parent.is_dir() or path.parent.is_symlink()):
@@ -254,6 +274,19 @@ def _record_installation(store: MemoryStore, *, entry_key: str, session: UpdateS
             "operation_digest": operation_digest(session.operations),
         },
     )
+
+
+def record_exact_update_prewarm(
+    store: MemoryStore,
+    *,
+    entry_key: str,
+    session: UpdateSession,
+    prepared_source_name: str | None = None,
+) -> None:
+    """Record the ordinary plan created by first-use materialization."""
+
+    del prepared_source_name
+    _record_installation(store, entry_key=entry_key, session=session)
 
 
 def is_installed_update_prewarm(store: MemoryStore, session: UpdateSession) -> bool:
@@ -724,7 +757,17 @@ def find_installed_projectable_update_prewarm(
                     else None
                 ),
             )
-            if not is_installed_update_prewarm(store, canonical):
+            if not (
+                declared_installation_matches(
+                    store,
+                    entry=entry,
+                    evidence=_installation_evidence(
+                        session=canonical,
+                        description=description,
+                    ),
+                )
+                or is_installed_update_prewarm(store, canonical)
+            ):
                 continue
             projected = _project_update_session(
                 canonical,
@@ -739,6 +782,19 @@ def find_installed_projectable_update_prewarm(
             if projected is None:
                 continue
             rebound, relation = projected
+            exact = bool(
+                relation == "EQUAL"
+                and source.uid == canonical.source_uid
+                and source.name == canonical.source_name
+                and source_include_descendants
+                == canonical.source_include_descendants
+                and target.uid == canonical.target_uid
+                and target.name == canonical.target_name
+                and target_include_descendants
+                == canonical.target_include_descendants
+            )
+            if exact:
+                rebound = canonical
         except (OSError, StudyPrewarmRegistryError, ValueError):
             continue
         matches.append(
@@ -747,7 +803,9 @@ def find_installed_projectable_update_prewarm(
                 session=rebound,
                 prepared_source_name=canonical.source_name,
                 origin=(
-                    "EQUIVALENT_SCOPE_PREWARM"
+                    "EXACT_PREWARM"
+                    if exact
+                    else "EQUIVALENT_SCOPE_PREWARM"
                     if relation == "EQUAL"
                     else "PROJECTED_PREWARM"
                 ),
@@ -783,7 +841,8 @@ def find_installed_equivalent_update_prewarm(
     )
     return (
         match
-        if match is not None and match.origin == "EQUIVALENT_SCOPE_PREWARM"
+        if match is not None
+        and match.origin in {"EXACT_PREWARM", "EQUIVALENT_SCOPE_PREWARM"}
         else None
     )
 
@@ -795,7 +854,7 @@ def install_declared_update_prewarms(
     registry_snapshot: ProfileRegistry,
     publish: bool = True,
 ) -> UpdatePrewarmInstallResult:
-    """Install the exact Task 1 proposal into Update's ordinary Impact slot."""
+    """Validate the exact Task 1 proposal and install a hidden receipt."""
 
     registry = load_registry(store.store_dir)
     if registry is None:
@@ -807,7 +866,7 @@ def install_declared_update_prewarms(
         raise StudyPrewarmRegistryError("Update prewarm belongs to a different baseline.")
     provider, model, reasoning = _configured_semantic_identity()
     declared = skipped = 0
-    installed: list[str] = []
+    installed = 0
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "UPDATE":
             continue
@@ -850,7 +909,13 @@ def install_declared_update_prewarms(
         ):
             raise StudyPrewarmRegistryError("Declared Update prewarm does not match current inputs.")
         if publish:
-            store.save_impact_plan(current)
-            _record_installation(store, entry_key=entry.key, session=current)
-            installed.append(current.uid)
-    return UpdatePrewarmInstallResult(declared, len(installed), skipped, tuple(installed))
+            record_declared_installation(
+                store,
+                entry=entry,
+                evidence=_installation_evidence(
+                    session=current,
+                    description=description,
+                ),
+            )
+            installed += 1
+    return UpdatePrewarmInstallResult(declared, installed, skipped, ())

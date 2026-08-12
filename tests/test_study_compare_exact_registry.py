@@ -4,11 +4,13 @@ from datetime import datetime, timezone
 import uuid
 
 import pytest
+from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
 import memcommit.store as store_module
 from memcommit.commands import meld as meld_command
+from memcommit.cli import app
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.comparison_execution import ensure_comparison_analysis
 from memcommit.commands.granted_context import ContextAccess
@@ -43,6 +45,9 @@ from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     publish_artifact,
 )
+
+
+runner = CliRunner(mix_stderr=False)
 
 
 def _profile(baseline_uid: str) -> ProfileEntry:
@@ -188,6 +193,14 @@ def test_task1_exact_basis_and_opposite_descendants_use_generic_registry(
         current_name=reference.name,
         include_descendants=(True, True),
         analyze=forbidden,
+        equivalent=lambda comparison_input: (
+            find_declared_equivalent_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=reference.name,
+                registry_snapshot=registry,
+            ).analysis
+        ),
     )
     reference_child = _subset_context(
         reference,
@@ -303,6 +316,14 @@ def test_exact_registry_installs_then_production_compare_never_calls_provider(
         current_name=reference.name,
         include_descendants=(True, True),
         analyze=forbidden,
+        equivalent=lambda comparison_input: (
+            find_declared_equivalent_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=reference.name,
+                registry_snapshot=registry,
+            ).analysis
+        ),
     )
 
     assert installed.declared == 1
@@ -314,6 +335,52 @@ def test_exact_registry_installs_then_production_compare_never_calls_provider(
     assert is_installed_compare_prewarm(store, execution.analysis) is True
     saved = load_comparison_analysis(reference.uid, compared.uid)
     assert saved is not None and saved.uid == prepared.uid
+
+
+def test_exact_compare_cli_materializes_hidden_receipt_without_provider(
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, reference, compared, prepared = _fixture(
+        tmp_path,
+        monkeypatch,
+    )
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    assert load_comparison_analysis(reference.uid, compared.uid) is None
+    monkeypatch.setattr(
+        "memcommit.commands.compare.MemoryStore",
+        lambda create=False: store,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.compare.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("hidden exact Compare receipt opened a provider")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "compare",
+            "--from",
+            reference.name,
+            "--to",
+            compared.name,
+            "--reference-descendants",
+            "--compared-descendants",
+            "--snapshot",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "EXACT PREWARM" in result.output
+    saved = load_comparison_analysis(reference.uid, compared.uid)
+    assert saved is not None
+    assert saved.to_dict() == prepared.to_dict()
 
 
 def test_configuration_mismatch_skips_seed_without_publishing(
@@ -440,13 +507,18 @@ def test_declared_parent_projection_supports_reversed_opposite_sides(
     tmp_path,
     monkeypatch,
 ):
-    store, _profile_entry, registry, reference, compared, _prepared = _fixture(
+    store, profile_entry, registry, reference, compared, _prepared = _fixture(
         tmp_path,
         monkeypatch,
     )
     left = _subset_context(reference, "task-2/advisor1/left")
     right = _subset_context(compared, "task-2/advisor2/right")
     comparison_input = ComparisonInput.from_contexts(right, left)
+    install_declared_compare_prewarms(
+        store=store,
+        profile=profile_entry,
+        registry_snapshot=registry,
+    )
 
     projected = project_declared_compare_analysis(
         store=store,

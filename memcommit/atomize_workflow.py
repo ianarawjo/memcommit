@@ -30,6 +30,7 @@ class OpenAtomizeWorkbenchResult:
     analysis: AtomizeAnalysisSession
     workbench: AtomizeWorkbenchSession
     created_analysis: bool
+    materialized_prepared: bool = False
 
 
 def install_prepared_atomize_analysis(
@@ -41,10 +42,11 @@ def install_prepared_atomize_analysis(
 ) -> OpenAtomizeWorkbenchResult:
     """Install one exact prepared analysis without opening a provider.
 
-    Study setup uses the same durable analysis/workbench pair as an ordinary
-    Atomize run.  The portable semantic payload is accepted only after it
-    matches the current direct Source exactly; the workbench is regenerated
-    for this run so no review response or application state crosses runs.
+    First-use Study materialization uses the same durable analysis/workbench
+    pair as an ordinary Atomize run. The portable semantic payload is accepted
+    only after it matches the current direct Source exactly; the workbench is
+    regenerated for this run so no review response or application state
+    crosses runs.
     """
 
     if (
@@ -100,6 +102,7 @@ def install_prepared_atomize_analysis(
         analysis=analysis,
         workbench=workbench,
         created_analysis=False,
+        materialized_prepared=True,
     )
 
 
@@ -132,6 +135,7 @@ def open_or_create_atomize_workbench(
     source_review_digest: str | None = None,
     output_context_name: str | None = None,
     validate_before_save: Callable[[], None] | None = None,
+    prepared_analysis: AtomizeAnalysisSession | None = None,
 ) -> OpenAtomizeWorkbenchResult:
     """Reuse an exact current result; call the provider only at a clear edge."""
     existing = store.load_atomize_analysis(ctx.uid)
@@ -173,6 +177,26 @@ def open_or_create_atomize_workbench(
             analysis=existing,
             workbench=workbench,
             created_analysis=False,
+        )
+
+    if prepared_analysis is not None and not refresh:
+        if (
+            declared_frames
+            or declared_frame_origins
+            or source_review_uid is not None
+            or source_review_digest is not None
+        ):
+            raise AtomizeImpactError(
+                "A prepared atomize analysis cannot replace a reviewed "
+                "reanalysis request."
+            )
+        if validate_before_save is not None:
+            validate_before_save()
+        return install_prepared_atomize_analysis(
+            store=store,
+            ctx=ctx,
+            analysis=prepared_analysis,
+            output_context_name=output_context_name,
         )
 
     previous_workbench = (
