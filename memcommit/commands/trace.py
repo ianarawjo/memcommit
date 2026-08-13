@@ -12,8 +12,12 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_history import (
     build_memory_history,
     load_retained_history_context,
+    load_retained_history_scope,
 )
-from memcommit.commands.memory_picker import choose_memory
+from memcommit.commands.memory_picker import (
+    ScopedMemoryPickerItem,
+    choose_memory_report_target,
+)
 from memcommit.commands.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
@@ -373,33 +377,55 @@ def cmd(
             raise ProvenanceError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
+        if selector is None:
+            history_scope = load_retained_history_scope(
+                store,
+                context_locator=context_name,
+                current_name=context_snapshot.current_name,
+                # The shared range control starts narrow but must know every
+                # eligible descendant before the person broadens it.
+                include_descendants=True,
+            )
+            candidate_items = tuple(
+                ScopedMemoryPickerItem(
+                    context_name=context.display_name,
+                    uid=candidate.uid,
+                    content=candidate.content,
+                    status=candidate.status,
+                    catalog_context_names=tuple(
+                        item.display_name for item in history_scope
+                    ),
+                    change_count=candidate.change_count,
+                )
+                for context in history_scope
+                for candidate in collect_trace_candidates(store, context.context)
+            )
+            selected = choose_memory_report_target(
+                candidate_items,
+                context_name=name,
+                operation="trace",
+                initial_include_descendants=False,
+            )
+            if selected is None:
+                typer.echo("Trace cancelled.")
+                return
+            selector = selected.memory_uid
+            context_name = selected.owner_context_name
+            # The picker is read-only, but another process may have changed the
+            # Context while it was open. Re-read before resolving the exact UID
+            # so the rendered report never mixes old live state with new history.
         history_context = load_retained_history_context(
             store,
             context_locator=context_name,
             current_name=context_snapshot.current_name,
         )
-        if selector is None:
-            selector = choose_memory(
-                collect_trace_candidates(store, history_context.context),
-                context_name=name,
-                operation="trace",
-            )
-            if selector is None:
-                typer.echo("Trace cancelled.")
-                return
-            # The picker is read-only, but another process may have changed the
-            # Context while it was open. Re-read before resolving the exact UID
-            # so the rendered report never mixes old live state with new history.
-            history_context = load_retained_history_context(
-                store,
-                context_locator=context_name,
-                current_name=context_snapshot.current_name,
-            )
+        name = history_context.display_name
         report = build_memory_history(store, history_context, selector)
         annotate_memory_report_attempt(
             operation="trace",
             context_name=name,
             memory_uid=report.selected_uid,
+            include_descendants=False,
         )
     except (
         FileNotFoundError,

@@ -39,7 +39,8 @@ replaceable provider-inference cache after a successful validated inference;
 
 In an interactive terminal, omitting `MEMORY` first opens the common session
 picker as a Recents launcher. Recent rows are scoped to the current operation,
-ordered newest first, and deduplicated by public Context name plus Memory UID.
+ordered newest first, and deduplicated by public Context name, Memory UID, and
+exact-versus-descendant range.
 The pinned `SELECT A MEMORY` action then opens the common read-only
 Context/Memory tree. This keeps repeated inspection quick without replacing
 the complete namespace route needed for a new target. When the operation has no
@@ -47,8 +48,9 @@ recent rows, the empty catalog is skipped and the Context/Memory tree opens
 directly; no saved-session-shaped decision exists in that case.
 
 Recents are derived only from completed command-attempt records. A record
-stores the operation, public or scoped Context name, and Memory UID; it never
-copies Memory content, inferred rationale, Grant material, or provider data.
+stores the operation, public or scoped Context name, Memory UID, and the
+content-free descendant boolean; it never copies Memory content, inferred
+rationale, Grant material, or provider data.
 Trace Recents also include completed `mem log --memory` attempts because that
 route is the same Memory-lineage view.
 Failed and cancelled attempts are not offered. Selecting a recent row freezes
@@ -57,34 +59,52 @@ path, where current Context existence, UID resolution, and effective
 permissions are checked again. A recent row is therefore navigation history,
 not retained read authority or a report snapshot.
 
-The Context/Memory tree begins on the command's current or explicitly scoped
-Context row, including when that row has no direct Memory. Rationale places
-every eligible Memory beneath its actual owner in the readable public
-hierarchy; a Grant attachment is never treated as a hierarchy edge. Trace
-retains its single-Context scope. Context rows browse or collapse the tree,
-while only an exact Memory row can complete selection.
+The shared execution launcher begins with `THIS CONTEXT ONLY` and
+`INCLUDE DESCENDANTS` projected through the common `ContextReachState`, then
+the common Context/Memory tree. It begins on the command's current or
+explicitly scoped Context row, including when that exact row has no direct
+Memory. Changing range never changes global current Context state. Rationale
+places every eligible Memory beneath its actual owner in the readable public
+hierarchy; a Grant attachment is never treated as a hierarchy edge. Trace may
+discover a Memory in a locally owned lexical descendant, but the resulting
+lineage still opens only that exact owner Context's history. Context rows
+browse or collapse the tree, while only an exact Memory row can complete
+selection.
 
-Each eligible UID appears once: currently present Memories first in canonical
-Context order, followed by historical-only Memories using their last retained
-content. `HISTORICAL` means only that the UID is no longer directly present;
+The launcher freezes the eligible descendant catalog before it opens but
+starts with exact reach. It therefore remains open when the root has zero
+direct candidates and descendants do have candidates: the person can move to
+`INCLUDE DESCENDANTS` instead of receiving a premature empty-scope error.
+When the complete frozen exact-plus-descendant catalog has no candidate, it
+still fails before opening an empty selector.
+
+Each eligible UID appears once per owner Context: currently present Memories
+first in canonical Context order, followed by historical-only Memories using
+their last retained content. `HISTORICAL` means only that the UID is no longer directly present;
 it can identify a removed Memory, a split parent, or another retained earlier
 state. Equal text never collapses distinct UIDs, and edits of one UID never
-create multiple picker rows. Up/Down, Left/Right, held-arrow acceleration, and
-wrapped scrolling all come from the common Context/Memory selector rather
+create multiple picker rows. Every locally owned row also shows the number of
+distinct retained operation rows that Log/Trace will expose for that lineage.
+Creation, edit, removal, reorder, and restoration can each contribute a row;
+events from one retained command identity count once. A granted Rationale row
+shows `HISTORY UNAVAILABLE` rather than treating withheld owner history as
+zero or deriving a count from current content. Up/Down, Left/Right,
+held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather
 than a second operation-specific navigation grammar.
 
-The picker returns the exact full UID and then enters the same command path as
-an explicit selector. It does not perform per-row semantic inference or open
-Memory references, embedded Contexts, or query-only sources. `mem rationale`
+The picker returns the exact root, owner Context, descendant boolean, and full
+UID, then enters the same report-building path as an explicit selector. It
+does not perform per-row semantic inference or open Memory references,
+embedded Contexts, or query-only sources. `mem rationale`
 connects its optional inference provider only after Enter selects a Memory;
 canceling therefore performs no provider call. After the full-screen picker
 closes, the command reloads the direct Context before reconstructing the report
 so it does not combine a pre-picker live frame with post-picker history.
-The selected-card detail names the resulting scope before Enter: Trace covers
+The selected row names its retained-change count before Enter: Trace covers
 the full retained lineage from earliest retained evidence through the current
 Context, while Rationale covers recorded evidence, saved analysis, and current
-interpretation. This shared first-stage picker is the interactive boundary for
-choosing a Memory; it does not silently choose an operation subrange.
+interpretation. This shared first-stage launcher is the interactive boundary
+for choosing both reach and Memory; it does not silently broaden exact reach.
 
 Rationale renders its complete interactive report inside the common framed,
 wrapped, read-only `VIEWER`, whether its Memory came from Recents, the tree, or
@@ -105,8 +125,9 @@ Outside a TTY, omission fails instead of silently selecting the first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
 explicit selector so machine-readable stdout is never preceded by terminal
 selection traffic. Escape, `q`, and Ctrl-C cancel the picker without changing
-the store. If no current or retained historical direct Memory exists, the
-command reports that boundary without opening an empty UI.
+the store. If no current or retained historical direct Memory exists anywhere
+in the frozen exact-plus-descendant catalog, the command reports that boundary
+without opening an empty UI.
 
 By default, `mem trace` renders the entire selected lineage as compact
 operation rows. The current endpoint comes first, followed by operations in
@@ -394,10 +415,11 @@ derived explanation shares the source Context's privacy lifetime.
 ## Readable subtree Rationale and Study Trace boundary
 
 Rationale does not perform an outbound search into arbitrary sibling or global
-Contexts. Selecting a Context freezes that Context plus every materialized
-lexical descendant in the shared readable public namespace. The public name,
-not the Grant attachment, determines hierarchy, so a local `task-1` scope can
-contain both `task-1/participant` and a granted `task-1/campus-wiki` sibling.
+Contexts. Selecting exact range freezes only that Context; selecting
+descendant range additionally freezes every materialized lexical descendant
+in the shared readable public namespace. The public name, not the Grant
+attachment, determines hierarchy, so a local `task-1` scope can contain both
+`task-1/participant` and a granted `task-1/campus-wiki` sibling.
 Each Context retains its own local or grant-bound access object; the hierarchy
 does not merge ownership. The target UID may belong to any direct Context in
 that subtree, and inference candidates retain their public owner Context names.
@@ -427,11 +449,12 @@ authority Profile's checkpoints, command receipts, or saved history artifacts.
 Only Grant rows therefore need a visible `TRACE BLOCKED` analysis boundary;
 local Study rows no longer repeat task-dependent Trace annotations.
 
-Recursive inference is not cached yet. Publishing a reusable result safely
-would require one freshness boundary over every Context in the subtree, while
-the current cache publication validates one direct Context. Recomputing is
-preferred to retaining a result whose supporting descendant changed during the
-provider turn.
+Multi-Context inference is not cached yet. Publishing a reusable result safely
+would require one freshness boundary over every Context in the selected
+range, while the current cache publication validates one direct Context.
+Recomputing is preferred to retaining a result whose supporting descendant
+changed during the provider turn. Exact one-Context inference retains the
+existing validated cache path.
 
 ## Query-only boundary
 

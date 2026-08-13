@@ -148,13 +148,20 @@ def _validated_details(value: object) -> None:
         raise CommandAttemptError("Command attempt details are invalid.")
     memory_report = value.get("memory_report")
     if memory_report is not None:
-        allowed = {"operation", "context_name", "memory_uid"}
-        if not isinstance(memory_report, dict) or set(memory_report) != allowed:
+        required = {"operation", "context_name", "memory_uid"}
+        if (
+            not isinstance(memory_report, dict)
+            or not required <= set(memory_report)
+            or set(memory_report) - {*required, "include_descendants"}
+        ):
             raise CommandAttemptError("Memory report attempt details are invalid.")
         if memory_report.get("operation") not in {"trace", "rationale"}:
             raise CommandAttemptError("Memory report operation is invalid.")
         _safe_nonempty(memory_report.get("context_name"), field="Context name")
         _safe_nonempty(memory_report.get("memory_uid"), field="Memory UID")
+        include_descendants = memory_report.get("include_descendants")
+        if include_descendants is not None and type(include_descendants) is not bool:
+            raise CommandAttemptError("Memory report scope is invalid.")
     sever = value.get("sever")
     if sever is None:
         return
@@ -382,6 +389,7 @@ def annotate_memory_report_attempt(
     operation: Literal["trace", "rationale"],
     context_name: str,
     memory_uid: str,
+    include_descendants: bool | None = None,
 ) -> None:
     """Persist only content-free navigation metadata for report Recents."""
     active = _ACTIVE_ATTEMPT.get()
@@ -399,6 +407,11 @@ def annotate_memory_report_attempt(
         "operation": operation,
         "context_name": context_name,
         "memory_uid": memory_uid,
+        **(
+            {"include_descendants": include_descendants}
+            if include_descendants is not None
+            else {}
+        ),
     }
     updated = replace(active.record, details=details)
     active.ledger.replace(updated)

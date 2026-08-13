@@ -10,6 +10,7 @@ from memcommit.commands.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
 )
+from memcommit.commands.memory_picker import MemoryReportTargetSelection
 from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.provenance import collect_trace_candidates
 from memcommit.store import MemoryStore
@@ -30,6 +31,21 @@ def _direct_memories(store: MemoryStore) -> list[Memory]:
     ]
 
 
+def _target_selection(
+    root: str,
+    owner: str,
+    memory_uid: str,
+    *,
+    include_descendants: bool = False,
+) -> MemoryReportTargetSelection:
+    return MemoryReportTargetSelection(
+        root_context_name=root,
+        owner_context_name=owner,
+        memory_uid=memory_uid,
+        include_descendants=include_descendants,
+    )
+
+
 def test_candidate_catalog_lists_current_then_historical_once(isolated_store):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "kept").exit_code == 0
@@ -48,6 +64,7 @@ def test_candidate_catalog_lists_current_then_historical_once(isolated_store):
         (kept.uid, "CURRENT", "kept revision"),
         (removed.uid, "HISTORICAL", "removed"),
     ]
+    assert [item.change_count for item in candidates] == [2, 2]
 
 
 def test_bare_trace_runs_existing_report_for_picker_uid(
@@ -61,13 +78,16 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
     assert invoke("remove", target.uid).exit_code == 0
     observed: dict[str, object] = {}
 
-    def select(items, *, context_name, operation):
+    def select(items, *, context_name, operation, initial_include_descendants):
         observed["items"] = [(item.uid, item.status) for item in items]
         observed["context_name"] = context_name
         observed["operation"] = operation
-        return target.uid
+        return _target_selection(context_name, context_name, target.uid)
 
-    monkeypatch.setattr("memcommit.commands.trace.choose_memory", select)
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_target",
+        select,
+    )
 
     result = invoke("trace")
 
@@ -89,8 +109,10 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
     monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory",
-        lambda items, *, context_name, operation: target.uid,
+        "memcommit.commands.rationale.choose_memory_report_target",
+        lambda items, *, context_name, operation, initial_include_descendants: (
+            _target_selection(context_name, context_name, target.uid)
+        ),
     )
     monkeypatch.setattr(
         "memcommit.commands.rationale.connect_codex_chatgpt_provider",
@@ -104,6 +126,44 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     assert result.exit_code == 0, result.output
     assert "Rationale for" in result.output
     assert "portable note" in result.output
+    assert "this Context only" in result.output
+
+
+def test_trace_descendant_range_opens_the_selected_owner_history(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "notes").exit_code == 0
+    assert invoke("init", "notes/child").exit_code == 0
+    assert invoke("add", "first child wording").exit_code == 0
+    store = MemoryStore()
+    target = _direct_memories(store)[0]
+    assert invoke("edit", target.uid, "current child wording").exit_code == 0
+    assert invoke("switch", "notes").exit_code == 0
+    observed: dict[str, object] = {}
+
+    def select(items, *, context_name, operation, initial_include_descendants):
+        observed["rows"] = [
+            (item.context_name, item.uid, item.change_count) for item in items
+        ]
+        return _target_selection(
+            context_name,
+            "notes/child",
+            target.uid,
+            include_descendants=True,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_target",
+        select,
+    )
+
+    result = invoke("trace")
+
+    assert result.exit_code == 0, result.output
+    assert observed["rows"] == [("notes/child", target.uid, 2)]
+    assert "Trace" in result.output
+    assert "current child wording" in result.output
 
 
 def test_rationale_picker_groups_memories_under_their_public_context(
@@ -118,13 +178,21 @@ def test_rationale_picker_groups_memories_under_their_public_context(
     assert invoke("switch", "notes").exit_code == 0
     observed: dict[str, object] = {}
 
-    def select(items, *, context_name, operation):
+    def select(items, *, context_name, operation, initial_include_descendants):
         observed["context_name"] = context_name
         observed["operation"] = operation
         observed["items"] = [(item.context_name, item.content) for item in items]
-        return child_target.uid
+        return _target_selection(
+            context_name,
+            "notes/child",
+            child_target.uid,
+            include_descendants=True,
+        )
 
-    monkeypatch.setattr("memcommit.commands.rationale.choose_memory", select)
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.choose_memory_report_target",
+        select,
+    )
 
     result = invoke("rationale", "--recorded-only")
 
@@ -137,6 +205,7 @@ def test_rationale_picker_groups_memories_under_their_public_context(
             ("notes/child", "child note"),
         ],
     }
+    assert "and readable descendants" in result.output
 
 
 def test_interactive_rationale_report_uses_common_viewer(
@@ -183,8 +252,10 @@ def test_interactive_trace_routes_bare_and_explicit_targets_to_history_explorer(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.choose_memory",
-        lambda items, *, context_name, operation: target.uid,
+        "memcommit.commands.trace.choose_memory_report_target",
+        lambda items, *, context_name, operation, initial_include_descendants: (
+            _target_selection(context_name, context_name, target.uid)
+        ),
     )
     monkeypatch.setattr(
         "memcommit.commands.trace.choose_memory_report_recent",
@@ -216,10 +287,11 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
         lambda store, *, operation: MemoryReportRecentSelection(
             context_name="notes",
             memory_uid=target.uid,
+            include_descendants=False,
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.choose_memory",
+        "memcommit.commands.trace.choose_memory_report_target",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
@@ -255,10 +327,11 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
         lambda store, *, operation: MemoryReportRecentSelection(
             context_name="notes",
             memory_uid=target.uid,
+            include_descendants=True,
         ),
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory",
+        "memcommit.commands.rationale.choose_memory_report_target",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
@@ -282,8 +355,8 @@ def test_bare_rationale_cancel_never_connects_provider(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory",
-        lambda items, *, context_name, operation: None,
+        "memcommit.commands.rationale.choose_memory_report_target",
+        lambda items, *, context_name, operation, initial_include_descendants: None,
     )
     monkeypatch.setattr(
         "memcommit.commands.rationale.connect_codex_chatgpt_provider",
@@ -349,8 +422,14 @@ def test_explicit_selectors_bypass_picker(isolated_store, monkeypatch):
     def unexpected(*args, **kwargs):
         raise AssertionError("an explicit selector must not open the picker")
 
-    monkeypatch.setattr("memcommit.commands.trace.choose_memory", unexpected)
-    monkeypatch.setattr("memcommit.commands.rationale.choose_memory", unexpected)
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_target",
+        unexpected,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.choose_memory_report_target",
+        unexpected,
+    )
 
     trace = invoke("trace", target.uid[:8])
     rationale = invoke("rationale", target.uid[:8], "--recorded-only")
@@ -366,8 +445,14 @@ def test_bare_json_requires_an_explicit_selector(isolated_store, monkeypatch):
     def unexpected(*args, **kwargs):
         raise AssertionError("bare JSON output must not open a picker")
 
-    monkeypatch.setattr("memcommit.commands.trace.choose_memory", unexpected)
-    monkeypatch.setattr("memcommit.commands.rationale.choose_memory", unexpected)
+    monkeypatch.setattr(
+        "memcommit.commands.trace.choose_memory_report_target",
+        unexpected,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.choose_memory_report_target",
+        unexpected,
+    )
 
     trace = invoke("trace", "--json")
     rationale = invoke("rationale", "--json")

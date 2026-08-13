@@ -9,9 +9,11 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.memory_picker import (
+    MemoryReportTargetSelection,
     ScopedMemoryPickerItem,
     _render_memory_options,
     choose_memory,
+    choose_memory_report_target,
 )
 import memcommit.commands.context_picker as context_picker
 from memcommit.provenance import TraceCandidate
@@ -22,12 +24,14 @@ def candidate(
     *,
     content: str | None = None,
     status: str = "CURRENT",
+    change_count: int | None = None,
 ) -> TraceCandidate:
     return TraceCandidate(
         uid=f"00000000-0000-4000-8000-{suffix:012d}",
         content=content if content is not None else f"Memory {suffix}",
         position=suffix,
         status=status,  # type: ignore[arg-type]
+        change_count=change_count,
     )
 
 
@@ -70,6 +74,65 @@ def test_scoped_picker_keeps_empty_current_context_as_initial_focus():
         )
 
     assert selected == item.uid
+
+
+def test_report_picker_can_broaden_an_empty_root_to_descendant_memories():
+    item = ScopedMemoryPickerItem(
+        context_name="notes/child",
+        uid=candidate(1).uid,
+        content="child Memory",
+        status="CURRENT",
+        catalog_context_names=("notes", "notes/child"),
+        change_count=3,
+    )
+    with create_pipe_input() as pipe_input:
+        # RANGE starts on THIS CONTEXT ONLY. Broaden, enter the tree, then
+        # visit root -> child -> child Memory and open the exact target.
+        pipe_input.send_text("\x1b[C\t\x1b[B\x1b[B\r")
+        selected = choose_memory_report_target(
+            (item,),
+            context_name="notes",
+            operation="trace",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == MemoryReportTargetSelection(
+        root_context_name="notes",
+        owner_context_name="notes/child",
+        memory_uid=item.uid,
+        include_descendants=True,
+    )
+
+
+def test_report_picker_keeps_exact_scope_when_opening_a_root_memory():
+    item = ScopedMemoryPickerItem(
+        context_name="notes",
+        uid=candidate(1).uid,
+        content="root Memory",
+        status="CURRENT",
+        catalog_context_names=("notes", "notes/child"),
+        change_count=2,
+    )
+    with create_pipe_input() as pipe_input:
+        # Tab enters the tree, then Down reaches the root's Memory.
+        pipe_input.send_text("\t\x1b[B\r")
+        selected = choose_memory_report_target(
+            (item,),
+            context_name="notes",
+            operation="rationale",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == MemoryReportTargetSelection(
+        root_context_name="notes",
+        owner_context_name="notes",
+        memory_uid=item.uid,
+        include_descendants=False,
+    )
 
 
 def test_picker_navigation_clamps_and_supports_home_end():
@@ -145,6 +208,7 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
             1,
             content="safe\nFAKE HEADING\u202e",
             status="HISTORICAL",
+            change_count=4,
         ),
     )
 
@@ -155,8 +219,20 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
     )
 
     assert "HISTORICAL" in rendered
+    assert "4 CHANGES" in rendered
     assert "safe\\nFAKE HEADING\\u202e" in rendered
     assert "\u202e" not in rendered
+
+
+def test_picker_marks_withheld_history_instead_of_fabricating_zero_changes():
+    rendered = "".join(
+        text
+        for style, text in _render_memory_options((candidate(1),), selected=0)
+        if style != "[SetCursorPosition]"
+    )
+
+    assert "HISTORY UNAVAILABLE" in rendered
+    assert "0 CHANGES" not in rendered
 
 
 def test_picker_requires_a_tty_when_requested(monkeypatch):

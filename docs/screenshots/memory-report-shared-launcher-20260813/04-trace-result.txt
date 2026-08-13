@@ -1,0 +1,52 @@
+ TRACE · MEMORY [6e50adda] · demo/child                                                                                                                                             
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ UID          27c2b688-acf8-465f-b198-7eb99c7ae951                                                                                                                               ^│
+│ Time         2026-08-13T14:25:57.297757                                                                                                                                          │
+│ Command      mem edit                                                                                                                                                            │
+│ Description  EDITED · RECORDED · [6e50adda]@1 “Second wording” → [6e50adda]@1 “Final wording used by both reports”                                                               │
+│ Detail       Selected Memory: 6e50adda-2746-4e6f-80ff-4b6d7841c21f                                                                                                               │
+│              Lineage UIDs: 6e50adda-2746-4e6f-80ff-4b6d7841c21f                                                                                                                  │
+│              NOW:                                                                                                                                                                │
+│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Final wording used by both reports                                                                                       │
+│              EARLIEST RETAINED:                                                                                                                                                  │
+│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 First wording                                                                                                            │
+│                                                                                                                                                                                  │
+│              Operation: mem edit                                                                                                                                                 │
+│              Effect: EDITED                                                                                                                                                      │
+│              Evidence: RECORDED                                                                                                                                                  │
+│              BEFORE:                                                                                                                                                             │
+│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Second wording                                                                                                           │
+│              AFTER:                                                                                                                                                              │
+│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Final wording used by both reports                                                                                       │
+│              Description: Edited memory [6e50adda]                                                                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› 2026-08-13 14:25  mem edit  27c2b688  EDITED · RECORDED · [6e50adda]@1 “Second wording” → [6e50adda]@1 “Final wording used by both reports”                                    ^┃
+┃  2026-08-13 14:25  mem edit  cb1f2f12  EDITED · RECORDED · [6e50adda]@1 “First wording” → [6e50adda]@1 “Second wording”                                                          ┃
+┃  2026-08-13 14:25  mem add   c24a92f4  CREATED · RECORDED · ∅ → [6e50adda]@1 “First wording”                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/3

@@ -15,6 +15,7 @@ from memcommit.commands.context_picker import (
     ContextMemorySelection,
     choose_context,
 )
+from memcommit.context_targeting.tui.reach import ContextReachState
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.commands.tui_text_layout import elide_terminal_text
 
@@ -29,6 +30,7 @@ class MemoryPickerItem(Protocol):
     uid: str
     content: str
     status: Literal["CURRENT", "HISTORICAL"]
+    change_count: int | None
 
 
 @dataclass(frozen=True)
@@ -40,11 +42,28 @@ class ScopedMemoryPickerItem:
     content: str
     status: Literal["CURRENT", "HISTORICAL"]
     catalog_context_names: tuple[str, ...] = ()
+    change_count: int | None = None
+
+
+@dataclass(frozen=True)
+class MemoryReportTargetSelection:
+    """Exact Memory plus the process-local Context range used to choose it."""
+
+    root_context_name: str
+    owner_context_name: str
+    memory_uid: str
+    include_descendants: bool
 
 
 def _preview(value: str, limit: int = 100) -> str:
     escaped = display_escape_text(value)
     return elide_terminal_text(escaped, limit)
+
+
+def _change_label(value: int | None) -> str:
+    if value is None:
+        return "HISTORY UNAVAILABLE"
+    return f"{value} {'CHANGE' if value == 1 else 'CHANGES'}"
 
 
 def _render_memory_options(
@@ -67,6 +86,7 @@ def _render_memory_options(
                 style,
                 f"{pointer} {item.status:<10} "
                 f"[{display_escape_text(item.uid[:8])}]  "
+                f"{_change_label(item.change_count)}  "
                 f"{_preview(item.content)}",
             )
         )
@@ -75,7 +95,7 @@ def _render_memory_options(
     return fragments
 
 
-def choose_memory(
+def _choose_memory_selection(
     items: Sequence[MemoryPickerItem],
     *,
     context_name: str,
@@ -83,7 +103,8 @@ def choose_memory(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> str | None:
+    initial_include_descendants: bool | None = None,
+) -> tuple[ContextMemorySelection, bool] | None:
     """Select one Memory through the shared Context/Memory tree picker."""
     options = tuple(items)
     if operation not in {"trace", "rationale"}:
@@ -99,6 +120,14 @@ def choose_memory(
         or not item.uid
         or not isinstance(item.content, str)
         or item.status not in {"CURRENT", "HISTORICAL"}
+        or (
+            item.change_count is not None
+            and (
+                isinstance(item.change_count, bool)
+                or not isinstance(item.change_count, int)
+                or item.change_count < 0
+            )
+        )
         for item in options
     ):
         raise ValueError("Memory selection received an invalid entry.")
@@ -136,12 +165,21 @@ def choose_memory(
     def memory_rows(name: str) -> tuple[ContextMemoryRow, ...]:
         return tuple(
             ContextMemoryRow(
-                f"{item.status.casefold()} {item.uid[:8]}",
+                f"{item.status.casefold()} {item.uid[:8]} · "
+                f"{_change_label(item.change_count).casefold()}",
                 item.content,
                 selector=item.uid,
             )
             for item in items_by_context[name]
         )
+
+    reach_state = (
+        ContextReachState.create(
+            include_descendants=initial_include_descendants,
+        )
+        if initial_include_descendants is not None
+        else None
+    )
 
     selected = choose_context(
         names,
@@ -159,9 +197,69 @@ def choose_memory(
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
+        memory_scope_root=(context_name if reach_state is not None else None),
+        memory_reach_state=reach_state,
     )
     if selected is None:
         return None
     if not isinstance(selected, ContextMemorySelection):
         raise ValueError("Memory selection did not return an exact Memory.")
-    return selected.selector
+    return selected, (
+        reach_state.include_descendants if reach_state is not None else False
+    )
+
+
+def choose_memory_report_target(
+    items: Sequence[MemoryPickerItem],
+    *,
+    context_name: str,
+    operation: MemoryPickerOperation,
+    initial_include_descendants: bool = False,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> MemoryReportTargetSelection | None:
+    """Choose the shared Context reach and one exact Memory for a report."""
+
+    if type(initial_include_descendants) is not bool:
+        raise TypeError("Initial Memory report reach must be a boolean.")
+    selected = _choose_memory_selection(
+        items,
+        context_name=context_name,
+        operation=operation,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+        initial_include_descendants=initial_include_descendants,
+    )
+    if selected is None:
+        return None
+    memory, include_descendants = selected
+    return MemoryReportTargetSelection(
+        root_context_name=context_name,
+        owner_context_name=memory.context_name,
+        memory_uid=memory.selector,
+        include_descendants=include_descendants,
+    )
+
+
+def choose_memory(
+    items: Sequence[MemoryPickerItem],
+    *,
+    context_name: str,
+    operation: MemoryPickerOperation,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> str | None:
+    """Compatibility picker without a range surface; return the exact UID."""
+
+    selected = _choose_memory_selection(
+        items,
+        context_name=context_name,
+        operation=operation,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    return selected[0].selector if selected is not None else None

@@ -48,6 +48,41 @@ def load_retained_history_context(
     )
 
 
+def load_retained_history_scope(
+    store: MemoryStore,
+    *,
+    context_locator: str | None,
+    current_name: str | None,
+    include_descendants: bool,
+) -> tuple[RetainedHistoryContext, ...]:
+    """Freeze one locally owned exact or lexical-descendant history range."""
+
+    if type(include_descendants) is not bool:
+        raise TypeError("Retained-history descendant scope must be a boolean.")
+    root = load_retained_history_context(
+        store,
+        context_locator=context_locator,
+        current_name=current_name,
+    )
+    names = tuple(
+        name
+        for name in store.list_context_names()
+        if name == root.storage_name
+        or (include_descendants and name.startswith(root.storage_name + "/"))
+    )
+    # The root access check above rejects a granted authority view before this
+    # local catalog is opened. Every descendant is therefore owned by the same
+    # active store rather than inferred from a public Grant hierarchy.
+    return tuple(
+        RetainedHistoryContext(
+            display_name=name,
+            storage_name=name,
+            context=store.load_direct(name),
+        )
+        for name in names
+    )
+
+
 def build_memory_history(
     store: MemoryStore,
     target: RetainedHistoryContext,

@@ -174,6 +174,7 @@ class RationaleReport:
     warnings: tuple[str, ...]
     inference_scope_name: str
     inference_scope_context_count: int
+    inference_scope_include_descendants: bool
     recorded_evidence_available: bool
 
     def to_dict(self) -> dict[str, object]:
@@ -207,6 +208,7 @@ class RationaleReport:
             "inference_scope": {
                 "context_name": self.inference_scope_name,
                 "context_count": self.inference_scope_context_count,
+                "include_descendants": self.inference_scope_include_descendants,
             },
             "recorded_evidence_available": self.recorded_evidence_available,
         }
@@ -753,6 +755,7 @@ def build_rationale(
     refresh_inference: bool = False,
     inference_contexts: tuple[Context, ...] | None = None,
     inference_scope_name: str | None = None,
+    inference_scope_include_descendants: bool = False,
     recorded_evidence_available: bool = True,
 ) -> RationaleReport:
     """Combine live durable evidence with an optional contextual reading."""
@@ -900,5 +903,6 @@ def build_rationale(
         warnings=tuple(warnings),
         inference_scope_name=inference_scope_name or ctx.name,
         inference_scope_context_count=len(inference_contexts),
+        inference_scope_include_descendants=inference_scope_include_descendants,
         recorded_evidence_available=recorded_evidence_available,
     )

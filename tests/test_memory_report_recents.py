@@ -140,6 +140,7 @@ def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
     assert selected == MemoryReportRecentSelection(
         context_name="research/granted",
         memory_uid="memory-two",
+        include_descendants=True,
     )
 
 

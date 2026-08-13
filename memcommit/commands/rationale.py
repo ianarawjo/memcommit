@@ -12,7 +12,10 @@ import typer
 from memcommit.command_attempts import annotate_memory_report_attempt
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.memory_picker import ScopedMemoryPickerItem, choose_memory
+from memcommit.commands.memory_picker import (
+    ScopedMemoryPickerItem,
+    choose_memory_report_target,
+)
 from memcommit.commands.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
@@ -91,6 +94,16 @@ def render_rationale(
     *,
     verbose: bool = False,
 ) -> None:
+    scope_reach = (
+        "and readable descendants"
+        if report.inference_scope_include_descendants
+        else "this Context only"
+    )
+    scope_display = (
+        f"{display_escape_text(report.inference_scope_name)} {scope_reach}"
+        if report.inference_scope_include_descendants
+        else f"{display_escape_text(report.inference_scope_name)} · {scope_reach}"
+    )
     typer.secho(
         f"Rationale for [{_uid(report.trace.selected_uid, verbose)}]",
         bold=True,
@@ -101,7 +114,7 @@ def render_rationale(
     )
     typer.echo(
         "Rationale scope: "
-        f"{display_escape_text(report.inference_scope_name)} and readable descendants "
+        f"{scope_display} "
         f"· {report.inference_scope_context_count} Context(s)"
     )
     typer.secho("\nMEMORY", bold=True)
@@ -293,7 +306,7 @@ def render_rationale(
     inference = report.inference
     if inference is not None:
         typer.secho(
-            "\nEVIDENCE USED FOR INFERENCE WITHIN THE CURRENT CONTEXT SUBTREE",
+            "\nEVIDENCE USED FOR INFERENCE WITHIN THE CURRENT CONTEXT RANGE",
             bold=True,
         )
         typer.secho(
@@ -308,7 +321,7 @@ def render_rationale(
 
         typer.secho(
             "\nBEST-EFFORT EXPLANATION — INFERRED WITHIN CONTEXT, not recorded "
-            "· readable subtree",
+            f"· {scope_reach}",
             bold=True,
         )
         if report.inference_cached:
@@ -331,7 +344,8 @@ def render_rationale(
             typer.echo(f"  - {safe_terminal_text(unresolved)}")
     else:
         typer.secho(
-            "\nCURRENT CONTEXT WINDOW — readable subtree, deterministic fallback only",
+            f"\nCURRENT CONTEXT WINDOW — {scope_reach}, "
+            "deterministic fallback only",
             bold=True,
         )
         typer.secho(
@@ -423,6 +437,7 @@ def cmd(
     """Separate recorded origin from inference within the current Context."""
     store = MemoryStore(create=False)
     try:
+        include_descendants = True
         if recorded_only and refresh:
             raise RationaleError("--refresh cannot be combined with --recorded-only.")
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -436,6 +451,7 @@ def cmd(
             if isinstance(launch, MemoryReportRecentSelection):
                 context_name = launch.context_name
                 selector = launch.memory_uid
+                include_descendants = launch.include_descendants
             elif not isinstance(launch, MemoryReportSelectAction):
                 raise RationaleError("Rationale launcher returned an invalid action.")
         name = context_snapshot.resolve_or_current(context_name)
@@ -443,14 +459,17 @@ def cmd(
             raise RationaleError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
-        scope = load_rationale_scope(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-        )
         if selector is None:
-            candidates, owners = rationale_candidates(scope)
-            selector = choose_memory(
+            picker_scope = load_rationale_scope(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                # Freeze every eligible row before the shared RANGE control
+                # narrows or broadens what can actually be selected.
+                include_descendants=True,
+            )
+            candidates, owners = rationale_candidates(picker_scope)
+            selected = choose_memory_report_target(
                 tuple(
                     ScopedMemoryPickerItem(
                         context_name=owners[candidate.uid][0].name,
@@ -458,24 +477,29 @@ def cmd(
                         content=candidate.content,
                         status=candidate.status,
                         catalog_context_names=tuple(
-                            context.name for context in scope.contexts
+                            context.name for context in picker_scope.contexts
                         ),
+                        change_count=candidate.change_count,
                     )
                     for candidate in candidates
                 ),
-                context_name=scope.root_name,
+                context_name=picker_scope.root_name,
                 operation="rationale",
+                initial_include_descendants=False,
             )
-            if selector is None:
+            if selected is None:
                 typer.echo("Rationale cancelled.")
                 return
+            selector = selected.memory_uid
+            include_descendants = selected.include_descendants
             # Do not connect the inference provider until an exact Memory has
             # been chosen. Re-read live state after the full-screen picker.
-            scope = load_rationale_scope(
-                store,
-                context_name,
-                current_name=context_snapshot.current_name,
-            )
+        scope = load_rationale_scope(
+            store,
+            context_name,
+            current_name=context_snapshot.current_name,
+            include_descendants=include_descendants,
+        )
         target = resolve_rationale_target(scope, selector)
         if target.access.is_granted and recorded_only:
             raise RationaleError(
@@ -495,6 +519,7 @@ def cmd(
                 refresh_inference=refresh,
                 inference_contexts=scope.contexts,
                 inference_scope_name=scope.root_name,
+                inference_scope_include_descendants=include_descendants,
                 recorded_evidence_available=not target.access.is_granted,
             )
         else:
@@ -512,12 +537,14 @@ def cmd(
                     refresh_inference=refresh,
                     inference_contexts=scope.contexts,
                     inference_scope_name=scope.root_name,
+                    inference_scope_include_descendants=include_descendants,
                     recorded_evidence_available=not target.access.is_granted,
                 )
         annotate_memory_report_attempt(
             operation="rationale",
             context_name=scope.root_name,
             memory_uid=report.trace.selected_uid,
+            include_descendants=include_descendants,
         )
     except (
         FileNotFoundError,

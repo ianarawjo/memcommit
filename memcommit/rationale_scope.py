@@ -67,8 +67,12 @@ def load_rationale_scope(
     operand: str | None,
     *,
     current_name: str | None,
+    include_descendants: bool = True,
 ) -> RationaleScope:
-    """Load the selected Context and every readable lexical descendant."""
+    """Load one selected Context range from the readable public namespace."""
+
+    if type(include_descendants) is not bool:
+        raise TypeError("Rationale descendant scope must be a boolean.")
 
     access = resolve_context_access(
         active_store,
@@ -85,7 +89,8 @@ def load_rationale_scope(
     names = [
         name
         for name in read_store.list_context_names()
-        if name == root_name or name.startswith(root_name + "/")
+        if name == root_name
+        or (include_descendants and name.startswith(root_name + "/"))
     ]
     if root_name not in names:
         raise FileNotFoundError(f"Context {root_name!r} not found.")

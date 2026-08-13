@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 import hashlib
-from typing import Any, Iterable, Literal
+from typing import Any, Iterable, Literal, Sequence
 import uuid
 
 from memcommit.chunking import chunk_content
@@ -79,6 +79,9 @@ class TraceCandidate:
     content: str
     position: int
     status: Literal["CURRENT", "HISTORICAL"]
+    # ``None`` is an authority boundary, not a zero: granted READ content may
+    # be selectable for Rationale without exposing its owner's retained log.
+    change_count: int | None = None
 
 
 @dataclass(frozen=True)
@@ -3042,6 +3045,63 @@ def _analysis_attachments(
     return analyses, []
 
 
+def _lineage_operation_counts(
+    selected_uids: Iterable[str],
+    events: Sequence[TraceEvent],
+) -> dict[str, int]:
+    """Count temporal Trace rows for every candidate in one history pass."""
+
+    candidates = tuple(dict.fromkeys(selected_uids))
+    operations_by_uid: dict[str, set[tuple[str, str]]] = {
+        uid: set() for uid in candidates
+    }
+    adjacency: dict[str, set[str]] = {uid: set() for uid in candidates}
+    for event_index, event in enumerate(events):
+        if event.command_operation is not None:
+            key = ("command", event.command_operation.uid)
+        elif event.operation_id is not None:
+            key = ("operation", event.operation_id)
+        elif event.checkpoint_uid is not None:
+            key = ("checkpoint", event.checkpoint_uid)
+        else:
+            # Unidentified reconstructed events remain independently visible
+            # in the Trace workbench, so they must not collapse by text/time.
+            key = ("event", str(event_index))
+        event_uids = event.uids
+        for uid in event_uids:
+            operations_by_uid.setdefault(uid, set()).add(key)
+            adjacency.setdefault(uid, set())
+        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}:
+            related = tuple(event_uids)
+            for uid in related:
+                adjacency[uid].update(candidate for candidate in related if candidate != uid)
+
+    counts: dict[str, int] = {}
+    visited: set[str] = set()
+    for selected_uid in candidates:
+        if selected_uid in visited:
+            continue
+        component = {selected_uid}
+        pending = [selected_uid]
+        while pending:
+            uid = pending.pop()
+            for neighbor in adjacency.get(uid, ()):
+                if neighbor in component:
+                    continue
+                component.add(neighbor)
+                pending.append(neighbor)
+        visited.update(component)
+        count = len(
+            set().union(
+                *(operations_by_uid.get(uid, set()) for uid in component)
+            )
+        )
+        for uid in component:
+            if uid in operations_by_uid:
+                counts[uid] = count
+    return counts
+
+
 def collect_trace_candidates(
     store: MemoryStore,
     ctx: Context,
@@ -3056,12 +3116,15 @@ def collect_trace_candidates(
     events, _, frames = _history(store, ctx)
     current_frame = frames[-1]
     current_uids = set(current_frame.memories)
+    known_uids = _known_historical_uids(events, frames)
+    change_counts = _lineage_operation_counts(known_uids, events)
     current = tuple(
         TraceCandidate(
             uid=uid,
             content=current_frame.memories[uid].content,
             position=current_frame.memories[uid].position,
             status="CURRENT",
+            change_count=change_counts[uid],
         )
         for uid in current_frame.order
     )
@@ -3080,7 +3143,7 @@ def collect_trace_candidates(
             last_event_state[state.uid] = (event_index, state)
 
     historical: list[tuple[int, int, TraceCandidate]] = []
-    for uid in _known_historical_uids(events, frames) - current_uids:
+    for uid in known_uids - current_uids:
         frame_observation = last_frame_state.get(uid)
         if frame_observation is not None:
             rank, state = frame_observation
@@ -3099,6 +3162,7 @@ def collect_trace_candidates(
                     content=state.content,
                     position=state.position,
                     status="HISTORICAL",
+                    change_count=change_counts[uid],
                 ),
             )
         )

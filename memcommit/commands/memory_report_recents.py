@@ -34,6 +34,7 @@ class MemoryReportRecent:
     operation: MemoryReportOperation
     context_name: str
     memory_uid: str
+    include_descendants: bool
     started_at: str
 
 
@@ -41,6 +42,7 @@ class MemoryReportRecent:
 class MemoryReportRecentSelection:
     context_name: str
     memory_uid: str
+    include_descendants: bool
 
 
 @dataclass(frozen=True)
@@ -66,11 +68,19 @@ def _recent_from_attempt(
     memory_uid = details.get("memory_uid")
     if not isinstance(context_name, str) or not isinstance(memory_uid, str):
         raise MemoryReportRecentError("Recent report metadata is invalid.")
+    include_descendants = details.get("include_descendants")
+    if include_descendants is None:
+        # Before range selection existed, Rationale was always subtree-scoped
+        # and Trace was always exact. Preserve those historical receipts.
+        include_descendants = operation == "rationale"
+    if type(include_descendants) is not bool:
+        raise MemoryReportRecentError("Recent report scope is invalid.")
     return MemoryReportRecent(
         attempt_uid=attempt.uid,
         operation=operation,
         context_name=context_name,
         memory_uid=memory_uid,
+        include_descendants=include_descendants,
         started_at=attempt.started_at,
     )
 
@@ -91,12 +101,16 @@ def memory_report_recents(
     except CommandAttemptError as error:
         raise MemoryReportRecentError(str(error)) from error
     result: list[MemoryReportRecent] = []
-    seen: set[tuple[str, str]] = set()
+    seen: set[tuple[str, str, bool]] = set()
     for attempt in attempts:
         recent = _recent_from_attempt(attempt, operation=operation)
         if recent is None:
             continue
-        identity = recent.context_name, recent.memory_uid
+        identity = (
+            recent.context_name,
+            recent.memory_uid,
+            recent.include_descendants,
+        )
         if identity in seen:
             continue
         seen.add(identity)
@@ -123,6 +137,7 @@ def _entry(recent: MemoryReportRecent) -> SessionPickerEntry:
         detail=(
             f"{command} report\n"
             f"Context {recent.context_name}\n"
+            f"Range {'INCLUDE DESCENDANTS' if recent.include_descendants else 'THIS CONTEXT ONLY'}\n"
             f"Memory UID {recent.memory_uid}\n"
             f"Opened {recent.started_at}\n\n"
             "Memory content is not copied into Recents. Opening this row "
@@ -191,4 +206,5 @@ def choose_memory_report_recent(
     return MemoryReportRecentSelection(
         context_name=selected.context_name,
         memory_uid=selected.memory_uid,
+        include_descendants=selected.include_descendants,
     )

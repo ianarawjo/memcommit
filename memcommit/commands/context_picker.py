@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import AbstractSet, Literal, Mapping
 
 from prompt_toolkit.application import Application, get_app
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
@@ -33,6 +34,10 @@ from memcommit.context_targeting.tui.tree import (
     context_ancestors,
     expandable_context_subtree,
     visible_context_rows,
+)
+from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
+    render_context_reach,
 )
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
@@ -438,6 +443,8 @@ def choose_context(
     display_names: Mapping[str, str] | None = None,
     descendant_scope_names: AbstractSet[str] = frozenset(),
     selectable_memories: bool = False,
+    memory_scope_root: str | None = None,
+    memory_reach_state: ContextReachState | None = None,
 ) -> str | ContextSubtreeSelection | ContextMemorySelection | None:
     """Return the selected Context name, or ``None`` when cancelled."""
     options = tuple(names)
@@ -480,6 +487,10 @@ def choose_context(
         )
     if selectable_memories and memory_loader is None:
         raise ValueError("Selectable Memories require a Memory loader.")
+    if (memory_scope_root is None) != (memory_reach_state is None):
+        raise ValueError(
+            "A scoped Memory picker requires both its root and reach state."
+        )
 
     catalog = (*options, *virtual)
     subtree_names = frozenset(descendant_scope_names)
@@ -490,6 +501,8 @@ def choose_context(
         not isinstance(label, str) or not label for label in labels.values()
     ):
         raise ValueError("Context display names are invalid.")
+    if memory_scope_root is not None and memory_scope_root not in catalog:
+        raise ValueError("The Memory scope root is outside the Context catalog.")
     if (
         not isinstance(title, str)
         or not title.strip()
@@ -527,6 +540,22 @@ def choose_context(
     memory_anchor: tuple[str, int] | None = None
     navigation_accelerator = NavigationAccelerator()
 
+    def memory_name_is_in_reach(name: str) -> bool:
+        if memory_scope_root is None or memory_reach_state is None:
+            return True
+        return name == memory_scope_root or (
+            memory_reach_state.include_descendants
+            and name.startswith(memory_scope_root + "/")
+        )
+
+    def visible_memory_contexts() -> frozenset[str]:
+        return frozenset(
+            row.name
+            for row in state.visible_rows()
+            if state.memories_visible_for(row.name)
+            and memory_name_is_in_reach(row.name)
+        )
+
     def load_visible_memories() -> None:
         if memory_loader is None:
             return
@@ -534,6 +563,7 @@ def choose_context(
             if (
                 not row.materialized
                 or not state.memories_visible_for(row.name)
+                or not memory_name_is_in_reach(row.name)
                 or row.name in memory_cache
             ):
                 continue
@@ -559,11 +589,7 @@ def choose_context(
             current=current,
             annotations=annotations,
             memories_by_context=memory_cache,
-            visible_memory_contexts=frozenset(
-                row.name
-                for row in state.visible_rows()
-                if state.memories_visible_for(row.name)
-            ),
+            visible_memory_contexts=visible_memory_contexts(),
             display_names=labels,
             wrap_width=wrap_width,
             memory_anchor=memory_anchor,
@@ -574,11 +600,7 @@ def choose_context(
         return context_picker_navigation_units(
             state.visible_rows(),
             memories_by_context=memory_cache,
-            visible_memory_contexts=frozenset(
-                row.name
-                for row in state.visible_rows()
-                if state.memories_visible_for(row.name)
-            ),
+            visible_memory_contexts=visible_memory_contexts(),
         )
 
     def current_navigation_unit() -> ContextPickerNavigationUnit:
@@ -613,11 +635,7 @@ def choose_context(
         prefixes = context_option_continuation_prefixes(
             state.visible_rows(),
             memories_by_context=memory_cache,
-            visible_memory_contexts=frozenset(
-                row.name
-                for row in state.visible_rows()
-                if state.memories_visible_for(row.name)
-            ),
+            visible_memory_contexts=visible_memory_contexts(),
             wrap_width=wrap_width,
         )
         return prefixes[line_number] if line_number < len(prefixes) else ""
@@ -628,7 +646,26 @@ def choose_context(
         show_cursor=False,
     )
 
-    @bindings.add("down")
+    reach_control = (
+        FormattedTextControl(
+            lambda: render_context_reach(
+                memory_reach_state,
+                focused=get_app().layout.has_focus(reach_control),
+                title="CONTEXT RANGE",
+            ),
+            focusable=True,
+            show_cursor=False,
+        )
+        if memory_reach_state is not None
+        else None
+    )
+    reach_focus = Condition(
+        lambda: reach_control is not None
+        and get_app().layout.has_focus(reach_control)
+    )
+    tree_focus = ~reach_focus
+
+    @bindings.add("down", filter=tree_focus)
     def _next_context(event) -> None:
         navigation_accelerator.move(
             1,
@@ -636,7 +673,7 @@ def choose_context(
             move_one=move_navigation_unit,
         )
 
-    @bindings.add("up")
+    @bindings.add("up", filter=tree_focus)
     def _previous_context(event) -> None:
         navigation_accelerator.move(
             -1,
@@ -644,7 +681,7 @@ def choose_context(
             move_one=move_navigation_unit,
         )
 
-    @bindings.add("right")
+    @bindings.add("right", filter=tree_focus)
     def _expand_or_enter_context(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
@@ -654,7 +691,7 @@ def choose_context(
         load_visible_memories()
         event.app.invalidate()
 
-    @bindings.add("left")
+    @bindings.add("left", filter=tree_focus)
     def _collapse_or_leave_context(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
@@ -665,8 +702,8 @@ def choose_context(
         state.collapse_selected(include_leaf_memories=memory_loader is not None)
         event.app.invalidate()
 
-    @bindings.add("a")
-    @bindings.add("A")
+    @bindings.add("a", filter=tree_focus)
+    @bindings.add("A", filter=tree_focus)
     def _toggle_expand_all(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
@@ -675,7 +712,7 @@ def choose_context(
         load_visible_memories()
         event.app.invalidate()
 
-    @bindings.add("M")
+    @bindings.add("M", filter=tree_focus)
     def _toggle_memories(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
@@ -686,7 +723,7 @@ def choose_context(
                 memory_anchor = None
         event.app.invalidate()
 
-    @bindings.add("m")
+    @bindings.add("m", filter=tree_focus)
     def _toggle_selected_memories(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
@@ -697,7 +734,7 @@ def choose_context(
                 memory_anchor = None
         event.app.invalidate()
 
-    @bindings.add("enter")
+    @bindings.add("enter", filter=tree_focus)
     def _accept_context(event) -> None:
         navigation_accelerator.reset()
         if memory_anchor is not None:
@@ -743,6 +780,48 @@ def choose_context(
             state.expand_selected()
         event.app.invalidate()
 
+    def set_memory_reach(include_descendants: bool, event) -> None:
+        nonlocal memory_anchor
+        if memory_reach_state is None:
+            return
+        memory_reach_state.choice.choose(
+            "SUBTREE" if include_descendants else "EXACT"
+        )
+        if (
+            memory_anchor is not None
+            and not memory_name_is_in_reach(memory_anchor[0])
+        ):
+            memory_anchor = None
+        load_visible_memories()
+        event.app.invalidate()
+
+    @bindings.add("left", filter=reach_focus, eager=True)
+    def _exact_memory_reach(event) -> None:
+        set_memory_reach(False, event)
+
+    @bindings.add("right", filter=reach_focus, eager=True)
+    def _descendant_memory_reach(event) -> None:
+        set_memory_reach(True, event)
+
+    @bindings.add("enter", filter=reach_focus, eager=True)
+    @bindings.add(" ", filter=reach_focus, eager=True)
+    def _toggle_memory_reach(event) -> None:
+        if memory_reach_state is not None:
+            set_memory_reach(not memory_reach_state.include_descendants, event)
+
+    @bindings.add("down", filter=reach_focus, eager=True)
+    @bindings.add("tab", filter=reach_focus, eager=True)
+    def _focus_memory_tree(event) -> None:
+        event.app.layout.focus(control)
+        event.app.invalidate()
+
+    @bindings.add("tab", filter=tree_focus, eager=True)
+    @bindings.add("s-tab", filter=tree_focus, eager=True)
+    def _focus_memory_reach(event) -> None:
+        if reach_control is not None:
+            event.app.layout.focus(reach_control)
+            event.app.invalidate()
+
     @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape")
     @bindings.add("c-c", eager=True)
@@ -765,6 +844,11 @@ def choose_context(
     )
 
     def render_footer() -> str:
+        if reach_control is not None and get_app().layout.has_focus(reach_control):
+            return (
+                " RANGE · ← this Context only  → include descendants  "
+                "Enter/Space toggle  ↓/Tab Memories  q cancel"
+            )
         units = navigation_units()
         navigation_index = units.index(current_navigation_unit())
         expansion_action = "A restore tree" if state.all_expanded else "A expand all"
@@ -814,19 +898,23 @@ def choose_context(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
+    body: list[object] = [
+        header,
+        Window(height=1, char="─"),
+    ]
+    if reach_control is not None:
+        body.extend(
+            [
+                Window(reach_control, height=Dimension.exact(1)),
+                Window(height=1, char="─"),
+            ]
+        )
+    body.extend([options_window, Window(height=1, char="─"), footer])
     app: Application[str | ContextSubtreeSelection | ContextMemorySelection | None] = (
         Application(
             layout=Layout(
-                HSplit(
-                    [
-                        header,
-                        Window(height=1, char="─"),
-                        options_window,
-                        Window(height=1, char="─"),
-                        footer,
-                    ]
-                ),
-                focused_element=control,
+                HSplit(body),
+                focused_element=(reach_control or control),
             ),
             key_bindings=bindings,
             full_screen=True,

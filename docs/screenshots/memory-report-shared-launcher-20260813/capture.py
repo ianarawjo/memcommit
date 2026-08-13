@@ -1,0 +1,191 @@
+"""Capture the shared Trace/Rationale range launcher in a real color PTY."""
+
+from __future__ import annotations
+
+import importlib.util
+import io
+import os
+from pathlib import Path
+import re
+import sys
+import tempfile
+
+import pexpect
+
+
+ROOT = Path("/Users/KimMunyeong/Github/memcommit")
+OUT = ROOT / "docs/screenshots/memory-report-shared-launcher-20260813"
+COLUMNS = 180
+ROWS = 52
+RIGHT = "\x1b[C"
+DOWN = "\x1b[B"
+
+_BASE_PATH = (
+    ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+)
+_SPEC = importlib.util.spec_from_file_location("memory_report_capture_base", _BASE_PATH)
+assert _SPEC is not None and _SPEC.loader is not None
+_BASE = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_BASE)
+_BASE.OUT = OUT
+_BASE.COLUMNS = COLUMNS
+_BASE.ROWS = ROWS
+
+
+def _isolate_store(root: Path) -> None:
+    import memcommit.store as store_module
+
+    store_dir = root / ".mem"
+    assignments = {
+        "STORE_DIR": store_dir,
+        "CONTEXTS_DIR": store_dir / "contexts",
+        "QUERY_SOURCES_DIR": store_dir / "query-sources",
+        "STATE_FILE": store_dir / "state.json",
+        "IMPACT_PLAN_FILE": store_dir / "impact-plan.json",
+        "STAGED_UPDATE_FILE": store_dir / "staged-update.json",
+        "REVIEW_SESSION_FILE": store_dir / "review-session.json",
+        "ATOMIZE_ANALYSES_DIR": store_dir / "atomize-analyses",
+        "ATOMIZE_WORKBENCHES_DIR": store_dir / "atomize-workbenches",
+        "ATOMIZE_GROUNDING_SESSIONS_DIR": store_dir / "atomize-groundings",
+        "ATOMIZE_GROUNDING_HISTORY_DIR": store_dir / "atomize-grounding-history",
+        "GROUND_SESSIONS_DIR": store_dir / "ground-sessions",
+        "MELD_SESSIONS_DIR": store_dir / "meld-sessions",
+    }
+    for name, value in assignments.items():
+        setattr(store_module, name, value)
+
+
+def _prepare_fixture() -> str:
+    from typer.testing import CliRunner
+
+    from memcommit.cli import app
+    from memcommit.context import Memory
+    from memcommit.store import MemoryStore
+
+    runner = CliRunner()
+    for argv in (
+        ("init", "demo"),
+        ("init", "demo/child"),
+        ("add", "First wording"),
+    ):
+        result = runner.invoke(app, list(argv))
+        assert result.exit_code == 0, result.output
+    store = MemoryStore()
+    memory = next(
+        item for item in store.load_current_direct().iter_items() if isinstance(item, Memory)
+    )
+    for content in ("Second wording", "Final wording used by both reports"):
+        result = runner.invoke(app, ["edit", memory.uid, content])
+        assert result.exit_code == 0, result.output
+    result = runner.invoke(app, ["switch", "demo"])
+    assert result.exit_code == 0, result.output
+    return memory.uid
+
+
+def _run_child(operation: str) -> None:
+    from memcommit.commands import rationale, trace
+
+    with tempfile.TemporaryDirectory(prefix="memcommit-report-capture-") as temporary:
+        _isolate_store(Path(temporary))
+        memory_uid = _prepare_fixture()
+        print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
+        if operation == "trace":
+            trace.cmd()
+        elif operation == "rationale":
+            # The launcher is the subject of this evidence. Recorded-only keeps
+            # the result deterministic and proves cancellation/selection does
+            # not require a provider connection.
+            rationale.cmd(recorded_only=True)
+        else:
+            raise ValueError(f"Unknown operation: {operation}")
+        print(
+            f"{operation.upper()} CLOSED · SELECTED [{memory_uid[:8]}] · "
+            "READ ONLY · STORE CONTENT UNCHANGED"
+        )
+
+
+def _environment() -> dict[str, str]:
+    environment = os.environ.copy()
+    environment.pop("NO_COLOR", None)
+    environment.update(
+        {
+            "TERM": "xterm-256color",
+            "COLORTERM": "truecolor",
+            "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
+        }
+    )
+    return environment
+
+
+def _spawn(operation: str) -> tuple[pexpect.spawn, io.StringIO]:
+    recorder = _BASE._StreamRecorder()
+    child = pexpect.spawn(
+        sys.executable,
+        [str(Path(__file__).resolve()), "--child", operation],
+        cwd=str(ROOT),
+        env=_environment(),
+        encoding="utf-8",
+        codec_errors="replace",
+        timeout=15,
+        dimensions=(ROWS, COLUMNS),
+    )
+    child.logfile_read = recorder
+    return child, recorder
+
+
+def _snapshot(recorder: io.StringIO, stem: str) -> None:
+    _BASE._snapshot(recorder, stem)
+
+
+def _capture(operation: str, start: int) -> int:
+    child, recorder = _spawn(operation)
+    try:
+        child.expect(f"{operation.upper()} · SELECT A MEMORY")
+        _BASE._settle(child)
+        _snapshot(recorder, f"{start:02d}-{operation}-exact-entry")
+
+        child.send(RIGHT)
+        _BASE._settle(child)
+        _snapshot(recorder, f"{start + 1:02d}-{operation}-descendants")
+
+        child.send("\t" + DOWN + DOWN)
+        _BASE._settle(child)
+        _snapshot(recorder, f"{start + 2:02d}-{operation}-memory-focused")
+
+        child.send("\r")
+        if operation == "trace":
+            child.expect("TRACE · MEMORY")
+        else:
+            child.expect("RATIONALE REPORT")
+        _BASE._settle(child)
+        _snapshot(recorder, f"{start + 3:02d}-{operation}-result")
+
+        child.send("q")
+        child.expect(f"{operation.upper()} CLOSED")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, f"{start + 4:02d}-{operation}-verification")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+    return start + 5
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    next_index = _capture("trace", 1)
+    _capture("rationale", next_index)
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
+    assert "3 changes" in raw.casefold()
+    assert "INCLUDE DESCENDANTS" in raw
+    assert "38;" in raw
+    assert any(
+        "7" in codes.split(";") for codes in re.findall("\x1b\\[([0-9;]*)m", raw)
+    )
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 3 and sys.argv[1] == "--child":
+        sys.path.insert(0, str(ROOT))
+        _run_child(sys.argv[2])
+    else:
+        main()
