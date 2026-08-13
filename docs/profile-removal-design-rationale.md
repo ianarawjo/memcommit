@@ -27,6 +27,11 @@ which it could restore the content.
 - A successful deletion returns to the refreshed Profile selector with a green
   in-selector receipt. It does not exit `mem profile`. Each subsequent deletion
   starts from a newly loaded registry generation and visible Profile catalog.
+- While recursive deletion is running, the frozen review remains visible and
+  the shared `.`, `..`, `…` busy cadence appears in the header and footer.
+  Deletion runs in the shared non-cancellable background executor so the TUI
+  can repaint without allowing a second mutation. Escape or Ctrl-C requests a
+  close only after the already approved deletion finishes.
 - Direct `mem profile remove ...` and `mem profile remove-study ...` commands
   remain one-shot CLI operations and print their full permanent-deletion
   receipts before exiting.
@@ -60,6 +65,8 @@ The tombstone is display metadata, not a trash or restore mechanism.
 9. After a TUI deletion, the reviewed picker instance is discarded. The next
    selector screen is built from the post-deletion registry and cannot reuse a
    stale target UID, generation, inventory, or Study row.
+10. Progress claims only that local deletion is still running. The animation
+    does not estimate bytes, checkpoint count, percentage, or remaining time.
 
 ## Publication and failure boundary
 

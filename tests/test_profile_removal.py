@@ -322,7 +322,9 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         current,
         registry_generation,
         initial_status="",
+        apply_removal=None,
     ):
+        assert callable(apply_removal)
         calls.append(
             {
                 "names": tuple(entry.name for entry in entries),

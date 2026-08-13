@@ -135,7 +135,7 @@ def test_profile_use_without_a_name_keeps_the_interactive_picker(
     )
     monkeypatch.setattr(
         "memcommit.commands.profile.choose_profile",
-        lambda entries, *, current, registry_generation: "authoring",
+        lambda entries, *, current, registry_generation, apply_removal: "authoring",
     )
 
     result = runner.invoke(app, ["profile", "use"])

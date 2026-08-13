@@ -262,7 +262,8 @@ def test_bare_profile_uses_interactive_picker_result(
     )
     observed: dict[str, object] = {}
 
-    def select(entries, *, current, registry_generation):
+    def select(entries, *, current, registry_generation, apply_removal):
+        assert callable(apply_removal)
         observed["names"] = [entry.name for entry in entries]
         observed["current"] = current
         observed["generation"] = registry_generation
@@ -302,7 +303,7 @@ def test_bare_profile_cancel_preserves_active_profile(
     )
     monkeypatch.setattr(
         "memcommit.commands.profile.choose_profile",
-        lambda entries, *, current, registry_generation: None,
+        lambda entries, *, current, registry_generation, apply_removal: None,
     )
 
     result = runner.invoke(app, ["profile"])
@@ -326,7 +327,7 @@ def test_bare_profile_revalidates_picker_result_before_selection(
     )
     monkeypatch.setattr(
         "memcommit.commands.profile.choose_profile",
-        lambda entries, *, current, registry_generation: "missing",
+        lambda entries, *, current, registry_generation, apply_removal: "missing",
     )
 
     result = runner.invoke(app, ["profile"])
@@ -1525,9 +1526,10 @@ def test_initialized_study_picker_shows_participant_and_authority_profiles(
     assert initialized.exit_code == 0, initialized.output
     observed: list[tuple[str, str | None]] = []
 
-    def select(entries, *, current, registry_generation):
+    def select(entries, *, current, registry_generation, apply_removal):
         assert current == "pilot-picker"
         assert registry_generation >= 1
+        assert callable(apply_removal)
         observed.extend((entry.name, entry.study_role) for entry in entries)
         return "pilot-picker"
 

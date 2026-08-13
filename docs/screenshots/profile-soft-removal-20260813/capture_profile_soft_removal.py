@@ -42,7 +42,8 @@ def _load_capture_helpers():
 
 
 _SETUP_MODE = len(sys.argv) == 4 and sys.argv[1] == "--setup"
-HELPERS = None if _SETUP_MODE else _load_capture_helpers()
+_SLOW_CLI_MODE = len(sys.argv) >= 4 and sys.argv[1] == "--slow-cli"
+HELPERS = None if (_SETUP_MODE or _SLOW_CLI_MODE) else _load_capture_helpers()
 
 
 def _environment(home: Path) -> dict[str, str]:
@@ -165,11 +166,16 @@ def _prepare(home: Path, *, active_participant: bool = False) -> None:
     )
 
 
-def _spawn(home: Path, *args: str):
+def _spawn(home: Path, *args: str, slow_delete: bool = False):
     assert HELPERS is not None
+    argv = (
+        [sys.executable, str(__file__), "--slow-cli", str(home), *args]
+        if slow_delete
+        else [sys.executable, "-m", "memcommit.cli", *args]
+    )
     command = (
         f"stty rows {ROWS} cols {COLS}; stty size; "
-        f"exec {shlex.join([sys.executable, '-m', 'memcommit.cli', *args])}"
+        f"exec {shlex.join(argv)}"
     )
     recorder = HELPERS._Recorder()
     child = pexpect.spawn(
@@ -227,7 +233,7 @@ def _capture_read_only(home: Path, stem: str, *expected: str) -> None:
 
 def _capture_study_path(home: Path) -> None:
     _prepare(home)
-    child, recorder = _spawn(home, "profile")
+    child, recorder = _spawn(home, "profile", slow_delete=True)
     _wait_for(child, recorder, "Select a Profile or Study", "STUDY capture-study")
     if "52 180" not in recorder.getvalue():
         raise RuntimeError("Study capture PTY did not verify 52 by 180.")
@@ -249,6 +255,15 @@ def _capture_study_path(home: Path) -> None:
     HELPERS._snapshot(recorder, "03-study-exact-removal-review")
 
     child.send("\r")
+    _wait_for(child, recorder, "Permanently deleting Study .")
+    _wait_for(child, recorder, "Permanently deleting Study ..")
+    _wait_for(
+        child,
+        recorder,
+        "Permanently deleting Study …",
+        "DELETING STORE AND CHECKPOINTS …",
+    )
+    HELPERS._snapshot(recorder, "04-study-deletion-in-progress")
     _wait_for(
         child,
         recorder,
@@ -264,12 +279,12 @@ def _capture_study_path(home: Path) -> None:
     ):
         if (home / ".mem-profiles" / "stores" / uid).exists():
             raise RuntimeError("Study removal retained a Profile store.")
-    HELPERS._snapshot(recorder, "04-study-removal-receipt")
+    HELPERS._snapshot(recorder, "05-study-removal-receipt")
     child.send("q")
     _finish(child, recorder)
     _capture_read_only(
         home,
-        "05-study-read-only-verification",
+        "06-study-read-only-verification",
         "* capture-workspace",
         "Deleted Profile tombstones hidden from this list: 2",
     )
@@ -277,17 +292,17 @@ def _capture_study_path(home: Path) -> None:
 
 def _capture_profile_path(home: Path) -> None:
     _prepare(home)
-    child, recorder = _spawn(home, "profile")
+    child, recorder = _spawn(home, "profile", slow_delete=True)
     _wait_for(child, recorder, "Select a Profile or Study", "STUDY capture-study")
     _assert_color(recorder)
 
     child.send("\x1b[Ad")
     _wait_for(child, recorder, "fixed authoring Profile cannot be removed")
-    HELPERS._snapshot(recorder, "06-fixed-authoring-removal-blocked")
+    HELPERS._snapshot(recorder, "07-fixed-authoring-removal-blocked")
 
     child.send("\x1b[B\x1b[B\x1b[B")
     _wait_for(child, recorder, "D remove Profile", "Participant · capture-participant")
-    HELPERS._snapshot(recorder, "07-profile-child-target")
+    HELPERS._snapshot(recorder, "08-profile-child-target")
 
     child.send("d")
     _wait_for(
@@ -297,9 +312,18 @@ def _capture_profile_path(home: Path) -> None:
         "mem profile remove capture-participant --force",
         "cannot be undone or recovered by mem",
     )
-    HELPERS._snapshot(recorder, "08-profile-exact-removal-review")
+    HELPERS._snapshot(recorder, "09-profile-exact-removal-review")
 
     child.send("a")
+    _wait_for(child, recorder, "Permanently deleting Profile .")
+    _wait_for(child, recorder, "Permanently deleting Profile ..")
+    _wait_for(
+        child,
+        recorder,
+        "Permanently deleting Profile …",
+        "DELETING STORE AND CHECKPOINTS …",
+    )
+    HELPERS._snapshot(recorder, "10-profile-deletion-in-progress")
     _wait_for(
         child,
         recorder,
@@ -317,12 +341,12 @@ def _capture_profile_path(home: Path) -> None:
     )
     if participant_store.exists() or not authority_store.is_dir():
         raise RuntimeError("Child removal did not preserve the exact sibling scope.")
-    HELPERS._snapshot(recorder, "09-profile-removal-receipt")
+    HELPERS._snapshot(recorder, "11-profile-removal-receipt")
     child.send("q")
     _finish(child, recorder)
     _capture_read_only(
         home,
-        "10-profile-read-only-verification",
+        "12-profile-read-only-verification",
         "capture-study  STUDY",
         "1 removed",
         "profile=capture-granted-memory",
@@ -338,18 +362,18 @@ def _capture_active_blocks(home: Path) -> None:
 
     child.send("d")
     _wait_for(child, recorder, "CURRENT Profile cannot be removed")
-    HELPERS._snapshot(recorder, "11-active-profile-removal-blocked")
+    HELPERS._snapshot(recorder, "13-active-profile-removal-blocked")
 
     child.send("\x1b[A")
     _wait_for(child, recorder, "D remove Study")
     child.send("d")
     _wait_for(child, recorder, "Study contains CURRENT Profile")
-    HELPERS._snapshot(recorder, "12-active-study-removal-blocked")
+    HELPERS._snapshot(recorder, "14-active-study-removal-blocked")
     child.send("q")
     _finish(child, recorder)
     _capture_read_only(
         home,
-        "13-blocked-read-only-verification",
+        "15-blocked-read-only-verification",
         "* Participant",
         "profile=capture-participant",
         "profile=capture-granted-memory",
@@ -365,6 +389,29 @@ def _run_direct_cli(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
         text=True,
         capture_output=True,
     )
+
+
+def _run_slow_cli(home: Path, args: list[str]) -> None:
+    """Delay only capture-process deletion so every shared busy frame appears."""
+
+    os.environ["HOME"] = str(home)
+    from memcommit.commands import profile as profile_command
+    from memcommit.cli import app
+
+    original_profile = profile_command.remove_profile
+    original_study = profile_command.remove_study
+
+    def slow_profile(*profile_args, **profile_kwargs):
+        time.sleep(1.4)
+        return original_profile(*profile_args, **profile_kwargs)
+
+    def slow_study(*study_args, **study_kwargs):
+        time.sleep(1.4)
+        return original_study(*study_args, **study_kwargs)
+
+    profile_command.remove_profile = slow_profile
+    profile_command.remove_study = slow_study
+    app(args=args, prog_name="mem")
 
 
 def _verify_direct_cli(profile_home: Path, study_home: Path) -> None:
@@ -442,5 +489,7 @@ def main() -> None:
 if __name__ == "__main__":
     if _SETUP_MODE:
         _setup(Path(sys.argv[2]), active_participant=sys.argv[3] == "active")
+    elif _SLOW_CLI_MODE:
+        _run_slow_cli(Path(sys.argv[2]), sys.argv[3:])
     else:
         main()

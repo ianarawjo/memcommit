@@ -1,12 +1,16 @@
 """Contracts for the interactive whole-store Profile selector."""
 from __future__ import annotations
 
+import threading
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
+import memcommit.commands.profile_picker as profile_picker_module
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
+    ProfilePickerRefresh,
     _picker_rows,
     _removal_action,
     _removal_review,
@@ -377,6 +381,92 @@ def test_profile_picker_study_header_d_then_enter_returns_whole_study_action():
         uid="study-uid",
         registry_generation=7,
     )
+
+
+def test_profile_picker_deletion_cycles_every_shared_busy_frame(monkeypatch):
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+    original_suffix = profile_picker_module.busy_suffix
+    rendered_frames: set[str] = set()
+    all_frames_rendered = threading.Event()
+    deletion_started = threading.Event()
+    release_deletion = threading.Event()
+    feeder_errors: list[Exception] = []
+
+    def capture_suffix(frame_index: int) -> str:
+        suffix = original_suffix(frame_index)
+        rendered_frames.add(suffix)
+        if rendered_frames == {".", "..", "…"}:
+            all_frames_rendered.set()
+        return suffix
+
+    monkeypatch.setattr(profile_picker_module, "busy_suffix", capture_suffix)
+    monkeypatch.setattr(
+        profile_picker_module,
+        "_PROFILE_DELETION_BUSY_INTERVAL_SECONDS",
+        0.01,
+    )
+
+    def delete(_action: ProfilePickerAction) -> str:
+        deletion_started.set()
+        if not release_deletion.wait(2):
+            raise RuntimeError("test did not release deletion")
+        return "Deletion completed"
+
+    with create_pipe_input() as pipe_input:
+
+        def release_after_animation() -> None:
+            try:
+                pipe_input.send_text("\x1b[Bd\r")
+                if not deletion_started.wait(2):
+                    raise AssertionError("deletion did not start")
+                if not all_frames_rendered.wait(2):
+                    raise AssertionError("busy indicator did not animate")
+            except Exception as error:  # pragma: no cover - assertion relay
+                feeder_errors.append(error)
+            finally:
+                release_deletion.set()
+
+        feeder = threading.Thread(target=release_after_animation)
+        feeder.start()
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            registry_generation=9,
+            apply_removal=delete,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert feeder_errors == []
+    assert not feeder.is_alive()
+    assert rendered_frames == {".", "..", "…"}
+    assert selected == ProfilePickerRefresh(status="Deletion completed")
 
 
 def test_profile_picker_review_warns_that_store_and_checkpoints_are_unrecoverable():

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import sys
-from typing import Annotated, Optional
+from typing import Annotated, Callable, Optional
 
 import typer
 
@@ -14,6 +14,7 @@ from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
+    ProfilePickerRefresh,
     choose_profile,
 )
 from memcommit.commands.tui_primitives import display_escape_text
@@ -196,7 +197,11 @@ def _print_grant(registry, grant, *, prefix: str = "") -> None:
     )
 
 
-def _pick_profile(*, initial_status: str = "") -> ProfilePickerAction | None:
+def _pick_profile(
+    *,
+    initial_status: str = "",
+    apply_removal: Callable[[ProfilePickerAction], str] | None = None,
+) -> ProfilePickerAction | ProfilePickerRefresh | None:
     registry, inspections = _profile_rows()
     memberships = _study_memberships(registry)
     entries = tuple(
@@ -266,6 +271,8 @@ def _pick_profile(*, initial_status: str = "") -> ProfilePickerAction | None:
         picker_kwargs = (
             {"initial_status": initial_status} if initial_status else {}
         )
+        if apply_removal is not None:
+            picker_kwargs["apply_removal"] = apply_removal
         selected = choose_profile(
             entries,
             current=registry.active.name,
@@ -363,6 +370,7 @@ def _apply_profile_picker_action(
     action: ProfilePickerAction,
     *,
     print_receipt: bool = True,
+    propagate_errors: bool = False,
 ) -> str | None:
     if action.kind == "USE":
         _use_profile(action.name)
@@ -381,6 +389,8 @@ def _apply_profile_picker_action(
                 expected_generation=action.registry_generation,
             )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        if propagate_errors:
+            raise
         _fail(error)
     if action.kind == "REMOVE_PROFILE":
         if print_receipt:
@@ -397,11 +407,29 @@ def _run_profile_selector() -> None:
     status = ""
     completed_removal = False
     while True:
-        action = _pick_profile(initial_status=status)
+        action = _pick_profile(
+            initial_status=status,
+            apply_removal=lambda reviewed: (
+                _apply_profile_picker_action(
+                    reviewed,
+                    print_receipt=False,
+                    propagate_errors=True,
+                )
+                or "Profile deletion completed"
+            ),
+        )
         if action is None:
             if not completed_removal:
                 typer.echo("Profile selection cancelled.")
             return
+        if isinstance(action, ProfilePickerRefresh):
+            if action.error is not None:
+                _fail(action.error)
+            status = action.status
+            completed_removal = True
+            if action.close_requested:
+                return
+            continue
         if action.kind == "USE":
             _apply_profile_picker_action(action)
             return
@@ -411,6 +439,7 @@ def _run_profile_selector() -> None:
         status = _apply_profile_picker_action(
             action,
             print_receipt=False,
+            propagate_errors=False,
         ) or "Profile deletion completed"
         completed_removal = True
 

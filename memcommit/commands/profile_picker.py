@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 import sys
 from typing import Literal
@@ -17,6 +17,11 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 
+from memcommit.commands.background_turn import BackgroundExecutorTurn
+from memcommit.commands.command_progress import (
+    BUSY_INTERVAL_SECONDS,
+    busy_suffix,
+)
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
@@ -61,6 +66,15 @@ class ProfilePickerAction:
 
 
 @dataclass(frozen=True)
+class ProfilePickerRefresh:
+    """A completed background deletion that requires a fresh picker catalog."""
+
+    status: str
+    error: Exception | None = None
+    close_requested: bool = False
+
+
+@dataclass(frozen=True)
 class _ProfilePickerRow:
     kind: Literal["PROFILE", "STUDY"]
     name: str
@@ -69,6 +83,9 @@ class _ProfilePickerRow:
     created_at: str | None = None
     profile_count: int = 1
     removed_count: int = 0
+
+
+_PROFILE_DELETION_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 
 
 def _validate_entries(
@@ -355,15 +372,18 @@ def choose_profile(
     current: str,
     registry_generation: int | None = None,
     initial_status: str = "",
+    apply_removal: Callable[[ProfilePickerAction], str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> ProfilePickerAction | None:
+) -> ProfilePickerAction | ProfilePickerRefresh | None:
     """Return one selected action, or ``None`` when cancelled."""
 
     options = _validate_entries(entries, current=current)
     if not isinstance(initial_status, str):
         raise ValueError("Profile selection status must be text.")
+    if apply_removal is not None and not callable(apply_removal):
+        raise ValueError("Profile removal handler must be callable.")
     rows = _picker_rows(options, current=current)
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
@@ -380,9 +400,17 @@ def choose_profile(
     }
     pending: dict[str, object | None] = {"action": None, "review": None}
     status = {"text": initial_status}
+    background_turn: BackgroundExecutorTurn[str] = BackgroundExecutorTurn(
+        interval_seconds=_PROFILE_DELETION_BUSY_INTERVAL_SECONDS,
+    )
+    background_result: dict[str, ProfilePickerRefresh | None] = {"value": None}
     bindings = KeyBindings()
-    review_mode = Condition(lambda: pending["action"] is not None)
-    picker_mode = ~review_mode
+    review_mode = Condition(
+        lambda: pending["action"] is not None and not background_turn.busy
+    )
+    picker_mode = Condition(
+        lambda: pending["action"] is None and not background_turn.busy
+    )
 
     def current_row() -> _ProfilePickerRow:
         return rows[selected["index"]]
@@ -471,10 +499,53 @@ def choose_profile(
     def _apply_reviewed_removal(event) -> None:
         action = pending["action"]
         assert isinstance(action, ProfilePickerAction)
-        event.app.exit(result=action)
+        if apply_removal is None:
+            event.app.exit(result=action)
+            return
+
+        def work() -> str:
+            return apply_removal(action)
+
+        def on_success(message: str) -> None:
+            background_result["value"] = ProfilePickerRefresh(status=message)
+
+        def on_error(error: Exception) -> None:
+            background_result["value"] = ProfilePickerRefresh(
+                status="",
+                error=error,
+            )
+
+        def finish(*, close_requested: bool) -> None:
+            result = background_result["value"]
+            if result is None:
+                result = ProfilePickerRefresh(
+                    status="",
+                    error=RuntimeError("Profile deletion finished without a result."),
+                )
+            event.app.exit(
+                result=ProfilePickerRefresh(
+                    status=result.status,
+                    error=result.error,
+                    close_requested=close_requested,
+                )
+            )
+
+        background_turn.start(
+            event.app,
+            work=work,
+            on_success=on_success,
+            on_error=on_error,
+            on_idle=lambda: finish(close_requested=False),
+            on_close=lambda: finish(close_requested=True),
+        )
+        event.app.invalidate()
 
     @bindings.add("escape")
     def _back_or_cancel(event) -> None:
+        if background_turn.request_close():
+            status["text"] = "Close requested · deletion will finish first"
+            event.app.invalidate()
+            return
         if pending["action"] is not None:
             pending["action"] = None
             pending["review"] = None
@@ -486,9 +557,21 @@ def choose_profile(
     @bind_case_insensitive_key(bindings, "q", filter=picker_mode, eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
+        if background_turn.request_close():
+            status["text"] = "Close requested · deletion will finish first"
+            event.app.invalidate()
+            return
         event.app.exit(result=None)
 
     def header_text() -> str:
+        if background_turn.busy:
+            action = pending["action"]
+            assert isinstance(action, ProfilePickerAction)
+            target_kind = "Study" if action.kind == "REMOVE_STUDY" else "Profile"
+            return (
+                f" Permanently deleting {target_kind} "
+                f"{busy_suffix(background_turn.frame)}"
+            )
         return (
             " Review irreversible deletion"
             if review_mode()
@@ -496,6 +579,17 @@ def choose_profile(
         )
 
     def footer_text() -> str:
+        if background_turn.busy:
+            close_note = (
+                " · close requested"
+                if background_turn.close_requested
+                else " · Esc/Ctrl-C closes after deletion"
+            )
+            return (
+                " DELETING STORE AND CHECKPOINTS "
+                + busy_suffix(background_turn.frame)
+                + close_note
+            )
         if review_mode():
             return (
                 " Enter/A apply exact command  Esc back · IRREVERSIBLE · "
@@ -527,7 +621,9 @@ def choose_profile(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[ProfilePickerAction | None] = Application(
+    app: Application[
+        ProfilePickerAction | ProfilePickerRefresh | None
+    ] = Application(
         layout=Layout(
             HSplit(
                 [
