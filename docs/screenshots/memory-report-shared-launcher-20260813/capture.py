@@ -56,29 +56,32 @@ def _isolate_store(root: Path) -> None:
 
 
 def _prepare_fixture() -> str:
-    from typer.testing import CliRunner
-
-    from memcommit.cli import app
+    from memcommit.commands import add, edit, init, switch
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 
-    runner = CliRunner()
-    for argv in (
-        ("init", "demo"),
-        ("init", "demo/child"),
-        ("add", "First wording"),
-    ):
-        result = runner.invoke(app, list(argv))
-        assert result.exit_code == 0, result.output
+    # Invoke the same command functions directly so this focused capture does
+    # not depend on unrelated CLI-module imports elsewhere in the prototype.
+    init.cmd("demo", parents=False)
+    init.cmd("demo/child", parents=False)
+    add.cmd(
+        "First wording",
+        input_source=None,
+        paste=False,
+        context_name=None,
+    )
     store = MemoryStore()
     memory = next(
         item for item in store.load_current_direct().iter_items() if isinstance(item, Memory)
     )
     for content in ("Second wording", "Final wording used by both reports"):
-        result = runner.invoke(app, ["edit", memory.uid, content])
-        assert result.exit_code == 0, result.output
-    result = runner.invoke(app, ["switch", "demo"])
-    assert result.exit_code == 0, result.output
+        edit.cmd(
+            memory.uid,
+            content,
+            input_source=None,
+            context_name=None,
+        )
+    switch.cmd("demo")
     return memory.uid
 
 
@@ -175,8 +178,10 @@ def main() -> None:
     next_index = _capture("trace", 1)
     _capture("rationale", next_index)
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
-    assert "3 changes" in raw.casefold()
+    assert "3 recorded changes" in raw.casefold()
     assert "INCLUDE DESCENDANTS" in raw
+    assert "CONTEXTS & MEMORIES" in raw
+    assert "┏" in raw and "┗" in raw
     assert "38;" in raw
     assert any(
         "7" in codes.split(";") for codes in re.findall("\x1b\\[([0-9;]*)m", raw)

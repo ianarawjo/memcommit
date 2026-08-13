@@ -19,12 +19,25 @@ from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.tui_primitives import navigable_tree_row_prefix
 from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.focus import (
+    FocusSurface,
+    SurfaceFocusController,
+    bind_surface_navigation,
+)
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    build_focused_frame,
+    build_tui_frame,
+)
 from memcommit.interfaces.tui.components.scrollable_pane import WrappedScrollbarMargin
 from memcommit.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
-from memcommit.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+)
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_targeting.tui.tree import (
     ContextTree,
@@ -56,6 +69,7 @@ from memcommit.source_projection.tui import render_source_display_tokens
 _CONTEXT_NAVIGATION_HINT = " ↑↓ move  ←→ expand  "
 _CONTEXT_PICKER_STYLE = merge_styles(
     [
+        MEMCOMMIT_TUI_STYLE,
         SEMANTIC_VIEWER_STYLE,
         Style.from_dict(
             {
@@ -615,18 +629,22 @@ def choose_context(
                 return candidate
         return ContextPickerNavigationUnit("CONTEXT", state.selected_name)
 
-    def move_navigation_unit(direction: int) -> None:
+    def move_navigation_unit(direction: int) -> bool:
         nonlocal memory_anchor
         units = navigation_units()
         current = current_navigation_unit()
         index = units.index(current)
-        target = units[max(0, min(index + direction, len(units) - 1))]
+        target_index = max(0, min(index + direction, len(units) - 1))
+        if target_index == index:
+            return False
+        target = units[target_index]
         state.selected_name = target.context_name
         memory_anchor = (
             (target.context_name, target.memory_index)
             if target.kind == "MEMORY" and target.memory_index is not None
             else None
         )
+        return True
 
     def continuation_prefix(line_number: int, wrap_count: int):
         if wrap_count == 0:
@@ -651,7 +669,7 @@ def choose_context(
             lambda: render_context_reach(
                 memory_reach_state,
                 focused=get_app().layout.has_focus(reach_control),
-                title="CONTEXT RANGE",
+                title="",
             ),
             focusable=True,
             show_cursor=False,
@@ -664,8 +682,12 @@ def choose_context(
         and get_app().layout.has_focus(reach_control)
     )
     tree_focus = ~reach_focus
+    focus_controller: SurfaceFocusController | None = None
+    unframed_tree_focus = tree_focus & Condition(
+        lambda: focus_controller is None
+    )
 
-    @bindings.add("down", filter=tree_focus)
+    @bindings.add("down", filter=unframed_tree_focus)
     def _next_context(event) -> None:
         navigation_accelerator.move(
             1,
@@ -673,7 +695,7 @@ def choose_context(
             move_one=move_navigation_unit,
         )
 
-    @bindings.add("up", filter=tree_focus)
+    @bindings.add("up", filter=unframed_tree_focus)
     def _previous_context(event) -> None:
         navigation_accelerator.move(
             -1,
@@ -734,7 +756,7 @@ def choose_context(
                 memory_anchor = None
         event.app.invalidate()
 
-    @bindings.add("enter", filter=tree_focus)
+    @bindings.add("enter", filter=unframed_tree_focus)
     def _accept_context(event) -> None:
         navigation_accelerator.reset()
         if memory_anchor is not None:
@@ -803,24 +825,63 @@ def choose_context(
     def _descendant_memory_reach(event) -> None:
         set_memory_reach(True, event)
 
-    @bindings.add("enter", filter=reach_focus, eager=True)
     @bindings.add(" ", filter=reach_focus, eager=True)
     def _toggle_memory_reach(event) -> None:
         if memory_reach_state is not None:
             set_memory_reach(not memory_reach_state.include_descendants, event)
 
-    @bindings.add("down", filter=reach_focus, eager=True)
-    @bindings.add("tab", filter=reach_focus, eager=True)
-    def _focus_memory_tree(event) -> None:
-        event.app.layout.focus(control)
-        event.app.invalidate()
+    if reach_control is not None:
 
-    @bindings.add("tab", filter=tree_focus, eager=True)
-    @bindings.add("s-tab", filter=tree_focus, eager=True)
-    def _focus_memory_reach(event) -> None:
-        if reach_control is not None:
-            event.app.layout.focus(reach_control)
-            event.app.invalidate()
+        def move_range_surface(event, direction):
+            del event, direction
+            return "BOUNDARY"
+
+        def move_tree_surface(event, direction):
+            units = navigation_units()
+            index = units.index(current_navigation_unit())
+            if (direction < 0 and index == 0) or (
+                direction > 0 and index == len(units) - 1
+            ):
+                navigation_accelerator.reset()
+                return "BOUNDARY"
+            navigation_accelerator.move(
+                direction,
+                app=event.app,
+                move_one=move_navigation_unit,
+            )
+            return "MOVED"
+
+        def activate_range_surface(event):
+            _toggle_memory_reach(event)
+            return "HANDLED"
+
+        def activate_tree_surface(event):
+            _accept_context(event)
+            return "HANDLED"
+
+        focus_controller = SurfaceFocusController(
+            (
+                FocusSurface(
+                    "range",
+                    reach_control,
+                    move_vertical=move_range_surface,
+                    activate=activate_range_surface,
+                ),
+                FocusSurface(
+                    "contexts-and-memories",
+                    control,
+                    move_vertical=move_tree_surface,
+                    activate=activate_tree_surface,
+                ),
+            )
+        )
+        bind_surface_navigation(
+            bindings,
+            focus_controller,
+            tab=True,
+            vertical=True,
+            activate=True,
+        )
 
     @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape")
@@ -898,22 +959,42 @@ def choose_context(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    body: list[object] = [
-        header,
-        Window(height=1, char="─"),
-    ]
     if reach_control is not None:
-        body.extend(
+        reach_frame = build_focused_frame(
+            Window(
+                reach_control,
+                height=Dimension.exact(1),
+                dont_extend_height=True,
+            ),
+            title="RANGE",
+            is_focused=lambda: get_app().layout.has_focus(reach_control),
+            height=Dimension.exact(3),
+        )
+        targets_frame = build_focused_frame(
+            options_window,
+            title="CONTEXTS & MEMORIES",
+            is_focused=lambda: get_app().layout.has_focus(control),
+        )
+        body = build_tui_frame(
+            TuiRegion(header),
+            TuiRegion(reach_frame),
+            TuiRegion(targets_frame),
+            TuiRegion(footer),
+        )
+    else:
+        body = HSplit(
             [
-                Window(reach_control, height=Dimension.exact(1)),
+                header,
                 Window(height=1, char="─"),
+                options_window,
+                Window(height=1, char="─"),
+                footer,
             ]
         )
-    body.extend([options_window, Window(height=1, char="─"), footer])
     app: Application[str | ContextSubtreeSelection | ContextMemorySelection | None] = (
         Application(
             layout=Layout(
-                HSplit(body),
+                body,
                 focused_element=(reach_control or control),
             ),
             key_bindings=bindings,

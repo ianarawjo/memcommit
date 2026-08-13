@@ -1,24 +1,24 @@
- TRACE · MEMORY [6e50adda] · demo/child                                                                                                                                             
+ TRACE · MEMORY [7ef2a351] · demo/child                                                                                                                                             
 ┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
-│ UID          27c2b688-acf8-465f-b198-7eb99c7ae951                                                                                                                               ^│
-│ Time         2026-08-13T14:25:57.297757                                                                                                                                          │
+│ UID          42f38eb2-ddbb-4795-9d96-a104e612fd40                                                                                                                               ^│
+│ Time         2026-08-13T15:29:40.641733                                                                                                                                          │
 │ Command      mem edit                                                                                                                                                            │
-│ Description  EDITED · RECORDED · [6e50adda]@1 “Second wording” → [6e50adda]@1 “Final wording used by both reports”                                                               │
-│ Detail       Selected Memory: 6e50adda-2746-4e6f-80ff-4b6d7841c21f                                                                                                               │
-│              Lineage UIDs: 6e50adda-2746-4e6f-80ff-4b6d7841c21f                                                                                                                  │
+│ Description  EDITED · RECORDED · [7ef2a351]@1 “Second wording” → [7ef2a351]@1 “Final wording used by both reports”                                                               │
+│ Detail       Selected Memory: 7ef2a351-1f33-4a49-88a7-a1de866f2f2f                                                                                                               │
+│              Lineage UIDs: 7ef2a351-1f33-4a49-88a7-a1de866f2f2f                                                                                                                  │
 │              NOW:                                                                                                                                                                │
-│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Final wording used by both reports                                                                                       │
+│                [7ef2a351-1f33-4a49-88a7-a1de866f2f2f]@1 Final wording used by both reports                                                                                       │
 │              EARLIEST RETAINED:                                                                                                                                                  │
-│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 First wording                                                                                                            │
+│                [7ef2a351-1f33-4a49-88a7-a1de866f2f2f]@1 First wording                                                                                                            │
 │                                                                                                                                                                                  │
 │              Operation: mem edit                                                                                                                                                 │
 │              Effect: EDITED                                                                                                                                                      │
 │              Evidence: RECORDED                                                                                                                                                  │
 │              BEFORE:                                                                                                                                                             │
-│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Second wording                                                                                                           │
+│                [7ef2a351-1f33-4a49-88a7-a1de866f2f2f]@1 Second wording                                                                                                           │
 │              AFTER:                                                                                                                                                              │
-│                [6e50adda-2746-4e6f-80ff-4b6d7841c21f]@1 Final wording used by both reports                                                                                       │
-│              Description: Edited memory [6e50adda]                                                                                                                               │
+│                [7ef2a351-1f33-4a49-88a7-a1de866f2f2f]@1 Final wording used by both reports                                                                                       │
+│              Description: Edited memory [7ef2a351]                                                                                                                               │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -42,9 +42,9 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› 2026-08-13 14:25  mem edit  27c2b688  EDITED · RECORDED · [6e50adda]@1 “Second wording” → [6e50adda]@1 “Final wording used by both reports”                                    ^┃
-┃  2026-08-13 14:25  mem edit  cb1f2f12  EDITED · RECORDED · [6e50adda]@1 “First wording” → [6e50adda]@1 “Second wording”                                                          ┃
-┃  2026-08-13 14:25  mem add   c24a92f4  CREATED · RECORDED · ∅ → [6e50adda]@1 “First wording”                                                                                     ┃
+┃›  2026-08-13 15:29  mem edit  42f38eb2  EDITED · RECORDED · [7ef2a351]@1 “Second wording” → [7ef2a351]@1 “Final wording used by both reports”                                   ^┃
+┃   2026-08-13 15:29  mem edit  583efc7e  EDITED · RECORDED · [7ef2a351]@1 “First wording” → [7ef2a351]@1 “Second wording”                                                         ┃
+┃   2026-08-13 15:29  mem add   7416b0a3  CREATED · RECORDED · ∅ → [7ef2a351]@1 “First wording”                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃

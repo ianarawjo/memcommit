@@ -1,0 +1,52 @@
+ TRACE · MEMORY [8b077f2a] · task-1/participant/construction-updates/building-access                                                                                                
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ UID          0                                                                                                                                                                  ^│
+│ Time         (current)                                                                                                                                                           │
+│ Command      mem current                                                                                                                                                         │
+│ Description  HISTORY_GAP · UNRECORDED · ∅ → [8b077f2a]@1 “Modify campus-wiki/building-access: During…”                                                                           │
+│ Detail       Selected Memory: 8b077f2a-6a9f-50f0-ae91-f6536fb226cb                                                                                                               │
+│              Lineage UIDs: 8b077f2a-6a9f-50f0-ae91-f6536fb226cb                                                                                                                  │
+│              NOW:                                                                                                                                                                │
+│                [8b077f2a-6a9f-50f0-ae91-f6536fb226cb]@1 Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for gen │
+│eral passage.                                                                                                                                                                     │
+│              EARLIEST RETAINED: ∅                                                                                                                                                │
+│                                                                                                                                                                                  │
+│              Operation: mem current                                                                                                                                              │
+│              Effect: HISTORY_GAP                                                                                                                                                 │
+│              Evidence: UNRECORDED                                                                                                                                                │
+│              BEFORE: ∅                                                                                                                                                           │
+│              AFTER:                                                                                                                                                              │
+│                [8b077f2a-6a9f-50f0-ae91-f6536fb226cb]@1 Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for gen │
+│eral passage.                                                                                                                                                                     │
+│              Description: Current Context differs from the last reconstructable checkpoint state.                                                                                │
+│                                                                                                                                                                                  │
+│              LIMITS                                                                                                                                                              │
+│                - The current Context contains changes that no retained checkpoint explains.                                                                                      │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃›  (current)         mem current  0  HISTORY_GAP · UNRECORDED · ∅ → [8b077f2a]@1 “Modify campus-wiki/building-access: During…”                                                   ^┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/1

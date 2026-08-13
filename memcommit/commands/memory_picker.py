@@ -63,7 +63,7 @@ def _preview(value: str, limit: int = 100) -> str:
 def _change_label(value: int | None) -> str:
     if value is None:
         return "HISTORY UNAVAILABLE"
-    return f"{value} {'CHANGE' if value == 1 else 'CHANGES'}"
+    return f"{value} RECORDED {'CHANGE' if value == 1 else 'CHANGES'}"
 
 
 def _render_memory_options(

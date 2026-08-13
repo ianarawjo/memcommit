@@ -3049,7 +3049,7 @@ def _lineage_operation_counts(
     selected_uids: Iterable[str],
     events: Sequence[TraceEvent],
 ) -> dict[str, int]:
-    """Count temporal Trace rows for every candidate in one history pass."""
+    """Count recorded temporal operations for every candidate in one pass."""
 
     candidates = tuple(dict.fromkeys(selected_uids))
     operations_by_uid: dict[str, set[tuple[str, str]]] = {
@@ -3057,6 +3057,13 @@ def _lineage_operation_counts(
     }
     adjacency: dict[str, set[str]] = {uid: set() for uid in candidates}
     for event_index, event in enumerate(events):
+        if event.kind == "HISTORY_GAP":
+            # A gap proves that the current state is not reconstructable from
+            # retained history. It is a visible Trace row, but not evidence of
+            # one recorded creation or modification. Excluding it directly
+            # keeps the count naturally nonnegative instead of subtracting a
+            # synthetic row after aggregation.
+            continue
         if event.command_operation is not None:
             key = ("command", event.command_operation.uid)
         elif event.operation_id is not None:

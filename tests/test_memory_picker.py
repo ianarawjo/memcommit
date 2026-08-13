@@ -16,7 +16,9 @@ from memcommit.commands.memory_picker import (
     choose_memory_report_target,
 )
 import memcommit.commands.context_picker as context_picker
-from memcommit.provenance import TraceCandidate
+import memcommit.ops as ops
+from memcommit.provenance import TraceCandidate, collect_trace_candidates
+from memcommit.store import MemoryStore
 
 
 def candidate(
@@ -93,6 +95,72 @@ def test_report_picker_can_broaden_an_empty_root_to_descendant_memories():
             (item,),
             context_name="notes",
             operation="trace",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == MemoryReportTargetSelection(
+        root_context_name="notes",
+        owner_context_name="notes/child",
+        memory_uid=item.uid,
+        include_descendants=True,
+    )
+
+
+def test_report_picker_composes_the_shared_focused_frames(monkeypatch):
+    item = ScopedMemoryPickerItem(
+        context_name="notes",
+        uid=candidate(1).uid,
+        content="root Memory",
+        status="CURRENT",
+        catalog_context_names=("notes",),
+        change_count=2,
+    )
+    titles: list[str] = []
+    original = context_picker.build_focused_frame
+
+    def observe_shared_frame(body, **kwargs):
+        titles.append(kwargs["title"])
+        return original(body, **kwargs)
+
+    monkeypatch.setattr(
+        context_picker,
+        "build_focused_frame",
+        observe_shared_frame,
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        selected = choose_memory_report_target(
+            (item,),
+            context_name="notes",
+            operation="trace",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert titles == ["RANGE", "CONTEXTS & MEMORIES"]
+
+
+def test_report_picker_uses_shared_enter_and_vertical_surface_routing():
+    item = ScopedMemoryPickerItem(
+        context_name="notes/child",
+        uid=candidate(1).uid,
+        content="child Memory",
+        status="CURRENT",
+        catalog_context_names=("notes", "notes/child"),
+        change_count=3,
+    )
+    with create_pipe_input() as pipe_input:
+        # Enter toggles RANGE through the common Surface activation. Down then
+        # crosses the frame boundary before visiting child and Memory rows.
+        pipe_input.send_text("\r\x1b[B\x1b[B\x1b[B\r")
+        selected = choose_memory_report_target(
+            (item,),
+            context_name="notes",
+            operation="rationale",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -219,7 +287,7 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
     )
 
     assert "HISTORICAL" in rendered
-    assert "4 CHANGES" in rendered
+    assert "4 RECORDED CHANGES" in rendered
     assert "safe\\nFAKE HEADING\\u202e" in rendered
     assert "\u202e" not in rendered
 
@@ -232,7 +300,29 @@ def test_picker_marks_withheld_history_instead_of_fabricating_zero_changes():
     )
 
     assert "HISTORY UNAVAILABLE" in rendered
-    assert "0 CHANGES" not in rendered
+    assert "0 RECORDED CHANGES" not in rendered
+
+
+def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
+    store = MemoryStore()
+    context = ops.init("unrecorded")
+    memory = ops.add(context, "Only the current file retains this.")
+    store.save(context)
+
+    candidates = collect_trace_candidates(
+        store,
+        store.load_direct(context.name),
+    )
+
+    assert [(item.uid, item.change_count) for item in candidates] == [
+        (memory.uid, 0)
+    ]
+    rendered = "".join(
+        text
+        for style, text in _render_memory_options(candidates, selected=0)
+        if style != "[SetCursorPosition]"
+    )
+    assert "0 RECORDED CHANGES" in rendered
 
 
 def test_picker_requires_a_tty_when_requested(monkeypatch):

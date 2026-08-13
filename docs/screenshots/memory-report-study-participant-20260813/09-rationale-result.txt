@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃Rationale for [8b077f2a]                                                                                                                                                         ^┃
+┃Context: task-1/participant/construction-updates/building-access [5a66e0ec]                                                                                                       ┃
+┃Rationale scope: task-1/participant and readable descendants · 8 Context(s)                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃MEMORY                                                                                                                                                                            ┃
+┃  Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.                                           ┃
+┃                                                                                                                                                                                  ┃
+┃RECORDED ORIGIN                                                                                                                                                                   ┃
+┃  No retained creation event was found.                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃RECORDED RATIONALE                                                                                                                                                                ┃
+┃  No semantic creation or transformation rationale was recorded.                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃SAVED ANALYSIS — not a creation cause                                                                                                                                             ┃
+┃  (no current saved analysis for this Memory)                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃SAVED ATOMIZE ANALYSIS                                                                                                                                                            ┃
+┃  (no saved atomize analysis for this lineage)                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃UNAPPLIED PROPOSALS                                                                                                                                                               ┃
+┃  (none linked to this lineage)                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃CURRENT CONTEXT WINDOW — and readable descendants, deterministic fallback only                                                                                                    ┃
+┃  No semantic relationship is asserted by this list.                                                                                                                              ┃
+┃  [56c34a24] task-1/participant/construction-updates/building-access · position 2                                                                                                 ┃
+┃      Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m. to 5:00 p.m.     ┃
+┃  [84a45a62] task-1/participant/construction-updates/building-access · position 3                                                                                                 ┃
+┃      Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.                         ┃
+┃  [89e6f853] task-1/participant/construction-updates/building-access · position 4                                                                                                 ┃
+┃      Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.                                   ┃
+┃  [f9d7eb4e] task-1/participant/construction-updates/building-access · position 5                                                                                                 ┃
+┃      Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.                        ┃
+┃  [f1b7843e] task-1/participant/construction-updates/building-access · position 6                                                                                                 ┃
+┃      Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff entrance instead  ┃
+┃of the third-floor rear entrance.                                                                                                                                                 ┃
+┃  [be002fc9] task-1/participant/construction-updates/building-access · position 7                                                                                                 ┃
+┃      Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of the main entrance  ┃
+┃and the closure of the third-floor rear entrance.                                                                                                                                 ┃
+┃  [2d8e8c75] task-1/participant/construction-updates/building-access · position 8                                                                                                 ┃
+┃      Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to pass through during ┃
+┃ the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.                                               ┃
+┃  [50fb8bfa] task-1/participant/construction-updates/building-access · position 9                                                                                                 ┃
+┃      Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction and leads from th ┃
+┃e temporary passage next to the main entrance to the first-floor lobby.                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃UNRESOLVED / UNRECORDED                                                                                                                                                           ┃
+┃  The author's intended meaning cannot be recovered from provenance alone.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃LIMITS                                                                                                                                                                           v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ RATIONALE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

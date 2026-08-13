@@ -1,14 +1,14 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale for [a0f5ddf4]                                                                                                                                                         ^┃
-┃Context: demo/child [579ee858]                                                                                                                                                    ┃
+┃Rationale for [f4ecd42a]                                                                                                                                                         ^┃
+┃Context: demo/child [99bcc011]                                                                                                                                                    ┃
 ┃Rationale scope: demo and readable descendants · 2 Context(s)                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  Final wording used by both reports                                                                                                                                              ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED ORIGIN                                                                                                                                                                   ┃
-┃  CREATED via add at 2026-08-13 14:26                                                                                                                                             ┃
-┃  Checkpoint: e01ba98a  |  Evidence: RECORDED                                                                                                                                     ┃
+┃  CREATED via add at 2026-08-13 15:29                                                                                                                                             ┃
+┃  Checkpoint: 63310eb8  |  Evidence: RECORDED                                                                                                                                     ┃
 ┃  Source occurrence: single item 1/1, original line 1                                                                                                                             ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED RATIONALE                                                                                                                                                                ┃

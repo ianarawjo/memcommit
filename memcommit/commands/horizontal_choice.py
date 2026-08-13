@@ -90,7 +90,10 @@ def render_horizontal_choice(
             focused=focused,
             show_description=show_description,
         )
-    fragments: StyleAndTextTuples = [("", f"{'›' if focused else ' '} {title} · ")]
+    prefix = f"{'›' if focused else ' '} "
+    if title:
+        prefix += f"{title} · "
+    fragments: StyleAndTextTuples = [("", prefix)]
     for index, option in enumerate(state.options):
         selected = option.uid == state.selected_uid
         visual = choice_visual_state(

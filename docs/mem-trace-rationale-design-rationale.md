@@ -71,6 +71,17 @@ lineage still opens only that exact owner Context's history. Context rows
 browse or collapse the tree, while only an exact Memory row can complete
 selection.
 
+The two controls are composed through the same service-wide terminal chrome,
+not through an operation-owned Trace/Rationale shell. `RANGE` and `CONTEXTS &
+MEMORIES` reuse `build_focused_frame`; their top-to-bottom layout reuses
+`build_tui_frame`, and the shared terminal theme supplies the light-blue heavy
+focused border and retained-choice fill. `SurfaceFocusController` owns
+Tab/Shift-Tab, boundary-aware vertical movement, and Enter dispatch across the
+two frames, while the existing reach and tree adapters retain their semantic
+actions. The unscoped Context browser used by Switch and Log retains its
+existing single-surface presentation. This avoids manufacturing a parallel
+picker merely to reproduce frame lines or focus color.
+
 The launcher freezes the eligible descendant catalog before it opens but
 starts with exact reach. It therefore remains open when the root has zero
 direct candidates and descendants do have candidates: the person can move to
@@ -84,11 +95,15 @@ their last retained content. `HISTORICAL` means only that the UID is no longer d
 it can identify a removed Memory, a split parent, or another retained earlier
 state. Equal text never collapses distinct UIDs, and edits of one UID never
 create multiple picker rows. Every locally owned row also shows the number of
-distinct retained operation rows that Log/Trace will expose for that lineage.
-Creation, edit, removal, reorder, and restoration can each contribute a row;
-events from one retained command identity count once. A granted Rationale row
-shows `HISTORY UNAVAILABLE` rather than treating withheld owner history as
-zero or deriving a count from current content. Up/Down, Left/Right,
+distinct recorded operations retained for that lineage. Creation, edit,
+removal, reorder, and restoration can each contribute once per retained command
+identity. A synthetic `HISTORY_GAP` remains visible after opening Trace but is
+excluded from this count because it proves only that the current state is not
+reconstructable; it does not prove one recorded change. Such a row therefore
+shows `0 RECORDED CHANGES`, never a negative result produced by subtracting a
+synthetic row. A granted Rationale row shows `HISTORY UNAVAILABLE` rather than
+treating withheld owner history as zero or deriving a count from current
+content. Up/Down, Left/Right,
 held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather
 than a second operation-specific navigation grammar.
 
@@ -100,7 +115,7 @@ connects its optional inference provider only after Enter selects a Memory;
 canceling therefore performs no provider call. After the full-screen picker
 closes, the command reloads the direct Context before reconstructing the report
 so it does not combine a pre-picker live frame with post-picker history.
-The selected row names its retained-change count before Enter: Trace covers
+The selected row names its recorded-change count before Enter: Trace covers
 the full retained lineage from earliest retained evidence through the current
 Context, while Rationale covers recorded evidence, saved analysis, and current
 interpretation. This shared first-stage launcher is the interactive boundary
