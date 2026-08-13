@@ -1,12 +1,14 @@
-"""Full-screen terminal picker for selecting one MemoryStore profile."""
+"""Full-screen terminal picker for selecting or soft-removing Profiles."""
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
 import sys
+from typing import Literal
 
 from prompt_toolkit.application import Application
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
@@ -15,6 +17,10 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 
+from memcommit.commands.exact_command_review import (
+    ExactCommandReview,
+    render_exact_command_review,
+)
 from memcommit.commands.tui_primitives import (
     bind_case_insensitive_key,
     display_escape_text,
@@ -23,7 +29,7 @@ from memcommit.commands.tui_primitives import (
 
 @dataclass(frozen=True)
 class ProfilePickerEntry:
-    """Display-only summary of one already validated Profile."""
+    """Display-only summary of one already validated visible Profile."""
 
     name: str
     context_count: int
@@ -33,10 +39,36 @@ class ProfilePickerEntry:
     granted_memory_count: int = 0
     query_source_count: int = 0
     query_source_names: tuple[str, ...] = ()
+    uid: str | None = None
+    study_uid: str | None = None
     study_name: str | None = None
     study_created_at: str | None = None
     study_task: int | None = None
     study_role: str | None = None
+    study_profile_count: int = 0
+    study_removed_count: int = 0
+    removal_block: str | None = None
+
+
+@dataclass(frozen=True)
+class ProfilePickerAction:
+    """One exact selector action returned only after its required key path."""
+
+    kind: Literal["USE", "REMOVE_PROFILE", "REMOVE_STUDY"]
+    name: str
+    uid: str | None
+    registry_generation: int | None
+
+
+@dataclass(frozen=True)
+class _ProfilePickerRow:
+    kind: Literal["PROFILE", "STUDY"]
+    name: str
+    uid: str | None
+    entry: ProfilePickerEntry | None = None
+    created_at: str | None = None
+    profile_count: int = 1
+    removed_count: int = 0
 
 
 def _validate_entries(
@@ -59,10 +91,13 @@ def _validate_entries(
         or len(entry.query_source_names) > entry.query_source_count
         or any(not name for name in entry.query_source_names)
         or len(set(entry.query_source_names)) != len(entry.query_source_names)
+        or (entry.uid is not None and not entry.uid)
+        or (entry.removal_block is not None and not entry.removal_block.strip())
         or (
             any(
                 value is not None
                 for value in (
+                    entry.study_uid,
                     entry.study_name,
                     entry.study_created_at,
                     entry.study_task,
@@ -70,10 +105,14 @@ def _validate_entries(
                 )
             )
             and not (
-                isinstance(entry.study_name, str)
+                isinstance(entry.study_uid, str)
+                and bool(entry.study_uid)
+                and isinstance(entry.study_name, str)
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
+                and entry.study_profile_count > 0
+                and 0 <= entry.study_removed_count < entry.study_profile_count
                 and (
                     (
                         type(entry.study_task) is int
@@ -88,10 +127,17 @@ def _validate_entries(
                 )
             )
         )
+        or (
+            entry.study_name is None
+            and (entry.study_profile_count != 0 or entry.study_removed_count != 0)
+        )
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
-    study_metadata: dict[str, tuple[str, set[tuple[str, int | None]]]] = {}
+    study_metadata: dict[
+        str,
+        tuple[str, str, int, int, set[tuple[str, int | None]]],
+    ] = {}
     finished_studies: set[str] = set()
     previous_study: str | None = None
     for entry in options:
@@ -106,20 +152,72 @@ def _validate_entries(
         if study_name in finished_studies:
             raise ValueError("Study Profile entries must remain contiguous.")
         created_at = entry.study_created_at
+        study_uid = entry.study_uid
         task = entry.study_task
         assert isinstance(created_at, str)
+        assert isinstance(study_uid, str)
         member = (entry.study_role or "TASK", task)
         existing = study_metadata.get(study_name)
+        metadata = (
+            study_uid,
+            created_at,
+            entry.study_profile_count,
+            entry.study_removed_count,
+        )
         if existing is None:
-            study_metadata[study_name] = (created_at, {member})
-        elif existing[0] != created_at or member in existing[1]:
+            study_metadata[study_name] = (*metadata, {member})
+        elif existing[:4] != metadata or member in existing[4]:
             raise ValueError("Study Profile entries are inconsistent.")
         else:
-            existing[1].add(member)
+            existing[4].add(member)
         previous_study = study_name
     if current not in names:
         raise ValueError("The current profile is not available to select.")
     return options
+
+
+def _picker_rows(
+    entries: Sequence[ProfilePickerEntry],
+    *,
+    current: str,
+) -> tuple[_ProfilePickerRow, ...]:
+    options = _validate_entries(entries, current=current)
+    rows: list[_ProfilePickerRow] = []
+    previous_study: str | None = None
+    for entry in options:
+        if entry.study_name is not None and entry.study_name != previous_study:
+            rows.append(
+                _ProfilePickerRow(
+                    kind="STUDY",
+                    name=entry.study_name,
+                    uid=entry.study_uid,
+                    created_at=entry.study_created_at,
+                    profile_count=entry.study_profile_count,
+                    removed_count=entry.study_removed_count,
+                )
+            )
+        rows.append(
+            _ProfilePickerRow(
+                kind="PROFILE",
+                name=entry.name,
+                uid=entry.uid,
+                entry=entry,
+            )
+        )
+        previous_study = entry.study_name
+    return tuple(rows)
+
+
+def _entry_name_label(entry: ProfilePickerEntry) -> str:
+    if entry.study_name is None:
+        return display_escape_text(entry.name)
+    if entry.study_role == "PARTICIPANT":
+        role = "Participant"
+    elif entry.study_role == "GRANTED_MEMORY":
+        role = "Granted memory"
+    else:
+        role = f"{(entry.study_role or 'TASK').title()} {entry.study_task}"
+    return f"{role} · {display_escape_text(entry.name)}"
 
 
 def _render_profile_options(
@@ -128,98 +226,138 @@ def _render_profile_options(
     selected: int,
     current: str,
 ) -> list[tuple[str, str]]:
-    """Render the persistent CURRENT row and selected USE action."""
-    options = _validate_entries(entries, current=current)
-    if selected < 0 or selected >= len(options):
-        raise ValueError("Selected profile index is out of range.")
-    def entry_name_label(entry: ProfilePickerEntry) -> str:
-        if entry.study_name is None:
-            return display_escape_text(entry.name)
-        if entry.study_role == "PARTICIPANT":
-            role = "Participant"
-        elif entry.study_role == "GRANTED_MEMORY":
-            role = "Granted memory"
-        else:
-            role = f"{(entry.study_role or 'TASK').title()} {entry.study_task}"
-        return f"{role} · {display_escape_text(entry.name)}"
+    """Render Study headers and Profile children as peer keyboard rows."""
 
-    name_labels = tuple(entry_name_label(entry) for entry in options)
-    name_width = min(max(max(len(label) for label in name_labels), 8), 24)
+    options = _validate_entries(entries, current=current)
+    rows = _picker_rows(options, current=current)
+    if selected < 0 or selected >= len(rows):
+        raise ValueError("Selected profile row index is out of range.")
+    name_width = min(
+        max(max(len(_entry_name_label(entry)) for entry in options), 8),
+        24,
+    )
     fragments: list[tuple[str, str]] = []
-    previous_study: str | None = None
-    for index, entry in enumerate(options):
-        if entry.study_name is not None and entry.study_name != previous_study:
+    for index, row in enumerate(rows):
+        is_selected = index == selected
+        if is_selected:
+            fragments.append(("[SetCursorPosition]", ""))
+        pointer = "›" if is_selected else " "
+        row_style = "class:selected" if is_selected else ""
+        if row.kind == "STUDY":
+            active_count = row.profile_count - row.removed_count
+            count_label = f"{active_count} active"
+            if row.removed_count:
+                count_label += f" · {row.removed_count} removed"
+            fragments.append(
+                (
+                    row_style or "class:study",
+                    f"{pointer} STUDY {display_escape_text(row.name)} · "
+                    f"{count_label} · created="
+                    f"{display_escape_text(row.created_at or '')}",
+                )
+            )
+        else:
+            entry = row.entry
+            assert entry is not None
+            is_current = entry.name == current
+            marker = "*" if is_current else " "
+            action = "CURRENT" if is_current else ("USE" if is_selected else "")
+            action_style = row_style or ("class:current" if is_current else "")
+            current_context = (
+                display_escape_text(entry.current_context)
+                if entry.current_context
+                else "(none)"
+            )
+            query_note = (
+                " · query="
+                + ",".join(
+                    display_escape_text(name) for name in entry.query_source_names
+                )
+                if entry.query_source_names
+                else (
+                    f" · {entry.query_source_count} query-only"
+                    if entry.query_source_count
+                    else ""
+                )
+            )
             fragments.extend(
                 [
                     (
-                        "class:study",
-                        "  STUDY "
-                        + display_escape_text(entry.study_name)
-                        + " · created="
-                        + display_escape_text(entry.study_created_at or ""),
+                        row_style,
+                        f"{pointer} {marker} {_entry_name_label(entry):<{name_width}}  ",
                     ),
-                    ("", "\n"),
+                    (action_style, f"{action:<7}"),
+                    (
+                        row_style,
+                        f"  Contexts {entry.context_count} owned + "
+                        f"{entry.granted_context_count} granted · "
+                        f"Memories {entry.memory_count} owned + "
+                        f"{entry.granted_memory_count} granted"
+                        f"{query_note} · current={current_context}",
+                    ),
                 ]
             )
-        is_selected = index == selected
-        is_current = entry.name == current
-        if is_selected:
-            # Keep the cursor attached to the selected row so prompt-toolkit
-            # can scroll naturally at any terminal height.
-            fragments.append(("[SetCursorPosition]", ""))
-        row_style = "class:selected" if is_selected else ""
-        pointer = "›" if is_selected else " "
-        marker = "*" if is_current else " "
-        action = "CURRENT" if is_current else ("USE" if is_selected else "")
-        action_style = row_style or ("class:current" if is_current else "")
-        # Raw entry values remain the selection identity.  Only labels passed
-        # to prompt-toolkit are escaped into a single unambiguous terminal row.
-        name_label = name_labels[index]
-        current_context = (
-            display_escape_text(entry.current_context)
-            if entry.current_context
-            else "(none)"
-        )
-        query_note = (
-            " · query="
-            + ",".join(display_escape_text(name) for name in entry.query_source_names)
-            if entry.query_source_names
-            else (
-                f" · {entry.query_source_count} query-only"
-                if entry.query_source_count
-                else ""
-            )
-        )
-        fragments.extend(
-            [
-                (row_style, f"{pointer} {marker} {name_label:<{name_width}}  "),
-                (action_style, f"{action:<7}"),
-                (
-                    row_style,
-                    f"  Contexts {entry.context_count} owned + "
-                    f"{entry.granted_context_count} granted · "
-                    f"Memories {entry.memory_count} owned + "
-                    f"{entry.granted_memory_count} granted"
-                    f"{query_note} · current={current_context}",
-                ),
-            ]
-        )
-        if index < len(options) - 1:
+        if index < len(rows) - 1:
             fragments.append(("", "\n"))
-        previous_study = entry.study_name
     return fragments
+
+
+def _removal_action(
+    row: _ProfilePickerRow,
+    *,
+    registry_generation: int | None,
+) -> ProfilePickerAction:
+    return ProfilePickerAction(
+        kind="REMOVE_STUDY" if row.kind == "STUDY" else "REMOVE_PROFILE",
+        name=row.name,
+        uid=row.uid,
+        registry_generation=registry_generation,
+    )
+
+
+def _removal_review(
+    action: ProfilePickerAction,
+    row: _ProfilePickerRow,
+) -> ExactCommandReview:
+    if action.kind == "REMOVE_STUDY":
+        effects = (
+            f"Remove all {row.profile_count} Profiles in Study {row.name!r} "
+            "from the live selector.",
+            "Retain every Profile store, Study provenance record, and Grant.",
+        )
+        command = "remove-study"
+    else:
+        entry = row.entry
+        assert entry is not None
+        effects_list = [
+            f"Remove only Profile {row.name!r} from the live selector.",
+            "Retain its stable store, provenance record, and Grants.",
+        ]
+        if entry.study_name is not None:
+            effects_list.append(
+                f"Keep Study {entry.study_name!r} and its other Profile rows."
+            )
+        effects = tuple(effects_list)
+        command = "remove"
+    return ExactCommandReview(
+        argv=("mem", "profile", command, action.name, "--force"),
+        effects=effects,
+    )
 
 
 def choose_profile(
     entries: Sequence[ProfilePickerEntry],
     *,
     current: str,
+    registry_generation: int | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> str | None:
-    """Return the selected Profile name, or ``None`` when cancelled."""
+) -> ProfilePickerAction | None:
+    """Return one selected action, or ``None`` when cancelled."""
+
     options = _validate_entries(entries, current=current)
+    rows = _picker_rows(options, current=current)
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive profile selection requires a terminal. "
@@ -228,12 +366,24 @@ def choose_profile(
 
     selected = {
         "index": next(
-            index for index, entry in enumerate(options) if entry.name == current
+            index
+            for index, row in enumerate(rows)
+            if row.kind == "PROFILE" and row.name == current
         )
     }
+    pending: dict[str, object | None] = {"action": None, "review": None}
+    status = {"text": ""}
     bindings = KeyBindings()
+    review_mode = Condition(lambda: pending["action"] is not None)
+    picker_mode = ~review_mode
 
-    def render_options():
+    def current_row() -> _ProfilePickerRow:
+        return rows[selected["index"]]
+
+    def render_content():
+        review = pending["review"]
+        if isinstance(review, ExactCommandReview):
+            return [("", render_exact_command_review(review))]
         return _render_profile_options(
             options,
             selected=selected["index"],
@@ -241,7 +391,7 @@ def choose_profile(
         )
 
     control = FormattedTextControl(
-        text=render_options,
+        text=render_content,
         focusable=True,
         show_cursor=False,
     )
@@ -249,31 +399,104 @@ def choose_profile(
     def move(delta: int) -> None:
         selected["index"] = max(
             0,
-            min(selected["index"] + delta, len(options) - 1),
+            min(selected["index"] + delta, len(rows) - 1),
         )
+        status["text"] = ""
 
-    @bindings.add("down")
-    def _next_profile(event) -> None:
+    @bindings.add("down", filter=picker_mode)
+    def _next_row(event) -> None:
         move(1)
         event.app.invalidate()
 
-    @bindings.add("up")
-    def _previous_profile(event) -> None:
+    @bindings.add("up", filter=picker_mode)
+    def _previous_row(event) -> None:
         move(-1)
         event.app.invalidate()
 
-    @bindings.add("enter")
+    @bindings.add("enter", filter=picker_mode)
     def _accept_profile(event) -> None:
-        event.app.exit(result=options[selected["index"]].name)
+        row = current_row()
+        if row.kind == "STUDY":
+            status["text"] = "Study header selected · D reviews whole-Study removal"
+            event.app.invalidate()
+            return
+        event.app.exit(
+            result=ProfilePickerAction(
+                kind="USE",
+                name=row.name,
+                uid=row.uid,
+                registry_generation=registry_generation,
+            )
+        )
 
-    @bind_case_insensitive_key(bindings, "q", eager=True)
+    @bind_case_insensitive_key(bindings, "d", filter=picker_mode, eager=True)
+    def _review_removal(event) -> None:
+        row = current_row()
+        if row.kind == "PROFILE":
+            entry = row.entry
+            assert entry is not None
+            if row.name == current:
+                status["text"] = "CURRENT Profile cannot be removed · switch first"
+                event.app.invalidate()
+                return
+            if entry.removal_block is not None:
+                status["text"] = entry.removal_block
+                event.app.invalidate()
+                return
+        elif any(
+            entry.study_name == row.name and entry.name == current
+            for entry in options
+        ):
+            status["text"] = "Study contains CURRENT Profile · switch first"
+            event.app.invalidate()
+            return
+        action = _removal_action(
+            row,
+            registry_generation=registry_generation,
+        )
+        pending["action"] = action
+        pending["review"] = _removal_review(action, row)
+        status["text"] = ""
+        event.app.invalidate()
+
+    @bind_case_insensitive_key(bindings, "a", filter=review_mode, eager=True)
+    def _apply_reviewed_removal(event) -> None:
+        action = pending["action"]
+        assert isinstance(action, ProfilePickerAction)
+        event.app.exit(result=action)
+
     @bindings.add("escape")
+    def _back_or_cancel(event) -> None:
+        if pending["action"] is not None:
+            pending["action"] = None
+            pending["review"] = None
+            status["text"] = "Removal review cancelled"
+            event.app.invalidate()
+            return
+        event.app.exit(result=None)
+
+    @bind_case_insensitive_key(bindings, "q", filter=picker_mode, eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         event.app.exit(result=None)
 
+    def header_text() -> str:
+        return " Review exact removal" if review_mode() else " Select a Profile or Study"
+
+    def footer_text() -> str:
+        if review_mode():
+            return " A apply exact command  Esc back · no store data will be deleted"
+        row = current_row()
+        action = "D remove Study" if row.kind == "STUDY" else "Enter use  D remove Profile"
+        message = status["text"]
+        suffix = f" · {message}" if message else ""
+        return (
+            f" ↑/↓ move  {action}  Esc/q cancel"
+            f"  ·  {selected['index'] + 1}/{len(rows)}{suffix}"
+        )
+
     header = Window(
-        FormattedTextControl(" Select a Profile"),
+        FormattedTextControl(header_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -283,16 +506,11 @@ def choose_profile(
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
     footer = Window(
-        FormattedTextControl(
-            lambda: (
-                " ↑/↓ move  Enter use  Esc/q cancel"
-                f"  ·  {selected['index'] + 1}/{len(options)}"
-            )
-        ),
+        FormattedTextControl(footer_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[str | None] = Application(
+    app: Application[ProfilePickerAction | None] = Application(
         layout=Layout(
             HSplit(
                 [

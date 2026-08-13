@@ -189,6 +189,28 @@ class ProfileRenameResult:
 
 
 @dataclass(frozen=True)
+class ProfileRemovalResult:
+    """One Profile hidden from direct selection without deleting its store."""
+
+    profile: ProfileEntry
+    study_name: str | None
+    active_profile_name: str
+    study_profile_count: int
+    study_removed_count: int
+
+
+@dataclass(frozen=True)
+class StudyRemovalResult:
+    """One complete Study hidden while preserving every member store."""
+
+    uid: str
+    name: str
+    profiles: tuple[ProfileEntry, ...]
+    newly_removed_count: int
+    active_profile_name: str
+
+
+@dataclass(frozen=True)
 class GrantedContextView:
     """One validated Context view resolved for a grantee Profile."""
 
@@ -1143,6 +1165,7 @@ def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
             cache=cache,
         )
         for profile, inspection in zip(registry.profiles, base, strict=True)
+        if not registry.is_removed(profile)
     )
 
 
@@ -1153,6 +1176,10 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         target = registry.by_name(canonical)
         if target is None:
             raise ProfileError(f"Profile {canonical!r} does not exist.")
+        if registry.is_removed(target):
+            raise ProfileError(
+                f"Profile {canonical!r} was removed from direct selection."
+            )
         inspection = _inspection_with_grants(
             registry,
             target,
@@ -1171,6 +1198,7 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
             active_uid=target.uid,
             profiles=registry.profiles,
             grants=registry.grants,
+            removed_profile_uids=registry.removed_profile_uids,
         )
         _write_registry(updated)
         return updated, inspection, True
@@ -1200,6 +1228,10 @@ def rename_profile(
         )
         if target is None:
             raise ProfileError(f"Profile {canonical_old!r} does not exist.")
+        if registry.is_removed(target):
+            raise ProfileError(
+                f"Profile {target.name!r} cannot be renamed while removed."
+            )
         was_active = target.uid == registry.active_uid
 
         # An exact no-op must not become a hidden store validation or registry
@@ -1275,6 +1307,7 @@ def rename_profile(
                 for profile in registry.profiles
             ),
             grants=registry.grants,
+            removed_profile_uids=registry.removed_profile_uids,
         )
         try:
             _write_registry(updated)
@@ -1305,6 +1338,218 @@ def rename_profile(
             active_profile_name=updated.active.name,
             was_active=was_active,
             changed=True,
+        )
+
+
+def _study_target(
+    registry: ProfileRegistry,
+    name: str,
+) -> tuple[str, str, tuple[ProfileEntry, ...]]:
+    """Resolve one legacy or current Study to its stable member identities."""
+
+    canonical = validate_profile_name(name)
+    matches: list[tuple[str, str, tuple[ProfileEntry, ...]]] = []
+    matches.extend(
+        (
+            group.uid,
+            group.name,
+            (*group.profiles, *group.support_profiles),
+        )
+        for group in study_profile_groups(registry.profiles)
+        if group.name.casefold() == canonical.casefold()
+    )
+    matches.extend(
+        (
+            pair.uid,
+            pair.name,
+            (pair.participant, pair.authority),
+        )
+        for pair in study_run_profile_pairs(registry.profiles)
+        if pair.name.casefold() == canonical.casefold()
+    )
+    if not matches:
+        raise ProfileError(f"Study {canonical!r} does not exist.")
+    if len(matches) != 1:
+        raise ProfileError(f"Study selector {canonical!r} is ambiguous.")
+    return matches[0]
+
+
+def _profile_study_target(
+    registry: ProfileRegistry,
+    profile: ProfileEntry,
+) -> tuple[str, str, tuple[ProfileEntry, ...]] | None:
+    """Return the complete Study containing a Profile, when one exists."""
+
+    for group in study_profile_groups(registry.profiles):
+        members = (*group.profiles, *group.support_profiles)
+        if any(member.uid == profile.uid for member in members):
+            return group.uid, group.name, members
+    for pair in study_run_profile_pairs(registry.profiles):
+        members = (pair.participant, pair.authority)
+        if any(member.uid == profile.uid for member in members):
+            return pair.uid, pair.name, members
+    return None
+
+
+def _write_soft_removal(
+    previous: ProfileRegistry,
+    updated: ProfileRegistry,
+    *,
+    label: str,
+) -> None:
+    """Publish one tombstone generation and distinguish ambiguous durability."""
+
+    try:
+        _write_registry(updated)
+    except Exception as error:
+        try:
+            visible = load_profile_registry()
+        except (OSError, ProfileConfigError, ValueError) as read_error:
+            raise ProfileError(
+                f"{label} removal registry state could not be confirmed."
+            ) from read_error
+        if visible == updated:
+            raise ProfileError(
+                f"{label} was removed, but registry durability could not be "
+                "confirmed; it remains removed."
+            ) from error
+        if visible != previous:
+            raise ProfileError(
+                f"{label} removal changed the registry unexpectedly."
+            ) from error
+        raise ProfileError(f"{label} was not removed.") from error
+
+
+def remove_profile(
+    name: str,
+    *,
+    expected_uid: str | None = None,
+    expected_generation: int | None = None,
+) -> ProfileRemovalResult:
+    """Hide one Profile while retaining its store, provenance, and Grants."""
+
+    canonical = validate_profile_name(name)
+    with _registry_lock():
+        registry = load_profile_registry()
+        if (
+            expected_generation is not None
+            and registry.generation != expected_generation
+        ):
+            raise ProfileError("Profile registry changed after removal review.")
+        target = registry.by_name(canonical)
+        if target is None:
+            raise ProfileError(f"Profile {canonical!r} does not exist.")
+        if expected_uid is not None and target.uid != expected_uid:
+            raise ProfileError("Profile identity changed after removal review.")
+        if target.kind == "AUTHORING":
+            raise ProfileError("The fixed authoring Profile cannot be removed.")
+        if target.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
+            raise ProfileError("The fixed study-baseline Profile cannot be removed.")
+        if target.uid == registry.active_uid:
+            raise ProfileError(
+                f"Profile {target.name!r} is active; select another Profile "
+                "before removing it."
+            )
+        if registry.is_removed(target):
+            raise ProfileError(f"Profile {target.name!r} is already removed.")
+
+        # Removal changes only live selector visibility. Validating the stable
+        # root first prevents a tombstone from concealing an already unsafe or
+        # missing store, while retaining the path lets in-flight readers finish.
+        inspect_store(
+            profile_store_dir(target),
+            allowed_virtual_currents=_read_granted_public_names(
+                registry,
+                target.uid,
+            ),
+        )
+        study = _profile_study_target(registry, target)
+        removed = frozenset((*registry.removed_profile_uids, target.uid))
+        ordered_removed = tuple(
+            profile.uid for profile in registry.profiles if profile.uid in removed
+        )
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=registry.profiles,
+            grants=registry.grants,
+            removed_profile_uids=ordered_removed,
+        )
+        _write_soft_removal(
+            registry,
+            updated,
+            label=f"Profile {target.name!r}",
+        )
+        members = study[2] if study is not None else ()
+        return ProfileRemovalResult(
+            profile=target,
+            study_name=study[1] if study is not None else None,
+            active_profile_name=registry.active.name,
+            study_profile_count=len(members),
+            study_removed_count=sum(
+                member.uid in removed for member in members
+            ),
+        )
+
+
+def remove_study(
+    name: str,
+    *,
+    expected_uid: str | None = None,
+    expected_generation: int | None = None,
+) -> StudyRemovalResult:
+    """Hide every Profile in one Study as one registry generation."""
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        if (
+            expected_generation is not None
+            and registry.generation != expected_generation
+        ):
+            raise ProfileError("Profile registry changed after removal review.")
+        study_uid, study_name, profiles = _study_target(registry, name)
+        if expected_uid is not None and study_uid != expected_uid:
+            raise ProfileError("Study identity changed after removal review.")
+        member_uids = {profile.uid for profile in profiles}
+        if registry.active_uid in member_uids:
+            raise ProfileError(
+                f"Study {study_name!r} contains the active Profile; select "
+                "another Profile before removing it."
+            )
+        existing_removed = frozenset(registry.removed_profile_uids)
+        newly_removed = member_uids - existing_removed
+        if not newly_removed:
+            raise ProfileError(f"Study {study_name!r} is already removed.")
+        for profile in profiles:
+            inspect_store(
+                profile_store_dir(profile),
+                allowed_virtual_currents=_read_granted_public_names(
+                    registry,
+                    profile.uid,
+                ),
+            )
+        removed = existing_removed | member_uids
+        ordered_removed = tuple(
+            profile.uid for profile in registry.profiles if profile.uid in removed
+        )
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=registry.profiles,
+            grants=registry.grants,
+            removed_profile_uids=ordered_removed,
+        )
+        _write_soft_removal(
+            registry,
+            updated,
+            label=f"Study {study_name!r}",
+        )
+        return StudyRemovalResult(
+            uid=study_uid,
+            name=study_name,
+            profiles=profiles,
+            newly_removed_count=len(newly_removed),
+            active_profile_name=registry.active.name,
         )
 
 
@@ -1390,6 +1635,11 @@ def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:
                 grant
                 for grant in registry.grants
                 if grant.uid not in internal_grant_uids
+            ),
+            removed_profile_uids=tuple(
+                uid
+                for uid in registry.removed_profile_uids
+                if uid not in grouped_uids
             ),
         )
         try:
@@ -1530,6 +1780,10 @@ def create_authority_grant(
             raise ProfileError(f"Profile {authority_name!r} does not exist.")
         if grantee is None:
             raise ProfileError(f"Profile {grantee_name!r} does not exist.")
+        if registry.is_removed(authority) or registry.is_removed(grantee):
+            raise ProfileError(
+                "A removed Profile cannot be used to create a new Grant."
+            )
         if authority.uid == grantee.uid:
             raise ProfileError("A Profile cannot grant a view to itself.")
         authority_contexts, _ = _context_records(profile_store_dir(authority))
@@ -1576,6 +1830,7 @@ def create_authority_grant(
             active_uid=registry.active_uid,
             profiles=registry.profiles,
             grants=(*registry.grants, grant),
+            removed_profile_uids=registry.removed_profile_uids,
         )
         _write_registry(updated)
         return updated, grant
@@ -1644,6 +1899,7 @@ def update_authority_grant(
                 replacement if grant.uid == existing.uid else grant
                 for grant in registry.grants
             ),
+            removed_profile_uids=registry.removed_profile_uids,
         )
         _write_registry(updated)
         return updated, replacement
@@ -1664,6 +1920,7 @@ def delete_authority_grant(
             grants=tuple(
                 grant for grant in registry.grants if grant.uid != removed.uid
             ),
+            removed_profile_uids=registry.removed_profile_uids,
         )
         _write_registry(updated)
         return updated, removed
@@ -2815,6 +3072,7 @@ def _publish_study_profile_batch(
             active_uid=registry.active_uid,
             profiles=(*registry.profiles, *profiles),
             grants=(*registry.grants, *grants),
+            removed_profile_uids=registry.removed_profile_uids,
         )
         cache = {
             profile.uid: inspection
@@ -3924,6 +4182,7 @@ def _publish_study_run_pair(
             active_uid=participant.uid,
             profiles=(*registry.profiles, participant, authority),
             grants=(*registry.grants, *grants),
+            removed_profile_uids=registry.removed_profile_uids,
         )
         participant_inspection = _inspection_with_grants(
             updated,

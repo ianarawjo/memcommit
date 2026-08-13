@@ -1,0 +1,6 @@
+52 180                                                                                                                                                                              
+  authoring    USE     authoring Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring                                                                    
+* capture-workspace CURRENT managed   Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace                                                               
+Granted views are permission projections, not copied Profiles.                                                                                                                      
+Authority Profiles are ordinary switchable owners of source data.                                                                                                                   
+Removed Profiles hidden from this list: 2

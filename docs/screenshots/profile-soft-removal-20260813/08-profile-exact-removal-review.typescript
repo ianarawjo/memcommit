@@ -1,0 +1,202 @@
+52 180
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Profile or Study[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    authoring                          Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring[61C[0;1m^[0m
+[0;1;7m› * capture-workspace         CURRENT  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace[61C[0;48;2;68;68;68m [0m
+[0;36;1m  STUDY capture-study · 2 active · created=2026-08-13T18:00:00+00:00[111C[0;48;2;68;68;68m [0m
+[0m    Participant · capture-participant           Contexts 1 owned + 1 granted · Memories 1 owned + 1 granted · current=participant[50C[0;48;2;68;68;68m [0m
+[0m    Granted memory · capture-granted-memory           Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=source[49C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move  Enter use  D remove Profile  Esc/q cancel  ·  2/5[60D[48A[0m[?25l[A[0;1;7m›   authoring                 USE      Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring[0m
+[0m  * capture-workspace         [0;32;1mCURRENT[0m  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[57C[0m1[2C · The fixed authoring Profile cannot be removed[49A[108D[0m[?25l[0m    authoring                          Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring[0m
+
+
+[0;1;7m›   Participant · capture-participant  USE      Contexts 1 owned + 1 granted · Memories 1 owned + 1 granted · current=participant[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[57C[0m4[2C[0m[K[46A[60D[0m[?25l[5A[C[0mR[Cview[Cexact removal[0m[K[0m
+
+[0mPROPOSED COMMAND[C·[CNOT[CRUN[0m                                                                                            [0m
+[2C[0mmem [Crofile [Cemove capture-participant --force[0m                                                                      [0m
+[0m                                                                    [0m
+[0mEFFECTS · ONE COMMAND[0m                                                                                                            [0m
+[2C[0mRemove only Profile 'capture-participant'[Cfrom[Cthe[Clive selector.[0m                                                               [0m
+[0m  Retain its stable store, provenance record, and Grants.[0m
+[0m  Keep Study 'capture-study' and its other Profile rows.[0m
+
+[0mApproval applies only to the exact command shown above.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mA apply exac[C command [CEsc back · no store dat[C wi[Cl[Cbe[Cdeleted[49A[64D[0m

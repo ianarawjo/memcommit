@@ -11,7 +11,11 @@ import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
 from memcommit.commands.profile_group import ProfileAliasGroup
-from memcommit.commands.profile_picker import ProfilePickerEntry, choose_profile
+from memcommit.commands.profile_picker import (
+    ProfilePickerAction,
+    ProfilePickerEntry,
+    choose_profile,
+)
 from memcommit.commands.tui_primitives import display_escape_text
 from memcommit.profile_config import (
     ProfileConfigError,
@@ -29,6 +33,8 @@ from memcommit.profiles import (
     import_study_profiles,
     list_authority_grants,
     list_profiles,
+    remove_profile,
+    remove_study,
     refresh_study_profile,
     rename_profile,
     study_run_profile_pairs,
@@ -98,12 +104,15 @@ def _grant_permissions_label(permissions: tuple[str, ...]) -> str:
 
 @dataclass(frozen=True)
 class _ProfileStudyMembership:
+    uid: str
     name: str
     created_at: str
     role: str
     task: int | None
     first: bool
     last: bool
+    profile_count: int
+    removed_count: int
 
 
 def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
@@ -123,16 +132,22 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
     memberships: dict[str, _ProfileStudyMembership] = {}
     for group in groups:
         members = (*group.profiles, *group.support_profiles)
+        visible_members = tuple(
+            profile for profile in members if not registry.is_removed(profile)
+        )
         for index, profile in enumerate(members):
             is_task = index < len(group.profiles)
             task = index + 1 if is_task else index - len(group.profiles) + 1
             memberships[profile.uid] = _ProfileStudyMembership(
+                uid=group.uid,
                 name=group.name,
                 created_at=group.created_at,
                 role="TASK" if is_task else "AUTHORITY",
                 task=task,
-                first=index == 0,
-                last=index == len(members) - 1,
+                first=bool(visible_members and profile.uid == visible_members[0].uid),
+                last=bool(visible_members and profile.uid == visible_members[-1].uid),
+                profile_count=len(members),
+                removed_count=len(members) - len(visible_members),
             )
     for pair in pairs:
         if (
@@ -140,21 +155,28 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
             != profile_positions[pair.participant.uid] + 1
         ):
             _fail(ProfileError("Study run Profile pair must remain contiguous."))
-        for index, (profile, role) in enumerate(
-            (
-                (pair.participant, "PARTICIPANT"),
-                (pair.authority, "GRANTED_MEMORY"),
-            )
-        ):
+        pair_members = (
+            (pair.participant, "PARTICIPANT"),
+            (pair.authority, "GRANTED_MEMORY"),
+        )
+        visible_members = tuple(
+            profile
+            for profile, _role in pair_members
+            if not registry.is_removed(profile)
+        )
+        for profile, role in pair_members:
             if profile.uid in memberships:
                 _fail(ProfileError("Profile has conflicting Study provenance."))
             memberships[profile.uid] = _ProfileStudyMembership(
+                uid=pair.uid,
                 name=pair.name,
                 created_at=pair.created_at,
                 role=role,
                 task=None,
-                first=index == 0,
-                last=index == 1,
+                first=bool(visible_members and profile.uid == visible_members[0].uid),
+                last=bool(visible_members and profile.uid == visible_members[-1].uid),
+                profile_count=len(pair_members),
+                removed_count=len(pair_members) - len(visible_members),
             )
     return memberships
 
@@ -174,7 +196,7 @@ def _print_grant(registry, grant, *, prefix: str = "") -> None:
     )
 
 
-def _pick_profile() -> str | None:
+def _pick_profile() -> ProfilePickerAction | None:
     registry, inspections = _profile_rows()
     memberships = _study_memberships(registry)
     entries = tuple(
@@ -187,6 +209,12 @@ def _pick_profile() -> str | None:
             granted_memory_count=inspection.granted_memory_count,
             query_source_count=inspection.query_source_count,
             query_source_names=inspection.query_source_names,
+            uid=profile.uid,
+            study_uid=(
+                memberships[profile.uid].uid
+                if profile.uid in memberships
+                else None
+            ),
             study_name=(
                 memberships[profile.uid].name
                 if profile.uid in memberships
@@ -207,17 +235,118 @@ def _pick_profile() -> str | None:
                 if profile.uid in memberships
                 else None
             ),
+            study_profile_count=(
+                memberships[profile.uid].profile_count
+                if profile.uid in memberships
+                else 0
+            ),
+            study_removed_count=(
+                memberships[profile.uid].removed_count
+                if profile.uid in memberships
+                else 0
+            ),
+            removal_block=(
+                "The fixed authoring Profile cannot be removed"
+                if profile.kind == "AUTHORING"
+                else (
+                    "The fixed study-baseline Profile cannot be removed"
+                    if profile.name.casefold()
+                    == STUDY_BASELINE_PROFILE_NAME.casefold()
+                    else None
+                )
+            ),
         )
         for profile, inspection in zip(
-            registry.profiles,
+            registry.visible_profiles,
             inspections,
             strict=True,
         )
     )
     try:
-        return choose_profile(entries, current=registry.active.name)
+        selected = choose_profile(
+            entries,
+            current=registry.active.name,
+            registry_generation=registry.generation,
+        )
+        # Compatibility for narrow tests and callers that supplied the former
+        # name-only picker result while the typed action contract rolled out.
+        if isinstance(selected, str):
+            target = registry.by_name(selected)
+            return ProfilePickerAction(
+                kind="USE",
+                name=selected,
+                uid=target.uid if target is not None else None,
+                registry_generation=registry.generation,
+            )
+        return selected
     except ValueError as error:
         _fail(ProfileError(str(error)))
+
+
+def _print_profile_removal(result) -> None:
+    typer.secho(
+        "Removed Profile '"
+        + display_escape_text(result.profile.name)
+        + "' from the live selector.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(
+        "Retained store: "
+        + display_escape_text(str(profile_store_dir(result.profile)))
+    )
+    typer.echo("Profile UID, provenance, and Grants were retained.")
+    if result.study_name is not None:
+        typer.echo(
+            "Study "
+            + display_escape_text(result.study_name)
+            + f": {result.study_profile_count - result.study_removed_count} active · "
+            + f"{result.study_removed_count} removed"
+        )
+    typer.echo(
+        "Active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+
+
+def _print_study_removal(result) -> None:
+    typer.secho(
+        "Removed Study '"
+        + display_escape_text(result.name)
+        + "' from the live selector.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(f"Profiles removed now: {result.newly_removed_count}")
+    typer.echo(f"Profiles retained on disk: {len(result.profiles)}")
+    typer.echo("Profile UIDs, Study provenance, stores, and Grants were retained.")
+    typer.echo(
+        "Active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+
+
+def _apply_profile_picker_action(action: ProfilePickerAction) -> None:
+    if action.kind == "USE":
+        _use_profile(action.name)
+        return
+    try:
+        if action.kind == "REMOVE_PROFILE":
+            result = remove_profile(
+                action.name,
+                expected_uid=action.uid,
+                expected_generation=action.registry_generation,
+            )
+        else:
+            result = remove_study(
+                action.name,
+                expected_uid=action.uid,
+                expected_generation=action.registry_generation,
+            )
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    if action.kind == "REMOVE_PROFILE":
+        _print_profile_removal(result)
+    else:
+        _print_study_removal(result)
 
 
 def _use_profile(name: str) -> None:
@@ -282,11 +411,11 @@ def profile_cmd(ctx: typer.Context) -> None:
     if not _interactive_terminal():
         list_cmd()
         return
-    selected = _pick_profile()
-    if selected is None:
+    action = _pick_profile()
+    if action is None:
         typer.echo("Profile selection cancelled.")
         return
-    _use_profile(selected)
+    _apply_profile_picker_action(action)
 
 
 @app.command("list")
@@ -296,7 +425,7 @@ def list_cmd() -> None:
     registry, inspections = _profile_rows()
     memberships = _study_memberships(registry)
     for profile, inspection in zip(
-        registry.profiles,
+        registry.visible_profiles,
         inspections,
         strict=True,
     ):
@@ -333,11 +462,17 @@ def list_cmd() -> None:
         membership = memberships.get(profile.uid)
         if membership is not None:
             if membership.first:
+                removal_note = (
+                    f" · {membership.removed_count} removed"
+                    if membership.removed_count
+                    else ""
+                )
                 typer.echo(
                     "  "
                     + display_escape_text(membership.name)
                     + "  STUDY   created="
                     + display_escape_text(membership.created_at)
+                    + removal_note
                 )
             branch = "└─" if membership.last else "├─"
             if membership.role == "PARTICIPANT":
@@ -363,6 +498,11 @@ def list_cmd() -> None:
         )
     typer.echo("Granted views are permission projections, not copied Profiles.")
     typer.echo("Authority Profiles are ordinary switchable owners of source data.")
+    if registry.removed_profile_uids:
+        typer.echo(
+            f"Removed Profiles hidden from this list: "
+            f"{len(registry.removed_profile_uids)}"
+        )
 
 
 app.command("ls", hidden=True)(list_cmd)
@@ -513,9 +653,10 @@ def current_cmd() -> None:
     """Show the selected profile and its current Context."""
 
     registry, inspections = _profile_rows()
+    visible_profiles = registry.visible_profiles
     index = next(
         index
-        for index, profile in enumerate(registry.profiles)
+        for index, profile in enumerate(visible_profiles)
         if profile.uid == registry.active_uid
     )
     inspection = inspections[index]
@@ -554,11 +695,73 @@ def use_cmd(
                     "Pass a profile name explicitly."
                 )
             )
-        name = _pick_profile()
-        if name is None:
+        action = _pick_profile()
+        if action is None:
             typer.echo("Profile selection cancelled.")
             return
+        _apply_profile_picker_action(action)
+        return
     _use_profile(name)
+
+
+@app.command("remove")
+def remove_cmd(
+    name: Annotated[
+        str,
+        typer.Argument(help="Visible managed Profile to remove from selection"),
+    ],
+    force: Annotated[
+        bool,
+        typer.Option("-f", "--force", help="Skip the confirmation prompt"),
+    ] = False,
+) -> None:
+    """Soft-remove one Profile while retaining its store and identity."""
+
+    if not force:
+        typer.echo(
+            "This removes only Profile '"
+            + display_escape_text(name)
+            + "' from the live selector. Its store, stable UID, provenance, "
+            "and Grants will be retained."
+        )
+        if not typer.confirm("Continue?", default=False):
+            typer.echo("Profile removal cancelled.")
+            return
+    try:
+        result = remove_profile(name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    _print_profile_removal(result)
+
+
+@app.command("remove-study")
+def remove_study_cmd(
+    name: Annotated[
+        str,
+        typer.Argument(help="Legacy or current Study name"),
+    ],
+    force: Annotated[
+        bool,
+        typer.Option("-f", "--force", help="Skip the confirmation prompt"),
+    ] = False,
+) -> None:
+    """Soft-remove every Profile in one Study as one exact operation."""
+
+    if not force:
+        typer.echo(
+            "This removes every Profile in Study '"
+            + display_escape_text(name)
+            + "' from the live selector. All stores, stable UIDs, provenance, "
+            "and Grants will be retained."
+        )
+        if not typer.confirm("Continue?", default=False):
+            typer.echo("Study removal cancelled.")
+            return
+    try:
+        result = remove_study(name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    _print_study_removal(result)
 
 
 @app.command("rename")

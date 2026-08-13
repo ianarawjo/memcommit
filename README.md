@@ -267,6 +267,19 @@ mem import profile rehearsal-copy --from-profile rehearsal-baseline
 mem profile rehearsal-baseline
 ```
 
+Profiles and complete Study runs can be removed from the live selector without
+deleting their stores, stable identities, provenance, or Grants:
+
+```bash
+mem profile remove rehearsal-copy
+mem profile remove-study pilot-001
+```
+
+In the interactive `mem profile` selector, Study headings are focusable rows.
+Press `D` on a Study heading to review whole-Study removal, or on a child row to
+review only that Profile; `A` applies the exact displayed command. The active,
+fixed `authoring`, and fixed `study-baseline` Profiles cannot be removed.
+
 `mem import` accepts `profile`, `context`, and `memory` resources. It preserves
 Context and Memory identity while excluding source operational history. For
 example, import a closed Context subtree or one Memory from another Profile:

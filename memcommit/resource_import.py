@@ -60,6 +60,10 @@ def _source_profile(
     profile = registry.by_name(canonical)
     if profile is None:
         raise ProfileError(f"Profile {canonical!r} does not exist.")
+    if registry.is_removed(profile):
+        raise ProfileError(
+            f"Profile {canonical!r} was removed from direct selection."
+        )
     inspect_store(profile_store_dir(profile))
     return profile
 

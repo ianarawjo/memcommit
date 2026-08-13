@@ -1,0 +1,156 @@
+52 180
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Profile or Study[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    authoring                          Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring[61C[0;1m^[0m
+[0;1;7m› * capture-workspace         CURRENT  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace[61C[0;48;2;68;68;68m [0m
+[0;36;1m  STUDY capture-study · 2 active · created=2026-08-13T18:00:00+00:00[111C[0;48;2;68;68;68m [0m
+[0m    Participant · capture-participant           Contexts 1 owned + 1 granted · Memories 1 owned + 1 granted · current=participant[50C[0;48;2;68;68;68m [0m
+[0m    Granted memory · capture-granted-memory           Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=source[49C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑/↓ move  Enter use  D remove Profile  Esc/q cancel  ·  2/5[60D[48A[0m[?25l[0m  * capture-workspace         [0;32;1mCURRENT[0m  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace[0m
+[0;1;7m› STUDY capture-study · 2 active · created=2026-08-13T18:00:00+00:00[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0mD r[Cmove Study  Esc/q canc[Cl[C ·  3/5[0m[K[47A[47D[0m[?25l[4A[C[0mR[Cview[Cexact removal[0m[K[0m
+
+[0mPROPOSED COMMAND[C·[CNOT[CRUN[0m                                                                                            [0m
+[2C[0mmem [Crofile [Cemove-study[Ccapture-study --force[0m                                                                      [0m
+[0m                                                                    [0m
+[0mEFFECTS · ONE COMMAND[0m                                                                                                            [0m
+[2C[0mRemove all 2 P[Cofiles in Study 'capture-study'[Cfrom[Cthe live[Cselector.[0m                                                          [0m
+[0m  Retain every Profile store, Study provenance record, and Grant.[0m
+
+[0mApproval applies only to the exact command shown above.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mA apply exact c[Cmmand  Esc back[C· [Co store[Cdata will be deleted[49A[64D[0m[2A[J[0m[?7h[?1049l[?2004l[32mRemoved Study 'capture-study' from the live selector.[0m
+Profiles removed now: 2
+Profiles retained on disk: 2
+Profile UIDs, Study provenance, stores, and Grants were retained.
+Active Profile unchanged: capture-workspace

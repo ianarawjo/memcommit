@@ -5,6 +5,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.commands.profile_picker import (
+    ProfilePickerAction,
     ProfilePickerEntry,
     _render_profile_options,
     choose_profile,
@@ -76,7 +77,12 @@ def test_profile_picker_preselects_current_and_accepts_enter():
             require_tty=False,
         )
 
-    assert selected == "task-1"
+    assert selected == ProfilePickerAction(
+        kind="USE",
+        name="task-1",
+        uid=None,
+        registry_generation=None,
+    )
 
 
 def test_profile_picker_moves_and_returns_use_target():
@@ -90,7 +96,12 @@ def test_profile_picker_moves_and_returns_use_target():
             require_tty=False,
         )
 
-    assert selected == "task-1"
+    assert selected == ProfilePickerAction(
+        kind="USE",
+        name="task-1",
+        uid=None,
+        registry_generation=None,
+    )
 
 
 def test_profile_picker_cancels_without_a_selection():
@@ -152,38 +163,44 @@ def test_profile_picker_nests_study_task_profiles_under_timestamped_heading():
             context_count=14,
             memory_count=375,
             current_context="participant/construction-updates",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=1,
+            study_profile_count=3,
         ),
         ProfilePickerEntry(
             name="pilot-001-task-2",
             context_count=34,
             memory_count=300,
             current_context="advisor1",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=2,
+            study_profile_count=3,
         ),
         ProfilePickerEntry(
             name="pilot-001-task-3",
             context_count=42,
             memory_count=375,
             current_context="personal-memory",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=3,
+            study_profile_count=3,
         ),
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=2, current="authoring")
+        _render_profile_options(entries, selected=3, current="authoring")
     )
 
     lines = rendered.splitlines()
     assert len(lines) == 5
     assert lines[1] == (
-        "  STUDY pilot-001 · created=2026-08-03T20:34:05+00:00"
+        "  STUDY pilot-001 · 3 active · created=2026-08-03T20:34:05+00:00"
     )
     assert "Task 1 · pilot-001-task-1" in lines[2]
     assert "Task 2 · pilot-001-task-2" in lines[3]
@@ -202,33 +219,39 @@ def test_profile_picker_keeps_study_authorities_with_their_tasks():
             name="pilot-001-task-1",
             context_count=1,
             current_context="task",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=1,
             study_role="TASK",
+            study_profile_count=3,
         ),
         ProfilePickerEntry(
             name="pilot-001-task-1-campus-authority",
             context_count=1,
             current_context="campus",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=1,
             study_role="AUTHORITY",
+            study_profile_count=3,
         ),
         ProfilePickerEntry(
             name="pilot-001-task-2",
             context_count=1,
             current_context="proposal",
+            study_uid="study-pilot-001",
             study_name="pilot-001",
             study_created_at="2026-08-03T20:34:05+00:00",
             study_task=2,
             study_role="TASK",
+            study_profile_count=3,
         ),
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=2, current="authoring")
+        _render_profile_options(entries, selected=3, current="authoring")
     )
 
     assert rendered.count("STUDY pilot-001") == 1
@@ -245,25 +268,168 @@ def test_profile_picker_labels_current_init_study_pair():
             context_count=65,
             memory_count=457,
             current_context="task-1/participant",
+            study_uid="study-pilot-current",
             study_name="pilot-current",
             study_created_at="2026-08-09T20:34:05+00:00",
             study_role="PARTICIPANT",
+            study_profile_count=2,
         ),
         ProfilePickerEntry(
             name="renamed-authority",
             context_count=75,
             memory_count=625,
             current_context="task-1/campus-wiki",
+            study_uid="study-pilot-current",
             study_name="pilot-current",
             study_created_at="2026-08-09T20:34:05+00:00",
             study_role="GRANTED_MEMORY",
+            study_profile_count=2,
         ),
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=1, current="pilot-current")
+        _render_profile_options(entries, selected=2, current="pilot-current")
     )
 
     assert rendered.count("STUDY pilot-current") == 1
     assert "Participant · pilot-current" in rendered
     assert "Granted memory · renamed-authority" in rendered
+
+
+def test_profile_picker_focuses_study_header_as_its_own_row():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+
+    rendered = _visible_text(
+        _render_profile_options(entries, selected=1, current="authoring")
+    )
+
+    assert rendered.splitlines()[1].startswith("› STUDY pilot")
+    assert "USE" not in rendered.splitlines()[1]
+
+
+def test_profile_picker_study_header_d_then_a_returns_whole_study_action():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bda")
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            registry_generation=7,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ProfilePickerAction(
+        kind="REMOVE_STUDY",
+        name="pilot",
+        uid="study-uid",
+        registry_generation=7,
+    )
+
+
+def test_profile_picker_child_d_then_a_returns_only_profile_action():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\x1b[Bda")
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            registry_generation=8,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ProfilePickerAction(
+        kind="REMOVE_PROFILE",
+        name="pilot-participant",
+        uid="participant-uid",
+        registry_generation=8,
+    )
+
+
+def test_profile_picker_escape_returns_from_review_without_applying():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Bd\x1bq")
+        selected = choose_profile(
+            ENTRIES,
+            current="authoring",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None

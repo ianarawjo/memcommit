@@ -284,7 +284,9 @@ def test_profile_picker_escapes_metadata_but_returns_raw_identity():
             app_output=DummyOutput(),
             require_tty=False,
         )
-    assert selected == raw_name
+    assert selected is not None
+    assert selected.kind == "USE"
+    assert selected.name == raw_name
 
 
 def test_compare_uses_the_shared_injective_display_escaper():

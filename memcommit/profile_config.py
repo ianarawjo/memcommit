@@ -15,7 +15,8 @@ import re
 import uuid
 
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 2
+PROFILE_REGISTRY_SCHEMA_VERSION = 3
+GRANT_PROFILE_REGISTRY_SCHEMA_VERSION = 2
 LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
@@ -281,6 +282,7 @@ class ProfileRegistry:
     active_uid: str
     profiles: tuple[ProfileEntry, ...]
     grants: tuple[AuthorityGrant, ...] = ()
+    removed_profile_uids: tuple[str, ...] = ()
 
     @property
     def active(self) -> ProfileEntry:
@@ -293,6 +295,19 @@ class ProfileRegistry:
             None,
         )
 
+    @property
+    def visible_profiles(self) -> tuple[ProfileEntry, ...]:
+        """Return Profiles that remain available to direct selection."""
+
+        removed = frozenset(self.removed_profile_uids)
+        return tuple(profile for profile in self.profiles if profile.uid not in removed)
+
+    def is_removed(self, profile: ProfileEntry | str) -> bool:
+        """Report whether one stable Profile identity is soft-removed."""
+
+        uid = profile.uid if isinstance(profile, ProfileEntry) else profile
+        return uid in self.removed_profile_uids
+
     def to_dict(self) -> dict[str, object]:
         return {
             "schema_version": PROFILE_REGISTRY_SCHEMA_VERSION,
@@ -300,6 +315,7 @@ class ProfileRegistry:
             "active_uid": self.active_uid,
             "profiles": [profile.to_dict() for profile in self.profiles],
             "grants": [grant.to_dict() for grant in self.grants],
+            "removed_profile_uids": list(self.removed_profile_uids),
         }
 
 
@@ -396,6 +412,7 @@ def load_profile_registry() -> ProfileRegistry:
     schema_version = value.get("schema_version")
     if schema_version not in {
         LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION,
+        GRANT_PROFILE_REGISTRY_SCHEMA_VERSION,
         PROFILE_REGISTRY_SCHEMA_VERSION,
     }:
         raise ProfileConfigError("Unsupported profile registry schema version.")
@@ -439,6 +456,28 @@ def load_profile_registry() -> ProfileRegistry:
     profile_uids = {profile.uid for profile in profiles}
     if active_uid not in profile_uids:
         raise ProfileConfigError("Active profile is not registered.")
+
+    raw_removed_profile_uids = value.get("removed_profile_uids", [])
+    if schema_version != PROFILE_REGISTRY_SCHEMA_VERSION:
+        if "removed_profile_uids" in value:
+            raise ProfileConfigError(
+                "Older profile registries cannot contain removed Profiles."
+            )
+        raw_removed_profile_uids = []
+    if not isinstance(raw_removed_profile_uids, list):
+        raise ProfileConfigError("Removed Profile identities must be a list.")
+    removed_profile_uids = tuple(
+        _canonical_uid(raw, field="Removed Profile uid")
+        for raw in raw_removed_profile_uids
+    )
+    if len(set(removed_profile_uids)) != len(removed_profile_uids):
+        raise ProfileConfigError("Removed Profile identities must be unique.")
+    if any(uid not in profile_uids for uid in removed_profile_uids):
+        raise ProfileConfigError("Removed Profile identity is not registered.")
+    if AUTHORING_PROFILE_UID in removed_profile_uids:
+        raise ProfileConfigError("The fixed authoring Profile cannot be removed.")
+    if active_uid in removed_profile_uids:
+        raise ProfileConfigError("The active Profile cannot be removed.")
 
     raw_grants = value.get("grants", [])
     if schema_version == LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION:
@@ -565,6 +604,7 @@ def load_profile_registry() -> ProfileRegistry:
         active_uid=active_uid,
         profiles=tuple(profiles),
         grants=tuple(grants),
+        removed_profile_uids=removed_profile_uids,
     )
 
 

@@ -1,0 +1,5 @@
+Removed Profile 'capture-participant' from the live selector.                                                                                                                       
+Retained store: /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/mem-profile-removal-capture-9x89zirj/profile/.mem-profiles/stores/33333333-3333-4333-8333-333333333333             
+Profile UID, provenance, and Grants were retained.                                                                                                                                  
+Study capture-study: 1 active · 1 removed                                                                                                                                           
+Active Profile unchanged: capture-workspace

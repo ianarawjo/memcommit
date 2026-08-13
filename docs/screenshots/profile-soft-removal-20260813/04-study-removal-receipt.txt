@@ -1,0 +1,5 @@
+Removed Study 'capture-study' from the live selector.                                                                                                                               
+Profiles removed now: 2                                                                                                                                                             
+Profiles retained on disk: 2                                                                                                                                                        
+Profile UIDs, Study provenance, stores, and Grants were retained.                                                                                                                   
+Active Profile unchanged: capture-workspace
