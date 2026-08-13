@@ -1,14 +1,14 @@
 [32mInitialized context 'demo'.[0m
 [32mInitialized context 'demo/child'.[0m
-[32mAdded [3d941981] First wording[0m
-[32m[1mEdited [3d941981] in 'demo/child':[0m
+[32mAdded [53afcafc] First wording[0m
+[32m[1mEdited [53afcafc] in 'demo/child':[0m
 [31m  - First wording[0m
 [32m  + Second wording[0m
-[32m[1mEdited [3d941981] in 'demo/child':[0m
+[32m[1mEdited [53afcafc] in 'demo/child':[0m
 [31m  - Second wording[0m
 [32m  + Final wording used by both reports[0m
-[32mAdded [07b7d8c5] Retained historical wording[0m
-[32mRemoved [07b7d8c5] Retained historical wording[0m
+[32mAdded [c25b2c06] Retained historical wording[0m
+[32mRemoved [c25b2c06] Retained historical wording[0m
 [32mSwitched to context 'demo'.[0m
 PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m RATIONALE · SELECT A MEMORY · demo[0m

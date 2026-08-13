@@ -39,6 +39,7 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "detail-card.focused": "fg:#8bd5ff bold",
         "memory-object": "fg:#cad3f5",
         "memory-object.focused": "fg:#8bd5ff bold",
+        "historical-memory-badge": "fg:#c9ad93",
         "reference": "fg:#c6a0f6",
         "impact.keep": "fg:#a6da95 bold",
         "impact.keep.focused": "fg:#a6da95 bold",
