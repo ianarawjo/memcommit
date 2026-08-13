@@ -268,17 +268,45 @@ def remove(ctx: Context, uid: str) -> Information:
     return item
 
 
-def embed(child: Context, parent: Context) -> None:
-    """
-    Embed child inside parent (as a live reference).
-    Raises ValueError if already embedded or if child and parent are the same.
-    """
+def validate_embed(
+    child: Context,
+    parent: Context,
+    *,
+    position: int | None = None,
+) -> None:
+    """Validate one live Context insertion without mutating either Context."""
+
+    if position is not None and (
+        isinstance(position, bool)
+        or not isinstance(position, int)
+        or not 0 <= position <= len(parent.ordered_uids())
+    ):
+        raise ValueError(
+            "Embed position must be between 0 and "
+            f"{len(parent.ordered_uids())}."
+        )
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
     for info in parent.iter_items():
         if isinstance(info, (Context, QueryContextRef)) and info.name == child.name:
             raise ValueError(f"'{child.name}' is already embedded in '{parent.name}'.")
-    parent.add(child)
+
+
+def embed(
+    child: Context,
+    parent: Context,
+    *,
+    position: int | None = None,
+) -> None:
+    """
+    Embed child inside parent (as a live reference).
+    New embeds append unless an exact direct-item insertion position is supplied.
+    Raises ValueError if already embedded, self-referential, or out of range.
+    """
+    validate_embed(child, parent, position=position)
+    # Context.add historically clamps positions for generic callers. Embed's
+    # reviewed gap is an exact safety boundary, so validate it before mutation.
+    parent.add(child, position=position)
 
 
 def branch(ctx: Context, new_name: str) -> Context:

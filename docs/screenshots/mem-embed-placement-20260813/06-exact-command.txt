@@ -1,0 +1,52 @@
+ MEM EMBED · CHILD → INTO                                                                                                                                                           
+ CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                        
+┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────┐
+│  ·   · archive                                                                                                                                                                  ^│
+│› ✓   · examples                                                                                                                                                                  │
+│  · * · guide                                                                                                                                                                    v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────┐
+│  ✓   ▾ archive                                                                                                                                                                  ^│
+│  · [memory f82e1635] Opening orientation for the guide.                                                                                                                          │
+│  › ✓ ───────── POSITION · 2/4 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
+│  · [memory 93cd201c] Detailed operating notes follow the examples.                                                                                                               │
+│  · [memory 246e913e] Closing verification for the guide.                                                                                                                         │
+│  ·   · examples                                                                                                                                                                  │
+│  · * · guide                                                                                                                                                                     │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
+┃  mem embed examples --into archive --before 93cd201c-1a5b-4e6e-8392-5f16a267fe9f                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
+┃  Only Context 'archive' is changed.                                                                                                                                              ┃
+┃  Context 'examples' keeps its identity and ownership; the target stores a live Context reference.                                                                                ┃
+┃  Insert at gap 2/4, between [f82e1635] and [93cd201c].                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃Approval applies only to the exact command shown above.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter apply exact command · ↑ position · Esc cancel                                                                                                                                

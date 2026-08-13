@@ -24,6 +24,8 @@ class ContextTreeRowDecoration:
     value_suffix: str = ""
     cursor_style: str = ""
     value_style: str | None = None
+    branch: str | None = None
+    nested_fragments: tuple[tuple[str, str], ...] = ()
     anchor_cursor: bool = True
     show_cursor: bool = True
 
@@ -49,7 +51,9 @@ def render_context_tree_rows(
         if cursor and decoration.show_cursor and decoration.anchor_cursor:
             fragments.append(("[SetCursorPosition]", ""))
         pointer = "›" if cursor and decoration.show_cursor else " "
-        branch = "▾" if row.expanded else "▸" if row.has_children else "·"
+        branch = decoration.branch or (
+            "▾" if row.expanded else "▸" if row.has_children else "·"
+        )
         prefix = (
             f"{pointer} {decoration.marker} {decoration.active} "
             f"{'  ' * row.depth}{branch} "
@@ -75,6 +79,7 @@ def render_context_tree_rows(
                     override_style=annotation_style,
                 )
             )
+        fragments.extend(decoration.nested_fragments)
         if index < len(rows) - 1:
             fragments.append(("", "\n"))
     return fragments

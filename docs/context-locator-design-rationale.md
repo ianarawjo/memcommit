@@ -31,7 +31,7 @@ mem clear [LOCATOR]
 mem delete LOCATOR
 mem remove LOCATOR
 mem merge LOCATOR
-mem embed LOCATOR --into LOCATOR
+mem embed LOCATOR --into LOCATOR [--before ITEM | --after ITEM]
 mem reference SELECTOR --from LOCATOR [--into LOCATOR]
 mem dev query-source install ... --into LOCATOR
 ```
@@ -149,6 +149,9 @@ The resolver must not be applied indiscriminately:
   canonical identifier and must not be reinterpreted as relative input.
 - Memory selectors, embedded-item selectors, requirement targets, and
   query-only source selectors have different namespaces.
+- Embed's `--before` and `--after` values select direct items inside the already
+  resolved target Context. They are not existing-Context locators and never
+  receive dot-segment resolution.
 - `mem delete` and `mem remove` deliberately combine the existing-Context and
   direct-item selector domains. Their ambiguity and explicit `--context`
   boundary are specified in `unified-delete-selector-design-rationale.md`.

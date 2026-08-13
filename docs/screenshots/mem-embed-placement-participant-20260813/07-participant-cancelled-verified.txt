@@ -1,0 +1,52 @@
+Embed cancelled — no Context was changed.                                                                                                                                           
+PARTICIPANT PROFILE VERIFICATION · READ-ONLY                                                                                                                                        
+STORE FILES · 2790                                                                                                                                                                  
+STORE BYTE DIGEST UNCHANGED · YES                                                                                                                                                   
+CURRENT CONTEXT · task-1/participant                                                                                                                                                
+VERIFICATION COMMAND · mem show --context task-1/participant/construction-updates/route-changes                                                                                     
+Context: task-1/participant/construction-updates/route-changes                                                                                                                      
+  Memories 9  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 8017409a] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot be used du
+ring the construction period.                                                                                                                                                       
+  [memory dbb3c40c] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.                    
+  [memory 2d20c61d] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.                          
+  [memory a8bb36e1] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience substantial heat and
+ travel burden when redirected to an outdoor alternative route during the construction period.                                                                                      
+  [memory 8276ab56] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct users to take
+ the accessible route to the left as viewed from the Main Building.                                                                                                                 
+  [memory 9af0f95c] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking Lot C–Stude
+nt Centre accessible entrance–Central Library west entrance.                                                                                                                        
+  [memory fd27f19b] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance for the clos
+ed connecting route through the Main Building.                                                                                                                                      
+  [memory 638f272f] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that pass throug
+h the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.                                                                     
+  [memory ba9d70f9] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support companion may re
+confirm the distance and slope of the alternative accessible route before accompanying the user.                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

@@ -229,7 +229,10 @@ COMMAND_FORMS = {
         "mem edit --input [file] --context [context] (batch-edit an explicit Context)",
     ),
     "embed": (
-        "mem embed [source_context] --into [target_context]",
+        "mem embed (choose Child, target, and insertion gap interactively)",
+        "mem embed [child_context] --into [target_context] (append)",
+        "mem embed [child_context] --into [target_context] --before [item]",
+        "mem embed [child_context] --into [target_context] --after [item]",
     ),
     "eval": (
         "mem eval semantic status (show retained semantic campaign status)",

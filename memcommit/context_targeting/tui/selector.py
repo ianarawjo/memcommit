@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
 from prompt_toolkit.application.current import get_app
@@ -18,6 +18,7 @@ from memcommit.context_targeting.tui.rendering import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.context_targeting.tui.tree import ContextTreeRow
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
@@ -71,6 +72,15 @@ class ContextSelectorView:
         )
 
 
+@dataclass(frozen=True)
+class ContextSelectorRowProjection:
+    """Optional nested presentation composed into one common Context row."""
+
+    branch: str | None = None
+    nested_fragments: tuple[tuple[str, str], ...] = ()
+    show_context_cursor: bool = True
+
+
 class ContextSelectorControl:
     """Common framed Context tree with independent cursor and checked state."""
 
@@ -79,12 +89,17 @@ class ContextSelectorControl:
         view: ContextSelectorView,
         *,
         height: int = 5,
+        row_projector: Callable[
+            [ContextTreeRow, bool], ContextSelectorRowProjection
+        ]
+        | None = None,
     ) -> None:
         if height < 1:
             raise ValueError("Context selector height must be positive.")
         self.view = view
         self.selectable = view.selectable
         self.annotations: Mapping[str, SourceDisplayValue] = dict(view.annotations)
+        self.row_projector = row_projector
         tree = build_context_tree(view.names, materialized_names=self.selectable)
         initial_cursor = view.selected[-1] if view.selected else view.names[0]
         self.tree = ContextTreeState.create(tree, selected=initial_cursor)
@@ -113,6 +128,11 @@ class ContextSelectorControl:
         focused = get_app().layout.has_focus(self.control)
 
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
+            projection = (
+                self.row_projector(row, focused)
+                if self.row_projector is not None
+                else ContextSelectorRowProjection()
+            )
             available = row.name in self.selectable
             selected = row.name in self.selection.selected_set
             annotation: SourceDisplayValue | None = self.annotations.get(row.name)
@@ -122,7 +142,7 @@ class ContextSelectorControl:
                     SourceDisplayFacts(states=(SourceState.UNAVAILABLE,)),
                 )
             cursor_style, value_style = tree_choice_styles(
-                cursor=cursor,
+                cursor=cursor and projection.show_context_cursor,
                 selected=selected,
                 focused=focused,
             )
@@ -132,6 +152,10 @@ class ContextSelectorControl:
                 annotation=annotation,
                 cursor_style=cursor_style,
                 value_style=value_style,
+                branch=projection.branch,
+                nested_fragments=projection.nested_fragments,
+                anchor_cursor=projection.show_context_cursor,
+                show_cursor=projection.show_context_cursor,
             )
 
         return render_context_tree_rows(self.tree, decorate)

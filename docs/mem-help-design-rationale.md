@@ -253,6 +253,11 @@ option that the parser does not implement. Resource imports and write-protection
 groups enumerate their distinct public grammars rather than collapsing them
 into ambiguous positional placeholders.
 
+`embed` likewise exposes its bare Child/Into/insertion-gap form and keeps the
+explicit append, `--before`, and `--after` command shapes separately visible.
+The item anchor is part of the durable direct-item order contract rather than a
+secondary presentation flag.
+
 The list intentionally omits secondary action flags such as comments,
 responses, snapshots, and acceptance controls; `H` retains the complete
 registered syntax reference. A selected Form preserves its bracketed

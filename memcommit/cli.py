@@ -200,8 +200,9 @@ app.command(
 app.command(
     "embed",
     help=(
-        "Add one Context to another as a live nested Context while the source "
-        "retains its own identity and ownership."
+        "Choose a Child, target, and direct-item insertion gap interactively, "
+        "or add one Context at an explicit before/after position while the "
+        "Child retains its identity and ownership."
     ),
 )(embed.cmd)
 app.command(
