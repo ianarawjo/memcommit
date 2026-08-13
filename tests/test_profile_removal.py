@@ -11,6 +11,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.commands.profile_picker import ProfilePickerAction
 from memcommit.context import Memory
 from memcommit.profile_config import (
     PROFILE_REGISTRY_SCHEMA_VERSION,
@@ -303,6 +304,62 @@ def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
     assert not profile_store_dir(authority).exists()
 
 
+def test_interactive_removal_reloads_and_stays_in_profile_selector(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    participant, authority = _prepare_study_registry(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    calls: list[dict[str, object]] = []
+
+    def select(
+        entries,
+        *,
+        current,
+        registry_generation,
+        initial_status="",
+    ):
+        calls.append(
+            {
+                "names": tuple(entry.name for entry in entries),
+                "current": current,
+                "generation": registry_generation,
+                "status": initial_status,
+            }
+        )
+        if len(calls) == 1:
+            return ProfilePickerAction(
+                kind="REMOVE_PROFILE",
+                name=authority.name,
+                uid=authority.uid,
+                registry_generation=registry_generation,
+            )
+        return None
+
+    monkeypatch.setattr(
+        "memcommit.commands.profile._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr("memcommit.commands.profile.choose_profile", select)
+
+    result = runner.invoke(app, ["profile"])
+
+    assert result.exit_code == 0, result.output
+    assert [call["names"] for call in calls] == [
+        ("authoring", participant.name, authority.name),
+        ("authoring", participant.name),
+    ]
+    assert calls[1]["generation"] == calls[0]["generation"] + 1
+    assert "Deleted Profile 'removal-authority' permanently" in calls[1]["status"]
+    assert "store/checkpoints deleted" in calls[1]["status"]
+    assert "Profile selection cancelled." not in result.output
+    assert not profile_store_dir(authority).exists()
+
+
 def test_cli_study_remove_confirmation_can_cancel_without_changes(
     isolated_store,
     tmp_path,
@@ -320,6 +377,30 @@ def test_cli_study_remove_confirmation_can_cancel_without_changes(
     assert result.exit_code == 0, result.output
     assert "Study removal cancelled." in result.output
     assert profile_registry_file().read_bytes() == before
+
+
+def test_cli_study_remove_force_deletes_both_stores_and_prints_receipt(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    participant, authority = _prepare_study_registry(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    result = runner.invoke(
+        app,
+        ["profile", "remove-study", "removal-study", "--force"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "Permanently deleted Study 'removal-study' Profile stores." in result.output
+    assert "Profile stores and checkpoint histories deleted: 2" in result.output
+    assert "Connected Grants removed: 1" in result.output
+    assert not profile_store_dir(participant).exists()
+    assert not profile_store_dir(authority).exists()
 
 
 def test_cli_confirmation_warns_that_profile_checkpoints_are_unrecoverable(

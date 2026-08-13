@@ -96,7 +96,7 @@
 
 
 
-[60C[0m · CURRENT Profile cannot be removed · switch first[46A[111D[0m[?25l[A[0;1;7m› STUDY capture-study · 2 active · created=2026-08-13T18:00:00+00:00[0m
+[60C[0m · [0;32;1mCURRENT Profile cannot be removed · switch first[46A[111D[0m[?25l[A[0;1;7m› STUDY capture-study · 2 active · created=2026-08-13T18:00:00+00:00[0m
 [0m  * Participant · capture-participant  [0;32;1mCURRENT[0m  Contexts 1 owned + 1 granted · Memories 1 owned + 1 granted · current=participant[0m
 
 
@@ -190,4 +190,4 @@
 
 
 
-[47C[0m · Study contains CURRENT Profile · switch first[47A[95D[0m
+[47C[0m · [0;32;1mStudy contains CURRENT Profile · switch first[47A[95D[0m

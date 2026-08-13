@@ -24,6 +24,12 @@ which it could restore the content.
 - The review lists store, Memory, session, checkpoint, and Grant deletion and
   says that `mem` cannot undo or recover it. `Enter` or `A` applies only the
   exact frozen command; Escape returns without mutation.
+- A successful deletion returns to the refreshed Profile selector with a green
+  in-selector receipt. It does not exit `mem profile`. Each subsequent deletion
+  starts from a newly loaded registry generation and visible Profile catalog.
+- Direct `mem profile remove ...` and `mem profile remove-study ...` commands
+  remain one-shot CLI operations and print their full permanent-deletion
+  receipts before exiting.
 - Enter continues to select a Profile while the selector is not in review. A
   Study header is a grouping and deletion target, never an implicit Profile
   selection.
@@ -51,6 +57,9 @@ The tombstone is display metadata, not a trash or restore mechanism.
    any recursive deletion can occur.
 8. The whole UID-rooted store is destroyed. This includes all Context records,
    Memories, workflow sessions, command receipts, and checkpoints inside it.
+9. After a TUI deletion, the reviewed picker instance is discarded. The next
+   selector screen is built from the post-deletion registry and cannot reuse a
+   stale target UID, generation, inventory, or Study row.
 
 ## Publication and failure boundary
 
@@ -101,6 +110,13 @@ display relationship without preserving content.
 Treating any child deletion as whole-Study deletion was rejected because the
 visible hierarchy communicates two different target scopes. The focusable
 header owns whole-Study deletion; its child owns only itself.
+
+Mutating one long-lived picker's row collection in place was rejected. The
+command-owned loop instead closes the reviewed picker, reloads the registry,
+and opens a fresh picker with the success receipt. This keeps storage and
+deletion logic out of the presentation component and makes the new generation
+the only source for the next selection, at the cost of a brief terminal-screen
+refresh between the two picker instances.
 
 ## Intentional non-goals
 

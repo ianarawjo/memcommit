@@ -22,6 +22,10 @@ The harness fails if an interactive raw stream lacks ANSI styling, if the PTY
 size is wrong, if an exact command or irreversible warning is missing, if a
 success receipt is absent, or if a deleted UID store remains on disk. The
 single-Profile path additionally verifies that the sibling UID store remains.
+Both success paths fail if deletion exits the TUI instead of reopening the
+refreshed selector. The same harness also runs the direct Profile and Study CLI
+commands with `--force` in two additional isolated homes and verifies their
+full receipts and deleted UID paths.
 
 ## Ordered interaction log
 
@@ -30,13 +34,13 @@ single-Profile path additionally verifies that the sibling UID store remains.
 | `01-study-entry` | `mem profile` equivalent | terminal CPR only | Entry with current workspace, focusable Study heading, participant, and granted-memory child | None |
 | `02-study-header-target` | same | `Down` | `STUDY capture-study` owns focus; footer says `D remove Study` | None |
 | `03-study-exact-removal-review` | same | `D` | Exact `mem profile remove-study capture-study --force`; Memories, sessions, checkpoints, and connected Grants are listed as unrecoverable deletions | None |
-| `04-study-removal-receipt` | same | `Enter` | Green permanent-deletion receipt; both stores and checkpoint histories deleted | Both Study UID paths destroyed; both identity tombstones published; incident Grant removed |
-| `05-study-read-only-verification` | `mem profile list` equivalent | None | Only authoring/workspace remain visible; two deletion tombstones reported | None; read-only |
+| `04-study-removal-receipt` | same | `Enter` | Refreshed selector stays open; Study rows are gone and a green permanent-deletion receipt is visible | Both Study UID paths destroyed; both identity tombstones published; incident Grant removed |
+| `05-study-read-only-verification` | `mem profile list` equivalent | `q`, then read-only command | Only authoring/workspace remain visible; two deletion tombstones reported | None; read-only |
 | `06-fixed-authoring-removal-blocked` | `mem profile` equivalent | `Up`, `D` | Fixed authoring row refuses deletion before review | None |
 | `07-profile-child-target` | same | `Down` × 3 | Participant child owns focus; footer says `D remove Profile` | None |
 | `08-profile-exact-removal-review` | same | `D` | Exact `mem profile remove capture-participant --force`; permanent store/checkpoint deletion warning; sibling Study row retained | None |
-| `09-profile-removal-receipt` | same | `A` | Green permanent-deletion receipt and `1 active · 1 removed` | Participant UID path destroyed; identity tombstone published; incident Grant removed; sibling store retained |
-| `10-profile-read-only-verification` | `mem profile list` equivalent | None | Study header remains with granted-memory child and `1 removed` annotation | None; read-only |
+| `09-profile-removal-receipt` | same | `A` | Refreshed selector stays open with the sibling Study child, `1 removed`, and a green permanent-deletion receipt | Participant UID path destroyed; identity tombstone published; incident Grant removed; sibling store retained |
+| `10-profile-read-only-verification` | `mem profile list` equivalent | `q`, then read-only command | Study header remains with granted-memory child and `1 removed` annotation | None; read-only |
 | `11-active-profile-removal-blocked` | `mem profile` equivalent | `D` on current participant | Current Profile refuses deletion and instructs a prior switch | None |
 | `12-active-study-removal-blocked` | same | `Up`, `D` | Parent Study refuses deletion because it contains current Profile | None |
 | `13-blocked-read-only-verification` | `mem profile list` equivalent | `q`, then read-only command | Both Study children remain and participant is still current | None; read-only |

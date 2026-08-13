@@ -1,5 +1,52 @@
-Permanently deleted Study 'capture-study' Profile stores.                                                                                                                           
-Profile stores and checkpoint histories deleted: 2                                                                                                                                  
-Connected Grants removed: 1                                                                                                                                                         
-Profile UIDs and Study provenance remain only as tombstones; content cannot be recovered.                                                                                           
-Active Profile unchanged: capture-workspace
+ Select a Profile or Study                                                                                                                                                          
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    authoring                   Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring                                                                    ^
+› * capture-workspace  CURRENT  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace                                                                     
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  Enter use  D remove Profile  Esc/q cancel  ·  2/2 · Deleted Study 'capture-study' permanently · 2 stores/checkpoint histories deleted · 1 Grant removed

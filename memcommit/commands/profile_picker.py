@@ -354,6 +354,7 @@ def choose_profile(
     *,
     current: str,
     registry_generation: int | None = None,
+    initial_status: str = "",
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -361,6 +362,8 @@ def choose_profile(
     """Return one selected action, or ``None`` when cancelled."""
 
     options = _validate_entries(entries, current=current)
+    if not isinstance(initial_status, str):
+        raise ValueError("Profile selection status must be text.")
     rows = _picker_rows(options, current=current)
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
@@ -376,7 +379,7 @@ def choose_profile(
         )
     }
     pending: dict[str, object | None] = {"action": None, "review": None}
-    status = {"text": ""}
+    status = {"text": initial_status}
     bindings = KeyBindings()
     review_mode = Condition(lambda: pending["action"] is not None)
     picker_mode = ~review_mode
@@ -501,11 +504,13 @@ def choose_profile(
         row = current_row()
         action = "D remove Study" if row.kind == "STUDY" else "Enter use  D remove Profile"
         message = status["text"]
-        suffix = f" · {message}" if message else ""
-        return (
+        prefix = (
             f" ↑/↓ move  {action}  Esc/q cancel"
-            f"  ·  {selected['index'] + 1}/{len(rows)}{suffix}"
+            f"  ·  {selected['index'] + 1}/{len(rows)}"
         )
+        if not message:
+            return prefix
+        return [("", prefix + " · "), ("class:success", message)]
 
     header = Window(
         FormattedTextControl(header_text),
@@ -545,6 +550,7 @@ def choose_profile(
                 "selected": "reverse bold",
                 "current": "ansigreen bold",
                 "study": "ansicyan bold",
+                "success": "ansigreen bold",
             }
         ),
     )

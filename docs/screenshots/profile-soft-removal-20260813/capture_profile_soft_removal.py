@@ -249,9 +249,15 @@ def _capture_study_path(home: Path) -> None:
     HELPERS._snapshot(recorder, "03-study-exact-removal-review")
 
     child.send("\r")
-    _finish(child, recorder)
-    if "Permanently deleted Study 'capture-study'" not in recorder.getvalue():
-        raise RuntimeError("Study removal did not produce its success receipt.")
+    _wait_for(
+        child,
+        recorder,
+        "Select a Profile or Study",
+        "Deleted Study 'capture-study' permanently",
+        "2 stores/checkpoint histories deleted",
+    )
+    if not child.isalive():
+        raise RuntimeError("Study removal exited instead of reopening the selector.")
     for uid in (
         "33333333-3333-4333-8333-333333333333",
         "44444444-4444-4444-8444-444444444444",
@@ -259,6 +265,8 @@ def _capture_study_path(home: Path) -> None:
         if (home / ".mem-profiles" / "stores" / uid).exists():
             raise RuntimeError("Study removal retained a Profile store.")
     HELPERS._snapshot(recorder, "04-study-removal-receipt")
+    child.send("q")
+    _finish(child, recorder)
     _capture_read_only(
         home,
         "05-study-read-only-verification",
@@ -292,9 +300,15 @@ def _capture_profile_path(home: Path) -> None:
     HELPERS._snapshot(recorder, "08-profile-exact-removal-review")
 
     child.send("a")
-    _finish(child, recorder)
-    if "Permanently deleted Profile 'capture-participant'" not in recorder.getvalue():
-        raise RuntimeError("Profile removal did not produce its success receipt.")
+    _wait_for(
+        child,
+        recorder,
+        "Select a Profile or Study",
+        "Deleted Profile 'capture-participant' permanently",
+        "store/checkpoints deleted",
+    )
+    if not child.isalive():
+        raise RuntimeError("Profile removal exited instead of reopening the selector.")
     participant_store = (
         home / ".mem-profiles" / "stores" / "33333333-3333-4333-8333-333333333333"
     )
@@ -304,6 +318,8 @@ def _capture_profile_path(home: Path) -> None:
     if participant_store.exists() or not authority_store.is_dir():
         raise RuntimeError("Child removal did not preserve the exact sibling scope.")
     HELPERS._snapshot(recorder, "09-profile-removal-receipt")
+    child.send("q")
+    _finish(child, recorder)
     _capture_read_only(
         home,
         "10-profile-read-only-verification",
@@ -340,6 +356,76 @@ def _capture_active_blocks(home: Path) -> None:
     )
 
 
+def _run_direct_cli(home: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, "-m", "memcommit.cli", *args],
+        cwd=ROOT,
+        env=_environment(home),
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+
+
+def _verify_direct_cli(profile_home: Path, study_home: Path) -> None:
+    _prepare(profile_home)
+    profile_result = _run_direct_cli(
+        profile_home,
+        "profile",
+        "remove",
+        "capture-granted-memory",
+        "--force",
+    )
+    if profile_result.returncode != 0 or not all(
+        text in profile_result.stdout
+        for text in (
+            "Permanently deleted Profile 'capture-granted-memory'",
+            "Deleted store and all checkpoints",
+            "Connected Grants removed: 1",
+        )
+    ):
+        raise RuntimeError("Direct Profile deletion CLI failed its receipt contract.")
+    profile_store = (
+        profile_home
+        / ".mem-profiles"
+        / "stores"
+        / "44444444-4444-4444-8444-444444444444"
+    )
+    if profile_store.exists():
+        raise RuntimeError("Direct Profile deletion CLI retained its store.")
+
+    _prepare(study_home)
+    study_result = _run_direct_cli(
+        study_home,
+        "profile",
+        "remove-study",
+        "capture-study",
+        "--force",
+    )
+    if study_result.returncode != 0 or not all(
+        text in study_result.stdout
+        for text in (
+            "Permanently deleted Study 'capture-study' Profile stores",
+            "checkpoint histories deleted: 2",
+            "Connected Grants removed: 1",
+        )
+    ):
+        raise RuntimeError("Direct Study deletion CLI failed its receipt contract.")
+    if any(
+        (
+            study_home
+            / ".mem-profiles"
+            / "stores"
+            / uid
+        ).exists()
+        for uid in (
+            "33333333-3333-4333-8333-333333333333",
+            "44444444-4444-4444-8444-444444444444",
+        )
+    ):
+        raise RuntimeError("Direct Study deletion CLI retained a member store.")
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="mem-profile-removal-capture-") as root:
@@ -347,6 +433,10 @@ def main() -> None:
         _capture_study_path(capture_root / "study")
         _capture_profile_path(capture_root / "profile")
         _capture_active_blocks(capture_root / "blocked")
+        _verify_direct_cli(
+            capture_root / "direct-profile",
+            capture_root / "direct-study",
+        )
 
 
 if __name__ == "__main__":

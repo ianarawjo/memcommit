@@ -196,7 +196,7 @@ def _print_grant(registry, grant, *, prefix: str = "") -> None:
     )
 
 
-def _pick_profile() -> ProfilePickerAction | None:
+def _pick_profile(*, initial_status: str = "") -> ProfilePickerAction | None:
     registry, inspections = _profile_rows()
     memberships = _study_memberships(registry)
     entries = tuple(
@@ -263,10 +263,14 @@ def _pick_profile() -> ProfilePickerAction | None:
         )
     )
     try:
+        picker_kwargs = (
+            {"initial_status": initial_status} if initial_status else {}
+        )
         selected = choose_profile(
             entries,
             current=registry.active.name,
             registry_generation=registry.generation,
+            **picker_kwargs,
         )
         # Compatibility for narrow tests and callers that supplied the former
         # name-only picker result while the typed action contract rolled out.
@@ -334,10 +338,35 @@ def _print_study_removal(result) -> None:
     )
 
 
-def _apply_profile_picker_action(action: ProfilePickerAction) -> None:
+def _profile_removal_status(result) -> str:
+    grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
+    return (
+        "Deleted Profile '"
+        + display_escape_text(result.profile.name)
+        + "' permanently · store/checkpoints deleted · "
+        + f"{result.removed_grant_count} {grant_label} removed"
+    )
+
+
+def _study_removal_status(result) -> str:
+    grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
+    return (
+        "Deleted Study '"
+        + display_escape_text(result.name)
+        + "' permanently · "
+        + f"{result.newly_removed_count} stores/checkpoint histories deleted · "
+        + f"{result.removed_grant_count} {grant_label} removed"
+    )
+
+
+def _apply_profile_picker_action(
+    action: ProfilePickerAction,
+    *,
+    print_receipt: bool = True,
+) -> str | None:
     if action.kind == "USE":
         _use_profile(action.name)
-        return
+        return None
     try:
         if action.kind == "REMOVE_PROFILE":
             result = remove_profile(
@@ -354,9 +383,36 @@ def _apply_profile_picker_action(action: ProfilePickerAction) -> None:
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     if action.kind == "REMOVE_PROFILE":
-        _print_profile_removal(result)
-    else:
+        if print_receipt:
+            _print_profile_removal(result)
+        return _profile_removal_status(result)
+    if print_receipt:
         _print_study_removal(result)
+    return _study_removal_status(result)
+
+
+def _run_profile_selector() -> None:
+    """Keep the selector open after deletion and reload its frozen catalog."""
+
+    status = ""
+    completed_removal = False
+    while True:
+        action = _pick_profile(initial_status=status)
+        if action is None:
+            if not completed_removal:
+                typer.echo("Profile selection cancelled.")
+            return
+        if action.kind == "USE":
+            _apply_profile_picker_action(action)
+            return
+        # A completed destructive action must never reuse the catalog or
+        # registry generation that was frozen for its review. Re-entering the
+        # picker reloads both while keeping the person in the selector flow.
+        status = _apply_profile_picker_action(
+            action,
+            print_receipt=False,
+        ) or "Profile deletion completed"
+        completed_removal = True
 
 
 def _use_profile(name: str) -> None:
@@ -421,11 +477,7 @@ def profile_cmd(ctx: typer.Context) -> None:
     if not _interactive_terminal():
         list_cmd()
         return
-    action = _pick_profile()
-    if action is None:
-        typer.echo("Profile selection cancelled.")
-        return
-    _apply_profile_picker_action(action)
+    _run_profile_selector()
 
 
 @app.command("list")
@@ -705,11 +757,7 @@ def use_cmd(
                     "Pass a profile name explicitly."
                 )
             )
-        action = _pick_profile()
-        if action is None:
-            typer.echo("Profile selection cancelled.")
-            return
-        _apply_profile_picker_action(action)
+        _run_profile_selector()
         return
     _use_profile(name)
 
