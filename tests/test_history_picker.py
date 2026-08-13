@@ -1,4 +1,5 @@
 """Interaction and presentation contract for the shared history picker."""
+
 from __future__ import annotations
 
 import io
@@ -66,10 +67,10 @@ def test_history_row_gives_wide_viewport_to_description():
     assert get_cwidth(narrow) <= 70
 
 
-def test_revert_enter_returns_exact_checkpoint_receipt():
+def test_revert_stages_exact_checkpoint_then_history_policy_then_apply():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r")
+        pipe_input.send_text("\r\r\r")
         selected = choose_history(
             (candidate,),
             context_name="test/update/to",
@@ -88,8 +89,8 @@ def test_revert_enter_returns_exact_checkpoint_receipt():
 def test_revert_arrows_move_and_clamp_before_accepting():
     candidates = (entry(1), entry(2), entry(3))
     with create_pipe_input() as pipe_input:
-        # Clamp below the last row, move once up, then choose the second row.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[B\x1b[B\x1b[A\r")
+        # Move to the last row, once up, then choose the second row.
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[A\r\r\r")
         selected = choose_history(
             candidates,
             context_name="journal",
@@ -108,7 +109,7 @@ def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
     with create_pipe_input() as pipe_input:
         # Up from the first Item crosses into the Viewer. Enter returns to
         # Items, where Down must still select the second exact checkpoint.
-        pipe_input.send_text("\x1b[A\r\x1b[B\r")
+        pipe_input.send_text("\x1b[A\r\x1b[B\r\r\r")
         selected = choose_history(
             candidates,
             context_name="journal",
@@ -122,6 +123,64 @@ def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
         context_name="journal",
         checkpoint_uid=candidates[1].uid,
     )
+
+
+def test_revert_tui_can_keep_all_newer_checkpoints():
+    candidate = entry(1)
+    with create_pipe_input() as pipe_input:
+        # Stage the target, change DISCARD NEWER to KEEP ALL, advance to
+        # APPLY, then approve the exact frozen choice.
+        pipe_input.send_text("\r\x1b[C\r\r")
+        selected = choose_history(
+            (candidate,),
+            context_name="journal",
+            mode="revert",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == HistorySelectionReceipt(
+        context_name="journal",
+        checkpoint_uid=candidate.uid,
+        keep_history=True,
+    )
+
+
+def test_revert_keep_flag_initializes_the_tui_policy():
+    candidate = entry(1)
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\r\r")
+        selected = choose_history(
+            (candidate,),
+            context_name="journal",
+            mode="revert",
+            keep_history=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is not None
+    assert selected.keep_history is True
+
+
+def test_empty_revert_stays_read_only_until_back_navigation():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\x1b[B\x7f")
+        selected = choose_history(
+            (),
+            context_name="empty/context",
+            mode="revert",
+            initial_details_open=True,
+            empty_message="No checkpoints for this Context yet.",
+            back_navigation=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is HISTORY_BACK
 
 
 def test_log_enter_opens_viewer_and_q_closes_without_selection():
@@ -285,8 +344,7 @@ def test_detail_contains_full_checkpoint_and_direct_change_summaries():
         "1 MemoryRef · 1 query-only Context · 1 embedded Context"
     ) in rendered
     assert (
-        "              Transition: +1 added · ~2 edited · "
-        "-3 removed · 4 reordered"
+        "              Transition: +1 added · ~2 edited · " "-3 removed · 4 reordered"
     ) in rendered
 
 

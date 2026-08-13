@@ -1,4 +1,5 @@
 """Restore one exact checkpoint, optionally selected through history search."""
+
 from __future__ import annotations
 
 import json
@@ -8,7 +9,12 @@ from typing import Annotated, Any, Optional
 
 import typer
 
+from memcommit.commands.checkpoint_diff import (
+    checkpoint_restore_detail_renderer,
+)
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.diff_browser import browse_checkpoint_locations
 from memcommit.commands.history_picker import (
     HistorySelectionReceipt,
     choose_history,
@@ -42,13 +48,11 @@ def _matching_checkpoint(
     matches = [
         entry
         for entry in entries
-        if isinstance(entry.get("uid"), str)
-        and entry["uid"].startswith(selector)
+        if isinstance(entry.get("uid"), str) and entry["uid"].startswith(selector)
     ]
     if len(matches) > 1:
         raise ValueError(
-            f"Ambiguous prefix '{selector}' matches "
-            f"{len(matches)} checkpoints."
+            f"Ambiguous prefix '{selector}' matches " f"{len(matches)} checkpoints."
         )
     return matches[0] if matches else None
 
@@ -60,31 +64,6 @@ def _looks_like_missing_uid(selector: str) -> bool:
     )
 
 
-def _revert_preview(
-    entries: list[dict[str, Any]],
-    *,
-    keep: bool,
-) -> dict[str, str]:
-    details: dict[str, str] = {}
-    for index, entry in enumerate(entries):
-        uid = entry.get("uid")
-        if not isinstance(uid, str):
-            continue
-        if keep:
-            line = (
-                "Revert log: --keep preserves every currently visible "
-                "checkpoint."
-            )
-        else:
-            line = (
-                f"Revert log: {index} newer visible checkpoint"
-                f"{'s' if index != 1 else ''} may leave the active log; "
-                "the pre-revert recovery checkpoint retains undo metadata."
-            )
-        details[uid] = line
-    return details
-
-
 def _semantic_selection(
     store: MemoryStore,
     name: str,
@@ -92,6 +71,7 @@ def _semantic_selection(
     query: str,
     *,
     keep: bool,
+    current_snapshot: dict[str, Any],
 ) -> HistorySelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
@@ -116,9 +96,7 @@ def _semantic_selection(
             limit=20,
         )
     active_uids = {
-        entry["uid"]
-        for entry in entries
-        if isinstance(entry.get("uid"), str)
+        entry["uid"] for entry in entries if isinstance(entry.get("uid"), str)
     }
     selected_uids = [
         result.checkpoint_uid
@@ -126,25 +104,18 @@ def _semantic_selection(
         if result.selectable and result.checkpoint_uid in active_uids
     ]
     if not selected_uids:
-        raise ValueError(
-            "No currently restorable checkpoint matched that description."
-        )
-    projected = {
-        entry.uid: entry
-        for entry in checkpoint_picker_entries(
-            entries,
-            extra_detail_by_uid=_revert_preview(entries, keep=keep),
-        )
-    }
-    options = [
-        projected[uid]
-        for uid in selected_uids
-        if uid is not None
-    ]
+        raise ValueError("No currently restorable checkpoint matched that description.")
+    projected = {entry.uid: entry for entry in checkpoint_picker_entries(entries)}
+    options = [projected[uid] for uid in selected_uids if uid is not None]
     return choose_history(
         options,
         context_name=name,
         mode="revert",
+        detail_renderer=checkpoint_restore_detail_renderer(
+            current_snapshot,
+            entries,
+        ),
+        keep_history=keep,
     )
 
 
@@ -153,6 +124,7 @@ def _picker_selection(
     entries: list[dict[str, Any]],
     *,
     keep: bool,
+    current_snapshot: dict[str, Any],
 ) -> HistorySelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
@@ -160,12 +132,14 @@ def _picker_selection(
             "Pass a checkpoint UID explicitly."
         )
     return choose_history(
-        checkpoint_picker_entries(
-            entries,
-            extra_detail_by_uid=_revert_preview(entries, keep=keep),
-        ),
+        checkpoint_picker_entries(entries),
         context_name=name,
         mode="revert",
+        detail_renderer=checkpoint_restore_detail_renderer(
+            current_snapshot,
+            entries,
+        ),
+        keep_history=keep,
     )
 
 
@@ -179,20 +153,15 @@ def _validate_reviewed_frame(
     receipt: HistorySelectionReceipt,
 ) -> str:
     """Recheck the reviewed frame before entering the store's revert lock."""
-    if (
-        receipt.context_name != context_name
-        or store.current_context_name() != context_name
-    ):
+    if receipt.context_name != context_name:
         raise ValueError(
-            "The current Context changed while history selection was open."
+            "The selected Context changed while history selection was open."
         )
     current = store.load_direct(context_name)
     if (
         current.uid != context_uid
         or context_record_digest(current) != context_digest
-        or checkpoint_history_digest(
-            store.list_checkpoints(context_name)
-        )
+        or checkpoint_history_digest(store.list_checkpoints(context_name))
         != history_digest
     ):
         raise ValueError(
@@ -203,13 +172,8 @@ def _validate_reviewed_frame(
         store.list_checkpoints(context_name),
         receipt.checkpoint_uid,
     )
-    if (
-        matching is None
-        or matching.get("uid") != receipt.checkpoint_uid
-    ):
-        raise ValueError(
-            "The selected checkpoint changed while selection was open."
-        )
+    if matching is None or matching.get("uid") != receipt.checkpoint_uid:
+        raise ValueError("The selected checkpoint changed while selection was open.")
     return receipt.checkpoint_uid
 
 
@@ -262,9 +226,57 @@ def cmd(
             help="Keep newer checkpoints in the log instead of truncating",
         ),
     ] = False,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help=(
+                "Context whose checkpoint should be restored; omit with a "
+                "bare TTY command to choose from the local Context tree"
+            ),
+        ),
+    ] = None,
 ) -> None:
     store = MemoryStore()
-    name = store.current_context_name()
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        name = context_snapshot.resolve_or_current(context_name)
+    except ValueError as error:
+        typer.secho(f"Context error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+
+    if selector is None and _interactive_terminal():
+        try:
+            reviewed = browse_checkpoint_locations(
+                store,
+                session=None,
+                context_locator=name if context_name is not None else None,
+                title="REVERT",
+                mode="revert",
+                keep_history=keep,
+            )
+        except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
+            typer.secho(
+                f"Revert picker error: {error}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if reviewed is None:
+            typer.echo("Revert cancelled.")
+            return
+        _apply_revert(
+            store,
+            reviewed.context_name,
+            reviewed.checkpoint_uid,
+            keep=reviewed.keep_history,
+            expected_context_uid=reviewed.context_uid,
+            expected_context_digest=reviewed.context_digest,
+            expected_history_digest=reviewed.history_digest,
+        )
+        return
+
     if not name:
         typer.secho(
             "No current context. Run 'mem init <name>' first.",
@@ -287,6 +299,10 @@ def cmd(
         )
         raise typer.Exit(1)
 
+    expected_context_uid = context.uid
+    expected_context_digest = context_record_digest(context)
+    expected_history_digest = checkpoint_history_digest(entries)
+
     if selector is not None:
         selector = selector.strip()
         if not selector:
@@ -302,7 +318,15 @@ def cmd(
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
         if exact is not None:
-            _apply_revert(store, name, exact["uid"], keep=keep)
+            _apply_revert(
+                store,
+                name,
+                exact["uid"],
+                keep=keep,
+                expected_context_uid=expected_context_uid,
+                expected_context_digest=expected_context_digest,
+                expected_history_digest=expected_history_digest,
+            )
             return
         if _looks_like_missing_uid(selector):
             typer.secho(
@@ -312,12 +336,14 @@ def cmd(
             )
             raise typer.Exit(1)
 
-    expected_context_uid = context.uid
-    expected_context_digest = context_record_digest(context)
-    expected_history_digest = checkpoint_history_digest(entries)
     try:
         receipt = (
-            _picker_selection(name, entries, keep=keep)
+            _picker_selection(
+                name,
+                entries,
+                keep=keep,
+                current_snapshot=context.to_dict(),
+            )
             if selector is None
             else _semantic_selection(
                 store,
@@ -325,6 +351,7 @@ def cmd(
                 entries,
                 selector,
                 keep=keep,
+                current_snapshot=context.to_dict(),
             )
         )
         if receipt is None:
@@ -351,7 +378,7 @@ def cmd(
         store,
         name,
         uid,
-        keep=keep,
+        keep=receipt.keep_history,
         expected_context_uid=expected_context_uid,
         expected_context_digest=expected_context_digest,
         expected_history_digest=expected_history_digest,

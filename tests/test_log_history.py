@@ -1,4 +1,5 @@
 """Interactive and semantic extensions to ``mem log``."""
+
 from __future__ import annotations
 
 import json
@@ -27,9 +28,7 @@ def _memory_uid(context_name: str) -> str:
 
 class CheckpointPlanProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        payload = json.loads(
-            prompt.split("HISTORY SEARCH PAYLOAD:\n", 1)[1]
-        )
+        payload = json.loads(prompt.split("HISTORY SEARCH PAYLOAD:\n", 1)[1])
         assert operation == "history search"
         assert payload["allowed_result_kinds"] == ["checkpoint"]
         return json.dumps(
@@ -94,11 +93,10 @@ def test_tty_log_opens_shared_picker(isolated_store, monkeypatch):
     assert observed["context_name"] == "notes"
     assert observed["locations"] == ("notes",)
     assert observed["location_title"] == "LOG · SELECT A CONTEXT"
-    assert observed["annotations"]["notes"] == (
-        "1 direct · 0 descendant operations"
-    )
-    assert [row.label for row in observed["operation_rows"]] == ["add"]
+    assert observed["annotations"]["notes"] == ("1 direct · 0 descendant operations")
+    assert [row.label for row in observed["operation_rows"]] == ["add", "created"]
     assert observed["operation_rows"][0].style == "report-neutral"
+    assert not observed["operation_rows"][1].content.startswith("[atomize]")
     assert observed["mode"] == "log"
     assert observed["initial_details_open"] is True
     assert observed["empty_message"] == "No checkpoints for this Context yet."

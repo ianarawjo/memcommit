@@ -211,18 +211,48 @@ redirection and automation and avoids requiring terminal key input.
 
 ```text
 mem revert
+mem revert --context task-1/participant
 mem revert 2f98a740
+mem revert 2f98a740 --context ../participant
 mem revert "the version before the shuttle notice was removed"
 mem revert --keep
 ```
 
 An exact checkpoint UID or unambiguous UID prefix remains the deterministic
-command-line restoration path. In a TTY, an omitted selector or a
-natural-language selector may open the same history picker in restoration
-mode. The semantic phase produces candidates only. Pressing Enter returns a
-local receipt containing the frozen Context name and exact full checkpoint
-UID; the command then invokes the ordinary store restoration path for that
-UID.
+command-line restoration path. Its optional `--context/-c` operand uses the
+shared existing-Context locator and freezes the active Context base once, so
+relative spellings such as `../participant` cannot change meaning before the
+write.
+
+In a TTY, operand-free Revert first opens the same complete local Context tree
+as Log. The active Context is only the initial cursor; selecting another row
+does not switch global current state. A Context with no checkpoints opens an
+explicit `0/0` history screen and can return to the Context tree rather than
+terminating the command with an error. Revert includes ordinary writable local
+Contexts only: a readable Grant is not mutation authority.
+
+Expanded Context rows retain concise command badges such as `[undo]` and
+`[atomize]`. A durable `init` receipt is shown separately as the non-counted
+lifecycle boundary `[created]`; when that receipt carries Atomize's exact
+`source_analysis_uid`, it is rendered `[created] [atomize]`. An ordinary init
+shows only `[created]`. The browser never infers creation from the oldest
+retained checkpoint because Revert truncation and inherited histories can make
+that inference false.
+
+Selecting a nonempty Context opens the common History workbench in restoration
+mode. Viewer shows the exact current-to-target direct-item impact. Enter on an
+Items row checks that exact full checkpoint UID and advances to the `HISTORY`
+frame. The shared checked-choice control stages either `DISCARD NEWER` or
+`KEEP ALL`; `--keep` initializes the latter but may still be changed before
+approval. Enter advances to a separate `APPLY` frame whose label repeats the
+checkpoint prefix and chosen history policy. Only Enter there returns the
+local receipt and permits the ordinary store restoration path. The selection,
+policy change, and Apply are process-local until that last action.
+
+A natural-language selector keeps its current- or explicitly selected-Context
+scope and opens the same staged Revert workbench after semantic candidate
+reduction. The semantic phase produces candidates only and never chooses or
+mutates by itself.
 
 A natural-language query never mutates directly, even if the provider returns
 one candidate. The current non-TTY command refuses semantic selection and
@@ -230,14 +260,15 @@ points the caller to `mem log "QUERY"` followed by an exact UID. An omitted
 selector outside a TTY is also an error. This avoids an implicit “select the
 first result” policy in scripts.
 
-The picker freezes the Context UID, canonical Context digest, and digest of the
-complete visible checkpoint list. After Enter, the command first checks that
-reviewed frame and passes all three preconditions to the store. The store then
-acquires the Context write lock, reloads the Context and checkpoint history,
-rechecks all three values, and resolves the exact target before changing
-anything. A save, checkpoint, revert, or checkpoint-history copy through the
-public store API participates in the same Context lock discipline, so it
-cannot change the reviewed frame between validation and mutation.
+Before the History screen opens, the adapter freezes the canonical Context
+name, Context UID, canonical Context digest, digest of the complete visible
+checkpoint list, and initial history policy. The final receipt carries the
+exact selected UID and reviewed policy. The store then acquires the Context
+write lock, reloads the Context and checkpoint history, rechecks all three
+freshness values, and resolves the exact target before changing anything. A
+save, checkpoint, revert, or checkpoint-history copy through the public store
+API participates in the same Context lock discipline, so it cannot change the
+reviewed frame between validation and mutation.
 
 ### `mem undo`
 
@@ -264,6 +295,16 @@ Inherited branch checkpoints establish the branch's base state but do not
 become newly entered commands. Initialization, manual/no-op checkpoints, and
 checkpoints whose direct state did not change are likewise not placed on the
 stack.
+
+Revert and command Undo/Redo share the narrow direct-snapshot restoration
+primitive: it normalizes the target under the live Context UID/name, attaches
+the same compare-and-set digest, enforces write protection through the common
+locked save path, and preserves opaque direct pointers. Their history policies
+remain deliberately separate. Revert selects one arbitrary Context checkpoint
+and may replace its visible log; Undo/Redo selects one global command unit,
+may restore several owners and companion semantic artifacts, and always
+appends shared restoration receipts. Neither CLI recursively invokes the
+other.
 
 New automatic checkpoints retain a top-level `command_before` direct snapshot.
 This makes the exact pre-image available even when a programmatic caller had
@@ -359,6 +400,11 @@ from the currently retained checkpoints and their supported recovery
 metadata. It is not an immutable audit log, and it is not permission to
 restore an arbitrary intermediate Memory version. Restoration always ends at
 an exact retained checkpoint boundary.
+
+Selecting `KEEP ALL` in the TUI or passing `--keep` leaves every currently
+visible checkpoint file in place and appends only the pre-revert recovery
+checkpoint. This changes retention, not the restored Context snapshot or the
+ability of command-unit Undo to reverse the Revert.
 
 Revert treats checkpoint snapshots as direct persistence records. It rebuilds
 them without resolving embedded Contexts or MemoryRef targets, so an

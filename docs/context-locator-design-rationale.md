@@ -18,6 +18,7 @@ mem list [LOCATOR]
 mem ls [LOCATOR]
 mem show [SELECTOR] --context LOCATOR
 mem log [--memory SELECTOR] --context LOCATOR
+mem revert [CHECKPOINT] --context LOCATOR
 mem trace [SELECTOR] --context LOCATOR
 mem rationale [SELECTOR] --context LOCATOR
 mem find [QUERY] --context LOCATOR

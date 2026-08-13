@@ -5790,6 +5790,33 @@ class MemoryStore:
             result.append((context, entries))
         return tuple(sorted(result, key=lambda item: item[0].name))
 
+    @staticmethod
+    def _context_for_restoration(
+        snapshot: dict[str, object],
+        *,
+        context_uid: str,
+        context_name: str,
+        expected_context_digest: str,
+    ) -> Context:
+        """Build one exact direct restore target under its current owner.
+
+        Revert may select an inherited checkpoint whose serialized owner is a
+        branch source, while Undo/Redo carries already-normalized command
+        images. Both paths must preserve the live Context identity and attach
+        the same compare-and-set digest before publishing through
+        ``_save_locked``.
+        """
+
+        restored = Context.from_dict(
+            {
+                **snapshot,
+                "uid": context_uid,
+                "name": context_name,
+            }
+        )
+        restored._store_digest = expected_context_digest
+        return restored
+
     def restore_recent_context_command(
         self,
         direction: str,
@@ -5883,11 +5910,15 @@ class MemoryStore:
                             target_record = (
                                 change.before if direction == "undo" else change.after
                             )
-                            restored = Context.from_dict(target_record)
                             expected_digest = context_record_digest(
                                 original_records[change.context_name]
                             )
-                            restored._store_digest = expected_digest
+                            restored = self._context_for_restoration(
+                                target_record,
+                                context_uid=change.context_uid,
+                                context_name=change.context_name,
+                                expected_context_digest=expected_digest,
+                            )
                             checkpoint = self._save_locked(
                                 restored,
                                 AutoCheckpoint(
@@ -6739,12 +6770,12 @@ class MemoryStore:
         # source Context identity. Restore their contents into the Context the
         # caller requested instead of writing back to the source Context. A
         # non-resolving parse preserves unavailable context_ref pointers.
-        restored_snapshot = {
-            **target_data["snapshot"],
-            "uid": ctx.uid,
-            "name": ctx.name,
-        }
-        restored = Context.from_dict(restored_snapshot)
+        restored = self._context_for_restoration(
+            target_data["snapshot"],
+            context_uid=ctx.uid,
+            context_name=ctx.name,
+            expected_context_digest=context_record_digest(ctx),
+        )
 
         context_path = self._context_file(ctx_name)
         original_context_bytes = context_path.read_bytes()

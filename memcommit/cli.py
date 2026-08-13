@@ -260,9 +260,9 @@ app.command(
 app.command(
     "revert",
     help=(
-        "Enter the interactive checkpoint picker when no selector is given, or "
-        "restore an exact or semantically found checkpoint; discard newer "
-        "checkpoints unless --keep is used."
+        "Choose a local Context and checkpoint interactively when no selector "
+        "is given, or restore an exact or semantically found checkpoint. The "
+        "TUI reviews whether newer checkpoints are discarded or kept."
     ),
 )(revert.cmd)
 app.command(

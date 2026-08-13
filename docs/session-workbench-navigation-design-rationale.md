@@ -41,9 +41,14 @@ provider, or interprets the row. Operation adapters still own projection-side
 cleanup such as closing transient detail, loading a response draft, or
 constructing an exact mutation receipt.
 History Log, Trace, Diff, and Revert use the same cursor/preview transition.
-Log-style Enter opens the aligned Viewer, while Revert deliberately keeps
-Enter as selection of the displayed exact checkpoint UID. Previewing a Revert
-row therefore does not weaken or bypass its later mutation receipt boundary.
+Log-style Enter opens the aligned Viewer. Revert instead stages the displayed
+exact checkpoint UID, then advances through its visible `HISTORY` policy and
+`APPLY` frames. Its complete screen order is
+`VIEWER → ITEMS → HISTORY → APPLY`; Tab follows that order and boundary-aware
+Up/Down crosses adjacent frames without wrapping. The History control reuses
+the common checked-choice grammar for `DISCARD NEWER` versus `KEEP ALL`.
+Previewing or checking a Revert row therefore does not weaken or bypass its
+later exact mutation boundary.
 
 Resolution sessions use three visible frames with separate responsibilities:
 

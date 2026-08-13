@@ -1,4 +1,5 @@
 """Exact, provider-free checkpoint transition presentation."""
+
 from __future__ import annotations
 
 import json
@@ -9,7 +10,9 @@ from typing import Any
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.commands.history_picker import HistoryPickerItem
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.memory_diff import MemoryChange, memory_diff_lines
 
 
@@ -61,10 +64,9 @@ def _checkpoint_changes(
         if uid not in before
     )
     common = set(before) & set(after)
-    reordered = (
-        [uid for uid in before_order if uid in common]
-        != [uid for uid in after_order if uid in common]
-    )
+    reordered = [uid for uid in before_order if uid in common] != [
+        uid for uid in after_order if uid in common
+    ]
     return tuple(changes), reordered
 
 
@@ -82,7 +84,9 @@ def _before_snapshots(
         if not isinstance(uid, str):
             continue
         command_before = checkpoint.get("command_before")
-        result[uid] = command_before if isinstance(command_before, Mapping) else previous
+        result[uid] = (
+            command_before if isinstance(command_before, Mapping) else previous
+        )
         previous = checkpoint.get("snapshot")
     return result
 
@@ -127,14 +131,14 @@ def checkpoint_diff_detail_renderer(
             ),
         ]
         if not changes and not reordered:
-            fragments.append(
-                ("class:report-neutral", " (no direct Context changes)\n")
-            )
+            fragments.append(("class:report-neutral", " (no direct Context changes)\n"))
             return fragments
         for index, change in enumerate(changes, start=1):
             before = _item_text(change.before)
             after = _item_text(change.after)
-            treatment = "ADD" if before is None else "REMOVE" if after is None else "EDIT"
+            treatment = (
+                "ADD" if before is None else "REMOVE" if after is None else "EDIT"
+            )
             fragments.append(
                 (
                     "class:report-label",
@@ -157,9 +161,7 @@ def checkpoint_diff_detail_renderer(
                     "=": "equal",
                     " ": "equal",
                 }[line.marker]
-                fragments.append(
-                    (f"class:memory-diff.{style_key}", f" {line.marker} ")
-                )
+                fragments.append((f"class:memory-diff.{style_key}", f" {line.marker} "))
                 fragments.extend(
                     (
                         f"class:memory-diff.{style_key}"
@@ -173,6 +175,91 @@ def checkpoint_diff_detail_renderer(
         if reordered:
             fragments.append(
                 ("class:report-neutral", " = Direct-item order changed.\n")
+            )
+        return fragments
+
+    return render
+
+
+def checkpoint_restore_detail_renderer(
+    current_snapshot: Mapping[str, Any],
+    checkpoints: Sequence[Mapping[str, Any]],
+):
+    """Return the exact current-to-target impact shown before Revert approval."""
+
+    records = {
+        checkpoint["uid"]: checkpoint
+        for checkpoint in checkpoints
+        if isinstance(checkpoint.get("uid"), str)
+    }
+
+    def render(entry: HistoryPickerItem) -> StyleAndTextTuples:
+        checkpoint = records[entry.uid]
+        changes, reordered = _checkpoint_changes(
+            current_snapshot,
+            checkpoint.get("snapshot"),
+        )
+        command = checkpoint.get("command")
+        recorded_by = (
+            command if isinstance(command, str) and command else "manual checkpoint"
+        )
+        fragments: StyleAndTextTuples = [
+            ("class:report-label", " TARGET      "),
+            ("class:report-neutral", display_escape_text(entry.uid) + "\n"),
+            ("class:report-label", " RECORDED BY "),
+            ("class:report-label", display_escape_text(recorded_by) + "\n"),
+            ("class:report-label", " DESCRIPTION "),
+            (
+                "class:report-neutral",
+                display_escape_text(entry.description or "(none)") + "\n\n",
+            ),
+            ("class:report-label", " RESTORE IMPACT\n"),
+        ]
+        if not changes and not reordered:
+            fragments.append(("class:report-neutral", " (no direct Context changes)\n"))
+            return fragments
+        for index, change in enumerate(changes, start=1):
+            before = _item_text(change.before)
+            after = _item_text(change.after)
+            treatment = (
+                "ADD" if before is None else "REMOVE" if after is None else "EDIT"
+            )
+            fragments.append(
+                (
+                    "class:report-label",
+                    f" {index}. REVERT · {treatment} "
+                    f"[{display_escape_text(change.uid[:8])}]\n",
+                )
+            )
+            memory_change = MemoryChange(
+                marker={"ADD": "+", "REMOVE": "−", "EDIT": "~"}[treatment],
+                treatment=treatment,
+                location=entry.uid,
+                memory_uid=change.uid,
+                before=before,
+                after=after,
+            )
+            for line in memory_diff_lines(memory_change):
+                style_key = {
+                    "-": "remove",
+                    "+": "add",
+                    "=": "equal",
+                    " ": "equal",
+                }[line.marker]
+                fragments.append((f"class:memory-diff.{style_key}", f" {line.marker} "))
+                fragments.extend(
+                    (
+                        f"class:memory-diff.{style_key}"
+                        + (".changed" if span.changed else ""),
+                        display_escape_text(span.text),
+                    )
+                    for span in line.spans
+                )
+                fragments.append(("", "\n"))
+            fragments.append(("", "\n"))
+        if reordered:
+            fragments.append(
+                ("class:report-neutral", " = Direct-item order will change.\n")
             )
         return fragments
 

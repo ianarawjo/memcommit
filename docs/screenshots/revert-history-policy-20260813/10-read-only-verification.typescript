@@ -1,0 +1,9 @@
+52 180
+READ-ONLY REVERT VERIFICATION
+PTY 180 52
+Current Context: task-1/participant
+Target Context: task-1/recovery
+Target Memories: []
+Visible checkpoints: 4
+Commands, recent first: revert, add, atomize, init
+KEEP ALL VERIFIED: True · CURRENT POINTER UNCHANGED: True

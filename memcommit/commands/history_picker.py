@@ -4,6 +4,7 @@ The picker deliberately receives presentation summaries rather than store
 objects.  History reconstruction, semantic search, freshness validation, and
 the eventual revert remain responsibilities of their command adapters.
 """
+
 from __future__ import annotations
 
 import sys
@@ -28,17 +29,29 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.widgets import Frame
 
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.commands.horizontal_choice import (
+    HorizontalChoiceOption,
+    HorizontalChoiceState,
+    render_horizontal_choice,
+)
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+    focused_control_style,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.components.frame import (
+    bind_focused_frame_style,
+)
 from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.console.text import (
+    display_escape_text,
 )
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
@@ -103,6 +116,7 @@ class HistorySelectionReceipt:
 
     context_name: str
     checkpoint_uid: str
+    keep_history: bool = False
 
 
 @dataclass(frozen=True)
@@ -119,6 +133,7 @@ def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
     start = min(start, count - visible)
     return start, start + visible
 
+
 def _compact_timestamp(value: str) -> str:
     return display_escape_text(value[:16].replace("T", " "))
 
@@ -132,18 +147,18 @@ def _render_entry_line(
     *,
     entries: Sequence[HistoryPickerItem],
     selected: bool,
+    checked: bool = False,
     available_width: int,
 ) -> str:
     """Render command and description columns from the live Items width."""
 
     pointer = "›" if selected else " "
+    marker = "✓" if checked else " "
     timestamp = (
-        f"{_compact_timestamp(entry.timestamp):<16}  "
-        if available_width >= 58
-        else ""
+        f"{_compact_timestamp(entry.timestamp):<16}  " if available_width >= 58 else ""
     )
     uid = display_escape_text(entry.uid)[:8]
-    prefix = f"{pointer} {timestamp}"
+    prefix = f"{pointer}{marker} {timestamp}"
     suffix = f"  {uid}  "
     field_budget = max(
         0,
@@ -151,8 +166,7 @@ def _render_entry_line(
     )
     commands = tuple(display_escape_text(item.command) for item in entries)
     descriptions = tuple(
-        display_escape_text(item.description or "(no description)")
-        for item in entries
+        display_escape_text(item.description or "(no description)") for item in entries
     )
     command_natural = max(
         (terminal_cell_width(value) for value in commands),
@@ -203,8 +217,7 @@ def _indented_detail(value: str) -> tuple[str, ...]:
     # returns, bidi controls, Unicode separators, and backslashes remain
     # visible escapes so item content cannot imitate the trusted frame.
     lines = tuple(
-        display_escape_text(line)
-        for line in (value or "(no detail)").split("\n")
+        display_escape_text(line) for line in (value or "(no detail)").split("\n")
     )
     return (
         f" Detail       {lines[0]}",
@@ -235,28 +248,30 @@ def choose_history(
     app_output: Output | None = None,
     require_tty: bool = True,
     initial_details_open: bool | None = None,
-    detail_renderer: Callable[
-        [HistoryPickerItem], str | StyleAndTextTuples
-    ] | None = None,
+    detail_renderer: (
+        Callable[[HistoryPickerItem], str | StyleAndTextTuples] | None
+    ) = None,
     empty_message: str | None = None,
     empty_detail: str | None = None,
     back_navigation: bool = False,
     title: str | None = None,
     workbench_navigation: SessionWorkbenchNavigation | None = None,
+    keep_history: bool = False,
 ) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
     In ``log`` mode Enter opens the selected checkpoint in Viewer and only a
-    close/cancel key exits. In ``revert`` mode Enter on Items returns an exact
-    UID receipt; this function never performs a revert. Arrow keys traverse
-    Viewer and Items at their real content boundaries.
+    close/cancel key exits. In ``revert`` mode Enter stages an exact checkpoint,
+    then the History and Apply frames review its retention policy before this
+    function returns a receipt. This function never performs a revert. Arrow
+    keys traverse Viewer and Items at their real content boundaries.
     """
     options = tuple(entries)
     if not isinstance(context_name, str) or not context_name:
         raise ValueError("History selection requires a Context name.")
     if mode not in {"log", "revert"}:
         raise ValueError("History picker mode must be 'log' or 'revert'.")
-    if not options and (mode != "log" or not empty_message):
+    if not options and not empty_message:
         raise ValueError("No history entries are available to select.")
     if any(not isinstance(entry, HistoryPickerItem) for entry in options):
         raise ValueError("History selection received an invalid entry.")
@@ -269,17 +284,15 @@ def choose_history(
             entry.detail,
         ):
             if not isinstance(value, str):
-                raise ValueError(
-                    "History selection received an invalid entry."
-                )
+                raise ValueError("History selection received an invalid entry.")
     if len({entry.uid for entry in options}) != len(options):
         raise ValueError("History selection received duplicate entry UIDs.")
     if detail_renderer is not None and not callable(detail_renderer):
         raise ValueError("History detail renderer must be callable.")
-    if initial_details_open is not None and not isinstance(
-        initial_details_open, bool
-    ):
+    if initial_details_open is not None and not isinstance(initial_details_open, bool):
         raise ValueError("History initial detail state must be boolean.")
+    if not isinstance(keep_history, bool):
+        raise ValueError("History preservation state must be boolean.")
     for value, label in (
         (empty_detail, "History empty detail"),
         (title, "History picker title"),
@@ -290,9 +303,7 @@ def choose_history(
             or (label == "History picker title" and "\n" in value)
         ):
             raise ValueError(f"{label} must be non-empty text.")
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
             "Interactive history selection requires a terminal. "
             "Pass a checkpoint UID explicitly or use plain log output."
@@ -308,11 +319,42 @@ def choose_history(
     details_open = {
         "value": True if initial_details_open is None else initial_details_open
     }
+    selected_checkpoint = {"uid": None}
+    history_policy = (
+        HorizontalChoiceState(
+            (
+                HorizontalChoiceOption(
+                    "DISCARD_NEWER",
+                    "DISCARD NEWER",
+                    (
+                        "Remove newer visible checkpoints after restoration; "
+                        "the recovery checkpoint retains undo metadata."
+                    ),
+                ),
+                HorizontalChoiceOption(
+                    "KEEP_ALL",
+                    "KEEP ALL",
+                    "Preserve every currently visible checkpoint after restoration.",
+                ),
+            ),
+            selected_uid="KEEP_ALL" if keep_history else "DISCARD_NEWER",
+        )
+        if mode == "revert" and options
+        else None
+    )
     bindings = KeyBindings()
+    app_ref: dict[
+        str, Application[HistorySelectionReceipt | HistoryBackNavigation | None]
+    ] = {}
 
     def render_entries() -> list[tuple[str, str]]:
         if not options:
-            return [("class:report-neutral", f"  {display_escape_text(empty_message or '')}")]
+            return [
+                (
+                    "class:report-neutral",
+                    f"  {display_escape_text(empty_message or '')}",
+                )
+            ]
         start, end = _visible_bounds(navigation.row_index, len(options))
         visible = options[start:end]
         available_width = live_window_content_width(
@@ -332,6 +374,9 @@ def choose_history(
                         entry,
                         entries=visible,
                         selected=selected,
+                        checked=(
+                            mode == "revert" and entry.uid == selected_checkpoint["uid"]
+                        ),
                         available_width=available_width,
                     ),
                 )
@@ -361,13 +406,32 @@ def choose_history(
         if not options:
             return f" {close}  ·  0/0"
         position = f"{navigation.row_index + 1}/{len(options)}"
-        if navigation.pane == "viewer":
+        app = app_ref.get("app")
+        if app is not None and app.layout.has_focus(detail_pane.text_area):
             return (
                 " FOCUS VIEWER · ↑/↓ scroll  Enter/Esc/Backspace items  "
                 f"Tab switch  q close  ·  {position}"
             )
+        if (
+            history_policy is not None
+            and app is not None
+            and app.layout.has_focus(policy_control)
+        ):
+            return (
+                " FOCUS HISTORY · ←/→ select  Enter apply  "
+                f"Esc/Backspace items  Tab switch  q cancel  ·  {position}"
+            )
+        if (
+            history_policy is not None
+            and app is not None
+            and app.layout.has_focus(apply_control)
+        ):
+            return (
+                " FOCUS APPLY · Enter revert exact checkpoint  "
+                f"Esc/Backspace history  Tab switch  q cancel  ·  {position}"
+            )
         if mode == "revert":
-            action = "Enter revert to exact UID"
+            action = "Enter select exact UID"
             close = (
                 "Esc/Backspace back  q cancel"
                 if back_navigation
@@ -376,8 +440,7 @@ def choose_history(
         else:
             action = "Enter viewer"
         return (
-            f" FOCUS ITEMS · ↑/↓ move  {action}  Tab switch  {close}"
-            f"  ·  {position}"
+            f" FOCUS ITEMS · ↑/↓ move  {action}  Tab switch  {close}" f"  ·  {position}"
         )
 
     list_control = FormattedTextControl(
@@ -418,9 +481,7 @@ def choose_history(
 
     def move_viewer(event, delta: int) -> SurfaceMoveResult:
         return (
-            "MOVED"
-            if move_wrapped_read_cursor(event, direction=delta)
-            else "BOUNDARY"
+            "MOVED" if move_wrapped_read_cursor(event, direction=delta) else "BOUNDARY"
         )
 
     def enter_viewer(delta: int) -> None:
@@ -438,12 +499,8 @@ def choose_history(
         if not options:
             return "HANDLED"
         if mode == "revert":
-            event.app.exit(
-                result=HistorySelectionReceipt(
-                    context_name=context_name,
-                    checkpoint_uid=options[navigation.row_index].uid,
-                )
-            )
+            selected_checkpoint["uid"] = options[navigation.row_index].uid
+            surface_focus.focus_relative(event.app, 1, wrap=False)
             return "HANDLED"
         details_open["value"] = True
         sync_detail(anchor="start")
@@ -463,28 +520,142 @@ def choose_history(
         event.app.exit(result=HISTORY_BACK if back_navigation else None)
         return "HANDLED"
 
-    surface_focus = SurfaceFocusController(
-        (
-            FocusSurface(
-                "viewer",
-                detail_pane.text_area,
-                move_vertical=move_viewer,
-                activate=activate_viewer,
-                back=back_viewer,
-                on_focus=focus_viewer,
-                on_vertical_enter=enter_viewer,
-            ),
-            FocusSurface(
-                "items",
-                list_control,
-                move_vertical=move_items,
-                activate=activate_items,
-                back=back_items,
-                on_focus=focus_items,
-            ),
+    def move_policy(_event, _delta: int) -> SurfaceMoveResult:
+        return "BOUNDARY"
+
+    def activate_policy(event) -> SurfaceActionResult:
+        surface_focus.focus_relative(event.app, 1, wrap=False)
+        return "HANDLED"
+
+    def back_policy(event) -> SurfaceActionResult:
+        surface_focus.focus_relative(event.app, -1, wrap=False)
+        return "HANDLED"
+
+    def move_apply(_event, _delta: int) -> SurfaceMoveResult:
+        return "BOUNDARY"
+
+    def activate_apply(event) -> SurfaceActionResult:
+        uid = selected_checkpoint["uid"]
+        if uid is None or history_policy is None:
+            return "HANDLED"
+        event.app.exit(
+            result=HistorySelectionReceipt(
+                context_name=context_name,
+                checkpoint_uid=uid,
+                keep_history=history_policy.selected_uid == "KEEP_ALL",
+            )
         )
+        return "HANDLED"
+
+    def back_apply(event) -> SurfaceActionResult:
+        surface_focus.focus_relative(event.app, -1, wrap=False)
+        return "HANDLED"
+
+    policy_control = FormattedTextControl(
+        lambda: (
+            render_horizontal_choice(
+                history_policy,
+                title="NEWER CHECKPOINTS",
+                focused=(
+                    app_ref.get("app") is not None
+                    and app_ref["app"].layout.has_focus(policy_control)
+                ),
+                show_description=True,
+                inline_boxed=True,
+            )
+            if history_policy is not None
+            else []
+        ),
+        focusable=history_policy is not None,
+        show_cursor=False,
     )
+    policy_frame = Frame(
+        Window(policy_control, height=2, dont_extend_height=True),
+        title="HISTORY",
+    )
+
+    def render_apply() -> StyleAndTextTuples:
+        focused = app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
+            apply_control
+        )
+        uid = selected_checkpoint["uid"]
+        if uid is None or history_policy is None:
+            label = "SELECT A CHECKPOINT FIRST"
+        else:
+            policy = (
+                "KEEP ALL CHECKPOINTS"
+                if history_policy.selected_uid == "KEEP_ALL"
+                else "DISCARD NEWER CHECKPOINTS"
+            )
+            label = f"REVERT TO {uid[:8]} · {policy}"
+        return [
+            ("[SetCursorPosition]", ""),
+            (focused_control_style(focused=focused), f"[ {label} ]"),
+        ]
+
+    apply_control = FormattedTextControl(
+        render_apply,
+        focusable=history_policy is not None,
+        show_cursor=False,
+    )
+    apply_frame = Frame(
+        Window(apply_control, height=1, dont_extend_height=True),
+        title="APPLY",
+    )
+
+    surfaces = [
+        FocusSurface(
+            "viewer",
+            detail_pane.text_area,
+            move_vertical=move_viewer,
+            activate=activate_viewer,
+            back=back_viewer,
+            on_focus=focus_viewer,
+            on_vertical_enter=enter_viewer,
+        ),
+        FocusSurface(
+            "items",
+            list_control,
+            move_vertical=move_items,
+            activate=activate_items,
+            back=back_items,
+            on_focus=focus_items,
+        ),
+    ]
+    if history_policy is not None:
+        surfaces.extend(
+            (
+                FocusSurface(
+                    "history-policy",
+                    policy_control,
+                    move_vertical=move_policy,
+                    activate=activate_policy,
+                    back=back_policy,
+                ),
+                FocusSurface(
+                    "apply",
+                    apply_control,
+                    move_vertical=move_apply,
+                    activate=activate_apply,
+                    back=back_apply,
+                ),
+            )
+        )
+    surface_focus = SurfaceFocusController(tuple(surfaces))
     bind_surface_navigation(bindings, surface_focus, back=True)
+
+    if history_policy is not None:
+        policy_focused = has_focus(policy_control)
+
+        @bindings.add("left", filter=policy_focused, eager=True)
+        def _policy_left(event) -> None:
+            history_policy.move(-1)
+            event.app.invalidate()
+
+        @bindings.add("right", filter=policy_focused, eager=True)
+        def _policy_right(event) -> None:
+            history_policy.move(1)
+            event.app.invalidate()
 
     viewer_focused = has_focus(detail_pane.text_area)
 
@@ -505,9 +676,7 @@ def choose_history(
 
     @bindings.add("end", filter=viewer_focused, eager=True)
     def _end(event) -> None:
-        detail_pane.text_area.buffer.cursor_position = len(
-            detail_pane.text_area.text
-        )
+        detail_pane.text_area.buffer.cursor_position = len(detail_pane.text_area.text)
         event.app.invalidate()
 
     @bind_case_insensitive_key(bindings, "q", eager=True)
@@ -536,31 +705,44 @@ def choose_history(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[
-        HistorySelectionReceipt | HistoryBackNavigation | None
-    ] = Application(
-        layout=Layout(
-            HSplit(
-                [
-                    header,
-                    viewer_frame,
-                    items_frame,
-                    footer,
-                ]
+    body: list[object] = [
+        header,
+        viewer_frame,
+        items_frame,
+    ]
+    if history_policy is not None:
+        body.extend((policy_frame, apply_frame))
+    body.append(footer)
+    app: Application[HistorySelectionReceipt | HistoryBackNavigation | None] = (
+        Application(
+            layout=Layout(
+                HSplit(body),
+                focused_element=list_control,
             ),
-            focused_element=list_control,
-        ),
-        key_bindings=bindings,
-        full_screen=True,
-        erase_when_done=True,
-        input=app_input,
-        output=app_output,
-        style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+            key_bindings=bindings,
+            full_screen=True,
+            erase_when_done=True,
+            input=app_input,
+            output=app_output,
+            style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+        )
     )
-    for pane, frame in (("viewer", viewer_frame), ("items", items_frame)):
+    app_ref["app"] = app
+    for control, frame in (
+        (detail_pane.text_area, viewer_frame),
+        (list_control, items_frame),
+        *(
+            (
+                (policy_control, policy_frame),
+                (apply_control, apply_frame),
+            )
+            if history_policy is not None
+            else ()
+        ),
+    ):
         bind_focused_frame_style(
             frame,
-            is_focused=lambda pane=pane: navigation.pane == pane,
+            is_focused=lambda control=control: app.layout.has_focus(control),
         )
     try:
         return app.run()

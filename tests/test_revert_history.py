@@ -1,12 +1,17 @@
 """Picker and natural-language selection contracts for ``mem revert``."""
+
 from __future__ import annotations
 
 import json
 
 from typer.testing import CliRunner
 
+import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.history_picker import HistorySelectionReceipt
+from memcommit.commands.history_picker import (
+    HISTORY_BACK,
+    HistorySelectionReceipt,
+)
 from memcommit.store import MemoryStore
 
 
@@ -23,9 +28,7 @@ class EarliestCheckpointProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.called = True
-        payload = json.loads(
-            prompt.split("HISTORY SEARCH PAYLOAD:\n", 1)[1]
-        )
+        payload = json.loads(prompt.split("HISTORY SEARCH PAYLOAD:\n", 1)[1])
         assert payload["allowed_result_kinds"] == ["checkpoint"]
         return json.dumps(
             {
@@ -56,17 +59,22 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
         lambda: True,
     )
 
-    def choose(entries, *, context_name, mode):
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: "notes",
+    )
+
+    def choose(entries, *, context_name, mode, **kwargs):
         assert context_name == "notes"
         assert mode == "revert"
-        assert all("Revert log:" in entry.detail for entry in entries)
+        assert kwargs["keep_history"] is False
         return HistorySelectionReceipt(
             context_name=context_name,
             checkpoint_uid=init_uid,
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.diff_browser.choose_history",
         choose,
     )
 
@@ -75,6 +83,86 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
     assert result.exit_code == 0
     assert "Reverted" in result.output
     assert not store.load_current().memories
+
+
+def test_bare_revert_can_leave_an_empty_context_and_choose_another(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    empty = ops.init("task-1/participant")
+    store.save(empty)
+    store.set_current(empty.name)
+    invoke("init", "task-1/result")
+    invoke("add", "remove me")
+    store.set_current(empty.name)
+    target_uid = store.list_checkpoints("task-1/result")[-1]["uid"]
+    selected_locations = iter((empty.name, "task-1/result"))
+
+    monkeypatch.setattr(
+        "memcommit.commands.revert._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: next(selected_locations),
+    )
+
+    def choose(entries, *, context_name, **kwargs):
+        if context_name == empty.name:
+            assert entries == []
+            assert kwargs["empty_message"] == ("No checkpoints for this Context yet.")
+            return HISTORY_BACK
+        return HistorySelectionReceipt(
+            context_name=context_name,
+            checkpoint_uid=target_uid,
+        )
+
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history",
+        choose,
+    )
+
+    result = invoke("revert")
+
+    assert result.exit_code == 0, result.output
+    assert store.current_context_name() == empty.name
+    assert not store.load_direct("task-1/result").memories
+
+
+def test_revert_tui_keep_choice_preserves_newer_checkpoint_files(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "notes")
+    invoke("add", "first")
+    invoke("add", "second")
+    store = MemoryStore()
+    before = store.list_checkpoints("notes")
+    target_uid = before[-1]["uid"]
+
+    monkeypatch.setattr(
+        "memcommit.commands.revert._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: "notes",
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history",
+        lambda *args, **kwargs: HistorySelectionReceipt(
+            context_name="notes",
+            checkpoint_uid=target_uid,
+            keep_history=True,
+        ),
+    )
+
+    result = invoke("revert")
+
+    assert result.exit_code == 0, result.output
+    after_uids = {entry["uid"] for entry in store.list_checkpoints("notes")}
+    assert {entry["uid"] for entry in before} <= after_uids
 
 
 def test_natural_language_revert_searches_then_requires_picker_enter(
@@ -95,8 +183,9 @@ def test_natural_language_revert_searches_then_requires_picker_enter(
         lambda: provider,
     )
 
-    def choose(entries, *, context_name, mode):
+    def choose(entries, *, context_name, mode, **kwargs):
         assert [entry.uid for entry in entries] == [init_uid]
+        assert kwargs["keep_history"] is False
         return HistorySelectionReceipt(
             context_name=context_name,
             checkpoint_uid=entries[0].uid,
@@ -137,6 +226,28 @@ def test_explicit_uid_bypasses_provider_and_picker(
     result = invoke("revert", uid[:8])
 
     assert result.exit_code == 0
+
+
+def test_exact_revert_resolves_an_explicit_relative_context_once(
+    isolated_store,
+):
+    invoke("init", "task/source")
+    invoke("init", "task/target")
+    invoke("add", "remove me")
+    store = MemoryStore()
+    target_uid = store.list_checkpoints("task/target")[-1]["uid"]
+    store.set_current("task/source")
+
+    result = invoke(
+        "revert",
+        target_uid[:8],
+        "--context",
+        "../target",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert store.current_context_name() == "task/source"
+    assert not store.load_direct("task/target").memories
 
 
 def test_missing_hex_uid_never_falls_back_to_semantic_search(
@@ -191,7 +302,12 @@ def test_picker_frame_change_aborts_before_revert(
         lambda: True,
     )
 
-    def choose(entries, *, context_name, mode):
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: "notes",
+    )
+
+    def choose(entries, *, context_name, mode, **kwargs):
         changed = store.load(context_name)
         changed.add("concurrent")
         store.save(changed)
@@ -201,14 +317,14 @@ def test_picker_frame_change_aborts_before_revert(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.diff_browser.choose_history",
         choose,
     )
 
     result = invoke("revert")
 
     assert result.exit_code == 1
-    assert "changed while selection was open" in result.output
+    assert "changed before the reviewed revert" in result.output
     assert len(store.load_current().memories) == 2
 
 
@@ -249,9 +365,7 @@ def test_semantic_revert_race_at_locked_apply_preserves_concurrent_state(
         concurrent = self.load_direct(context_name)
         concurrent.add("concurrent")
         self.save(concurrent)
-        state_after_race["context"] = self.load_direct(
-            context_name
-        ).to_dict()
+        state_after_race["context"] = self.load_direct(context_name).to_dict()
         state_after_race["history"] = self.list_checkpoints(context_name)
         return original_revert(
             self,
@@ -293,7 +407,11 @@ def test_cancelled_picker_does_not_resolve_memory_ref_targets(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.commands.revert.choose_history",
+        "memcommit.commands.diff_browser.choose_history_location",
+        lambda *args, **kwargs: "notes",
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.diff_browser.choose_history",
         lambda *args, **kwargs: None,
     )
 

@@ -1,4 +1,5 @@
 """Location and subtree dispatch for the interactive Diff browser."""
+
 from __future__ import annotations
 
 from types import SimpleNamespace
@@ -86,9 +87,7 @@ def test_checkpoint_backspace_reopens_context_selector(monkeypatch):
 
     assert len(selector_currents) == 2
     assert selector_currents[1] == child
-    assert opened == [
-        (session, child, {"back_navigation": True})
-    ]
+    assert opened == [(session, child, {"back_navigation": True})]
 
 
 def test_subtree_counts_multi_context_update_and_undo_as_two_operations():
@@ -102,8 +101,7 @@ def test_subtree_counts_multi_context_update_and_undo_as_two_operations():
         status="undone",
         application=SimpleNamespace(operation_digest="digest-1"),
         operations=tuple(
-            SimpleNamespace(owner_context_name=name)
-            for name in locations
+            SimpleNamespace(owner_context_name=name) for name in locations
         ),
     )
 
@@ -114,9 +112,7 @@ def test_subtree_counts_multi_context_update_and_undo_as_two_operations():
     )
 
     assert annotations[parent] == "0 direct · 2 descendant operations"
-    assert annotations[locations[0]] == (
-        "2 direct · 0 descendant operations"
-    )
+    assert annotations[locations[0]] == ("2 direct · 0 descendant operations")
 
 
 def test_checkpoint_operation_identity_deduplicates_shared_receipts():
@@ -138,6 +134,51 @@ def test_checkpoint_operation_identity_deduplicates_shared_receipts():
     ) == diff_browser._checkpoint_operation_identity(
         {"uid": "checkpoint-d", "command": "undo", "args": undo_args}
     )
-    assert diff_browser._checkpoint_operation_identity(
-        {"uid": "baseline", "command": "init", "args": {}}
-    ) is None
+    assert (
+        diff_browser._checkpoint_operation_identity(
+            {"uid": "baseline", "command": "init", "args": {}}
+        )
+        is None
+    )
+
+
+def test_checkpoint_rows_mark_proven_creation_without_counting_it_as_operation():
+    checkpoints = (
+        {
+            "uid": "atomize-checkpoint",
+            "timestamp": "2026-08-13T11:39:00",
+            "command": "atomize",
+            "description": "Applied atomize",
+            "args": {},
+        },
+        {
+            "uid": "creation-checkpoint",
+            "timestamp": "2026-08-13T11:38:00",
+            "command": "init",
+            "description": "Initialized output before applying atomize",
+            "args": {"source_analysis_uid": "analysis-1"},
+        },
+    )
+
+    rows = diff_browser._checkpoint_operation_rows(checkpoints)
+
+    assert [row.label for row in rows] == ["atomize", "created"]
+    assert rows[1].content.startswith("[atomize] 2026-08-13 11:38")
+    assert diff_browser._checkpoint_operation_identity(checkpoints[1]) is None
+
+
+def test_checkpoint_rows_do_not_infer_creation_origin_from_oldest_entry():
+    rows = diff_browser._checkpoint_operation_rows(
+        (
+            {
+                "uid": "plain-creation",
+                "timestamp": "2026-08-13T10:00:00",
+                "command": "init",
+                "description": "Initialized context",
+                "args": {"name": "output"},
+            },
+        )
+    )
+
+    assert rows[0].label == "created"
+    assert not rows[0].content.startswith("[")
