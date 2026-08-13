@@ -58,19 +58,25 @@ def project_summarize_clipboard(
 
     results = source.results
     if not whole_document and len(results) == 2:
-        # Header/status sections precede the scoped sections. Treat them as
-        # the first visible Summary so an initial `y` has useful semantics.
-        include_descendants = bool(
-            focused_uid and ":RECURSIVE:" in focused_uid
-        )
-        focused = source.result_for(include_descendants=include_descendants)
-        if focused is None:
-            raise ValueError("The focused Summary scope is unavailable.")
-        results = (focused,)
+        # Only a section inside an explicitly labelled scope narrows `y`.
+        # The shared title/status describes the whole document, so `y` there
+        # must agree with `Y` instead of silently choosing the first scope.
+        include_descendants: bool | None = None
+        if focused_uid and ":DIRECT:" in focused_uid:
+            include_descendants = False
+        elif focused_uid and ":RECURSIVE:" in focused_uid:
+            include_descendants = True
+        if include_descendants is not None:
+            focused = source.result_for(
+                include_descendants=include_descendants
+            )
+            if focused is None:
+                raise ValueError("The focused Summary scope is unavailable.")
+            results = (focused,)
 
     label = (
         "complete summary"
-        if whole_document or len(source.results) == 1
+        if whole_document or len(results) == len(source.results)
         else (
             "current + descendants summary"
             if results[0].include_descendants

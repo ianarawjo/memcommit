@@ -78,9 +78,10 @@ revocable Grant store; it does not make the prose durable inside MemCommit.
 
 The interactive Viewer exposes the same disclosure as a process-local action:
 `y` copies the scope containing the focused Summary section and `Y` copies the
-complete available Summary document. For `BOTH`, header or status focus maps
-to the first current-only view, while focus inside the recursive group maps to
-the descendants view. These keys use the injected plain-text writer, show a
+complete available Summary document. For `BOTH`, the shared title and status
+describe the complete document, so `y` and `Y` are identical there. Focus
+inside the current-only or descendants group makes lowercase `y` copy only
+that labelled scope. These keys use the injected plain-text writer, show a
 transient success or failure receipt, and likewise create no structured stage.
 
 After the semantic call, the command rebuilds the same frame and compares its

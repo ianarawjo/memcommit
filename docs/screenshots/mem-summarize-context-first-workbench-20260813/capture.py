@@ -58,12 +58,14 @@ def _run_tui_child(*, cancel: bool) -> None:
         assert copied == []
         outcome = "CANCELLED BEFORE EXECUTION"
     else:
-        assert len(copied) == 3
-        assert copied[0].startswith("[CURRENT ONLY]\n")
-        assert copied[1].startswith("[CURRENT + DESCENDANTS]\n")
-        assert "[CURRENT ONLY]" in copied[2]
-        assert "[CURRENT + DESCENDANTS]" in copied[2]
-        outcome = "BOTH VIEWS AND THREE COPIES VERIFIED"
+        assert len(copied) == 4
+        assert "[CURRENT ONLY]" in copied[0]
+        assert "[CURRENT + DESCENDANTS]" in copied[0]
+        assert copied[1].startswith("[CURRENT ONLY]\n")
+        assert copied[2].startswith("[CURRENT + DESCENDANTS]\n")
+        assert "[CURRENT ONLY]" in copied[3]
+        assert "[CURRENT + DESCENDANTS]" in copied[3]
+        outcome = "BOTH VIEWS AND FOUR COPIES VERIFIED"
     print(
         f"SUMMARIZE {outcome} · READ-ONLY VERIFIED · "
         "CONTEXT BYTES UNCHANGED · CHECKPOINTS UNCHANGED"
@@ -140,9 +142,13 @@ def main() -> None:
 
         child.send("y")
         _BASE._settle(child)
+        _snapshot(recorder, "04a-header-y-complete")
+
+        child.send(DOWN * 2 + "y")
+        _BASE._settle(child)
         _snapshot(recorder, "05-current-summary-copied")
 
-        child.send(DOWN * 5 + "y")
+        child.send(DOWN * 3 + "y")
         _BASE._settle(child)
         _snapshot(recorder, "06-descendants-summary-copied")
 
@@ -151,7 +157,7 @@ def main() -> None:
         _snapshot(recorder, "07-complete-summary-copied")
 
         child.send("q")
-        child.expect("THREE COPIES VERIFIED")
+        child.expect("FOUR COPIES VERIFIED")
         child.expect(pexpect.EOF)
         _snapshot(recorder, "08-read-only-copy-verification")
     finally:

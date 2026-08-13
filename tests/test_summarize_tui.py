@@ -296,6 +296,16 @@ def test_summarize_clipboard_projects_current_scope_and_complete_document() -> N
         focused_uid="SUMMARY:RECURSIVE:UNDERSTANDING",
         whole_document=False,
     )
+    header = project_summarize_clipboard(
+        outcome,
+        focused_uid="SUMMARY:TITLE",
+        whole_document=False,
+    )
+    status = project_summarize_clipboard(
+        outcome,
+        focused_uid="SUMMARY:STATUS",
+        whole_document=False,
+    )
     complete = project_summarize_clipboard(outcome, whole_document=True)
 
     assert direct.label == "current-only summary"
@@ -306,6 +316,8 @@ def test_summarize_clipboard_projects_current_scope_and_complete_document() -> N
         "[CURRENT + DESCENDANTS]\nWHAT MEM UNDERSTOOD\n"
     )
     assert "[CURRENT ONLY]" not in recursive.text
+    assert header == complete
+    assert status == complete
     assert complete.label == "complete summary"
     assert "[CURRENT ONLY]" in complete.text
     assert "[CURRENT + DESCENDANTS]" in complete.text
@@ -315,9 +327,11 @@ def test_summarize_y_and_uppercase_y_copy_scope_then_complete_document() -> None
     copied: list[str] = []
 
     with create_pipe_input() as pipe_input:
-        # S runs both scopes. The result starts in Summary: y copies direct,
-        # five Down keys enter the recursive group, and Y copies both.
-        pipe_input.send_text("sy" + "\x1b[B" * 5 + "yYq")
+        # S runs both scopes. At the shared title, y copies the complete
+        # document. Scoped sections narrow y; Y remains complete everywhere.
+        pipe_input.send_text(
+            "sy" + "\x1b[B" * 2 + "y" + "\x1b[B" * 3 + "yYq"
+        )
         returned = run_summarize_tui(
             SummarizeRequest(context_locator="summary/context"),
             setup=_setup(),
@@ -329,14 +343,16 @@ def test_summarize_y_and_uppercase_y_copy_scope_then_complete_document() -> None
         )
 
     assert returned is not None
-    assert copied[0].startswith("[CURRENT ONLY]\nWHAT MEM UNDERSTOOD\n")
-    assert "[CURRENT + DESCENDANTS]" not in copied[0]
-    assert copied[1].startswith(
+    assert "[CURRENT ONLY]" in copied[0]
+    assert "[CURRENT + DESCENDANTS]" in copied[0]
+    assert copied[1].startswith("[CURRENT ONLY]\nWHAT MEM UNDERSTOOD\n")
+    assert "[CURRENT + DESCENDANTS]" not in copied[1]
+    assert copied[2].startswith(
         "[CURRENT + DESCENDANTS]\nWHAT MEM UNDERSTOOD\n"
     )
-    assert "[CURRENT ONLY]" not in copied[1]
-    assert "[CURRENT ONLY]" in copied[2]
-    assert "[CURRENT + DESCENDANTS]" in copied[2]
+    assert "[CURRENT ONLY]" not in copied[2]
+    assert "[CURRENT ONLY]" in copied[3]
+    assert "[CURRENT + DESCENDANTS]" in copied[3]
 
 
 def test_summarize_both_does_not_publish_a_partial_pair() -> None:
