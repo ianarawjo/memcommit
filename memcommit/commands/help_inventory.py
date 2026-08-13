@@ -283,6 +283,7 @@ COMMAND_FORMS = {
         "mem impact --to [target_context] (current Context is source)",
     ),
     "import": (
+        "mem import (choose a non-active source and import Profile, Context, or Memory)",
         "mem import profile [profile_name] --from [store] (clean baseline from an external store)",
         "mem import profile [profile_name] --from-profile [source_profile] (clean baseline from a registered Profile)",
         "mem import context [source_context] --from-profile [source_profile] (one Context root)",

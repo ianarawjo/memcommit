@@ -1,0 +1,52 @@
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+Imported Memory [20000000] into Context 'destination'.                                                                                                                              
+Stable root Memory.                                                                                                                                                                 
+Source and active Profile selection unchanged.                                                                                                                                      
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION                                                                                                                                                              
+COMMAND · mem list destination --direct                                                                                                                                             
+Context: destination                                                                                                                                                                
+  2 items                                                                                                                                                                           
+                                                                                                                                                                                    
+  [memory 40000000] Local destination Memory.                                                                                                                                       
+  [memory 20000000] Stable root Memory.                                                                                                                                             
+CURRENT CONTEXT · destination                                                                                                                                                       
+READ-ONLY VERIFICATION COMPLETE                                                                                                                                                     
+                                                                                                                                                                                    

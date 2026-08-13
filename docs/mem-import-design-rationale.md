@@ -42,6 +42,55 @@ using one source-current snapshot. `--as` names a new Context and is therefore
 not passed through the existing-Context resolver. A Memory `--into` operand is
 resolved once against the active Profile's captured current Context.
 
+## Interactive setup
+
+In a terminal, flagless `mem import` composes the shared flat-choice dialog,
+Context/Memory tree picker, Context reach control, exact-name editor, and
+exact-command review surface. Fully specified commands retain their stable
+non-interactive behavior. Outside a terminal, flagless import fails with an
+instruction to pass the resource kind and operands; it never guesses from
+stdin or the active Context.
+
+The setup first chooses `PROFILE`, `CONTEXT`, or `MEMORY`, then freezes a
+name-only catalog of registered source Profiles. The active Profile is omitted
+from that catalog rather than rendered as an unavailable row, and no candidate
+store is opened merely to build the Profile list. Only after one non-active
+source identity is selected may its ordinary Context names and Memory previews
+be loaded. This keeps source discovery from mixing the active destination into
+the same visible Profile namespace. Removed Profiles are omitted as well.
+
+The TUI intentionally supports registered `--from-profile` sources only.
+External filesystem intake remains the explicit `mem import profile ... --from
+PATH` form: adding path completion or a terminal filesystem browser would be a
+separate host-disclosure and portability decision. Cross-Profile export is also
+not implied by this setup. Grants remain the live readable-access mechanism,
+and `mem share` remains the bounded sender-to-receiver transfer mechanism.
+
+Context setup reuses the source tree and the common exact-versus-descendant
+control, then composes the shared Save Location parent browser with direct
+exact-name input. Memory setup selects one directly owned Memory in the source
+tree and one existing ordinary destination Context in the active Profile. A
+Profile import edits one fresh exact Profile name. Every branch ends at an
+`ExactCommandReview`; only the dedicated `A` key approves the frozen argv.
+Enter on the review is deliberately inert so ordinary forward navigation
+cannot also authorize a write.
+
+Interactive browsing holds no store or registry lock while waiting for input.
+Immediately before review, Context and Memory setup creates a typed import plan
+containing the selected source and destination Profile UIDs, canonical Context
+names and UIDs, record digests, Memory content digest, mapped destination set,
+and displayed counts. Apply reacquires the existing registry, graph, record,
+and CAS boundaries and requires the newly prepared plan to equal the reviewed
+plan before publishing anything. A Profile import similarly revalidates the
+selected source Profile UID under the registry lock. This rejects an active
+Profile switch, source edit, target edit, rename, removal, or identity change
+that occurs while the person is reviewing the command; the TUI must be reopened
+instead of silently applying to newer state.
+
+The ordered 180×52 color PTY evidence for all three branches, cancellation,
+receipts, and read-only verification is recorded under
+[`screenshots/mem-import-tui-20260813/`](screenshots/mem-import-tui-20260813/).
+
 ## Profile import
 
 Profile import creates a fresh managed Profile around a clean content baseline.

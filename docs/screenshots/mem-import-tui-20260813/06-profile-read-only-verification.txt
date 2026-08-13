@@ -1,0 +1,52 @@
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+Imported clean baseline Profile 'source-profile-import'.                                                                                                                            
+Contexts 2 · Memories 2 · current=source/root                                                                                                                                       
+Baseline SHA-256: f216d609d99b37cc07a32fdf64fa3f11f9b9655bfd95fc5a85f6a5e9e2352147                                                                                                  
+Checkpoint history, sessions, caches, locks, and run logs were not imported.                                                                                                        
+The source and active Profile were not changed.                                                                                                                                     
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION                                                                                                                                                              
+COMMAND · mem profile list                                                                                                                                                          
+* authoring    CURRENT authoring Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=destination                                                                  
+  source-profile USE     managed   Contexts 2 owned + 0 granted · Memories 2 owned + 0 granted · current=source/root                                                                
+  source-profile-import USE     managed   Contexts 2 owned + 0 granted · Memories 2 owned + 0 granted · current=source/root                                                         
+Granted views are permission projections, not copied Profiles.                                                                                                                      
+Authority Profiles are ordinary switchable owners of source data.                                                                                                                   
+CURRENT CONTEXT · destination                                                                                                                                                       
+READ-ONLY VERIFICATION COMPLETE                                                                                                                                                     
+                                                                                                                                                                                    

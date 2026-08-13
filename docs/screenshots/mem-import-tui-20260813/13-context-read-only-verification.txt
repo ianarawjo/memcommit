@@ -1,0 +1,52 @@
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+Imported 2 Context(s) from Profile 'source-profile'.                                                                                                                                
+Contexts: source/root, source/root/child                                                                                                                                            
+Direct Memories: 2 · source and active Profile selection unchanged                                                                                                                  
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION                                                                                                                                                              
+COMMAND · mem list source/root --direct                                                                                                                                             
+Context: source/root                                                                                                                                                                
+  2 items                                                                                                                                                                           
+                                                                                                                                                                                    
+  [context 10000000] source/root/child  VIA EMBED                                                                                                                                   
+  [memory 20000000] Stable root Memory.                                                                                                                                             
+CURRENT CONTEXT · destination                                                                                                                                                       
+READ-ONLY VERIFICATION COMPLETE                                                                                                                                                     
+                                                                                                                                                                                    

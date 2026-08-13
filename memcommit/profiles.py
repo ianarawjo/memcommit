@@ -2454,8 +2454,20 @@ def import_baseline_profile(
         source_profile=source_profile,
     )
     with _registry_lock():
+        registry = load_profile_registry()
+        if source_profile is not None:
+            frozen_source = registry.by_name(source_profile.name)
+            if (
+                frozen_source is None
+                or registry.is_removed(frozen_source)
+                or frozen_source.uid != source_profile.uid
+                or profile_store_dir(frozen_source).absolute() != source_root
+            ):
+                raise ProfileError(
+                    "Source Profile identity changed while import was starting."
+                )
         return _publish_baseline_profile_locked(
-            load_profile_registry(),
+            registry,
             name=canonical,
             source_root=source_root,
             digest=digest,

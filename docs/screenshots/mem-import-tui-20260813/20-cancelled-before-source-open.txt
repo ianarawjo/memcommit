@@ -1,0 +1,52 @@
+┃  CONTEXT                                                                                                                                                                         ┃
+┃  Copy one Context or lexical subtree.                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃  MEMORY                                                                                                                                                                          ┃
+┃  Copy one directly owned Memory.                                                                                                                                                 ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ ↑/↓ move · Enter select · Esc/Q cancel · EXTERNAL PATH IMPORT REMAINS AVAILABLE WITH --from PATH                                                                                   
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+Import cancelled.                                                                                                                                                                   
+CANCEL VERIFICATION · READ-ONLY                                                                                                                                                     
+CONTEXTS · destination                                                                                                                                                              
+CURRENT CONTEXT · destination                                                                                                                                                       
+READ-ONLY VERIFICATION COMPLETE                                                                                                                                                     
+                                                                                                                                                                                    

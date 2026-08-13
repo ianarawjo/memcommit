@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 from dataclasses import dataclass
 
 from memcommit.context import (
@@ -52,6 +53,40 @@ class MemoryImportResult:
     memory: Memory
 
 
+@dataclass(frozen=True)
+class ContextImportPlan:
+    """Frozen identities and counts shown before one Context import."""
+
+    source_profile: str
+    source_profile_uid: str
+    target_profile: str
+    target_profile_uid: str
+    source_context: str
+    target_contexts: tuple[str, ...]
+    source_context_versions: tuple[tuple[str, str, str], ...]
+    context_count: int
+    memory_count: int
+    recursive: bool
+
+
+@dataclass(frozen=True)
+class MemoryImportPlan:
+    """Frozen identities shown before one direct Memory import."""
+
+    source_profile: str
+    source_profile_uid: str
+    target_profile: str
+    target_profile_uid: str
+    source_context: str
+    source_context_uid: str
+    source_context_digest: str
+    source_memory_uid: str
+    source_memory_content_sha256: str
+    target_context: str
+    target_context_uid: str
+    target_context_digest: str
+
+
 def _source_profile(
     registry: ProfileRegistry,
     name: str,
@@ -61,9 +96,7 @@ def _source_profile(
     if profile is None:
         raise ProfileError(f"Profile {canonical!r} does not exist.")
     if registry.is_removed(profile):
-        raise ProfileError(
-            f"Profile {canonical!r} was removed from direct selection."
-        )
+        raise ProfileError(f"Profile {canonical!r} was removed from direct selection.")
     inspect_store(profile_store_dir(profile))
     return profile
 
@@ -93,11 +126,18 @@ def _require_active_profile_snapshot(
 def import_profile_from_profile(
     name: str,
     source_profile_name: str,
+    *,
+    expected_source_profile_uid: str | None = None,
 ) -> tuple[ProfileEntry, StoreInspection]:
     """Create one clean Profile from another registered Profile."""
 
     registry = load_profile_registry()
     source = _source_profile(registry, source_profile_name)
+    if (
+        expected_source_profile_uid is not None
+        and source.uid != expected_source_profile_uid
+    ):
+        raise ProfileError("Source Profile identity changed after import review.")
     return import_baseline_profile(
         name,
         profile_store_dir(source),
@@ -205,12 +245,101 @@ def _reject_context_identity_collisions(
             )
 
 
+def _prepare_context_import(
+    registry: ProfileRegistry,
+    destination: MemoryStore,
+    source_profile: ProfileEntry,
+    source_name: str,
+    snapshots: tuple[Context, ...],
+    *,
+    target_root: str,
+    recursive: bool,
+) -> tuple[ContextImportPlan, tuple[Context, ...]]:
+    source_names = tuple(context.name for context in snapshots)
+    mapping = _context_name_mapping(
+        source_names,
+        source_root=source_name,
+        target_root=target_root,
+    )
+    imported = _closed_import_contexts(snapshots, mapping)
+    _reject_context_identity_collisions(destination, imported)
+    return (
+        ContextImportPlan(
+            source_profile=source_profile.name,
+            source_profile_uid=source_profile.uid,
+            target_profile=registry.active.name,
+            target_profile_uid=registry.active.uid,
+            source_context=source_name,
+            target_contexts=tuple(context.name for context in imported),
+            source_context_versions=tuple(
+                (context.name, context.uid, str(context._store_digest or ""))
+                for context in snapshots
+            ),
+            context_count=len(imported),
+            memory_count=sum(
+                1
+                for context in imported
+                for item in context.iter_items()
+                if isinstance(item, Memory)
+            ),
+            recursive=recursive,
+        ),
+        imported,
+    )
+
+
+def plan_context_import(
+    source_profile_name: str,
+    source_context_locator: str,
+    *,
+    target_name: str | None = None,
+    recursive: bool = False,
+) -> ContextImportPlan:
+    """Validate and freeze one read-only Context import preview."""
+
+    destination = MemoryStore()
+    with authority_grant_snapshot_lock() as registry:
+        _require_active_profile_snapshot(registry, destination)
+        source_profile = _source_profile(registry, source_profile_name)
+        _require_cross_profile_source(registry, source_profile)
+        source_store = MemoryStore(
+            root=profile_store_dir(source_profile),
+            create=False,
+        )
+        source_name = resolve_context_locator(
+            source_context_locator,
+            current=source_store.current_context_name(),
+        )
+        target_root = target_name or source_name
+        with source_store._context_graph_lock(exclusive=True):
+            source_names = _source_context_names(
+                source_store,
+                source_name,
+                recursive=recursive,
+            )
+            with source_store._context_write_locks(source_names):
+                snapshots = tuple(
+                    source_store.load_direct(name) for name in source_names
+                )
+                plan, _imported = _prepare_context_import(
+                    registry,
+                    destination,
+                    source_profile,
+                    source_name,
+                    snapshots,
+                    target_root=target_root,
+                    recursive=recursive,
+                )
+                return plan
+
+
 def import_context_from_profile(
     source_profile_name: str,
     source_context_locator: str,
     *,
     target_name: str | None = None,
     recursive: bool = False,
+    expected_plan: ContextImportPlan | None = None,
 ) -> ContextImportResult:
     """Import one closed Context set into the active Profile with stable UIDs."""
 
@@ -242,13 +371,19 @@ def import_context_from_profile(
                 snapshots = tuple(
                     source_store.load_direct(name) for name in source_names
                 )
-                mapping = _context_name_mapping(
-                    source_names,
-                    source_root=source_name,
+                actual_plan, imported = _prepare_context_import(
+                    registry,
+                    destination,
+                    source_profile,
+                    source_name,
+                    snapshots,
                     target_root=target_root,
+                    recursive=recursive,
                 )
-                imported = _closed_import_contexts(snapshots, mapping)
-                _reject_context_identity_collisions(destination, imported)
+                if expected_plan is not None and actual_plan != expected_plan:
+                    raise ProfileError(
+                        "Context import inputs changed after review; reopen mem import."
+                    )
                 entries = tuple(
                     (
                         context,
@@ -311,26 +446,102 @@ def _direct_memory(context: Context, selector: str) -> Memory:
     return matches[0]
 
 
+def _memory_content_digest(memory: Memory) -> str:
+    return hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
+
+
+def _memory_import_plan(
+    registry: ProfileRegistry,
+    source_profile: ProfileEntry,
+    source_context: Context,
+    source_memory: Memory,
+    target: Context,
+) -> MemoryImportPlan:
+    return MemoryImportPlan(
+        source_profile=source_profile.name,
+        source_profile_uid=source_profile.uid,
+        target_profile=registry.active.name,
+        target_profile_uid=registry.active.uid,
+        source_context=source_context.name,
+        source_context_uid=source_context.uid,
+        source_context_digest=str(source_context._store_digest or ""),
+        source_memory_uid=source_memory.uid,
+        source_memory_content_sha256=_memory_content_digest(source_memory),
+        target_context=target.name,
+        target_context_uid=target.uid,
+        target_context_digest=str(target._store_digest or ""),
+    )
+
+
+def _memory_target_name(
+    destination: MemoryStore,
+    target_context_locator: str | None,
+) -> str:
+    destination_current = destination.current_context_name()
+    if target_context_locator is None:
+        if not destination_current:
+            raise RuntimeError("No current Context; pass --into TARGET.")
+        return destination_current
+    return resolve_context_locator(
+        target_context_locator,
+        current=destination_current,
+    )
+
+
+def plan_memory_import(
+    source_profile_name: str,
+    source_context_locator: str,
+    memory_selector: str,
+    *,
+    target_context_locator: str | None = None,
+) -> MemoryImportPlan:
+    """Validate and freeze one read-only direct Memory import preview."""
+
+    destination = MemoryStore()
+    target_name = _memory_target_name(destination, target_context_locator)
+    with authority_grant_snapshot_lock() as registry:
+        _require_active_profile_snapshot(registry, destination)
+        source_profile = _source_profile(registry, source_profile_name)
+        _require_cross_profile_source(registry, source_profile)
+        source_store = MemoryStore(
+            root=profile_store_dir(source_profile),
+            create=False,
+        )
+        source_name = resolve_context_locator(
+            source_context_locator,
+            current=source_store.current_context_name(),
+        )
+        with source_store._context_graph_lock(exclusive=False):
+            with source_store._context_write_lock(source_name):
+                source_context = source_store.load_direct(source_name)
+                source_memory = _direct_memory(source_context, memory_selector)
+                target = destination.load_for_update(target_name)
+                if source_memory.uid in target.memories:
+                    raise ProfileError(
+                        f"Memory identity [{source_memory.uid[:8]}] already exists "
+                        f"in Context {target.name!r}."
+                    )
+                return _memory_import_plan(
+                    registry,
+                    source_profile,
+                    source_context,
+                    source_memory,
+                    target,
+                )
+
+
 def import_memory_from_profile(
     source_profile_name: str,
     source_context_locator: str,
     memory_selector: str,
     *,
     target_context_locator: str | None = None,
+    expected_plan: MemoryImportPlan | None = None,
 ) -> MemoryImportResult:
     """Import one directly owned Memory into an existing active Context."""
 
     destination = MemoryStore()
-    destination_current = destination.current_context_name()
-    if target_context_locator is None:
-        if not destination_current:
-            raise RuntimeError("No current Context; pass --into TARGET.")
-        target_name = destination_current
-    else:
-        target_name = resolve_context_locator(
-            target_context_locator,
-            current=destination_current,
-        )
+    target_name = _memory_target_name(destination, target_context_locator)
 
     with authority_grant_snapshot_lock() as registry:
         _require_active_profile_snapshot(registry, destination)
@@ -353,6 +564,17 @@ def import_memory_from_profile(
                     raise ProfileError(
                         f"Memory identity [{source_memory.uid[:8]}] already exists "
                         f"in Context {target.name!r}."
+                    )
+                actual_plan = _memory_import_plan(
+                    registry,
+                    source_profile,
+                    source_context,
+                    source_memory,
+                    target,
+                )
+                if expected_plan is not None and actual_plan != expected_plan:
+                    raise ProfileError(
+                        "Memory import inputs changed after review; reopen mem import."
                     )
                 imported = Memory(
                     uid=source_memory.uid,

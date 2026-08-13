@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 from typing import Annotated, Optional
 
 import typer
@@ -48,11 +49,16 @@ def _profile_import(
     *,
     source: Path | None,
     source_profile: str | None,
+    expected_source_profile_uid: str | None = None,
 ) -> None:
     if (source is None) == (source_profile is None):
         _fail("Profile import requires exactly one of --from or --from-profile.")
     if source_profile is not None:
-        profile, inspection = import_profile_from_profile(name, source_profile)
+        profile, inspection = import_profile_from_profile(
+            name,
+            source_profile,
+            expected_source_profile_uid=expected_source_profile_uid,
+        )
     else:
         assert source is not None
         profile, inspection = import_baseline_profile(name, source)
@@ -78,16 +84,89 @@ def _profile_import(
     typer.echo("The source and active Profile were not changed.")
 
 
+def _print_context_import(result) -> None:
+    typer.secho(
+        f"Imported {result.context_count} Context(s) from Profile "
+        f"'{display_escape_text(result.source_profile)}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(
+        "Contexts: "
+        + ", ".join(display_escape_text(name) for name in result.target_contexts)
+    )
+    typer.echo(
+        f"Direct Memories: {result.memory_count} · "
+        "source and active Profile selection unchanged"
+    )
+
+
+def _print_memory_import(result) -> None:
+    typer.secho(
+        f"Imported Memory [{result.memory.uid[:8]}] into Context "
+        f"'{display_escape_text(result.target_context)}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(display_escape_text(result.memory.content))
+    typer.echo("Source and active Profile selection unchanged.")
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _run_interactive_import() -> None:
+    from memcommit.commands.import_workbench import choose_import_setup
+
+    setup = choose_import_setup()
+    if setup is None:
+        typer.echo("Import cancelled.")
+        return
+    if setup.kind == "PROFILE":
+        assert setup.target_name is not None
+        _profile_import(
+            setup.target_name,
+            source=None,
+            source_profile=setup.source_profile_name,
+            expected_source_profile_uid=setup.source_profile_uid,
+        )
+        return
+    if setup.kind == "CONTEXT":
+        assert setup.source_context is not None
+        assert setup.target_name is not None
+        assert setup.context_plan is not None
+        result = import_context_from_profile(
+            setup.source_profile_name,
+            setup.source_context,
+            target_name=setup.target_name,
+            recursive=setup.recursive,
+            expected_plan=setup.context_plan,
+        )
+        _print_context_import(result)
+        return
+    assert setup.source_context is not None
+    assert setup.memory_selector is not None
+    assert setup.target_context is not None
+    assert setup.memory_plan is not None
+    result = import_memory_from_profile(
+        setup.source_profile_name,
+        setup.source_context,
+        setup.memory_selector,
+        target_context_locator=setup.target_context,
+        expected_plan=setup.memory_plan,
+    )
+    _print_memory_import(result)
+
+
 def cmd(
     kind_or_name: Annotated[
-        str,
+        Optional[str],
         typer.Argument(
             help=(
                 "Resource kind (profile/context/memory), or a Profile name "
                 "for the legacy 'mem import NAME --from PATH' form"
             )
         ),
-    ],
+    ] = None,
     resource_name: Annotated[
         Optional[str],
         typer.Argument(
@@ -120,6 +199,27 @@ def cmd(
     ] = False,
 ) -> None:
     """Import one resource by value without copying source operational history."""
+
+    if kind_or_name is None:
+        if not _interactive_terminal():
+            _fail(
+                "Interactive import setup requires a terminal; pass a resource "
+                "kind and operands explicitly."
+            )
+        try:
+            _run_interactive_import()
+        except (
+            FileNotFoundError,
+            KeyError,
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
+            _fail(str(error))
+        return
 
     options: dict[str, object] = {
         "--from": source,
@@ -165,21 +265,7 @@ def cmd(
                 target_name=target_name,
                 recursive=recursive,
             )
-            typer.secho(
-                f"Imported {result.context_count} Context(s) from Profile "
-                f"'{display_escape_text(result.source_profile)}'.",
-                fg=typer.colors.GREEN,
-            )
-            typer.echo(
-                "Contexts: "
-                + ", ".join(
-                    display_escape_text(name) for name in result.target_contexts
-                )
-            )
-            typer.echo(
-                f"Direct Memories: {result.memory_count} · "
-                "source and active Profile selection unchanged"
-            )
+            _print_context_import(result)
             return
 
         _reject_options(
@@ -194,13 +280,7 @@ def cmd(
             resource_name,
             target_context_locator=target_context,
         )
-        typer.secho(
-            f"Imported Memory [{result.memory.uid[:8]}] into Context "
-            f"'{display_escape_text(result.target_context)}'.",
-            fg=typer.colors.GREEN,
-        )
-        typer.echo(display_escape_text(result.memory.content))
-        typer.echo("Source and active Profile selection unchanged.")
+        _print_memory_import(result)
     except typer.Exit:
         raise
     except (
