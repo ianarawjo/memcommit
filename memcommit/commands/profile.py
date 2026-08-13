@@ -10,6 +10,7 @@ from typing import Annotated, Callable, Optional
 import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,
@@ -817,7 +818,12 @@ def remove_cmd(
             typer.echo("Profile removal cancelled.")
             return
     try:
-        result = remove_profile(name)
+        with CommandProgress(
+            "profile remove",
+            "deleting store and checkpoints",
+            total=1,
+        ):
+            result = remove_profile(name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     _print_profile_removal(result)
@@ -847,7 +853,12 @@ def remove_study_cmd(
             typer.echo("Study removal cancelled.")
             return
     try:
-        result = remove_study(name)
+        with CommandProgress(
+            "profile remove-study",
+            "deleting stores and checkpoints",
+            total=1,
+        ):
+            result = remove_study(name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     _print_study_removal(result)

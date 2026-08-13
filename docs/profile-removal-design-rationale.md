@@ -33,8 +33,9 @@ which it could restore the content.
   can repaint without allowing a second mutation. Escape or Ctrl-C requests a
   close only after the already approved deletion finishes.
 - Direct `mem profile remove ...` and `mem profile remove-study ...` commands
-  remain one-shot CLI operations and print their full permanent-deletion
-  receipts before exiting.
+  use the same `.`, `..`, `…` cadence on a transient TTY-only progress line,
+  then print their full permanent-deletion receipts and exit. Redirected and
+  machine-consumed output remains unchanged.
 - Enter continues to select a Profile while the selector is not in review. A
   Study header is a grouping and deletion target, never an implicit Profile
   selection.

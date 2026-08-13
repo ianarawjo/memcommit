@@ -10,6 +10,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.profile as profile_command
 from memcommit.cli import app
 from memcommit.commands.profile_picker import ProfilePickerAction
 from memcommit.context import Memory
@@ -37,6 +38,19 @@ from memcommit.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+class _RecordingProgress:
+    calls: list[tuple[str, str, int]] = []
+
+    def __init__(self, operation: str, stage: str, *, total: int) -> None:
+        self.calls.append((operation, stage, total))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback) -> None:
+        return None
 
 
 def _create_store(root: Path, context_name: str, content: str) -> None:
@@ -282,6 +296,8 @@ def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
         tmp_path,
         monkeypatch,
     )
+    _RecordingProgress.calls = []
+    monkeypatch.setattr(profile_command, "CommandProgress", _RecordingProgress)
 
     removed = runner.invoke(
         app,
@@ -302,6 +318,9 @@ def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
     assert authority.name not in listing.output
     assert "Deleted Profile tombstones hidden from this list: 1" in listing.output
     assert not profile_store_dir(authority).exists()
+    assert _RecordingProgress.calls == [
+        ("profile remove", "deleting store and checkpoints", 1)
+    ]
 
 
 def test_interactive_removal_reloads_and_stays_in_profile_selector(
@@ -391,6 +410,8 @@ def test_cli_study_remove_force_deletes_both_stores_and_prints_receipt(
         tmp_path,
         monkeypatch,
     )
+    _RecordingProgress.calls = []
+    monkeypatch.setattr(profile_command, "CommandProgress", _RecordingProgress)
 
     result = runner.invoke(
         app,
@@ -403,6 +424,9 @@ def test_cli_study_remove_force_deletes_both_stores_and_prints_receipt(
     assert "Connected Grants removed: 1" in result.output
     assert not profile_store_dir(participant).exists()
     assert not profile_store_dir(authority).exists()
+    assert _RecordingProgress.calls == [
+        ("profile remove-study", "deleting stores and checkpoints", 1)
+    ]
 
 
 def test_cli_confirmation_warns_that_profile_checkpoints_are_unrecoverable(

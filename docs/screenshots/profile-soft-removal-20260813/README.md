@@ -25,7 +25,9 @@ single-Profile path additionally verifies that the sibling UID store remains.
 Both success paths fail if deletion exits the TUI instead of reopening the
 refreshed selector. The same harness also runs the direct Profile and Study CLI
 commands with `--force` in two additional isolated homes and verifies their
-full receipts and deleted UID paths.
+full receipts and deleted UID paths. Those subprocesses redirect output, so the
+TTY-only transient cadence is intentionally absent from their stable receipt
+evidence.
 The interactive capture process delays the approved deletion by `1.4` seconds
 without changing the deletion implementation. It requires the raw PTY stream
 to show the shared `.`, `..`, `…` cadence before the refreshed selector.
