@@ -222,18 +222,18 @@ _STUDY_TASKS = (1, 2, 3)
 _STUDY_PRACTICE_ROOT = "practice"
 _STUDY_PRACTICE_DESCRIPTION = "practice/description"
 _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
-    "MemLab is a research prototype that provides command-line and terminal "
+    "memcommit is a research prototype that provides command-line and terminal "
     "user interfaces (CLI/TUI) for managing agent memory and supporting "
-    "collaboration among people and agents. Through MemLab's operations and "
+    "collaboration among people and agents. Through memcommit's operations and "
     "structural concepts—including Memories, Contexts, Profiles, Grants, and "
     "Sessions—you can manage agent memories as they are collected, organized, "
     "and propagated among people and agents. In this study, you will use "
-    "MemLab in three different situations, each involving a different context, "
+    "memcommit in three different situations, each involving a different context, "
     "goal, and kind of memory."
 )
 _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "Before beginning the three study tasks, complete a short practice "
-    "exercise to become familiar with how MemLab organizes and presents its "
+    "exercise to become familiar with how memcommit organizes and presents its "
     "commands. The informal editing request in `practice/source` combines "
     "several constraints in a single Memory. Divide it into appropriate "
     "atomic Memories without adding instructions or changing the intended "
@@ -241,6 +241,12 @@ _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "`mem help`, inspect the available operations, find the operation designed "
     "for atomization, and use it to review the proposed atomization and save "
     "the result as `practice/source-atomized`."
+)
+_LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
+    _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT.replace("memcommit", "MemLab")
+)
+_LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
+    _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT.replace("memcommit", "MemLab")
 )
 _LEGACY_STUDY_PRACTICE_PROVENANCE_UID = str(
     uuid.uuid5(
@@ -2937,23 +2943,37 @@ def _is_study_practice_name(name: str) -> bool:
     return name == _STUDY_PRACTICE_ROOT or name.startswith(_STUDY_PRACTICE_ROOT + "/")
 
 
-def _without_legacy_study_practice_provenance(
+def _canonicalize_study_practice_description(
     contexts: dict[str, Context],
 ) -> dict[str, Context]:
-    """Exclude the retired practice note without editing the source baseline."""
+    """Apply exact Practice compatibility edits without changing the baseline."""
 
     description = contexts.get(_STUDY_PRACTICE_DESCRIPTION)
-    if (
-        description is None
-        or _LEGACY_STUDY_PRACTICE_PROVENANCE_UID not in description.memories
-    ):
+    if description is None:
         return contexts
-    # Existing editable baselines can still contain the deterministic legacy
-    # Memory. Snapshot a sanitized copy so new runs omit it while the baseline
-    # remains untouched and independently recoverable.
+    replacements = {
+        _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
+            _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+        ),
+        _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
+            _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        ),
+    }
+    needs_copy = _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in description.memories or any(
+        isinstance(item, Memory) and item.content in replacements
+        for item in description.iter_items()
+    )
+    if not needs_copy:
+        return contexts
+    # Exact known legacy values are safe to migrate in the run snapshot. Any
+    # independently edited description remains untouched and recoverable.
     sanitized = dict(contexts)
     sanitized_description = copy.deepcopy(description)
-    sanitized_description.remove(_LEGACY_STUDY_PRACTICE_PROVENANCE_UID)
+    if _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in sanitized_description.memories:
+        sanitized_description.remove(_LEGACY_STUDY_PRACTICE_PROVENANCE_UID)
+    for item in sanitized_description.iter_items():
+        if isinstance(item, Memory) and item.content in replacements:
+            item.content = replacements[item.content]
     sanitized[_STUDY_PRACTICE_DESCRIPTION] = sanitized_description
     return sanitized
 
@@ -3571,7 +3591,7 @@ def _snapshot_study_baseline(
                         context.name: context for context in _study_practice_contexts()
                     }
                 )
-                practice = _without_legacy_study_practice_provenance(practice)
+                practice = _canonicalize_study_practice_description(practice)
                 selected.update(practice)
             if not selected:
                 raise ProfileError(f"Study baseline branch {branch!r} is empty.")
@@ -3742,9 +3762,10 @@ def _compose_study_run_pair(
         participant_root,
         contexts=tuple(participant_contexts),
         catalogs=tuple(participant_catalogs),
-        current_context=(
-            "task-1/" + str(packages[1].profiles[0].inspection.current_context)
-        ),
+        # Start at the Practice parent so the participant deliberately opens
+        # its description before proceeding. Task-specific Contexts stay
+        # intact for later explicit navigation.
+        current_context=_STUDY_PRACTICE_ROOT,
     )
     authority_source = next(
         source for source in packages[1].profiles if source.role == "AUTHORITY"

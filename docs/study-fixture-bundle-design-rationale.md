@@ -52,6 +52,13 @@ templates between those two Profiles, with public paths directly below
 translation views, and task current Contexts cross the snapshot boundary;
 checkpoints and other operational artifacts do not.
 
+The participant Profile opens at the `practice` parent, not at a measured Task
+Context or directly inside `practice/description`. The participant must descend
+into the description before proceeding, while every Task-specific Context and
+its fixture provenance remain intact for later explicit navigation. The
+granted-memory Profile retains its Task 1 authority orientation because it is
+not participant-facing onboarding state.
+
 Both stores and all grants publish in one registry transaction. A failure
 before that publication rolls back both stores. A participant mutation allowed
 by Task 1's `CREATE` or `UPDATE` permission therefore changes only that run's
@@ -90,7 +97,7 @@ input. Spreadsheet views are regenerated from the current parsed corpus.
 
 Every `init-study` participant Profile receives two separate local rehearsal
 Contexts. `practice/description` contains an overview Memory and a task Memory.
-The overview introduces MemLab and the
+The overview introduces memcommit and the
 three Study situations. The task directs the participant to use the grouped
 `mem help` browser to discover the atomization operation, review its proposal,
 and save the result as `practice/source-atomized`. `practice/source` contains
@@ -111,13 +118,13 @@ mutating that older baseline.
 The two description Memories are:
 
 ```text
-MemLab is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
-Through MemLab's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents.
-In this study, you will use MemLab in three different situations, each involving a different context, goal, and kind of memory.
+memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
+Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents.
+In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory.
 ```
 
 ```text
-Before beginning the three study tasks, complete a short practice exercise to become familiar with how MemLab organizes and presents its commands. The informal editing request in `practice/source` combines several constraints in a single Memory. Divide it into appropriate atomic Memories without adding instructions or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
+Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. The informal editing request in `practice/source` combines several constraints in a single Memory. Divide it into appropriate atomic Memories without adding instructions or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
 ```
 
 The source Memory is the following English editing request:
@@ -134,17 +141,21 @@ historical quotation. Atomize should preserve the informal source wording as
 evidence and separate its requirements; the rehearsal does not ask the model
 to perform the requested rewrite.
 
-The earlier fixture included a third provenance-only description Memory. It
+The earlier fixture used `MemLab` as the participant-facing product name and
+included a third provenance-only description Memory. The current fixture uses
+the repository name `memcommit`. During initialization, only the exact legacy
+brand text is rewritten in the run snapshot; independently edited baseline
+prose is preserved. The third Memory
 was retired because it added a non-actionable row to the participant's
 onboarding Context without affecting the Atomize target or task contract. New
 fixtures do not create it. When a new run is initialized from an older editable
 baseline, snapshotting removes that one deterministic legacy Memory from the
 run copy without mutating the baseline itself; other baseline edits remain
 preserved. A retained Tutorial Atomize prewarm that was prepared against the
-older description remains admissible only when temporarily reconstructing that
-exact retired Memory makes its full description digest match. The compatibility
-check never persists or renders the reconstructed Memory, and any other
-instruction difference still fails closed.
+older description remains admissible only when temporarily reconstructing the
+exact legacy brand, retired Memory, or both makes its full description digest
+match. The compatibility check never persists or renders those reconstructed
+variants, and any other instruction difference still fails closed.
 
 A cold production Atomize check used `gpt-5.6-sol` with reasoning `medium`.
 The first English draft used the phrase `preserve its meaning`; the provider
@@ -178,7 +189,8 @@ under `description`. Its English body is the previously authored Task
 description and its Korean body is a same-UID translation. Keeping the brief
 inside the Task branch makes it part of every baseline snapshot and
 `init-study` run without treating it as authority-owned evidence or a Grant.
-The operation-specific starting Context remains unchanged.
+Those operation-specific Contexts remain unchanged, but a newly initialized
+participant run does not select one until the participant leaves Practice.
 
 Each canonical locator's final segment is a Memory leaf. By default, the
 preceding segments become physical ordinary Contexts linked from their parents.

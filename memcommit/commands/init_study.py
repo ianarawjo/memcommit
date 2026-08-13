@@ -143,66 +143,18 @@ def cmd(
         "Task-owned and granted-memory data were copied into isolated run "
         "Profiles and connected with real authority grants."
     )
-    if result.declared_compare_prewarms:
-        typer.echo(
-            "Declared Compare prewarms "
-            f"{result.installed_compare_prewarms} hidden receipts installed"
-            + (
-                f" · {result.skipped_compare_prewarms} skipped for the current "
-                "provider configuration"
-                if result.skipped_compare_prewarms
-                else ""
-            )
-            + "."
+    if any(
+        (
+            result.installed_compare_prewarms,
+            result.installed_atomize_prewarms,
+            result.installed_update_prewarms,
+            result.installed_sever_prewarms,
+            result.installed_directional_meld_prewarms,
         )
-    if result.declared_atomize_prewarms:
-        typer.echo(
-            "Declared Tutorial Atomize prewarms "
-            f"{result.installed_atomize_prewarms} hidden receipts installed"
-            + (
-                f" · {result.skipped_atomize_prewarms} skipped for the current "
-                "provider configuration"
-                if result.skipped_atomize_prewarms
-                else ""
-            )
-            + "."
-        )
-    if result.declared_update_prewarms:
-        typer.echo(
-            "Declared Task 1 Update prewarms "
-            f"{result.installed_update_prewarms} hidden receipts installed"
-            + (
-                f" · {result.skipped_update_prewarms} skipped for the current "
-                "provider configuration"
-                if result.skipped_update_prewarms
-                else ""
-            )
-            + "."
-        )
-    if result.declared_sever_prewarms:
-        typer.echo(
-            "Declared Task 3 Sever prewarms "
-            f"{result.installed_sever_prewarms} hidden receipts installed"
-            + (
-                f" · {result.skipped_sever_prewarms} skipped for the current "
-                "provider configuration"
-                if result.skipped_sever_prewarms
-                else ""
-            )
-            + "."
-        )
-    if result.declared_directional_meld_prewarms:
-        typer.echo(
-            "Declared Task 1 Directional Meld prewarms "
-            f"{result.installed_directional_meld_prewarms} hidden receipts installed"
-            + (
-                f" · {result.skipped_directional_meld_prewarms} skipped for the "
-                "current provider configuration"
-                if result.skipped_directional_meld_prewarms
-                else ""
-            )
-            + "."
-        )
+    ):
+        # Setup diagnostics must not prime participants with operation names or
+        # reveal which measured task has a prepared semantic path.
+        typer.echo("Prewarms and receipts installed.")
     typer.echo(
         "Operational history starts empty; declared caches remain hidden until "
         "the first matching operation. Checkpoints, sessions, ad-hoc caches, "

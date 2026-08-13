@@ -29,6 +29,12 @@ both requirements:
 - the visible session catalog records operations the participant actually
   started.
 
+The successful `init-study` receipt is deliberately summarized as
+`Prewarms and receipts installed.` It does not enumerate operation names,
+task-to-operation mappings, artifact counts, or prepared branches. Those are
+setup diagnostics that could prime a participant toward a measured command;
+the hidden installation and first-use validation contracts remain unchanged.
+
 ## Receipt contract
 
 Every declared operation uses the same strict envelope:

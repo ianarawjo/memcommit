@@ -17,6 +17,12 @@ from memcommit.atomize import (
 from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
+from memcommit.profiles import (
+    _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+    _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+    _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+)
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.installations import (
@@ -100,17 +106,36 @@ def _description_matches_prepared_digest(
         or _LEGACY_PRACTICE_PROVENANCE_UID in description.memories
     ):
         return False
-    # Older retained artifacts bound the same instruction plus one retired
-    # provenance-only Memory. Reconstruct it only in memory for an exact digest
-    # comparison; it must never be saved back into the participant Context.
-    legacy_description = copy.deepcopy(description)
-    legacy_description.add(
-        Memory(
-            uid=_LEGACY_PRACTICE_PROVENANCE_UID,
-            content=_LEGACY_PRACTICE_PROVENANCE_CONTENT,
+    # Older retained artifacts may bind the retired brand name, one retired
+    # provenance-only Memory, or both. Reconstruct only those exact variants
+    # in memory; none may be saved into the participant Context.
+    variants = [copy.deepcopy(description)]
+    legacy_brand = copy.deepcopy(description)
+    brand_replacements = {
+        _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
+            _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+        ),
+        _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
+            _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        ),
+    }
+    for item in legacy_brand.iter_items():
+        if isinstance(item, Memory) and item.content in brand_replacements:
+            item.content = brand_replacements[item.content]
+    if context_record_digest(legacy_brand) != context_record_digest(description):
+        variants.append(legacy_brand)
+    for variant in tuple(variants):
+        with_provenance = copy.deepcopy(variant)
+        with_provenance.add(
+            Memory(
+                uid=_LEGACY_PRACTICE_PROVENANCE_UID,
+                content=_LEGACY_PRACTICE_PROVENANCE_CONTENT,
+            )
         )
+        variants.append(with_provenance)
+    return any(
+        context_record_digest(variant) == prepared_digest for variant in variants
     )
-    return context_record_digest(legacy_description) == prepared_digest
 
 
 def _key_material(

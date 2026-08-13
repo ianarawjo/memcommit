@@ -193,6 +193,17 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     )
     practice_source = first_store.load_direct("practice/source")
     practice_description = first_store.load_direct("practice/description")
+    legacy_brand = {
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
+            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+        ),
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
+            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        ),
+    }
+    for item in practice_description.iter_items():
+        if isinstance(item, Memory) and item.content in legacy_brand:
+            item.content = legacy_brand[item.content]
     legacy_provenance = Memory(
         uid=profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID,
         content=atomize_prewarm_module._LEGACY_PRACTICE_PROVENANCE_CONTENT,
@@ -200,6 +211,9 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     practice_description.add(legacy_provenance)
     baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
     baseline_description = baseline_store.load_direct("practice/description")
+    for item in baseline_description.iter_items():
+        if isinstance(item, Memory) and item.content in legacy_brand:
+            item.content = legacy_brand[item.content]
     baseline_description.add(legacy_provenance)
     baseline_store.save(baseline_description)
     atomize_analysis = create_atomize_analysis(
@@ -226,14 +240,9 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     initialized = runner.invoke(app, ["init-study", "seed-target"])
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
-    assert (
-        "Declared Compare prewarms 1 hidden receipts installed."
-        in initialized.output
-    )
-    assert (
-        "Declared Tutorial Atomize prewarms 1 hidden receipts installed."
-        in initialized.output
-    )
+    assert initialized.output.count("Prewarms and receipts installed.") == 1
+    assert "Compare prewarms" not in initialized.output
+    assert "Atomize prewarms" not in initialized.output
     second_registry = load_profile_registry()
     second = second_registry.active
     second_store = MemoryStore(root=profile_store_dir(second), create=False)
@@ -327,6 +336,13 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID
         not in copied_description.memories
     )
+    copied_memories = [
+        item for item in copied_description.iter_items() if isinstance(item, Memory)
+    ]
+    assert [item.content for item in copied_memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    ]
     atomize_workbench = second_store.load_atomize_workbench(saved_atomize)
     assert atomize_workbench is not None
     assert atomize_workbench.output_context_name == "practice/source-atomized"

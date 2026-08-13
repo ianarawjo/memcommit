@@ -378,7 +378,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
     assert "study-baseline: Contexts 141 owned + 0 granted" in result.output
-    assert "Memories 1310 owned + 0 granted" in result.output
+    assert "Memories 1309 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -430,7 +430,6 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     practice_source = store.load_direct("practice/source")
     source_memories = [
@@ -484,7 +483,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "Already using profile 'profile-view'." in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
-    assert "* task-1" in contexts.stdout
+    assert "* practice" in contexts.stdout
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
@@ -500,6 +499,12 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "FROM profile-view-granted-memory" in contexts.stdout
     assert "authoring-notes" not in contexts.stdout
 
+    task_one = _subprocess_mem(
+        tmp_path,
+        "switch",
+        "task-1/participant/construction-updates",
+    )
+    assert task_one.returncode == 0, task_one.stderr
     readable = _subprocess_mem(
         tmp_path,
         "ls",
@@ -716,7 +721,11 @@ def test_live_baseline_edits_are_copied_into_the_next_initialized_study(
     initialized = runner.invoke(app, ["init-study", "edited-baseline"])
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
     assert runner.invoke(app, ["profile", "use", "edited-baseline"]).exit_code == 0
-    listing = _subprocess_mem(tmp_path, "ls")
+    listing = _subprocess_mem(
+        tmp_path,
+        "ls",
+        "task-1/participant/construction-updates",
+    )
 
     assert listing.returncode == 0, listing.stderr
     assert "A locally revised study Memory." in listing.stdout
@@ -1149,7 +1158,10 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Baseline Profile: study-baseline" in result.output
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
-    assert "Contexts 65 · Memories 457" in result.output
+    assert (
+        "Contexts 65 · Memories 456 · current=practice"
+        in result.output
+    )
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
     assert "Active Profile: pilot-001" in result.output
     assert _tree_digest(bundle_root) == source_digest
@@ -1210,9 +1222,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     authority_store = MemoryStore(root=authority_root, create=False)
     assert len(copied_store.list_context_names()) == 65
     assert len(authority_store.list_context_names()) == 75
-    assert copied_store.current_context_name() == (
-        "task-1/participant/construction-updates"
-    )
+    assert copied_store.current_context_name() == "practice"
     assert authority_store.current_context_name() == "task-1/campus-wiki"
     assert "granted-memory/task-1/campus-wiki" in baseline_store.list_context_names()
     assert "task-1/campus-wiki" in authority_store.list_context_names()
@@ -1227,7 +1237,6 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     practice_source = copied_store.load_direct("practice/source")
     source_memories = [
@@ -1286,7 +1295,6 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     assert [item.content for item in memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT,
     ]
     source = store.load_direct("practice/source")
     source_memories = [
@@ -1297,10 +1305,81 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     ]
 
 
+def test_init_study_migrates_legacy_practice_description_without_editing_baseline(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    _prepare_authoring(isolated_store)
+    bundles = tmp_path / "bundles"
+    build_all_study_bundles(bundles)
+    _bootstrap_study_baseline(bundles)
+    baseline = load_profile_registry().by_name(STUDY_BASELINE_PROFILE_NAME)
+    assert baseline is not None
+    baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
+    description = baseline_store.load_direct("practice/description")
+    legacy_brand = {
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
+            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+        ),
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
+            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        ),
+    }
+    for item in description.iter_items():
+        if isinstance(item, Memory) and item.content in legacy_brand:
+            item.content = legacy_brand[item.content]
+    description.add(
+        Memory(
+            uid=profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID,
+            content="Retired practice provenance note.",
+        )
+    )
+    baseline_store.save(description)
+
+    result = runner.invoke(app, ["init-study", "legacy-provenance-run"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    participant = load_profile_registry().by_name("legacy-provenance-run")
+    assert participant is not None
+    participant_store = MemoryStore(
+        root=profile_store_dir(participant),
+        create=False,
+    )
+    copied_description = participant_store.load_direct("practice/description")
+    assert (
+        profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID
+        not in copied_description.memories
+    )
+    copied_memories = [
+        item for item in copied_description.iter_items() if isinstance(item, Memory)
+    ]
+    assert [item.content for item in copied_memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    ]
+    unchanged_baseline = baseline_store.load_direct("practice/description")
+    assert (
+        profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID
+        in unchanged_baseline.memories
+    )
+    unchanged_memories = [
+        item
+        for item in unchanged_baseline.iter_items()
+        if isinstance(item, Memory)
+        and item.uid != profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID
+    ]
+    assert [item.content for item in unchanged_memories] == [
+        profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    ]
+
+
 def test_study_practice_source_matches_instruction_refinement_topic():
+    overview = profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
     source = profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
     task = profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
-    provenance = profiles_module._STUDY_PRACTICE_DESCRIPTION_PROVENANCE_CONTENT
 
     assert source == (
         "Please avoid using the expression “rather than” in the text. Do not "
@@ -1311,12 +1390,11 @@ def test_study_practice_source_matches_instruction_refinement_topic():
         "casual style. Keep the writing concise while giving it a minimally "
         "formal tone."
     )
+    assert overview.startswith("memcommit is a research prototype")
+    assert "MemLab" not in overview
+    assert "MemLab" not in task
     assert "informal editing request" in task
     assert "without adding instructions or changing the intended meaning" in task
-    assert provenance == (
-        "The practice source is a synthetic editing request supplied for this "
-        "study. It has no external bibliographic source."
-    )
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -1415,7 +1493,7 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
         if "Participant" in line and "profile=pilot-002 " in line
     )
     assert "Contexts 65 owned + 43 granted" in profile_line
-    assert "Memories 457 owned + 625 granted" in profile_line
+    assert "Memories 456 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()
