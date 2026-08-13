@@ -1,0 +1,2 @@
+ONE-SHOT VERIFICATION · CALLS 1 · ALL 7 ALIASES EXPOSED True · gpt-5.6-sol / none                                                                                                   
+QUERY CLOSED · READ ONLY · NO SESSION SAVE · NO SOURCE MUTATION

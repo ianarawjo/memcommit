@@ -11,15 +11,16 @@ from memcommit.context_targeting.search import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
-from memcommit.find_answer_dialogue import synthesize_find_answer
-from memcommit.find_answer_references import (
-    FindAnswerReferenceDocument,
-    build_find_answer_reference_document,
-)
+from memcommit.find_answer_references import FindAnswerReferenceDocument
 from memcommit.find_scope_evidence import (
     compact_artifact_references,
     compact_reference_content,
     visible_result_evidence,
+)
+from memcommit.ordinary_query_answer import (
+    build_ordinary_query_reference_document,
+    complete_ordinary_query_answer,
+    prepare_ordinary_query_answer,
 )
 from memcommit.profile_config import (
     AuthorityGrant,
@@ -41,7 +42,6 @@ from memcommit.query_sessions import (
     render_session_question,
     validate_query_session_name,
 )
-from memcommit.search import rank_candidates
 from memcommit.store import MemoryStore
 
 
@@ -58,7 +58,6 @@ class OrdinaryQueryRequest:
     target_names: tuple[str, ...]
     include_descendants: bool = False
     follow_embeds: bool = True
-    limit: int = 8
 
     def __post_init__(self) -> None:
         if not isinstance(self.question, str) or not self.question.strip():
@@ -73,8 +72,6 @@ class OrdinaryQueryRequest:
             self.follow_embeds, bool
         ):
             raise ValueError("Query scope choices must be explicit booleans.")
-        if isinstance(self.limit, bool) or not 1 <= self.limit <= 20:
-            raise ValueError("Query evidence limit must be between 1 and 20.")
 
 
 @dataclass(frozen=True)
@@ -242,48 +239,41 @@ def run_ordinary_query_request(
         follow_embeds=request.follow_embeds,
         artifact_roots=local_roots,
     )
-    if on_stage is not None:
-        on_stage("connecting provider", 1)
-    provider = connect_provider()
-    if on_stage is not None:
-        on_stage("selecting grounded evidence", 2)
-    matches = rank_candidates(
-        request.question,
-        list(candidates),
-        provider,
-        limit=request.limit,
+    label = (
+        request.target_names[0]
+        if len(request.target_names) == 1
+        else f"{len(request.target_names)} selected Contexts"
     )
-    primary = tuple(
-        match.candidate for match in matches if match.relevance == "primary"
-    )
-    if not primary:
-        label = (
-            request.target_names[0]
-            if len(request.target_names) == 1
-            else f"{len(request.target_names)} selected Contexts"
-        )
+    if not candidates:
         return OrdinaryQueryResponse(
             request,
             f"{label}\n  (no grounded answer found)",
             False,
         )
-    visible = visible_result_evidence(primary)
+
+    # Ordinary Query deliberately does not reuse Find's TOP_K_RERANK stage.
+    # The provider sees every frozen candidate once and returns prose plus the
+    # temporary aliases used by that prose in the same structured completion.
+    evidence = visible_result_evidence(candidates)
+    plan = prepare_ordinary_query_answer(request.question, evidence)
     if on_stage is not None:
-        on_stage("drafting grounded answer", 3)
-    answer = synthesize_find_answer(
-        request.question,
-        visible,
-        (),
-        (),
-        "NOT_REQUESTED",
-        provider,
-        interpreted_request=request.question,
-    )
-    reference_document = build_find_answer_reference_document(
+        on_stage("connecting provider", 1)
+    provider = connect_provider()
+    if on_stage is not None:
+        on_stage("answering from complete frozen corpus", 2)
+    answer = complete_ordinary_query_answer(plan, provider)
+    if not answer.grounded:
+        return OrdinaryQueryResponse(
+            request,
+            f"{label}\n  {answer.no_answer}",
+            False,
+        )
+
+    reference_document = build_ordinary_query_reference_document(
         compact_reference_content(
-            compact_artifact_references(visible, candidates)
+            compact_artifact_references(evidence, candidates)
         ),
-        answer.sentences,
+        answer,
     )
     return OrdinaryQueryResponse(
         request,

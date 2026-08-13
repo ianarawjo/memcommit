@@ -10,7 +10,8 @@ That contract preserved explicit scripts but prevented Query from offering the
 same query-first terminal entry point as Find.
 
 Query also has two materially different Source boundaries. Ordinary Query reads
-visible Contexts and synthesizes a grounded answer from ranked evidence.
+visible Contexts and synthesizes a grounded answer from the complete frozen
+candidate corpus in one provider turn.
 Query-only View execution receives only public grant routing metadata until the
 query provider is authenticated; it then opens concealed authority material,
 revalidates the grant and source after the provider call, and may save only the
@@ -69,7 +70,7 @@ remain compatible.
 used by both CLI and TTY:
 
 - `OrdinaryQueryRequest` freezes question, exact public Context names,
-  descendant policy, embed policy, and evidence limit.
+  descendant policy, and embed policy. It has no top-k evidence limit.
 - `FindAnswerReferenceDocument` retains the rendered answer body and numbered
   used References while its `text` property preserves the established CLI
   output byte-for-byte.

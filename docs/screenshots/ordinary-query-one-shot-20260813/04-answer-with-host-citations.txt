@@ -1,0 +1,52 @@
+ MEM QUERY · INTERACTIVE · VISIBLE                                                                                                                                                  
+ CONTEXTS 4 · INCLUDE DESCENDANTS · FOLLOW EMBEDS                                                                                                                                   
+┌───────────────────────────────────────────────────────────────────────────| QUESTION · ENTER TO ASK |────────────────────────────────────────────────────────────────────────────┐
+│› What representative things differ? Give examples from both sides and check conflicts.                                                                                           │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────| SOURCES · PROFILE/CONTEXT · ENTER/SPACE TO SELECT |───────────────────────────────────────────────────────────────┐
+│  ·   PROFILE  ALL READABLE CONTEXTS                                                                                                                                             ^│
+│› ✓ * ▸ task-1                                                                                                                                                                    │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| SCOPE |─────────────────────────────────────────────────────────────────────────────────────┐
+│  SOURCE TYPE · [ VISIBLE CONTEXTS ] · ←/→ SELECT                                                                                                                                 │
+│  TARGET SELECTION · [ SINGLE TARGET ]  [ MULTIPLE TARGETS ] · ←/→ SELECT                                                                                                         │
+│  CONTEXT RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     │
+│  EMBEDDED CONTEXTS · [ EXCLUDE ]  [ FOLLOW ] · ←/→ SELECT                                                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────| SAVED TRANSCRIPTS · ENTER TO VIEW |───────────────────────────────────────────────────────────────────────┐
+│  No saved query transcripts.                                                                                                                                                    ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ANSWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃Access changes from 10 p.m. to 5 p.m. during construction. [1] [2]                                                                                                               ^┃
+┃                                                                                                                                                                                  ┃
+┃Parking moves to Lot C, while hall viewing and reservations stop. [3] [4] [5] [6]                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃The reviewed comparison reports no unresolved issue; this is bounded to that corpus. [7]                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃References                                                                                                                                                                        ┃
+┃[1] m1 · memory · 11111111 · Context: task-1/campus-wiki/building-access                                                                                                          ┃
+┃  The main entrance normally closes at 10 p.m.                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃[2] m2 · memory · 22222222 · Context: task-1/participant/construction-updates/building-access                                                                                     ┃
+┃  During construction, general access ends at 5 p.m.                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃[3] m3 · memory · 33333333 · Context: task-1/campus-wiki/temporary-parking                                                                                                        ┃
+┃  The underground garage normally accepts general vehicles.                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[4] m4 · memory · 44444444 · Context: task-1/participant/construction-updates/temporary-parking                                                                                   ┃
+┃  During construction, use Outdoor Parking Lot C instead.                                                                                                                         ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ QUERY COMPLETE · SOURCE AND SCOPE FROZEN · ↑/↓ answer/References · y copy focused · Y copy complete answer · Tab switch · Esc question

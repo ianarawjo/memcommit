@@ -27,32 +27,22 @@ runner = CliRunner(mix_stderr=False)
 
 class _QueryAnswerProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        if operation == "find":
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
-            selected = next(
-                candidate["candidate_id"]
-                for candidate in payload["candidates"]
-                if "advisor1" in candidate.get("content", "")
-            )
-            return json.dumps(
-                {
-                    "matches": [{"candidate_id": selected}],
-                    "related_query": "",
-                    "related_matches": [],
-                }
-            )
-        assert operation == "find answer"
-        visible_alias = output_schema["properties"]["visible_sources"]["items"][
-            "enum"
-        ][0]
+        assert operation == "ordinary query"
+        payload = json.loads(prompt.split("ORDINARY QUERY PAYLOAD:\n", 1)[1])
+        artifact_alias = next(
+            item["alias"]
+            for item in payload["complete_frozen_corpus"]
+            if item["type"] == "artifact" and "advisor1" in item["content"]
+        )
         return json.dumps(
             {
-                "visible_text": "Advisor 1 and Advisor 2 were merged into this Context.",
-                "visible_sources": [visible_alias],
-                "context_text": "No additional same-Context evidence was needed.",
-                "context_sources": [],
-                "outside_text": "Other Contexts were not checked.",
-                "outside_sources": [],
+                "answer_blocks": [
+                    {
+                        "text": "Advisor 1 and Advisor 2 were merged into this Context.",
+                        "source_aliases": [artifact_alias],
+                    }
+                ],
+                "no_answer": "",
             }
         )
 

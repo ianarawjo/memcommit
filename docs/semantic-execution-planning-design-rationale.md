@@ -113,6 +113,16 @@ provider returns a coupled subject/anchor/relation plan rather than ordinary
 ranked candidates; independently planned timeline shards cannot yet be merged
 without a temporal-plan agreement contract.
 
+### Ordinary Query
+
+Ordinary Query declares `WHOLE_FRAME_ONLY`. Unlike Find, it does not produce a
+top-k result list: one Sol/none completion reviews the complete frozen candidate
+corpus and returns answer blocks plus the temporary evidence aliases supporting
+each block. The host validates those aliases and assigns display citation
+numbers without another provider turn. A corpus beyond the shared input bound
+fails before provider connection; Query does not inherit Find's staged ranker,
+silently shortlist the frame, or reconcile separately drafted partial answers.
+
 ### Translate
 
 Translate uses `COVERAGE_MAP`. Small selections retain one provider call. A

@@ -21,6 +21,10 @@ from memcommit.commands.query_execution import (
     run_granted_query_request,
     run_ordinary_query_request,
 )
+from memcommit.commands.ordinary_query_provider_policy import (
+    connect_ordinary_query_provider as connect_codex_chatgpt_provider,
+    connect_query_route_provider as connect_query_provider,
+)
 from memcommit.commands.query_workbench import (
     SavedQueryTranscript,
     run_query_workbench,
@@ -37,13 +41,10 @@ from memcommit.context import QueryContextRef
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
+from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-    connect_query_provider,
-)
+from memcommit.query_provider import QueryProviderError
 from memcommit.query_sessions import (
     AuthorityQueryCatalogEntry,
     QuerySessionError,
@@ -81,7 +82,7 @@ def _query_ordinary_context(
     with CommandProgress(
         "QUERY",
         "connecting provider",
-        total=3,
+        total=2,
     ) as progress:
         response = run_ordinary_query_request(
             store,
@@ -352,6 +353,7 @@ def cmd(
         except (
             FileNotFoundError,
             FindAnswerCorpusTooLarge,
+            OrdinaryQueryCorpusTooLarge,
             FindError,
             OSError,
             ProfileConfigError,
@@ -532,6 +534,7 @@ def cmd(
             except (
                 FileNotFoundError,
                 FindAnswerCorpusTooLarge,
+                OrdinaryQueryCorpusTooLarge,
                 FindError,
                 OSError,
                 ProfileConfigError,
