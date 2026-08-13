@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/11",
+      "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+      "digest": "5b50bb41b9eea40ee692e1f1da824e598de61e442a4640a45c8a87fe43cf7af7",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "681cdbd5-595d-5211-914d-edfd9a6b130d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "56078821-34d0-540f-ae66-03bdd7bd1df3"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/11",
+          "context_uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+          "memory_uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+        }
+      ]
+    },
+    "key": "6c151dd5f03018e29daf08979caa890499244ed0fb9ccf617ad0138001429b14",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.4022574169976,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+        "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+        "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+        "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+        "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+        "681cdbd5-595d-5211-914d-edfd9a6b130d",
+        "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+        "56078821-34d0-540f-ae66-03bdd7bd1df3",
+        "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+        "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+      ],
+      "text": "The user planned a family dinner for late November. Crowded restaurants and loud music hindered conversation and caused a headache, while a yard barbecue eased listening and the father’s home supported conversation after dinner. Arrival times affect preparation and departures, so confirm attendees’ timing and location before scheduling; year-end restaurant slots may disappear quickly."
+    },
+    "understanding_digest": "841b5bb9fddf8fe49331dabfc8c57c29145590fd5cfe5eabbc91bb89c980d0c3"
+  },
+  "context_name": "task-3/local/personal-memory/2025/11",
+  "created_at": "2026-08-13T19:17:23.816323Z",
+  "follow_embeds": false,
+  "frame_digest": "5b50bb41b9eea40ee692e1f1da824e598de61e442a4640a45c8a87fe43cf7af7",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.4022574169976,
+  "row_key": "6c151dd5f03018e29daf08979caa890499244ed0fb9ccf617ad0138001429b14",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

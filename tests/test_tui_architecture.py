@@ -52,7 +52,7 @@ def test_migrated_tui_modules_have_no_legacy_import_path() -> None:
     )
 
 
-def test_summarize_operation_tui_only_composes_shared_viewer() -> None:
+def test_summarize_operation_tui_only_composes_shared_workbench() -> None:
     operation_dir = PACKAGE / "interfaces" / "tui" / "operations" / "summarize"
     forbidden = {
         "prompt_toolkit.application",
@@ -68,6 +68,11 @@ def test_summarize_operation_tui_only_composes_shared_viewer() -> None:
     ]
 
     assert offenders == []
+    assert any(
+        module == "memcommit.interfaces.tui.workbenches.context_summary"
+        for path in operation_dir.rglob("*.py")
+        for module in _imports(path)
+    )
 
 
 def test_moved_component_symbols_no_longer_live_in_tui_primitives() -> None:

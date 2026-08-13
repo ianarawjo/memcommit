@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/03",
+      "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+      "digest": "85d7db8e602f55424e32471fad548c6d990adbc3f1df27686df5c0e024ef884f",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "5d989bab-c471-5de9-bb73-29cabc4753dd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "904ff225-26df-5424-8a82-23d733649106"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "67a003c7-648a-59dc-8e82-03f9e452ffce"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "64bf4401-e972-5d15-a526-21ca901a6a9f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "1f94b78b-1635-551c-b90c-bea2a67ca595"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/03",
+          "context_uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+          "memory_uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+        }
+      ]
+    },
+    "key": "e86a83dfcc7b4df2acfba1d18fedb1bc6ee773c41bcebd1bc2d526a1aa05ca8c",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.802315916000225,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "5d989bab-c471-5de9-bb73-29cabc4753dd",
+        "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+        "904ff225-26df-5424-8a82-23d733649106",
+        "67a003c7-648a-59dc-8e82-03f9e452ffce",
+        "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+        "64bf4401-e972-5d15-a526-21ca901a6a9f",
+        "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+        "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+        "1f94b78b-1635-551c-b90c-bea2a67ca595",
+        "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+      ],
+      "text": "The user stores prepared meals on the freezer’s second shelf, though condition varies with packaging and storage time. Refrigerator photos prevent duplicate shopping. Halving chili powder made spicy stew finishable. With their younger brother, dividing preparation, heat control, cooking, and dishwashing roles in advance avoids duplication and saves time. The local agent can compare several meals but cannot infer ingredient dislike from one unfinished item."
+    },
+    "understanding_digest": "7eca70490dbfeba74be56f8bead21c46fff705f66cc04947c2f4d0f7aedcc9a6"
+  },
+  "context_name": "task-3/local/personal-memory/2025/03",
+  "created_at": "2026-08-13T19:17:11.379214Z",
+  "follow_embeds": false,
+  "frame_digest": "85d7db8e602f55424e32471fad548c6d990adbc3f1df27686df5c0e024ef884f",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.802315916000225,
+  "row_key": "e86a83dfcc7b4df2acfba1d18fedb1bc6ee773c41bcebd1bc2d526a1aa05ca8c",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

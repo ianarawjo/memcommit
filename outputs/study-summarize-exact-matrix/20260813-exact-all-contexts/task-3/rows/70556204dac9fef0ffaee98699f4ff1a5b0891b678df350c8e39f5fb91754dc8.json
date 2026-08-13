@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/channel-and-format",
+      "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+      "digest": "558749b90cc26f96a57c8c03fb70ca205fae44f72c4289202bd4311dc080c7b9",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "d75604e1-1e25-5c2b-8316-3db4224965bf"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "69e95464-217e-5620-8ffc-c5d0f20afc46"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6"
+        }
+      ]
+    },
+    "key": "70556204dac9fef0ffaee98699f4ff1a5b0891b678df350c8e39f5fb91754dc8",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.59505608299878,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+        "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+        "d75604e1-1e25-5c2b-8316-3db4224965bf",
+        "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+        "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+        "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+        "69e95464-217e-5620-8ffc-c5d0f20afc46",
+        "f9492eaf-c1e8-5adc-9987-e58fcf527ed6"
+      ],
+      "text": "Use only the user-approved delivery channel, verify its supported format, remove unnecessary identifying metadata, and protect sensitive items appropriately. Do not switch channels automatically after failure; restrictions differ by channel. The local agent can record selections but cannot inspect external retention, and unclear markers may obscure instructions, body text, or quotations."
+    },
+    "understanding_digest": "f0f2eb5471f61b27545dba877bafecaf85fca389c0c9b505bf6877cf330a9f60"
+  },
+  "context_name": "task-3/local/guardrails/channel-and-format",
+  "created_at": "2026-08-13T19:16:21.034525Z",
+  "follow_embeds": false,
+  "frame_digest": "558749b90cc26f96a57c8c03fb70ca205fae44f72c4289202bd4311dc080c7b9",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.59505608299878,
+  "row_key": "70556204dac9fef0ffaee98699f4ff1a5b0891b678df350c8e39f5fb91754dc8",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

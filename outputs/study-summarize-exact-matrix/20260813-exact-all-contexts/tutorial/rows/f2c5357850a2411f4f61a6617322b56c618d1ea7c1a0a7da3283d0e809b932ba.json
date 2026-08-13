@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "practice/output",
+      "context_uid": "e367e8da-a2fd-461e-b6b6-0756cc5f07b8",
+      "digest": "c4a979740787aba0c0b1a3c72fdc98f04586cf186427b3f8b0fcc9870ed0d42e",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "practice/output",
+          "context_uid": "e367e8da-a2fd-461e-b6b6-0756cc5f07b8",
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa"
+        }
+      ]
+    },
+    "key": "f2c5357850a2411f4f61a6617322b56c618d1ea7c1a0a7da3283d0e809b932ba",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 16.00923295800021,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "tutorial",
+    "understanding": {
+      "source_uids": [
+        "ac614cce-7803-539d-b05f-44a802da25fa"
+      ],
+      "text": "Text refinements should remain close to the original, preserve its meaning, and focus mainly on necessary grammatical corrections. The writing should be concise and minimally formal, not overly casual, while avoiding “rather than,” forced concluding phrases such as “taken together,” em dashes, and colons."
+    },
+    "understanding_digest": "8d05983b6e4464e7a9857ab1201c74aba44b66757db13733a2e8bbe5131c8467"
+  },
+  "context_name": "practice/output",
+  "created_at": "2026-08-13T19:14:46.489748Z",
+  "follow_embeds": true,
+  "frame_digest": "c4a979740787aba0c0b1a3c72fdc98f04586cf186427b3f8b0fcc9870ed0d42e",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 16.00923295800021,
+  "row_key": "f2c5357850a2411f4f61a6617322b56c618d1ea7c1a0a7da3283d0e809b932ba",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

@@ -1,0 +1,2196 @@
+{
+  "baseline_profile_uid": "e2cdbdc7-3db4-4d23-b59e-2a2783545005",
+  "created_at": "2026-08-13T19:27:08.621057Z",
+  "deterministic_empty_count": 20,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX",
+  "model": "gpt-5.6-sol",
+  "profile_name": "study-20260813T135528Z-d61e7a16",
+  "profile_uid": "2ab5a8d6-647a-481d-aba2-651f8dd8c3f3",
+  "provider": "codex_chatgpt",
+  "provider_row_count": 198,
+  "reasoning": "medium",
+  "row_count": 218,
+  "rows": [
+    {
+      "context_name": "practice",
+      "follow_embeds": false,
+      "frame_digest": "dba3934ea3246cb99f1d2e8adf40aa5f96b6cd198010780d1d2ed5eb30768cea",
+      "include_descendants": false,
+      "row_key": "5524bac5164c530914210c860acfcf38f1dca4f448512490533a179bc2a316d6",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice",
+      "follow_embeds": true,
+      "frame_digest": "b456a2f25f8d56c0d481fc1d054de5db851ac72bb42e964d25708649f7085d4a",
+      "include_descendants": true,
+      "row_key": "f6250f9f38917d3cd3073c946b596d28b03b8b96ea378f3177c3779659223ed2",
+      "source_count": 4,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/description",
+      "follow_embeds": false,
+      "frame_digest": "054a8c2f650c2d6c8588723d72444c71fa3dcc9d6945ed7a21ca8f587e1cb1f8",
+      "include_descendants": false,
+      "row_key": "2f96c9b4f74f5413efafbf1e38968d8cdc88e9336633b0b79238e5c0e066b785",
+      "source_count": 2,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/description",
+      "follow_embeds": true,
+      "frame_digest": "b7d48754a2364669f0ce644d901472779dc6b1747153910f4092073ff918cce3",
+      "include_descendants": true,
+      "row_key": "0717ffa711808b1ac4dfe231af5ea34c7e4fc7ccc69b066f158996ec60d7cbcb",
+      "source_count": 2,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/output",
+      "follow_embeds": false,
+      "frame_digest": "71339c35cf7fd1e860ec10e61fc4e4695e3d4dc881cbda04a27f3d7b9d62b694",
+      "include_descendants": false,
+      "row_key": "399756af93ff15599d94a118d85ea536d51cef9d0815039657c40fb18300df1c",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/output",
+      "follow_embeds": true,
+      "frame_digest": "c4a979740787aba0c0b1a3c72fdc98f04586cf186427b3f8b0fcc9870ed0d42e",
+      "include_descendants": true,
+      "row_key": "f2c5357850a2411f4f61a6617322b56c618d1ea7c1a0a7da3283d0e809b932ba",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/source",
+      "follow_embeds": false,
+      "frame_digest": "600db837c565fa050776c4eb2dd21494152cce57390ca89c5d2b338b139b64c4",
+      "include_descendants": false,
+      "row_key": "e3ccae082c67acc7f4ca0011f78e92f4e50639ac0e293909b8225493800280ca",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "practice/source",
+      "follow_embeds": true,
+      "frame_digest": "8791150f1d7900cc7999318cf55df22aee7ebfec928db8886d5cb7e7d990dfa2",
+      "include_descendants": true,
+      "row_key": "864ce29e720bd9a5c2c53ea0f8826a0954db6e6322b156c94e8c37295140d856",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "tutorial"
+    },
+    {
+      "context_name": "task-1",
+      "follow_embeds": false,
+      "frame_digest": "6c5b34a00741a9ba7f269684c654e3edd7f2410dbe344842c065c9114a3881ac",
+      "include_descendants": false,
+      "row_key": "3fdc9a3847e291b9fceebc3a62c766a17af06eed6f1f91720b43fdf33f2ffe46",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1",
+      "follow_embeds": true,
+      "frame_digest": "77d8b8a92adbc1b2c01e4cf42855c7fd87065eddf7827abe9f6ac5caf2b47042",
+      "include_descendants": true,
+      "row_key": "773cb749e94e194d6043069b8e4e6877ed902a655b257d36a892eed11ae275f6",
+      "source_count": 376,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki",
+      "follow_embeds": false,
+      "frame_digest": "59f82a599658f2699989d18b639f7c286b28ae3b7c8fe9ba7cbafaa99a99e97b",
+      "include_descendants": false,
+      "row_key": "ceb6433b98fe5f48782a78d1f0e59bf334b0628735a090aa8fe3806935d22b2b",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki",
+      "follow_embeds": true,
+      "frame_digest": "aee353c60ee766532da361921b645506a33e066fc731dfbbe8f92cc49899b5d9",
+      "include_descendants": true,
+      "row_key": "a320288b80a83b0b16369e0534160d105961eb1e873baf8dfd65b1f5008acaa6",
+      "source_count": 300,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/building-access",
+      "follow_embeds": false,
+      "frame_digest": "f8dda3b97745acb1c6d2a24a072ab5e57173bfbd4f9a87fd363d410a3b8a9598",
+      "include_descendants": false,
+      "row_key": "7ab3886a6bce2f0536dce20bb8c4a720e683ae0acfa91788d47b222aeae55854",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/building-access",
+      "follow_embeds": true,
+      "frame_digest": "7b2333d4c0f12ff17e168341e140ebc1d3cfbd162fb1959db419114da9fa7f5e",
+      "include_descendants": true,
+      "row_key": "5ff25ade207ca493ccb5a27b04c7c7bb41ff419425f357c1f2cb7c81be6c2a3d",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/event-relocations",
+      "follow_embeds": false,
+      "frame_digest": "fc6bf70b3fc7338eea8451cd6a64c37654017a40997b84cd77f680e2951b1709",
+      "include_descendants": false,
+      "row_key": "1fc4ccb112bb0714ef5c967459817e8f021aa3b1737ef179716600994791797d",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/event-relocations",
+      "follow_embeds": true,
+      "frame_digest": "7230dff31a075fc3d0c9711eb7bfa0bbbb0644431f3bbda420748ff3eac2b52f",
+      "include_descendants": true,
+      "row_key": "8e8d9f50739cdbe52e54a1310864f5037164685336fcc8e1b0949addad1f4aeb",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/facility-updates",
+      "follow_embeds": false,
+      "frame_digest": "4a7a37fab1c2c7bc8e6031bd7ea4805175aa03784488e1ba279456d7755de6cf",
+      "include_descendants": false,
+      "row_key": "aa9a9b6885ae62bd8e340283ca5fa81847a9910b4fb2224a5e9bf163c9c1175b",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/facility-updates",
+      "follow_embeds": true,
+      "frame_digest": "dcb23fd22b5b22fe328d19f5140c3abcb86c72d7a4210005982e8e8550fd8dbf",
+      "include_descendants": true,
+      "row_key": "45063d95b60b3f183d832d0bb1df3baccf4ae999859f6d1ddc086cba8a77b435",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/route-changes",
+      "follow_embeds": false,
+      "frame_digest": "deedd13db6d63f51345e689d70e3f187af659cb0160f238b5af51f89b988b014",
+      "include_descendants": false,
+      "row_key": "ea315fd216ae3739038bcaa3c743b4f652da068915c1fbe193e9ace3fd717ccc",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/route-changes",
+      "follow_embeds": true,
+      "frame_digest": "7d105df6000b42a734b806364755e01a8dba2802120888c2dd6cad23026bcb96",
+      "include_descendants": true,
+      "row_key": "579953a63e039e01c34f9f1301692ffbf0541e15a20ae2f7a3dfc0d80f0129fa",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/shop-updates",
+      "follow_embeds": false,
+      "frame_digest": "1a31369436fec5fa8b2c6f5306c0070aa3533d35f4a9089fa7621101c46d622b",
+      "include_descendants": false,
+      "row_key": "cd08c38ab0422598adbeb4991f159a90b1c624ee5cecac558b16c41e3cbaede1",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/shop-updates",
+      "follow_embeds": true,
+      "frame_digest": "e485b60abc45ddd17b12a35fb2b5ddd5fb9be532324c1dfcfda94225d0ee6636",
+      "include_descendants": true,
+      "row_key": "d6bdee67bb7e798826a0faa13080715660f4156fe8b85812b01aee14dd867bd0",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/temporary-parking",
+      "follow_embeds": false,
+      "frame_digest": "9ee8d0c41b91b8d63c3d7dbb796b9d85bb9540e3b7691c50cd6e0bc3e7ef7179",
+      "include_descendants": false,
+      "row_key": "a23c1b22d7473a5354d01d3e9df066653129156db713fa57265c48be8f05f310",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/campus-wiki/temporary-parking",
+      "follow_embeds": true,
+      "frame_digest": "3f2baee94402e838f7a32810c1180f468632c5d24df9a05bb58b9e8efd8e9a14",
+      "include_descendants": true,
+      "row_key": "81cf9ef8cb27b6cab63258fa9686e5b76e734499316f2c53eb4b39998d4ab6ff",
+      "source_count": 50,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/description",
+      "follow_embeds": false,
+      "frame_digest": "5b615dd9faa7125be8a5759360f1e476455a3720e214c9320ef83ac6338b360b",
+      "include_descendants": false,
+      "row_key": "4de75dd94c604cc9755704d05d51d4ebe3585ad2b56faaa2ddf4b394f7a1c0ff",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/description",
+      "follow_embeds": true,
+      "frame_digest": "b6f35288d4095d84699b1484fedc05d8d600d20b38f161b5a88201ee66640c73",
+      "include_descendants": true,
+      "row_key": "26156d1d28ac9483ab76eb273a164c845e3fa52e3cfd76fa458f0e63a00be370",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant",
+      "follow_embeds": false,
+      "frame_digest": "42ce3cf9f6b84725b071ba414d12da7998719938f1d9702b4665a1bb6f139bb0",
+      "include_descendants": false,
+      "row_key": "aebeadb66cdba24c6e652163298f1e59f811868429ef61a4bb31d6bddc32c1dc",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant",
+      "follow_embeds": true,
+      "frame_digest": "2fd338d2d3efc82e11a8483ece4ab09e5462cd8de3de8ef9a64d7af231105d89",
+      "include_descendants": true,
+      "row_key": "a7905e1d4c451e262be1df5fed9e65d6823a7de3d53f280e4a4c7060f3ab0ddc",
+      "source_count": 75,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates",
+      "follow_embeds": false,
+      "frame_digest": "6e7491bd9e7cfcf7fe06fc29d2b34fc8f5691a97641cac32280ad8623d5c0b99",
+      "include_descendants": false,
+      "row_key": "f3105e9a34ae0ef607f75da28dd3edff3b0c8c0c1ef2c2ccc0c57caa7a267cf8",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates",
+      "follow_embeds": true,
+      "frame_digest": "470bc1344de9d92999fd8a7804f774dd0b71b4d7ed3ca1c4a4172f2701898fe0",
+      "include_descendants": true,
+      "row_key": "bb47eb3261d19b61e8c2eccf9dd6a70ed8321ff853e001f39bb7758320515f31",
+      "source_count": 75,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/building-access",
+      "follow_embeds": false,
+      "frame_digest": "32643b6ef492da3103215eb70be70305ae94b740a9b0e351cc818069ed0a68bb",
+      "include_descendants": false,
+      "row_key": "4db9b8888cdf21e39d1aea9c9b62e7af8a5ebc8471483c3112f9229b6f42704c",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/building-access",
+      "follow_embeds": true,
+      "frame_digest": "8a595acf08bd1918a2950cc2fae0ec96484c2a54392480c89350a2f27d5e0666",
+      "include_descendants": true,
+      "row_key": "5c8107c2db346600095863f76b567dbd25ad9729284384e821a2a7567e054194",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/event-relocations",
+      "follow_embeds": false,
+      "frame_digest": "1bbadda8f2dd163ecbddf776f1720b7b39b708c764d97d196e3bb027549ded2b",
+      "include_descendants": false,
+      "row_key": "91caff908ad4c9cfd371842460d8a2e172cc0e4b06e98083f8e9ea3a55bf9136",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/event-relocations",
+      "follow_embeds": true,
+      "frame_digest": "0be46c9f13c75734873fd942619d9c047c025f1154680497f1de5401e1c2d8ff",
+      "include_descendants": true,
+      "row_key": "f04f8b2e8edbf013e3d800ee6949fc5a5022bafac9a9cac8119e9635e279e4a4",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/facility-updates",
+      "follow_embeds": false,
+      "frame_digest": "5c539f52da69dc1fa209fd0ac3007dc579f0cc365f11fcada1e0ce0fb60cd921",
+      "include_descendants": false,
+      "row_key": "5a70078401dcfdcb2b1c25ccf9ddf45b8a38e162a2f25fa0cc69f535870c651f",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/facility-updates",
+      "follow_embeds": true,
+      "frame_digest": "578682f4cb6c81c7250db1ceb8d8e1409c22c6c43c3cdbac05c875ed115cf775",
+      "include_descendants": true,
+      "row_key": "6c769fe4566fd8f6342ade7cc04a522448d0c6b24c5705b514b03715e1a4f0e5",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/route-changes",
+      "follow_embeds": false,
+      "frame_digest": "9fc08dc5d7f5ff171f99c2e35cc7e04134c7194f1102648d37d657a5a022392f",
+      "include_descendants": false,
+      "row_key": "61d108f5398462c90178b873aab4e395f489fa53092280633f1308bf88408c40",
+      "source_count": 9,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/route-changes",
+      "follow_embeds": true,
+      "frame_digest": "50c88f146a34f99473f310cd81d0a5fd8b1e992c610fcd2dbbc0dde9d9a70967",
+      "include_descendants": true,
+      "row_key": "7226a3119ebe28ac57cdc31cbb5e10149e7bcc9af735e47d8d9d1a3f7deaa5d6",
+      "source_count": 9,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/shop-updates",
+      "follow_embeds": false,
+      "frame_digest": "7b7f481d6c9de559077c75a57aeba93914ea8ea6bd9b609f8e097428438e7d60",
+      "include_descendants": false,
+      "row_key": "c4615b93e0f1d252a8f8f83fdcf255e07dd641e51f06da07732629db6c72129f",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/shop-updates",
+      "follow_embeds": true,
+      "frame_digest": "0f1f1a5d17e3cae37a136215f213bd563ba202808af2de3ba48833ac82d8264e",
+      "include_descendants": true,
+      "row_key": "802d5128150a9e760b25e51c851586ea2820ce62ecf576c0745dcdfcb424299d",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/temporary-parking",
+      "follow_embeds": false,
+      "frame_digest": "8b25f8b0f14fb9067886a96bf50417d52edb9684f2abf1c59ab0e5b59f443aa5",
+      "include_descendants": false,
+      "row_key": "9c5851a10ea849032b9947271b6d06aed8cdf4a10140ed2ededb752abe1de019",
+      "source_count": 15,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-1/participant/construction-updates/temporary-parking",
+      "follow_embeds": true,
+      "frame_digest": "3bae3978e6e1e7eefe2c495212a4d5c064f0e0e45ab72d092ae698d92fb26e01",
+      "include_descendants": true,
+      "row_key": "723e4e1ed629db5439de565114dfe30d7ebc8d9d4b53cba6a5c1812d750b7792",
+      "source_count": 15,
+      "state": "CALL",
+      "task": "task-1"
+    },
+    {
+      "context_name": "task-2",
+      "follow_embeds": false,
+      "frame_digest": "07eda725be3c5e182c3618e72e2b2964556f30b27552c0bb55bf9e67dbd35e23",
+      "include_descendants": false,
+      "row_key": "d5cd5f0a20874a6a2c3498813b4fc16c3a52182c2bd74a363b33fb34fe46a5f4",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2",
+      "follow_embeds": true,
+      "frame_digest": "3b475dd2171d3e72ef22d2338addca1c954890b7f6e4ee217313f0b0cd62b25e",
+      "include_descendants": true,
+      "row_key": "c7688036421026416145c3462cc39b6bca00f8915c136474c46e4a0c944abd44",
+      "source_count": 301,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1",
+      "follow_embeds": false,
+      "frame_digest": "f0e41a5f69e462fab7efdab3fb08f05cadc5f41d6c276b118d6712200701637f",
+      "include_descendants": false,
+      "row_key": "6613079112a48069fb27850033aee9433d6e2ce47e17cfd278d929425a4db3cf",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1",
+      "follow_embeds": true,
+      "frame_digest": "22d461d14ee1ca0c437aee34fd84a56f90df9150a84b3b4b72adcc5cd2d7e84a",
+      "include_descendants": true,
+      "row_key": "3076d382fb64866514c2cd1b70ee722b7a0f622803c3616701f29724e613352f",
+      "source_count": 150,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/budget",
+      "follow_embeds": false,
+      "frame_digest": "cfc01ef530a52e0c928a328bb9bcf305237b57e9d5620e82d9047d51c6f10b81",
+      "include_descendants": false,
+      "row_key": "58818eea018e6620cd2a5bcf246b29c093d66419c8516f800b0995b415b20afa",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/budget",
+      "follow_embeds": true,
+      "frame_digest": "e9a964006a35f872f78a68dfdf3a266a1eeca1ac4e5e611f078cbaad735069ee",
+      "include_descendants": true,
+      "row_key": "1cb729a464257f43a6ad1586feb5d67fcb1e149c9967a97180e8d9d44e2783b0",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/claim-evidence",
+      "follow_embeds": false,
+      "frame_digest": "3ce13d8c19308258c667a0a27e2f4dcee9c66d116fd56884ab36538c3e098884",
+      "include_descendants": false,
+      "row_key": "3fd6ffbff812d69fbdc2f2df8c47e717e0340a15d361be73bde807f6b1b66c2f",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/claim-evidence",
+      "follow_embeds": true,
+      "frame_digest": "e55efe03c74bb7b7ea667318707e98e3a291d6239667554a5ca4fd72914c2881",
+      "include_descendants": true,
+      "row_key": "bbcf423ad9ead9c6ba06662724dec31adb0ee086064c1c8799ddec0b0baf2478",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/compensation",
+      "follow_embeds": false,
+      "frame_digest": "f94434b0a9d059871190f132fe96b3f0bd3d1944c91ce29b959b9fdbeb5328db",
+      "include_descendants": false,
+      "row_key": "ce4849f1d527bace99382503ae1e941e5c53520a99da859372bd28b5bed74c05",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/compensation",
+      "follow_embeds": true,
+      "frame_digest": "a25530514bbb5751232d44ccdc08cd852920d757e7a8c5d0150ee696db80983e",
+      "include_descendants": true,
+      "row_key": "d23042511a1669d65c283ea2c437f007a42c9dfa507a228fda2a01711c82c335",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/emphasis",
+      "follow_embeds": false,
+      "frame_digest": "73d43cfe18595e14d2178a02e5bdab14ec7897f7b3345bfefb4fa3d687c374ef",
+      "include_descendants": false,
+      "row_key": "14e4ffc753201ce72ca355dbeb804c951f888813b4eac47e5b859e32344284d8",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/emphasis",
+      "follow_embeds": true,
+      "frame_digest": "25d770b4e9dca6f31879a2d840c4d77870e4d6bb70b8819647a41c10bef3de11",
+      "include_descendants": true,
+      "row_key": "6cbe70355711fa2fb940a64f24aca35d8537df4c3413a3053c1b0f30c6b4c163",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/ethics",
+      "follow_embeds": false,
+      "frame_digest": "01f2f6b3d1ab5a9c10bbf35cb1c04125aad88c425b56341c3f3b2606993895b2",
+      "include_descendants": false,
+      "row_key": "4ed01af0d6eeff70f7f258fcf5bd15ecb4c85fa5a25cd3055de9a61004f20187",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/ethics",
+      "follow_embeds": true,
+      "frame_digest": "969fa64ac21f420d8cfa5aec1f46e7fe15a33da9dda2dc8b4e4ac6c9d451d976",
+      "include_descendants": true,
+      "row_key": "2e5a1013f5bf6cdd589791b4c25d9d4f56746affe5a3b9fdd18ab01b41d07bb1",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/evaluation",
+      "follow_embeds": false,
+      "frame_digest": "2ab2b86ae624bbc4ca51a56ac83549919f61cb4e674050d3df0d67b84c3a30d7",
+      "include_descendants": false,
+      "row_key": "92fec9233a62f800fbe50999bd0080d71bb2d3932d107807e69a34cf74dc86c0",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/evaluation",
+      "follow_embeds": true,
+      "frame_digest": "33e180e7d0915c5f8f0ee91993bc98d63150999b70da7c754cf7df6f3f77a1a6",
+      "include_descendants": true,
+      "row_key": "ea9dd2f9c2c3b542d03c09971afb592dff1abf55ee2e6fe2039625754b95e63e",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/expression",
+      "follow_embeds": false,
+      "frame_digest": "6d3713bce2e1d46aa1493c727cb4cfbc7d019110ce6ab77a4141a6073eb58df6",
+      "include_descendants": false,
+      "row_key": "b37aceda4545e75f860bcd7a88e5113d2ffc12ac14de4b3246924f6364ad492e",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/expression",
+      "follow_embeds": true,
+      "frame_digest": "cb73753c233037d6fe8ec413923aecf5e7ae15dd1bbc0cdbd393462e70686c97",
+      "include_descendants": true,
+      "row_key": "09eb3fd77401ae1b8192f8af6955c1b145b7a2075d862483a4a5fab04a74357f",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/feasibility",
+      "follow_embeds": false,
+      "frame_digest": "7c203fd7b6ed448115b67cb4b2a556c9e005affc52e8ae799fc63d2511074c9f",
+      "include_descendants": false,
+      "row_key": "dc3c0da2f56f6ddcf763056189ad784c059b44a5807abe7e80af3e0fd50a4f01",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/feasibility",
+      "follow_embeds": true,
+      "frame_digest": "69030e17085b2325ad3d3c2f6fda8745701e29d1d39cb246dd3ef882aaa1ddeb",
+      "include_descendants": true,
+      "row_key": "33ae991cdaa4221a7054a80deee7bca4a8cace77d39a082564badc0f67c69b06",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/methods",
+      "follow_embeds": false,
+      "frame_digest": "8a5ddb2cb915b28fedf4a2a95e76d19559db70226804e6cb8ede6c8d762a9b9a",
+      "include_descendants": false,
+      "row_key": "0de861d92d778a2477fc48f91c5b8fb0d740b4d92607a44de3212e1e228b97bc",
+      "source_count": 14,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/methods",
+      "follow_embeds": true,
+      "frame_digest": "b21bd0ecc77311b17e18ee317100c95619105242abf9e4d215a1c629ba9bb53d",
+      "include_descendants": true,
+      "row_key": "ef97d3e27bd8fe1dc5c9235b1fece16ef7588c5ce3b64ae7216726f25d74d78b",
+      "source_count": 14,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/reproducibility",
+      "follow_embeds": false,
+      "frame_digest": "f1759a124fbb11a65042d047f3052a7f41687e64aa96db29368fba0d112314d0",
+      "include_descendants": false,
+      "row_key": "4666636fe6897b8af50fcd9c8f8533c6cd365d451261b9f1f43404953e42c0fa",
+      "source_count": 4,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/reproducibility",
+      "follow_embeds": true,
+      "frame_digest": "f18301312692cf290bc275d6687a811c7eb2ed450fa9edacbd6fb26f6b4ecb72",
+      "include_descendants": true,
+      "row_key": "061dfbe1d0eb4e1bd8c79073f6ac678b68fcccfb17ac3305e7b50b7221eae846",
+      "source_count": 4,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/review",
+      "follow_embeds": false,
+      "frame_digest": "348029972266f9319ac53f23f6d9cd2accb360dbd2baaca0135a046f6fb44dba",
+      "include_descendants": false,
+      "row_key": "88f125bfe23f5d366df9283d7a6befaffa2fa9b4a841318aae8191ef7b4b2e22",
+      "source_count": 12,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/review",
+      "follow_embeds": true,
+      "frame_digest": "c57ddf0575d5d0c5e98034dbc35115d6db70b78a21b4092579897ff1757077a5",
+      "include_descendants": true,
+      "row_key": "a1e4bb0d21d54993dd34e031dc7a2cdb241c075f95e8cf56802d7e220c2f7f3b",
+      "source_count": 12,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/safety",
+      "follow_embeds": false,
+      "frame_digest": "884b48f23d0c09335503ee04e9c3b533f4d7a14bd8c02203528cc26c4f040f30",
+      "include_descendants": false,
+      "row_key": "40ae73a018b219eb8525029023a62b0b04ec105869035261543f227bb1c9d3da",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/safety",
+      "follow_embeds": true,
+      "frame_digest": "f3fb749e6ceec00c4f71e21068e90a015586fb56b68af2c2c67dea1e27e5875c",
+      "include_descendants": true,
+      "row_key": "a3de0287163ec4b754cb2ad973d286b73dc1db0b241d6488d46474dd8c7e7e69",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/scope",
+      "follow_embeds": false,
+      "frame_digest": "cc8c70f54772ab451f4489fed11edd0b8d4a08b43d09c20de2cbf4d1ecb6cb9b",
+      "include_descendants": false,
+      "row_key": "9cda9e7120f4a200ef5111c5486f2d2e184a9c8c103ea49141b097f257964110",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/scope",
+      "follow_embeds": true,
+      "frame_digest": "5958e90459ff3a1b9dfc4a5bb16f5c0cbdf74109d4aed447cfb045c25d5157c9",
+      "include_descendants": true,
+      "row_key": "4041574fd9d108cdc29473bfe224a3f4ff823e4a78f2de5b92f441e0ddcf3ffd",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/structure",
+      "follow_embeds": false,
+      "frame_digest": "2a37614dc310e6c0e663debd2dce710a4ad91bc8b20aa9af8460cb94dc095bb5",
+      "include_descendants": false,
+      "row_key": "f410b4728eba4b81f578c82292058d8c2f29511e44df5bab5be0499fa8a45391",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/structure",
+      "follow_embeds": true,
+      "frame_digest": "dc8932f81500b9baa87d70bb6cee622928c9a48512268716d55cf8fd8ef4b32b",
+      "include_descendants": true,
+      "row_key": "bc067203cf7c6902f1744239155a02d4a7877aa4fdb5962957e7ac844a6c1a1b",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/style",
+      "follow_embeds": false,
+      "frame_digest": "537e103add53ba6f0d652cbd87f33ddf8f855f9253c67c935149532234e4c518",
+      "include_descendants": false,
+      "row_key": "7287ce21bd007ea9a9be6c9e0cbfb002a830fc74383225e9a76bc8e7c5d6e23a",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/style",
+      "follow_embeds": true,
+      "frame_digest": "a698a4c42cf1ed4a24d2962bb4955b77879302fbb060159c8a74577b9b61f03f",
+      "include_descendants": true,
+      "row_key": "26d5230f3aea11a56dc8d756f1446a8b069298a5cc03a74c57e5f719bef4a5f9",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/terminology",
+      "follow_embeds": false,
+      "frame_digest": "7291a80644aeab617ee169e0bf42280c79d1cc21b100991c5acf98b320297cf9",
+      "include_descendants": false,
+      "row_key": "c096a9c9aaf807c7ed898c1e42b66b94533510b59353f8cccdca660a6e2a7912",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor1/terminology",
+      "follow_embeds": true,
+      "frame_digest": "2572eb3abb337d576e359c4b586949fc5e68d21335a864e22537028929ad1e32",
+      "include_descendants": true,
+      "row_key": "325dcd509d5de8b835a0996ce226b63b833949606bd3a1df3e8e30e46fb7afa1",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2",
+      "follow_embeds": false,
+      "frame_digest": "56258cede03165b04fcb43cc85fb1adf76c57ab67e2141cc6c65a9c3205b3d81",
+      "include_descendants": false,
+      "row_key": "341bb30f85e4c22ccd8613480d253fcd60f4ec3e70e042934a9e4c3b2144b734",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2",
+      "follow_embeds": true,
+      "frame_digest": "8350068d423398c824d606780af516b32474fd05fcbc39733218d579708b7d0e",
+      "include_descendants": true,
+      "row_key": "d2a9a978f037dfc52d2a8852cc2880f45ccd14c8ef246cc189dc00a3055c718b",
+      "source_count": 150,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/budget",
+      "follow_embeds": false,
+      "frame_digest": "140ed761ca662e9c00067aa946576e002e8c55d7d6ddab962cb0d0b1dbaa919f",
+      "include_descendants": false,
+      "row_key": "8ddf0b240812fd7697b77b8a37772390face79d28d4de335808990c55a2866de",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/budget",
+      "follow_embeds": true,
+      "frame_digest": "5348806290848128b15701a7aa2fb88ff728cc23ecdde50223b725172a862fe4",
+      "include_descendants": true,
+      "row_key": "4fb11c00ec4130652d4d6833f2161e0f986de6b5c540d70eea8cf7209fb46bd8",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/claim-evidence",
+      "follow_embeds": false,
+      "frame_digest": "cb0a1599b359c4daff3761ea62db8ad180abcc99f9b695e6f54f819a9623efc2",
+      "include_descendants": false,
+      "row_key": "d052cc0a161d4829ce742eafcf81dddf66cc7d871a27247fc533088b7ddf5723",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/claim-evidence",
+      "follow_embeds": true,
+      "frame_digest": "af5f0af896a165572be1f2ef16870552860a417f981b85e35b4ae005e1de1708",
+      "include_descendants": true,
+      "row_key": "3b9a2f485271f615b2b585a14b388453d8111f4401cec505b6dbc54c5df42582",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/compensation",
+      "follow_embeds": false,
+      "frame_digest": "0fdb16a43b63bbbc421f2a56b5dcd9875086ba9aa43d01f570fc09a7f647bfb0",
+      "include_descendants": false,
+      "row_key": "0db45a452d0b63d319dffdd08a21fa5e2731bea95b86013a8c4becc4507e0a94",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/compensation",
+      "follow_embeds": true,
+      "frame_digest": "b21cbc35eaaef5764564e659fc60decfabab465254202395402cd393d9afd6c4",
+      "include_descendants": true,
+      "row_key": "31291b45575bcd293dfae64666034911770adb73d177c950df36169076093bee",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/emphasis",
+      "follow_embeds": false,
+      "frame_digest": "08433b9e0e493900b4eb4407c028e8bc7007c3f25bed3f5149d51e4cf97e5b92",
+      "include_descendants": false,
+      "row_key": "1d54ef4ff8fb905c2f33ec87ef723a81498d9ae5c1416f2f24e3ba305ae012c7",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/emphasis",
+      "follow_embeds": true,
+      "frame_digest": "9b4fe9bbf56c623bec691cfda3587072c9297128fea9d731844efcef8edf43e4",
+      "include_descendants": true,
+      "row_key": "af06d31a22d0c21eaebb6a00af4cd38a8825498768e2f3735f359bc86eed3008",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/ethics",
+      "follow_embeds": false,
+      "frame_digest": "df4d56b8f5530462edfaa08ee86fc5fc008f1a7ea5ef6d4cd349da3397a12a1b",
+      "include_descendants": false,
+      "row_key": "46c50e597085aa5d0f6808eba7b29bd105ca3ce3319276453272010ff6cadb56",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/ethics",
+      "follow_embeds": true,
+      "frame_digest": "6d1ace7f38a75aaad3c8f0f4ebba81f7e2fc3f40157f706503120117d1278338",
+      "include_descendants": true,
+      "row_key": "66d674e2a4ee85a958f275ac650972c9079624cf85698d052345f65cbf1a56dc",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/evaluation",
+      "follow_embeds": false,
+      "frame_digest": "2e3362347100c778759edd11fdb9a700c1a04b382ce385ddabc126c3851f160b",
+      "include_descendants": false,
+      "row_key": "0ddccc1a6d4afaee147e374d036bf7d61cb588c7750b20b4166d4c20267982f0",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/evaluation",
+      "follow_embeds": true,
+      "frame_digest": "c93ff9f9e85a12f186553dc9b6e37d3e07c527a772638c2e66b3c49f56ecf75d",
+      "include_descendants": true,
+      "row_key": "4cc50965af354dd32a59678e143f7b23bdcb5bc26c73552916c368119b586366",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/expression",
+      "follow_embeds": false,
+      "frame_digest": "15ba4516fb325c99b2107f26f6c1655fae8aab08e40a93fb253607c80f1582fd",
+      "include_descendants": false,
+      "row_key": "a57b2a911ea52e94e0205b77c348759de13ef2bb4c580fd03455ad0d56a0ace1",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/expression",
+      "follow_embeds": true,
+      "frame_digest": "a2c89a4a395ab07b9300c93c955fa5fa5c0e8358fe375310448b486bdf55c6e1",
+      "include_descendants": true,
+      "row_key": "ea76bd60f087924a1b893056a64973cd8f420438cd11ad25f77af91cee0ffab0",
+      "source_count": 7,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/feasibility",
+      "follow_embeds": false,
+      "frame_digest": "a5b65939e1704f7ca3370c99e3081fb9dc9ec27afb525433893d9cd6f9277688",
+      "include_descendants": false,
+      "row_key": "00cd6c2954e310ba22a6f3b0328f4b118382379df71d9a66656dde17b4d1aaca",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/feasibility",
+      "follow_embeds": true,
+      "frame_digest": "2f7d93e44399dca929b7f1f4bc586f7da4195cd2056bc5fb5698e22ddd03cd68",
+      "include_descendants": true,
+      "row_key": "aaed7b610b459d6aebc637c873989dd87538a24848ed27e76ab7f0e487db48b6",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/methods",
+      "follow_embeds": false,
+      "frame_digest": "883a3e24f650256e44d1c9e3979173846839e0c412429f4f1ddd1e0a71455c77",
+      "include_descendants": false,
+      "row_key": "0b8332a7ce4ba63547e3fbfc011f44eb94dab2e6fd9fdcea084477b34467781a",
+      "source_count": 16,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/methods",
+      "follow_embeds": true,
+      "frame_digest": "739c8c5e163fce2b758a1fe738fe36d64c0467775bc61359dd1415ecd0d98dc0",
+      "include_descendants": true,
+      "row_key": "63286448f31e94b5653f610c1861f155db542eec09a90c47b766a8a22651bc67",
+      "source_count": 16,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/reproducibility",
+      "follow_embeds": false,
+      "frame_digest": "b09ccd244431b47cdbb67483d567b9251700fa454cd9e7fbfd4a5d9ad8131ceb",
+      "include_descendants": false,
+      "row_key": "0be881d32ac72841e1b048811ea465de1a69c852ddf439c1a6e20a4eb168a690",
+      "source_count": 3,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/reproducibility",
+      "follow_embeds": true,
+      "frame_digest": "ab40776f1480409e0e18a20356b365f8d373c9bcb2a01692b09c20eff340271f",
+      "include_descendants": true,
+      "row_key": "7d26476de8488ced00b3df5b109896d81c00a9db6418ed9e35a5c31f37e738c7",
+      "source_count": 3,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/review",
+      "follow_embeds": false,
+      "frame_digest": "0185194105cc983c5f772514ef79c7e2e5ea38c1944b788ae5f77700dd493c46",
+      "include_descendants": false,
+      "row_key": "2ea719fde6931114a42b5df1e8028e5dd9852d5f6cad763ad0e3edcd6feb98be",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/review",
+      "follow_embeds": true,
+      "frame_digest": "b21b7a2fa83fbcf2d729c7109ea1549d5793e31072e2fef5e0d0c494c140f14d",
+      "include_descendants": true,
+      "row_key": "7c23245ec2c45643faa018dad71a972319f85a5592aa4bf6d9fa378a430d4d7a",
+      "source_count": 11,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/safety",
+      "follow_embeds": false,
+      "frame_digest": "1fb9c3a04bd3631d9758d934df553c14139de6b99772473b44be3df32af8f648",
+      "include_descendants": false,
+      "row_key": "dc40df507a46577a5f0dca7cdfc3ba881f75dff639f31945249a7dedc2a77391",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/safety",
+      "follow_embeds": true,
+      "frame_digest": "9d6ea48b41f8095d0ec6e79c01ce722b5b9d7ded86c2ec4989aeb84f04233a5d",
+      "include_descendants": true,
+      "row_key": "f083e20bc4e787dd873717e833ed08dbf4f67768fb500fc1afb878e6e28251ff",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/scope",
+      "follow_embeds": false,
+      "frame_digest": "cc766581d4c6f2ee3e6a1a17c069e8df12d1e798d67504b7a702766954c91c93",
+      "include_descendants": false,
+      "row_key": "935aabcefe4a20560a1e302049bfd81fa432a2a7eac533cdfb4f6548aeb73c53",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/scope",
+      "follow_embeds": true,
+      "frame_digest": "28438ab487263a5b7b3ddf83912f044dced54c819bc93e1c442487b57b292d29",
+      "include_descendants": true,
+      "row_key": "6fec43dcb9ce8bb795b84642e34e55e7aae911c92acc00233b20664c08048a65",
+      "source_count": 5,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/structure",
+      "follow_embeds": false,
+      "frame_digest": "244a7da9bf15284c34348983f23417bf64ed8dfddd57f851d89a1d815a7a53bd",
+      "include_descendants": false,
+      "row_key": "e7936f7268db170f4ee25a98da1e42ab24fdf93b6b5054c96d5a92a091a98d7d",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/structure",
+      "follow_embeds": true,
+      "frame_digest": "b3521108fe3e688515e186de9fce35e8eb34fa8693107e2f574d5a8f1a9aa812",
+      "include_descendants": true,
+      "row_key": "fca0be954231ca6b52629ac0e6fc38104d5fead0e26fab7f7f4898ad9f83fab6",
+      "source_count": 17,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/style",
+      "follow_embeds": false,
+      "frame_digest": "3c16fc4e4fbe744f4aa6a312c9d1d7906b8257ada659e23a9d98e31a2eba4e2f",
+      "include_descendants": false,
+      "row_key": "8a7df63e17f705faf17438ac395de19c717135ffc4073c353882cd1779d18af0",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/style",
+      "follow_embeds": true,
+      "frame_digest": "734edf50afae700e8eb3bad8b57bd5595164f0a7240c88bd8afb06c6602509b5",
+      "include_descendants": true,
+      "row_key": "cf957e8d82065e0c863030c64e686c03dc6a05150ef6603fc1a16359c2269ea3",
+      "source_count": 13,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/terminology",
+      "follow_embeds": false,
+      "frame_digest": "e676da1f8d5f12dc0064ff95e33817e65b2c9845ca6bbb91cd20e1badc6d58d4",
+      "include_descendants": false,
+      "row_key": "c8b01d6e238152d1a1a69033541ca940beb1445a40770a68f8c027a3b2375864",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/advisor2/terminology",
+      "follow_embeds": true,
+      "frame_digest": "c57c2c0b5324d0e441379f48208e4e10ddc5c3ccb6dd1ca61491cdd89692d679",
+      "include_descendants": true,
+      "row_key": "d013b4fe3645c9ebcf238f2e14b60adad2eff9066b52e31f773153a7771d8e83",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/description",
+      "follow_embeds": false,
+      "frame_digest": "b2cdabffd6c051b2d7caa70d6546d18abf6da6aa0f82c466c1ae44a0d432d203",
+      "include_descendants": false,
+      "row_key": "82a66debd695cbd9e0048e59a649c6eabc373c4cea536dc3134d7044cf8ef1bf",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/description",
+      "follow_embeds": true,
+      "frame_digest": "1b812739992be3d1659b32750ad39c420615bf83ce131b08df9e47960d1bff42",
+      "include_descendants": true,
+      "row_key": "beae14f4ec1c958232a8fb1e307b3e7b32c80731ef84830b39ebf6fb38b3b83b",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/participant",
+      "follow_embeds": false,
+      "frame_digest": "db0e5ddf6fa8b3f83e0bc94db9cb963ad7c9b3f60fffd9389d03d0f1588871e5",
+      "include_descendants": false,
+      "row_key": "64330d12e0ab397d3ef11219d963364d18902b856ea0e0d6305d18df051aea6c",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/participant",
+      "follow_embeds": true,
+      "frame_digest": "19d06c44c216928c31948a5507325aa2ab551c1e94c15c76e3e654ce4d3b5bd8",
+      "include_descendants": true,
+      "row_key": "5987fabdfa3cd3454cd3cbc29cbc691e8b46aaee3ccec01aa5ea463f45086a92",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/participant/proposal-workspace",
+      "follow_embeds": false,
+      "frame_digest": "8c0963a216bdfe3be94a5fdb55b91e503c2713764e2ea67e946c7b2cfeb788c5",
+      "include_descendants": false,
+      "row_key": "30b7944a83acd64c3e1ca9d2dca77a8233c05c6cb273df0dfa4b78dfb134032e",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-2/participant/proposal-workspace",
+      "follow_embeds": true,
+      "frame_digest": "addd26ffd9aaad72773bce19c1f404ce9cbb257d2bad965e8f20cdd6431b7577",
+      "include_descendants": true,
+      "row_key": "496b70e5f77874f8b947d3c6cb2d425cfcb9ed5ec0fb7089ad80fb2a3a1f76fd",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-2"
+    },
+    {
+      "context_name": "task-3",
+      "follow_embeds": false,
+      "frame_digest": "4cccd40fc1f172a552f45ac8dd188756deef62bbe46a5904c6f3b30ccad93341",
+      "include_descendants": false,
+      "row_key": "596a4e29c8f9daa8fa2c86134ef2fbce275c42fabce899b24f7bca7bcb0c14e1",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3",
+      "follow_embeds": true,
+      "frame_digest": "7fd9eed19d36e7833ebc29319b2e2368c3241195b591aea38680a870e4694530",
+      "include_descendants": true,
+      "row_key": "9e8fdc1b4ca34e50f1b33f7ebb5351952d20768788108c46200ef0d065285ef4",
+      "source_count": 401,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/description",
+      "follow_embeds": false,
+      "frame_digest": "3725956cd443c83c1d776f2951d71f7a6e43aefd52ce3a54ddd6d599f7a820ca",
+      "include_descendants": false,
+      "row_key": "74f04b9650106cbda007318fa1a3a44464c11000730deb34eac80d76c13e5a6f",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/description",
+      "follow_embeds": true,
+      "frame_digest": "baa66e742a6559e4862ecf29d37ebf3932fb6db27c18a9c28af2e8bc5f68dfa8",
+      "include_descendants": true,
+      "row_key": "16325e94249d798d896dcd68e6c4dbcb231798b7fab119e99128284b999b0af0",
+      "source_count": 1,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local",
+      "follow_embeds": false,
+      "frame_digest": "880137fd9fbcedc4818a160df3e7e2d8bef9cf08ad5dd242ed731699350f78dd",
+      "include_descendants": false,
+      "row_key": "3ee027b62381530b8f41f1de6d4ebe9d72d3ddf5b290312398f4423217c24328",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local",
+      "follow_embeds": true,
+      "frame_digest": "640f9103a0c1b801cce385338f0ce3a0ec44112f7320a398a64f04f2453eac81",
+      "include_descendants": true,
+      "row_key": "2beedf06cc1bf0415d9fdacee181653be6c57a1a5bef9b021f96ea87bbc4f562",
+      "source_count": 375,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails",
+      "follow_embeds": false,
+      "frame_digest": "8d2e416215d3e120c6c358ecfdcd636d96749c7c44553d9139b42d22326ffa6e",
+      "include_descendants": false,
+      "row_key": "e24727980523dea45e9f8315c16722e6865557751eac6cc39e2222f03532c232",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails",
+      "follow_embeds": true,
+      "frame_digest": "f35d52a8734e11cf442ef1ad9af6b805b911f5a608e8aacfa5ad128ca2435312",
+      "include_descendants": true,
+      "row_key": "0cff0ae3a9809ddff24d935ab33ea7d1d192208586fb56ac88ff1a5363f22c8e",
+      "source_count": 75,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/approval-and-delivery",
+      "follow_embeds": false,
+      "frame_digest": "826cc2fe115412f1f9754edafae9feb1364fef3f34fb70c35e482f90f1c5ca7b",
+      "include_descendants": false,
+      "row_key": "4e517b1abbfabbaa6690a4d14f0d5acae373b7ad0f7034bd78de866d04d3bb5c",
+      "source_count": 9,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/approval-and-delivery",
+      "follow_embeds": true,
+      "frame_digest": "2ecda8608b3fab91a68723f60d02b3d6e12b2adc4e2c378cf1b46da421400401",
+      "include_descendants": true,
+      "row_key": "0289065ddc3e9e59375fd0b75889812b97eecdf641a48614fa5c30d9341a096a",
+      "source_count": 9,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/audit-and-recovery",
+      "follow_embeds": false,
+      "frame_digest": "0cc05c6f3dda24b43a4be7b2d1ec1a6f973c9ac1a01950e8212152c183e9f7e2",
+      "include_descendants": false,
+      "row_key": "fcf48a8c4e915b3c0cb4f15659ee767d965a1f883298d31f145ebdf3a974c883",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/audit-and-recovery",
+      "follow_embeds": true,
+      "frame_digest": "d5bc10e9bc32135276d93b0278993ece087c92cab71ed6276f452c5dbcc7f312",
+      "include_descendants": true,
+      "row_key": "540c7eda710d4b5a9b9648d4ae9dcd0448a1c90c0f5566e1c2dd7c422d874c78",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/channel-and-format",
+      "follow_embeds": false,
+      "frame_digest": "558749b90cc26f96a57c8c03fb70ca205fae44f72c4289202bd4311dc080c7b9",
+      "include_descendants": false,
+      "row_key": "70556204dac9fef0ffaee98699f4ff1a5b0891b678df350c8e39f5fb91754dc8",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/channel-and-format",
+      "follow_embeds": true,
+      "frame_digest": "f917715bb7013731b109a43faf25bbc6a72a9bd90f517d56d042d73454e44c08",
+      "include_descendants": true,
+      "row_key": "4c5c88f1f700e53d1f326a00efcff05be03cb150f14dd8f17f12e89ceb01d434",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/downstream-use",
+      "follow_embeds": false,
+      "frame_digest": "340118aee64f6a6aea94a3c8dd566c15915bdf2386054404aecaf4101e748aa8",
+      "include_descendants": false,
+      "row_key": "97c2b140d247e117fec89fbe3334a106530d44070d0669cc2df91468425e916b",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/downstream-use",
+      "follow_embeds": true,
+      "frame_digest": "ad39261d562b3026b31cca3be2cf3faa6bfa7838112bb6d4c9c697f3b7d11ed4",
+      "include_descendants": true,
+      "row_key": "ae187b866f746499fe7d29fe4ee5de028978038612288971d7b851537718d1fd",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+      "follow_embeds": false,
+      "frame_digest": "5490aa250b93d6cc73e23876a15a1c6cd649edf63ecda311562b5bccf0da50f9",
+      "include_descendants": false,
+      "row_key": "08eae0157c6f3ac5966ffbd58039ff4175d93415ca74c7afd6e739303ba94257",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+      "follow_embeds": true,
+      "frame_digest": "0cbd89ee87f1dafc98dbf5a5389479896424fb296a3da80f3a18dfe424b7b46b",
+      "include_descendants": true,
+      "row_key": "54275527a157fb3f776276e8733203603b03a3c5ba3a46f749dafd3456e8a816",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/minimization-and-redaction",
+      "follow_embeds": false,
+      "frame_digest": "b7f53b57093aae43c2ec89e914e92c64f50ec8597e78659797bde0efbdc95fa9",
+      "include_descendants": false,
+      "row_key": "d1e51d1f21601ed4dc5312169d39dec7f5233642d7c556f00e40a6ce00d70445",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/minimization-and-redaction",
+      "follow_embeds": true,
+      "frame_digest": "9513db787d78f98d61cd1cc9cb48740fa2dd640b73b97a503fa4fd1954933082",
+      "include_descendants": true,
+      "row_key": "7a428ce4f7677a895c49dd5ed9b6f198b1f6ffbc47965f6ca2b2132b25766837",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/privacy-and-others",
+      "follow_embeds": false,
+      "frame_digest": "92b11c7a01dbdf473598901f43b0c5911113d28ae15d1d6b64cb36b0e118ed20",
+      "include_descendants": false,
+      "row_key": "98305406e5d34ce40d5e448f68924bd98b73d27f814ffdee4f34e28328596a73",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/privacy-and-others",
+      "follow_embeds": true,
+      "frame_digest": "33185b85841b448cab535cced53b54fa51129bcdd25bede4f6c536ac3bc5b87b",
+      "include_descendants": true,
+      "row_key": "72017318f5edb5dfc80daec068bdfc1a9baa73555b7e575d628bf7866159e4fb",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/purpose-and-scope",
+      "follow_embeds": false,
+      "frame_digest": "e486651db79dad39eb01d9123447d25932d01f59d0ba043b6576dabe0f37b704",
+      "include_descendants": false,
+      "row_key": "ddc55cf5e7e11500cba11cb23fc9ce6c479b979bf72f9de300f92a7969654f34",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/purpose-and-scope",
+      "follow_embeds": true,
+      "frame_digest": "6246774e4835e86bb9b71f22a9b13e60bbb7dc0bbde485ee0470bfb8bf0a852e",
+      "include_descendants": true,
+      "row_key": "b6011b78e8c910a9adcd38424982b2986fa0cef1c28b9245f31f2ca6b691fb2b",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/recipient-and-authority",
+      "follow_embeds": false,
+      "frame_digest": "372d0e01d4fb9376761d9195d80b64f6883c1507a365f5ca773ce45fa9025b41",
+      "include_descendants": false,
+      "row_key": "47dc11e60fa0c3004e1f4a40e4ba7d380c39f417c9b664f25529686b7168feeb",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/recipient-and-authority",
+      "follow_embeds": true,
+      "frame_digest": "eec7f13a2b0fbef24b4f695700acde86d760bb68f80b8b9954bb7dcb51c4a406",
+      "include_descendants": true,
+      "row_key": "c926738ced4d92d7058aa202a0361acfce48d846cb04bc308b48e94c79c4ace2",
+      "source_count": 8,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/retention-and-revocation",
+      "follow_embeds": false,
+      "frame_digest": "35ccecdea0ad5fb15ad58f4f88b93462fb71ff2ca13dd62a8b3dd6f25ae59cce",
+      "include_descendants": false,
+      "row_key": "307e9d6cc16e78acc72950d9d687f691b56cf63cfb1d217fa920841a243d979b",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/guardrails/retention-and-revocation",
+      "follow_embeds": true,
+      "frame_digest": "ef16fbf229f1fa684a2bc551c57846666929aad1a43e610f88ff3e0aff0a129b",
+      "include_descendants": true,
+      "row_key": "8074b6e68cb9572251d4fce314e7b8c89a64dc1b52ccfa3657ffcfb4c8e648c1",
+      "source_count": 6,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory",
+      "follow_embeds": false,
+      "frame_digest": "de91a1125cf6f83be804f1267c3ad1662974b8322137e53db633093fc222084e",
+      "include_descendants": false,
+      "row_key": "2808c5b6310c4cd3e8c457587633cfc721f539d261e24a1d5ec99e3fc9e5a0a6",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory",
+      "follow_embeds": true,
+      "frame_digest": "80d4659a9cbc0bff83e4638955a4828bdc33d89c86410061f36e867b7c6e7189",
+      "include_descendants": true,
+      "row_key": "d3b5462e661209f10472cdf1b64a73f4b7f2c33993d0c17933b53b419c05d442",
+      "source_count": 300,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024",
+      "follow_embeds": false,
+      "frame_digest": "257ceaa04b4720b2ea65c81ebd3464c0edc1c64ae417217bcb5247f7814637a3",
+      "include_descendants": false,
+      "row_key": "4d7a7238147572c53ac9391a51e91280d2b6440a3ee13a5ad5cd298e4081f3fd",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024",
+      "follow_embeds": true,
+      "frame_digest": "12a5cb177f4d661ee1290de8c2651e3718133edfeeee288ed7c3babd3ed515db",
+      "include_descendants": true,
+      "row_key": "7809902e0ad0b1d6f50e0dab453b12ec45d331e400f9e72381643e4e4a536cab",
+      "source_count": 120,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/01",
+      "follow_embeds": false,
+      "frame_digest": "a052985d9096f6fac6e7ff364ae4b59a8bca9475ebfb6d8cb70f10ef8da803f5",
+      "include_descendants": false,
+      "row_key": "d698ec117d1cfdd017ec79068ac5325551572c5e034ffb3352889d9493cb2a64",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/01",
+      "follow_embeds": true,
+      "frame_digest": "509dc530827bda9c4923a7d97134f2b8e5c3071223f47d0acd54ebcbd8e9a53c",
+      "include_descendants": true,
+      "row_key": "e89f6aa532a05fb41e8b978e9ea5cde2c36a060fd70626bd1e8b6145581de4a7",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/02",
+      "follow_embeds": false,
+      "frame_digest": "504103a65586cd9508fb2f9b2bcfc21af408ead344e3b729de414cf1e8c23575",
+      "include_descendants": false,
+      "row_key": "1e2c37a4fab65aee15c3bf0b12c7a5bc2b911ba896ea6ba381856dcb5c272881",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/02",
+      "follow_embeds": true,
+      "frame_digest": "d2ac7b94df835d43aef0a106013c3843ae012fa384c725626439f076cc8b5ae5",
+      "include_descendants": true,
+      "row_key": "c325c5d4ff2617157cac793334bf1f98894c85383ec73ab57948f7ec87d6ae95",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/03",
+      "follow_embeds": false,
+      "frame_digest": "714602a5e0b40878cd48b59027b7ae0bc9a4dcfeee8b62f3a74cfca921be3a28",
+      "include_descendants": false,
+      "row_key": "020040c8c62e50d03236ab0f685d26d18430792ff2cd190861e6c6a3b22e9e4c",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/03",
+      "follow_embeds": true,
+      "frame_digest": "c8541e86e343debeebc1bb3d7b3e4a220497932106cfca9095250fead60bd80b",
+      "include_descendants": true,
+      "row_key": "71649d164839d394ed9d5f5dc7bf394e6b4be315eb63c8c9a3eb153767881993",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/04",
+      "follow_embeds": false,
+      "frame_digest": "73d0528c5a12f3b964f248868e073d7cc202ce8e00b4a8655333e8885d1628ed",
+      "include_descendants": false,
+      "row_key": "4191281042bb993add38dc7512c08ee75a34df6a32c0aec0493c982b01b1e781",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/04",
+      "follow_embeds": true,
+      "frame_digest": "157c91f5fa729920c49fd34a8d8e27efb9c4bb70824f2e108e2b46f7a4898f9c",
+      "include_descendants": true,
+      "row_key": "832cc18aa317b38d8cb774fbe52ee717dc4f014966029bdca92c8591728d111e",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/05",
+      "follow_embeds": false,
+      "frame_digest": "0e647efa36fc7512784951ef9f953940ab12f50877b66ca940490d2702a37074",
+      "include_descendants": false,
+      "row_key": "2f24b89ae8bc03d6b968f9b2fb294a6bc81f9b842de172837fe15cf1442b2ebe",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/05",
+      "follow_embeds": true,
+      "frame_digest": "14307bc6df51dd587dce8ff9bb40705902de72544510247a88c8b4244665af36",
+      "include_descendants": true,
+      "row_key": "2ddaaf5ffa20cef8a71437cc226c383c42e0d7efbf8205c3dfdfbe9dec110f20",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/06",
+      "follow_embeds": false,
+      "frame_digest": "bba548d58e0ceb8f59a1007802a187ccc19e5d9549493baeded52dee7c3fd49c",
+      "include_descendants": false,
+      "row_key": "dd7d42599ab9fdbb7cf476acee6c04a1c67cb8987217b194ba1cf94bdeebba41",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/06",
+      "follow_embeds": true,
+      "frame_digest": "c10e8f7f4f12a800bb43a9a15bdf551a8bb8c156eca4de8bfffc7dd30c78f7ac",
+      "include_descendants": true,
+      "row_key": "a7b04a978762024283a07f1fd5220d5bddb0307e1e842ad2f37be909fdc84d84",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/07",
+      "follow_embeds": false,
+      "frame_digest": "9814ef22d3d485f79417fbf21932e8d5a05b6dd5604e4243dd1339339b0acb57",
+      "include_descendants": false,
+      "row_key": "916f7ab9e22cd11c07cfdac82a09ea6ad4fb4da2535fcace9a62dac9cc4fba63",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/07",
+      "follow_embeds": true,
+      "frame_digest": "a0e646c3c6eab2c3b0ce26a221524fed2264e8c5b38472c9058a3cc7b2e193cc",
+      "include_descendants": true,
+      "row_key": "58fd74d3a09d090b43c9d02abf491bd597253c54babe33d3735fb5dadba2e041",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/08",
+      "follow_embeds": false,
+      "frame_digest": "ba7ffb87b4b7775bc0a5beb2de4676716bbb69df382c422dc3d347766559a1d0",
+      "include_descendants": false,
+      "row_key": "c0d3c8dd60351d083302af14177bc7c3ba6c17623d3276eee34c79834de0b47b",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/08",
+      "follow_embeds": true,
+      "frame_digest": "30a9a04d7a1caa0938b7c7a2dc5a32324915269d745b89c04ec25f0774710b3f",
+      "include_descendants": true,
+      "row_key": "61b908e77e748769fe64dd7c7bcca7f55d7bbd0057d1044314ace38de66b5f9b",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/09",
+      "follow_embeds": false,
+      "frame_digest": "7caf70d55e5c2faaafbab160e015d78257ddb2f95dd6bf1f5c6bfee528e13b4d",
+      "include_descendants": false,
+      "row_key": "d7c786eb9d4e6f44ed24373e80421cc562078e93b9a9fadd6b86615e04884268",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/09",
+      "follow_embeds": true,
+      "frame_digest": "eaafebd50f259aaee0d1d0a715d4b50bc1965562643a2eef56b5d317cafd9730",
+      "include_descendants": true,
+      "row_key": "a6c101c0ced31c3e2d3e57dadc0e8127d5b3b07a6eed88f059e64db3aee60430",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/10",
+      "follow_embeds": false,
+      "frame_digest": "88c375c1d31630d6e2937b84e9ebbd87955b68ac9d7a8bfe843e612c827b8fe9",
+      "include_descendants": false,
+      "row_key": "12391212b27c7591af1a8f1b0dafd6fcd016154ae4e84d6b2ba0f4c4e46a038b",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/10",
+      "follow_embeds": true,
+      "frame_digest": "5593828ac3f62465949c6e17a903dc2e8808156c4026e6bdb2c713afd434eab5",
+      "include_descendants": true,
+      "row_key": "d83ed548b5ab2c2fce0fb195358b80ffcf42a7ebd5f3986b2a5686460379932e",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/11",
+      "follow_embeds": false,
+      "frame_digest": "4a9c61434133a49a8bbdb506c19444d1750b9b4721015aadec70b5191eae6281",
+      "include_descendants": false,
+      "row_key": "473c5a09ec0d02f017c9075d47f26f1d3ea048eb1b0c2765900a990c1bab35bc",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/11",
+      "follow_embeds": true,
+      "frame_digest": "589a80423a8f3576134585a82ca35aeadaec66c0d9a08d08478c82b3b27874ff",
+      "include_descendants": true,
+      "row_key": "2cccde2faffe6d242c742925d687582d4590b5da75764dd09363088c4d6d40c4",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/12",
+      "follow_embeds": false,
+      "frame_digest": "b868bd964b8559acd3f3baa82cf485ee6273d5e0ee289b9f0bafa57358af6a96",
+      "include_descendants": false,
+      "row_key": "67b5045ce639ecf62af55c0eb4b62634bad25fe5e8799c02e117858da38e90f7",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2024/12",
+      "follow_embeds": true,
+      "frame_digest": "70f5ef824444b6bd2089a17060b28f077a39fc20e53c4da35f7a98fef614b90a",
+      "include_descendants": true,
+      "row_key": "cb8bac6b5f9709dfd0673852d6f0b93b9e76d1c9651197fc202fdd203079e302",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025",
+      "follow_embeds": false,
+      "frame_digest": "a017d3e92f1761662739cc488031a4253b69c4f1b3cd832e979a0b30db518e7c",
+      "include_descendants": false,
+      "row_key": "7a7779127d5ea7b6a44277ecd4818b6dd72abbb4eed8c5f65230f2310c9940be",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025",
+      "follow_embeds": true,
+      "frame_digest": "72eca292202352f83cf60f088d22114e283456d5b9a66e7b58f094b628d1c12d",
+      "include_descendants": true,
+      "row_key": "61544cfccdb86d7aa5e9970eaa706d1c0cbdc4927ade90476d55b1ca32e4593d",
+      "source_count": 120,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/01",
+      "follow_embeds": false,
+      "frame_digest": "962d2cd5ba1d4e5684c308d9cb02af37d3d2361be2b77f4625ab8a60d265420d",
+      "include_descendants": false,
+      "row_key": "e9e7eab34d2e493ab8a38ebd5aa3ddbf492fbb3371334852d1f2f28672b16511",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/01",
+      "follow_embeds": true,
+      "frame_digest": "d5a8e258483897d6c43709ecf2609e4dc506f205d0755fc99a38cf08fd1532db",
+      "include_descendants": true,
+      "row_key": "d4305b4bf58d7926d284768c5e0cbe10c6531b69c7d060f35ccf88de31f8e7b7",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/02",
+      "follow_embeds": false,
+      "frame_digest": "555f13a2fba25955043b3e4d77ebd05fee9d04dfa7bb6b2a2181e36dca89d2ec",
+      "include_descendants": false,
+      "row_key": "20a7ac664730eab4f58948a7cd43f3f2a450b044562e091a296f12b438a5b9ce",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/02",
+      "follow_embeds": true,
+      "frame_digest": "5f6e97e5029635b7e3bf4a4ca8904f0e695e1c5d95f8515ba061b72370b09038",
+      "include_descendants": true,
+      "row_key": "1eab36f657ccfefe1614f56e9fc501fb0625d91d37d6479c0ee6804ea835967e",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/03",
+      "follow_embeds": false,
+      "frame_digest": "85d7db8e602f55424e32471fad548c6d990adbc3f1df27686df5c0e024ef884f",
+      "include_descendants": false,
+      "row_key": "e86a83dfcc7b4df2acfba1d18fedb1bc6ee773c41bcebd1bc2d526a1aa05ca8c",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/03",
+      "follow_embeds": true,
+      "frame_digest": "e72ca7b5a5fdef9fea0fd134209cbe0be8d20ee5e5191e01a14d88dd26998973",
+      "include_descendants": true,
+      "row_key": "7a7782e3a96d4e10f565af1774b69001fd6907378670967b396788343e25bc59",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/04",
+      "follow_embeds": false,
+      "frame_digest": "843acb6aea6e47053a037106d02ae4e1563214ae68e2598949e7d9d3b39ddac6",
+      "include_descendants": false,
+      "row_key": "87506dcfdb31007b1bb900dd8e7b6c90562b817947d99f6609e70c61fd2058d0",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/04",
+      "follow_embeds": true,
+      "frame_digest": "7aee2e55c62e0536c5b98475748b951f36f93c6934528571d4fb55a944ce2498",
+      "include_descendants": true,
+      "row_key": "47fc6a00c2f7b0c0bcbf7c99f0e947f3839fcc5a9bb851b77114d885894d3c8e",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/05",
+      "follow_embeds": false,
+      "frame_digest": "3423348377a1d6d199f8222c9384e233bbcc2085747bb9ba5c860d85ec7a681e",
+      "include_descendants": false,
+      "row_key": "c87493a0206f96315c06e2fb70fdd91f4b1a6e92845f5a15e445cb1b9842944b",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/05",
+      "follow_embeds": true,
+      "frame_digest": "a394d3e5f536ffe0d001e8da7d6c25dd75e7a706e4598ef808e0eb6527d9f3e7",
+      "include_descendants": true,
+      "row_key": "2d6d0d973958a6817e617f3a230e43e2edf3973247d5e9378fdf3b833f0b2641",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/06",
+      "follow_embeds": false,
+      "frame_digest": "f9095f984b2c74ef6ba2842475119aa3c2de496187160e817d2c9e4f516d4292",
+      "include_descendants": false,
+      "row_key": "e5b9a93412c0da8e42a5354a73c4221adbf91c0d8883310a0675b8d0d527fe8b",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/06",
+      "follow_embeds": true,
+      "frame_digest": "02374437da749e2101b588185928d114d911e381b683885482e895a23731d8b4",
+      "include_descendants": true,
+      "row_key": "9f68271aa1e26c762b23943a0ed149e088f7b06b039eb944f9fd638e3dcabf5d",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/07",
+      "follow_embeds": false,
+      "frame_digest": "3c2f46010ccc7d2e0fda33d139cc1b0607ce617f4031b6326df26118c2185d3a",
+      "include_descendants": false,
+      "row_key": "4220af0045f364f9c52146b33e37ee2b1391c30be822f5b826f1ee5097c645fe",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/07",
+      "follow_embeds": true,
+      "frame_digest": "464f1d4122a12dc57af30ce60a3f458a6644b1d000755ac1f08f63e0812bc13f",
+      "include_descendants": true,
+      "row_key": "dd4deb93880bb2825e14df0601e13148a31886cadebc6b54fe3ece3e6ed68a6f",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/08",
+      "follow_embeds": false,
+      "frame_digest": "a7fd1c1bd4dbdefb9281cde68b2608ec40a12df2fba963a2d03b1835ad331558",
+      "include_descendants": false,
+      "row_key": "552fd296d6223057464f8fcd5ce1d0001487217bec46f09e20af23e12cc160cd",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/08",
+      "follow_embeds": true,
+      "frame_digest": "f0f0ed899fee6c7fcdfd166dd66dd07c4aca4832df9a45a7faff77533934b3b7",
+      "include_descendants": true,
+      "row_key": "ba1a465c93c54e0162ca4e838e4d0bdf21faeabc6d62370c37c3de7aa0160a87",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/09",
+      "follow_embeds": false,
+      "frame_digest": "22a4fd0d5bc77cfe3a10b25aefc0ca316c6e3558807339e34ff4af6e7a11b36c",
+      "include_descendants": false,
+      "row_key": "b5b41b2a203be0906b6287b6a04cccf97e3e83cf9a1da4897845f8476e6107c3",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/09",
+      "follow_embeds": true,
+      "frame_digest": "f97642bdc34e69cd289e5b7dca6e1cfd5e6a63e3eb46a4f310580a40d22cd17c",
+      "include_descendants": true,
+      "row_key": "3adbfec006e847802183b0feb1436cf085208971e4cd7cfe5e393b462319dff1",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/10",
+      "follow_embeds": false,
+      "frame_digest": "f6fe272e37be3e6a5720c2a58a1aac942db5f9954ba6d68447123a67ef5dffc7",
+      "include_descendants": false,
+      "row_key": "e8363b2598e11083ddd59eac6736d5b9bb1226f32b71255fd0e6e87a33c0d3ae",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/10",
+      "follow_embeds": true,
+      "frame_digest": "242fd4041a5b4bd02807abaa79864daa9ddd9078164fb2cab79d808e03c276d8",
+      "include_descendants": true,
+      "row_key": "33b0e6d41e02091181a04e3669e20d8dc90373111b5498a6b0852fd29e10cb7e",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/11",
+      "follow_embeds": false,
+      "frame_digest": "5b50bb41b9eea40ee692e1f1da824e598de61e442a4640a45c8a87fe43cf7af7",
+      "include_descendants": false,
+      "row_key": "6c151dd5f03018e29daf08979caa890499244ed0fb9ccf617ad0138001429b14",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/11",
+      "follow_embeds": true,
+      "frame_digest": "9b60a9733005bae76af023cfc8af2b62f2f4e3fe49625055f6936fb6ab819fdb",
+      "include_descendants": true,
+      "row_key": "c7abceed8e7e062692a130da16ed14805d13a5b8da92b9e7c4ccd64d3abd9076",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/12",
+      "follow_embeds": false,
+      "frame_digest": "207a25aa8c2e53b932dce7cdf612d1b3157942292f3dd42c7631f83748addb78",
+      "include_descendants": false,
+      "row_key": "9983595cfa96e1c451caa808b099722c0b299ff8c8f1fae43278a524ba3fce37",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2025/12",
+      "follow_embeds": true,
+      "frame_digest": "3683703b10fb26a1e79a74546f7946f74c2666a06067fb5f209e1addc9c9b37c",
+      "include_descendants": true,
+      "row_key": "8d2980058fcf0398c29077f08bd2c55fbb0e26b2a0219d6ef73adf7367067da5",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026",
+      "follow_embeds": false,
+      "frame_digest": "85d017c966abedc926a1847bfcc190fe88e946cdd6a8884177c77cf810deae4d",
+      "include_descendants": false,
+      "row_key": "3d3c227034e3bcbf405042968ba4e98e47c2fde58a369b8fc43d2dc252bc8490",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026",
+      "follow_embeds": true,
+      "frame_digest": "34dd88e3b087345ccff43589b0858817d0bbe0d814ff62a8d8b4170c139ee3aa",
+      "include_descendants": true,
+      "row_key": "dee4e4ee71e4bedf22bc1973903311e82dd7fa7ae09e8f5e247c9da754a1fd63",
+      "source_count": 60,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/01",
+      "follow_embeds": false,
+      "frame_digest": "118486a57bfc9dd3b3a0b4d62ef577b045d690175f273764ec4b883431438989",
+      "include_descendants": false,
+      "row_key": "f60043aff62ca9b466bda91d9c959b5eb9c5999c82af7077d52943a8d1cb4f44",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/01",
+      "follow_embeds": true,
+      "frame_digest": "3baa12b5d2c6cb355512ae2b5248a05a9828ff308e79b395758535673cf659b1",
+      "include_descendants": true,
+      "row_key": "cfcc06fbc07bab2996246804d95895106d339e75de1c057e5444dacf5a6fad6c",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/02",
+      "follow_embeds": false,
+      "frame_digest": "52e6a8cfe1d04eb24a3db84af68d37d6f6306213e58c91b2ac76c9d1628dbfdf",
+      "include_descendants": false,
+      "row_key": "6f47410160c9dba073a8f24ea8985619729f960533168775f3cfc8c52fe51cb3",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/02",
+      "follow_embeds": true,
+      "frame_digest": "8ebceef67df6b03f1654852ccb9b9b742b1e3b8ae577d5c6c9ba8e9579d29cc0",
+      "include_descendants": true,
+      "row_key": "1bdea6d6323d313ef7a1dc598095f85479be658fb963f667ec166f0fcc4b4dd2",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/03",
+      "follow_embeds": false,
+      "frame_digest": "ddee9324ace15177a442d815d59c84fcfa35c3f6bdb8d779b9e55cae9b83fc1b",
+      "include_descendants": false,
+      "row_key": "038b41cec70bd57616e500a5de32beafa9781cd4a56c251155a40392e51cc68f",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/03",
+      "follow_embeds": true,
+      "frame_digest": "0a83e48440f93a9d0507983bf0ea4b7d00a53910d72f538e021a1df267c61d61",
+      "include_descendants": true,
+      "row_key": "cff1ab067dbdc3f0afd1a75b2371d5b7efb91d9282497a3f3640397ae52448ff",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/04",
+      "follow_embeds": false,
+      "frame_digest": "aecac8121e6501a414bf5652b7a4794f6c17fe40145efe43ec544aaa68efd8df",
+      "include_descendants": false,
+      "row_key": "8a95f19eadd66769119fc25b586009272b22e4354da04a114246bbd5eac3d3fb",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/04",
+      "follow_embeds": true,
+      "frame_digest": "d7e987ff3b0774543ae987f6e5d7b163aa8a3a63639c1bd2290b48e2f4348885",
+      "include_descendants": true,
+      "row_key": "e6e6542bcdbb7f879221fcb3be9b4ccd78e0ae5eefc12f5f64ad8d22ba16a66c",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/05",
+      "follow_embeds": false,
+      "frame_digest": "affedfd9508abcc7e2a9f83d2fe0ae3632fc1b2c09a374e5f339352c24277862",
+      "include_descendants": false,
+      "row_key": "f4081769f3ed89244acc6a61041c124f8a0249142ec175ca1a0e1704b3c4de3a",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/05",
+      "follow_embeds": true,
+      "frame_digest": "97bee95798c87d6aced5b44e3441fe173e6fbc7c0666f8a6c41bd58a54d6cdfc",
+      "include_descendants": true,
+      "row_key": "c914bc488fffa0f4962f4261d0ef668d1e3fc8a03590733786cf645c5c83bb34",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/06",
+      "follow_embeds": false,
+      "frame_digest": "94f2c7420998715c63deea5631e2a93b50e69e491999db1ca4c4962786029b92",
+      "include_descendants": false,
+      "row_key": "e149d0b64ac38f8eb58f745474eae9cfad659ea8b9ba2bd96fd32cda2aa4e18d",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/local/personal-memory/2026/06",
+      "follow_embeds": true,
+      "frame_digest": "8533dd316f54dbd269bfea96e01070b6acfd1fbd47085c3d92aae580e4ae867a",
+      "include_descendants": true,
+      "row_key": "d3fda49a28318092c26f3c8a49cd24349ac2c054cc91279b69fbc9ec3023148c",
+      "source_count": 10,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance",
+      "follow_embeds": false,
+      "frame_digest": "91a4259acf521b55b9c33b32cdd46d817d14ed0c1a23ceeb1855d499aec736e7",
+      "include_descendants": false,
+      "row_key": "6fb6326f7bc5ec8835af2f17209a6f53a538dffc6bcd5592c8fc15a99b995c96",
+      "source_count": 0,
+      "state": "DETERMINISTIC_EMPTY",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance",
+      "follow_embeds": true,
+      "frame_digest": "6d7252096ea742e11a7f3027f8876053d8c7fb6ee70f23314ca7756c8430e614",
+      "include_descendants": true,
+      "row_key": "219dd58b08cfc36d75cb0a7358a7a4772a30edad3ee9ce04e6342ed052601a3c",
+      "source_count": 25,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+      "follow_embeds": false,
+      "frame_digest": "c62aba8436f9dbdd27aec760b5d03e22e78266c11d72974b2a91e173bef573b8",
+      "include_descendants": false,
+      "row_key": "9f5a1e4378152670097efe8249a1c68c5d0d04dcf8c68faf2b39d07a62d8f690",
+      "source_count": 25,
+      "state": "CALL",
+      "task": "task-3"
+    },
+    {
+      "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+      "follow_embeds": true,
+      "frame_digest": "57a6faac1a7ab472a6d6296b34e92211aeadbca0cb1dd067fe06e02f42ae2b02",
+      "include_descendants": true,
+      "row_key": "d1df5378885d12ded7563d6c381a045d296482e5ecdf44a444824dca4aff805d",
+      "source_count": 25,
+      "state": "CALL",
+      "task": "task-3"
+    }
+  ],
+  "schema_version": 1
+}

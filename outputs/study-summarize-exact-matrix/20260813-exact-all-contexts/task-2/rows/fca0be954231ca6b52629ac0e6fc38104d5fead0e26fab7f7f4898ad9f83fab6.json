@@ -1,0 +1,143 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/structure",
+      "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+      "digest": "b3521108fe3e688515e186de9fce35e8eb34fa8693107e2f574d5a8f1a9aa812",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "e32f543b-1637-572a-ab96-319d74ee7e21"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "48e887dc-7fc8-5a23-9999-890acb870251"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "e34bce0c-7d07-5fe6-b03f-39faa801640b"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "68ad56f9-6ca2-587a-9182-fd98a79d3d5c"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "eca301ff-9feb-502d-b955-055c48342542"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "9283aedb-6818-5c99-8fe0-502b488acb66"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "87203bcf-6724-543a-ad19-60a2becc4598"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "c9591180-6f3a-5909-8695-31704b9b6f01"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "0ac685f9-e338-5549-bf91-32078cf36f15"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "5567fb3c-de90-5363-af1b-62fb5b8e0bb1"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "32cef408-4c66-5ef2-9a59-eea6fc67b16e"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "3579fcc0-c74e-5006-901b-6406a3106fa1"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "2c2aa1af-c450-5c8d-a907-042c5757d3ee"
+        },
+        {
+          "context_name": "task-2/advisor2/structure",
+          "context_uid": "09c95ce6-baa2-5823-a035-e4b0d323200b",
+          "memory_uid": "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+        }
+      ]
+    },
+    "key": "fca0be954231ca6b52629ac0e6fc38104d5fead0e26fab7f7f4898ad9f83fab6",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.615022500001942,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "e32f543b-1637-572a-ab96-319d74ee7e21",
+        "6bbb0f69-ca99-539a-a810-a0fb34fe9cc3",
+        "48e887dc-7fc8-5a23-9999-890acb870251",
+        "e34bce0c-7d07-5fe6-b03f-39faa801640b",
+        "68ad56f9-6ca2-587a-9182-fd98a79d3d5c",
+        "eca301ff-9feb-502d-b955-055c48342542",
+        "cbd977cd-1b78-5ca6-823a-7a5b4b92d77a",
+        "9283aedb-6818-5c99-8fe0-502b488acb66",
+        "c5c04ab1-10e8-52a3-98a1-aa9cbede57c1",
+        "87203bcf-6724-543a-ad19-60a2becc4598",
+        "c9591180-6f3a-5909-8695-31704b9b6f01",
+        "0ac685f9-e338-5549-bf91-32078cf36f15",
+        "5567fb3c-de90-5363-af1b-62fb5b8e0bb1",
+        "32cef408-4c66-5ef2-9a59-eea6fc67b16e",
+        "3579fcc0-c74e-5006-901b-6406a3106fa1",
+        "2c2aa1af-c450-5c8d-a907-042c5757d3ee",
+        "1fb62d5b-532b-5664-842c-57622e3c8b9d"
+      ],
+      "text": "For a two-page HCI master’s proposal, sustain a continuous problem–consequence–response–next-step argument through paragraph transitions, not space-consuming headings, and place feasibility evidence beside its claims. The opening may extend to three sentences when a concrete person, setting, or consequence prevents ambiguity. Specify users, stakeholders, and environment in the research question; connect the contextual gap to design and operational contributions; visualize unfamiliar procedures with transition conditions; and organize the schedule around phase milestones and phase-entry deliverables."
+    },
+    "understanding_digest": "b483dc4c2580cc8159acfd563d4b6e273debee46f76ee07f605c443c68c1cbd2"
+  },
+  "context_name": "task-2/advisor2/structure",
+  "created_at": "2026-08-13T19:16:09.584145Z",
+  "follow_embeds": true,
+  "frame_digest": "b3521108fe3e688515e186de9fce35e8eb34fa8693107e2f574d5a8f1a9aa812",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.615022500001942,
+  "row_key": "fca0be954231ca6b52629ac0e6fc38104d5fead0e26fab7f7f4898ad9f83fab6",
+  "schema_version": 1,
+  "source_count": 17,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

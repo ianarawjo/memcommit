@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/expression",
+      "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+      "digest": "cb73753c233037d6fe8ec413923aecf5e7ae15dd1bbc0cdbd393462e70686c97",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "e686bd4d-3ebd-5e55-ba39-f26971247965"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "019662a9-6f03-527f-9b6d-be5a2966d9e9"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "a6dfe9a7-1df8-561f-8d3e-fc19518beca9"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "7047a23d-45b3-5d5c-a00b-c12552e9680d"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "50a71968-7e3f-5b99-b3fa-769af386d0c0"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "ae1610f6-a855-56c1-a0fb-fd3207dab615"
+        },
+        {
+          "context_name": "task-2/advisor1/expression",
+          "context_uid": "39a6f298-c511-5c21-a106-998c1df9d951",
+          "memory_uid": "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+        }
+      ]
+    },
+    "key": "09eb3fd77401ae1b8192f8af6955c1b145b7a2075d862483a4a5fab04a74357f",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.802529250002408,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "51fa3fcc-9d5f-52f0-809d-62d7cdd8a865",
+        "e686bd4d-3ebd-5e55-ba39-f26971247965",
+        "019662a9-6f03-527f-9b6d-be5a2966d9e9",
+        "a6dfe9a7-1df8-561f-8d3e-fc19518beca9",
+        "7047a23d-45b3-5d5c-a00b-c12552e9680d",
+        "50a71968-7e3f-5b99-b3fa-769af386d0c0",
+        "ae1610f6-a855-56c1-a0fb-fd3207dab615",
+        "d2825b84-b4a6-58c9-8f8e-9e19c6192a03"
+      ],
+      "text": "When procedural alternatives produce different outcomes, use one flow diagram showing every branch and result together; it communicates the overall branching shape faster than a row-by-row table and supports reviewers who inspect visuals before full explanations. However, diagrams take longer to revise, and prototype visual fidelity may differ from functional fidelity."
+    },
+    "understanding_digest": "2e5f1387aa51b8a9b8c457caa2d346c8b6c95fb911013f98f291d3c53e966cd6"
+  },
+  "context_name": "task-2/advisor1/expression",
+  "created_at": "2026-08-13T19:15:26.825728Z",
+  "follow_embeds": true,
+  "frame_digest": "cb73753c233037d6fe8ec413923aecf5e7ae15dd1bbc0cdbd393462e70686c97",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.802529250002408,
+  "row_key": "09eb3fd77401ae1b8192f8af6955c1b145b7a2075d862483a4a5fab04a74357f",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

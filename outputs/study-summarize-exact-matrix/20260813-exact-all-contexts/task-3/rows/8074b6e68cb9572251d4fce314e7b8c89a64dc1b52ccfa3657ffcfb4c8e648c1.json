@@ -1,0 +1,77 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/retention-and-revocation",
+      "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+      "digest": "ef16fbf229f1fa684a2bc551c57846666929aad1a43e610f88ff3e0aff0a129b",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "4004ad20-547d-5588-a4d5-2bceff66005f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "38256d79-12a4-5f38-aca9-357056cab7ce"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc"
+        }
+      ]
+    },
+    "key": "8074b6e68cb9572251d4fce314e7b8c89a64dc1b52ccfa3657ffcfb4c8e648c1",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.42155954199916,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+        "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+        "4004ad20-547d-5588-a4d5-2bceff66005f",
+        "38256d79-12a4-5f38-aca9-357056cab7ce",
+        "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+        "044511b2-40d0-55cb-912c-49c4ec0874fc"
+      ],
+      "text": "Sharing drafts remain available only while user review requires; rejected drafts must leave reusable working state, and revoked items must not be reused or excluded Memory content conveyed. Removing a draft does not delete its source local Memory, while recipients lacking revocation notice may regard prior approval as valid."
+    },
+    "understanding_digest": "0dcefb743a42e5e7a95843d85f564067be624174420b2fc8befc388e237ba83e"
+  },
+  "context_name": "task-3/local/guardrails/retention-and-revocation",
+  "created_at": "2026-08-13T19:16:37.139457Z",
+  "follow_embeds": true,
+  "frame_digest": "ef16fbf229f1fa684a2bc551c57846666929aad1a43e610f88ff3e0aff0a129b",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.42155954199916,
+  "row_key": "8074b6e68cb9572251d4fce314e7b8c89a64dc1b52ccfa3657ffcfb4c8e648c1",
+  "schema_version": 1,
+  "source_count": 6,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

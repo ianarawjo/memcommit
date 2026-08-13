@@ -11,18 +11,30 @@ from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.clipboard import ClipboardError, write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.granted_context import (
+    context_access_display_facts,
+    resolve_context_access,
+)
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
+)
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
+from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.interfaces.console import (
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
 )
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.understanding import understanding_lines
+from memcommit.interfaces.tui.operations.summarize import (
+    SummarizeTuiOutcome,
+    SummarizeTuiSetup,
+    project_summarize_clipboard,
+)
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import (
@@ -31,7 +43,7 @@ from memcommit.query_provider import (
 )
 from memcommit.store import MemoryStore
 from memcommit.summarize import SummarizeError, SummarizeProvider
-from memcommit.summarize_application import SummarizeRequest
+from memcommit.summarize_application import SummarizeRequest, SummarizeResult
 from memcommit.summarize_runtime import run_summarize_with_store
 
 
@@ -47,6 +59,30 @@ def _provider_session() -> Iterator[SummarizeProvider]:
         provider = connect_codex_chatgpt_provider()
         progress.update("summarizing memories", step=2)
         yield provider
+
+
+def _summarize_clipboard_text(
+    result: SummarizeResult | SummarizeTuiOutcome,
+) -> str:
+    """Keep both explicitly requested TUI views distinct on the clipboard."""
+
+    return project_summarize_clipboard(result).text
+
+
+def _initial_tui_range_mode(
+    *,
+    direct: bool,
+    recursive: bool,
+) -> ContextReachViewMode:
+    """Keep explicit CLI scope while making a flagless TUI dual-view."""
+
+    if direct and recursive:
+        raise ValueError("Summarize TUI scope flags are mutually exclusive.")
+    if direct:
+        return "EXACT"
+    if recursive:
+        return "SUBTREE"
+    return "BOTH"
 
 
 def cmd(
@@ -109,13 +145,20 @@ def cmd(
         )
         traversal = resolve_context_traversal(preset=preset)
         mode = resolve_console_mode(plain=plain, tui=tui)
+        resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
+
+        def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:
+            nonlocal resources
+            if resources is None:
+                store = MemoryStore(create=False)
+                resources = (store, ContextOperandSnapshot.capture(store))
+            return resources
 
         def execute(request: SummarizeRequest):
             # Route validation happens before opening durable or semantic
             # infrastructure, so a forced TUI cannot partially execute when
             # no terminal is available.
-            store = MemoryStore(create=False)
-            snapshot = ContextOperandSnapshot.capture(store)
+            store, snapshot = command_resources()
             return run_summarize_with_store(
                 request,
                 store=store,
@@ -123,8 +166,41 @@ def cmd(
                 provider_session_factory=_provider_session,
             )
 
+        def prepare_tui(request: SummarizeRequest) -> SummarizeTuiSetup:
+            store, snapshot = command_resources()
+            selected_access = resolve_context_access(
+                store,
+                request.context_locator,
+                current_name=snapshot.current_name,
+                required_permission="READ",
+            )
+            catalog = freeze_profile_readable_context_catalog(
+                store,
+                selected_access,
+                include_query_routes=False,
+            )
+            names = tuple(catalog.list_context_names())
+            annotations = tuple(
+                (name, context_access_display_facts(access))
+                for name in names
+                if (access := catalog.access_for(name)).is_granted
+            )
+            current = snapshot.current_name
+            return SummarizeTuiSetup(
+                names=names,
+                selected_context=selected_access.display_name,
+                initial_range_mode=_initial_tui_range_mode(
+                    direct=direct,
+                    recursive=recursive,
+                ),
+                current_context=current if current in names else None,
+                annotations=annotations,
+            )
+
         runner = build_summarize_console_runner(
             execute=execute,
+            prepare_tui=prepare_tui,
+            clipboard_writer=write_system_clipboard,
             terminal=SystemTerminalCapabilities(),
         )
         result = runner.run(
@@ -153,9 +229,12 @@ def cmd(
         )
         raise typer.Exit(1)
 
+    if result is None:
+        typer.echo("Summarize cancelled.")
+        return
+
     if copy_result:
-        rendered_understanding = understanding_lines(result.understanding)
-        clipboard_text = "\n".join(rendered_understanding)
+        clipboard_text = _summarize_clipboard_text(result)
         try:
             write_system_clipboard(clipboard_text)
         except ClipboardError as error:

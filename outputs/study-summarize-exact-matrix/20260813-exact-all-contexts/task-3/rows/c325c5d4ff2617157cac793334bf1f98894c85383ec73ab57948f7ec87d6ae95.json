@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/02",
+      "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+      "digest": "d2ac7b94df835d43aef0a106013c3843ae012fa384c725626439f076cc8b5ae5",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+        }
+      ]
+    },
+    "key": "c325c5d4ff2617157cac793334bf1f98894c85383ec73ab57948f7ec87d6ae95",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 19.505092791998322,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+        "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+        "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+        "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+        "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+        "2e0df581-bd54-54f5-94ef-b719427fc88c",
+        "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+        "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+        "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+        "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+      ],
+      "text": "For lockouts, the user contacts their maternal aunt before management, confirms an in-person visit and arrival time, then returns the spare key in person that day. Sharing its location or the aunt’s contact requires consent; management verifies identity. The user avoids written passcodes, dislikes unannounced visits, and finds delivery photos reassuring."
+    },
+    "understanding_digest": "85a317b16e3295ffa9650ae2a6a3f6fbce6175d7725d16a109c8c83c8359d5b6"
+  },
+  "context_name": "task-3/local/personal-memory/2024/02",
+  "created_at": "2026-08-13T19:16:44.219885Z",
+  "follow_embeds": true,
+  "frame_digest": "d2ac7b94df835d43aef0a106013c3843ae012fa384c725626439f076cc8b5ae5",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 19.505092791998322,
+  "row_key": "c325c5d4ff2617157cac793334bf1f98894c85383ec73ab57948f7ec87d6ae95",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

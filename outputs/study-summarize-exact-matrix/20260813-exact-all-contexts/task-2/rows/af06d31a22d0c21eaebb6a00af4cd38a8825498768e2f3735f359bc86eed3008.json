@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/emphasis",
+      "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+      "digest": "9b4fe9bbf56c623bec691cfda3587072c9297128fea9d731844efcef8edf43e4",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "d59dc83b-ce6a-5ac7-ab64-e5436df1f945"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "328de462-17a4-551f-9f74-cb3118519e45"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "eab1dac5-8b61-5793-a56f-c4e3e64af190"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "f90e616a-d5a4-5cc2-86e4-62534a1faf83"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "78a1c87a-6936-516c-b578-8e97dc2e91f4"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "7af2db41-9091-5452-9beb-8fd7b48b7872"
+        },
+        {
+          "context_name": "task-2/advisor2/emphasis",
+          "context_uid": "398f9930-3a0f-5de0-a339-ceba7dd5d1c6",
+          "memory_uid": "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+        }
+      ]
+    },
+    "key": "af06d31a22d0c21eaebb6a00af4cd38a8825498768e2f3735f359bc86eed3008",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.412680917001126,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "d59dc83b-ce6a-5ac7-ab64-e5436df1f945",
+        "328de462-17a4-551f-9f74-cb3118519e45",
+        "eab1dac5-8b61-5793-a56f-c4e3e64af190",
+        "f90e616a-d5a4-5cc2-86e4-62534a1faf83",
+        "78a1c87a-6936-516c-b578-8e97dc2e91f4",
+        "7af2db41-9091-5452-9beb-8fd7b48b7872",
+        "2312f35d-c17d-5af3-b84f-d2e671d7663f"
+      ],
+      "text": "Limit the memorable primary HCI contributions to two, presenting each design or operational contribution as one named sentence, because reviewers struggle beyond two. For organizational-member studies, emphasize workflow and manager-approval constraints. Center the claim on one field operational decision that evaluation results will change, treating unnecessary prototype features as secondary scope."
+    },
+    "understanding_digest": "3ece1846e1823ef3f3945d01fdcc5769d06a7569b3718b5d87eca5cc4314ea77"
+  },
+  "context_name": "task-2/advisor2/emphasis",
+  "created_at": "2026-08-13T19:15:53.556431Z",
+  "follow_embeds": true,
+  "frame_digest": "9b4fe9bbf56c623bec691cfda3587072c9297128fea9d731844efcef8edf43e4",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.412680917001126,
+  "row_key": "af06d31a22d0c21eaebb6a00af4cd38a8825498768e2f3735f359bc86eed3008",
+  "schema_version": 1,
+  "source_count": 7,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

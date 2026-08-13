@@ -1,0 +1,52 @@
+ MEM SUMMARIZE                                                                                                                                                                      
+ READ-ONLY · PICK CONTEXT AND DESCENDANTS SEPARATELY                                                                                                                                
+┌─────────────────────────────────────────────────────────────────────────────────| DESCENDANTS |──────────────────────────────────────────────────────────────────────────────────┐
+│  RANGE · [ BOTH ]  [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────| CONTEXT · ALL READABLE CONTEXTS · * CURRENT |──────────────────────────────────────────────────────────────────┐
+│  ·   ▸ practice                                                                                                                                                                 ^│
+│  ·   ▾ task-1                                                                                                                                                                    │
+│  ·     ▸ task-1/campus-wiki  READ GRANT                                                                                                                                          │
+│  ·     · task-1/description                                                                                                                                                      │
+│  · *   · task-1/description-atomized                                                                                                                                             │
+│› ✓     ▸ task-1/participant                                                                                                                                                      │
+│  ·   ▸ task-2                                                                                                                                                                    │
+│  ·   ▸ task-3                                                                                                                                                                    │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SUMMARY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ SUMMARY · task-1/participant                                                                                                                                                    ^┃
+┃ STATUS · READ-ONLY · BOTH VIEWS                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ [CURRENT ONLY]                                                                                                                                                                   ┃
+┃ STATUS · DIRECT · SOURCES 0                                                                                                                                                      ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ The selected Context contains no ordinary Memories to summarize.                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ [CURRENT + DESCENDANTS]                                                                                                                                                          ┃
+┃ STATUS · RECURSIVE · SOURCES 75                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ From June 24 through August 23, Main Building construction closes or limits entrances, accessible and library routes, event venues, parking, shops, desks, and restrooms; design ┃
+┃ated alternative routes, venues, parking, amenities, online services, and nearby restrooms remain available. Authorized after-hours students and staff need physical cards, no re ┃
+┃placement store operates after 11:00 p.m., and guidance cannot guarantee parking availability or infer nonpublic work.                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ COPIED · current-only summary · y current · Y all · ↑/↓ section/cross · PgUp/PgDn page · Home/End · S rerun · Esc/Backspace/Q close · read-only

@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/description",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "digest": "baa66e742a6559e4862ecf29d37ebf3932fb6db27c18a9c28af2e8bc5f68dfa8",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/description",
+          "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+          "memory_uid": "77ea44c9-0a6f-5ab2-b20d-07341e978b87"
+        }
+      ]
+    },
+    "key": "16325e94249d798d896dcd68e6c4dbcb231798b7fab119e99128284b999b0af0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.618744625000545,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "77ea44c9-0a6f-5ab2-b20d-07341e978b87"
+      ],
+      "text": "정부가 의료 과정 대부분을 지원하는 새 AI 의료 에이전트를 제공하며, 더 유용한 지원을 위해 삶의 거의 모든 영역과 과거 에이전트 대화가 담긴 개인 메모리 접근을 요청한다. 사용자는 제공할 정보와 제외할 정보를 결정한 뒤 선택한 정보만 전송해야 한다."
+    },
+    "understanding_digest": "5921c588e55ccddfa71e155bbd6ab1649b886fa923d07c76bc9f2f8861ab48da"
+  },
+  "context_name": "task-3/description",
+  "created_at": "2026-08-13T19:16:13.788857Z",
+  "follow_embeds": true,
+  "frame_digest": "baa66e742a6559e4862ecf29d37ebf3932fb6db27c18a9c28af2e8bc5f68dfa8",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.618744625000545,
+  "row_key": "16325e94249d798d896dcd68e6c4dbcb231798b7fab119e99128284b999b0af0",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

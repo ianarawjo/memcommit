@@ -1,14 +1,14 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale for [c25b2c06]                                                                                                                                                         ^┃
-┃Context: demo/child [681e7535]                                                                                                                                                    ┃
+┃Rationale for [3d941981]                                                                                                                                                         ^┃
+┃Context: demo/child [a44cc77b]                                                                                                                                                    ┃
 ┃Rationale scope: demo and readable descendants · 2 Context(s)                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  Retained historical wording                                                                                                                                                     ┃
+┃  Final wording used by both reports                                                                                                                                              ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED ORIGIN                                                                                                                                                                   ┃
-┃  CREATED via add at 2026-08-13 15:55                                                                                                                                             ┃
-┃  Checkpoint: 238a8fad  |  Evidence: RECORDED                                                                                                                                     ┃
+┃  CREATED via add at 2026-08-13 15:45                                                                                                                                             ┃
+┃  Checkpoint: f42c8ef9  |  Evidence: RECORDED                                                                                                                                     ┃
 ┃  Source occurrence: single item 1/1, original line 1                                                                                                                             ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED RATIONALE                                                                                                                                                                ┃
@@ -25,11 +25,11 @@
 ┃                                                                                                                                                                                  ┃
 ┃CURRENT CONTEXT WINDOW — and readable descendants, deterministic fallback only                                                                                                    ┃
 ┃  No semantic relationship is asserted by this list.                                                                                                                              ┃
-┃  [53afcafc] demo/child · position 1                                                                                                                                              ┃
-┃      Final wording used by both reports                                                                                                                                          ┃
+┃  (no other direct Memories)                                                                                                                                                      ┃
 ┃                                                                                                                                                                                  ┃
 ┃UNRESOLVED / UNRECORDED                                                                                                                                                           ┃
 ┃  The author's intended meaning cannot be recovered from provenance alone.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/04",
+      "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+      "digest": "73d0528c5a12f3b964f248868e073d7cc202ce8e00b4a8655333e8885d1628ed",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "71e27b0c-5c10-5102-aeac-98b0841723f2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "50ac9268-9259-56fd-8678-1dfc8f919efb"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "5141ca66-9860-5ec5-b028-ac8670f586ca"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/04",
+          "context_uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+          "memory_uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+        }
+      ]
+    },
+    "key": "4191281042bb993add38dc7512c08ee75a34df6a32c0aec0493c982b01b1e781",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.103620166999463,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "9cea83cd-e39f-53bd-9e79-d30aa465ad02",
+        "51f8326f-60d4-5ba3-ba32-a04331dcb930",
+        "cd0bce79-71d5-5d46-9c68-8a1d096dd53a",
+        "71e27b0c-5c10-5102-aeac-98b0841723f2",
+        "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7",
+        "aab36950-7e2b-588f-bb7c-d3bd6e36c501",
+        "50ac9268-9259-56fd-8678-1dfc8f919efb",
+        "5141ca66-9860-5ec5-b028-ac8670f586ca",
+        "e265e637-fa41-53d0-aa9b-0102e9962f9a",
+        "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+      ],
+      "text": "In April 2024, the user completed a dental checkup, needed sequential questions, and later answered all of them when asked individually. Appointment changes must be requested by phone, though a lunchtime call went unanswered. They retained photographed instructions; future calendar entries should confirm date, time, address, and floor. Sharing the time enabled their older sister to check in afterward. The local agent can track visits and appointments but cannot decide whether follow-up is needed."
+    },
+    "understanding_digest": "039a27979171bd85b19cfe999470e60471c1fb6b3f9195bab1551b037e0404c5"
+  },
+  "context_name": "task-3/local/personal-memory/2024/04",
+  "created_at": "2026-08-13T19:16:46.924778Z",
+  "follow_embeds": false,
+  "frame_digest": "73d0528c5a12f3b964f248868e073d7cc202ce8e00b4a8655333e8885d1628ed",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.103620166999463,
+  "row_key": "4191281042bb993add38dc7512c08ee75a34df6a32c0aec0493c982b01b1e781",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

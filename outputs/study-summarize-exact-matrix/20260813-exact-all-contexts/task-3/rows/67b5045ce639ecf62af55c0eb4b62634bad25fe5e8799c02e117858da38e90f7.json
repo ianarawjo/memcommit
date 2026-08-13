@@ -1,0 +1,100 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/12",
+      "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+      "digest": "b868bd964b8559acd3f3baa82cf485ee6273d5e0ee289b9f0bafa57358af6a96",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "e9515d6b-10d9-579f-abf7-5030db64218a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/12",
+          "context_uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+          "memory_uid": "a6076438-307c-56fe-9d2c-848181846ce5"
+        }
+      ]
+    },
+    "key": "67b5045ce639ecf62af55c0eb4b62634bad25fe5e8799c02e117858da38e90f7",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.692887166998844,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "a6923620-267d-5129-b8c4-cd9b1e1a1e7b",
+        "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582",
+        "4cb45120-4376-5c7b-ae92-faa9e4b9330c",
+        "479f4434-879c-5335-b0c9-c0bfa19ecdcd",
+        "0f2c78a7-8f92-573d-af8a-a360ceb77b24",
+        "7b9197ac-4263-5169-8d3b-d34f5d893d36",
+        "7b0b7571-f29c-56e5-a27a-82d69a4a6982",
+        "8e57141d-c603-56cd-ab9e-c14b4e944b45",
+        "a6076438-307c-56fe-9d2c-848181846ce5"
+      ],
+      "text": "2024年12月，用户去诊所时遇到积雪阻断主入口坡道，遂改走侧门；电梯检查又延误了就诊，所以下次到访前先电话确认运行情况。候诊条件不一：有时在取号机旁等候，有时无椅可靠墙换姿势，姐姐陪同时则很快找到座位。仅凭使用无障碍路线不能推断其身体状况。"
+    },
+    "understanding_digest": "6a0840dfa13aa5ff5bb8a48873ba59b664763fc87d309d28acc1a6e4ee161712"
+  },
+  "context_name": "task-3/local/personal-memory/2024/12",
+  "created_at": "2026-08-13T19:16:56.655184Z",
+  "follow_embeds": false,
+  "frame_digest": "b868bd964b8559acd3f3baa82cf485ee6273d5e0ee289b9f0bafa57358af6a96",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.692887166998844,
+  "row_key": "67b5045ce639ecf62af55c0eb4b62634bad25fe5e8799c02e117858da38e90f7",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

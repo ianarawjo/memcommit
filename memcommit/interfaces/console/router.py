@@ -41,19 +41,24 @@ def resolve_console_mode(*, plain: bool, tui: bool) -> ConsoleMode:
 
 @dataclass(frozen=True)
 class ConsoleRunner(Generic[RequestT, ResultT]):
-    """Execute one use case and present it through one injected adapter.
+    """Route one use case through an injected plain or interactive adapter.
 
     This is the only object that knows both presentation siblings. The CLI and
     TUI adapters remain independent, while the application callable receives
-    no terminal state or rendering concern.
+    no terminal state or rendering concern.  The interactive adapter owns when
+    execution begins so a setup screen can be cancelled before semantic or
+    durable infrastructure is touched.
     """
 
     execute: Callable[[RequestT], ResultT]
     present_plain: Callable[[ResultT], None]
-    present_tui: Callable[[ResultT], None]
+    run_tui: Callable[
+        [RequestT, Callable[[RequestT], ResultT]],
+        ResultT | None,
+    ]
     terminal: TerminalCapabilities
 
-    def run(self, request: RequestT, *, mode: ConsoleMode) -> ResultT:
+    def run(self, request: RequestT, *, mode: ConsoleMode) -> ResultT | None:
         if not isinstance(mode, ConsoleMode):
             raise TypeError("Console mode is invalid.")
         interactive = self.terminal.is_interactive()
@@ -68,9 +73,8 @@ class ConsoleRunner(Generic[RequestT, ResultT]):
             if mode is ConsoleMode.AUTO
             else mode
         )
-        result = self.execute(request)
         if selected is ConsoleMode.TUI:
-            self.present_tui(result)
-        else:
-            self.present_plain(result)
+            return self.run_tui(request, self.execute)
+        result = self.execute(request)
+        self.present_plain(result)
         return result

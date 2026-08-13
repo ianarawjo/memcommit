@@ -1,0 +1,77 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/evaluation",
+      "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+      "digest": "2ab2b86ae624bbc4ca51a56ac83549919f61cb4e674050d3df0d67b84c3a30d7",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "a50f6ecb-de38-5769-8a6e-23b84a7eb35c"
+        },
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "44c61beb-24a2-584a-ad96-e622690d8171"
+        },
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "23202824-b576-5d77-b591-8b4cc0757632"
+        },
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "65ae88bf-8002-5ada-8590-eaf345b38863"
+        },
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1"
+        },
+        {
+          "context_name": "task-2/advisor1/evaluation",
+          "context_uid": "30568e2f-ce17-50ce-a25b-1cc4bdb94689",
+          "memory_uid": "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+        }
+      ]
+    },
+    "key": "92fec9233a62f800fbe50999bd0080d71bb2d3932d107807e69a34cf74dc86c0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.66275766599938,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "a50f6ecb-de38-5769-8a6e-23b84a7eb35c",
+        "44c61beb-24a2-584a-ad96-e622690d8171",
+        "23202824-b576-5d77-b591-8b4cc0757632",
+        "65ae88bf-8002-5ada-8590-eaf345b38863",
+        "79af5e5f-4868-5e76-bcd5-3f8e1d6a0bd1",
+        "3a65fc8b-a5b4-50fc-a60e-fc6f3fc44547"
+      ],
+      "text": "Evaluation should use one representative primary measure to decide whether compared designs are retained, modified, or discarded, with review panels confirming clear criteria. Process measures should diagnose problematic interaction steps, results should express differences between alternatives, boundary cases should test broader explanatory power, and controlled settings exclude some everyday pressures and behaviors."
+    },
+    "understanding_digest": "b7c023765cf2734e9424e2978cd0f661c94f453aaeb0a0e2cd8af3eb71d8ab96"
+  },
+  "context_name": "task-2/advisor1/evaluation",
+  "created_at": "2026-08-13T19:15:21.352010Z",
+  "follow_embeds": false,
+  "frame_digest": "2ab2b86ae624bbc4ca51a56ac83549919f61cb4e674050d3df0d67b84c3a30d7",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.66275766599938,
+  "row_key": "92fec9233a62f800fbe50999bd0080d71bb2d3932d107807e69a34cf74dc86c0",
+  "schema_version": 1,
+  "source_count": 6,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

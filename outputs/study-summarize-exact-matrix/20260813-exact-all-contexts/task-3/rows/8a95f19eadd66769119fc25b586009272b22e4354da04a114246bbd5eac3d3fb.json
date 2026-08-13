@@ -1,0 +1,99 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/04",
+      "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+      "digest": "aecac8121e6501a414bf5652b7a4794f6c17fe40145efe43ec544aaa68efd8df",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "384f4e47-1d90-5c4e-984a-6403fb26df74"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "16be89a1-66f7-5241-993a-d495a7bc1feb"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "828790fa-0e60-5710-a4b1-6a93827088f2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/04",
+          "context_uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+          "memory_uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+        }
+      ]
+    },
+    "key": "8a95f19eadd66769119fc25b586009272b22e4354da04a114246bbd5eac3d3fb",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.69831937499839,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "384f4e47-1d90-5c4e-984a-6403fb26df74",
+        "3b402d53-6d16-5f10-9964-a3f504f2ee27",
+        "657f55d0-cbe6-5098-a34a-669acbb59ad7",
+        "b152e8f8-1d98-53dc-8c50-965b1dadd4d7",
+        "828790fa-0e60-5710-a4b1-6a93827088f2",
+        "6e4c3217-e8aa-55a8-b08a-157c280282e1",
+        "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff",
+        "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+      ],
+      "text": "The user keeps a donation bag by the entrance and successfully cleared a closet compartment after unworn clothes remained untouched for a month. Organizing should proceed by item type, separating documents and discard candidates. Confirm before disposing of personal documents or others’ property, offer usable kitchenware to the user’s mother, and never infer emotional value from use frequency alone."
+    },
+    "understanding_digest": "11f854554d2e5b5671f56a78072c2d7f0ab49fe019fe73286d978c65d0531c08"
+  },
+  "context_name": "task-3/local/personal-memory/2026/04",
+  "created_at": "2026-08-13T19:17:34.668074Z",
+  "follow_embeds": false,
+  "frame_digest": "aecac8121e6501a414bf5652b7a4794f6c17fe40145efe43ec544aaa68efd8df",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.69831937499839,
+  "row_key": "8a95f19eadd66769119fc25b586009272b22e4354da04a114246bbd5eac3d3fb",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

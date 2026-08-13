@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/scope",
+      "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+      "digest": "cc8c70f54772ab451f4489fed11edd0b8d4a08b43d09c20de2cbf4d1ecb6cb9b",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memory_uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7"
+        },
+        {
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memory_uid": "31cdacff-7c49-547d-9f97-598a07b67fb6"
+        },
+        {
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memory_uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8"
+        },
+        {
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memory_uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba"
+        },
+        {
+          "context_name": "task-2/advisor1/scope",
+          "context_uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+          "memory_uid": "fd29c315-521f-53c0-add5-c668ec318a43"
+        }
+      ]
+    },
+    "key": "9cda9e7120f4a200ef5111c5486f2d2e184a9c8c103ea49141b097f257964110",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.66237908399853,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+        "31cdacff-7c49-547d-9f97-598a07b67fb6",
+        "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+        "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+        "fd29c315-521f-53c0-add5-c668ec318a43"
+      ],
+      "text": "The proposal should bound generalization by naming, in one sentence, excluded users and situations, and by specifying transferable goals, interaction conditions, and technological constraints. Accessible-sample formative studies may support analytic generalization through design conditions and mechanisms, but not statistical representativeness; reviewers expect this distinction before broader population claims."
+    },
+    "understanding_digest": "5751345e0abca6dacb5e4342b6932c1b25e711f7fd04e0d95d72a8eeda5da6c7"
+  },
+  "context_name": "task-2/advisor1/scope",
+  "created_at": "2026-08-13T19:15:34.566702Z",
+  "follow_embeds": false,
+  "frame_digest": "cc8c70f54772ab451f4489fed11edd0b8d4a08b43d09c20de2cbf4d1ecb6cb9b",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.66237908399853,
+  "row_key": "9cda9e7120f4a200ef5111c5486f2d2e184a9c8c103ea49141b097f257964110",
+  "schema_version": 1,
+  "source_count": 5,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

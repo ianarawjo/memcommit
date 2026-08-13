@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/08",
+      "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+      "digest": "f0f0ed899fee6c7fcdfd166dd66dd07c4aca4832df9a45a7faff77533934b3b7",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "15c3941e-ed44-508f-ae30-b51456b5ba86"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "8946f9da-e325-59c3-9260-2d2f590d3701"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "67e8b160-a57d-56e5-a766-741b7ce0e939"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "efd0706b-600a-5ac1-926e-cc0602ca0086"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "a8670161-257e-51ab-8e30-0e282952278f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "2db70f53-99ee-556c-a8c1-b809881cbebd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/08",
+          "context_uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+          "memory_uid": "1272087c-a535-5612-8c7a-1bc257183788"
+        }
+      ]
+    },
+    "key": "ba1a465c93c54e0162ca4e838e4d0bdf21faeabc6d62370c37c3de7aa0160a87",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.048353125002905,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "15c3941e-ed44-508f-ae30-b51456b5ba86",
+        "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4",
+        "8946f9da-e325-59c3-9260-2d2f590d3701",
+        "67e8b160-a57d-56e5-a766-741b7ce0e939",
+        "efd0706b-600a-5ac1-926e-cc0602ca0086",
+        "1e8a6f7e-0911-5a34-ad82-172479d1a7a4",
+        "a8670161-257e-51ab-8e30-0e282952278f",
+        "2db70f53-99ee-556c-a8c1-b809881cbebd",
+        "38d60cc4-2f91-5cc2-b511-55cdbbe12c32",
+        "1272087c-a535-5612-8c7a-1bc257183788"
+      ],
+      "text": "For returns, the user keeps packing tape in an upper kitchen drawer, seals boxes at home, and affixes barcodes flat without folds. They now verify same-day hours, including holiday counter exceptions, arrive well before intake ends, and map nearby bank and postal branches before combining errands."
+    },
+    "understanding_digest": "3f5469d4edd15591e0846406fbc3ccef5f8938fc281da977aea4ed78690d1b74"
+  },
+  "context_name": "task-3/local/personal-memory/2025/08",
+  "created_at": "2026-08-13T19:17:16.936051Z",
+  "follow_embeds": true,
+  "frame_digest": "f0f0ed899fee6c7fcdfd166dd66dd07c4aca4832df9a45a7faff77533934b3b7",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.048353125002905,
+  "row_key": "ba1a465c93c54e0162ca4e838e4d0bdf21faeabc6d62370c37c3de7aa0160a87",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

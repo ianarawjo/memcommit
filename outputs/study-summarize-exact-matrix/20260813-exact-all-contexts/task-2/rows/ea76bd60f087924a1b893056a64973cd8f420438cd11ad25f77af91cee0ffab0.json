@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/expression",
+      "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+      "digest": "a2c89a4a395ab07b9300c93c955fa5fa5c0e8358fe375310448b486bdf55c6e1",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "4264c20d-3e44-578d-866e-7787cc7b59e2"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "70a8c3f0-0f6a-5881-abd6-29f52833b7bd"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "b410aa8d-db87-586b-a1cd-4af5767a9f7a"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "a385fbb1-85b4-5132-bbc7-8fd8daedb715"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "22254f16-4628-5fd9-b1af-6e66dc2572b3"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "32028269-5d43-5a65-b22b-9e570ceabfde"
+        },
+        {
+          "context_name": "task-2/advisor2/expression",
+          "context_uid": "cf8e8baf-292e-57c3-8e2c-3f9b3d52f3d3",
+          "memory_uid": "939ee3d0-b611-574a-a25b-82708394bd5e"
+        }
+      ]
+    },
+    "key": "ea76bd60f087924a1b893056a64973cd8f420438cd11ad25f77af91cee0ffab0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.167898625000817,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "4264c20d-3e44-578d-866e-7787cc7b59e2",
+        "70a8c3f0-0f6a-5881-abd6-29f52833b7bd",
+        "b410aa8d-db87-586b-a1cd-4af5767a9f7a",
+        "a385fbb1-85b4-5132-bbc7-8fd8daedb715",
+        "22254f16-4628-5fd9-b1af-6e66dc2572b3",
+        "32028269-5d43-5a65-b22b-9e570ceabfde",
+        "939ee3d0-b611-574a-a25b-82708394bd5e"
+      ],
+      "text": "Use sequence tables for changing draft procedures, with stable rows for each step, actor, condition, and outcome; they enable faster updates and stepwise checking, though branching is less immediate. Service-flow diagrams still expose human-system transitions and aid reviewers’ early scans, while prototype visual fidelity can differ from data and service integration."
+    },
+    "understanding_digest": "fd300188f1658be56e03ee9f1edf42e74beba8cd7354f3e7247de3c0167550fd"
+  },
+  "context_name": "task-2/advisor2/expression",
+  "created_at": "2026-08-13T19:16:02.608982Z",
+  "follow_embeds": true,
+  "frame_digest": "a2c89a4a395ab07b9300c93c955fa5fa5c0e8358fe375310448b486bdf55c6e1",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.167898625000817,
+  "row_key": "ea76bd60f087924a1b893056a64973cd8f420438cd11ad25f77af91cee0ffab0",
+  "schema_version": 1,
+  "source_count": 7,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/03",
+      "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+      "digest": "0a83e48440f93a9d0507983bf0ea4b7d00a53910d72f538e021a1df267c61d61",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "4b4ace0a-623b-5897-8fbc-85bfac28e393"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "5a53cbc8-6e6d-571a-9ebd-bdb077626878"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "ff436ea5-1b3e-55df-8302-bd8a96740671"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "53faabad-0e32-52a8-b089-ef48ba2a8e9e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "89d6fa9a-b795-59df-be34-1c05a9861d35"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "945562ec-8998-5d1e-b7ea-2bcf874876f2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "5551622f-66cf-5542-8c47-1cddadab5c02"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "70a9ef78-af41-5d15-8ea1-4e9c727de07f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "1d278d8b-cc5c-5635-af71-e7d2a6e81094"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/03",
+          "context_uid": "97d36150-4792-5a5c-9332-5eb1de8bcf04",
+          "memory_uid": "de398064-3179-590b-8c62-effb17060115"
+        }
+      ]
+    },
+    "key": "cff1ab067dbdc3f0afd1a75b2371d5b7efb91d9282497a3f3640397ae52448ff",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.030377125000086,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "4b4ace0a-623b-5897-8fbc-85bfac28e393",
+        "5a53cbc8-6e6d-571a-9ebd-bdb077626878",
+        "ff436ea5-1b3e-55df-8302-bd8a96740671",
+        "53faabad-0e32-52a8-b089-ef48ba2a8e9e",
+        "89d6fa9a-b795-59df-be34-1c05a9861d35",
+        "945562ec-8998-5d1e-b7ea-2bcf874876f2",
+        "5551622f-66cf-5542-8c47-1cddadab5c02",
+        "70a9ef78-af41-5d15-8ea1-4e9c727de07f",
+        "1d278d8b-cc5c-5635-af71-e7d2a6e81094",
+        "de398064-3179-590b-8c62-effb17060115"
+      ],
+      "text": "The user stores tax receipts by year, photographs them promptly, and names files by date and expense category to prevent omissions and enable search. Before submission, they check signatures and provide fully legible electronic copies. The local agent remains available to organize receipts by date and category, but cannot assess deductibility; accepted documents and deadlines depend on current-year guidance."
+    },
+    "understanding_digest": "ecf11a23cf2072bc77ef879ece76503cb992ec6aef0d4f9c96661932295c3d7d"
+  },
+  "context_name": "task-3/local/personal-memory/2026/03",
+  "created_at": "2026-08-13T19:17:30.844731Z",
+  "follow_embeds": true,
+  "frame_digest": "0a83e48440f93a9d0507983bf0ea4b7d00a53910d72f538e021a1df267c61d61",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.030377125000086,
+  "row_key": "cff1ab067dbdc3f0afd1a75b2371d5b7efb91d9282497a3f3640397ae52448ff",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

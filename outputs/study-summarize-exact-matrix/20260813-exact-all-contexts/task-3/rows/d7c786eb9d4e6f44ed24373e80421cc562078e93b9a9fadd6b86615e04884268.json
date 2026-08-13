@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/09",
+      "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+      "digest": "7caf70d55e5c2faaafbab160e015d78257ddb2f95dd6bf1f5c6bfee528e13b4d",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "84b4519d-ef17-5403-a866-4eb705951a09"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "25994612-bebc-5643-8642-19b825f00f00"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "9b667d0d-d97b-5dfa-af66-295b9c40403d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "54d29daf-7bd7-5221-ae65-8b46f7f4869b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "375957b9-e051-5a94-bde1-d157f44cc343"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "d189ddb4-7014-5d19-b779-5f36c6bb4160"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "61ee4989-7372-5845-b14f-d8a6eb1e5300"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "f2b9f9b0-3d15-5411-9c40-ddce42288ed3"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "947e37c1-1235-54e1-8ddd-dcad7d725ede"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/09",
+          "context_uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+          "memory_uid": "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+        }
+      ]
+    },
+    "key": "d7c786eb9d4e6f44ed24373e80421cc562078e93b9a9fadd6b86615e04884268",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.515903958999843,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "84b4519d-ef17-5403-a866-4eb705951a09",
+        "25994612-bebc-5643-8642-19b825f00f00",
+        "9b667d0d-d97b-5dfa-af66-295b9c40403d",
+        "54d29daf-7bd7-5221-ae65-8b46f7f4869b",
+        "375957b9-e051-5a94-bde1-d157f44cc343",
+        "d189ddb4-7014-5d19-b779-5f36c6bb4160",
+        "61ee4989-7372-5845-b14f-d8a6eb1e5300",
+        "f2b9f9b0-3d15-5411-9c40-ddce42288ed3",
+        "947e37c1-1235-54e1-8ddd-dcad7d725ede",
+        "1b2e9508-d9ce-5b27-bf66-ec7691061e13"
+      ],
+      "text": "The user’s availability changes weekly, so prior weekdays are unreliable and availability should be reconfirmed before booking. Consecutive or closely spaced appointments can delay lunch or force eating in transit, while shared calendars omit travel buffers. Calendar details should protect private reasons, and same-day evening changes require advance weekend-morning notice to the user’s mother."
+    },
+    "understanding_digest": "eb26834802e192bb00b888e9917bedf6b58f626948f8d50e6ffa3dd0600b3a91"
+  },
+  "context_name": "task-3/local/personal-memory/2024/09",
+  "created_at": "2026-08-13T19:16:53.197458Z",
+  "follow_embeds": false,
+  "frame_digest": "7caf70d55e5c2faaafbab160e015d78257ddb2f95dd6bf1f5c6bfee528e13b4d",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.515903958999843,
+  "row_key": "d7c786eb9d4e6f44ed24373e80421cc562078e93b9a9fadd6b86615e04884268",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

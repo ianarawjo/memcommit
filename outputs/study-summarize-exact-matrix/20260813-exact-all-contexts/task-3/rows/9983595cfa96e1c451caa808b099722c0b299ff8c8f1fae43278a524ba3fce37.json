@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/12",
+      "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+      "digest": "207a25aa8c2e53b932dce7cdf612d1b3157942292f3dd42c7631f83748addb78",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "bd69b616-6e7c-5440-8b29-586de68bcff6"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "90c60e57-d7db-5783-9ca8-2fd27b94d847"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "53bc23b2-8242-58b5-b496-a45c70bb8e41"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "3b097446-2c73-5414-8c06-6bacdf00a4c1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "7657f424-cd24-54dd-8409-e04974dd1531"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "d8e82ad3-902e-5f0c-aa8e-b23ce874982a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "8a941bf1-73bd-51d3-a069-62ecc9d56439"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "036edf8f-4680-5822-924e-0fdc691c8135"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/12",
+          "context_uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+          "memory_uid": "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+        }
+      ]
+    },
+    "key": "9983595cfa96e1c451caa808b099722c0b299ff8c8f1fae43278a524ba3fce37",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.827677875000518,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "bd69b616-6e7c-5440-8b29-586de68bcff6",
+        "90c60e57-d7db-5783-9ca8-2fd27b94d847",
+        "53bc23b2-8242-58b5-b496-a45c70bb8e41",
+        "3b097446-2c73-5414-8c06-6bacdf00a4c1",
+        "ce18c7a5-d1e9-5e5c-8739-b14fa7298feb",
+        "7657f424-cd24-54dd-8409-e04974dd1531",
+        "d8e82ad3-902e-5f0c-aa8e-b23ce874982a",
+        "8a941bf1-73bd-51d3-a069-62ecc9d56439",
+        "036edf8f-4680-5822-924e-0fdc691c8135",
+        "b9e9e222-a559-56e3-93b5-1f49a0e0d3ab"
+      ],
+      "text": "The user keeps wrapping supplies in the bedroom closet. After duplicate, late, and misassigned gifts, they now let their mother choose needed items, order a week ahead after checking delivery dates, and label box bottoms. Their brother prefers shareable snacks. The local agent can flag past duplicates, but not current needs, and year-end delivery dates may slip."
+    },
+    "understanding_digest": "cf85f0376c264ec85069074e26b9b1cf6f28770d205289d87b486ec6282b50eb"
+  },
+  "context_name": "task-3/local/personal-memory/2025/12",
+  "created_at": "2026-08-13T19:17:22.996694Z",
+  "follow_embeds": false,
+  "frame_digest": "207a25aa8c2e53b932dce7cdf612d1b3157942292f3dd42c7631f83748addb78",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.827677875000518,
+  "row_key": "9983595cfa96e1c451caa808b099722c0b299ff8c8f1fae43278a524ba3fce37",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

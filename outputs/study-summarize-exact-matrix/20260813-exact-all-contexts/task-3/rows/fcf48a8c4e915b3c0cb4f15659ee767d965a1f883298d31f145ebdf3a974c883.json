@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/audit-and-recovery",
+      "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+      "digest": "0cc05c6f3dda24b43a4be7b2d1ec1a6f973c9ac1a01950e8212152c183e9f7e2",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "c0ce508e-2777-54e3-806d-632adbdb9073"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "620a1dee-b131-586f-a838-64d853c44a92"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "26256211-0509-5c26-a54c-e83b4bde5a4e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "0d377136-da0b-570b-8deb-c662bee5bcbb"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "d26befa6-62a2-5923-a31b-71e73a31e164"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "d5d34316-4878-53d9-9ba8-d4d4d3d13752"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+        }
+      ]
+    },
+    "key": "fcf48a8c4e915b3c0cb4f15659ee767d965a1f883298d31f145ebdf3a974c883",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.980351124999288,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "c0ce508e-2777-54e3-806d-632adbdb9073",
+        "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+        "620a1dee-b131-586f-a838-64d853c44a92",
+        "26256211-0509-5c26-a54c-e83b4bde5a4e",
+        "0d377136-da0b-570b-8deb-c662bee5bcbb",
+        "d26befa6-62a2-5923-a31b-71e73a31e164",
+        "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+        "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+      ],
+      "text": "Approved sharing must record the source Memory locator, recipient, purpose, and approval time, and users must be informed of transmission failures. The local agent can reconstruct recorded approvals and transmissions, but cannot trace unrecorded external processing; external copies may not receive later local corrections, and external operators may prefer their own conflicting audit records."
+    },
+    "understanding_digest": "9e057bd2aa8f30367f52faadf0204435ca5eec06bd4f416c9d7479630f54aa08"
+  },
+  "context_name": "task-3/local/guardrails/audit-and-recovery",
+  "created_at": "2026-08-13T19:16:19.077072Z",
+  "follow_embeds": false,
+  "frame_digest": "0cc05c6f3dda24b43a4be7b2d1ec1a6f973c9ac1a01950e8212152c183e9f7e2",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.980351124999288,
+  "row_key": "fcf48a8c4e915b3c0cb4f15659ee767d965a1f883298d31f145ebdf3a974c883",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

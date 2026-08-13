@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/purpose-and-scope",
+      "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+      "digest": "6246774e4835e86bb9b71f22a9b13e60bbb7dc0bbde485ee0470bfb8bf0a852e",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd"
+        }
+      ]
+    },
+    "key": "b6011b78e8c910a9adcd38424982b2986fa0cef1c28b9245f31f2ca6b691fb2b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 27.070770667000033,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "c971c24d-2543-5874-91e3-b97aec8bc77a",
+        "3d3749df-7036-548b-b939-7b6b32c79af6",
+        "75944d44-d6e7-52fc-a68a-676b0df123ed",
+        "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+        "e0133c8a-5382-50d2-9d9a-74e3ff700f69",
+        "58850532-c154-5e64-87cb-91c81d3e5ca5",
+        "05953013-6bb7-5f2c-8024-23ef357161fa",
+        "b5618dee-42df-583f-a839-e8e611ccdabd"
+      ],
+      "text": "Sharing candidates must contain only Memories and details necessary for the user-confirmed purpose; if that purpose is insufficiently specific, clarification is required first. Approval covers only the reviewed recipients, purposes, and items and cannot be reused for another purpose. Unless separately restricted, recipients may use received material within the requested scope."
+    },
+    "understanding_digest": "67857c4638864fc46a128f64f795c594cab547c86ab4a16463f72063f9c1cc16"
+  },
+  "context_name": "task-3/local/guardrails/purpose-and-scope",
+  "created_at": "2026-08-13T19:16:43.889274Z",
+  "follow_embeds": true,
+  "frame_digest": "6246774e4835e86bb9b71f22a9b13e60bbb7dc0bbde485ee0470bfb8bf0a852e",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 27.070770667000033,
+  "row_key": "b6011b78e8c910a9adcd38424982b2986fa0cef1c28b9245f31f2ca6b691fb2b",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

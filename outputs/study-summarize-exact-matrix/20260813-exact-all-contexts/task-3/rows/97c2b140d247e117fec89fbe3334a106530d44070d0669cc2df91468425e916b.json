@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/downstream-use",
+      "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+      "digest": "340118aee64f6a6aea94a3c8dd566c15915bdf2386054404aecaf4101e748aa8",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "8cd6d58b-9325-584d-8c5c-396e1af03423"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "00564a98-72a6-57ce-9fc6-20a918e9e593"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "c2f154f8-6340-57d6-bd12-efa5411592b1"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71"
+        }
+      ]
+    },
+    "key": "97c2b140d247e117fec89fbe3334a106530d44070d0669cc2df91468425e916b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.43069583399847,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+        "8cd6d58b-9325-584d-8c5c-396e1af03423",
+        "00564a98-72a6-57ce-9fc6-20a918e9e593",
+        "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+        "c2f154f8-6340-57d6-bd12-efa5411592b1",
+        "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+        "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+        "9b320cc6-d3d3-5135-82dc-93b48c4bfb71"
+      ],
+      "text": "Shared material must state its permitted purpose, prohibit unapproved forwarding, and not be assumed available for model training; authority to receive does not confer reuse authority. Secondary processors require separate user approval, although recipients may consider internal processors covered originally. Copies may persist across processing stages, so deletion must not be guaranteed without verified compliance."
+    },
+    "understanding_digest": "0fe36ce42077cf5058453a8e0f1bc2544dec648c03de072e9e8209e411992569"
+  },
+  "context_name": "task-3/local/guardrails/downstream-use",
+  "created_at": "2026-08-13T19:16:21.397402Z",
+  "follow_embeds": false,
+  "frame_digest": "340118aee64f6a6aea94a3c8dd566c15915bdf2386054404aecaf4101e748aa8",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.43069583399847,
+  "row_key": "97c2b140d247e117fec89fbe3334a106530d44070d0669cc2df91468425e916b",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

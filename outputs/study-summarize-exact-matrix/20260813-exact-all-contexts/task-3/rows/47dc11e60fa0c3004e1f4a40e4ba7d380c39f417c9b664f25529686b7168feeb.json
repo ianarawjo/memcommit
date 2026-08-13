@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/recipient-and-authority",
+      "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+      "digest": "372d0e01d4fb9376761d9195d80b64f6883c1507a365f5ca773ce45fa9025b41",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "bd834d39-cdba-5742-b76c-5ede06d26852"
+        }
+      ]
+    },
+    "key": "47dc11e60fa0c3004e1f4a40e4ba7d380c39f417c9b664f25529686b7168feeb",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 25.561302209000132,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+        "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+        "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+        "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+        "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+        "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+        "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+        "bd834d39-cdba-5742-b76c-5ede06d26852"
+      ],
+      "text": "Before approval, verify exact account/address and separately assess identity and authority; role and identifiers alone cannot establish authority, though the local agent can compare presented identifiers. Name system services, confirm proxy delivery targets, and reverify expired authority. An intermediary operator may consider pre-delivery input transformation permitted processing."
+    },
+    "understanding_digest": "c68a16af5ac3bd2e59d9fd83befe9d5c4e2d6c5384c68706f40a77067be83852"
+  },
+  "context_name": "task-3/local/guardrails/recipient-and-authority",
+  "created_at": "2026-08-13T19:16:44.667806Z",
+  "follow_embeds": false,
+  "frame_digest": "372d0e01d4fb9376761d9195d80b64f6883c1507a365f5ca773ce45fa9025b41",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 25.561302209000132,
+  "row_key": "47dc11e60fa0c3004e1f4a40e4ba7d380c39f417c9b664f25529686b7168feeb",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

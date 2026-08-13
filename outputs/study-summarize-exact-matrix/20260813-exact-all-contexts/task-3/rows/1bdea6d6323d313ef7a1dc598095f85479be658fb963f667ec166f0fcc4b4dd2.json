@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/02",
+      "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+      "digest": "8ebceef67df6b03f1654852ccb9b9b742b1e3b8ae577d5c6c9ba8e9579d29cc0",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "7d3daf76-a21e-5117-a534-6175ab2d2861"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "70a6d9f5-180f-5174-b247-690e10baa23e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "9fcd922c-147c-517b-82b3-180fdfb13f33"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "2bc97de2-e486-5f16-ae2e-d73d78d53a65"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "1e2fa0c2-4563-549e-8349-d4606f45af3a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "9925ffe3-d63b-522c-b5c7-ea6e48652441"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "02d6c448-e597-5e8a-a95e-98425b4f3bdd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "4716a67b-8602-564c-9e89-85cd4ee158f9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/02",
+          "context_uid": "7ffcbc10-1703-54b0-9545-99742b51d333",
+          "memory_uid": "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+        }
+      ]
+    },
+    "key": "1bdea6d6323d313ef7a1dc598095f85479be658fb963f667ec166f0fcc4b4dd2",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.98844037500021,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "7d3daf76-a21e-5117-a534-6175ab2d2861",
+        "70a6d9f5-180f-5174-b247-690e10baa23e",
+        "9fcd922c-147c-517b-82b3-180fdfb13f33",
+        "9d0c63b9-2b5b-59ce-8e60-96b6a08155e5",
+        "2bc97de2-e486-5f16-ae2e-d73d78d53a65",
+        "1e2fa0c2-4563-549e-8349-d4606f45af3a",
+        "9925ffe3-d63b-522c-b5c7-ea6e48652441",
+        "02d6c448-e597-5e8a-a95e-98425b4f3bdd",
+        "4716a67b-8602-564c-9e89-85cd4ee158f9",
+        "1186c8b1-b27c-5db4-bd17-25c9c757917c"
+      ],
+      "text": "The user keeps repair tools under the sink; a towel alone did not contain a faucet leak. After sending management a photo, they scheduled access and cleared the area. Calendar-only notice caused lateness, while a 30-minute reminder worked. Their aunt still holds the spare key and will not give it to technicians without explicit instruction. Reconfirm entry before scheduling, as timing may change for emergencies or parts."
+    },
+    "understanding_digest": "a643dbfbf8b7bc1afa3def78d84c7e2e8a478aae2449c99a2a492a985e2ea13c"
+  },
+  "context_name": "task-3/local/personal-memory/2026/02",
+  "created_at": "2026-08-13T19:17:30.895253Z",
+  "follow_embeds": true,
+  "frame_digest": "8ebceef67df6b03f1654852ccb9b9b742b1e3b8ae577d5c6c9ba8e9579d29cc0",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.98844037500021,
+  "row_key": "1bdea6d6323d313ef7a1dc598095f85479be658fb963f667ec166f0fcc4b4dd2",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

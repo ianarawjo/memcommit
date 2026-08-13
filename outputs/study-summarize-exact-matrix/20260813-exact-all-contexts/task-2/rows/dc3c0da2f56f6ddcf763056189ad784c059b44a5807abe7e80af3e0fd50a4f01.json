@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/feasibility",
+      "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+      "digest": "7c203fd7b6ed448115b67cb4b2a556c9e005affc52e8ae799fc63d2511074c9f",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "b150c774-27f6-5ec8-8cb9-9a00be19ce9b"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "6c7d14ed-67e5-56ff-befb-7648b95aa7a3"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "3ae97c88-7537-5733-b48d-e02c9283f486"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "e2b5c1f0-97c2-5d46-af80-993d8d5606c9"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "f636b400-d3a2-5873-bf5b-c990b0f7ea42"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "49385488-2315-51bc-bea0-749a1aea52f1"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "f1c22a48-9d8d-5e82-9837-690d66e719db"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "4d69f030-0dc0-5df7-a153-0b595a3f68de"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "152f8621-f5fb-5c5e-a961-1fde77ed0bb3"
+        },
+        {
+          "context_name": "task-2/advisor1/feasibility",
+          "context_uid": "52db6b06-e86a-556a-913e-30e45f7e9529",
+          "memory_uid": "1877a138-31f6-59a5-b666-ae57985f540d"
+        }
+      ]
+    },
+    "key": "dc3c0da2f56f6ddcf763056189ad784c059b44a5807abe7e80af3e0fd50a4f01",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.81739658400329,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "b150c774-27f6-5ec8-8cb9-9a00be19ce9b",
+        "6c7d14ed-67e5-56ff-befb-7648b95aa7a3",
+        "00bf39b5-fe97-5fd0-b579-a5c13b5e6af7",
+        "3ae97c88-7537-5733-b48d-e02c9283f486",
+        "e2b5c1f0-97c2-5d46-af80-993d8d5606c9",
+        "f636b400-d3a2-5873-bf5b-c990b0f7ea42",
+        "49385488-2315-51bc-bea0-749a1aea52f1",
+        "f1c22a48-9d8d-5e82-9837-690d66e719db",
+        "4d69f030-0dc0-5df7-a153-0b595a3f68de",
+        "152f8621-f5fb-5c5e-a961-1fde77ed0bb3",
+        "1877a138-31f6-59a5-b666-ae57985f540d"
+      ],
+      "text": "Feasibility requires labeling unverified schedule, recruitment, and technical assumptions; linking each requested resource to its prototype-fabrication or user-study stage; and assigning personnel, equipment, and time to every procedure. Formative iterations must fit recruitment and between-iteration modification capacity, accounting for recruitment delays, while the prototype includes only functionality needed to compare primary design assumptions."
+    },
+    "understanding_digest": "02e4d903444bf8dc1526b8d0ce3d9ac01e9b2399ee9e0ec62030156e353deafa"
+  },
+  "context_name": "task-2/advisor1/feasibility",
+  "created_at": "2026-08-13T19:15:24.601724Z",
+  "follow_embeds": false,
+  "frame_digest": "7c203fd7b6ed448115b67cb4b2a556c9e005affc52e8ae799fc63d2511074c9f",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.81739658400329,
+  "row_key": "dc3c0da2f56f6ddcf763056189ad784c059b44a5807abe7e80af3e0fd50a4f01",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

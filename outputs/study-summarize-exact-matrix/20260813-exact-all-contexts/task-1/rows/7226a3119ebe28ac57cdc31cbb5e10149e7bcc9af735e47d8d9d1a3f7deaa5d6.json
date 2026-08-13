@@ -1,0 +1,95 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/route-changes",
+      "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+      "digest": "50c88f146a34f99473f310cd81d0a5fd8b1e992c610fcd2dbbc0dde9d9a70967",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "dbb3c40c-7699-509d-901d-be9de2f110dc"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "638f272f-9fbd-5d1f-bfd8-b01618424065"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/route-changes",
+          "context_uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+          "memory_uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+        }
+      ]
+    },
+    "key": "7226a3119ebe28ac57cdc31cbb5e10149e7bcc9af735e47d8d9d1a3f7deaa5d6",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.479221583002072,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
+        "dbb3c40c-7699-509d-901d-be9de2f110dc",
+        "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
+        "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
+        "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
+        "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
+        "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
+        "638f272f-9fbd-5d1f-bfd8-b01618424065",
+        "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+      ],
+      "text": "During construction, Main Building floors 1–3, its third-floor rear entrance, and the Parking Lot A route to Central Library are closed and may be omitted from guidance. The accessible alternative runs via Parking Lot C, the Student Centre accessible entrance, and the library’s official west entrance; restroom users should turn left from the Main Building. Outdoor diversion may impose heat and travel burdens, and mobility companions may reconfirm distance and slope."
+    },
+    "understanding_digest": "8e9caf86aac93e7847dbf51e8c8ffcad3b7bc077bc5a24a2da7aacbe8b61dd6a"
+  },
+  "context_name": "task-1/participant/construction-updates/route-changes",
+  "created_at": "2026-08-13T19:15:08.676746Z",
+  "follow_embeds": true,
+  "frame_digest": "50c88f146a34f99473f310cd81d0a5fd8b1e992c610fcd2dbbc0dde9d9a70967",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.479221583002072,
+  "row_key": "7226a3119ebe28ac57cdc31cbb5e10149e7bcc9af735e47d8d9d1a3f7deaa5d6",
+  "schema_version": 1,
+  "source_count": 9,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/04",
+      "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+      "digest": "7aee2e55c62e0536c5b98475748b951f36f93c6934528571d4fb55a944ce2498",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+        }
+      ]
+    },
+    "key": "47fc6a00c2f7b0c0bcbf7c99f0e947f3839fcc5a9bb851b77114d885894d3c8e",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 19.414066291999916,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+        "9479e799-95d7-50d2-af62-d1e0914a389b",
+        "528cb5ea-8c36-5206-beaa-19432250ec4d",
+        "85fb1639-2176-5329-b490-3325ff030db4",
+        "431d170a-863f-596d-97c0-0c9634524ee5",
+        "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+        "ba7daae9-938d-55a1-af20-21cd10d395d8",
+        "abbf8742-38e3-5810-b222-fe91e3340962",
+        "06273d22-0b42-5c55-9d70-eda14084219a",
+        "03ac930e-d745-5c29-8c24-5ced669817f9"
+      ],
+      "text": "The shared laundry card is kept in the entrance drawer. After a note for leaving laundry 25 minutes, the user adopted a reminder five minutes before their machine’s end time and immediate collection, considered fair to others. New jeans should be washed separately and the dryer filter emptied; machine availability remains unknown."
+    },
+    "understanding_digest": "a041424713c8d5abef76ed85e8913fb9263b221462d659e184c961478acbe744"
+  },
+  "context_name": "task-3/local/personal-memory/2025/04",
+  "created_at": "2026-08-13T19:17:15.878369Z",
+  "follow_embeds": true,
+  "frame_digest": "7aee2e55c62e0536c5b98475748b951f36f93c6934528571d4fb55a944ce2498",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 19.414066291999916,
+  "row_key": "47fc6a00c2f7b0c0bcbf7c99f0e947f3839fcc5a9bb851b77114d885894d3c8e",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

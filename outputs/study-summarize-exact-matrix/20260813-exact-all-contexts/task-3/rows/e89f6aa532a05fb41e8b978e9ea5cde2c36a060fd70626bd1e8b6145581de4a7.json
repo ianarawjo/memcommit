@@ -1,0 +1,96 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/01",
+      "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+      "digest": "509dc530827bda9c4923a7d97134f2b8e5c3071223f47d0acd54ebcbd8e9a53c",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+        }
+      ]
+    },
+    "key": "e89f6aa532a05fb41e8b978e9ea5cde2c36a060fd70626bd1e8b6145581de4a7",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 24.803226874999382,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "2cd0229d-b7f1-581b-8019-25bdb485afd9",
+        "74eaea9d-7640-51ba-aa77-9c050581dc46",
+        "a1984768-d20d-59cd-84c9-cb08c6b7affb",
+        "f52d11e2-2449-5c9d-887b-96c8b5cd0184",
+        "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+      ],
+      "text": "The user’s mother’s birthday is in January’s third week, and she prioritizes the whole family eating together over gifts. For plans, check schedules and attendees, favor a quiet venue when conversation matters, and confirm the choice with the user. Past dining responses remain available for comparison but cannot alone determine the next location."
+    },
+    "understanding_digest": "75545f4286e0dc08ae428c00f37ba9795da673373dae3b69a0e4ea7034b868e4"
+  },
+  "context_name": "task-3/local/personal-memory/2024/01",
+  "created_at": "2026-08-13T19:16:46.233953Z",
+  "follow_embeds": true,
+  "frame_digest": "509dc530827bda9c4923a7d97134f2b8e5c3071223f47d0acd54ebcbd8e9a53c",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 24.803226874999382,
+  "row_key": "e89f6aa532a05fb41e8b978e9ea5cde2c36a060fd70626bd1e8b6145581de4a7",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

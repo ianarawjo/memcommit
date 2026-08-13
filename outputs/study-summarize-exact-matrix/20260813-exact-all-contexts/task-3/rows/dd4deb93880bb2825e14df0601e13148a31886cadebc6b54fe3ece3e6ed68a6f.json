@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/07",
+      "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+      "digest": "464f1d4122a12dc57af30ce60a3f458a6644b1d000755ac1f08f63e0812bc13f",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "3ab0326a-a006-51ea-9348-7ada19a23bce"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "90059fcc-436d-5453-98f0-a9b23a08faf1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "12ef03f9-8cda-5ed7-be83-891b4702f872"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "54136935-a460-573d-ac40-f5edb0ca7e6c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/07",
+          "context_uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+          "memory_uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+        }
+      ]
+    },
+    "key": "dd4deb93880bb2825e14df0601e13148a31886cadebc6b54fe3ece3e6ed68a6f",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.973987332999968,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+        "3ab0326a-a006-51ea-9348-7ada19a23bce",
+        "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+        "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+        "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+        "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+        "90059fcc-436d-5453-98f0-a9b23a08faf1",
+        "12ef03f9-8cda-5ed7-be83-891b4702f872",
+        "54136935-a460-573d-ac40-f5edb0ca7e6c",
+        "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+      ],
+      "text": "The user stores a travel power bank in the first desk drawer. After overpacking shoes, buying a forgotten cable, and arriving late after packing toiletries on departure day, they switched to one walking pair, photo-checking chargers, and closing the bag the night before for lighter, timely travel. Future lists must confirm trip length and activities; prior luggage alone is insufficient, while their sister recommends an extra cable."
+    },
+    "understanding_digest": "71c42c059d20093f9c3af9506e46d247c4f948d8adf99e7f5fe51b51251e9ec9"
+  },
+  "context_name": "task-3/local/personal-memory/2025/07",
+  "created_at": "2026-08-13T19:17:16.784623Z",
+  "follow_embeds": true,
+  "frame_digest": "464f1d4122a12dc57af30ce60a3f458a6644b1d000755ac1f08f63e0812bc13f",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.973987332999968,
+  "row_key": "dd4deb93880bb2825e14df0601e13148a31886cadebc6b54fe3ece3e6ed68a6f",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

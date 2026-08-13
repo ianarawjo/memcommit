@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
@@ -11,6 +12,9 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
+
+
+ContextReachViewMode = Literal["BOTH", "EXACT", "SUBTREE"]
 
 
 @dataclass
@@ -39,8 +43,40 @@ class ContextReachState:
         return self.choice.move(delta)
 
 
+@dataclass
+class ContextReachViewState:
+    """Choose one or both independently rendered reach views."""
+
+    choice: HorizontalChoiceState
+
+    @classmethod
+    def create(cls, *, mode: ContextReachViewMode) -> "ContextReachViewState":
+        if mode not in {"BOTH", "EXACT", "SUBTREE"}:
+            raise ValueError("Context reach view mode is invalid.")
+        return cls(
+            HorizontalChoiceState(
+                (
+                    HorizontalChoiceOption("BOTH", "BOTH"),
+                    HorizontalChoiceOption("EXACT", "THIS CONTEXT ONLY"),
+                    HorizontalChoiceOption("SUBTREE", "INCLUDE DESCENDANTS"),
+                ),
+                selected_uid=mode,
+            )
+        )
+
+    @property
+    def mode(self) -> ContextReachViewMode:
+        selected = self.choice.selected_uid
+        if selected not in {"BOTH", "EXACT", "SUBTREE"}:
+            raise ValueError("Context reach view state is invalid.")
+        return selected
+
+    def move(self, delta: int) -> bool:
+        return self.choice.move(delta)
+
+
 def render_context_reach(
-    state: ContextReachState,
+    state: ContextReachState | ContextReachViewState,
     *,
     focused: bool,
     title: str = "RANGE",

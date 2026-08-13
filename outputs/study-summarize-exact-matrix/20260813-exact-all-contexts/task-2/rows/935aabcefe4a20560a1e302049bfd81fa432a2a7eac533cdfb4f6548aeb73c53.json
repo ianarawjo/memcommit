@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/scope",
+      "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+      "digest": "cc766581d4c6f2ee3e6a1a17c069e8df12d1e798d67504b7a702766954c91c93",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memory_uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3"
+        },
+        {
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memory_uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e"
+        },
+        {
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memory_uid": "25731e2b-8535-5b37-a377-0a3a99dbe189"
+        },
+        {
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memory_uid": "d79ba448-76b6-592e-b4ba-8cfd98683755"
+        },
+        {
+          "context_name": "task-2/advisor2/scope",
+          "context_uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+          "memory_uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+        }
+      ]
+    },
+    "key": "935aabcefe4a20560a1e302049bfd81fa432a2a7eac533cdfb4f6548aeb73c53",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 8.82314262500222,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "6cfd5026-0c04-5ed8-baac-a56e68723aa3",
+        "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e",
+        "25731e2b-8535-5b37-a377-0a3a99dbe189",
+        "d79ba448-76b6-592e-b4ba-8cfd98683755",
+        "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+      ],
+      "text": "Design knowledge should be bounded in one sentence by its target users and actual usage environment, while transfer to another field site requires matching workflow, technical infrastructure, and operational authority. Reviewers assess generalizability against these conditions, cautioning against extending one-site findings to all similar organizations."
+    },
+    "understanding_digest": "3521f0a9e58118a5d86f2a1099badff6d0f708e9f4ed715f0184543fe2a41e4a"
+  },
+  "context_name": "task-2/advisor2/scope",
+  "created_at": "2026-08-13T19:16:02.706731Z",
+  "follow_embeds": false,
+  "frame_digest": "cc766581d4c6f2ee3e6a1a17c069e8df12d1e798d67504b7a702766954c91c93",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 8.82314262500222,
+  "row_key": "935aabcefe4a20560a1e302049bfd81fa432a2a7eac533cdfb4f6548aeb73c53",
+  "schema_version": 1,
+  "source_count": 5,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,143 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/structure",
+      "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+      "digest": "2a37614dc310e6c0e663debd2dce710a4ad91bc8b20aa9af8460cb94dc095bb5",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "44249c8a-e84f-5c20-a9cd-a55457e98511"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "21371c6c-c74f-5791-8f9b-6d099306bfb5"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "f69ea80c-0d56-5fe8-9d24-8793eefa6643"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "5ab99a77-8836-50cf-8377-fdd23a208bc4"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "b9b7932b-85c1-5a14-80f7-0983dbf22380"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "2f7092a7-2625-5d27-bd76-a13ee5809cc2"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "a1857f07-36cd-5a6c-946d-a308e712e9eb"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "3005f4c5-e17b-531b-b9bf-c9d69411c71f"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "4913f63e-ceb9-587a-ade9-494fc8f28849"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "8ecaec22-7c25-5a39-a85b-56db9c3b607e"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "a4536b84-40f2-57db-84e4-024c97c9fecb"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "2312cb6e-4f50-56f5-b725-ba5e45697a73"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "1d90043b-f010-5a14-9493-77f636c13975"
+        },
+        {
+          "context_name": "task-2/advisor1/structure",
+          "context_uid": "0ff7abfd-58d3-58c2-b42a-31dca38cb7bd",
+          "memory_uid": "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+        }
+      ]
+    },
+    "key": "f410b4728eba4b81f578c82292058d8c2f29511e44df5bab5be0499fa8a45391",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 21.67242916699979,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "44249c8a-e84f-5c20-a9cd-a55457e98511",
+        "21371c6c-c74f-5791-8f9b-6d099306bfb5",
+        "f69ea80c-0d56-5fe8-9d24-8793eefa6643",
+        "18ebdcbc-cf5a-5e6c-b2cd-b4cd07d7e59e",
+        "5ab99a77-8836-50cf-8377-fdd23a208bc4",
+        "b9b7932b-85c1-5a14-80f7-0983dbf22380",
+        "fc0a3a72-2da2-5843-be3a-a4ff2adf8fac",
+        "2f7092a7-2625-5d27-bd76-a13ee5809cc2",
+        "a1857f07-36cd-5a6c-946d-a308e712e9eb",
+        "895b5ac9-1aa4-51d2-b89a-94e9fe5b869d",
+        "3005f4c5-e17b-531b-b9bf-c9d69411c71f",
+        "4913f63e-ceb9-587a-ade9-494fc8f28849",
+        "8ecaec22-7c25-5a39-a85b-56db9c3b607e",
+        "a4536b84-40f2-57db-84e4-024c97c9fecb",
+        "2312cb6e-4f50-56f5-b725-ba5e45697a73",
+        "1d90043b-f010-5a14-9493-77f636c13975",
+        "b77fe6ec-676b-5bb9-9119-45aefea2aa27"
+      ],
+      "text": "Frame the concrete problem and consequence in the first two sentences, then present the response; state the HCI question’s user, context, and interaction. Use reusable descriptive subheadings for problem, response, next steps, and support. Pair research gaps with contributions and feasibility claims with evidence. Visually summarize unfamiliar procedures and transitions. Phase the schedule across exploration, design, prototyping, and evaluation, each with a reviewable deliverable; visible headings also support scanning, return visits, and completeness checks."
+    },
+    "understanding_digest": "c9078b00b9b020f3945c28991169ae9bd9d39ac7e6f6b40404a5cf28cba62f52"
+  },
+  "context_name": "task-2/advisor1/structure",
+  "created_at": "2026-08-13T19:15:45.905162Z",
+  "follow_embeds": false,
+  "frame_digest": "2a37614dc310e6c0e663debd2dce710a4ad91bc8b20aa9af8460cb94dc095bb5",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 21.67242916699979,
+  "row_key": "f410b4728eba4b81f578c82292058d8c2f29511e44df5bab5be0499fa8a45391",
+  "schema_version": 1,
+  "source_count": 17,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,5 +1,9 @@
 # Summarize TUI capture log
 
+> Historical evidence for the completed-result-only Viewer. The later
+> picker-first workbench supersedes this interaction contract; its refreshed
+> evidence is stored under `mem-summarize-workbench-20260813/`.
+
 This ordered set records the first operation adapter built on the extracted
 frame and semantic Viewer component hierarchy. `mem summarize` computes one
 typed `SummarizeResult`; the console router sends that same result to the TUI

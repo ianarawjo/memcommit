@@ -1,0 +1,77 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/safety",
+      "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+      "digest": "9d6ea48b41f8095d0ec6e79c01ce722b5b9d7ded86c2ec4989aeb84f04233a5d",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "ceb095a9-3068-55ea-a06f-d954c121e007"
+        },
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "962d7645-02b3-5611-8415-4370794c10d4"
+        },
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "a3270872-1901-5d24-8ef1-374833599bf9"
+        },
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3"
+        },
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "342e4697-873f-56a8-b4a4-896efe910144"
+        },
+        {
+          "context_name": "task-2/advisor2/safety",
+          "context_uid": "4283d797-6a33-5f39-b7f6-f4dbd3264389",
+          "memory_uid": "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+        }
+      ]
+    },
+    "key": "f083e20bc4e787dd873717e833ed08dbf4f67768fb500fc1afb878e6e28251ff",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.561027042000205,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "ceb095a9-3068-55ea-a06f-d954c121e007",
+        "962d7645-02b3-5611-8415-4370794c10d4",
+        "a3270872-1901-5d24-8ef1-374833599bf9",
+        "f6dd1368-0d90-5f1a-97d0-56594ce8f4b3",
+        "342e4697-873f-56a8-b4a4-896efe910144",
+        "6c4e9175-4590-5689-ae2b-678f0eb930b9"
+      ],
+      "text": "The safety plan must specify an ordered notification sequence for serious discomfort, cessation thresholds for participant harm, operational disruption, and data anomalies, and procedures for restoring prior systems and workflows. It must assign authority for recovery and responsibility for execution. Where error reporting affects evaluations, separated safety records and decision logs may undermine incident traceability."
+    },
+    "understanding_digest": "11f51bacdc118e48e3ed7b590cdc9da42bbab3f709ed00471029bc45a4feef63"
+  },
+  "context_name": "task-2/advisor2/safety",
+  "created_at": "2026-08-13T19:16:04.145226Z",
+  "follow_embeds": true,
+  "frame_digest": "9d6ea48b41f8095d0ec6e79c01ce722b5b9d7ded86c2ec4989aeb84f04233a5d",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.561027042000205,
+  "row_key": "f083e20bc4e787dd873717e833ed08dbf4f67768fb500fc1afb878e6e28251ff",
+  "schema_version": 1,
+  "source_count": 6,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

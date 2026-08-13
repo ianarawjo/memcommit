@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/evaluation",
+      "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+      "digest": "2e3362347100c778759edd11fdb9a700c1a04b382ce385ddabc126c3851f160b",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "b06bb706-f911-5767-8e27-b64c74d0e592"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe"
+        },
+        {
+          "context_name": "task-2/advisor2/evaluation",
+          "context_uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+          "memory_uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+        }
+      ]
+    },
+    "key": "0ddccc1a6d4afaee147e374d036bf7d61cb588c7750b20b4166d4c20267982f0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.967525457999727,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "f27576c7-6f53-5412-901c-19df7e1d5e2e",
+        "8608bdf3-49d7-54d0-a2fb-c883c24e40ef",
+        "b06bb706-f911-5767-8e27-b64c74d0e592",
+        "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3",
+        "935cf79f-3e67-567d-ab55-35e8fad7eb37",
+        "bea0e97f-1217-507b-87a7-09ce85bae9fe",
+        "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+      ],
+      "text": "Evaluation should designate one representative primary measure and explicit thresholds for maintaining, modifying, or discontinuing the design, with panel verification that these support operational decisions. It should separately assess usability, adoption intent, implementation fidelity, and workload shifted across roles, while recognizing that initial and long-term evaluations differ because exposure duration and repeated-use frequency vary."
+    },
+    "understanding_digest": "45b69135b1f86a12bcf71cc8c83f19a8d36aa52565a2ba504f12f1b64b259b40"
+  },
+  "context_name": "task-2/advisor2/evaluation",
+  "created_at": "2026-08-13T19:15:54.917633Z",
+  "follow_embeds": false,
+  "frame_digest": "2e3362347100c778759edd11fdb9a700c1a04b382ce385ddabc126c3851f160b",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.967525457999727,
+  "row_key": "0ddccc1a6d4afaee147e374d036bf7d61cb588c7750b20b4166d4c20267982f0",
+  "schema_version": 1,
+  "source_count": 7,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

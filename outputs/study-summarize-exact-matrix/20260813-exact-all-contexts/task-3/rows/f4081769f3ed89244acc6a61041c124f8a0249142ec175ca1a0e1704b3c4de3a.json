@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/05",
+      "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+      "digest": "affedfd9508abcc7e2a9f83d2fe0ae3632fc1b2c09a374e5f339352c24277862",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "fa2735e1-f4af-57d3-a18c-795715b6715b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "70277b86-d5db-5b58-8a94-e77372d15a4c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/05",
+          "context_uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+          "memory_uid": "5a54437b-9b0e-5103-860d-d878be70b3ef"
+        }
+      ]
+    },
+    "key": "f4081769f3ed89244acc6a61041c124f8a0249142ec175ca1a0e1704b3c4de3a",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.882857166001486,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+        "fa2735e1-f4af-57d3-a18c-795715b6715b",
+        "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+        "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+        "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+        "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+        "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+        "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+        "70277b86-d5db-5b58-8a94-e77372d15a4c",
+        "5a54437b-9b0e-5103-860d-d878be70b3ef"
+      ],
+      "text": "The user keeps a picnic mat on the entrance cabinet’s bottom shelf. For outdoor meals, they favor tree shade and two frozen water bottles after heat made an unshaded spot and one bottle insufficient. Park meetings should confirm the exact, low-walking entrance—ideally with a sign photo—and a rain alternative; restrooms and fountains may close seasonally."
+    },
+    "understanding_digest": "4fcc4d8153b016b838651b19e3ce90b63cff910f3ea636099c8bd6c42e108348"
+  },
+  "context_name": "task-3/local/personal-memory/2026/05",
+  "created_at": "2026-08-13T19:17:34.088075Z",
+  "follow_embeds": false,
+  "frame_digest": "affedfd9508abcc7e2a9f83d2fe0ae3632fc1b2c09a374e5f339352c24277862",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.882857166001486,
+  "row_key": "f4081769f3ed89244acc6a61041c124f8a0249142ec175ca1a0e1704b3c4de3a",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

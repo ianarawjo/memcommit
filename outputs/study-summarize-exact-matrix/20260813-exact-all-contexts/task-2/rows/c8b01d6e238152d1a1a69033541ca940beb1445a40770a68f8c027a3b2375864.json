@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/terminology",
+      "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+      "digest": "e676da1f8d5f12dc0064ff95e33817e65b2c9845ca6bbb91cd20e1badc6d58d4",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "0dd5d707-7d13-5be0-8377-421507650cba"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216"
+        },
+        {
+          "context_name": "task-2/advisor2/terminology",
+          "context_uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+          "memory_uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+        }
+      ]
+    },
+    "key": "c8b01d6e238152d1a1a69033541ca940beb1445a40770a68f8c027a3b2375864",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.721150583001872,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "e2ae95ed-9033-5625-9179-33f4cf4a95c1",
+        "4be60357-09fa-523d-8c8d-8e03ace8fde9",
+        "0dd5d707-7d13-5be0-8377-421507650cba",
+        "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2",
+        "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe",
+        "dc9e3f25-7aac-500b-b431-f6d810dd09bb",
+        "04956cab-eb3a-5b71-be45-b1edd6c4a216",
+        "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+      ],
+      "text": "Use consistent terminology for the same roles, functions, and stages. In two-page proposals, reserve abbreviations for long recurring terms and define them at first use. Identify participants by study role rather than status or generic “user,” define each operational role’s decisions and actions, and distinguish identical titles when site-specific privileges or access differ."
+    },
+    "understanding_digest": "e7233bbfd217998383a9529c834fbb8b3a679c53542242f40f0a1ed42affefaf"
+  },
+  "context_name": "task-2/advisor2/terminology",
+  "created_at": "2026-08-13T19:16:16.111794Z",
+  "follow_embeds": false,
+  "frame_digest": "e676da1f8d5f12dc0064ff95e33817e65b2c9845ca6bbb91cd20e1badc6d58d4",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.721150583001872,
+  "row_key": "c8b01d6e238152d1a1a69033541ca940beb1445a40770a68f8c027a3b2375864",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

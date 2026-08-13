@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/02",
+      "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+      "digest": "504103a65586cd9508fb2f9b2bcfc21af408ead344e3b729de414cf1e8c23575",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "2e0df581-bd54-54f5-94ef-b719427fc88c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/02",
+          "context_uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+          "memory_uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+        }
+      ]
+    },
+    "key": "1e2c37a4fab65aee15c3bf0b12c7a5bc2b911ba896ea6ba381856dcb5c272881",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.65104791700287,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+        "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+        "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+        "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+        "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+        "2e0df581-bd54-54f5-94ef-b719427fc88c",
+        "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+        "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+        "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+        "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+      ],
+      "text": "The user’s maternal aunt holds a spare home key and should be contacted before building management when locked out. Collection requires advance arrival timing and confirmation of an in-person visit; return it in person that day. Confirm before disclosing its location or the aunt’s contact details. Management holds no unit key without identity verification. The user avoids paper passcodes, dislikes unannounced family visits during meetings, and checks delivery photos for reassurance."
+    },
+    "understanding_digest": "4d392d03f8d0d6d24b8837260e17e547923c42d24c29c2cc43568ef32d5df800"
+  },
+  "context_name": "task-3/local/personal-memory/2024/02",
+  "created_at": "2026-08-13T19:16:47.377734Z",
+  "follow_embeds": false,
+  "frame_digest": "504103a65586cd9508fb2f9b2bcfc21af408ead344e3b729de414cf1e8c23575",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 23.65104791700287,
+  "row_key": "1e2c37a4fab65aee15c3bf0b12c7a5bc2b911ba896ea6ba381856dcb5c272881",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

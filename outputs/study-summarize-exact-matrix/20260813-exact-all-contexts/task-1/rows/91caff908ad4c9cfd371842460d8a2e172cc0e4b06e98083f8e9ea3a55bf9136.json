@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/event-relocations",
+      "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+      "digest": "1bbadda8f2dd163ecbddf776f1720b7b39b708c764d97d196e3bb027549ded2b",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "686d630d-defe-5aa1-a28d-470b3ebb9059"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "eee1213e-3582-5c9a-bde8-78af7b216df0"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/event-relocations",
+          "context_uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+          "memory_uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+        }
+      ]
+    },
+    "key": "91caff908ad4c9cfd371842460d8a2e172cc0e4b06e98083f8e9ea3a55bf9136",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.078656042001967,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+        "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+        "686d630d-defe-5aa1-a28d-470b3ebb9059",
+        "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+        "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+        "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+        "eee1213e-3582-5c9a-bde8-78af7b216df0",
+        "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+        "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+        "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+      ],
+      "text": "During construction, tenth-floor hall viewing and new Main Building venue reservations are suspended. Users should use the east detached-building auditorium or Engineering Building’s third-floor multipurpose room; guidance is limited to these alternatives and their reservation channels. The auditorium’s separate entrance handles relocated equipment. Visitors and operators must not rely on former entrances, floors, loading procedures, or delayed access checks."
+    },
+    "understanding_digest": "374596cd59051364b9a654441bf0458bdcc510cce9bc3b3dacb362a0778c2edd"
+  },
+  "context_name": "task-1/participant/construction-updates/event-relocations",
+  "created_at": "2026-08-13T19:15:05.681118Z",
+  "follow_embeds": false,
+  "frame_digest": "1bbadda8f2dd163ecbddf776f1720b7b39b708c764d97d196e3bb027549ded2b",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.078656042001967,
+  "row_key": "91caff908ad4c9cfd371842460d8a2e172cc0e4b06e98083f8e9ea3a55bf9136",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/description",
+      "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+      "digest": "b6f35288d4095d84699b1484fedc05d8d600d20b38f161b5a88201ee66640c73",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-1/description",
+          "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
+          "memory_uid": "2db26309-b11b-5963-87ff-497f135eb150"
+        }
+      ]
+    },
+    "key": "26156d1d28ac9483ab76eb273a164c845e3fa52e3cfd76fa458f0e63a00be370",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.449597542003175,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "2db26309-b11b-5963-87ff-497f135eb150"
+      ],
+      "text": "The campus facilities coordinator must use verified local information about Main Building construction—including confirmed event relocations, temporary parking, updated shops and facilities, and nearby route changes—to update every affected part of the university organizational wiki for campus members, visitors, and AI agents, then contribute the completed update."
+    },
+    "understanding_digest": "78c928519078df111c6a334be491f0b87c64d0bc0dbe8230e963412589cedfae"
+  },
+  "context_name": "task-1/description",
+  "created_at": "2026-08-13T19:15:00.105833Z",
+  "follow_embeds": true,
+  "frame_digest": "b6f35288d4095d84699b1484fedc05d8d600d20b38f161b5a88201ee66640c73",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.449597542003175,
+  "row_key": "26156d1d28ac9483ab76eb273a164c845e3fa52e3cfd76fa458f0e63a00be370",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

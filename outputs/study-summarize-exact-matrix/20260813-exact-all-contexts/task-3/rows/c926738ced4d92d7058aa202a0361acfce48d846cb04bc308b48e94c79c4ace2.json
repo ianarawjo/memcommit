@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/recipient-and-authority",
+      "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+      "digest": "eec7f13a2b0fbef24b4f695700acde86d760bb68f80b8b9954bb7dcb51c4a406",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "bd834d39-cdba-5742-b76c-5ede06d26852"
+        }
+      ]
+    },
+    "key": "c926738ced4d92d7058aa202a0361acfce48d846cb04bc308b48e94c79c4ace2",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 19.48654650000026,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+        "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+        "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+        "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+        "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+        "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+        "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+        "bd834d39-cdba-5742-b76c-5ede06d26852"
+      ],
+      "text": "Verify the recipient’s exact account or address and separately assess identity and authority, never inferring authority from role or identifiers alone. Show a system recipient’s service name, confirm the actual target behind any proxy, and reverify expired authority. An intermediary may treat pre-delivery transformation as permitted processing."
+    },
+    "understanding_digest": "31fe80e046534c128ebad9629da2e9cd4a3c89fbca1b2a4e8220f84bb67266f9"
+  },
+  "context_name": "task-3/local/guardrails/recipient-and-authority",
+  "created_at": "2026-08-13T19:16:38.827726Z",
+  "follow_embeds": true,
+  "frame_digest": "eec7f13a2b0fbef24b4f695700acde86d760bb68f80b8b9954bb7dcb51c4a406",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 19.48654650000026,
+  "row_key": "c926738ced4d92d7058aa202a0361acfce48d846cb04bc308b48e94c79c4ace2",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

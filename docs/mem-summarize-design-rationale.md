@@ -60,23 +60,36 @@ reported deterministically without connecting a provider. Oversized input is
 rejected rather than truncated or divided into hidden provider calls.
 
 The provider returns one concise natural-language paragraph plus temporary
-source aliases. Unknown or duplicate aliases, duplicate JSON keys, list-shaped
-prose, over-limit output, and source-free nonempty claims fail closed. Output
-is terminal-escaped by the common renderer.
+source aliases. Unknown aliases, repeated temporary aliases, duplicate JSON
+keys, list-shaped prose, over-limit output, and source-free nonempty claims
+fail closed. Two distinct authorized aliases may expose the same durable
+Memory UID; their citations collapse to that UID once in first-seen order.
+Output is terminal-escaped by the common renderer.
 
 `--copy` writes the verified `WHAT MEM UNDERSTOOD` heading and body to the
-operating-system plain-text clipboard after source revalidation. It omits the
-command header and execution status, creates no structured mutation clipboard
-stage, and performs no additional provider turn. A copy failure leaves the
-rendered result visible and exits with an explicit error. Copying prose derived
+operating-system plain-text clipboard after source revalidation. For an
+interactive `BOTH` result it keeps `[CURRENT ONLY]` and `[CURRENT +
+DESCENDANTS]` as two labelled sections instead of silently choosing one. It
+omits the command header and execution status, creates no structured mutation
+clipboard stage, and performs no additional provider turn. A copy failure
+leaves the rendered result visible and exits with an explicit error. Copying prose derived
 from a granted frame is an explicit user-controlled disclosure outside the
 revocable Grant store; it does not make the prose durable inside MemCommit.
 
+The interactive Viewer exposes the same disclosure as a process-local action:
+`y` copies the scope containing the focused Summary section and `Y` copies the
+complete available Summary document. For `BOTH`, header or status focus maps
+to the first current-only view, while focus inside the recursive group maps to
+the descendants view. These keys use the injected plain-text writer, show a
+transient success or failure receipt, and likewise create no structured stage.
+
 After the semantic call, the command rebuilds the same frame and compares its
 digest before publishing output. A granted READ frame additionally freezes and
-revalidates the exact grant binding. Results are process-local: this avoids
-copying authority-derived prose into the participant store and avoids creating
-a stale summary cache before a separately designed revocable artifact exists.
+revalidates the exact grant binding. Ordinary results are process-local, so
+authority-derived prose is not copied into the participant Store. A participant
+Study Profile may resolve an exact prepared understanding from its pinned
+immutable baseline bundle after the same READ freeze. The result is still
+materialized only in the invoking process and is revalidated before return.
 
 ## Reuse boundary
 
@@ -93,7 +106,9 @@ refactor may share more prompt composition without changing this contract.
 
 ## Intentional limitations
 
-- No persistent summary cache or `--refresh` lifecycle exists yet.
+- No ordinary Profile-local summary cache, saved Summary session, or
+  `--refresh` lifecycle exists. Study-only exact artifacts remain in the
+  immutable shared baseline bundle.
 - Plain clipboard integration inherits the existing macOS-only system
   clipboard adapter.
 - No query-only summarize route is inferred; `mem query` remains authoritative.
@@ -115,17 +130,37 @@ The application module imports neither Typer, prompt-toolkit, nor
 `memcommit.commands`. `memcommit.summarize_runtime` now supplies the real
 MemoryStore/Grant adapter and a terminal-free `execute_summarize` composition;
 provider construction remains injected and terminal rendering remains above the
-application. The console host executes that path once, then an injected router
-selects either the plain renderer or the read-only semantic Viewer. The CLI,
+application. The console host selects an adapter without putting terminal state
+in the application. Plain mode executes immediately and renders once.
+Interactive mode first freezes the Profile-wide readable Context catalog. The
+three-way range control appears above the Context picker and offers `BOTH`,
+`THIS CONTEXT ONLY`, and `INCLUDE DESCENDANTS`. The Context picker owns initial
+focus. Before a result exists, the Summary frame itself contains the explicit
+Run action, so one forward focus move from Context reaches execution. A
+flagless TUI starts on `BOTH`; explicit `-d` and `-r` retain their individual
+initial selections.
+Only the explicit Summarize action constructs and executes requests;
+cancellation executes nothing. `BOTH` performs the direct request first and the
+recursive request second, then publishes the pair only after both succeed.
+Each later rerun is another visible action over the staged picker values. The CLI,
 TUI, and direct Python runtime therefore share the same Source freeze, provider,
 and freshness path while the use case can still run without a terminal or
 command invocation.
 
-The Summarize TUI projects `SummarizeResult` directly into the shared typed
-Viewer document. It does not parse CLI text, reload evidence, reconnect the
-provider, or introduce a review/Apply lifecycle. Automatic routing uses an
-injected terminal capability; `--plain` and `--tui` make the presentation route
-explicit, and forced TUI failure occurs before Store construction.
+The Summarize TUI composes a three-way reach choice, single-Context selector,
+and typed semantic Viewer in one vertical workbench. The empty Viewer position
+owns Run; after execution, the typed result replaces that action in place.
+One result is projected directly from `SummarizeResult`; `BOTH` uses a typed
+`SummarizeTuiOutcome` and shows `[CURRENT ONLY]` and `[CURRENT +
+DESCENDANTS]` as independently navigable sections. It never parses CLI text or
+derives one view by trimming the other. The picker is process-local and never
+switches the global current Context. Each execution re-resolves and
+reauthorizes the selected canonical name, freezes its source, and connects the
+provider only when its frame is nonempty and no exact Study artifact is
+available. There is no review/Apply lifecycle or Context mutation. Automatic
+routing uses an injected terminal capability; `--plain` and `--tui` make the
+presentation route explicit, and forced TUI failure occurs before Store
+construction.
 
 The runtime has one documented transitional dependency on the existing
 operation-neutral Grant mechanics under `memcommit.commands.granted_context`.

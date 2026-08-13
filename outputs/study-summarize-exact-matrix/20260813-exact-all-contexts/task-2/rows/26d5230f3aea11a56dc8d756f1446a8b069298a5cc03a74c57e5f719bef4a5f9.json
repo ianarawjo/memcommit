@@ -1,0 +1,119 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/style",
+      "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+      "digest": "a698a4c42cf1ed4a24d2962bb4955b77879302fbb060159c8a74577b9b61f03f",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "33503d41-7b99-5526-a028-0a1a20652c0d"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "79437c17-1f08-5188-8177-c622429dc4f9"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "807a906c-d519-59b1-8406-43c8015ef068"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "e463a3b5-263f-58da-9895-242965892e60"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "fef78af8-1774-5da0-8345-571eb8c9cc3c"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "58565355-bec5-5b2b-89ed-f0b8cab0351a"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "bec16e02-b267-50b8-9c0e-964184f2a6b4"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "cc860653-ad91-52f8-91db-5b26371dca0a"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "af0d191d-d23e-562b-997b-b1024dacefda"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "13dc50e1-ecaa-504e-a602-7a10a09d5484"
+        },
+        {
+          "context_name": "task-2/advisor1/style",
+          "context_uid": "a759f597-4f26-5782-828b-55f1c90076bf",
+          "memory_uid": "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+        }
+      ]
+    },
+    "key": "26d5230f3aea11a56dc8d756f1446a8b069298a5cc03a74c57e5f719bef4a5f9",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.572207000001072,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "33503d41-7b99-5526-a028-0a1a20652c0d",
+        "79437c17-1f08-5188-8177-c622429dc4f9",
+        "807a906c-d519-59b1-8406-43c8015ef068",
+        "e463a3b5-263f-58da-9895-242965892e60",
+        "fef78af8-1774-5da0-8345-571eb8c9cc3c",
+        "ff8f0b12-9df4-5968-90b2-cd8d971dcc1b",
+        "6c282ef7-4326-5d69-a7c4-d3f4f3a3a508",
+        "58565355-bec5-5b2b-89ed-f0b8cab0351a",
+        "bec16e02-b267-50b8-9c0e-964184f2a6b4",
+        "cc860653-ad91-52f8-91db-5b26371dca0a",
+        "af0d191d-d23e-562b-997b-b1024dacefda",
+        "13dc50e1-ecaa-504e-a602-7a10a09d5484",
+        "358230d3-9ff0-51b9-9bf6-0752a2d9845a"
+      ],
+      "text": "Proposal prose should use short sentences with one reviewable claim, ordinary punctuation instead of em dashes, and consistent first-person active voice for author-controlled choices and commitments. Use “we” only when authors share control. Present verified prototype behavior as observed, and unimplemented or unevaluated behavior as plans or expectations."
+    },
+    "understanding_digest": "95d2266d116173d43fad44ee3d03ad2d41d4e2edc95e6a3a8a8aefbde7a252bb"
+  },
+  "context_name": "task-2/advisor1/style",
+  "created_at": "2026-08-13T19:15:42.442069Z",
+  "follow_embeds": true,
+  "frame_digest": "a698a4c42cf1ed4a24d2962bb4955b77879302fbb060159c8a74577b9b61f03f",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.572207000001072,
+  "row_key": "26d5230f3aea11a56dc8d756f1446a8b069298a5cc03a74c57e5f719bef4a5f9",
+  "schema_version": 1,
+  "source_count": 13,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

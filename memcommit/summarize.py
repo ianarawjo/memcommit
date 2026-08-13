@@ -33,6 +33,9 @@ SUMMARIZE_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 SUMMARIZE_RESPONSE_CHAR_LIMIT = 50_000
 SUMMARIZE_TEXT_LIMIT = 4_000
 SUMMARIZE_OPERATION = "summarize_context"
+# Exact Study artifacts bind this value so a prompt, schema, or decoder change
+# cannot silently replay an understanding produced under an older contract.
+SUMMARIZE_PROVIDER_CONTRACT_VERSION = 1
 
 SUMMARIZE_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation=SUMMARIZE_OPERATION,
@@ -102,6 +105,7 @@ def collect_summary_scope(
         raise ValueError("Summary scope must begin with its selected root Context.")
     sources: list[SummarySource] = []
     visited_contexts: set[str] = set()
+    content_by_memory_uid: dict[str, str] = {}
 
     def visit(current: Context) -> None:
         if current.uid in visited_contexts:
@@ -109,6 +113,16 @@ def collect_summary_scope(
         visited_contexts.add(current.uid)
         for item in current.iter_items():
             if isinstance(item, Memory):
+                previous_content = content_by_memory_uid.get(item.uid)
+                if previous_content is not None and previous_content != item.content:
+                    # A portable UnderstandingSummary cites durable Memory UIDs.
+                    # Two different payloads under one UID cannot be cited
+                    # unambiguously, even when both Context paths are readable.
+                    raise SummarizeError(
+                        "The selected scope exposes conflicting content for one "
+                        "Memory identity; no summary was generated."
+                    )
+                content_by_memory_uid[item.uid] = item.content
                 sources.append(
                     SummarySource(
                         alias=f"m{len(sources) + 1:06d}",

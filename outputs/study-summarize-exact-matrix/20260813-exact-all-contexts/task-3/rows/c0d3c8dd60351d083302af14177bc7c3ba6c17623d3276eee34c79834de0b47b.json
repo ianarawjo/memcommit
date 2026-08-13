@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/08",
+      "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+      "digest": "ba7ffb87b4b7775bc0a5beb2de4676716bbb69df382c422dc3d347766559a1d0",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+        }
+      ]
+    },
+    "key": "c0d3c8dd60351d083302af14177bc7c3ba6c17623d3276eee34c79834de0b47b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.394790999998804,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "5f80c7ec-e294-5905-abab-91027c9d827b",
+        "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+        "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+        "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+        "c7385cce-ec43-5902-973c-5b8af54c3557",
+        "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+        "9433523f-8c4e-5424-b370-d325ba5154d1",
+        "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+        "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+        "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+      ],
+      "text": "The user limits monthly non-living spending, batches errands to reduce travel, records accumulated cash receipts at month-end, and cuts dining out after noticing a large expense. Earlier bill alerts support prompt payment, while due-date alerts may be deferred around meetings. Joint meal costs with the user’s older sister should be settled electronically. Confirm the amount and account before scheduling automatic payments, and account for institution-specific processing and late-payment timing."
+    },
+    "understanding_digest": "9cc7dfb774f3c392a7dfb1be99336a434ad9b5b8c0d758e1ae0629da92110adf"
+  },
+  "context_name": "task-3/local/personal-memory/2024/08",
+  "created_at": "2026-08-13T19:16:54.125529Z",
+  "follow_embeds": false,
+  "frame_digest": "ba7ffb87b4b7775bc0a5beb2de4676716bbb69df382c422dc3d347766559a1d0",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.394790999998804,
+  "row_key": "c0d3c8dd60351d083302af14177bc7c3ba6c17623d3276eee34c79834de0b47b",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

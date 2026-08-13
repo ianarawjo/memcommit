@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/06",
+      "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+      "digest": "94f2c7420998715c63deea5631e2a93b50e69e491999db1ca4c4962786029b92",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "cce43b8e-c1c1-5208-8d9a-ee665b805d4c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "e682f0fd-e92f-566e-b1ec-1d5ebf091b60"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "c1f2b53e-6184-552b-a321-9796bb121055"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "56d5befe-d5f4-59df-82e4-a66ba868dfc2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "83d73ede-6f5a-550e-ba1c-c146b73a9917"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "cf0947e8-c133-5259-bac2-e8ee6d74929e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "d42e48ca-39de-529f-bba2-332b779bd6c2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "3958627e-a0fa-5e32-9e87-7ee874fc6fe7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "1f24b5c2-554c-5356-b335-c6879e53ba7f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/06",
+          "context_uid": "f2e6c2e0-886a-52d8-98d4-03009ea37991",
+          "memory_uid": "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+        }
+      ]
+    },
+    "key": "e149d0b64ac38f8eb58f745474eae9cfad659ea8b9ba2bd96fd32cda2aa4e18d",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.508232583997597,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "cce43b8e-c1c1-5208-8d9a-ee665b805d4c",
+        "e682f0fd-e92f-566e-b1ec-1d5ebf091b60",
+        "c1f2b53e-6184-552b-a321-9796bb121055",
+        "56d5befe-d5f4-59df-82e4-a66ba868dfc2",
+        "83d73ede-6f5a-550e-ba1c-c146b73a9917",
+        "cf0947e8-c133-5259-bac2-e8ee6d74929e",
+        "d42e48ca-39de-529f-bba2-332b779bd6c2",
+        "3958627e-a0fa-5e32-9e87-7ee874fc6fe7",
+        "1f24b5c2-554c-5356-b335-c6879e53ba7f",
+        "d88b1b21-c58f-51d5-a60b-54bb11473d96"
+      ],
+      "text": "The user stores four folding chairs for family barbecues and shifted gatherings from a noisy restaurant to the father’s yard, moving between seats to converse. Midday sun shortened one meal; starting at 6 p.m. provided shade, wind, and time until sunset. After duplicate container checks, foods were labeled by name and contributor, while leftovers are portioned for the younger brother. Prior preparations and responses remain summarizable, but future attendees and weather are unknowable."
+    },
+    "understanding_digest": "37c0cf4da6d349420ac4dabc8eb2a9c5bce04cc4efbdab69384204b4153059ce"
+  },
+  "context_name": "task-3/local/personal-memory/2026/06",
+  "created_at": "2026-08-13T19:17:37.914918Z",
+  "follow_embeds": false,
+  "frame_digest": "94f2c7420998715c63deea5631e2a93b50e69e491999db1ca4c4962786029b92",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.508232583997597,
+  "row_key": "e149d0b64ac38f8eb58f745474eae9cfad659ea8b9ba2bd96fd32cda2aa4e18d",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,340 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/campus-wiki/facility-updates",
+      "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+      "digest": "dcb23fd22b5b22fe328d19f5140c3abcb86c72d7a4210005982e8e8550fd8dbf",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "d79aa629-3e49-5c45-993e-c80efc278889"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "50135594-9d2a-554a-9552-c74d35b60b4f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "df86c8e5-275e-51d8-8e51-b4827e71d226"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "69e3647a-9987-5052-8d81-a231f73aeec7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "d05a9731-1c25-5d54-b8a1-65195ca18327"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "411a27b6-e540-530b-a5b5-764e26855173"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "1582377c-501e-57cc-9cd0-f3281289a2fa"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "16f54319-1da3-5a17-830b-6524fa183511"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "710369be-287c-5c29-9da2-9631d099500e"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "ba35ad87-8285-5130-add8-fc694deeb8f7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "e59de198-f9a2-5f3f-be66-43eb9deab632"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "a3f16328-2a27-5b18-b802-11036a6d2be6"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "c6894aba-7d8e-5448-b775-e0303efb15d1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "b33a6790-d94b-51d7-a737-92b9793a466c"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "10e2336f-921e-54c3-872e-218a6e745277"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "9ab67289-f3b1-5918-9965-ecb4ab743400"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "e7272a72-48a5-544b-8771-9c9872ae34f2"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "f7817017-85a2-582d-bb63-2b77cd2e9311"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "a2c599c9-1218-5d37-a866-66222eb5e226"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "cc098a87-de11-594f-b59c-126a2cec29bd"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "d842f429-c182-5fd0-baf8-8f023b85632f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "90c6d663-e63e-591c-99c3-a300a7e7e253"
+        },
+        {
+          "context_name": "task-1/campus-wiki/facility-updates",
+          "context_uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+          "memory_uid": "38daa1a2-70e9-5815-957a-41c95ed6119e"
+        }
+      ]
+    },
+    "key": "45063d95b60b3f183d832d0bb1df3baccf4ae999859f6d1ddc086cba8a77b435",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.862032334000105,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "d79aa629-3e49-5c45-993e-c80efc278889",
+        "50135594-9d2a-554a-9552-c74d35b60b4f",
+        "0a35d46b-a369-560e-8363-0844ad4f9ea2",
+        "b117c1ba-c88e-52ca-8dde-ccb21661e910",
+        "2a06fd43-23f0-5d12-8d7e-d8e1df97176c",
+        "6620e427-90a1-5f6c-9e99-12bd39277c3a",
+        "a1f3fd8f-3c17-5020-a6b0-e50bde147841",
+        "d307ffc0-44d6-52d8-9ad6-f76651f2603a",
+        "df86c8e5-275e-51d8-8e51-b4827e71d226",
+        "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac",
+        "69e3647a-9987-5052-8d81-a231f73aeec7",
+        "250dc7c8-024c-5d51-9bd7-e2eefbded504",
+        "d05a9731-1c25-5d54-b8a1-65195ca18327",
+        "fa07f2f5-bb84-56c0-9b9e-85e32b47453d",
+        "7aced411-0d52-54ba-96cf-6b7fefcf1ea9",
+        "2df2602b-fa8c-5715-a7c7-1606037e3b6d",
+        "24ad69ce-b1f5-5bde-ad59-d637f261cb99",
+        "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6",
+        "411a27b6-e540-530b-a5b5-764e26855173",
+        "bd016a0a-0be5-52e9-a549-102ea5fe0148",
+        "1582377c-501e-57cc-9cd0-f3281289a2fa",
+        "16f54319-1da3-5a17-830b-6524fa183511",
+        "e06a605d-d4d2-5308-9cc5-b1cae7469f36",
+        "9da215bb-7f87-583d-9bc2-23e08305d4f1",
+        "710369be-287c-5c29-9da2-9631d099500e",
+        "e9107328-9e4b-5dcf-a74d-22c90a23b5e0",
+        "076ffc9d-2681-59f2-8f8f-1435c49c3f17",
+        "ba35ad87-8285-5130-add8-fc694deeb8f7",
+        "e59de198-f9a2-5f3f-be66-43eb9deab632",
+        "a3f16328-2a27-5b18-b802-11036a6d2be6",
+        "c6894aba-7d8e-5448-b775-e0303efb15d1",
+        "666e872c-e71a-5c64-a5cc-b12d2aac9916",
+        "b3bd402a-5af7-58df-bbcc-2857c956fa74",
+        "b33a6790-d94b-51d7-a737-92b9793a466c",
+        "70b6e9b8-4a12-5e39-a564-9de4e3882337",
+        "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7",
+        "10e2336f-921e-54c3-872e-218a6e745277",
+        "0ce575cf-f16d-5434-9ac5-00d454d90a09",
+        "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f",
+        "7b821e8c-2e26-52d0-b34e-314a614eeb26",
+        "9ab67289-f3b1-5918-9965-ecb4ab743400",
+        "e7272a72-48a5-544b-8771-9c9872ae34f2",
+        "f7817017-85a2-582d-bb63-2b77cd2e9311",
+        "a2c599c9-1218-5d37-a866-66222eb5e226",
+        "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3",
+        "b1e19dc4-db1f-5328-8448-aac4d37451d7",
+        "d842f429-c182-5fd0-baf8-8f023b85632f",
+        "90c6d663-e63e-591c-99c3-a300a7e7e253",
+        "38daa1a2-70e9-5815-957a-41c95ed6119e"
+      ],
+      "text": "The Main Building directory covers facilities from the first through tenth floors and elevators from underground parking, with department-centered directions for visitors. Guidance must check published listings and temporary notices, respect restricted research access, appointments, operating hours, holiday closures and separated service routes, and avoid claims about occupancy, construction, inspections or real-time layout accuracy."
+    },
+    "understanding_digest": "421f02801152f3ae3d279385a3b163dc0a52d85e4a997eb71d2fb261248d7ac0"
+  },
+  "context_name": "task-1/campus-wiki/facility-updates",
+  "created_at": "2026-08-13T19:14:54.392836Z",
+  "follow_embeds": true,
+  "frame_digest": "dcb23fd22b5b22fe328d19f5140c3abcb86c72d7a4210005982e8e8550fd8dbf",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 23.862032334000105,
+  "row_key": "45063d95b60b3f183d832d0bb1df3baccf4ae999859f6d1ddc086cba8a77b435",
+  "schema_version": 1,
+  "source_count": 50,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

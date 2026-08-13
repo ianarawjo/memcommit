@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/minimization-and-redaction",
+      "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+      "digest": "9513db787d78f98d61cd1cc9cb48740fa2dd640b73b97a503fa4fd1954933082",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "c679d589-afa1-59bd-9973-a20076c1fc8d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "0b514128-2b69-534e-bac9-e685aefc5683"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+        }
+      ]
+    },
+    "key": "7a428ce4f7677a895c49dd5ed9b6f198b1f6ffbc47965f6ca2b2132b25766837",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.487104166997597,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+        "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+        "c679d589-afa1-59bd-9973-a20076c1fc8d",
+        "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+        "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+        "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+        "0b514128-2b69-534e-bac9-e685aefc5683",
+        "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+      ],
+      "text": "Use only the minimum necessary Memory; redact unnecessary identifiers and disclose the field types removed. Generalization must preserve essential meaning, and removed values must not be replaced plausibly. Omission does not assert the opposite, although recipients may read it as “not applicable” instead of “not verified.” Combining de-identified fragments can re-identify someone."
+    },
+    "understanding_digest": "dc516127690021f8b1df3c70adf4acdae7b6781edad168b947d966c13520384c"
+  },
+  "context_name": "task-3/local/guardrails/minimization-and-redaction",
+  "created_at": "2026-08-13T19:16:26.302318Z",
+  "follow_embeds": true,
+  "frame_digest": "9513db787d78f98d61cd1cc9cb48740fa2dd640b73b97a503fa4fd1954933082",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.487104166997597,
+  "row_key": "7a428ce4f7677a895c49dd5ed9b6f198b1f6ffbc47965f6ca2b2132b25766837",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

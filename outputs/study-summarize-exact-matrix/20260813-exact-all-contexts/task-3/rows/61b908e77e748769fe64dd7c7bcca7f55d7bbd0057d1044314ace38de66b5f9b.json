@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/08",
+      "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+      "digest": "30a9a04d7a1caa0938b7c7a2dc5a32324915269d745b89c04ec25f0774710b3f",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "5f80c7ec-e294-5905-abab-91027c9d827b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "c7385cce-ec43-5902-973c-5b8af54c3557"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "9433523f-8c4e-5424-b370-d325ba5154d1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/08",
+          "context_uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+          "memory_uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+        }
+      ]
+    },
+    "key": "61b908e77e748769fe64dd7c7bcca7f55d7bbd0057d1044314ace38de66b5f9b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.292441375000635,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "5f80c7ec-e294-5905-abab-91027c9d827b",
+        "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+        "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+        "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+        "c7385cce-ec43-5902-973c-5b8af54c3557",
+        "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+        "9433523f-8c4e-5424-b370-d325ba5154d1",
+        "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+        "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+        "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+      ],
+      "text": "The user limits non-living spending, batches receipt entry monthly, cuts dining after large expenses, and saves travel by combining errands. Early bill alerts enable prompt payment, while due-date alerts may lead to delay. Confirm amount and account before automating payments; processing and late-recording timing varies by biller. Their sister prefers electronic reimbursement for shared meals."
+    },
+    "understanding_digest": "8cf518a8d758255dd736c06a627a013109c049808765c79cb600b43ef805c07a"
+  },
+  "context_name": "task-3/local/personal-memory/2024/08",
+  "created_at": "2026-08-13T19:16:57.707804Z",
+  "follow_embeds": true,
+  "frame_digest": "30a9a04d7a1caa0938b7c7a2dc5a32324915269d745b89c04ec25f0774710b3f",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.292441375000635,
+  "row_key": "61b908e77e748769fe64dd7c7bcca7f55d7bbd0057d1044314ace38de66b5f9b",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

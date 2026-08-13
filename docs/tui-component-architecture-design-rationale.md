@@ -32,8 +32,10 @@ memcommit/interfaces/tui/
   viewers/
     semantic/                   typed document, controller, renderer, shell
     read_only/                  generic read-only shell
+  workbenches/
+    context_summary/            Context + reach + semantic result composition
   operations/
-    summarize/                  result projection and launch adapter only
+    summarize/                  picker/reach composition and result projection
 ```
 
 The dependency direction is `core -> components -> viewers -> operation
@@ -50,21 +52,31 @@ composition root for a runner; neither presenter imports or invokes the other.
 
 ## Summarize console contract
 
-One invocation constructs one typed `SummarizeRequest` and executes the
-application callable at most once. The router then presents the returned
-`SummarizeResult`:
+One invocation constructs one typed `SummarizeRequest`, then the router gives
+the selected sibling adapter control of when execution begins:
 
 - automatic mode chooses the TUI only when input and output are interactive;
 - `--plain` always uses the scripted renderer;
 - `--tui` requires an interactive terminal and fails before Store construction
   or provider connection when that capability is absent; and
+- the TUI can cancel before execution; an individual Run invokes the
+  application once, while `BOTH` visibly invokes direct then recursive and
+  publishes only the complete pair; and
 - `--copy` remains a post-result presentation effect and creates no receipt or
-  structured mutation stage.
+  structured mutation stage; Viewer `y`/`Y` copies the focused scope or complete
+  document through the same injected plain-text boundary and likewise creates
+  no structured stage.
 
-The TUI adapter maps the result directly to `SemanticViewerDocument`. It does
-not parse plain terminal output, reopen Contexts, call a provider, or change
-durable state. Direct versus recursive reach stays in the application request,
-not in the presentation router.
+The TUI adapter freezes one Profile-wide readable catalog before showing the
+shared Context selector. The reach control orders `BOTH`, exact, and
+descendants above it; Context owns initial focus. The empty Summary frame below
+Context owns Run, and the result replaces that action in place. It maps one
+result or the typed direct/recursive pair to `SemanticViewerDocument`. It does not parse plain terminal
+output or change durable state. The adapter may invoke the injected application
+callable only after the explicit action; source opening, authority validation,
+provider connection, and freshness checks remain inside the runtime path.
+Direct versus recursive reach is copied into a new application request rather
+than becoming hidden presentation state.
 
 ## Invariants
 
@@ -74,9 +86,8 @@ not in the presentation router.
    not reintroduced as a facade merely to avoid migrating a caller.
 3. A component owns reusable interaction mechanics; an operation adapter owns
    labels and projection from its typed result.
-4. Forced TUI eligibility is checked before executing the use case, so an
-   unavailable presentation route cannot partially execute semantic or durable
-   work.
+4. Forced TUI eligibility is checked before catalog or use-case execution, and
+   closing setup performs no semantic or durable work.
 5. The semantic Viewer remains read-only. Closing or moving focus cannot apply,
    checkpoint, copy, or otherwise mutate a Context.
 6. Package discovery must include every normal `memcommit` subpackage so source
@@ -91,25 +102,29 @@ not in the presentation router.
 - **Create a file for every visual rectangle.** Visual shape alone does not
   define reuse. Frame chrome, scrolling, focus, and typed semantic documents
   are separated because their behavior and tests differ.
-- **Build Summarize directly from prompt-toolkit widgets.** That would prove
-  only a new screen, not shared composition. Summarize therefore contains only
-  a result adapter and delegates the shell to the semantic Viewer.
+- **Build every Summarize control directly from prompt-toolkit widgets.** That
+  would prove only a new screen, not shared composition. Summarize instead
+  composes the existing Context selector and reach state with the semantic
+  Viewer controller; only its screen topology, labels, and Run meaning remain
+  operation-owned.
 - **Move every TUI helper at once.** Input controls, tree selectors, and review
   workbenches have different state and safety contracts. They remain in place
   until a vertical slice can migrate and verify each family.
 
 ## Verification evidence
 
-- 93 focused Summarize/router/component/architecture and Grant tests pass in
-  the exact commit tree.
+- 90 focused Summarize/router/component/architecture and Grant tests pass for
+  the Context-first, three-range, dual-result and scoped-copy workbench slice.
 - 1,258 existing TUI-consumer tests pass across bounded partitions after the
   import migration.
 - Architecture tests reject imports from retired command paths, reject
   `interfaces -> commands` dependencies, and ensure the Summarize adapter
-  composes the shared Viewer instead of raw layout widgets.
-- A real color-capable 180×52 PTY trace records entry, section focus changes,
-  close verification, and the noninteractive plain route under
-  `docs/screenshots/mem-summarize-tui-20260813/`.
+  composes the shared Context-summary workbench instead of raw layout widgets.
+- A real color-capable 180×52 PTY trace records Context-first entry, the empty
+  Summary Run action, all three range choices, direct and recursive result
+  sections, focused and complete clipboard projections, cancellation before
+  execution, byte/checkpoint verification, and the noninteractive plain route
+  under `docs/screenshots/mem-summarize-context-first-workbench-20260813/`.
 - A built wheel contains the new interface hierarchy; an isolated
   `uvx --from <wheel>` environment runs the installed `mem summarize --help`
   and resolves the frame component from site-packages.
@@ -119,9 +134,9 @@ not in the presentation router.
 
 ## Remaining boundary
 
-This slice proves a read-only completed-result Viewer. It does not yet prove
-editable input, Context-tree selection, review/Apply, cache/receipt, or CAS
-behavior through the new operation-adapter hierarchy. The public Python API and
-machine-readable adapter also remain separate gates. A second non-Study slice
-should add one of those contracts while reusing this component ownership and
-console routing.
+This slice now proves process-local Context-tree selection, a three-way
+range choice, complete dual-result publication, cancellation before execution,
+explicit reruns, scoped/complete plain-text copy, and a read-only result Viewer.
+It does not prove editable text input, review/Apply,
+cache/receipt, or CAS behavior through the new operation-adapter hierarchy. The
+public Python API and machine-readable adapter also remain separate gates.

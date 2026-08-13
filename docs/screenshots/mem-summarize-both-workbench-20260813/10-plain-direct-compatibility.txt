@@ -1,0 +1,7 @@
+PTY 180 52                                                                                                                                                                          
+SUMMARY · task-1/participant                                                                                                                                                        
+STATUS · READ-ONLY · DIRECT                                                                                                                                                         
+                                                                                                                                                                                    
+WHAT MEM UNDERSTOOD                                                                                                                                                                 
+The selected Context contains no ordinary Memories to summarize.                                                                                                                    
+PLAIN VERIFICATION COMPLETE · DIRECT DEFAULT · CONTEXT UNCHANGED

@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/claim-evidence",
+      "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+      "digest": "af5f0af896a165572be1f2ef16870552860a417f981b85e35b4ae005e1de1708",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "b39cf79f-d174-5ecb-98c9-b3f62ce0696a"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "b95e0185-f933-508d-8da7-41c65e2cc340"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "b5461283-9001-510c-9a30-bb367f247b25"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "87340c01-2e0f-5b82-9410-2133648022da"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "565a2263-e3bc-5379-9a80-64665b491c88"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "27b58ee9-5cad-5872-8eb7-a694728d8e79"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "cf7e9410-2144-53c4-a236-a16a7b5be494"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "ad643b33-fba1-5643-b57f-3bb8c3829122"
+        },
+        {
+          "context_name": "task-2/advisor2/claim-evidence",
+          "context_uid": "1ca4b72a-fcbb-5997-a1b5-f764662460a5",
+          "memory_uid": "546548e3-c47a-5a74-a04a-0a328602ead4"
+        }
+      ]
+    },
+    "key": "3b9a2f485271f615b2b585a14b388453d8111f4401cec505b6dbc54c5df42582",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.075092082999618,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "b39cf79f-d174-5ecb-98c9-b3f62ce0696a",
+        "b95e0185-f933-508d-8da7-41c65e2cc340",
+        "f82f1e1f-3f27-5668-a5a4-e64b0f88b44a",
+        "b5461283-9001-510c-9a30-bb367f247b25",
+        "87340c01-2e0f-5b82-9410-2133648022da",
+        "8b15a9ad-aa53-5a54-beb2-f1cc8d6da846",
+        "565a2263-e3bc-5379-9a80-64665b491c88",
+        "27b58ee9-5cad-5872-8eb7-a694728d8e79",
+        "cf7e9410-2144-53c4-a236-a16a7b5be494",
+        "ad643b33-fba1-5643-b57f-3bb8c3829122",
+        "546548e3-c47a-5a74-a04a-0a328602ead4"
+      ],
+      "text": "Claims and design choices should identify stakeholder needs and be paired with the closest direct, preferably recent field evidence. Separate confirmed observations, stakeholder reports, and study predictions; avoid unsupported causal language. Workarounds and breakdown logs reveal failures and adaptations, while coexisting formal and manual routines limit attribution to individual changes."
+    },
+    "understanding_digest": "25ff60ec18e66d83800187398519bd775abb69f46e7f93340c98c297ce097ae2"
+  },
+  "context_name": "task-2/advisor2/claim-evidence",
+  "created_at": "2026-08-13T19:15:47.259611Z",
+  "follow_embeds": true,
+  "frame_digest": "af5f0af896a165572be1f2ef16870552860a417f981b85e35b4ae005e1de1708",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.075092082999618,
+  "row_key": "3b9a2f485271f615b2b585a14b388453d8111f4401cec505b6dbc54c5df42582",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

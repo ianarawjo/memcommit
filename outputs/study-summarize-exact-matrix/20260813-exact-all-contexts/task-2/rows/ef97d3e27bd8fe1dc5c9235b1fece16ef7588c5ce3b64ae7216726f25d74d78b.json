@@ -1,0 +1,125 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/methods",
+      "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+      "digest": "b21bd0ecc77311b17e18ee317100c95619105242abf9e4d215a1c629ba9bb53d",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "c8bcefee-c64a-5a1f-911c-502cc4522701"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "8747b27e-6c2b-5498-9eac-c403e26101a6"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "df53a41c-2fbf-532a-a5b0-560a196bf5cb"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "24d49198-fd7b-5810-bc56-1910a796f76e"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "2f367cf3-50c5-59bc-972e-6173e56343ac"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "91db3bd1-4417-5db6-b7a6-3e79c87ebe88"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "49746579-92d7-51ea-b158-7d770443d101"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "20d116ab-f9cc-5f61-808b-8555da09d707"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "881bc037-c099-50e4-b7e0-d38fba5146c9"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "9a969676-6093-5fac-bda8-92ebdac70c37"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "0ecc319a-ae60-5510-883d-52e613138164"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "c4dfdb65-e673-52c0-a40c-e909d6014e00"
+        },
+        {
+          "context_name": "task-2/advisor1/methods",
+          "context_uid": "d2f78b99-5dcf-5876-89a9-1058bceca333",
+          "memory_uid": "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+        }
+      ]
+    },
+    "key": "ef97d3e27bd8fe1dc5c9235b1fece16ef7588c5ce3b64ae7216726f25d74d78b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.144255375002103,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "c8bcefee-c64a-5a1f-911c-502cc4522701",
+        "8747b27e-6c2b-5498-9eac-c403e26101a6",
+        "c3ad4ad8-4c5c-54c5-8d65-2dae15fa69a0",
+        "df53a41c-2fbf-532a-a5b0-560a196bf5cb",
+        "24d49198-fd7b-5810-bc56-1910a796f76e",
+        "2f367cf3-50c5-59bc-972e-6173e56343ac",
+        "91db3bd1-4417-5db6-b7a6-3e79c87ebe88",
+        "49746579-92d7-51ea-b158-7d770443d101",
+        "20d116ab-f9cc-5f61-808b-8555da09d707",
+        "881bc037-c099-50e4-b7e0-d38fba5146c9",
+        "9a969676-6093-5fac-bda8-92ebdac70c37",
+        "0ecc319a-ae60-5510-883d-52e613138164",
+        "c4dfdb65-e673-52c0-a40c-e909d6014e00",
+        "a7c3a123-3f05-52e0-b33e-c450d1a070ac"
+      ],
+      "text": "The methods must link every HCI question to timed, tool-specific user-data collection and analysis; distinguish prototype instability from design failure; and avoid treating feature lists as contributions. Preregistered deviations require permitted conditions and records, while safety procedures override collection. One exact participant target must consistently determine sessions, staffing, payments, schedule, and budget; shortfalls must be disclosed with affected plans revised, not deferred through ranges."
+    },
+    "understanding_digest": "fa3265ec274241d86cefacad4236a2f5376fdd7500a97fefbe730f246965a2dd"
+  },
+  "context_name": "task-2/advisor1/methods",
+  "created_at": "2026-08-13T19:15:29.663486Z",
+  "follow_embeds": true,
+  "frame_digest": "b21bd0ecc77311b17e18ee317100c95619105242abf9e4d215a1c629ba9bb53d",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.144255375002103,
+  "row_key": "ef97d3e27bd8fe1dc5c9235b1fece16ef7588c5ce3b64ae7216726f25d74d78b",
+  "schema_version": 1,
+  "source_count": 14,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

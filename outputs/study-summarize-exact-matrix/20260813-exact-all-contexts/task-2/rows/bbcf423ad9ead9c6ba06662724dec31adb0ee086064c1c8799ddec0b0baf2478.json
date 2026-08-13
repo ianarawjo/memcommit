@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/claim-evidence",
+      "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+      "digest": "e55efe03c74bb7b7ea667318707e98e3a291d6239667554a5ca4fd72914c2881",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "06f6c673-ea0c-5657-89d2-3f8711097cd7"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "58991ce7-d394-5087-b14f-0b014b0ec6ad"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "f5adf029-a750-5a3a-8eb8-d68e43bb5c13"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "b2a7ff8a-dfca-5857-8733-fe03cbd943ec"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "1f0c95f4-69bb-5764-a358-d428ff7019d2"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "cd475113-5354-5f80-b063-7628e4359afc"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "86fe1306-7650-58cc-a3df-79870c61784d"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "5d022e45-09c0-515e-98f1-68b2aec686bc"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "9939e9e8-d97d-57db-974a-750566ca9e2b"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "41060e8e-95ff-58c1-8b71-36a501a9bd23"
+        },
+        {
+          "context_name": "task-2/advisor1/claim-evidence",
+          "context_uid": "b0c4b50c-f70b-5b0c-a1eb-0fd63e0531bf",
+          "memory_uid": "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+        }
+      ]
+    },
+    "key": "bbcf423ad9ead9c6ba06662724dec31adb0ee086064c1c8799ddec0b0baf2478",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.966899541999737,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "06f6c673-ea0c-5657-89d2-3f8711097cd7",
+        "58991ce7-d394-5087-b14f-0b014b0ec6ad",
+        "f5adf029-a750-5a3a-8eb8-d68e43bb5c13",
+        "b2a7ff8a-dfca-5857-8733-fe03cbd943ec",
+        "1f0c95f4-69bb-5764-a358-d428ff7019d2",
+        "cd475113-5354-5f80-b063-7628e4359afc",
+        "86fe1306-7650-58cc-a3df-79870c61784d",
+        "5d022e45-09c0-515e-98f1-68b2aec686bc",
+        "9939e9e8-d97d-57db-974a-750566ca9e2b",
+        "41060e8e-95ff-58c1-8b71-36a501a9bd23",
+        "ec54ce10-07db-5ae3-94a5-8f3621fed4a9"
+      ],
+      "text": "Place direct evidence beside each core claim, favoring recent comprehensive HCI studies where sufficient, because reviewers inspect nearby support first. Distinguish pilot findings from main-study expectations and avoid unsupported causal or long-term-use conclusions. Tie design choices to user needs, formative evidence to retain/modify/discard judgments, and falsifiable conceptual principles to observable behavior."
+    },
+    "understanding_digest": "ec79604bf23c96e766d9ff700d0117a98b94262e5b34cdb615c5177d35460240"
+  },
+  "context_name": "task-2/advisor1/claim-evidence",
+  "created_at": "2026-08-13T19:15:18.086900Z",
+  "follow_embeds": true,
+  "frame_digest": "e55efe03c74bb7b7ea667318707e98e3a291d6239667554a5ca4fd72914c2881",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.966899541999737,
+  "row_key": "bbcf423ad9ead9c6ba06662724dec31adb0ee086064c1c8799ddec0b0baf2478",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

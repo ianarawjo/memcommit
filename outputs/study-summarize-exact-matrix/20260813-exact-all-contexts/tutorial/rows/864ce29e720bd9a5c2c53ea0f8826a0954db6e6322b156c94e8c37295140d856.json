@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "practice/source",
+      "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+      "digest": "8791150f1d7900cc7999318cf55df22aee7ebfec928db8886d5cb7e7d990dfa2",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "practice/source",
+          "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa"
+        }
+      ]
+    },
+    "key": "864ce29e720bd9a5c2c53ea0f8826a0954db6e6322b156c94e8c37295140d856",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 16.283958582997002,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "tutorial",
+    "understanding": {
+      "source_uids": [
+        "ac614cce-7803-539d-b05f-44a802da25fa"
+      ],
+      "text": "Text refinements should stay close to the original meaning, focus mainly on necessary grammatical corrections, remain concise and minimally formal, and avoid an overly casual style. The expressions “rather than” and forced conclusions such as “taken together” are prohibited, as are em dashes and colons."
+    },
+    "understanding_digest": "89c77ce8d4df7c547cea76e061ca3be642e31752df502c33e878d3a2ce0484b7"
+  },
+  "context_name": "practice/source",
+  "created_at": "2026-08-13T19:14:46.758010Z",
+  "follow_embeds": true,
+  "frame_digest": "8791150f1d7900cc7999318cf55df22aee7ebfec928db8886d5cb7e7d990dfa2",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 16.283958582997002,
+  "row_key": "864ce29e720bd9a5c2c53ea0f8826a0954db6e6322b156c94e8c37295140d856",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

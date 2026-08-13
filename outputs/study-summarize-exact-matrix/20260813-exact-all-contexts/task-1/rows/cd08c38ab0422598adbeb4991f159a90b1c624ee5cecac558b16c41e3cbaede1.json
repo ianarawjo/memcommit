@@ -1,0 +1,312 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/campus-wiki/shop-updates",
+      "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+      "digest": "1a31369436fec5fa8b2c6f5306c0070aa3533d35f4a9089fa7621101c46d622b",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "65a4b93f-f1da-52c0-b013-34c876391794"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "46192dec-18a4-5404-b3fe-5c0c42be97da"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "644d9c0b-c300-51e4-b680-4318328aa4b9"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "b03652e7-6a61-5dd6-8484-f19f93536d59"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "5f43f896-6a76-51f2-b034-221955b4165f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "16efed59-7583-5467-828e-b856ccf7c5e1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "150a226f-2cfb-523a-ae59-a37becaa4310"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "0147df04-89c5-56a0-b119-5b6baf57bb29"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "91791ba2-e7cc-5437-9855-e10726378d20"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "6248ac88-de59-5039-b01e-328669694909"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "451e08d8-5b71-5655-af71-94e99eb46cb2"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "d0fb793a-0864-5db7-a568-3fc424ae126a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "7930a9bc-37f3-5344-8aef-9111f1007813"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "815ce86f-370a-51d0-8cb9-82aed0352946"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "53aa3f6e-1be2-5ccc-80c7-003286636621"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "3b187e27-31b2-543f-8c62-6b43135e7b40"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "1ff36f44-d288-52db-9f58-aa17a80a6259"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "45b26dcc-e2bc-554a-aeae-91aac780b121"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5"
+        },
+        {
+          "context_name": "task-1/campus-wiki/shop-updates",
+          "context_uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+          "memory_uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+        }
+      ]
+    },
+    "key": "cd08c38ab0422598adbeb4991f159a90b1c624ee5cecac558b16c41e3cbaede1",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.005696374999388,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+        "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+        "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+        "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+        "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+        "b03652e7-6a61-5dd6-8484-f19f93536d59",
+        "5f43f896-6a76-51f2-b034-221955b4165f",
+        "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+        "16efed59-7583-5467-828e-b856ccf7c5e1",
+        "150a226f-2cfb-523a-ae59-a37becaa4310",
+        "0147df04-89c5-56a0-b119-5b6baf57bb29",
+        "91791ba2-e7cc-5437-9855-e10726378d20",
+        "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+        "815ce86f-370a-51d0-8cb9-82aed0352946",
+        "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+        "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+        "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+        "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+        "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+        "1ff36f44-d288-52db-9f58-aa17a80a6259",
+        "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+      ],
+      "text": "The Main Building store remains open 7 a.m.–11 p.m. during recess, while the Engineering store operates 9 a.m.–6 p.m.; its cafe and dining area continue through summer. Holiday and exam-period hours require official notices. Guidance may provide posted locations and hours or same-type alternatives, but cannot verify inventory, payment, sudden closures, purchases, ATM errors, unlisted ingredients, or cross-contact. Keep Main Building and West Complex ATMs distinct and refer service issues to the relevant posted contact or operator."
+    },
+    "understanding_digest": "b6a0c6bd1f08bbcdf924cbd9ccf6dd9d8a09c6b94894f45061901b7695b1f671"
+  },
+  "context_name": "task-1/campus-wiki/shop-updates",
+  "created_at": "2026-08-13T19:14:55.001936Z",
+  "follow_embeds": false,
+  "frame_digest": "1a31369436fec5fa8b2c6f5306c0070aa3533d35f4a9089fa7621101c46d622b",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.005696374999388,
+  "row_key": "cd08c38ab0422598adbeb4991f159a90b1c624ee5cecac558b16c41e3cbaede1",
+  "schema_version": 1,
+  "source_count": 50,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

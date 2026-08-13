@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/11",
+      "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+      "digest": "4a9c61434133a49a8bbdb506c19444d1750b9b4721015aadec70b5191eae6281",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "07ea3801-8666-581d-b846-2f45bf99ca19"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/11",
+          "context_uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+          "memory_uid": "820a5de9-9e08-52c7-8747-5155fe341bb4"
+        }
+      ]
+    },
+    "key": "473c5a09ec0d02f017c9075d47f26f1d3ea048eb1b0c2765900a990c1bab35bc",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.457356833998347,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "bb17c696-0c1c-516f-8ad9-68a4b159ce22",
+        "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea",
+        "4c8759cc-66aa-527c-a9d5-197d39b5d2b7",
+        "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958",
+        "32a19a57-9b04-5f86-92ba-202a9ac803e4",
+        "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3",
+        "07ea3801-8666-581d-b846-2f45bf99ca19",
+        "9e70b92e-1d8d-51ef-962d-bd9b348a56d5",
+        "d76686fd-9f1d-5d94-931b-4b49c86a8f4e",
+        "820a5de9-9e08-52c7-8747-5155fe341bb4"
+      ],
+      "text": "In November 2024, the user rescheduled once for their mother’s hospital visit but removed the reason; future external availability should disclose only timing, never her reason. Parking photos aid navigation, and written preparation lists prevent omissions. Some daily-life services may have shorter hours during the year-end holidays."
+    },
+    "understanding_digest": "3a518bdc9bcc83aa35074951720c322d0848f643e9efa209ce786ef64f68b62b"
+  },
+  "context_name": "task-3/local/personal-memory/2024/11",
+  "created_at": "2026-08-13T19:16:57.166564Z",
+  "follow_embeds": false,
+  "frame_digest": "4a9c61434133a49a8bbdb506c19444d1750b9b4721015aadec70b5191eae6281",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.457356833998347,
+  "row_key": "473c5a09ec0d02f017c9075d47f26f1d3ea048eb1b0c2765900a990c1bab35bc",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

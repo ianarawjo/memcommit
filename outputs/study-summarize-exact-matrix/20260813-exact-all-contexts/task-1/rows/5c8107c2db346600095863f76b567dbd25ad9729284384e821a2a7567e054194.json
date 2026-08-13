@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/building-access",
+      "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+      "digest": "8a595acf08bd1918a2950cc2fae0ec96484c2a54392480c89350a2f27d5e0666",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "8b077f2a-6a9f-50f0-ae91-f6536fb226cb"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "56c34a24-0954-5c64-9fd4-880995e6e53c"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "84a45a62-09c7-5187-8fa6-ff7063f9e8d0"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "89e6f853-8c98-51ba-98cc-ad5c84580a53"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "f9d7eb4e-221f-5b5f-a237-213a31e04093"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "f1b7843e-2c8a-5434-94a4-1383534abb3a"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "be002fc9-b9e0-5d73-9c15-622c0688c73c"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/building-access",
+          "context_uid": "5a66e0ec-3497-5ccf-9d8f-08c966647677",
+          "memory_uid": "31f5b67b-40f8-5690-b772-b329ce50e443"
+        }
+      ]
+    },
+    "key": "5c8107c2db346600095863f76b567dbd25ad9729284384e821a2a7567e054194",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.790495833000023,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "8b077f2a-6a9f-50f0-ae91-f6536fb226cb",
+        "56c34a24-0954-5c64-9fd4-880995e6e53c",
+        "84a45a62-09c7-5187-8fa6-ff7063f9e8d0",
+        "89e6f853-8c98-51ba-98cc-ad5c84580a53",
+        "f9d7eb4e-221f-5b5f-a237-213a31e04093",
+        "f1b7843e-2c8a-5434-94a4-1383534abb3a",
+        "be002fc9-b9e0-5d73-9c15-622c0688c73c",
+        "2d8e8c75-1dad-5dbc-9eaa-04cd522410f0",
+        "50fb8bfa-2764-5b4f-a83c-80bf2d3a73d0",
+        "ebc1d272-2f9a-5b2e-a5a4-6c0539f46527",
+        "31f5b67b-40f8-5690-b772-b329ce50e443"
+      ],
+      "text": "During construction, general main-entrance access ends at 5:00 p.m., and the third-floor rear entrance is unavailable; authorized students entering later must use a physical NFC card, while staff and construction/facilities personnel use only the designated staff entrance. The accessible route under reconstruction is replaced throughout construction by a temporary passage beside the main entrance leading to the first-floor lobby. Guidance may prioritize these closures and should proactively warn affected students and external tour leaders."
+    },
+    "understanding_digest": "01379fe0390f60f0ccf836b76f066cf6c658bb76768a69b0b37400f9d3d1409f"
+  },
+  "context_name": "task-1/participant/construction-updates/building-access",
+  "created_at": "2026-08-13T19:15:03.225860Z",
+  "follow_embeds": true,
+  "frame_digest": "8a595acf08bd1918a2950cc2fae0ec96484c2a54392480c89350a2f27d5e0666",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.790495833000023,
+  "row_key": "5c8107c2db346600095863f76b567dbd25ad9729284384e821a2a7567e054194",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/10",
+      "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+      "digest": "5593828ac3f62465949c6e17a903dc2e8808156c4026e6bdb2c713afd434eab5",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+        }
+      ]
+    },
+    "key": "d83ed548b5ab2c2fce0fb195358b80ffcf42a7ebd5f3986b2a5686460379932e",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.429316500001732,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "04711182-acef-52a9-bd58-7fe98a54854a",
+        "0229d0b1-750c-521b-a126-22c9d9d001c4",
+        "e310fe87-8cde-5399-be00-9f8d7ec44e94",
+        "4f37306b-08cd-512a-b92e-ca6761da1a5b",
+        "5897ffa4-cfc6-5012-8931-15420ec5cf7c",
+        "ce38bd13-3d51-5bff-9eba-ed70a8217356",
+        "a304315b-bc0a-591b-b8c2-7eea5145819d",
+        "ef060b89-6c54-5c20-86be-c07766a35daa",
+        "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f",
+        "e96f7007-5814-5986-b121-4ce3b22506e1"
+      ],
+      "text": "The user renewed their library membership, prefers well-lit evening routes despite longer walks, and should check current conditions because the local agent can compare past detours but cannot observe them directly. Inside the library, sitting farther from traffic noise supported an hour’s focus. Phone reminders worked better than paper for book returns, while replacement cards require identity verification."
+    },
+    "understanding_digest": "6953d95045d4331daa91976e8066f73a240407a49e3f8aa79d7af7160eb894e6"
+  },
+  "context_name": "task-3/local/personal-memory/2024/10",
+  "created_at": "2026-08-13T19:16:54.953967Z",
+  "follow_embeds": true,
+  "frame_digest": "5593828ac3f62465949c6e17a903dc2e8808156c4026e6bdb2c713afd434eab5",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.429316500001732,
+  "row_key": "d83ed548b5ab2c2fce0fb195358b80ffcf42a7ebd5f3986b2a5686460379932e",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

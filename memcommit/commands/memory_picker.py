@@ -11,7 +11,6 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.commands.context_picker import (
-    ContextMemoryBadge,
     ContextMemoryRow,
     ContextMemorySelection,
     choose_context,
@@ -67,18 +66,14 @@ def _change_badge(value: int | None) -> str:
     return f"r{value}"
 
 
-def _memory_badges(item: MemoryPickerItem) -> tuple[ContextMemoryBadge, ...]:
+def _memory_badges(item: MemoryPickerItem) -> tuple[str, ...]:
     """Project compact identity, exceptional lifecycle, and history badges."""
 
     identity = item.uid[:8]
     revision = _change_badge(item.change_count)
     if item.status == "HISTORICAL":
-        return (
-            ContextMemoryBadge("historical", "historical-memory-badge"),
-            ContextMemoryBadge(identity),
-            ContextMemoryBadge(revision),
-        )
-    return (ContextMemoryBadge(identity), ContextMemoryBadge(revision))
+        return ("historical", identity, revision)
+    return (identity, revision)
 
 
 def _render_memory_options(
@@ -96,17 +91,15 @@ def _render_memory_options(
             fragments.append(("[SetCursorPosition]", ""))
         style = "class:selected" if is_selected else ""
         pointer = "›" if is_selected else " "
-        fragments.append((style, f"{pointer} "))
-        for badge in _memory_badges(item):
-            badge_style = (
-                style
-                if is_selected or badge.style is None
-                else f"class:{badge.style}"
+        badges = "".join(
+            f"[{display_escape_text(badge)}]" for badge in _memory_badges(item)
+        )
+        fragments.append(
+            (
+                style,
+                f"{pointer} {badges} {_preview(item.content)}",
             )
-            fragments.append(
-                (badge_style, f"[{display_escape_text(badge.text)}]")
-            )
-        fragments.append((style, f" {_preview(item.content)}"))
+        )
         if index < len(options) - 1:
             fragments.append(("", "\n"))
     return fragments
@@ -185,9 +178,8 @@ def _choose_memory_selection(
             badges = _memory_badges(item)
             rows.append(
                 ContextMemoryRow(
-                    badges[0].text,
+                    badges[0],
                     item.content,
-                    label_style=badges[0].style,
                     selector=item.uid,
                     badges=badges[1:],
                 )

@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2026/01",
+      "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+      "digest": "118486a57bfc9dd3b3a0b4d62ef577b045d690175f273764ec4b883431438989",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "4eca74d0-4413-5339-a8fa-6b6fa3515409"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "22632e75-6b0f-58f3-ad9c-20b253d4d4e5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "a11f0943-8ee1-5305-87fb-64982fb36f82"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "f623f245-cdd5-5080-8869-b52cf2914076"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "17ac56f1-1302-5350-99d5-b95ef7feb768"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "96988fa9-44b1-511e-8c99-4372f902cfe3"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "b628acaa-50da-552c-8665-244dc4ab8263"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "08dfb937-7b28-55b5-801c-c0da00cbd414"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "be55eacc-6c19-5ced-8b25-bc1fac07ba5d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2026/01",
+          "context_uid": "e48e6eac-20f7-599d-9f76-4238bd9dd96d",
+          "memory_uid": "802c4031-57de-592a-9bc8-6ee3d54921c8"
+        }
+      ]
+    },
+    "key": "f60043aff62ca9b466bda91d9c959b5eb9c5999c82af7077d52943a8d1cb4f44",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.056164541998442,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "4eca74d0-4413-5339-a8fa-6b6fa3515409",
+        "22632e75-6b0f-58f3-ad9c-20b253d4d4e5",
+        "a11f0943-8ee1-5305-87fb-64982fb36f82",
+        "f623f245-cdd5-5080-8869-b52cf2914076",
+        "17ac56f1-1302-5350-99d5-b95ef7feb768",
+        "96988fa9-44b1-511e-8c99-4372f902cfe3",
+        "b628acaa-50da-552c-8665-244dc4ab8263",
+        "08dfb937-7b28-55b5-801c-c0da00cbd414",
+        "be55eacc-6c19-5ced-8b25-bc1fac07ba5d",
+        "802c4031-57de-592a-9bc8-6ee3d54921c8"
+      ],
+      "text": "The user stores winter accessories in an entrance basket and prepares gloves the night before to leave on time. They favor cleared main-road sidewalks over snowy shortcuts, lower nighttime heat and add a thin blanket, and receive their father’s pre-departure texts during heavy snow. Route suggestions must check recent clearing and accessible entrances because forecasts alone cannot establish actual sidewalk conditions."
+    },
+    "understanding_digest": "2c6064a5179cb2c8acabfd1e10be94884fc59254df04b0bf2e13e9ec7721f50f"
+  },
+  "context_name": "task-3/local/personal-memory/2026/01",
+  "created_at": "2026-08-13T19:17:23.470944Z",
+  "follow_embeds": false,
+  "frame_digest": "118486a57bfc9dd3b3a0b4d62ef577b045d690175f273764ec4b883431438989",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.056164541998442,
+  "row_key": "f60043aff62ca9b466bda91d9c959b5eb9c5999c82af7077d52943a8d1cb4f44",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

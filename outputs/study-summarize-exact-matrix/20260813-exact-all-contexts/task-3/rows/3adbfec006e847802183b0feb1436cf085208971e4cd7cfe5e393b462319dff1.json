@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/09",
+      "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+      "digest": "f97642bdc34e69cd289e5b7dca6e1cfd5e6a63e3eb46a4f310580a40d22cd17c",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "28714a4e-bc14-5703-b594-126471ae0585"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "1b1c9f90-2561-53d5-88fe-d54618450143"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "58494743-fc7f-59e9-8e17-80b8a644470a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/09",
+          "context_uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+          "memory_uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+        }
+      ]
+    },
+    "key": "3adbfec006e847802183b0feb1436cf085208971e4cd7cfe5e393b462319dff1",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.471055666999746,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+        "28714a4e-bc14-5703-b594-126471ae0585",
+        "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+        "1b1c9f90-2561-53d5-88fe-d54618450143",
+        "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+        "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+        "58494743-fc7f-59e9-8e17-80b8a644470a",
+        "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+        "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+        "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+      ],
+      "text": "The user reads and takes notes at a small living-room desk. Television and phone notifications disrupt concentration; turning the television off enabled 40 uninterrupted pages, while leaving the phone elsewhere prevented checks for an hour, with lower volume suggested as an alternative. Recording page numbers avoided losing their place. The local agent can summarize prior conditions and interruptions but cannot predict future reading times."
+    },
+    "understanding_digest": "6607e0e437e522cdb7ee335181325c95e384becde269de544b0badd135a39702"
+  },
+  "context_name": "task-3/local/personal-memory/2025/09",
+  "created_at": "2026-08-13T19:17:20.406339Z",
+  "follow_embeds": true,
+  "frame_digest": "f97642bdc34e69cd289e5b7dca6e1cfd5e6a63e3eb46a4f310580a40d22cd17c",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.471055666999746,
+  "row_key": "3adbfec006e847802183b0feb1436cf085208971e4cd7cfe5e393b462319dff1",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

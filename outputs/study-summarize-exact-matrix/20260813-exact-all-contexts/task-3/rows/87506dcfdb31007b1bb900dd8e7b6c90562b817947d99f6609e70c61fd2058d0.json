@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/04",
+      "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+      "digest": "843acb6aea6e47053a037106d02ae4e1563214ae68e2598949e7d9d3b39ddac6",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "a1c67646-6a75-504a-9508-d69e1d04b3e5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "9479e799-95d7-50d2-af62-d1e0914a389b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "528cb5ea-8c36-5206-beaa-19432250ec4d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "85fb1639-2176-5329-b490-3325ff030db4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "431d170a-863f-596d-97c0-0c9634524ee5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "4df33adc-cfba-50f2-b141-e2ebed38b81c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "ba7daae9-938d-55a1-af20-21cd10d395d8"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "abbf8742-38e3-5810-b222-fe91e3340962"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "06273d22-0b42-5c55-9d70-eda14084219a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/04",
+          "context_uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+          "memory_uid": "03ac930e-d745-5c29-8c24-5ced669817f9"
+        }
+      ]
+    },
+    "key": "87506dcfdb31007b1bb900dd8e7b6c90562b817947d99f6609e70c61fd2058d0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.521222167000815,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "a1c67646-6a75-504a-9508-d69e1d04b3e5",
+        "9479e799-95d7-50d2-af62-d1e0914a389b",
+        "528cb5ea-8c36-5206-beaa-19432250ec4d",
+        "85fb1639-2176-5329-b490-3325ff030db4",
+        "431d170a-863f-596d-97c0-0c9634524ee5",
+        "4df33adc-cfba-50f2-b141-e2ebed38b81c",
+        "ba7daae9-938d-55a1-af20-21cd10d395d8",
+        "abbf8742-38e3-5810-b222-fe91e3340962",
+        "06273d22-0b42-5c55-9d70-eda14084219a",
+        "03ac930e-d745-5c29-8c24-5ced669817f9"
+      ],
+      "text": "The shared laundry card is kept in the entrance drawer. After a 25-minute delay prompted a household note, the user adopted a five-minute pre-finish reminder and immediate collection, consistent with the manager’s fairness expectation. New jeans should be washed separately, dryer filters emptied, and current machine availability remains unknowable locally."
+    },
+    "understanding_digest": "74173c3b916abad4de0c5bdd57af432000a39080fb19af8989fcf1bce0b4c2b4"
+  },
+  "context_name": "task-3/local/personal-memory/2025/04",
+  "created_at": "2026-08-13T19:17:12.503544Z",
+  "follow_embeds": false,
+  "frame_digest": "843acb6aea6e47053a037106d02ae4e1563214ae68e2598949e7d9d3b39ddac6",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.521222167000815,
+  "row_key": "87506dcfdb31007b1bb900dd8e7b6c90562b817947d99f6609e70c61fd2058d0",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

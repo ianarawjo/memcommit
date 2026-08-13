@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/safety",
+      "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+      "digest": "f3fb749e6ceec00c4f71e21068e90a015586fb56b68af2c2c67dea1e27e5875c",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+        }
+      ]
+    },
+    "key": "a3de0287163ec4b754cb2ad973d286b73dc1db0b241d6488d46474dd8c7e7e69",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 19.698190167000575,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "9d6f5228-d182-571a-83d2-6a67becb7736",
+        "00ed485d-66c2-59ad-9c5b-9ae445412690",
+        "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+        "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+        "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+      ],
+      "text": "Safety procedures must define the reporting order and recipients for serious discomfort, with field staff following a pre-defined contact sequence. Recurring severe errors require criteria for halting a design alternative, which cannot re-enter later evaluations unmodified. Even controlled settings face longer interruptions and altered data conditions when prototype recovery is delayed."
+    },
+    "understanding_digest": "6eef7525cd4b8c743e406425b9c5f54b199c89087685355035ed74b48f0f082e"
+  },
+  "context_name": "task-2/advisor1/safety",
+  "created_at": "2026-08-13T19:15:42.914805Z",
+  "follow_embeds": true,
+  "frame_digest": "f3fb749e6ceec00c4f71e21068e90a015586fb56b68af2c2c67dea1e27e5875c",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 19.698190167000575,
+  "row_key": "a3de0287163ec4b754cb2ad973d286b73dc1db0b241d6488d46474dd8c7e7e69",
+  "schema_version": 1,
+  "source_count": 5,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

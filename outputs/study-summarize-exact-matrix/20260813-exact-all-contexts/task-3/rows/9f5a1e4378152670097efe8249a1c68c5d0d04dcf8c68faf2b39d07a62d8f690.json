@@ -1,0 +1,191 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+      "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+      "digest": "c62aba8436f9dbdd27aec760b5d03e22e78266c11d72974b2a91e173bef573b8",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "adba0a3f-38b0-5869-bcaf-7c940cf3c95d"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "250cba93-dc05-52eb-9e0d-a4a191ed50de"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "8cc545c2-9808-5401-b845-ac3a2f0a72e3"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "39b5e1f6-782d-5da1-86e0-13229940671a"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "b696bf85-364e-532c-a6ae-5d049b311368"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "bea24cd0-a2c6-5445-aa78-805175f4518a"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "aa464413-c292-58ea-8785-1da5620c3fdb"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "dcf1b441-c8bd-541d-a26b-839b19ef33f8"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "6c3b4e2d-994e-5d0f-9628-0ca35366dc13"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "c81aebd6-81ab-5ab5-8e5a-9bacdb7228a0"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "1b3925ec-6490-5d7e-9492-2dd7e9093da2"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "777f7b41-569d-5496-b079-3067dfed49d9"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "c99b4cb8-3d97-5ed1-85c5-786ab54acd21"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "2955e504-e422-562a-ba1d-9c91e673b119"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "1b4f6c8d-818b-50db-9ae2-ae92bbd94264"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "1076a390-d7d1-5d72-8271-35a3d7770942"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "03681efd-c272-54d0-bfb1-d2ee68647e1f"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "b9835a1e-de2d-56da-9f7d-7f9ebbf07908"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "fcb07dc8-574b-5274-949c-392ca6ccd011"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "88548b91-8546-5321-8fa1-1ddb3571b97a"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "67b0db35-5f3b-54dc-968d-9679441cf499"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "d5722825-ebd9-56ce-979f-992db24e6709"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "40110fb1-4797-52f9-8718-caaf668cac9d"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "62b94e08-bea9-5e9b-bd55-7aba3c8d0e45"
+        },
+        {
+          "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+          "context_uid": "ef17277c-75d8-5462-a77e-2ca1f9f0b028",
+          "memory_uid": "1cf83eaa-ceff-5436-a108-c5e4dede0f9d"
+        }
+      ]
+    },
+    "key": "9f5a1e4378152670097efe8249a1c68c5d0d04dcf8c68faf2b39d07a62d8f690",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 26.609899749997567,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "adba0a3f-38b0-5869-bcaf-7c940cf3c95d",
+        "250cba93-dc05-52eb-9e0d-a4a191ed50de",
+        "8cc545c2-9808-5401-b845-ac3a2f0a72e3",
+        "39b5e1f6-782d-5da1-86e0-13229940671a",
+        "b696bf85-364e-532c-a6ae-5d049b311368",
+        "bea24cd0-a2c6-5445-aa78-805175f4518a",
+        "aa464413-c292-58ea-8785-1da5620c3fdb",
+        "dcf1b441-c8bd-541d-a26b-839b19ef33f8",
+        "6c3b4e2d-994e-5d0f-9628-0ca35366dc13",
+        "c81aebd6-81ab-5ab5-8e5a-9bacdb7228a0",
+        "1b3925ec-6490-5d7e-9492-2dd7e9093da2",
+        "777f7b41-569d-5496-b079-3067dfed49d9",
+        "c99b4cb8-3d97-5ed1-85c5-786ab54acd21",
+        "2955e504-e422-562a-ba1d-9c91e673b119",
+        "1b4f6c8d-818b-50db-9ae2-ae92bbd94264",
+        "1076a390-d7d1-5d72-8271-35a3d7770942",
+        "03681efd-c272-54d0-bfb1-d2ee68647e1f",
+        "b9835a1e-de2d-56da-9f7d-7f9ebbf07908",
+        "fcb07dc8-574b-5274-949c-392ca6ccd011",
+        "88548b91-8546-5321-8fa1-1ddb3571b97a",
+        "67b0db35-5f3b-54dc-968d-9679441cf499",
+        "d5722825-ebd9-56ce-979f-992db24e6709",
+        "40110fb1-4797-52f9-8718-caaf668cac9d",
+        "62b94e08-bea9-5e9b-bd55-7aba3c8d0e45",
+        "1cf83eaa-ceff-5436-a108-c5e4dede0f9d"
+      ],
+      "text": "This public summary offers preliminary cues for minimizing and accurately presenting necessary healthcare-support information, including using summaries or preferences and checking possibly stale details. The agent may prepare an editable candidate, but transmission requires explicit approval and verified scope, recipient, purpose, and channel. Delivery, retention, deletion, routing, internal processing, service-improvement use, and downstream permissions remain governed by authorized policy and may be unknown."
+    },
+    "understanding_digest": "d91c324926925a0acbd82fedd9af4d814bb2f880386de74b3cdd7287f07f1cb5"
+  },
+  "context_name": "task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance",
+  "created_at": "2026-08-13T19:17:49.738771Z",
+  "follow_embeds": false,
+  "frame_digest": "c62aba8436f9dbdd27aec760b5d03e22e78266c11d72974b2a91e173bef573b8",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 26.609899749997567,
+  "row_key": "9f5a1e4378152670097efe8249a1c68c5d0d04dcf8c68faf2b39d07a62d8f690",
+  "schema_version": 1,
+  "source_count": 25,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

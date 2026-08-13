@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/01",
+      "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+      "digest": "d5a8e258483897d6c43709ecf2609e4dc506f205d0755fc99a38cf08fd1532db",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "929107ac-c62d-5920-9f71-12d4c9a102e9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "df8b90c2-4310-5e89-b979-508309bf6b04"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "306b9df1-d713-5413-b448-e2b42376d827"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "a0fe456c-0794-5bce-8ef9-9558e9833471"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/01",
+          "context_uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+          "memory_uid": "c9872898-ec4f-576e-b154-ff6fda581a1a"
+        }
+      ]
+    },
+    "key": "d4305b4bf58d7926d284768c5e0cbe10c6531b69c7d060f35ccf88de31f8e7b7",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.940680625000823,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "50911f7e-75a1-5099-99f1-e471bb8e6cb6",
+        "d5bd9f79-7295-5014-9668-83b7cffc78e2",
+        "5f92f6a3-1739-580c-bd63-1a936098ccd0",
+        "929107ac-c62d-5920-9f71-12d4c9a102e9",
+        "df8b90c2-4310-5e89-b979-508309bf6b04",
+        "306b9df1-d713-5413-b448-e2b42376d827",
+        "870b57b5-4cdb-54fc-b17f-8ffb86dad802",
+        "a0fe456c-0794-5bce-8ef9-9558e9833471",
+        "111972b9-e05f-5e1b-b121-ef9e51572d1d",
+        "c9872898-ec4f-576e-b154-ff6fda581a1a"
+      ],
+      "text": "The user learned to consolidate document copies before applying, match official-form names exactly to supporting documents, bring originals and copies for identity verification, and calendar and verify submission deadlines and expected issuance dates. A renewal is due in late 2025, but current validity cannot be determined without the expiration date."
+    },
+    "understanding_digest": "cab832cc9e727a36989575cd88a35ca2f5af23a5f15d49f4013117e32e4d1abe"
+  },
+  "context_name": "task-3/local/personal-memory/2025/01",
+  "created_at": "2026-08-13T19:17:05.857331Z",
+  "follow_embeds": true,
+  "frame_digest": "d5a8e258483897d6c43709ecf2609e4dc506f205d0755fc99a38cf08fd1532db",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.940680625000823,
+  "row_key": "d4305b4bf58d7926d284768c5e0cbe10c6531b69c7d060f35ccf88de31f8e7b7",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

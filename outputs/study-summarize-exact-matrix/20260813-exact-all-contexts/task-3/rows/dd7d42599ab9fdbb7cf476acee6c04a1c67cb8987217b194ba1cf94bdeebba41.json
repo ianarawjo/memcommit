@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/06",
+      "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+      "digest": "bba548d58e0ceb8f59a1007802a187ccc19e5d9549493baeded52dee7c3fd49c",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "f772b0c7-502f-55b7-b431-ee6b20518d38"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "b233f332-4927-549b-8dab-b554977fe363"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "4668d326-b11c-5467-bca4-e8d5e242e375"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "a77c985c-3986-5141-9805-e3321b3cfa2c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/06",
+          "context_uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+          "memory_uid": "988926a1-3e28-5b3e-a41c-d9338971643e"
+        }
+      ]
+    },
+    "key": "dd7d42599ab9fdbb7cf476acee6c04a1c67cb8987217b194ba1cf94bdeebba41",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 32.36625704200196,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06",
+        "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac",
+        "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e",
+        "f772b0c7-502f-55b7-b431-ee6b20518d38",
+        "0b2d800b-a4ab-5422-bf06-56d17b98f604",
+        "b233f332-4927-549b-8dab-b554977fe363",
+        "b38d0d63-c4b0-5955-857d-03cbcfd27f5b",
+        "4668d326-b11c-5467-bca4-e8d5e242e375",
+        "a77c985c-3986-5141-9805-e3321b3cfa2c",
+        "988926a1-3e28-5b3e-a41c-d9338971643e"
+      ],
+      "text": "The user keeps identity-document copies encrypted. Direct travel of similar duration lets them stay seated, while transfers add boarding, walking, rain exposure, and post-trip rest. They seek accessible entrances, checking ahead or meeting their uncle near an elevator; past records cannot confirm same-day operation, and he prefers aisle seats."
+    },
+    "understanding_digest": "728de360b5997be7e94592924a65c2eea1b6368e5d56ca012df0e2ac61aafa2e"
+  },
+  "context_name": "task-3/local/personal-memory/2024/06",
+  "created_at": "2026-08-13T19:17:11.222404Z",
+  "follow_embeds": false,
+  "frame_digest": "bba548d58e0ceb8f59a1007802a187ccc19e5d9549493baeded52dee7c3fd49c",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 32.36625704200196,
+  "row_key": "dd7d42599ab9fdbb7cf476acee6c04a1c67cb8987217b194ba1cf94bdeebba41",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

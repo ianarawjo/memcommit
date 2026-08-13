@@ -1,0 +1,53 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "practice/description",
+      "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+      "digest": "054a8c2f650c2d6c8588723d72444c71fa3dcc9d6945ed7a21ca8f587e1cb1f8",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9"
+        },
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be"
+        }
+      ]
+    },
+    "key": "2f96c9b4f74f5413efafbf1e38968d8cdc88e9336633b0b79238e5c0e066b785",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.184895584003243,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "tutorial",
+    "understanding": {
+      "source_uids": [
+        "89ff1887-d807-5a04-94d7-424fff9a93b9",
+        "1e046596-b6f1-5623-aebb-52c46b4a54be"
+      ],
+      "text": "MemLab 是用于管理智能体记忆并支持人与智能体协作的 CLI/TUI 研究原型。本研究包含三种不同情境。开始前需练习将 `practice/source` 的复合编辑请求拆分为可独立审阅的原子记忆，不得增添指令或改变原意，并将结果保存为 `practice/source-atomized`。"
+    },
+    "understanding_digest": "4f93da8c3657086dd62fa58907fce8c8700571e5816b5eb897c5f7df24239e90"
+  },
+  "context_name": "practice/description",
+  "created_at": "2026-08-13T19:14:44.671187Z",
+  "follow_embeds": false,
+  "frame_digest": "054a8c2f650c2d6c8588723d72444c71fa3dcc9d6945ed7a21ca8f587e1cb1f8",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.184895584003243,
+  "row_key": "2f96c9b4f74f5413efafbf1e38968d8cdc88e9336633b0b79238e5c0e066b785",
+  "schema_version": 1,
+  "source_count": 2,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

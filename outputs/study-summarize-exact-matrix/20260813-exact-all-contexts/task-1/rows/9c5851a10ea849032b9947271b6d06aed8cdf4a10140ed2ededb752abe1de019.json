@@ -1,0 +1,131 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/temporary-parking",
+      "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+      "digest": "8b25f8b0f14fb9067886a96bf50417d52edb9684f2abf1c59ab0e5b59f443aa5",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "84196dc5-9ae8-5663-866a-048024119fd2"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "fdffd727-3579-5edc-8433-1f1f372b7576"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "32e116a4-526b-5cd1-af16-4872680376b5"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "9b8a7458-4ebc-5b82-be5b-522268680f63"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "71a5daa6-e289-51bf-bf1f-051d9958091e"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "7f72387d-58fc-511c-84c3-940933217e9d"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/temporary-parking",
+          "context_uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+          "memory_uid": "ceffae14-e966-566e-83b2-df46680d4582"
+        }
+      ]
+    },
+    "key": "9c5851a10ea849032b9947271b6d06aed8cdf4a10140ed2ededb752abe1de019",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.737601417000405,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "84196dc5-9ae8-5663-866a-048024119fd2",
+        "fdffd727-3579-5edc-8433-1f1f372b7576",
+        "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4",
+        "fb0765f1-92fa-50b6-ab78-35ca165ab2e6",
+        "5a4dd86f-bead-50bb-b6e8-45c176b6d65f",
+        "32e116a4-526b-5cd1-af16-4872680376b5",
+        "8fa46317-ba39-54bb-8cf0-f85770bd5032",
+        "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc",
+        "9b8a7458-4ebc-5b82-be5b-522268680f63",
+        "d47493d3-5b50-53d0-a5b9-5dedbdb268a4",
+        "91de6da4-a9f4-5e2a-a585-14609a8d8497",
+        "71a5daa6-e289-51bf-bf1f-051d9958091e",
+        "7f72387d-58fc-511c-84c3-940933217e9d",
+        "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51",
+        "ceffae14-e966-566e-83b2-df46680d4582"
+      ],
+      "text": "During Main Building construction, the underground garage and Lot A are closed to general parking; the connecting road and stairs are blocked, and the locked pedestrian door requires staff cards, while approved controlled access remains for construction/facilities personnel. The garage temporarily stores materials, with cleared personal items sent to lost and found. Lot C is the alternative, though space cannot be checked or guaranteed, and Lot A should reopen when construction ends. Guidance may explain posted closures and Lot C’s location; visitors, delivery drivers, and contractors may nevertheless reach the control line and need rerouting or delivery confirmation."
+    },
+    "understanding_digest": "629b6792ee2fb76e65ecff4b1e828bd993db66ce6707a4318dcc7f986020fa25"
+  },
+  "context_name": "task-1/participant/construction-updates/temporary-parking",
+  "created_at": "2026-08-13T19:15:12.894521Z",
+  "follow_embeds": false,
+  "frame_digest": "8b25f8b0f14fb9067886a96bf50417d52edb9684f2abf1c59ab0e5b59f443aa5",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.737601417000405,
+  "row_key": "9c5851a10ea849032b9947271b6d06aed8cdf4a10140ed2ededb752abe1de019",
+  "schema_version": 1,
+  "source_count": 15,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,0 +1,64 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "practice",
+      "context_uid": "824acb9d-695c-5d55-9997-64cc317a2203",
+      "digest": "b456a2f25f8d56c0d481fc1d054de5db851ac72bb42e964d25708649f7085d4a",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9"
+        },
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be"
+        },
+        {
+          "context_name": "practice/output",
+          "context_uid": "e367e8da-a2fd-461e-b6b6-0756cc5f07b8",
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa"
+        },
+        {
+          "context_name": "practice/source",
+          "context_uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+          "memory_uid": "ac614cce-7803-539d-b05f-44a802da25fa"
+        }
+      ]
+    },
+    "key": "f6250f9f38917d3cd3073c946b596d28b03b8b96ea378f3177c3779659223ed2",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.583962583001266,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "tutorial",
+    "understanding": {
+      "source_uids": [
+        "89ff1887-d807-5a04-94d7-424fff9a93b9",
+        "1e046596-b6f1-5623-aebb-52c46b4a54be",
+        "ac614cce-7803-539d-b05f-44a802da25fa"
+      ],
+      "text": "The practice context introduces MemLab, a CLI/TUI research prototype for managing and sharing agent memory across people and agents, before three study situations. Its editing guidance requires concise, minimally formal wording that preserves meaning, stays close to the original, permits mainly necessary grammatical corrections, and excludes “rather than,” forced conclusions, em dashes, colons, and excessive casualness."
+    },
+    "understanding_digest": "0895465fca1e30fc91494412bfc78aef967a1e89716a34bd6d55d7be05b9d4de"
+  },
+  "context_name": "practice",
+  "created_at": "2026-08-13T19:19:29.981546Z",
+  "follow_embeds": true,
+  "frame_digest": "b456a2f25f8d56c0d481fc1d054de5db851ac72bb42e964d25708649f7085d4a",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.583962583001266,
+  "row_key": "f6250f9f38917d3cd3073c946b596d28b03b8b96ea378f3177c3779659223ed2",
+  "schema_version": 1,
+  "source_count": 4,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

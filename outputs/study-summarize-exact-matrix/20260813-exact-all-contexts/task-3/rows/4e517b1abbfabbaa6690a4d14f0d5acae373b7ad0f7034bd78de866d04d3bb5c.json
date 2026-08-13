@@ -1,0 +1,95 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/approval-and-delivery",
+      "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+      "digest": "826cc2fe115412f1f9754edafae9feb1364fef3f34fb70c35e482f90f1c5ca7b",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "96442184-816a-58f1-a72d-40eb907688fe"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "f449bbaa-c795-51b3-8f19-f6f26d819445"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "ce35336a-9b15-5448-b664-d6e8a5306d32"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "14d28101-761a-5d2a-8f80-d89f526b8598"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "319e6774-f20f-571e-b92f-e6c71f345320"
+        }
+      ]
+    },
+    "key": "4e517b1abbfabbaa6690a4d14f0d5acae373b7ad0f7034bd78de866d04d3bb5c",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.579859000001306,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "96442184-816a-58f1-a72d-40eb907688fe",
+        "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+        "f449bbaa-c795-51b3-8f19-f6f26d819445",
+        "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+        "ce35336a-9b15-5448-b664-d6e8a5306d32",
+        "14d28101-761a-5d2a-8f80-d89f526b8598",
+        "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+        "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+        "319e6774-f20f-571e-b92f-e6c71f345320"
+      ],
+      "text": "Before transmission, show the user the actual recipient, its intended use, and the exact Memories to be shared, and obtain fresh approval if any changes. The local agent cannot approve external sharing. Without separate restrictions, the recipient may retain the input as a business record and forward it to internal processors."
+    },
+    "understanding_digest": "3c46f2556ad2aa6307952d3ac5b602d4afba5fc2d7210e25278e6239ae30ad2f"
+  },
+  "context_name": "task-3/local/guardrails/approval-and-delivery",
+  "created_at": "2026-08-13T19:16:15.616396Z",
+  "follow_embeds": false,
+  "frame_digest": "826cc2fe115412f1f9754edafae9feb1364fef3f34fb70c35e482f90f1c5ca7b",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.579859000001306,
+  "row_key": "4e517b1abbfabbaa6690a4d14f0d5acae373b7ad0f7034bd78de866d04d3bb5c",
+  "schema_version": 1,
+  "source_count": 9,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

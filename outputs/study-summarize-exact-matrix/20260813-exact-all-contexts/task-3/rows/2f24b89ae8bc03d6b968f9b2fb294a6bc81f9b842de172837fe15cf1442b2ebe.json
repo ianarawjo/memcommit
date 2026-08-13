@@ -1,0 +1,99 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/05",
+      "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+      "digest": "0e647efa36fc7512784951ef9f953940ab12f50877b66ca940490d2702a37074",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "3088c235-435c-52ee-9ffc-26cf85ec196e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "7811ed66-2f22-54d8-a215-62a843264ba5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "d0f94a56-5cf8-5215-9cfa-5993b3b781be"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "fc19394a-6634-5aae-bfa5-bba91e707954"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "be7aa7f3-1b67-5677-950d-9942ca337a99"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "47faaefd-2d60-5693-9847-2c1d5d2f9092"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "d6eea310-1313-5a51-b032-f3f518620610"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "056defa1-8256-561d-a2b4-a70df4058c33"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "7cecee60-fabd-55a3-998b-78810bd9eaf4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/05",
+          "context_uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+          "memory_uid": "9ace13d3-d881-5720-bfd5-f7884db67756"
+        }
+      ]
+    },
+    "key": "2f24b89ae8bc03d6b968f9b2fb294a6bc81f9b842de172837fe15cf1442b2ebe",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.57412016699891,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "3088c235-435c-52ee-9ffc-26cf85ec196e",
+        "7811ed66-2f22-54d8-a215-62a843264ba5",
+        "d0f94a56-5cf8-5215-9cfa-5993b3b781be",
+        "47faaefd-2d60-5693-9847-2c1d5d2f9092",
+        "d6eea310-1313-5a51-b032-f3f518620610",
+        "056defa1-8256-561d-a2b4-a70df4058c33",
+        "7cecee60-fabd-55a3-998b-78810bd9eaf4",
+        "9ace13d3-d881-5720-bfd5-f7884db67756"
+      ],
+      "text": "Late-afternoon coffee tends to delay the user’s sleep, once until dawn, while coffee before 2 p.m. did not disrupt their usual bedtime. A closed window with the bedside fan prevented overheating, whereas an open window allowed street noise to wake them twice. Their father prefers coffee available after dinner despite believing it harmless. Sleep advice must not generalize from only one or two observations."
+    },
+    "understanding_digest": "4bef27bfaa4fca18841b7a591fdfbb8d5fd0dad7e8bfeebdd92db65c7f689328"
+  },
+  "context_name": "task-3/local/personal-memory/2024/05",
+  "created_at": "2026-08-13T19:16:47.743706Z",
+  "follow_embeds": false,
+  "frame_digest": "0e647efa36fc7512784951ef9f953940ab12f50877b66ca940490d2702a37074",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.57412016699891,
+  "row_key": "2f24b89ae8bc03d6b968f9b2fb294a6bc81f9b842de172837fe15cf1442b2ebe",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

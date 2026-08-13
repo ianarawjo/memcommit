@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/safety",
+      "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+      "digest": "884b48f23d0c09335503ee04e9c3b533f4d7a14bd8c02203528cc26c4f040f30",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "9d6f5228-d182-571a-83d2-6a67becb7736"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "00ed485d-66c2-59ad-9c5b-9ae445412690"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "9c6e1561-f671-52cb-aa67-245cc4987ad4"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "2381ecf7-2b11-583d-91d9-0a5cfc279ba1"
+        },
+        {
+          "context_name": "task-2/advisor1/safety",
+          "context_uid": "cd6c1fab-786a-52ea-9437-9a4d209ba419",
+          "memory_uid": "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+        }
+      ]
+    },
+    "key": "40ae73a018b219eb8525029023a62b0b04ec105869035261543f227bb1c9d3da",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 20.385487582996575,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "9d6f5228-d182-571a-83d2-6a67becb7736",
+        "00ed485d-66c2-59ad-9c5b-9ae445412690",
+        "9c6e1561-f671-52cb-aa67-245cc4987ad4",
+        "2381ecf7-2b11-583d-91d9-0a5cfc279ba1",
+        "c5ce1b00-36d9-5cdd-a318-93b88ca0e322"
+      ],
+      "text": "Safety procedures require a predefined order and recipients for field staff reporting serious discomfort. Formative evaluation must define criteria for halting alternatives with recurring severe errors; safety-halted alternatives remain excluded from later iterations unless modified. Even in controlled environments, delayed prototype recovery prolongs interruptions and changes task data-collection conditions."
+    },
+    "understanding_digest": "6b8b04945493cf50bc8110b5467143cdc9204cc3c6893988c4240768a6058db0"
+  },
+  "context_name": "task-2/advisor1/safety",
+  "created_at": "2026-08-13T19:15:41.767468Z",
+  "follow_embeds": false,
+  "frame_digest": "884b48f23d0c09335503ee04e9c3b533f4d7a14bd8c02203528cc26c4f040f30",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 20.385487582996575,
+  "row_key": "40ae73a018b219eb8525029023a62b0b04ec105869035261543f227bb1c9d3da",
+  "schema_version": 1,
+  "source_count": 5,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -105,10 +105,7 @@ row. The compact `rN` badge means N recorded lineage-changing operations; it is
 separate from the UID badge so the two values remain independently scannable.
 `CURRENT` is omitted because it is the default state. Only an exceptional
 retained-only row adds `[historical]`, yielding
-`[historical][UID][rN]`. Its badge alone uses a muted warm taupe; UID, revision,
-and Memory text retain the shared light lavender Memory-object color. Row focus
-still replaces both colors with the shared blue treatment. A granted Rationale
-row shows
+`[historical][UID][rN]`. A granted Rationale row shows
 `[UID][history unavailable]` rather than treating withheld owner history as
 zero or deriving a count from current content. Up/Down, Left/Right,
 held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather

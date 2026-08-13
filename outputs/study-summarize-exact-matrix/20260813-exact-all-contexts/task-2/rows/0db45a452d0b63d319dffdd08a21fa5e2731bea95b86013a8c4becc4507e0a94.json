@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/compensation",
+      "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+      "digest": "0fdb16a43b63bbbc421f2a56b5dcd9875086ba9aa43d01f570fc09a7f647bfb0",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "be9e402b-8d3b-58da-9766-2cf2ec25b9ae"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "85157c57-410f-5c7d-8183-b37d61eebf8a"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "8abeab95-3e41-5378-8409-08200aee9d58"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "5c6c461d-05e5-5b0c-b801-245de2f9c8d7"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "44abc098-8c9f-5abb-bc49-9deb25066d93"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "2a252668-f3f2-5582-b248-43ad81c54a48"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "7e647a83-81b0-52d6-9362-e513dc2a5032"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "d77affab-60c8-5403-b189-17022b484640"
+        },
+        {
+          "context_name": "task-2/advisor2/compensation",
+          "context_uid": "4ffbd453-7d61-56f7-90ad-34d77b485ef8",
+          "memory_uid": "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+        }
+      ]
+    },
+    "key": "0db45a452d0b63d319dffdd08a21fa5e2731bea95b86013a8c4becc4507e0a94",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.199265707997256,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "be9e402b-8d3b-58da-9766-2cf2ec25b9ae",
+        "85157c57-410f-5c7d-8183-b37d61eebf8a",
+        "8abeab95-3e41-5378-8409-08200aee9d58",
+        "9b59c6ed-5dbe-5ccc-87b5-6be31f414e68",
+        "5c6c461d-05e5-5b0c-b801-245de2f9c8d7",
+        "44abc098-8c9f-5abb-bc49-9deb25066d93",
+        "2a252668-f3f2-5582-b248-43ad81c54a48",
+        "7e647a83-81b0-52d6-9362-e513dc2a5032",
+        "d77affab-60c8-5403-b189-17022b484640",
+        "0c470c6b-26a6-5501-93ac-c51fecd708ae"
+      ],
+      "text": "Compensation budgets should reflect participants’ actual total burden—session time across modalities plus technical setup, travel, follow-up, and longitudinal diary or reporting time—because this determines perceived fairness. Pay mid-study withdrawals for time participated, permit burden-based on-site/remote differences and equivalent gift cards when transfers are unavailable, and do not fault unresolved payment methods at proposal stage. Keep participant compensation distinct from staff labor costs, while guarding against the tendency to omit setup and follow-up time."
+    },
+    "understanding_digest": "40fc7f9b3b04d9a727dae3bac7a1562d5aa4643ecd1abe59b03e418cdbae18e2"
+  },
+  "context_name": "task-2/advisor2/compensation",
+  "created_at": "2026-08-13T19:15:51.728402Z",
+  "follow_embeds": false,
+  "frame_digest": "0fdb16a43b63bbbc421f2a56b5dcd9875086ba9aa43d01f570fc09a7f647bfb0",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.199265707997256,
+  "row_key": "0db45a452d0b63d319dffdd08a21fa5e2731bea95b86013a8c4becc4507e0a94",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

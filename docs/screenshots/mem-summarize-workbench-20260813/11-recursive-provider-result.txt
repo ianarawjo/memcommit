@@ -1,0 +1,52 @@
+ MEM SUMMARIZE                                                                                                                                                                      
+ READ-ONLY · PICK CONTEXT AND DESCENDANTS SEPARATELY                                                                                                                                
+┌─────────────────────────────────────────────────────────────────| CONTEXT · ALL READABLE CONTEXTS · * CURRENT |──────────────────────────────────────────────────────────────────┐
+│  ·   ▸ practice                                                                                                                                                                 ^│
+│  ·   ▾ task-1                                                                                                                                                                    │
+│  ·     ▸ task-1/campus-wiki  READ GRANT                                                                                                                                          │
+│  ·     · task-1/description                                                                                                                                                      │
+│› ✓ *   ▸ task-1/participant                                                                                                                                                      │
+│  ·   ▸ task-2                                                                                                                                                                    │
+│  ·   ▸ task-3                                                                                                                                                                    │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────| DESCENDANTS |──────────────────────────────────────────────────────────────────────────────────┐
+│  RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SUMMARY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ SUMMARY · task-1/participant                                                                                                                                                    ^┃
+┃ STATUS · READ-ONLY · RECURSIVE · SOURCES 75                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ From June 24 through August 23, Main Building construction closes rear and accessible routes, event venues, parking, shops, restrooms, service desks, and library shortcuts; mai ┃
+┃n-entry access ends at 5 p.m. Alternatives include temporary accessible passages, designated external venues, Lot C, West Complex and Engineering amenities, portal services, ext ┃
+┃ernal restrooms, and the Library west entrance. Authorized students need physical NFC cards after 5 p.m.; staff and contractors use controlled entrances, parking availability is ┃
+┃ not guaranteed, elevators alternate, and brief air-conditioning interruptions may occur.                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│  RERUN SUMMARIZE · ENTER                                                                                                                                                         │
+│  SOURCE · task-1/participant · RECURSIVE · READ-ONLY                                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ section/cross · PgUp/PgDn page · Home/End · S rerun · Esc/Backspace/Q close · read-only

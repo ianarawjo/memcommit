@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/10",
+      "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+      "digest": "88c375c1d31630d6e2937b84e9ebbd87955b68ac9d7a8bfe843e612c827b8fe9",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "04711182-acef-52a9-bd58-7fe98a54854a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "0229d0b1-750c-521b-a126-22c9d9d001c4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "e310fe87-8cde-5399-be00-9f8d7ec44e94"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "4f37306b-08cd-512a-b92e-ca6761da1a5b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "5897ffa4-cfc6-5012-8931-15420ec5cf7c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "ce38bd13-3d51-5bff-9eba-ed70a8217356"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "a304315b-bc0a-591b-b8c2-7eea5145819d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "ef060b89-6c54-5c20-86be-c07766a35daa"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/10",
+          "context_uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+          "memory_uid": "e96f7007-5814-5986-b121-4ce3b22506e1"
+        }
+      ]
+    },
+    "key": "12391212b27c7591af1a8f1b0dafd6fcd016154ae4e84d6b2ba0f4c4e46a038b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.179362917002436,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "04711182-acef-52a9-bd58-7fe98a54854a",
+        "0229d0b1-750c-521b-a126-22c9d9d001c4",
+        "e310fe87-8cde-5399-be00-9f8d7ec44e94",
+        "4f37306b-08cd-512a-b92e-ca6761da1a5b",
+        "5897ffa4-cfc6-5012-8931-15420ec5cf7c",
+        "ce38bd13-3d51-5bff-9eba-ed70a8217356",
+        "a304315b-bc0a-591b-b8c2-7eea5145819d",
+        "ef060b89-6c54-5c20-86be-c07766a35daa",
+        "7669e5eb-c0fd-5182-ae9a-5f9ae95ddf2f",
+        "e96f7007-5814-5986-b121-4ce3b22506e1"
+      ],
+      "text": "The user renewed their library membership, favors well-lit evening routes despite a 12-minute delay, and should verify current conditions because the local agent can only review past detour reasons. Inside the library, they avoided window traffic noise by sitting farther in. Phone reminders proved reliable for returns; replacement cards require identity verification."
+    },
+    "understanding_digest": "006dbbf075d221c4216941bfe75e10c35614599df05c1a3b804932b5fe1b707b"
+  },
+  "context_name": "task-3/local/personal-memory/2024/10",
+  "created_at": "2026-08-13T19:16:56.436407Z",
+  "follow_embeds": false,
+  "frame_digest": "88c375c1d31630d6e2937b84e9ebbd87955b68ac9d7a8bfe843e612c827b8fe9",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.179362917002436,
+  "row_key": "12391212b27c7591af1a8f1b0dafd6fcd016154ae4e84d6b2ba0f4c4e46a038b",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

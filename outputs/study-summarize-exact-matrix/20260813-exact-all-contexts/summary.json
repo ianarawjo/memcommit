@@ -1,0 +1,17 @@
+{
+  "already_published_count": 198,
+  "artifact_provider_seconds": 2885.640752717005,
+  "completed_provider_rows": 198,
+  "created_at": "2026-08-13T19:27:08.705802Z",
+  "deterministic_empty_count": 20,
+  "failures": [],
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_SUMMARY",
+  "provider_call_count": 0,
+  "provider_seconds": 0,
+  "published": true,
+  "published_count": 0,
+  "resumed_output_count": 198,
+  "reused_existing_count": 0,
+  "row_count": 218,
+  "schema_version": 1
+}

@@ -1,0 +1,119 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/style",
+      "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+      "digest": "734edf50afae700e8eb3bad8b57bd5595164f0a7240c88bd8afb06c6602509b5",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+        }
+      ]
+    },
+    "key": "cf957e8d82065e0c863030c64e686c03dc6a05150ef6603fc1a16359c2269ea3",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.435156749997986,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+        "e3e20261-e03c-52fb-be9e-04f5f9b1294d",
+        "8d8d0e8d-dad1-50b5-9438-049052748a6a",
+        "8c74ba87-822b-5ce2-9a3a-3adc02ab9744",
+        "1f29de31-5429-5dfc-ab27-01779fa16704",
+        "1d181223-f750-57d2-97a5-b79f276a589f",
+        "a5ce5f9f-8852-5080-ae35-21abcf4a0973",
+        "888ce8af-a36e-5e74-9a0c-604aac48d3b7",
+        "ddf40413-3274-5662-ba5e-d6cae2a1e546",
+        "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1",
+        "89c2ce30-d6aa-5762-bf17-c697caac68e4",
+        "9f1b647a-bd2b-50df-8141-5b8c142c0fa5",
+        "49a42872-adcc-5bf8-9029-1d134cac6267"
+      ],
+      "text": "Use action- or condition-first procedural sentences that remain meaningful as reorderable checklist items. Describe field-confirmed behavior as observed and unconfirmed behavior as conditional. Keep connected clauses together when segmentation harms rhythm. Use “I” or a named team’s “we” consistently, and reserve em dashes for deliberate interruption or sharp contrast, using ordinary punctuation otherwise."
+    },
+    "understanding_digest": "a90338a16043617b385dfa29bc58f2dc34ce8f6201da813253f9c0daf99e3911"
+  },
+  "context_name": "task-2/advisor2/style",
+  "created_at": "2026-08-13T19:16:10.458502Z",
+  "follow_embeds": true,
+  "frame_digest": "734edf50afae700e8eb3bad8b57bd5595164f0a7240c88bd8afb06c6602509b5",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.435156749997986,
+  "row_key": "cf957e8d82065e0c863030c64e686c03dc6a05150ef6603fc1a16359c2269ea3",
+  "schema_version": 1,
+  "source_count": 13,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

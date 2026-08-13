@@ -1,0 +1,447 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails",
+      "context_uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+      "digest": "f35d52a8734e11cf442ef1ad9af6b805b911f5a608e8aacfa5ad128ca2435312",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "c971c24d-2543-5874-91e3-b97aec8bc77a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "3d3749df-7036-548b-b939-7b6b32c79af6"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "75944d44-d6e7-52fc-a68a-676b0df123ed"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "78bba4e2-c5d0-5df3-8f81-6641515e4875"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "e0133c8a-5382-50d2-9d9a-74e3ff700f69"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "58850532-c154-5e64-87cb-91c81d3e5ca5"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "05953013-6bb7-5f2c-8024-23ef357161fa"
+        },
+        {
+          "context_name": "task-3/local/guardrails/purpose-and-scope",
+          "context_uid": "900828d4-48ca-5a05-9807-620165233930",
+          "memory_uid": "b5618dee-42df-583f-a839-e8e611ccdabd"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "67035ffd-3709-592a-9d42-601fffb9ff79"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "47174c75-1951-5f0f-be2f-e79315d88b91"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "73411861-8d89-5bf4-9987-f7757e403089"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "4af0efc1-3442-580c-b2da-7725249adbbd"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "aff10a17-19e9-5e2e-b082-4971c8ac5b2f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "3f8f3387-8c2a-5059-8b4f-4b1478f5076a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "aa806a1b-9eaa-5964-98a6-ed787d57887b"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "b59b39e5-f099-5111-9ce9-8eaef8472cc8"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "587c2393-0105-5905-813e-c188b5a976f4"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "96442184-816a-58f1-a72d-40eb907688fe"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "f449bbaa-c795-51b3-8f19-f6f26d819445"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "ce35336a-9b15-5448-b664-d6e8a5306d32"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "14d28101-761a-5d2a-8f80-d89f526b8598"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "319e6774-f20f-571e-b92f-e6c71f345320"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "4004ad20-547d-5588-a4d5-2bceff66005f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "38256d79-12a4-5f38-aca9-357056cab7ce"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/retention-and-revocation",
+          "context_uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+          "memory_uid": "044511b2-40d0-55cb-912c-49c4ec0874fc"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef"
+        },
+        {
+          "context_name": "task-3/local/guardrails/recipient-and-authority",
+          "context_uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+          "memory_uid": "bd834d39-cdba-5742-b76c-5ede06d26852"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "c679d589-afa1-59bd-9973-a20076c1fc8d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "0b514128-2b69-534e-bac9-e685aefc5683"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "d75604e1-1e25-5c2b-8316-3db4224965bf"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "69e95464-217e-5620-8ffc-c5d0f20afc46"
+        },
+        {
+          "context_name": "task-3/local/guardrails/channel-and-format",
+          "context_uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+          "memory_uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "8cd6d58b-9325-584d-8c5c-396e1af03423"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "00564a98-72a6-57ce-9fc6-20a918e9e593"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "c2f154f8-6340-57d6-bd12-efa5411592b1"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/downstream-use",
+          "context_uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+          "memory_uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "c0ce508e-2777-54e3-806d-632adbdb9073"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "620a1dee-b131-586f-a838-64d853c44a92"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "26256211-0509-5c26-a54c-e83b4bde5a4e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "0d377136-da0b-570b-8deb-c662bee5bcbb"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "d26befa6-62a2-5923-a31b-71e73a31e164"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "d5d34316-4878-53d9-9ba8-d4d4d3d13752"
+        },
+        {
+          "context_name": "task-3/local/guardrails/audit-and-recovery",
+          "context_uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+          "memory_uid": "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+        }
+      ]
+    },
+    "key": "0cff0ae3a9809ddff24d935ab33ea7d1d192208586fb56ac88ff1a5363f22c8e",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.317210666999017,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "c971c24d-2543-5874-91e3-b97aec8bc77a",
+        "78bba4e2-c5d0-5df3-8f81-6641515e4875",
+        "67035ffd-3709-592a-9d42-601fffb9ff79",
+        "47174c75-1951-5f0f-be2f-e79315d88b91",
+        "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+        "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+        "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+        "96442184-816a-58f1-a72d-40eb907688fe",
+        "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+        "f449bbaa-c795-51b3-8f19-f6f26d819445",
+        "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+        "ce35336a-9b15-5448-b664-d6e8a5306d32",
+        "14d28101-761a-5d2a-8f80-d89f526b8598",
+        "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+        "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+        "319e6774-f20f-571e-b92f-e6c71f345320",
+        "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+        "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+        "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+        "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+        "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+        "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+        "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+        "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+        "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+        "8cd6d58b-9325-584d-8c5c-396e1af03423",
+        "00564a98-72a6-57ce-9fc6-20a918e9e593",
+        "c2f154f8-6340-57d6-bd12-efa5411592b1",
+        "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+        "0d377136-da0b-570b-8deb-c662bee5bcbb",
+        "d5d34316-4878-53d9-9ba8-d4d4d3d13752"
+      ],
+      "text": "External sharing requires a specific purpose, verified recipient and authority, minimal necessary content, explicit user approval of recipient, purpose, items, channel, and protections, plus renewed approval for changes or secondary processors. Third-party data, uncertainty, provenance, redactions, downstream restrictions, retention, and failures must be handled transparently; approval cannot be inferred or granted by the agent. Recipient retention, forwarding, processing, deletion, and correction synchronization cannot be assumed, while removing a draft leaves local source Memories available."
+    },
+    "understanding_digest": "8cb8476b6742f081566ba76b083dedbf1f13225a34e6cce5b7cf1ebad97e1ed5"
+  },
+  "context_name": "task-3/local/guardrails",
+  "created_at": "2026-08-13T19:16:19.600497Z",
+  "follow_embeds": true,
+  "frame_digest": "f35d52a8734e11cf442ef1ad9af6b805b911f5a608e8aacfa5ad128ca2435312",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.317210666999017,
+  "row_key": "0cff0ae3a9809ddff24d935ab33ea7d1d192208586fb56ac88ff1a5363f22c8e",
+  "schema_version": 1,
+  "source_count": 75,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

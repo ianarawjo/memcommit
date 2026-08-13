@@ -1,0 +1,307 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/campus-wiki/route-changes",
+      "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+      "digest": "7d105df6000b42a734b806364755e01a8dba2802120888c2dd6cad23026bcb96",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "b54ac954-0a84-502c-a096-a4f85a0d317a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "6ded9e53-4073-5911-82c6-b3981c2daf98"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "494bc428-f0be-5a21-9475-14fc405c9fda"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "78ebae58-9630-5674-90e7-a35951661d19"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "f0864b5f-4148-5c8c-a778-de0a028146d7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "056cce65-dd73-50e6-8745-27d4d71effb1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "084210ca-d235-52d4-9801-3e78c7d53454"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "c33f2c68-d304-51e0-8489-7e8876775cfd"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "4bad21e5-cc32-5995-93fd-d0938a41d427"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "d1aaec66-fff8-5270-b939-cd8877f75339"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "cae9af0e-9225-5193-b581-5b2d8096fc14"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "c3558237-458f-5487-8718-0c48b9bdf568"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "6c4eeef5-0905-5923-b201-666b504b95f1"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "4dcddb86-e56c-552a-810d-c04a1934b475"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "27e0d8cf-02ac-5b42-8970-da451a27e055"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "08d5128e-e371-5251-a3e8-acf488ccbc59"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "49a1ffe4-b705-5503-9853-e755bef73239"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "2742f895-9179-5e72-bef7-2ab08c68db2c"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "2f6bcece-e018-5b44-8936-430839892e49"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "675f922d-084f-54bd-bc38-f7aae69a370b"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa"
+        },
+        {
+          "context_name": "task-1/campus-wiki/route-changes",
+          "context_uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+          "memory_uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+        }
+      ]
+    },
+    "key": "579953a63e039e01c34f9f1301692ffbf0541e15a20ae2f7a3dfc0d80f0129fa",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.375715375001164,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "02df0e1e-fc32-5136-a0c2-5af11f99293e",
+        "759a38f7-7b7f-5eae-bbec-f00df27c9f4b",
+        "78ebae58-9630-5674-90e7-a35951661d19",
+        "f0864b5f-4148-5c8c-a778-de0a028146d7",
+        "056cce65-dd73-50e6-8745-27d4d71effb1",
+        "084210ca-d235-52d4-9801-3e78c7d53454",
+        "fd111f85-255e-5c35-acfb-b860f35cc4a8",
+        "4bad21e5-cc32-5995-93fd-d0938a41d427",
+        "27e0d8cf-02ac-5b42-8970-da451a27e055",
+        "d7a22205-1d0a-5106-a764-fc2e97769bc8",
+        "2db61a85-42af-5b31-b070-5ba2ef965cc7",
+        "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845",
+        "49a1ffe4-b705-5503-9853-e755bef73239",
+        "2742f895-9179-5e72-bef7-2ab08c68db2c",
+        "3b535b19-637b-5f2a-8441-8c509e7a1bfa",
+        "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+      ],
+      "text": "Route guidance should recommend only confirmed-open, publicly mapped routes, check destination entrance notices, distinguish shortest from accessible options, and offer a step-free alternative when stairs occur. It can compare stored map information but cannot verify live congestion, obstacles, temporary controls, or travel times. Emergencies defer to on-site directions; staff-only passages and informal shortcuts are excluded."
+    },
+    "understanding_digest": "0a9b5cc318677b9ca18c5d3c2a8d034f823eb6f986254952f582e20772a11298"
+  },
+  "context_name": "task-1/campus-wiki/route-changes",
+  "created_at": "2026-08-13T19:14:54.353239Z",
+  "follow_embeds": true,
+  "frame_digest": "7d105df6000b42a734b806364755e01a8dba2802120888c2dd6cad23026bcb96",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.375715375001164,
+  "row_key": "579953a63e039e01c34f9f1301692ffbf0541e15a20ae2f7a3dfc0d80f0129fa",
+  "schema_version": 1,
+  "source_count": 50,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

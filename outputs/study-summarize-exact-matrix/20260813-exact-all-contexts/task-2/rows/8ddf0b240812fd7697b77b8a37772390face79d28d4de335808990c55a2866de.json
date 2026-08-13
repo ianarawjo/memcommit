@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/budget",
+      "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+      "digest": "140ed761ca662e9c00067aa946576e002e8c55d7d6ddab962cb0d0b1dbaa919f",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "d614b55d-d9f6-5347-8d02-2d219d621a09"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "24500129-4b07-564f-ba67-39e40d7d7860"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "07bad409-af9c-512a-b829-7ceb28273f91"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "abf6d361-c2eb-512f-87e0-f3af9c5eb677"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "473cf3ca-9832-5d9c-97df-974f1d9b0d1b"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "675956de-2c61-53e1-bb89-9b49d92558ba"
+        },
+        {
+          "context_name": "task-2/advisor2/budget",
+          "context_uid": "ae02c2b2-49d3-5c30-b686-81ea17a8a87e",
+          "memory_uid": "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+        }
+      ]
+    },
+    "key": "8ddf0b240812fd7697b77b8a37772390face79d28d4de335808990c55a2866de",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.731911000002583,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "d614b55d-d9f6-5347-8d02-2d219d621a09",
+        "24500129-4b07-564f-ba67-39e40d7d7860",
+        "07bad409-af9c-512a-b829-7ceb28273f91",
+        "abf6d361-c2eb-512f-87e0-f3af9c5eb677",
+        "473cf3ca-9832-5d9c-97df-974f1d9b0d1b",
+        "675956de-2c61-53e1-bb89-9b49d92558ba",
+        "f4371f72-f222-5066-b2f4-0a6be5d6865e"
+      ],
+      "text": "Keep the main argument limited to the total and major cost categories, with a clear reference to a compact, complete budget table or appendix. Give each category a stable row containing quantity, unit rate, estimate basis, and subtotal, so arithmetic is verifiable and revisions remain localized."
+    },
+    "understanding_digest": "db167b38bb98487f0b514f2050f20c3cd8c19b8b52957f303abecf74f70e56e2"
+  },
+  "context_name": "task-2/advisor2/budget",
+  "created_at": "2026-08-13T19:15:39.500164Z",
+  "follow_embeds": false,
+  "frame_digest": "140ed761ca662e9c00067aa946576e002e8c55d7d6ddab962cb0d0b1dbaa919f",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.731911000002583,
+  "row_key": "8ddf0b240812fd7697b77b8a37772390face79d28d4de335808990c55a2866de",
+  "schema_version": 1,
+  "source_count": 7,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

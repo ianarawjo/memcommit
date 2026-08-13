@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/review",
+      "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+      "digest": "b21b7a2fa83fbcf2d729c7109ea1549d5793e31072e2fef5e0d0c494c140f14d",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "6d203c86-b6e0-586a-b896-b654fa319ed1"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "6b75bfb1-67f5-50bb-9e0c-04026062de96"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "3abfda89-82ab-5cc5-bdcd-5e2f274fd727"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "f14f1974-9035-5a2c-931a-89a5004a2567"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "6ba1d344-5d98-5c25-ba1e-b28c08d39747"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "75c4c71d-28e3-559c-99d1-f0dccc31a9e2"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "577e5506-78e8-5768-b288-7a5986347cce"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "f8253f92-c60c-57e1-a630-6b31abe080ae"
+        },
+        {
+          "context_name": "task-2/advisor2/review",
+          "context_uid": "3398ba87-f01e-56bd-9da2-0ed0894524fa",
+          "memory_uid": "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+        }
+      ]
+    },
+    "key": "7c23245ec2c45643faa018dad71a972319f85a5592aa4bf6d9fa378a430d4d7a",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.105152416999772,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "6d203c86-b6e0-586a-b896-b654fa319ed1",
+        "6b75bfb1-67f5-50bb-9e0c-04026062de96",
+        "3abfda89-82ab-5cc5-bdcd-5e2f274fd727",
+        "f14f1974-9035-5a2c-931a-89a5004a2567",
+        "6ba1d344-5d98-5c25-ba1e-b28c08d39747",
+        "4a85ebbd-a4ee-5c88-9e93-5fc545f41c64",
+        "75c4c71d-28e3-559c-99d1-f0dccc31a9e2",
+        "577e5506-78e8-5768-b288-7a5986347cce",
+        "9ce34a9a-4ba2-5b32-a1de-b0469ddc3f95",
+        "f8253f92-c60c-57e1-a630-6b31abe080ae",
+        "f5ad6933-3e22-5c47-bdaf-bacc9c9a5b3c"
+      ],
+      "text": "Before submission, conduct one review focused solely on validating the user problem, system intervention, and field-evaluation logic. Check alignment among research questions, system functions, field tasks, representative measures, evidence, changeable decisions, and expected contribution; walk through failures, interruptions, and recovery with field liaisons, state each contribution’s decision impact, and distinguish confirmed from unconfirmed partners and equipment."
+    },
+    "understanding_digest": "4c0f8b94489e528163648a1d525867f201de31c8b5c7561c8ab045b75ea0362a"
+  },
+  "context_name": "task-2/advisor2/review",
+  "created_at": "2026-08-13T19:16:05.005645Z",
+  "follow_embeds": true,
+  "frame_digest": "b21b7a2fa83fbcf2d729c7109ea1549d5793e31072e2fef5e0d0c494c140f14d",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.105152416999772,
+  "row_key": "7c23245ec2c45643faa018dad71a972319f85a5592aa4bf6d9fa378a430d4d7a",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

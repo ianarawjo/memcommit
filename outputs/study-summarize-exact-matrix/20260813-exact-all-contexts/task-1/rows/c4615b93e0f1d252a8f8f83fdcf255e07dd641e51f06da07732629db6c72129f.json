@@ -1,0 +1,118 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/shop-updates",
+      "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+      "digest": "7b7f481d6c9de559077c75a57aeba93914ea8ea6bd9b609f8e097428438e7d60",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "37113bd0-5194-521b-9d9e-48903d819520"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "741db845-9a4e-5281-825c-e046801b8be5"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "c88880dc-ebfa-5847-89d2-692cd22406d5"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "048d155c-f81b-5293-b493-44fbce424662"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "80d1e21d-3839-5515-b235-e1c1282599e5"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/shop-updates",
+          "context_uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+          "memory_uid": "50be93d9-d0da-542c-beab-be56adde4ee2"
+        }
+      ]
+    },
+    "key": "c4615b93e0f1d252a8f8f83fdcf255e07dd641e51f06da07732629db6c72129f",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.51011387499966,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "37113bd0-5194-521b-9d9e-48903d819520",
+        "741db845-9a4e-5281-825c-e046801b8be5",
+        "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+        "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+        "c88880dc-ebfa-5847-89d2-692cd22406d5",
+        "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+        "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+        "048d155c-f81b-5293-b493-44fbce424662",
+        "80d1e21d-3839-5515-b235-e1c1282599e5",
+        "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+        "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+        "50be93d9-d0da-542c-beab-be56adde4ee2"
+      ],
+      "text": "During construction, the Main Building’s first-floor ATM, unattended 24-hour store, Campus Store, and cafe are closed and should be excluded from recommendations. Users should use the West Complex ATM via a route avoiding the construction zone, or the Engineering Building Campus Store from 7:00 a.m. to 11:00 p.m.; no on-campus store alternative exists afterward. Only staff may use the Innovation Hub coffee machine, and the Engineering Store operator may increase evening staffing and inventory for additional demand."
+    },
+    "understanding_digest": "8bcdaa2cf10490153258cb4dd0fda33a27bca38167fac344cfe839e18f2597ae"
+  },
+  "context_name": "task-1/participant/construction-updates/shop-updates",
+  "created_at": "2026-08-13T19:15:09.175106Z",
+  "follow_embeds": false,
+  "frame_digest": "7b7f481d6c9de559077c75a57aeba93914ea8ea6bd9b609f8e097428438e7d60",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.51011387499966,
+  "row_key": "c4615b93e0f1d252a8f8f83fdcf255e07dd641e51f06da07732629db6c72129f",
+  "schema_version": 1,
+  "source_count": 13,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

@@ -1,24 +1,24 @@
- TRACE · MEMORY [f45ef742] · demo/child                                                                                                                                             
+ TRACE · MEMORY [814f9e78] · demo/child                                                                                                                                             
 ┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
-│ UID          465a1e6c-a14f-4c87-9134-991edd52ca2b                                                                                                                               ^│
-│ Time         2026-08-13T15:55:10.289613                                                                                                                                          │
-│ Command      mem remove                                                                                                                                                          │
-│ Description  REMOVED · RECORDED · [f45ef742]@2 “Retained historical wording” → ∅                                                                                                 │
-│ Detail       Selected Memory: f45ef742-0c32-44fe-924c-42eef2f1d993                                                                                                               │
-│              Lineage UIDs: f45ef742-0c32-44fe-924c-42eef2f1d993                                                                                                                  │
-│              NOW: ∅                                                                                                                                                              │
+│ UID          77f62da5-ddbd-4daf-b368-c8802054de43                                                                                                                               ^│
+│ Time         2026-08-13T15:45:49.447433                                                                                                                                          │
+│ Command      mem edit                                                                                                                                                            │
+│ Description  EDITED · RECORDED · [814f9e78]@1 “Second wording” → [814f9e78]@1 “Final wording used by both reports”                                                               │
+│ Detail       Selected Memory: 814f9e78-3a0b-49f0-ad7f-b564e952d063                                                                                                               │
+│              Lineage UIDs: 814f9e78-3a0b-49f0-ad7f-b564e952d063                                                                                                                  │
+│              NOW:                                                                                                                                                                │
+│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Final wording used by both reports                                                                                       │
 │              EARLIEST RETAINED:                                                                                                                                                  │
-│                [f45ef742-0c32-44fe-924c-42eef2f1d993]@2 Retained historical wording                                                                                              │
+│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 First wording                                                                                                            │
 │                                                                                                                                                                                  │
-│              Operation: mem remove                                                                                                                                               │
-│              Effect: REMOVED                                                                                                                                                     │
+│              Operation: mem edit                                                                                                                                                 │
+│              Effect: EDITED                                                                                                                                                      │
 │              Evidence: RECORDED                                                                                                                                                  │
 │              BEFORE:                                                                                                                                                             │
-│                [f45ef742-0c32-44fe-924c-42eef2f1d993]@2 Retained historical wording                                                                                              │
-│              AFTER: ∅                                                                                                                                                            │
-│              Description: Removed memory [f45ef742]: "Retained historical wording"                                                                                               │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
+│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Second wording                                                                                                           │
+│              AFTER:                                                                                                                                                              │
+│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Final wording used by both reports                                                                                       │
+│              Description: Edited memory [814f9e78]                                                                                                                               │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -42,11 +42,11 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃›  2026-08-13 15:55  mem remove  465a1e6c  REMOVED · RECORDED · [f45ef742]@2 “Retained historical wording” → ∅                                                                   ^┃
-┃   2026-08-13 15:55  mem add     6f894866  CREATED · RECORDED · ∅ → [f45ef742]@2 “Retained historical wording”                                                                    ┃
-┃                                                                                                                                                                                  ┃
+┃›  2026-08-13 15:45  mem edit  77f62da5  EDITED · RECORDED · [814f9e78]@1 “Second wording” → [814f9e78]@1 “Final wording used by both reports”                                   ^┃
+┃   2026-08-13 15:45  mem edit  bfdd98f1  EDITED · RECORDED · [814f9e78]@1 “First wording” → [814f9e78]@1 “Second wording”                                                         ┃
+┃   2026-08-13 15:45  mem add   1765a884  CREATED · RECORDED · ∅ → [814f9e78]@1 “First wording”                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/2
+ FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/3

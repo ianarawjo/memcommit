@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/05",
+      "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+      "digest": "a394d3e5f536ffe0d001e8da7d6c25dd75e7a706e4598ef808e0eb6527d9f3e7",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "95978183-0070-5b12-b117-be39bb343a5e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "3f886c0c-071b-5f2d-adad-da01345d702f"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "a2426820-65d6-5c78-ac50-0f32b366ae47"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/05",
+          "context_uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+          "memory_uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+        }
+      ]
+    },
+    "key": "2d6d0d973958a6817e617f3a230e43e2edf3973247d5e9378fdf3b833f0b2641",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 14.400392832998477,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+        "95978183-0070-5b12-b117-be39bb343a5e",
+        "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+        "3f886c0c-071b-5f2d-adad-da01345d702f",
+        "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+        "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+        "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+        "a2426820-65d6-5c78-ac50-0f32b366ae47",
+        "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+        "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+      ],
+      "text": "The user keeps two herbs by a south-facing window, where seasonal sunlight changes drying rates. Daily surface-based watering yellowed one plant, while checking deeper soil supported new growth. After wind toppled a pot, it was moved inward. An aunt-gifted pot was labeled to avoid care mix-ups; reminders should verify names and latest watering dates, prioritizing location sunlight."
+    },
+    "understanding_digest": "b431aaf8de92729b5ab490b07c0ea0be30b57f122d1fae406995f363804e783c"
+  },
+  "context_name": "task-3/local/personal-memory/2025/05",
+  "created_at": "2026-08-13T19:17:11.601020Z",
+  "follow_embeds": true,
+  "frame_digest": "a394d3e5f536ffe0d001e8da7d6c25dd75e7a706e4598ef808e0eb6527d9f3e7",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 14.400392832998477,
+  "row_key": "2d6d0d973958a6817e617f3a230e43e2edf3973247d5e9378fdf3b833f0b2641",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

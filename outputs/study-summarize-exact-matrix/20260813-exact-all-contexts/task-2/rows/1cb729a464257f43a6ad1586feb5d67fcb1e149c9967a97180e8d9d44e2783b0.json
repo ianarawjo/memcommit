@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/budget",
+      "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+      "digest": "e9a964006a35f872f78a68dfdf3a266a1eeca1ac4e5e611f078cbaad735069ee",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "05e0261e-5c52-5030-8176-0f02d4522931"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "1083e9b3-698a-57b1-91ab-ce04cec1e5e5"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "3652f268-d86f-55d6-935d-d3bdc487aae6"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "4e1e1201-94b8-5a7a-8737-edc4c62881ff"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "2f5f9039-e038-51c1-8af0-21a78772c512"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "f7a16d08-fbe2-5508-890d-cdbf70c1146e"
+        },
+        {
+          "context_name": "task-2/advisor1/budget",
+          "context_uid": "d6d3ee9e-eb0f-5c28-9463-7a680d53b470",
+          "memory_uid": "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+        }
+      ]
+    },
+    "key": "1cb729a464257f43a6ad1586feb5d67fcb1e149c9967a97180e8d9d44e2783b0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.696897833000548,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "05e0261e-5c52-5030-8176-0f02d4522931",
+        "1083e9b3-698a-57b1-91ab-ce04cec1e5e5",
+        "3652f268-d86f-55d6-935d-d3bdc487aae6",
+        "4e1e1201-94b8-5a7a-8737-edc4c62881ff",
+        "2f5f9039-e038-51c1-8af0-21a78772c512",
+        "f7a16d08-fbe2-5508-890d-cdbf70c1146e",
+        "2ca1d5a1-d78a-55b2-ab21-fd6ad73366b4"
+      ],
+      "text": "Keep the total, major cost categories, and quantity-and-unit-rate basis in the main text, placing each major cost beside the activity or deliverable it enables. Update costs whenever activities change. A denser paragraph is acceptable when needed to assess proportionality, since detached tables risk drift and make benefits harder to verify."
+    },
+    "understanding_digest": "72eaa5ffc4eae20ab193e6ed5469715d8700708cc5fe7bb7674693528fee3f65"
+  },
+  "context_name": "task-2/advisor1/budget",
+  "created_at": "2026-08-13T19:15:14.752212Z",
+  "follow_embeds": true,
+  "frame_digest": "e9a964006a35f872f78a68dfdf3a266a1eeca1ac4e5e611f078cbaad735069ee",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.696897833000548,
+  "row_key": "1cb729a464257f43a6ad1586feb5d67fcb1e149c9967a97180e8d9d44e2783b0",
+  "schema_version": 1,
+  "source_count": 7,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/feasibility",
+      "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+      "digest": "2f7d93e44399dca929b7f1f4bc586f7da4195cd2056bc5fb5698e22ddd03cd68",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "84f6e5e3-96b4-538b-a633-1b656204a296"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb"
+        },
+        {
+          "context_name": "task-2/advisor2/feasibility",
+          "context_uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+          "memory_uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+        }
+      ]
+    },
+    "key": "aaed7b610b459d6aebc637c873989dd87538a24848ed27e76ab7f0e487db48b6",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 16.181811624999682,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+        "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+        "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+        "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+        "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+        "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+        "84f6e5e3-96b4-538b-a633-1b656204a296",
+        "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+        "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+        "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+        "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+      ],
+      "text": "Assess feasibility by tracing personnel, equipment, time, and other resources for each core prototype feature and field procedure, making external-service and field-personnel dependencies visible. Separately document partner commitments and confirmation for recruitment, installation, and operational support, and assign responsibility for updates, inspections, and user support during deployment. Flag unverified schedule, recruitment, and technical assumptions; field schedules and personnel may change beyond researcher control."
+    },
+    "understanding_digest": "f54cc52df4208dafcc6b076fd2570887a81402db7c3001be1e1eb1a0b0a3db3a"
+  },
+  "context_name": "task-2/advisor2/feasibility",
+  "created_at": "2026-08-13T19:16:03.132966Z",
+  "follow_embeds": true,
+  "frame_digest": "2f7d93e44399dca929b7f1f4bc586f7da4195cd2056bc5fb5698e22ddd03cd68",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 16.181811624999682,
+  "row_key": "aaed7b610b459d6aebc637c873989dd87538a24848ed27e76ab7f0e487db48b6",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

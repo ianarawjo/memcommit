@@ -1,0 +1,77 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/privacy-and-others",
+      "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+      "digest": "33185b85841b448cab535cced53b54fa51129bcdd25bede4f6c536ac3bc5b87b",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "67035ffd-3709-592a-9d42-601fffb9ff79"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "47174c75-1951-5f0f-be2f-e79315d88b91"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "73411861-8d89-5bf4-9987-f7757e403089"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "4af0efc1-3442-580c-b2da-7725249adbbd"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "5cd7bde0-0d4f-5946-a551-65836f41cb3e"
+        },
+        {
+          "context_name": "task-3/local/guardrails/privacy-and-others",
+          "context_uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+          "memory_uid": "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad"
+        }
+      ]
+    },
+    "key": "72017318f5edb5dfc80daec068bdfc1a9baa73555b7e575d628bf7866159e4fb",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.632856125001126,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "67035ffd-3709-592a-9d42-601fffb9ff79",
+        "47174c75-1951-5f0f-be2f-e79315d88b91",
+        "73411861-8d89-5bf4-9987-f7757e403089",
+        "4af0efc1-3442-580c-b2da-7725249adbbd",
+        "5cd7bde0-0d4f-5946-a551-65836f41cb3e",
+        "eafc4a2b-8e2a-5e58-9813-f1346bbdc2ad"
+      ],
+      "text": "Exclude third-party contact details unless essential, confirm consent scope before sharing third-party-authored content, never infer sensitive traits from fragmentary behavior, and generalize rare identifying detail combinations. Mixed user–third-party items disclose both parties if shared unchanged, while third parties may not expect disclosure to external agents."
+    },
+    "understanding_digest": "21bd04cb547dcf02a54f71f6cc81697f9a708e06c466ee7644f07720056f0005"
+  },
+  "context_name": "task-3/local/guardrails/privacy-and-others",
+  "created_at": "2026-08-13T19:16:33.789831Z",
+  "follow_embeds": true,
+  "frame_digest": "33185b85841b448cab535cced53b54fa51129bcdd25bede4f6c536ac3bc5b87b",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.632856125001126,
+  "row_key": "72017318f5edb5dfc80daec068bdfc1a9baa73555b7e575d628bf7866159e4fb",
+  "schema_version": 1,
+  "source_count": 6,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

@@ -1,0 +1,95 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/approval-and-delivery",
+      "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+      "digest": "2ecda8608b3fab91a68723f60d02b3d6e12b2adc4e2c378cf1b46da421400401",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "96442184-816a-58f1-a72d-40eb907688fe"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "33169da3-3a2a-5e33-8fe2-66dbe9c0b641"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "f449bbaa-c795-51b3-8f19-f6f26d819445"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "9b905e4c-8522-5138-bc4e-b4deb308d28d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "ce35336a-9b15-5448-b664-d6e8a5306d32"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "14d28101-761a-5d2a-8f80-d89f526b8598"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "d7d7f1a5-f831-5d03-9137-ae485cebb67a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3"
+        },
+        {
+          "context_name": "task-3/local/guardrails/approval-and-delivery",
+          "context_uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+          "memory_uid": "319e6774-f20f-571e-b92f-e6c71f345320"
+        }
+      ]
+    },
+    "key": "0289065ddc3e9e59375fd0b75889812b97eecdf641a48614fa5c30d9341a096a",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.667094167001778,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "96442184-816a-58f1-a72d-40eb907688fe",
+        "33169da3-3a2a-5e33-8fe2-66dbe9c0b641",
+        "f449bbaa-c795-51b3-8f19-f6f26d819445",
+        "9b905e4c-8522-5138-bc4e-b4deb308d28d",
+        "ce35336a-9b15-5448-b664-d6e8a5306d32",
+        "14d28101-761a-5d2a-8f80-d89f526b8598",
+        "d7d7f1a5-f831-5d03-9137-ae485cebb67a",
+        "b0db9a0f-f96d-5766-b1fb-483e89d0b4a3",
+        "319e6774-f20f-571e-b92f-e6c71f345320"
+      ],
+      "text": "Before transmission, show the user the actual recipient, its intended use, and the exact Memories to be shared. The local agent may present candidates and recipient scope but cannot approve external sharing. Renewed approval is required if recipient, purpose, or items change. Without separate restrictions, recipients may retain input as ordinary business records and forward it to internal processors."
+    },
+    "understanding_digest": "f2c0dcc389422bb09718dec32dd01fe2173ef8d4aadb835ca47fd0c34528ca5e"
+  },
+  "context_name": "task-3/local/guardrails/approval-and-delivery",
+  "created_at": "2026-08-13T19:16:19.679633Z",
+  "follow_embeds": true,
+  "frame_digest": "2ecda8608b3fab91a68723f60d02b3d6e12b2adc4e2c378cf1b46da421400401",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.667094167001778,
+  "row_key": "0289065ddc3e9e59375fd0b75889812b97eecdf641a48614fa5c30d9341a096a",
+  "schema_version": 1,
+  "source_count": 9,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

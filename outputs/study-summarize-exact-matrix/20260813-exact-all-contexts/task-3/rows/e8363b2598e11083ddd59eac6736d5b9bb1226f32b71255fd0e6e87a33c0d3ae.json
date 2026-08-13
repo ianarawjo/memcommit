@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/10",
+      "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+      "digest": "f6fe272e37be3e6a5720c2a58a1aac942db5f9954ba6d68447123a67ef5dffc7",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "82c1e806-de3a-5633-8a08-175487e69fd6"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "25df6384-836f-5f8e-bd97-73a1fb171c48"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "55abae4f-206a-586e-8b35-406d7525c0a1"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "ccd1f422-6130-5f19-869e-681102a3a1fa"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/10",
+          "context_uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+          "memory_uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+        }
+      ]
+    },
+    "key": "e8363b2598e11083ddd59eac6736d5b9bb1226f32b71255fd0e6e87a33c0d3ae",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.42646424999839,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "82c1e806-de3a-5633-8a08-175487e69fd6",
+        "25df6384-836f-5f8e-bd97-73a1fb171c48",
+        "55abae4f-206a-586e-8b35-406d7525c0a1",
+        "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+        "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+        "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+        "ccd1f422-6130-5f19-869e-681102a3a1fa",
+        "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+        "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+        "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+      ],
+      "text": "The user keeps waterproof shoes left of the entrance for rain, after thin shoes caused wet socks; waterproof shoes later kept feet dry. New shoes chafed on a long walk despite two short outings, so long walks require weather and discomfort checks. Umbrellas should dry outside, not with documents; their mother leaves a spare when rain is forecast. Shoe location remains known, but condition and usability do not."
+    },
+    "understanding_digest": "7722dc55fea857324b181e049dfe4f6451495e3080dd65428fdba124877dc80d"
+  },
+  "context_name": "task-3/local/personal-memory/2025/10",
+  "created_at": "2026-08-13T19:17:19.822415Z",
+  "follow_embeds": false,
+  "frame_digest": "f6fe272e37be3e6a5720c2a58a1aac942db5f9954ba6d68447123a67ef5dffc7",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.42646424999839,
+  "row_key": "e8363b2598e11083ddd59eac6736d5b9bb1226f32b71255fd0e6e87a33c0d3ae",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

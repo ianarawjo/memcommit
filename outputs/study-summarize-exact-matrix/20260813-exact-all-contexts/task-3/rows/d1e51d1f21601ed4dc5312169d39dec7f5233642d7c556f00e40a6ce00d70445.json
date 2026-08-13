@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/minimization-and-redaction",
+      "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+      "digest": "b7f53b57093aae43c2ec89e914e92c64f50ec8597e78659797bde0efbdc95fa9",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "c679d589-afa1-59bd-9973-a20076c1fc8d"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "0b514128-2b69-534e-bac9-e685aefc5683"
+        },
+        {
+          "context_name": "task-3/local/guardrails/minimization-and-redaction",
+          "context_uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+          "memory_uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+        }
+      ]
+    },
+    "key": "d1e51d1f21601ed4dc5312169d39dec7f5233642d7c556f00e40a6ce00d70445",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 11.045767125000566,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+        "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+        "c679d589-afa1-59bd-9973-a20076c1fc8d",
+        "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+        "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+        "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+        "0b514128-2b69-534e-bac9-e685aefc5683",
+        "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+      ],
+      "text": "Use only the smallest necessary Memory unit, redact unneeded identifiers, disclose redacted field types, and preserve essential meaning when generalizing. Never substitute plausible values. Omission neither asserts the opposite nor necessarily means “not applicable” rather than “not verified,” and combining de-identified fragments may re-identify someone."
+    },
+    "understanding_digest": "3a1516fa363dcbb57383d752d6422fa16ea5c1d642563128e6419c6ca2214a8a"
+  },
+  "context_name": "task-3/local/guardrails/minimization-and-redaction",
+  "created_at": "2026-08-13T19:16:23.697517Z",
+  "follow_embeds": false,
+  "frame_digest": "b7f53b57093aae43c2ec89e914e92c64f50ec8597e78659797bde0efbdc95fa9",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 11.045767125000566,
+  "row_key": "d1e51d1f21601ed4dc5312169d39dec7f5233642d7c556f00e40a6ce00d70445",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

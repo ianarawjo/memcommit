@@ -1,0 +1,77 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+      "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+      "digest": "5490aa250b93d6cc73e23876a15a1c6cd649edf63ecda311562b5bccf0da50f9",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "aff10a17-19e9-5e2e-b082-4971c8ac5b2f"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "3f8f3387-8c2a-5059-8b4f-4b1478f5076a"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "aa806a1b-9eaa-5964-98a6-ed787d57887b"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "b59b39e5-f099-5111-9ce9-8eaef8472cc8"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea"
+        },
+        {
+          "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+          "context_uid": "136dface-67b3-5116-86e2-b70449b30366",
+          "memory_uid": "587c2393-0105-5905-813e-c188b5a976f4"
+        }
+      ]
+    },
+    "key": "08eae0157c6f3ac5966ffbd58039ff4175d93415ca74c7afd6e739303ba94257",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 8.998000125000544,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+        "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+        "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+        "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+        "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+        "587c2393-0105-5905-813e-c188b5a976f4"
+      ],
+      "text": "Time-sensitive content must show its latest verification time, uncertainty must be explicit because recipients may otherwise treat it as verified, and unresolved conflicts must not establish either side as current fact. Supporting Memories must remain traceable; if a source Memory is not updated after reality changes, the candidate retains the earlier state."
+    },
+    "understanding_digest": "ee56931cbc7a3dea4c196cb26d4ee8aaf492590c403de02fbd791ce7057bbd48"
+  },
+  "context_name": "task-3/local/guardrails/evidence-and-uncertainty",
+  "created_at": "2026-08-13T19:16:19.699074Z",
+  "follow_embeds": false,
+  "frame_digest": "5490aa250b93d6cc73e23876a15a1c6cd649edf63ecda311562b5bccf0da50f9",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 8.998000125000544,
+  "row_key": "08eae0157c6f3ac5966ffbd58039ff4175d93415ca74c7afd6e739303ba94257",
+  "schema_version": 1,
+  "source_count": 6,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

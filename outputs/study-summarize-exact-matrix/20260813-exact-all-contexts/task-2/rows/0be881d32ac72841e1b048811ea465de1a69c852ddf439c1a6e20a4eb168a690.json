@@ -1,0 +1,59 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/reproducibility",
+      "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+      "digest": "b09ccd244431b47cdbb67483d567b9251700fa454cd9e7fbfd4a5d9ad8131ceb",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memory_uid": "40f11374-d91b-546a-9e93-fcf98a0fde98"
+        },
+        {
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memory_uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184"
+        },
+        {
+          "context_name": "task-2/advisor2/reproducibility",
+          "context_uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+          "memory_uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+        }
+      ]
+    },
+    "key": "0be881d32ac72841e1b048811ea465de1a69c852ddf439c1a6e20a4eb168a690",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.442269125000166,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "40f11374-d91b-546a-9e93-fcf98a0fde98",
+        "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+        "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+      ],
+      "text": "HCI field deployments should disclose the system version used and maintain a timestamped history of configuration, field-procedure, and data-collection-tool changes with rationales, because this evidence enables reviewers to assess reproducibility and interpret results across different field sites."
+    },
+    "understanding_digest": "4928cee5ac5090beaa9aede11b260cec2de95d4f6bce89ebd8c5568b245b8afd"
+  },
+  "context_name": "task-2/advisor2/reproducibility",
+  "created_at": "2026-08-13T19:15:56.738461Z",
+  "follow_embeds": false,
+  "frame_digest": "b09ccd244431b47cdbb67483d567b9251700fa454cd9e7fbfd4a5d9ad8131ceb",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.442269125000166,
+  "row_key": "0be881d32ac72841e1b048811ea465de1a69c852ddf439c1a6e20a4eb168a690",
+  "schema_version": 1,
+  "source_count": 3,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

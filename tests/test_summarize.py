@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -13,12 +14,68 @@ from memcommit.commands.help_inventory import COMMAND_FORMS
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import analyze_comparison
-from memcommit.summarize import SUMMARIZE_OPERATION
+from memcommit.context import Memory
+from memcommit.interfaces.tui.operations.summarize import SummarizeTuiOutcome
+from memcommit.summarize import (
+    SUMMARIZE_OPERATION,
+    SummarizeError,
+    collect_summary_scope,
+)
 from memcommit.store import MemoryStore
-from memcommit.understanding import UnderstandingSummary
+from memcommit.summarize_application import SummarizeResult
+from memcommit.understanding import (
+    UnderstandingSummary,
+    parse_source_linked_understanding,
+)
 
 
 runner = CliRunner()
+
+
+def test_summarize_tui_defaults_to_both_but_preserves_explicit_scope_flags():
+    assert summarize_command._initial_tui_range_mode(
+        direct=False,
+        recursive=False,
+    ) == "BOTH"
+    assert summarize_command._initial_tui_range_mode(
+        direct=True,
+        recursive=False,
+    ) == "EXACT"
+    assert summarize_command._initial_tui_range_mode(
+        direct=False,
+        recursive=True,
+    ) == "SUBTREE"
+
+
+def test_understanding_deduplicates_two_aliases_for_one_durable_memory():
+    summary = parse_source_linked_understanding(
+        {
+            "text": "The same durable evidence is visible through two Context aliases.",
+            "source_ids": ["m000001", "m000002"],
+        },
+        source_uid_by_id={
+            "m000001": "shared-memory-uid",
+            "m000002": "shared-memory-uid",
+        },
+    )
+
+    assert summary.source_uids == ("shared-memory-uid",)
+
+
+def test_summary_scope_rejects_conflicting_payloads_for_one_memory_uid():
+    first = ops.init("summary/first")
+    second = ops.init("summary/second")
+    first.add(Memory(uid="shared-memory-uid", content="First payload."))
+    second.add(Memory(uid="shared-memory-uid", content="Conflicting payload."))
+
+    with pytest.raises(SummarizeError, match="conflicting content"):
+        collect_summary_scope(
+            (first, second),
+            root_context_uid=first.uid,
+            root_context_name="summary",
+            include_descendants=True,
+            follow_embeds=True,
+        )
 
 
 def test_mem_summarize_inventory_matches_direct_default_and_copy_contract():
@@ -249,6 +306,39 @@ def test_mem_summarize_copy_failure_keeps_result_visible_and_fails_cleanly(
     assert result.exit_code == 1
     assert "WHAT MEM UNDERSTOOD" in result.stdout
     assert "Copy error: clipboard unavailable" in result.output
+
+
+def test_summarize_both_clipboard_keeps_scope_results_separate() -> None:
+    direct = SummarizeResult(
+        context_name="summary",
+        include_descendants=False,
+        follow_embeds=False,
+        source_digest="a" * 64,
+        source_count=1,
+        understanding=UnderstandingSummary("Direct understanding.", ("m1",)),
+    )
+    recursive = SummarizeResult(
+        context_name="summary",
+        include_descendants=True,
+        follow_embeds=True,
+        source_digest="b" * 64,
+        source_count=2,
+        understanding=UnderstandingSummary(
+            "Recursive understanding.",
+            ("m1", "m2"),
+        ),
+    )
+
+    assert summarize_command._summarize_clipboard_text(
+        SummarizeTuiOutcome((direct, recursive))
+    ) == (
+        "[CURRENT ONLY]\n"
+        "WHAT MEM UNDERSTOOD\n"
+        "Direct understanding.\n\n"
+        "[CURRENT + DESCENDANTS]\n"
+        "WHAT MEM UNDERSTOOD\n"
+        "Recursive understanding."
+    )
 
 
 def test_mem_summarize_empty_context_is_provider_free(

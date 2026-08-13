@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/terminology",
+      "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+      "digest": "7291a80644aeab617ee169e0bf42280c79d1cc21b100991c5acf98b320297cf9",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "949a884d-b348-5fa0-b1dd-adbebafe10a9"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "2f484151-b5fc-51a9-8a88-b30a403617b3"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "21131a6f-d35c-51e3-895f-46cd21a3b566"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "e02c3110-05c4-58a4-8d76-c8fd2426a0d5"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "af028910-e48b-5605-b92b-9378bdfa525c"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "39792d18-2be0-5135-a063-c5213247d330"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1"
+        },
+        {
+          "context_name": "task-2/advisor1/terminology",
+          "context_uid": "7699c7c5-e48b-5548-b0aa-256d793c6c06",
+          "memory_uid": "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+        }
+      ]
+    },
+    "key": "c096a9c9aaf807c7ed898c1e42b66b94533510b59353f8cccdca660a6e2a7912",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.311033915997541,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "949a884d-b348-5fa0-b1dd-adbebafe10a9",
+        "2f484151-b5fc-51a9-8a88-b30a403617b3",
+        "21131a6f-d35c-51e3-895f-46cd21a3b566",
+        "e02c3110-05c4-58a4-8d76-c8fd2426a0d5",
+        "af028910-e48b-5605-b92b-9378bdfa525c",
+        "39792d18-2be0-5135-a063-c5213247d330",
+        "bcaa8c30-ca6e-5b9f-af93-88513a2f16b1",
+        "82ad9fe2-4063-5e89-9097-c975aa2920cb"
+      ],
+      "text": "Use consistent terminology, abbreviate only recurring terms of at least three words, and define abbreviations on first use because cross-subfield reviewers may not infer them. Describe participants by research role, distinguish formative evaluation from final efficacy judgments, and use contribution labels matching deliverable abstraction; design principles relate conditions to outcomes, not screen-replication instructions."
+    },
+    "understanding_digest": "53e907664b0ffa9a15a4d994716b651961e002603b6359114ff391a1ff299a12"
+  },
+  "context_name": "task-2/advisor1/terminology",
+  "created_at": "2026-08-13T19:15:42.442468Z",
+  "follow_embeds": false,
+  "frame_digest": "7291a80644aeab617ee169e0bf42280c79d1cc21b100991c5acf98b320297cf9",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.311033915997541,
+  "row_key": "c096a9c9aaf807c7ed898c1e42b66b94533510b59353f8cccdca660a6e2a7912",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

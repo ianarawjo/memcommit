@@ -7,10 +7,12 @@ from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.tui.reach import (
     ContextReachState,
+    ContextReachViewState,
     render_context_reach,
 )
 from memcommit.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
+    project_checked_context_names,
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import (
@@ -167,6 +169,42 @@ def test_context_reach_uses_one_shared_exact_and_descendant_vocabulary():
     assert "INCLUDE DESCENDANTS" in rendered
     assert state.move(1) is True
     assert state.include_descendants is True
+
+
+def test_context_reach_view_offers_both_before_individual_scopes():
+    state = ContextReachViewState.create(mode="BOTH")
+
+    rendered = "".join(
+        text for _style, text in render_context_reach(state, focused=True)
+    )
+
+    assert rendered.index("BOTH") < rendered.index("THIS CONTEXT ONLY")
+    assert rendered.index("THIS CONTEXT ONLY") < rendered.index(
+        "INCLUDE DESCENDANTS"
+    )
+    assert state.mode == "BOTH"
+    assert state.move(1) is True
+    assert state.mode == "EXACT"
+    assert state.move(1) is True
+    assert state.mode == "SUBTREE"
+
+
+def test_checked_context_projection_shows_effective_reachable_rows_only():
+    tree = build_context_tree(
+        ("task", "task/readable", "task/query-only", "other")
+    )
+
+    assert project_checked_context_names(
+        tree,
+        ("task",),
+        include_descendants=False,
+    ) == ("task",)
+    assert project_checked_context_names(
+        tree,
+        ("task",),
+        include_descendants=True,
+        selectable_names=frozenset({"task", "task/readable", "other"}),
+    ) == ("task", "task/readable")
 
 
 def test_context_range_freezes_effective_descendants_without_hidden_reexpansion():

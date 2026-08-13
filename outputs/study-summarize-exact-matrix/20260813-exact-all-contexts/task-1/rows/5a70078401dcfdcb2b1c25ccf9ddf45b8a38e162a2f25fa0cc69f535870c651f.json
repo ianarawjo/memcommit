@@ -1,0 +1,142 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-1/participant/construction-updates/facility-updates",
+      "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+      "digest": "5c539f52da69dc1fa209fd0ac3007dc579f0cc365f11fcada1e0ce0fb60cd921",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "99c29cea-9270-5a77-952c-b3f48da55612"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "26131bc5-ee41-5d66-9507-4f11f9d0afde"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "5e34a7f5-41ab-5322-849b-f8304a1a3148"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "f460b6d0-66c8-581c-860f-a925cc03770e"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "cd0830c7-5289-529f-bedd-b0fd27d29b3f"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "d73ccf7b-55d0-5f1c-8197-d3c9551da84d"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "0df15633-8f63-54c3-b679-1ab878e8c4f3"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "aa595f26-74ce-5f66-8a54-87bcc962cb06"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "8e868c0f-3a92-54e6-a76d-21d3ded46c65"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "1dbffba3-b393-5a96-89c4-785df0782e3a"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "e79f6d6c-7637-5ef6-b373-651c21a6bb29"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "faea18ec-3091-571f-be3f-345bdbf086b3"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "ecf1c8bb-4099-5e7f-82e0-a95928defd5f"
+        },
+        {
+          "context_name": "task-1/participant/construction-updates/facility-updates",
+          "context_uid": "fe3ca57d-565a-5839-a78f-15f9a224e75d",
+          "memory_uid": "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+        }
+      ]
+    },
+    "key": "5a70078401dcfdcb2b1c25ccf9ddf45b8a38e162a2f25fa0cc69f535870c651f",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 13.779875083000661,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-1",
+    "understanding": {
+      "source_uids": [
+        "99c29cea-9270-5a77-952c-b3f48da55612",
+        "26131bc5-ee41-5d66-9507-4f11f9d0afde",
+        "5e34a7f5-41ab-5322-849b-f8304a1a3148",
+        "f460b6d0-66c8-581c-860f-a925cc03770e",
+        "cd0830c7-5289-529f-bedd-b0fd27d29b3f",
+        "d73ccf7b-55d0-5f1c-8197-d3c9551da84d",
+        "b9dda61f-7f10-5fad-ab6e-82ba3e7f8cf6",
+        "7a58eb23-f1a1-552b-b4b1-c3732cbeeb86",
+        "cb4f2f04-25c6-58ed-acd6-71b0a9c29b69",
+        "0df15633-8f63-54c3-b679-1ab878e8c4f3",
+        "aa595f26-74ce-5f66-8a54-87bcc962cb06",
+        "8e868c0f-3a92-54e6-a76d-21d3ded46c65",
+        "e79f6d6c-7637-5ef6-b373-651c21a6bb29",
+        "faea18ec-3091-571f-be3f-345bdbf086b3",
+        "ecf1c8bb-4099-5e7f-82e0-a95928defd5f",
+        "0c87297c-f5fb-5380-9cc3-efa21c0fb60b"
+      ],
+      "text": "From June 24 through August 23, major Main Building improvements leave one elevator operating at a time, suspend in-person visitor and Innovation Hub desks, shift visitor services to the campus portal, close first- to third-floor restrooms, and occasionally interrupt cooling for five to ten minutes. Students, staff, and members should use Central Library restrooms; visitors should generally use facilities outside the building, with the West Complex exhibition hall nearest, while accessible-restroom users go to the Student Centre. Contract staff must use the designated service entrance, and guidance is limited to disclosed impacts, not nonpublic work."
+    },
+    "understanding_digest": "8cd65e7f3e5d44356174961b8dc5be4f4f72695cf037a993e67dfc1516686054"
+  },
+  "context_name": "task-1/participant/construction-updates/facility-updates",
+  "created_at": "2026-08-13T19:15:08.201981Z",
+  "follow_embeds": false,
+  "frame_digest": "5c539f52da69dc1fa209fd0ac3007dc579f0cc365f11fcada1e0ce0fb60cd921",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 13.779875083000661,
+  "row_key": "5a70078401dcfdcb2b1c25ccf9ddf45b8a38e162a2f25fa0cc69f535870c651f",
+  "schema_version": 1,
+  "source_count": 17,
+  "state": "EXACT_PREWARM",
+  "task": "task-1"
+}

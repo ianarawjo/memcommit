@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/emphasis",
+      "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+      "digest": "25d770b4e9dca6f31879a2d840c4d77870e4d6bb70b8819647a41c10bef3de11",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "b5b6a901-9047-5482-a0e1-d29e5f7171e8"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "e89de514-48a5-5e9b-96ca-f194c0ed79ab"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "f7025cbb-4005-53c6-9031-e33f04a86b92"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "a42891a1-b674-5747-a77c-43699b0b9723"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "f8931b4e-9656-548d-84a1-f2f2c3eb47b1"
+        },
+        {
+          "context_name": "task-2/advisor1/emphasis",
+          "context_uid": "6f253a9e-f504-53bf-a1d1-de2c4532171e",
+          "memory_uid": "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+        }
+      ]
+    },
+    "key": "6cbe70355711fa2fb940a64f24aca35d8537df4c3413a3053c1b0f30c6b4c163",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 8.571268625000812,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "4a1de8df-6f03-5a3d-bbfa-7c1144d2ec5c",
+        "b5b6a901-9047-5482-a0e1-d29e5f7171e8",
+        "e89de514-48a5-5e9b-96ca-f194c0ed79ab",
+        "f7025cbb-4005-53c6-9031-e33f04a86b92",
+        "a42891a1-b674-5747-a77c-43699b0b9723",
+        "9d7169d5-058f-5f7c-b1ac-30cabd8ba02e",
+        "f8931b4e-9656-548d-84a1-f2f2c3eb47b1",
+        "9bf9e735-7598-5977-abe2-87b2c9c38a24"
+      ],
+      "text": "Limit the work to two clearly named primary HCI contributions, each stated in one sentence, prioritizing transferable design principles over prototype performance. Frame formative evaluation around revisable core design decisions, not polished demonstrations or definitive superiority claims, and highlight community participants’ time and travel burdens."
+    },
+    "understanding_digest": "b60c570b7ea37f68b2159b49f877d6e46f77ffe5e6d655b94795ebfff6d5a399"
+  },
+  "context_name": "task-2/advisor1/emphasis",
+  "created_at": "2026-08-13T19:15:17.282978Z",
+  "follow_embeds": true,
+  "frame_digest": "25d770b4e9dca6f31879a2d840c4d77870e4d6bb70b8819647a41c10bef3de11",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 8.571268625000812,
+  "row_key": "6cbe70355711fa2fb940a64f24aca35d8537df4c3413a3053c1b0f30c6b4c163",
+  "schema_version": 1,
+  "source_count": 8,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

@@ -1,0 +1,117 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor2/style",
+      "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+      "digest": "3c16fc4e4fbe744f4aa6a312c9d1d7906b8257ada659e23a9d98e31a2eba4e2f",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "9bd2a9da-9720-5001-b958-f7a2a2658f87"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "e3e20261-e03c-52fb-be9e-04f5f9b1294d"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "8d8d0e8d-dad1-50b5-9438-049052748a6a"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "8c74ba87-822b-5ce2-9a3a-3adc02ab9744"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "1f29de31-5429-5dfc-ab27-01779fa16704"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "1d181223-f750-57d2-97a5-b79f276a589f"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "a5ce5f9f-8852-5080-ae35-21abcf4a0973"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "888ce8af-a36e-5e74-9a0c-604aac48d3b7"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "ddf40413-3274-5662-ba5e-d6cae2a1e546"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "89c2ce30-d6aa-5762-bf17-c697caac68e4"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "9f1b647a-bd2b-50df-8141-5b8c142c0fa5"
+        },
+        {
+          "context_name": "task-2/advisor2/style",
+          "context_uid": "f0ea0447-bfe6-503c-89da-e90f24af6e2d",
+          "memory_uid": "49a42872-adcc-5bf8-9029-1d134cac6267"
+        }
+      ]
+    },
+    "key": "8a7df63e17f705faf17438ac395de19c717135ffc4073c353882cd1779d18af0",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 9.2128727920026,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "9bd2a9da-9720-5001-b958-f7a2a2658f87",
+        "e3e20261-e03c-52fb-be9e-04f5f9b1294d",
+        "8d8d0e8d-dad1-50b5-9438-049052748a6a",
+        "8c74ba87-822b-5ce2-9a3a-3adc02ab9744",
+        "1d181223-f750-57d2-97a5-b79f276a589f",
+        "a5ce5f9f-8852-5080-ae35-21abcf4a0973",
+        "888ce8af-a36e-5e74-9a0c-604aac48d3b7",
+        "ddf40413-3274-5662-ba5e-d6cae2a1e546",
+        "6b7aaddf-5bbd-5015-811d-9f4d7a4b4ad1",
+        "9f1b647a-bd2b-50df-8141-5b8c142c0fa5",
+        "49a42872-adcc-5bf8-9029-1d134cac6267"
+      ],
+      "text": "Use action-, condition-, or output-first procedural sentences that remain reusable as checklist items, while preserving longer connected sentences when splitting would harm rhythm. Present field-confirmed behavior as observed and unconfirmed behavior as conditional. Keep authorship consistently “I” or a named team’s “we,” and reserve em dashes for deliberate interruption or sharp contrast."
+    },
+    "understanding_digest": "8b152085dc9cec3f677fe20847dfa20c1c0451d9e73de608028089ddb8bf55a6"
+  },
+  "context_name": "task-2/advisor2/style",
+  "created_at": "2026-08-13T19:16:05.978010Z",
+  "follow_embeds": false,
+  "frame_digest": "3c16fc4e4fbe744f4aa6a312c9d1d7906b8257ada659e23a9d98e31a2eba4e2f",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 9.2128727920026,
+  "row_key": "8a7df63e17f705faf17438ac395de19c717135ffc4073c353882cd1779d18af0",
+  "schema_version": 1,
+  "source_count": 13,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

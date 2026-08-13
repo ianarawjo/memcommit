@@ -1,14 +1,14 @@
 [32mInitialized context 'demo'.[0m
 [32mInitialized context 'demo/child'.[0m
-[32mAdded [ebf2bfeb] First wording[0m
-[32m[1mEdited [ebf2bfeb] in 'demo/child':[0m
+[32mAdded [814f9e78] First wording[0m
+[32m[1mEdited [814f9e78] in 'demo/child':[0m
 [31m  - First wording[0m
 [32m  + Second wording[0m
-[32m[1mEdited [ebf2bfeb] in 'demo/child':[0m
+[32m[1mEdited [814f9e78] in 'demo/child':[0m
 [31m  - Second wording[0m
 [32m  + Final wording used by both reports[0m
-[32mAdded [f45ef742] Retained historical wording[0m
-[32mRemoved [f45ef742] Retained historical wording[0m
+[32mAdded [3a4bb58d] Retained historical wording[0m
+[32mRemoved [3a4bb58d] Retained historical wording[0m
 [32mSwitched to context 'demo'.[0m
 PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A MEMORY · demo[0m
@@ -67,5 +67,5 @@ PTY 180 52
 
 
 [7C[0m▾[0m
-[C[0;38;5;189m    · [ebf2bfeb][r3] Final wording used by both reports[0m
-[C[0;38;5;189m    · [0;38;5;180m[historical][0;38;5;189m[f45ef742][r2] Retained historical wording[6A[60D[0m
+[C[0;38;5;189m    · [814f9e78][r3] Final wording used by both reports[0m
+[C[0;38;5;189m    · [historical][3a4bb58d][r2] Retained historical wording[6A[60D[0m

@@ -1,0 +1,107 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/ethics",
+      "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+      "digest": "969fa64ac21f420d8cfa5aec1f46e7fe15a33da9dda2dc8b4e4ac6c9d451d976",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "e874407e-4d36-55a6-949e-44e5944f1bb4"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "df16dca6-0b48-5753-aa18-7e5524187a1e"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "407a4c1c-c333-5764-8d89-252bed150f99"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "28646fd3-54af-51f9-97da-ad9489ecda79"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "218aafb6-9332-5693-a2e7-c7777dc64de7"
+        },
+        {
+          "context_name": "task-2/advisor1/ethics",
+          "context_uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+          "memory_uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+        }
+      ]
+    },
+    "key": "2e5a1013f5bf6cdd589791b4c25d9d4f56746affe5a3b9fdd18ab01b41d07bb1",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.597033957998065,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50",
+        "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6",
+        "bc41fce0-dbfc-5d23-9d97-9f81531c098c",
+        "9768e0d9-ef46-52a4-af04-8f6ca3c176c5",
+        "e874407e-4d36-55a6-949e-44e5944f1bb4",
+        "df16dca6-0b48-5753-aa18-7e5524187a1e",
+        "7d0b3072-7bac-5bc6-9c79-acc808c38f1f",
+        "407a4c1c-c333-5764-8d89-252bed150f99",
+        "28646fd3-54af-51f9-97da-ad9489ecda79",
+        "218aafb6-9332-5693-a2e7-c7777dc64de7",
+        "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+      ],
+      "text": "The study must pair each task’s burden with mitigation, cap cumulative burden in repeat participation, provide and explain accessibility accommodations and necessary loan equipment and returns, separate identifiers immediately, and clarify that the prototype is unfinished. Reviewers will verify burden mappings, mindful of benefit-focused framing and possible overlap between recruitment and evaluation authority."
+    },
+    "understanding_digest": "713160b291f085f88f64f1f87cc4a6e825b3c13c5f4edfe990ae043348798c0d"
+  },
+  "context_name": "task-2/advisor1/ethics",
+  "created_at": "2026-08-13T19:15:19.808995Z",
+  "follow_embeds": true,
+  "frame_digest": "969fa64ac21f420d8cfa5aec1f46e7fe15a33da9dda2dc8b4e4ac6c9d451d976",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.597033957998065,
+  "row_key": "2e5a1013f5bf6cdd589791b4c25d9d4f56746affe5a3b9fdd18ab01b41d07bb1",
+  "schema_version": 1,
+  "source_count": 11,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

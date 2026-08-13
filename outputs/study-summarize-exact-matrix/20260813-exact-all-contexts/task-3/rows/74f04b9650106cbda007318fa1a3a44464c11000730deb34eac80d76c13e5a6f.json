@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/description",
+      "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+      "digest": "3725956cd443c83c1d776f2951d71f7a6e43aefd52ce3a54ddd6d599f7a820ca",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/description",
+          "context_uid": "24b95215-b400-5e84-9729-1479af0308ba",
+          "memory_uid": "77ea44c9-0a6f-5ab2-b20d-07341e978b87"
+        }
+      ]
+    },
+    "key": "74f04b9650106cbda007318fa1a3a44464c11000730deb34eac80d76c13e5a6f",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 7.1936459579992516,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "77ea44c9-0a6f-5ab2-b20d-07341e978b87"
+      ],
+      "text": "The government provides an AI healthcare agent supporting most healthcare stages. To improve assistance, it requests access to broad personal memory containing prior agent conversations and information across nearly all life areas. The user must choose what to include or exclude and transfer only the selected information."
+    },
+    "understanding_digest": "fd26c3cd4d25a3f5d62b05d03abc7b7a4dd5d9904bdf053f22b0bd53ec07e8dd"
+  },
+  "context_name": "task-3/description",
+  "created_at": "2026-08-13T19:16:09.934153Z",
+  "follow_embeds": false,
+  "frame_digest": "3725956cd443c83c1d776f2951d71f7a6e43aefd52ce3a54ddd6d599f7a820ca",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 7.1936459579992516,
+  "row_key": "74f04b9650106cbda007318fa1a3a44464c11000730deb34eac80d76c13e5a6f",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

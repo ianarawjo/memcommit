@@ -24,15 +24,33 @@ class _Terminal:
 
 def test_auto_routes_one_application_result_to_tui_on_terminal() -> None:
     events: list[tuple[str, object]] = []
+
+    def run_tui(request, execute):
+        events.append(("tui", request))
+        return execute(request)
+
     runner = ConsoleRunner(
         execute=lambda request: events.append(("execute", request)) or "result",
         present_plain=lambda result: events.append(("plain", result)),
-        present_tui=lambda result: events.append(("tui", result)),
+        run_tui=run_tui,
         terminal=_Terminal(True),
     )
 
     assert runner.run("request", mode=ConsoleMode.AUTO) == "result"
-    assert events == [("execute", "request"), ("tui", "result")]
+    assert events == [("tui", "request"), ("execute", "request")]
+
+
+def test_tui_can_cancel_before_application_execution() -> None:
+    events: list[tuple[str, object]] = []
+    runner = ConsoleRunner(
+        execute=lambda request: events.append(("execute", request)) or "result",
+        present_plain=lambda result: events.append(("plain", result)),
+        run_tui=lambda request, _execute: events.append(("tui", request)) or None,
+        terminal=_Terminal(True),
+    )
+
+    assert runner.run("request", mode=ConsoleMode.TUI) is None
+    assert events == [("tui", "request")]
 
 
 def test_auto_routes_the_same_application_result_to_plain_without_tty() -> None:
@@ -40,7 +58,7 @@ def test_auto_routes_the_same_application_result_to_plain_without_tty() -> None:
     runner = ConsoleRunner(
         execute=lambda request: events.append(("execute", request)) or "result",
         present_plain=lambda result: events.append(("plain", result)),
-        present_tui=lambda result: events.append(("tui", result)),
+        run_tui=lambda request, _execute: events.append(("tui", request)),
         terminal=_Terminal(False),
     )
 
@@ -54,7 +72,7 @@ def test_forced_tui_fails_before_application_execution_without_tty() -> None:
     runner = ConsoleRunner(
         execute=lambda request: executed.append(request),
         present_plain=lambda _result: None,
-        present_tui=lambda _result: None,
+        run_tui=lambda _request, _execute: None,
         terminal=_Terminal(False),
     )
 
@@ -69,7 +87,7 @@ def test_explicit_plain_never_opens_tui_on_terminal() -> None:
     ConsoleRunner(
         execute=lambda request: request,
         present_plain=lambda _result: presentations.append("plain"),
-        present_tui=lambda _result: presentations.append("tui"),
+        run_tui=lambda _request, _execute: presentations.append("tui"),
         terminal=_Terminal(True),
     ).run("result", mode=ConsoleMode.PLAIN)
 

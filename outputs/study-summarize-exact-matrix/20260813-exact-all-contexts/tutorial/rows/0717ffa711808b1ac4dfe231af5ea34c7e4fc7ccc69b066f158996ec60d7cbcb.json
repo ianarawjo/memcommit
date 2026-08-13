@@ -1,0 +1,53 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "practice/description",
+      "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+      "digest": "b7d48754a2364669f0ce644d901472779dc6b1747153910f4092073ff918cce3",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "89ff1887-d807-5a04-94d7-424fff9a93b9"
+        },
+        {
+          "context_name": "practice/description",
+          "context_uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+          "memory_uid": "1e046596-b6f1-5623-aebb-52c46b4a54be"
+        }
+      ]
+    },
+    "key": "0717ffa711808b1ac4dfe231af5ea34c7e4fc7ccc69b066f158996ec60d7cbcb",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 17.34318679200078,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "tutorial",
+    "understanding": {
+      "source_uids": [
+        "89ff1887-d807-5a04-94d7-424fff9a93b9",
+        "1e046596-b6f1-5623-aebb-52c46b4a54be"
+      ],
+      "text": "MemLab is a research prototype with CLI/TUI interfaces for managing and propagating agent memories and supporting human-agent collaboration through Memories, Contexts, Profiles, Grants, and Sessions. Before three varied study tasks, participants complete a practice exercise by dividing a multi-constraint editing request into meaning-preserving atomic Memories for independent review and saving the result in the specified context."
+    },
+    "understanding_digest": "4cf422c3bf558084c5a7479e7da793f8fdbf8f6a765d612809eed0c1081fe247"
+  },
+  "context_name": "practice/description",
+  "created_at": "2026-08-13T19:14:47.824186Z",
+  "follow_embeds": true,
+  "frame_digest": "b7d48754a2364669f0ce644d901472779dc6b1747153910f4092073ff918cce3",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 17.34318679200078,
+  "row_key": "0717ffa711808b1ac4dfe231af5ea34c7e4fc7ccc69b066f158996ec60d7cbcb",
+  "schema_version": 1,
+  "source_count": 2,
+  "state": "EXACT_PREWARM",
+  "task": "tutorial"
+}

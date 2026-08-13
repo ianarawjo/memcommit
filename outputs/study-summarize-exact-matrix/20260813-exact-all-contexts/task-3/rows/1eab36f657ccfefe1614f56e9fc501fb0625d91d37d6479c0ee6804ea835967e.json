@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2025/02",
+      "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+      "digest": "5f6e97e5029635b7e3bf4a4ca8904f0e695e1c5d95f8515ba061b72370b09038",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "3ff046b1-5810-51ca-8d43-c99ef6a90b41"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "e2a304e5-6100-5a5f-b508-0a7f28f6bda7"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "51d03bff-3e33-5f68-9df6-ed7efa8e3de9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "0987293e-3e21-5cbc-bb46-59245a5fa041"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "dc3de6ad-56ea-528a-a9b7-349e79af2326"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "6546d41b-3d5b-5802-a9e7-ac028405e3f2"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "12fe7e64-192e-5359-8f96-d2875f7e5399"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "e6f89ded-5687-5c25-8df8-88f288d450c6"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2025/02",
+          "context_uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+          "memory_uid": "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+        }
+      ]
+    },
+    "key": "1eab36f657ccfefe1614f56e9fc501fb0625d91d37d6479c0ee6804ea835967e",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 15.431715291997534,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "3ff046b1-5810-51ca-8d43-c99ef6a90b41",
+        "e2a304e5-6100-5a5f-b508-0a7f28f6bda7",
+        "51d03bff-3e33-5f68-9df6-ed7efa8e3de9",
+        "0987293e-3e21-5cbc-bb46-59245a5fa041",
+        "dc3de6ad-56ea-528a-a9b7-349e79af2326",
+        "6546d41b-3d5b-5802-a9e7-ac028405e3f2",
+        "ea6eb9d2-9b01-5330-a4d5-886d4bc6cd85",
+        "12fe7e64-192e-5359-8f96-d2875f7e5399",
+        "e6f89ded-5687-5c25-8df8-88f288d450c6",
+        "f9197c33-ff93-5215-a3a5-e4087bea2a0d"
+      ],
+      "text": "The user reviewed emergency contacts, replacing an undeliverable old number after confirmation with their older sister; before emergency use, reconfirm the number and relationship. The sister prefers nonurgent texts when available. Checklists support complete preparation, and day-before reminders allow rechecking. Their mother was briefly unavailable one weekend evening but spoke for 40 minutes the next Saturday morning."
+    },
+    "understanding_digest": "ecc6e5b9f2743e39f76b96c6b0ebc9355c3cd69c6470a668e6e00074776b4ffd"
+  },
+  "context_name": "task-3/local/personal-memory/2025/02",
+  "created_at": "2026-08-13T19:17:08.771094Z",
+  "follow_embeds": true,
+  "frame_digest": "5f6e97e5029635b7e3bf4a4ca8904f0e695e1c5d95f8515ba061b72370b09038",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 15.431715291997534,
+  "row_key": "1eab36f657ccfefe1614f56e9fc501fb0625d91d37d6479c0ee6804ea835967e",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

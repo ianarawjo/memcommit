@@ -1,0 +1,47 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/description",
+      "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+      "digest": "1b812739992be3d1659b32750ad39c420615bf83ce131b08df9e47960d1bff42",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/description",
+          "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
+          "memory_uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2"
+        }
+      ]
+    },
+    "key": "beae14f4ec1c958232a8fb1e307b3e7b32c80731ef84830b39ebf6fb38b3b83b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 10.268141874999856,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2"
+      ],
+      "text": "一名研究生需公平整合两位同等权威共同导师对两页研究提案的写作政策，涵盖结构、重点、论断与证据、语气及术语；应合并重复或同义指导、明确不同适用情境，并协调冲突，无法协调时则保留双方意见并加以说明。"
+    },
+    "understanding_digest": "eb1d56f205a7fa4326fbab6a66aca2375ce502ae7f40d867bd96c181b020d687"
+  },
+  "context_name": "task-2/description",
+  "created_at": "2026-08-13T19:16:12.622916Z",
+  "follow_embeds": true,
+  "frame_digest": "1b812739992be3d1659b32750ad39c420615bf83ce131b08df9e47960d1bff42",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 10.268141874999856,
+  "row_key": "beae14f4ec1c958232a8fb1e307b3e7b32c80731ef84830b39ebf6fb38b3b83b",
+  "schema_version": 1,
+  "source_count": 1,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}

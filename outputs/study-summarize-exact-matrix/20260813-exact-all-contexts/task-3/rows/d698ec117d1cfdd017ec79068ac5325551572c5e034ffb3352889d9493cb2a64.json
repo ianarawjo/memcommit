@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/01",
+      "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+      "digest": "a052985d9096f6fac6e7ff364ae4b59a8bca9475ebfb6d8cb70f10ef8da803f5",
+      "follow_embeds": false,
+      "include_descendants": false,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "2cd0229d-b7f1-581b-8019-25bdb485afd9"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "c62f1669-11c9-5a81-b5f5-304acce69c23"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "674f4bdf-27c3-5870-a68e-91e4a093dd93"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "21509788-2e3d-548b-8303-f34cfea68c9b"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "74eaea9d-7640-51ba-aa77-9c050581dc46"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "1384df1d-2173-5673-96f5-a4d86835d404"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "3cf68c8e-5da9-51d3-a402-c10f4137b1f4"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "a1984768-d20d-59cd-84c9-cb08c6b7affb"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "f52d11e2-2449-5c9d-887b-96c8b5cd0184"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/01",
+          "context_uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+          "memory_uid": "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+        }
+      ]
+    },
+    "key": "d698ec117d1cfdd017ec79068ac5325551572c5e034ffb3352889d9493cb2a64",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 20.627125958999386,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "2cd0229d-b7f1-581b-8019-25bdb485afd9",
+        "c62f1669-11c9-5a81-b5f5-304acce69c23",
+        "674f4bdf-27c3-5870-a68e-91e4a093dd93",
+        "21509788-2e3d-548b-8303-f34cfea68c9b",
+        "74eaea9d-7640-51ba-aa77-9c050581dc46",
+        "1384df1d-2173-5673-96f5-a4d86835d404",
+        "3cf68c8e-5da9-51d3-a402-c10f4137b1f4",
+        "a1984768-d20d-59cd-84c9-cb08c6b7affb",
+        "f52d11e2-2449-5c9d-887b-96c8b5cd0184",
+        "c8fccfbe-7756-5d62-9cd7-403dd6741915"
+      ],
+      "text": "The user’s mother’s birthday is in January’s third week, and she values the whole family dining together over gifts. Because noisy restaurants and banquet halls impeded conversation while home barbecues supported it, birthday plans should check schedules and attendees, prioritize quiet settings when conversation matters, and remain user-confirmed; past records can inform comparisons but cannot determine the venue."
+    },
+    "understanding_digest": "9f61b43e4834d1b4ecb5a47f0b34e480a3aef74abb24abe4e5f4f71b3473ce83"
+  },
+  "context_name": "task-3/local/personal-memory/2024/01",
+  "created_at": "2026-08-13T19:16:41.695749Z",
+  "follow_embeds": false,
+  "frame_digest": "a052985d9096f6fac6e7ff364ae4b59a8bca9475ebfb6d8cb70f10ef8da803f5",
+  "include_descendants": false,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 20.627125958999386,
+  "row_key": "d698ec117d1cfdd017ec79068ac5325551572c5e034ffb3352889d9493cb2a64",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

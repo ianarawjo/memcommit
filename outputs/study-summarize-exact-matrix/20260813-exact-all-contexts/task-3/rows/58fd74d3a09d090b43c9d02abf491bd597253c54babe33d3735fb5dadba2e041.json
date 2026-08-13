@@ -1,0 +1,101 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-3/local/personal-memory/2024/07",
+      "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+      "digest": "a0e646c3c6eab2c3b0ce26a221524fed2264e8c5b38472c9058a3cc7b2e193cc",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "65a332a2-2707-55f8-b7a6-a7378e6fbb7a"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "7d8db31a-c330-5852-9d7c-c9da7f98d899"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "008dd110-feb2-5b4b-b602-bb3e23475a95"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "a03ed01a-3d15-5eaf-9415-529705fd1245"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "2fb4b0bd-1257-5e50-881a-7f312940e1c5"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "d05286e8-f183-5f4a-99d8-3dcca1aeaa09"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "44d28aa3-1aa4-5276-b545-86ee2cb17078"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "77f77450-ab10-5469-8e2f-5445060926bc"
+        },
+        {
+          "context_name": "task-3/local/personal-memory/2024/07",
+          "context_uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+          "memory_uid": "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+        }
+      ]
+    },
+    "key": "58fd74d3a09d090b43c9d02abf491bd597253c54babe33d3735fb5dadba2e041",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 12.109307999999146,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-3",
+    "understanding": {
+      "source_uids": [
+        "65a332a2-2707-55f8-b7a6-a7378e6fbb7a",
+        "fb94e1fd-9b3d-567a-81d8-d7a0ee90e04e",
+        "7d8db31a-c330-5852-9d7c-c9da7f98d899",
+        "008dd110-feb2-5b4b-b602-bb3e23475a95",
+        "a03ed01a-3d15-5eaf-9415-529705fd1245",
+        "2fb4b0bd-1257-5e50-881a-7f312940e1c5",
+        "d05286e8-f183-5f4a-99d8-3dcca1aeaa09",
+        "44d28aa3-1aa4-5276-b545-86ee2cb17078",
+        "77f77450-ab10-5469-8e2f-5445060926bc",
+        "fd7f98b4-d5b9-5196-ad5e-c4356681ecf4"
+      ],
+      "text": "In July 2024, the user updated the home utility account. Paper bills and late-read notices led to late payment and missed shutoff preparation, while electronic alerts and calendar entries enabled timely payment and inspections. Future visits require availability confirmation and one-day workspace preparation; the local agent can compare records and notices but cannot verify resolution."
+    },
+    "understanding_digest": "84ee6a9fb0c96aa64644068fdd3f1912b1cc983858060e39a3839e26aa5ffbac"
+  },
+  "context_name": "task-3/local/personal-memory/2024/07",
+  "created_at": "2026-08-13T19:16:53.546013Z",
+  "follow_embeds": true,
+  "frame_digest": "a0e646c3c6eab2c3b0ce26a221524fed2264e8c5b38472c9058a3cc7b2e193cc",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 12.109307999999146,
+  "row_key": "58fd74d3a09d090b43c9d02abf491bd597253c54babe33d3735fb5dadba2e041",
+  "schema_version": 1,
+  "source_count": 10,
+  "state": "EXACT_PREWARM",
+  "task": "task-3"
+}

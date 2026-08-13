@@ -1,0 +1,113 @@
+{
+  "artifact": {
+    "frame": {
+      "context_name": "task-2/advisor1/review",
+      "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+      "digest": "c57ddf0575d5d0c5e98034dbc35115d6db70b78a21b4092579897ff1757077a5",
+      "follow_embeds": true,
+      "include_descendants": true,
+      "sources": [
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "fb785649-1947-5e7d-aafb-308f14fb21b4"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "d17ba26c-187e-57bc-8468-c9c053fc303d"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "48a91d19-cc68-5400-8971-8125236f3fbf"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "774341c9-b92d-53a5-a24c-59c75e39756b"
+        },
+        {
+          "context_name": "task-2/advisor1/review",
+          "context_uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+          "memory_uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+        }
+      ]
+    },
+    "key": "a1e4bb0d21d54993dd34e031dc7a2cdb241c075f95e8cf56802d7e220c2f7f3b",
+    "kind": "STUDY_SUMMARIZE_EXACT_PREWARM",
+    "model": "gpt-5.6-sol",
+    "offline_provider_seconds": 23.33607325000048,
+    "operation": "SUMMARIZE",
+    "provider": "codex_chatgpt",
+    "provider_contract_version": 1,
+    "reasoning": "medium",
+    "schema_version": 1,
+    "task": "task-2",
+    "understanding": {
+      "source_uids": [
+        "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+        "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+        "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+        "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+        "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+        "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+        "fb785649-1947-5e7d-aafb-308f14fb21b4",
+        "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+        "d17ba26c-187e-57bc-8468-c9c053fc303d",
+        "48a91d19-cc68-5400-8971-8125236f3fbf",
+        "774341c9-b92d-53a5-a24c-59c75e39756b",
+        "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+      ],
+      "text": "Before submission, conduct one focused validity review linking user problems, research questions, prototype functions, interventions, representative evaluation tasks and measures, evidence-driven design or operational decisions, studies, and contributions. State design principles’ applicable conditions and failure boundaries, separate prototype outcomes from transferable knowledge, and acknowledge that controlled formative evaluation excludes long-term adaptation and real-world operational change."
+    },
+    "understanding_digest": "63fd9f0caf42c592c809cd79a626026e590ae3f20e6a592bd1d2b4a1ffbc0ed1"
+  },
+  "context_name": "task-2/advisor1/review",
+  "created_at": "2026-08-13T19:15:44.181235Z",
+  "follow_embeds": true,
+  "frame_digest": "c57ddf0575d5d0c5e98034dbc35115d6db70b78a21b4092579897ff1757077a5",
+  "include_descendants": true,
+  "kind": "STUDY_SUMMARIZE_EXACT_MATRIX_ROW",
+  "provider_seconds": 23.33607325000048,
+  "row_key": "a1e4bb0d21d54993dd34e031dc7a2cdb241c075f95e8cf56802d7e220c2f7f3b",
+  "schema_version": 1,
+  "source_count": 12,
+  "state": "EXACT_PREWARM",
+  "task": "task-2"
+}
