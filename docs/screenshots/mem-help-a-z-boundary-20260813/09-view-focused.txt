@@ -1,7 +1,7 @@
  mem help · command inventory                                                                                                                                                       
-┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
-│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INVENTORY VIEW ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
 │ MEMORY      An atomic unit of information stored in a Context.                                                                                                                  │ 
 │ CONTEXT     A named workspace that organizes Memories and other Contexts.                                                                                                       │ 
@@ -19,19 +19,19 @@
 │ Esc / Backspace  Go back one layer; Backspace edits text in writable fields.                                                                                                    │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
-┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-┃ ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                                                                                                 ┃ 
-┃ ▸ mem contexts   Browse ordinary local Contexts and readable cross-Profile Context views without switching; print the catalog outside a terminal.                               ┃ 
-┃ ▸ mem list (ls)  Browse child Contexts and direct items in the current or explicit Context; ls is the equivalent compact spelling.                                              ┃ 
-┃ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                              ┃ 
-┃ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit Context.                                                                                        ┃ 
-┃ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    ┃ 
-┃ ▸ mem init       Edit a suggested name, or create an explicitly named Context, and switch to it; --parents ensures its hierarchy.                                               ┃ 
-┃ ▸ mem branch     Choose a local Source range and exact fresh target when unnamed, or branch the current Context or subtree to an explicit new name.                             ┃ 
-┃ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          ┃ 
-┃ ▸ mem embed      Choose a Child, target, and direct-item insertion gap interactively, or add one Context at an explicit before/after position while the Child retains its       ┃ 
-┃                  identity and ownership.                                                                                                                                        ┃ 
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+┌ CONTEXTS ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                                                                                                 │ 
+│ ▸ mem contexts   Browse ordinary local Contexts and readable cross-Profile Context views without switching; print the catalog outside a terminal.                               │ 
+│ ▸ mem list (ls)  Browse child Contexts and direct items in the current or explicit Context; ls is the equivalent compact spelling.                                              │ 
+│ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                              │ 
+│ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit Context.                                                                                        │ 
+│ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    │ 
+│ ▸ mem init       Edit a suggested name, or create an explicitly named Context, and switch to it; --parents ensures its hierarchy.                                               │ 
+│ ▸ mem branch     Choose a local Source range and exact fresh target when unnamed, or branch the current Context or subtree to an explicit new name.                             │ 
+│ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          │ 
+│ ▸ mem embed      Choose a Child, target, and direct-item insertion gap interactively, or add one Context at an explicit before/after position while the Child retains its       │ 
+│                  identity and ownership.                                                                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
 │ ▸ mem add        Add one or more Memories to the current or explicit Context.                                                                                                   │ 
@@ -49,4 +49,4 @@
 │ ▸ mem find              Open interactive search when QUERY is omitted, or search once when QUERY is supplied. One-shot search defaults to the selected Context roots only; use  │ 
 │                         -r/--recursive for namespace descendants and embedded Contexts. The interactive workbench keeps its visible scope controls. Descendant and embedded     │v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
- ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help
+ VIEW: ←/→ choose · ↓ list · Tab first kind · Q cancel

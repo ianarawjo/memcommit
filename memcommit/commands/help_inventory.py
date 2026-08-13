@@ -971,6 +971,7 @@ def run_help_selector(
     selected_concept_index: dict[str, int | None] = {"value": None}
     expanded_index: dict[str, int | None] = {"value": None}
     selected_form: dict[str, int | None] = {"value": None}
+    category_cursors: dict[str, int] = {}
     bindings = KeyBindings()
     navigation_accelerator = NavigationAccelerator()
     app_ref: dict[str, Application[HelpSelection | None]] = {}
@@ -999,6 +1000,93 @@ def run_help_selector(
             and selected_concept_index["value"] is not None
         )
 
+    def visible_groups() -> list[tuple[str, list[tuple[int, CommandEntry]]]]:
+        """Project the current rows into the same boxes the renderer shows."""
+
+        indexed_entries = list(enumerate(visible_entries["value"]))
+        if view_state.selected_uid != "CATEGORY":
+            return [("A–Z", indexed_entries)]
+        groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
+        for index, entry in indexed_entries:
+            category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
+            if not groups or groups[-1][0] != category:
+                groups.append((category, []))
+            groups[-1][1].append((index, entry))
+        return groups
+
+    def selected_group_index(
+        groups: list[tuple[str, list[tuple[int, CommandEntry]]]],
+    ) -> int | None:
+        if concept_focus_active():
+            return None
+        selected = selected_index["value"]
+        return next(
+            (
+                group_index
+                for group_index, (_title, rows) in enumerate(groups)
+                if any(index == selected for index, _entry in rows)
+            ),
+            None,
+        )
+
+    def focus_group(
+        group: tuple[str, list[tuple[int, CommandEntry]]],
+    ) -> None:
+        """Enter one visible kind at its last retained command cursor."""
+
+        title, rows = group
+        row_indexes = {index for index, _entry in rows}
+        retained = category_cursors.get(title)
+        selected_index["value"] = (
+            retained if retained in row_indexes else rows[0][0]
+        )
+        selected_concept_index["value"] = None
+        expanded_index["value"] = None
+        selected_form["value"] = None
+
+    def move_tab(event, direction: int) -> None:
+        """Traverse VIEW and every visible BY KIND box in screen order."""
+
+        navigation_accelerator.reset()
+        if view_state.selected_uid != "CATEGORY":
+            surface_focus.focus_relative(event.app, direction, wrap=True)
+            event.app.invalidate()
+            return
+
+        groups = visible_groups()
+        if event.app.layout.has_focus(view_control):
+            # A complete cycle must leave VIEW toward the opposite edge of the
+            # list. Retaining the last group here would recreate the old
+            # VIEW/last-group two-stop loop after one pass through the screen.
+            focus_group(groups[0] if direction > 0 else groups[-1])
+            event.app.layout.focus(list_control)
+            event.app.invalidate()
+            return
+
+        group_index = selected_group_index(groups)
+        if group_index is not None:
+            title, _rows = groups[group_index]
+            category_cursors[title] = selected_index["value"]
+        target_index = (
+            0 if group_index is None and direction > 0
+            else group_index + direction if group_index is not None
+            else -1
+        )
+        if 0 <= target_index < len(groups):
+            focus_group(groups[target_index])
+        else:
+            expanded_index["value"] = None
+            selected_form["value"] = None
+            surface_focus.focus_relative(
+                event.app,
+                direction,
+                # VIEW is declared before the scrolling list, so moving
+                # forward from the final kind crosses the layout boundary by
+                # wrapping once; reverse movement reaches VIEW directly.
+                wrap=True,
+            )
+        event.app.invalidate()
+
     def render_entries():
         fragments: list[tuple[str, str]] = []
         app = app_ref.get("app")
@@ -1017,16 +1105,7 @@ def run_help_selector(
         )
         if fragments:
             fragments.append(("", "\n"))
-        indexed_entries = list(enumerate(visible_entries["value"]))
-        groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
-        if by_kind:
-            for index, entry in indexed_entries:
-                category = HELP_CATEGORY_BY_COMMAND.get(entry.name, "OTHER")
-                if not groups or groups[-1][0] != category:
-                    groups.append((category, []))
-                groups[-1][1].append((index, entry))
-        else:
-            groups.append(("A–Z", indexed_entries))
+        groups = visible_groups()
         for group_index, (title, group_entries) in enumerate(groups):
             group_focused = list_focused and any(
                 index == selected_index["value"] for index, _entry in group_entries
@@ -1350,23 +1429,11 @@ def run_help_selector(
 
     @bindings.add("tab")
     def _next_surface(event) -> None:
-        navigation_accelerator.reset()
-        surface_focus.focus_relative(
-            event.app,
-            1,
-            wrap=True,
-        )
-        event.app.invalidate()
+        move_tab(event, 1)
 
     @bindings.add("s-tab")
     def _previous_surface(event) -> None:
-        navigation_accelerator.reset()
-        surface_focus.focus_relative(
-            event.app,
-            -1,
-            wrap=True,
-        )
-        event.app.invalidate()
+        move_tab(event, -1)
 
     @bind_case_insensitive_key(bindings, "q", eager=True)
     @bindings.add("escape", eager=True)
@@ -1421,8 +1488,13 @@ def run_help_selector(
             and app_ref["app"].layout.has_focus(view_control)
         ):
             toggle = " · H hide Help" if mode == "EXPLORE" else ""
+            tab_hint = (
+                "Tab first kind"
+                if view_state.selected_uid == "CATEGORY"
+                else "Tab list"
+            )
             return (
-                " VIEW: ←/→ choose · ↓ list · Tab surface"
+                f" VIEW: ←/→ choose · ↓ list · {tab_hint}"
                 f"{toggle} · Q {return_label}"
             )
         if concept_focus_active():
@@ -1431,7 +1503,7 @@ def run_help_selector(
                 if mode == "EXPLORE"
                 else ""
             )
-            return f" ↑/↓ move (hold accelerates)  Tab surface {toggle}"
+            return f" ↑/↓ move (hold accelerates)  Tab first kind {toggle}"
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
@@ -1444,9 +1516,14 @@ def run_help_selector(
             if mode == "EXPLORE"
             else "H full help"
         )
+        tab_hint = (
+            "Tab next kind"
+            if view_state.selected_uid == "CATEGORY"
+            else "Tab surface"
+        )
         return (
             " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
-            f"{enter_action}  {detail_action} "
+            f"{enter_action}  {tab_hint}  {detail_action} "
         )
 
     footer = Window(

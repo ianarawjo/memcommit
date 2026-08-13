@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                   ^
+┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem add        Add one or more Memories to the current or explicit Context.                                                                                                   │ 
+│ ▸ mem reference  Add a read-only live pointer to a directly owned source Memory; the target stores identity metadata rather than copying its content.                           │ 
+│ ▸ mem edit       Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                             │ 
+│ ▸ mem chunk      Preview and, after confirmation, split one direct current-Context Memory by headers, paragraphs, or sentences.                                                 │ 
+│ ▸ mem forget     Enter interactive instruction and direct-Source setup when no operand is supplied, or analyze one instruction against the current direct Memories; review each │ 
+│                  keep/edit/delete decision and apply only the accepted batch.                                                                                                   │ 
+│ ▸ mem remove     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
+│ ▸ mem delete     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
+│ ▸ mem clear      Remove all direct items from the current or explicit Context after confirmation.                                                                               │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem find              Open interactive search when QUERY is omitted, or search once when QUERY is supplied. One-shot search defaults to the selected Context roots only; use  │ 
+│                         -r/--recursive for namespace descendants and embedded Contexts. The interactive workbench keeps its visible scope controls. Descendant and embedded     │ 
+│                         reach also have independent long flags. Explicitly temporal wording searches retained Memory history.                                                   │ 
+│ ▸ mem query             Open interactive Query with a read-only saved transcript browser, or ask visible Context knowledge or a concealed query-only view; sessions retain only │ 
+│                         visible Q/A when permitted.                                                                                                                             │ 
+│ ▸ mem summarize         Show what Mem understands from a Context's visible ordinary Memories.                                                                                   │ 
+│ ▸ mem trace             Open recent targets or browse local Contexts, including empty ones, then trace one retained Memory lineage in Log's History explorer.                   │ 
+│ ▸ mem rationale         Open recent targets or browse readable Contexts, including empty ones, then explain one Memory without changing current Context state.                  │ 
+│ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                │ 
+│ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                │ 
+│ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                          │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ ANALYZE & TRANSFORM ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem audit      Run the Duplicate, Ambiguity, and Conflict finders over one frozen direct Context, save their exact combined snapshot, and open Review.                        │ 
+│ ▸ mem atomize    Enter an interactive Atomize session; --evaluate runs its issue-scoped directional meld, changes require explicit acceptance, and --sessions enters the        │ 
+│                  interactive cross-Context session launcher.                                                                                                                    │ 
+│ ▸ mem compare    Enter the interactive Compare session launcher with no endpoints, or compare the active Context with an equal-authority PEER; save no target changes.          │ 
+│ ▸ mem impact     Preview a directional Update or Atomize analysis, or inspect a saved Meld, Sever, or Update Impact; no Context changes occur in the Impact view, and APPLY?    │ 
+│                  hands saved work to its normal Apply flow.                                                                                                                     │ 
+│ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never apply Memories.                                                                  │ 
+│ ▸ mem meld       Enter the interactive Meld session launcher with no operands, combine two equal-authority Contexts into the current empty Context, or directionally use        │ 
+│                  INCOMING --into authoritative BASELINE; --from INCOMING uses the current authoritative BASELINE and is normalized to INCOMING --into BASELINE.                 │ 
+│ ▸ mem update     Enter the interactive Update session launcher with no endpoints, or apply a directional plan to a local target; no shared publication.                         │ 
+│ ▸ mem sever      Enter the interactive Sever session launcher with no operands, or review one Source root against one scoped Criteria root and create a local result that       │ 
+│                  forgets selected content while leaving Source unchanged.                                                                                                       │ 
+│ ▸ mem translate  Show and save a reusable translation view without changing the source; materialize only through explicit --save-as or --in-place routes.                       │ 
+│ ▸ mem merge      Add UID-new direct items from another Context; no semantic reconciliation.                                                                                     │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem log         Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                                       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

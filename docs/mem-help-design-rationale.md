@@ -33,12 +33,17 @@ prompt-toolkit selector:
   `✓`, while the keyboard target also receives the shared blue focus treatment.
   Left and Right
   change the projection through the common `HorizontalChoiceState` only while
-  VIEW has focus. Up from the first command reaches VIEW, Down returns to the
-  command list, and Tab/Shift-Tab traverse the same two visible surfaces. These
-  transitions use the common `SurfaceFocusController`; Help retains only its
-  accelerated internal command/Form movement and activation semantics. A view
-  change retains the selected command by name but closes its Forms because
-  their row offsets belong to the old projection.
+  VIEW has focus. Up from the first command reaches VIEW, and Down returns to
+  the command list. In `BY KIND`, Tab advances through each category box in
+  screen order before reaching VIEW; Shift-Tab traverses the reverse path.
+  Leaving VIEW completes that cycle at the first or last category instead of
+  returning to the category beside it and creating a two-stop loop. Each
+  category retains its last command cursor while Forms close at a category
+  boundary. `A–Z` has one list box, so its Tab path remains VIEW/list. Cross-
+  control transitions use the common `SurfaceFocusController`; Help owns only
+  its category boundaries plus accelerated internal command/Form movement and
+  activation semantics. A view change retains the selected command by name but
+  closes its Forms because their row offsets belong to the old projection.
 - The two inline choice boxes sit inside one `INVENTORY VIEW` frame, matching the
   common endpoint setup hierarchy where Meld's mode boxes sit inside
   `OPERATION SHAPE`. When VIEW owns keyboard focus, the shared focused-frame

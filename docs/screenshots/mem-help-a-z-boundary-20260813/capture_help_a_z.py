@@ -1,4 +1,4 @@
-"""Capture the Help projection transition and aligned A–Z bottom boundary."""
+"""Capture BY KIND Tab traversal and the aligned A–Z bottom boundary."""
 
 from __future__ import annotations
 
@@ -220,19 +220,33 @@ def main() -> None:
 
         _wait_for_visible(child, recorder, "CORE CONCEPTS")
         _snapshot(recorder, "01-by-kind-entry")
+        tab_stops = (
+            ("02-memories-focused", "MEMORIES"),
+            ("03-search-explain-focused", "SEARCH & EXPLAIN"),
+            ("04-analyze-transform-focused", "ANALYZE & TRANSFORM"),
+            ("05-history-recovery-focused", "HISTORY & RECOVERY"),
+            ("06-ground-evaluation-focused", "GROUND & EVALUATION"),
+            ("07-profile-sharing-focused", "PROFILE & SHARING"),
+            ("08-system-focused", "SYSTEM"),
+        )
+        for stem, title in tab_stops:
+            child.send("\t")
+            _wait_for_visible(child, recorder, f"┏ {title} ")
+            _snapshot(recorder, stem)
         child.send("\t")
-        _pump(child)
-        _snapshot(recorder, "02-view-focused")
+        _wait_for_visible(child, recorder, "› VIEW")
+        _snapshot(recorder, "09-view-focused")
         child.send("\x1b[C")
         _wait_for_visible(child, recorder, "┌ A–Z")
-        _snapshot(recorder, "03-a-z-selected")
+        _snapshot(recorder, "10-a-z-selected")
         child.send("\t")
         _pump(child)
-        _snapshot(recorder, "04-a-z-list-boundary")
+        _snapshot(recorder, "11-a-z-list-boundary")
 
         raw = recorder.getvalue()
         assert "52 180" in raw
-        assert re.search(r"\x1b\[[0-9;]*m", raw) is not None
+        assert re.search(r"\x1b\[[0-9;]*38;(?:2|5);", raw) is not None
+        assert re.search(r"\x1b\[[0-9;]*48;(?:2|5);", raw) is not None
         assert " A–Z " in "\n".join(_screen(raw).display)
         _assert_a_z_boundary(raw)
 
@@ -263,17 +277,18 @@ def main() -> None:
             "CORE CONCEPTS",
             rows=TALL_ROWS,
         )
-        tall_child.send("\t\x1b[C\t")
+        tall_child.send("\t" * 8 + "\x1b[C\t")
         _wait_for_visible(tall_child, tall_recorder, "┏ A–Z", rows=TALL_ROWS)
         _pump(tall_child)
         _snapshot(
             tall_recorder,
-            "05-a-z-tall-viewport-fill-180x86",
+            "12-a-z-tall-viewport-fill-180x86",
             rows=TALL_ROWS,
         )
         tall_raw = tall_recorder.getvalue()
         assert f"{TALL_ROWS} {COLS}" in tall_raw
-        assert re.search(r"\x1b\[[0-9;]*m", tall_raw) is not None
+        assert re.search(r"\x1b\[[0-9;]*38;(?:2|5);", tall_raw) is not None
+        assert re.search(r"\x1b\[[0-9;]*48;(?:2|5);", tall_raw) is not None
         _assert_tall_a_z_fill(tall_raw)
         tall_child.send("q")
         tall_child.expect(pexpect.EOF, timeout=5)

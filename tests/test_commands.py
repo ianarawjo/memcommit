@@ -608,7 +608,7 @@ class TestHelp:
         assert result is None
         assert bound == ["INVENTORY VIEW"]
 
-    def test_selector_tab_switches_category_and_a_z_views(self):
+    def test_selector_tab_advances_through_by_kind_groups(self):
         entries = [
             CommandEntry(
                 name=name,
@@ -620,10 +620,35 @@ class TestHelp:
             for name in ("add", "branch", "find")
         ]
         with create_pipe_input() as pipe_input:
-            # BY KIND starts at branch (Contexts); Down reaches add (Memories).
-            # Tab focuses VIEW, Right switches to A-Z while retaining add, and
-            # Tab returns to the list for the normal two-stage selection.
-            pipe_input.send_text("\x1b[B\t\x1b[C\t\r\r")
+            # BY KIND starts at branch (Contexts). Successive Tabs must reach
+            # add (Memories) and then find (Search & Explain), rather than
+            # alternating between the original row and VIEW.
+            pipe_input.send_text("\t\t\r\r")
+            selected = run_help_selector(
+                entries,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem find"
+
+    def test_selector_reaches_view_then_keeps_a_z_as_one_list_surface(self):
+        entries = [
+            CommandEntry(
+                name=name,
+                annotation=None,
+                description=f"{name} description",
+                command=object(),
+                forms=(f"mem {name}",),
+            )
+            for name in ("add", "branch")
+        ]
+        with create_pipe_input() as pipe_input:
+            # Contexts -> Memories -> VIEW, then switch projection. A–Z keeps
+            # its single list surface and the selected command by name.
+            pipe_input.send_text("\t\t\x1b[C\t\r\r")
             selected = run_help_selector(
                 entries,
                 app_input=pipe_input,
@@ -633,6 +658,54 @@ class TestHelp:
 
         assert selected is not None
         assert selected.command_line == "mem add"
+
+    def test_selector_tab_wraps_through_view_and_restores_kind_cursor(self):
+        entries = [
+            CommandEntry(
+                name=name,
+                annotation=None,
+                description=f"{name} description",
+                command=object(),
+                forms=(f"mem {name}",),
+            )
+            for name in ("status", "branch", "add")
+        ]
+        with create_pipe_input() as pipe_input:
+            # Retain branch inside Contexts, cross Memories and VIEW, then
+            # re-enter Contexts. Tab traversal preserves that kind's cursor.
+            pipe_input.send_text("\x1b[B\t\t\t\r\r")
+            selected = run_help_selector(
+                entries,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem branch"
+
+    def test_selector_shift_tab_reaches_previous_kind_through_view(self):
+        entries = [
+            CommandEntry(
+                name=name,
+                annotation=None,
+                description=f"{name} description",
+                command=object(),
+                forms=(f"mem {name}",),
+            )
+            for name in ("add", "branch", "find")
+        ]
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[Z\x1b[Z\r\r")
+            selected = run_help_selector(
+                entries,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem find"
 
     def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
         with create_pipe_input() as pipe_input:

@@ -1,7 +1,9 @@
-# `mem help` A–Z boundary verification
+# `mem help` BY KIND Tab path and A–Z boundary verification
 
 These captures reproduce `mem help` with the real executable in color-capable
-`180×52` and `180×86` PTYs. The capture removes `NO_COLOR`, sets
+`180×52` and `180×86` PTYs. They first verify that Tab follows every visible
+`BY KIND` category box in screen order before reaching `INVENTORY VIEW`, then
+verify the A–Z projection boundary. The capture removes `NO_COLOR`, sets
 `TERM=xterm-256color` and `COLORTERM=truecolor`, verifies both live sizes with
 `stty size`, and checks that the raw PTY streams contain ANSI styles. The taller
 viewport is intentional: it exposes the spare space below the complete A–Z
@@ -18,11 +20,18 @@ closing border is directly above the pinned rule.
 
 | Capture | Exact command | Profile / current Context | Preceding input | Visible state | Durable mutation |
 |---|---|---|---|---|---|
-| `01-by-kind-entry` | `mem help` | none / none | none | initial `BY KIND` command list | none |
-| `02-view-focused` | same | none / none | `Tab` | `INVENTORY VIEW` focused, `BY KIND` retained | none |
-| `03-a-z-selected` | same | none / none | `Right` | `A–Z` selected while VIEW remains focused | none |
-| `04-a-z-list-boundary` | same | none / none | `Tab` | A–Z list focused; box and bottom rule share the same right edge | none |
-| `05-a-z-tall-viewport-fill-180x86` | `mem help` in `180×86` | none / none | `Tab`, `Right`, `Tab` | spare rows below `update` remain inside the A–Z box | none |
+| `01-by-kind-entry` | `mem help` | none / none | none | initial `BY KIND` inventory with `CONTEXTS` focused | none |
+| `02-memories-focused` | same | none / none | `Tab` | `MEMORIES` is the next focused kind | none |
+| `03-search-explain-focused` | same | none / none | `Tab` | `SEARCH & EXPLAIN` is focused | none |
+| `04-analyze-transform-focused` | same | none / none | `Tab` | `ANALYZE & TRANSFORM` is focused | none |
+| `05-history-recovery-focused` | same | none / none | `Tab` | `HISTORY & RECOVERY` is focused | none |
+| `06-ground-evaluation-focused` | same | none / none | `Tab` | `GROUND & EVALUATION` is focused | none |
+| `07-profile-sharing-focused` | same | none / none | `Tab` | `PROFILE & SHARING` is focused | none |
+| `08-system-focused` | same | none / none | `Tab` | `SYSTEM` is focused | none |
+| `09-view-focused` | same | none / none | `Tab` | after the final kind, `INVENTORY VIEW` owns focus | none |
+| `10-a-z-selected` | same | none / none | `Right` | `A–Z` is selected while VIEW retains focus | none |
+| `11-a-z-list-boundary` | same | none / none | `Tab` | A–Z list focused; box and bottom rule share the same right edge | none |
+| `12-a-z-tall-viewport-fill-180x86` | `mem help` in `180×86` | none / none | `Tab` ×8, `Right`, `Tab` | spare rows below `update` remain inside the A–Z box | none |
 
 After the final capture, `Q` cancels the read-only browser with exit status 0.
 The full-screen application erases itself on exit, so there is no separate

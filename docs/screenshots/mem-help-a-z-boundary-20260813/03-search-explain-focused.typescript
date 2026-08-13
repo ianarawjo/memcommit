@@ -50,4 +50,42 @@
 [0m│[0;1m ▸ mem find              [0mOpen interactive search when QUERY is omitted, or search once when QUERY is supplied. One-shot search defaults to the selected Context roots only; use  [0m│[179C[0;48;5;248m [0m
 [0m│[0;1m                         [0m-r/--recursive for namespace descendants and embedded Contexts. The interactive workbench keeps its visible scope controls. Descendant and embedded     │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[29A[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[29A[0m[A[0m┌ CONTEXTS ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[0;1m ▸ mem status     [0mShow current Context counts, recent Memories, and checkpoints.                                                                                                 [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+[0;38;5;117;1m┏ MEMORIES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem add        Add one or more Memories to the current or explicit Context.                                                                                                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[9A[0m[A[0m┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[0;1m ▸ mem add        [0mAdd one or more Memories to the current or explicit Context.                                                                                                   [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+[0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem find              Open interactive search when QUERY is omitted, or search once when QUERY is supplied. One-shot search defaults to the selected Context roots only; use  [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m                         -r/--recursive for namespace descendants and embedded Contexts. The interactive workbench keeps its visible scope controls. Descendant and embedded     [0;38;5;117;1m┃[A[0m
