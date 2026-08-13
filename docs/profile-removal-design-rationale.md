@@ -27,6 +27,10 @@ which it could restore the content.
 - A successful deletion returns to the refreshed Profile selector with a green
   in-selector receipt. It does not exit `mem profile`. Each subsequent deletion
   starts from a newly loaded registry generation and visible Profile catalog.
+- The refreshed selector reuses the reviewed row's visual index rather than
+  resetting to `CURRENT`. The same index names the next surviving row after
+  deletion; if the target was last, clamping selects the row immediately above.
+  This positional hint never reuses the deleted UID or stale catalog entry.
 - While recursive deletion is running, the frozen review remains visible and
   the shared `.`, `..`, `…` busy cadence appears in the header and footer.
   Deletion runs in the shared non-cancellable background executor so the TUI

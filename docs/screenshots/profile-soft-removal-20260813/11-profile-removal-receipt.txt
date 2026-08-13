@@ -1,9 +1,9 @@
  Select a Profile or Study                                                                                                                                                          
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     authoring                          Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring                                                             ^
-› * capture-workspace         CURRENT  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace                                                              
+  * capture-workspace         CURRENT  Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=workspace                                                              
   STUDY capture-study · 1 active · 1 removed · created=2026-08-13T18:00:00+00:00                                                                                                    
-    Granted memory · capture-granted-memory           Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=source                                                  
+›   Granted memory · capture-granted-memory  USE      Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=source                                                  
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑/↓ move  Enter use  D remove Profile  Esc/q cancel  ·  2/4 · Deleted Profile 'capture-participant' permanently · store/checkpoints deleted · 1 Grant removed
+ ↑/↓ move  Enter use  D remove Profile  Esc/q cancel  ·  4/4 · Deleted Profile 'capture-participant' permanently · store/checkpoints deleted · 1 Grant removed

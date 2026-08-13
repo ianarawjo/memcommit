@@ -72,6 +72,7 @@ class ProfilePickerRefresh:
     status: str
     error: Exception | None = None
     close_requested: bool = False
+    preferred_row_index: int | None = None
 
 
 @dataclass(frozen=True)
@@ -372,6 +373,7 @@ def choose_profile(
     current: str,
     registry_generation: int | None = None,
     initial_status: str = "",
+    initial_row_index: int | None = None,
     apply_removal: Callable[[ProfilePickerAction], str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -382,6 +384,12 @@ def choose_profile(
     options = _validate_entries(entries, current=current)
     if not isinstance(initial_status, str):
         raise ValueError("Profile selection status must be text.")
+    if initial_row_index is not None and (
+        not isinstance(initial_row_index, int)
+        or isinstance(initial_row_index, bool)
+        or initial_row_index < 0
+    ):
+        raise ValueError("Profile selection row must be a nonnegative integer.")
     if apply_removal is not None and not callable(apply_removal):
         raise ValueError("Profile removal handler must be callable.")
     rows = _picker_rows(options, current=current)
@@ -391,11 +399,18 @@ def choose_profile(
             "Pass a profile name explicitly."
         )
 
+    current_index = next(
+        index
+        for index, row in enumerate(rows)
+        if row.kind == "PROFILE" and row.name == current
+    )
     selected = {
-        "index": next(
-            index
-            for index, row in enumerate(rows)
-            if row.kind == "PROFILE" and row.name == current
+        # The same visual position resolves to the next surviving row after a
+        # deletion, or the preceding row when the removed target was last.
+        "index": (
+            min(initial_row_index, len(rows) - 1)
+            if initial_row_index is not None
+            else current_index
         )
     }
     pending: dict[str, object | None] = {"action": None, "review": None}
@@ -499,6 +514,7 @@ def choose_profile(
     def _apply_reviewed_removal(event) -> None:
         action = pending["action"]
         assert isinstance(action, ProfilePickerAction)
+        reviewed_row_index = selected["index"]
         if apply_removal is None:
             event.app.exit(result=action)
             return
@@ -507,12 +523,16 @@ def choose_profile(
             return apply_removal(action)
 
         def on_success(message: str) -> None:
-            background_result["value"] = ProfilePickerRefresh(status=message)
+            background_result["value"] = ProfilePickerRefresh(
+                status=message,
+                preferred_row_index=reviewed_row_index,
+            )
 
         def on_error(error: Exception) -> None:
             background_result["value"] = ProfilePickerRefresh(
                 status="",
                 error=error,
+                preferred_row_index=reviewed_row_index,
             )
 
         def finish(*, close_requested: bool) -> None:
@@ -527,6 +547,7 @@ def choose_profile(
                     status=result.status,
                     error=result.error,
                     close_requested=close_requested,
+                    preferred_row_index=result.preferred_row_index,
                 )
             )
 

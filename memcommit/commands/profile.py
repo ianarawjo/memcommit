@@ -201,6 +201,7 @@ def _print_grant(registry, grant, *, prefix: str = "") -> None:
 def _pick_profile(
     *,
     initial_status: str = "",
+    initial_row_index: int | None = None,
     apply_removal: Callable[[ProfilePickerAction], str] | None = None,
 ) -> ProfilePickerAction | ProfilePickerRefresh | None:
     registry, inspections = _profile_rows()
@@ -274,6 +275,8 @@ def _pick_profile(
         )
         if apply_removal is not None:
             picker_kwargs["apply_removal"] = apply_removal
+        if initial_row_index is not None:
+            picker_kwargs["initial_row_index"] = initial_row_index
         selected = choose_profile(
             entries,
             current=registry.active.name,
@@ -406,10 +409,12 @@ def _run_profile_selector() -> None:
     """Keep the selector open after deletion and reload its frozen catalog."""
 
     status = ""
+    preferred_row_index: int | None = None
     completed_removal = False
     while True:
         action = _pick_profile(
             initial_status=status,
+            initial_row_index=preferred_row_index,
             apply_removal=lambda reviewed: (
                 _apply_profile_picker_action(
                     reviewed,
@@ -427,6 +432,7 @@ def _run_profile_selector() -> None:
             if action.error is not None:
                 _fail(action.error)
             status = action.status
+            preferred_row_index = action.preferred_row_index
             completed_removal = True
             if action.close_requested:
                 return

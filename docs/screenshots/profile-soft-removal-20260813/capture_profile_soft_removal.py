@@ -330,6 +330,7 @@ def _capture_profile_path(home: Path) -> None:
         "Select a Profile or Study",
         "Deleted Profile 'capture-participant' permanently",
         "store/checkpoints deleted",
+        "›   Granted memory · capture-granted-memory",
     )
     if not child.isalive():
         raise RuntimeError("Profile removal exited instead of reopening the selector.")

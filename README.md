@@ -282,8 +282,10 @@ Press `D` on a Study heading to review whole-Study removal, or on a child row to
 review only that Profile. `Enter` or `A` applies the exact displayed command
 after the irreversible-deletion warning. After deletion, the refreshed
 selector stays open with a success receipt so more old Profiles can be removed
-without restarting `mem profile`. While deletion runs, `.`, `..`, `…` shows
-that the approved store/checkpoint cleanup is still active. Direct CLI commands
+without restarting `mem profile`. Its cursor stays at the deleted row's visual
+position, which selects the next surviving row or the row immediately above
+when the target was last. While deletion runs, `.`, `..`, `…` shows that the
+approved store/checkpoint cleanup is still active. Direct CLI commands
 show the same transient cadence in a TTY while remaining stable and silent when
 redirected, then exit after their one-shot receipt. The active, fixed
 `authoring`, and fixed `study-baseline` Profiles cannot be removed. Stable UID

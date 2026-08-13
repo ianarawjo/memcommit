@@ -341,6 +341,7 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         current,
         registry_generation,
         initial_status="",
+        initial_row_index=None,
         apply_removal=None,
     ):
         assert callable(apply_removal)
@@ -350,14 +351,20 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
                 "current": current,
                 "generation": registry_generation,
                 "status": initial_status,
+                "row_index": initial_row_index,
             }
         )
         if len(calls) == 1:
-            return ProfilePickerAction(
+            action = ProfilePickerAction(
                 kind="REMOVE_PROFILE",
                 name=authority.name,
                 uid=authority.uid,
                 registry_generation=registry_generation,
+            )
+            status = apply_removal(action)
+            return profile_command.ProfilePickerRefresh(
+                status=status,
+                preferred_row_index=3,
             )
         return None
 
@@ -375,6 +382,8 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         ("authoring", participant.name),
     ]
     assert calls[1]["generation"] == calls[0]["generation"] + 1
+    assert calls[0]["row_index"] is None
+    assert calls[1]["row_index"] == 3
     assert "Deleted Profile 'removal-authority' permanently" in calls[1]["status"]
     assert "store/checkpoints deleted" in calls[1]["status"]
     assert "Profile selection cancelled." not in result.output

@@ -466,7 +466,45 @@ def test_profile_picker_deletion_cycles_every_shared_busy_frame(monkeypatch):
     assert feeder_errors == []
     assert not feeder.is_alive()
     assert rendered_frames == {".", "..", "…"}
-    assert selected == ProfilePickerRefresh(status="Deletion completed")
+    assert selected == ProfilePickerRefresh(
+        status="Deletion completed",
+        preferred_row_index=1,
+    )
+
+
+def test_profile_picker_initial_row_uses_nearest_surviving_visual_position():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            initial_row_index=99,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ProfilePickerAction(
+        kind="USE",
+        name="pilot-participant",
+        uid="participant-uid",
+        registry_generation=None,
+    )
 
 
 def test_profile_picker_review_warns_that_store_and_checkpoints_are_unrecoverable():
