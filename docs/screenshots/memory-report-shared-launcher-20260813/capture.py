@@ -13,7 +13,7 @@ import tempfile
 import pexpect
 
 
-ROOT = Path("/Users/KimMunyeong/Github/memcommit")
+ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/memory-report-shared-launcher-20260813"
 COLUMNS = 180
 ROWS = 52
@@ -56,7 +56,7 @@ def _isolate_store(root: Path) -> None:
 
 
 def _prepare_fixture() -> str:
-    from memcommit.commands import add, edit, init, switch
+    from memcommit.commands import add, delete, edit, init, switch
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 
@@ -81,6 +81,18 @@ def _prepare_fixture() -> str:
             input_source=None,
             context_name=None,
         )
+    add.cmd(
+        "Retained historical wording",
+        input_source=None,
+        paste=False,
+        context_name=None,
+    )
+    historical = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory) and item.content == "Retained historical wording"
+    )
+    delete.cmd(historical.uid, context_name=None, force=False)
     switch.cmd("demo")
     return memory.uid
 
@@ -178,7 +190,12 @@ def main() -> None:
     next_index = _capture("trace", 1)
     _capture("rationale", next_index)
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
-    assert "3 recorded changes" in raw.casefold()
+    assert re.search(r"\[[0-9a-f]{8}\]\[r3\]", raw.casefold())
+    assert re.search(
+        r"\[historical\]\[[0-9a-f]{8}\]\[r2\]",
+        raw.casefold(),
+    )
+    assert "[current" not in raw.casefold()
     assert "INCLUDE DESCENDANTS" in raw
     assert "CONTEXTS & MEMORIES" in raw
     assert "┏" in raw and "┗" in raw

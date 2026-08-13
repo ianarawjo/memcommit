@@ -100,10 +100,14 @@ removal, reorder, and restoration can each contribute once per retained command
 identity. A synthetic `HISTORY_GAP` remains visible after opening Trace but is
 excluded from this count because it proves only that the current state is not
 reconstructable; it does not prove one recorded change. Such a row therefore
-shows `0 RECORDED CHANGES`, never a negative result produced by subtracting a
-synthetic row. A granted Rationale row shows `HISTORY UNAVAILABLE` rather than
-treating withheld owner history as zero or deriving a count from current
-content. Up/Down, Left/Right,
+shows `[UID][r0]`, never a negative result produced by subtracting a synthetic
+row. The compact `rN` badge means N recorded lineage-changing operations; it is
+separate from the UID badge so the two values remain independently scannable.
+`CURRENT` is omitted because it is the default state. Only an exceptional
+retained-only row adds `[historical]`, yielding
+`[historical][UID][rN]`. A granted Rationale row shows
+`[UID][history unavailable]` rather than treating withheld owner history as
+zero or deriving a count from current content. Up/Down, Left/Right,
 held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather
 than a second operation-specific navigation grammar.
 

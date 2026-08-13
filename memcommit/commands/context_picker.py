@@ -95,6 +95,7 @@ class ContextMemoryRow:
     style: Literal["memory-object", "report-neutral"] = "memory-object"
     selector: str | None = None
     source: SourceDisplayFacts | None = None
+    badges: tuple[str, ...] = ()
 
 
 def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
@@ -257,6 +258,7 @@ def render_context_options(
                 display_label = (
                     f"{object_label} " if object_label else ""
                 ) + memory.label
+                display_badges = (display_label, *memory.badges)
                 memory_annotations = (
                     source_annotation_tokens(memory.source)
                     if memory.source is not None
@@ -264,7 +266,12 @@ def render_context_options(
                 )
                 leading = (
                     "  " * (row.depth + 1)
-                    + f"{memory_pointer} [{display_escape_text(display_label)}] "
+                    + f"{memory_pointer} "
+                    + "".join(
+                        f"[{display_escape_text(badge)}]"
+                        for badge in display_badges
+                    )
+                    + " "
                 )
                 annotation_width = get_cwidth(
                     " · ".join(token.text for token in memory_annotations)

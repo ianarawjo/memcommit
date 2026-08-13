@@ -13,7 +13,7 @@ import sys
 import pexpect
 
 
-ROOT = Path("/Users/KimMunyeong/Github/memcommit")
+ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/memory-report-study-participant-20260813"
 COLUMNS = 180
 ROWS = 52
@@ -149,7 +149,8 @@ def main() -> None:
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert CURRENT in raw
     assert "Modify campus-wiki/building-access" in raw
-    assert "0 recorded changes" in raw.casefold()
+    assert "[8b077f2a][r0]" in raw.casefold()
+    assert "[current" not in raw.casefold()
     assert "CONTEXTS & MEMORIES" in raw
     assert "┏" in raw and "┗" in raw
     assert "38;" in raw

@@ -6,8 +6,8 @@
 ┌─────────────────────────────────────────────────────────────────────────────| CONTEXTS & MEMORIES |──────────────────────────────────────────────────────────────────────────────┐
 │› * ▾ demo                                                                                                                                                                       ^│
 │      ▾ demo/child                                                                                                                                                                │
-│    · [current 7ef2a351 · 3 recorded changes] Final wording used by both reports                                                                                                  │
-│                                                                                                                                                                                  │
+│    · [814f9e78][r3] Final wording used by both reports                                                                                                                           │
+│    · [historical][3a4bb58d][r2] Retained historical wording                                                                                                                      │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │

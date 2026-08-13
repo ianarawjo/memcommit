@@ -144,6 +144,37 @@ def test_report_picker_composes_the_shared_focused_frames(monkeypatch):
     assert titles == ["RANGE", "CONTEXTS & MEMORIES"]
 
 
+def test_report_picker_projects_current_and_historical_as_separate_badges(
+    monkeypatch,
+):
+    observed_rows = []
+
+    def observe_rows(names, **kwargs):
+        observed_rows.extend(kwargs["memory_loader"](names[0]))
+        return None
+
+    monkeypatch.setattr(
+        "memcommit.commands.memory_picker.choose_context",
+        observe_rows,
+    )
+
+    selected = choose_memory_report_target(
+        (
+            candidate(1, change_count=2),
+            candidate(2, status="HISTORICAL", change_count=3),
+        ),
+        context_name="notes",
+        operation="trace",
+        require_tty=False,
+    )
+
+    assert selected is None
+    assert [(row.label, row.badges) for row in observed_rows] == [
+        ("00000000", ("r2",)),
+        ("historical", ("00000000", "r3")),
+    ]
+
+
 def test_report_picker_uses_shared_enter_and_vertical_surface_routing():
     item = ScopedMemoryPickerItem(
         context_name="notes/child",
@@ -286,8 +317,7 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
         if style != "[SetCursorPosition]"
     )
 
-    assert "HISTORICAL" in rendered
-    assert "4 RECORDED CHANGES" in rendered
+    assert "[historical][00000000][r4]" in rendered
     assert "safe\\nFAKE HEADING\\u202e" in rendered
     assert "\u202e" not in rendered
 
@@ -299,8 +329,8 @@ def test_picker_marks_withheld_history_instead_of_fabricating_zero_changes():
         if style != "[SetCursorPosition]"
     )
 
-    assert "HISTORY UNAVAILABLE" in rendered
-    assert "0 RECORDED CHANGES" not in rendered
+    assert "[00000000][history unavailable]" in rendered
+    assert "[r0]" not in rendered
 
 
 def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
@@ -322,7 +352,8 @@ def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
         for style, text in _render_memory_options(candidates, selected=0)
         if style != "[SetCursorPosition]"
     )
-    assert "0 RECORDED CHANGES" in rendered
+    assert f"[{memory.uid[:8]}][r0]" in rendered
+    assert "[current" not in rendered.casefold()
 
 
 def test_picker_requires_a_tty_when_requested(monkeypatch):

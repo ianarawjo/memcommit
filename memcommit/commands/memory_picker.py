@@ -60,10 +60,20 @@ def _preview(value: str, limit: int = 100) -> str:
     return elide_terminal_text(escaped, limit)
 
 
-def _change_label(value: int | None) -> str:
+def _change_badge(value: int | None) -> str:
     if value is None:
-        return "HISTORY UNAVAILABLE"
-    return f"{value} RECORDED {'CHANGE' if value == 1 else 'CHANGES'}"
+        return "history unavailable"
+    return f"r{value}"
+
+
+def _memory_badges(item: MemoryPickerItem) -> tuple[str, ...]:
+    """Project compact identity, exceptional lifecycle, and history badges."""
+
+    identity = item.uid[:8]
+    revision = _change_badge(item.change_count)
+    if item.status == "HISTORICAL":
+        return ("historical", identity, revision)
+    return (identity, revision)
 
 
 def _render_memory_options(
@@ -81,13 +91,13 @@ def _render_memory_options(
             fragments.append(("[SetCursorPosition]", ""))
         style = "class:selected" if is_selected else ""
         pointer = "›" if is_selected else " "
+        badges = "".join(
+            f"[{display_escape_text(badge)}]" for badge in _memory_badges(item)
+        )
         fragments.append(
             (
                 style,
-                f"{pointer} {item.status:<10} "
-                f"[{display_escape_text(item.uid[:8])}]  "
-                f"{_change_label(item.change_count)}  "
-                f"{_preview(item.content)}",
+                f"{pointer} {badges} {_preview(item.content)}",
             )
         )
         if index < len(options) - 1:
@@ -163,15 +173,18 @@ def _choose_memory_selection(
     }
 
     def memory_rows(name: str) -> tuple[ContextMemoryRow, ...]:
-        return tuple(
-            ContextMemoryRow(
-                f"{item.status.casefold()} {item.uid[:8]} · "
-                f"{_change_label(item.change_count).casefold()}",
-                item.content,
-                selector=item.uid,
+        rows: list[ContextMemoryRow] = []
+        for item in items_by_context[name]:
+            badges = _memory_badges(item)
+            rows.append(
+                ContextMemoryRow(
+                    badges[0],
+                    item.content,
+                    selector=item.uid,
+                    badges=badges[1:],
+                )
             )
-            for item in items_by_context[name]
-        )
+        return tuple(rows)
 
     reach_state = (
         ContextReachState.create(

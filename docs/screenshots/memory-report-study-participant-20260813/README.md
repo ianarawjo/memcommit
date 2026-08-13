@@ -7,10 +7,12 @@ shared-launcher regression set. The selected row is the first real Memory in
 `Modify campus-wiki/building-access`.
 
 The real data also exposes an important interpretation boundary. The selected
-row says `0 recorded changes`, while its Trace result separately classifies the
+row says `[8b077f2a][r0]`, while its Trace result separately classifies the
 current state as `HISTORY_GAP · UNRECORDED`: the Context differs from
 reconstructable checkpoint history, but that gap is not counted as evidence of
-one recorded modification.
+one recorded modification. `r0` is a compact count of recorded lineage changes;
+the default `current` state is omitted, while retained-only rows would add a
+separate `[historical]` badge.
 
 ## Reproduction frame
 
@@ -36,7 +38,7 @@ one recorded modification.
 | --- | --- | --- | --- |
 | `01-trace-exact-entry.png` | Open Trace | `RANGE` starts at `THIS CONTEXT ONLY`; participant root is empty | None |
 | `02-trace-descendants.png` | `Right` | Real construction-update Contexts and Memories become visible | None |
-| `03-trace-study-memory-focused.png` | `Tab`, `Down` × 3 | Blue `CONTEXTS & MEMORIES` frame contains the real building-access Memory and `0 recorded changes` | None |
+| `03-trace-study-memory-focused.png` | `Tab`, `Down` × 3 | Blue `CONTEXTS & MEMORIES` frame contains the real building-access Memory with `[8b077f2a][r0]` | None |
 | `04-trace-result.png` | `Enter` | Shared temporal Trace result opens for the exact Memory | None |
 | `05-trace-verification.png` | `q` | Store digest remains unchanged | None |
 | `06-rationale-exact-entry.png` | Open recorded-only Rationale | Same exact-range launcher | None |
