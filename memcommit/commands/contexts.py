@@ -1,11 +1,86 @@
+import sys
+
 import typer
 
-from memcommit.commands.switch import _granted_picker_views
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.commands.context_picker import choose_context, context_memory_rows
+from memcommit.commands.granted_context import (
+    resolve_context_access,
+)
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_readable_context_catalog,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.context_targeting.catalog import (
+    freeze_granted_context_navigation,
+    grant_navigation_display_annotation,
+)
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import source_display_text
+
+
+def _interactive_terminal() -> bool:
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _browse_contexts(
+    store: MemoryStore,
+    *,
+    current: str | None,
+    names: list[str],
+) -> None:
+    """Open the shared Context tree without returning an executable target."""
+
+    initial_name = current if current in names else names[0]
+    initial_access = resolve_context_access(
+        store,
+        initial_name,
+        current_name=current,
+        required_permission="READ",
+    )
+    catalog = freeze_profile_readable_context_catalog(
+        store,
+        initial_access,
+        include_query_routes=False,
+    )
+    readable_names = tuple(catalog.list_context_names())
+    local_names = tuple(
+        name for name in readable_names if not catalog.access_for(name).is_granted
+    )
+    virtual_names = tuple(
+        name for name in readable_names if catalog.access_for(name).is_granted
+    )
+    virtual_annotations = {}
+    for name in virtual_names:
+        access = catalog.access_for(name)
+        if access.view is None:
+            raise ValueError("Readable granted Context annotations are incomplete.")
+        virtual_annotations[name] = grant_navigation_display_annotation(
+            name,
+            access.view.grant.permissions,
+        )
+
+    def load_memories(context_name: str):
+        return context_memory_rows(catalog.load(context_name))
+
+    # The return value is intentionally discarded. Browse mode never produces
+    # a Context target, and this command has no state-writing continuation.
+    choose_context(
+        local_names,
+        current=initial_name,
+        title="Browse Contexts",
+        virtual_names=virtual_names,
+        selectable_virtual_names=frozenset(virtual_names),
+        virtual_annotations=virtual_annotations,
+        memory_loader=load_memories,
+        browse_only=True,
+        initially_expand_selected=False,
+        initially_expand_all=False,
+        initially_show_memories=False,
+    )
 
 
 def cmd() -> None:
@@ -17,6 +92,28 @@ def cmd() -> None:
     if not names:
         typer.echo("No contexts yet. Run 'mem init <name>' to create one.")
         return
+    if _interactive_terminal():
+        try:
+            _browse_contexts(
+                store,
+                current=current,
+                names=names,
+            )
+        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        return
+
+    try:
+        granted_navigation = freeze_granted_context_navigation(store)
+        virtual_names = granted_navigation.names
+        annotations = granted_navigation.annotations
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+
+    # Noninteractive output remains a stable, line-oriented catalog for pipes,
+    # test runners, and agents that cannot drive the full-screen browser.
     for name in names:
         label = display_escape_text(name)
         if name == current:
@@ -24,7 +121,6 @@ def cmd() -> None:
         else:
             typer.echo(f"  {label}")
     try:
-        virtual_names, annotations = _granted_picker_views(store)
         registry = load_profile_registry()
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)

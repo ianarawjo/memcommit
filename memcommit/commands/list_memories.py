@@ -386,6 +386,7 @@ def _snapshot_browser_tree(
     tuple[str, ...],
     dict[str, str],
     dict[str, SourceDisplayValue],
+    dict[str, SourceDisplayValue],
     dict[str, tuple[ContextMemoryRow, ...]],
 ]:
     """Adapt the frozen recursive occurrence graph to the common tree UI.
@@ -402,7 +403,8 @@ def _snapshot_browser_tree(
     children: dict[str, tuple[str, ...]] = {}
     parents: dict[str, str | None] = {root_id: None}
     labels = {root_id: root_name}
-    annotations: dict[str, SourceDisplayValue] = {}
+    local_annotations: dict[str, SourceDisplayValue] = {}
+    virtual_annotations: dict[str, SourceDisplayValue] = {}
     memories: dict[str, tuple[ContextMemoryRow, ...]] = {}
 
     def visit(parent_id: str, items: list[dict[str, object]]) -> None:
@@ -417,7 +419,7 @@ def _snapshot_browser_tree(
             parents[child_id] = parent_id
             if kind == "query_context_ref":
                 labels[child_id] = _require_string(item, "name")
-                annotations[child_id] = SourceDisplayFacts(
+                virtual_annotations[child_id] = SourceDisplayFacts(
                     form=SourceForm.QUERY_VIEW,
                 )
                 virtual.append(child_id)
@@ -425,7 +427,7 @@ def _snapshot_browser_tree(
                 continue
             labels[child_id] = _require_string(item, "name")
             cycle = _require_bool(item, "cycle")
-            annotations[child_id] = SourceDisplayFacts(
+            local_annotations[child_id] = SourceDisplayFacts(
                 reach=(
                     SourceReach.VIA_EMBED
                     if kind == "context"
@@ -454,7 +456,8 @@ def _snapshot_browser_tree(
         materialized,
         tuple(virtual),
         labels,
-        annotations,
+        local_annotations,
+        virtual_annotations,
         memories,
     )
 
@@ -1157,7 +1160,8 @@ def cmd(
             browser_names,
             browser_virtual_names,
             browser_labels,
-            browser_annotations,
+            browser_local_annotations,
+            browser_virtual_annotations,
             browser_memories,
         ) = _snapshot_browser_tree(browser_snapshot)
         root_id = browser_tree.roots[0]
@@ -1166,8 +1170,9 @@ def cmd(
             browser_names,
             current=root_id,
             title=f"List · {access.display_name}",
+            local_annotations=browser_local_annotations,
             virtual_names=browser_virtual_names,
-            virtual_annotations=browser_annotations,
+            virtual_annotations=browser_virtual_annotations,
             memory_loader=lambda occurrence: browser_memories.get(
                 occurrence, ()
             ),

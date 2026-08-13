@@ -1,0 +1,151 @@
+LIVE PTY · 52 180
+PRE-BROWSE PROFILE/CURRENT
+Profile: study-20260813T135528Z-d61e7a16
+Store: /Users/KimMunyeong/.mem-profiles/stores/2ab5a8d6-647a-481d-aba2-651f8dd8c3f3
+Contexts 66 owned + 43 granted · Memories 457 owned + 625 granted
+Current Context: task-1/participant
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Browse Contexts[0m
+[0m Roots · practice · task-1 · task-2 · task-3[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    ▸ practice[165C[0;1m^[0m
+[0m    ▾ task-1[167C[0;48;5;238m [0m
+[0m      ▸ task-1/description[153C[0;48;5;238m [0m
+[0;1;7m› *   ▸ task-1/participant[153C[0;48;5;238m [0m
+[0m      ▸ task-1/campus-wiki  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mA[179C[0;48;5;238m [0m
+[0m        [0;38;5;255mNALYSIS RATIONALE SUBTREE + TRACE BLOCKED[130C[0;48;5;238m [0m
+[0m    ▸ task-2[167C[0;48;5;238m [0m
+[0m    ▸ task-3[167C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  Enter open/collapse  q close · 4/7 · 109 selectable[129D[45A[0m[0m  *   ▸ task-1/participant[0m
+[0;1;7m›     ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · A[0m
+[8C[0;1;7mNALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[109C[0m5[44A[110D[0m[4A[4C[0m▾[0m
+[4C[0m [C▸ practice/description[0m
+[8C[0mpractice/outpu[C[0m   [0m
+[2C[0m [5Cpractice/source[0m   [0m
+[0m    ▾ task-1[0m                                                                                                                                                                       [0m
+[6C[0m▸[Ctask-1/description[0m                       [0m
+[2C[0m*[C [C▾ task-1/participant[0m
+[4C[0m [C  ▾ task-1/participant/construction-updates[0m
+[0m          ▸ task-1/participant/construction-updates/building-access[0m
+[0m          ▸ task-1/participant/construction-updates/event-relocations[0m
+[0m          ▸ task-1/participant/construction-updates/facility-updates[0m
+[0m          ▸ task-1/participant/construction-updates/route-changes[0m
+[0m          ▸ task-1/participant/construction-updates/shop-updates[0m
+[0m          ▸ task-1/participant/construction-updates/temporary-parking[0m
+[0;1;7m›     ▾ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · A[0m
+[0m        [0;1;7mNALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
+[0m        ▸ task-1/campus-wiki/building-access  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS +[0m
+[0m          [0m SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[110C[0;48;5;238m [0m
+[0m        ▸ task-1/campus-wiki/event-relocations  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS[179C[0;48;5;248m [0m
+[0m          [0m + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[108C[0;48;5;248m [0m
+[0m        ▸ task-1/campus-wiki/facility-updates  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS [179C[0;48;5;248m [0m
+[0m          [0m+ SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[109C[0;48;5;248m [0m
+[0m        ▸ task-1/campus-wiki/route-changes  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + S[179C[0;48;5;248m [0m
+[0m          [0mAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[112C[0;48;5;248m [0m
+[0m        ▸ task-1/campus-wiki/shop-updates  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SA[179C[0;48;5;248m [0m
+[0m          [0mVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[113C[0;48;5;248m [0m
+[0m        ▸ task-1/campus-wiki/temporary-parking  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS[179C[0;48;5;248m [0m
+[0m          [0m + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[108C[0;48;5;248m [0m
+[0m    ▾ task-2[167C[0;48;5;248m [0m
+[0m      ▸ task-2/description[153C[0;48;5;248m [0m
+[0m      ▾ task-2/participant[153C[0;48;5;248m [0m
+[0m        ▸ task-2/participant/proposal-workspace[132C[0;48;5;248m [0m
+[0m      ▾ task-2/advisor1  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[14C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/budget  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[5C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/claim-evidence  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOC[179C[0;48;5;248m [0m
+[0m          [0;38;5;255mKED[166C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/compensation  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKE[179C[0;48;5;248m [0m
+[0m          [0;38;5;255mD[168C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/emphasis  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[3C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/ethics  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[5C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/evaluation  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/expression  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/feasibility  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[179C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/methods  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[4C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/reproducibility  [0mREAD GRANT · [0mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLO[179C[0;48;5;248m [0m
+[0m          [0;38;5;255mCKED[165C[0;48;5;248m [0m
+[0m        ▸ task-2/advisor1/review  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
+
+[23C[0mrestore tree [Cm show Memories h[Cre [CM show all Memories  Enter open/collapse [Cq close[C· 15/109 · 109 selectable[34A[134D[0m

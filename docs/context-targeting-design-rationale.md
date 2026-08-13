@@ -26,6 +26,9 @@ there is intentionally no profile-wide “last Scope” preference.
 - `search.py` loads one or more searchable roots and independently controls
   embedded-Context traversal and authorized activity artifacts for Find and
   ordinary Query.
+- `catalog.py` freezes public Grant rows for namespace navigation while keeping
+  the READ-authorized subset separate from opaque QUERY and other non-READ
+  roots. Namespace visibility therefore never becomes ordinary load authority.
 - `tui/tree.py` owns frozen namespace topology, cursor, and expansion state.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
 - `tui/selector.py` composes that cardinality state with the common framed

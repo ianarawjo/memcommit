@@ -1,0 +1,8 @@
+RECURSIVE READ-ONLY VERIFIED · CURRENT CONTEXT UNCHANGED                                                                                                                            
+Context: task-1/description                                                                                                                                                         
+  1 item                                                                                                                                                                            
+                                                                                                                                                                                    
+  [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining                                                                                
+                    a university organizational wiki used by campus members, visitors, and AI                                                                                       
+                    agents. The Main Building of the campus is under construction, and you have just                                                                                
+READ-ONLY RESULT VERIFIED · DIRECT TEXT CONTRACT INTACT

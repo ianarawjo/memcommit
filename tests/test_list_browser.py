@@ -51,6 +51,8 @@ def test_tty_ls_roots_shared_browser_at_exact_context(
     assert observed["initially_expand_selected"] is True
     assert observed["initially_expand_all"] is False
     assert observed["initially_show_memories"] is True
+    assert set(observed["local_annotations"]) <= set(observed["names"])
+    assert observed["virtual_annotations"] == {}
     rows = observed["memory_loader"](root_id)
     assert [row.content for row in rows] == ["root memory"]
 
@@ -107,9 +109,15 @@ def test_snapshot_browser_preserves_repeated_context_occurrences():
         "items": [repeated, dict(repeated)],
     }
 
-    tree, names, virtual, labels, annotations, memories = (
-        _snapshot_browser_tree(snapshot)
-    )
+    (
+        tree,
+        names,
+        virtual,
+        labels,
+        local_annotations,
+        virtual_annotations,
+        memories,
+    ) = _snapshot_browser_tree(snapshot)
 
     assert len(names) == 3
     assert virtual == ()
@@ -118,8 +126,43 @@ def test_snapshot_browser_preserves_repeated_context_occurrences():
     shared_ids = tree.children_by_name[tree.roots[0]]
     assert [row.content for row in memories[shared_ids[0]]] == ["same"]
     assert [row.content for row in memories[shared_ids[1]]] == ["same"]
-    assert set(annotations) == set(shared_ids)
+    assert set(local_annotations) == set(shared_ids)
+    assert virtual_annotations == {}
     assert all(
         annotation.reach is SourceReach.VIA_EMBED
-        for annotation in annotations.values()
+        for annotation in local_annotations.values()
     )
+
+
+def test_snapshot_browser_separates_materialized_and_virtual_annotations():
+    snapshot = {
+        "context": {"uid": "root-uid", "name": "root"},
+        "items": [
+            {
+                "kind": "context",
+                "uid": "child-uid",
+                "name": "root/child",
+                "cycle": False,
+                "children": [],
+            },
+            {
+                "kind": "query_context_ref",
+                "uid": "query-uid",
+                "name": "root/query",
+            },
+        ],
+    }
+
+    (
+        _tree,
+        names,
+        virtual,
+        _labels,
+        local_annotations,
+        virtual_annotations,
+        _memories,
+    ) = _snapshot_browser_tree(snapshot)
+
+    assert set(local_annotations) <= set(names)
+    assert set(virtual_annotations) == set(virtual)
+    assert set(local_annotations).isdisjoint(virtual_annotations)

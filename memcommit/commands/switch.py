@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Annotated, Optional
 
 import typer
@@ -8,47 +7,33 @@ from memcommit.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.profile_config import (
-    ProfileConfigError,
-    load_profile_registry,
-    profile_store_dir,
-)
+from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.commands.granted_context import (
     GrantedReadStore,
     resolve_context_access,
 )
+from memcommit.context_targeting.catalog import (
+    GrantedContextNavigation,
+    freeze_granted_context_navigation,
+    grant_navigation_annotation,
+)
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.study_operation_policy import analysis_boundary_label
-from memcommit.source_projection.model import context_access_facts
 from memcommit.source_projection.presentation import (
-    SourceDisplayToken,
     SourceDisplayValue,
-    SourceTokenRole,
-    combine_source_display_tokens,
-    source_display_tokens,
 )
 
 
-@dataclass(frozen=True)
-class _GrantedPickerState:
-    names: tuple[str, ...]
-    annotations: dict[str, SourceDisplayValue]
-    selectable_names: frozenset[str]
+_GrantedPickerState = GrantedContextNavigation
 
 
 def _grant_annotation(
     permissions: tuple[str, ...],
-) -> tuple[SourceDisplayToken, ...]:
+) -> SourceDisplayValue:
     """Render Grant authority through the application-wide source grammar."""
 
-    facts = context_access_facts(
-        granted=True,
-        permission="READ" if "READ" in permissions else "QUERY",
-        permissions=permissions,
-    )
-    return source_display_tokens(facts, include_permissions=True)
+    return grant_navigation_annotation(permissions)
 
 
 def _granted_picker_state(
@@ -56,56 +41,7 @@ def _granted_picker_state(
 ) -> _GrantedPickerState:
     """Return granted rows, exact permission labels, and navigation rights."""
 
-    registry = load_profile_registry()
-    active_store = profile_store_dir(registry.active)
-    if store is None:
-        store = MemoryStore(root=active_store, create=False)
-    elif store.store_dir.resolve() != active_store.resolve():
-        # Tests and embedders may supply an isolated store while a separate
-        # host Profile is active. Never leak that host's virtual grants into
-        # navigation for an unrelated storage boundary.
-        return _GrantedPickerState((), {}, frozenset())
-    names: dict[str, SourceDisplayValue] = {}
-    selectable_names: set[str] = set()
-    for grant in registry.grants:
-        if grant.grantee_profile_uid != registry.active.uid:
-            continue
-        if not store.context_exists(grant.attachment_context_name):
-            continue
-        attachment = store.load_direct(grant.attachment_context_name)
-        if attachment.uid != grant.attachment_context_uid:
-            continue
-        annotation = combine_source_display_tokens(
-            _grant_annotation(grant.permissions),
-            SourceDisplayToken(
-                "ANALYSIS "
-                + analysis_boundary_label(
-                    grant.public_name,
-                    granted=True,
-                    readable="READ" in grant.permissions,
-                    registry=registry,
-                ),
-                SourceTokenRole.NOTE,
-            ),
-        )
-        if "READ" not in grant.permissions:
-            # A query-only grant exposes its reviewed public route, never its
-            # frozen authority descendants, in ordinary navigation.
-            names[grant.public_name] = annotation
-            selectable_names.discard(grant.public_name)
-            continue
-        for binding in grant.contexts:
-            suffix = binding.name[len(grant.resource_name) :]
-            public_name = grant.public_name + suffix
-            names[public_name] = annotation
-            # Navigation is authorized from structured grant data. Display
-            # wording may evolve without accidentally opening a query-only row.
-            selectable_names.add(public_name)
-    return _GrantedPickerState(
-        tuple(sorted(names)),
-        names,
-        frozenset(selectable_names),
-    )
+    return freeze_granted_context_navigation(store)
 
 
 def _granted_picker_views(

@@ -1,0 +1,6 @@
+POST-BROWSE PROFILE/CURRENT                                                                                                                                                         
+Profile: study-20260813T135528Z-d61e7a16                                                                                                                                            
+Store: /Users/KimMunyeong/.mem-profiles/stores/2ab5a8d6-647a-481d-aba2-651f8dd8c3f3                                                                                                 
+Contexts 66 owned + 43 granted · Memories 457 owned + 625 granted                                                                                                                   
+Current Context: task-1/participant                                                                                                                                                 
+READ-ONLY VERIFIED · CURRENT CONTEXT UNCHANGED · NO SWITCH RECEIPT

@@ -809,6 +809,64 @@ def test_picker_cancels_without_a_selection():
     assert selected is None
 
 
+def test_picker_browse_mode_never_returns_the_focused_context():
+    with create_pipe_input() as pipe_input:
+        # Enter expands the focused branch; only the later q closes the view.
+        pipe_input.send_text("\rq")
+        selected = choose_context(
+            ("alpha", "alpha/child", "beta"),
+            current="alpha",
+            browse_only=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+
+
+def test_contexts_tty_reuses_the_picker_as_a_read_only_browser(
+    isolated_store,
+    monkeypatch,
+):
+    invoke("init", "alpha")
+    invoke("add", "alpha memory")
+    invoke("init", "beta")
+    observed: dict[str, object] = {}
+
+    def browse(names, **kwargs):
+        observed["names"] = names
+        observed.update(kwargs)
+        return "alpha"
+
+    monkeypatch.setattr(
+        "memcommit.commands.contexts._interactive_terminal",
+        lambda: True,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.contexts.choose_context",
+        browse,
+    )
+
+    result = invoke("contexts")
+
+    assert result.exit_code == 0, result.output
+    assert tuple(observed["names"]) == ("alpha", "beta")
+    assert observed["current"] == "beta"
+    assert observed["title"] == "Browse Contexts"
+    assert observed["browse_only"] is True
+    assert observed["initially_expand_selected"] is False
+    assert observed["initially_expand_all"] is False
+    assert observed["initially_show_memories"] is False
+    assert observed["virtual_names"] == ()
+    assert observed["selectable_virtual_names"] == frozenset()
+    assert [row.content for row in observed["memory_loader"]("alpha")] == [
+        "alpha memory"
+    ]
+    # Even a misbehaving wrapper return cannot become a Switch continuation.
+    assert MemoryStore().current_context_name() == "beta"
+
+
 def test_bare_switch_uses_picker_result(
     isolated_store,
     monkeypatch,

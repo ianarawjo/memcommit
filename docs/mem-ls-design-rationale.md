@@ -340,6 +340,17 @@ preserve embedded Contexts, repeated embeds, cycle leaves, query-only opaque
 rows, and namespace-derived children even when two occurrences have the same
 canonical name. Those IDs never become Context locators or persisted state.
 
+The tree interaction is deliberately shared with `mem contexts` and the bare
+`mem switch` picker; command meaning comes from the frozen entry projection
+and the continuation, not from a separate key grammar. `mem contexts` enters
+the complete readable namespace with Memories hidden, `mem list` enters one
+exact occurrence root with direct Memories visible, and `mem switch` consumes
+an accepted Context as a state-changing target. A list occurrence annotation
+must remain partitioned by picker domain: materialized rows use local
+annotations and opaque query rows use virtual annotations. Mixing those maps
+would make an otherwise valid materialized child fail the picker's authority
+validation before the browser opens.
+
 Noninteractive stdout retains the stable text format for scripts, tests, and
 agents. `--copy`, `--with-ids`, and `--paste` also retain their existing text
 and structured-snapshot contract even in a terminal; clipboard commands never
