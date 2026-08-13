@@ -155,9 +155,8 @@ PTY 180 52
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0m ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/2 · 2 selectable[170D[48A[0m[?25l[0m  * ▸ task-1/participant  [0;38;2;244;245;247m0 direct · 0 descendant operations[0m
 [0;1;7m›   ▾ task-1/recovery  2 direct · 0 descendant operations[0m
-[0;38;2;244;245;247m  · [add] 2026-08-13 14:58 · be659d01 · Added newer recovery Memory[0m
-[0;38;2;244;245;247m  · [atomize] 2026-08-13 14:58 · c1c5cf41 · Applied atomize to create first recovery Memory[0m
-[0;38;2;244;245;247m  · [created] [atomize] 2026-08-13 14:58 · a77b55bc · Initialized recovery Context before applying atomize[0m
+[0;38;2;244;245;247m  · [add] 2026-08-13 15:16 · 52a207ce · Added newer recovery Memory[0m
+[0;38;2;244;245;247m  · [created] [atomize] 2026-08-13 15:16 · fb133aa1 · Initialized recovery Context before applying atomize[0m
 
 
 
@@ -201,4 +200,5 @@ PTY 180 52
 
 
 
-[37C[0mhide[111C2[C5[47A[155D[0m
+
+[37C[0mhide[111C2[C4[47A[155D[0m

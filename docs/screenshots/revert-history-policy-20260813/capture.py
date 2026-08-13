@@ -83,13 +83,14 @@ def _prepare_store(store_dir: Path) -> tuple[str, ...]:
     store.save(participant)
 
     recovery = ops.init("task-1/recovery")
+    analysis_uid = "00000000-0000-4000-8000-000000000001"
     store.save(
         recovery,
         AutoCheckpoint(
             command="init",
             args={
                 "name": recovery.name,
-                "source_analysis_uid": "00000000-0000-4000-8000-000000000001",
+                "source_analysis_uid": analysis_uid,
             },
             description="Initialized recovery Context before applying atomize",
         ),
@@ -99,7 +100,7 @@ def _prepare_store(store_dir: Path) -> tuple[str, ...]:
         recovery,
         AutoCheckpoint(
             command="atomize",
-            args={"content": "Keep this first recovery Memory."},
+            args={"analysis_uid": analysis_uid},
             description="Applied atomize to create first recovery Memory",
         ),
     )

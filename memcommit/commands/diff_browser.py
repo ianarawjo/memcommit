@@ -149,6 +149,17 @@ def _checkpoint_operation_rows(
 ) -> tuple[ContextMemoryRow, ...]:
     """Project direct operations plus a non-counted creation boundary."""
 
+    creation_atomize_uids = {
+        source_uid
+        for checkpoint in checkpoints
+        if checkpoint.get("command") == "init"
+        and isinstance(checkpoint.get("args"), Mapping)
+        and isinstance(
+            source_uid := checkpoint["args"].get("source_analysis_uid"),
+            str,
+        )
+        and source_uid
+    }
     rows: list[ContextMemoryRow] = []
     seen: set[str] = set()
     for checkpoint in checkpoints:
@@ -179,6 +190,16 @@ def _checkpoint_operation_rows(
                     style="report-neutral",
                 )
             )
+            continue
+        args = checkpoint.get("args")
+        if (
+            command == "atomize"
+            and isinstance(args, Mapping)
+            and args.get("analysis_uid") in creation_atomize_uids
+        ):
+            # Save-as Atomize persists a baseline init and the applied result
+            # separately. Their shared analysis UID proves one creation flow,
+            # so the Context overview folds both into [created] [atomize].
             continue
         identity = _checkpoint_operation_identity(checkpoint)
         if identity is None or identity in seen:

@@ -235,9 +235,13 @@ Expanded Context rows retain concise command badges such as `[undo]` and
 `[atomize]`. A durable `init` receipt is shown separately as the non-counted
 lifecycle boundary `[created]`; when that receipt carries Atomize's exact
 `source_analysis_uid`, it is rendered `[created] [atomize]`. An ordinary init
-shows only `[created]`. The browser never infers creation from the oldest
-retained checkpoint because Revert truncation and inherited histories can make
-that inference false.
+shows only `[created]`. A later Atomize checkpoint with the same
+`analysis_uid` is folded into that creation row rather than rendered twice;
+unrelated later Atomize operations remain separate. The correlated Atomize
+still contributes its operation identity to direct/descendant counts, while
+the creation boundary itself does not. The browser never infers creation from
+the oldest retained checkpoint because Revert truncation and inherited
+histories can make that inference false.
 
 Selecting a nonempty Context opens the common History workbench in restoration
 mode. Viewer shows the exact current-to-target direct-item impact. Enter on an

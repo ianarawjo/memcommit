@@ -3,8 +3,8 @@ Restored state recorded by: mem init
 Action detail: Initialized recovery Context before applying atomize                                                                                                                 
 Affected Context: task-1/recovery                                                                                                                                                   
 Affected content: 2 Memories removed                                                                                                                                                
-  - [73cfd681] Memory: "Keep this first recovery Memory."                                                                                                                           
-  - [30b315c9] Memory: "Remove this newer recovery Memory."                                                                                                                         
-Restored checkpoint: [a77b55bc] (2026-08-13 14:58)                                                                                                                                  
+  - [be6eb0ee] Memory: "Keep this first recovery Memory."                                                                                                                           
+  - [382a7456] Memory: "Remove this newer recovery Memory."                                                                                                                         
+Restored checkpoint: [fb133aa1] (2026-08-13 15:16)                                                                                                                                  
 Undo command: mem undo                                                                                                                                                              
-Exact recovery checkpoint: mem revert 122f83e8
+Exact recovery checkpoint: mem revert 536eccda

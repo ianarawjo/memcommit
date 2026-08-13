@@ -149,7 +149,7 @@ def test_checkpoint_rows_mark_proven_creation_without_counting_it_as_operation()
             "timestamp": "2026-08-13T11:39:00",
             "command": "atomize",
             "description": "Applied atomize",
-            "args": {},
+            "args": {"analysis_uid": "analysis-1"},
         },
         {
             "uid": "creation-checkpoint",
@@ -162,9 +162,32 @@ def test_checkpoint_rows_mark_proven_creation_without_counting_it_as_operation()
 
     rows = diff_browser._checkpoint_operation_rows(checkpoints)
 
-    assert [row.label for row in rows] == ["atomize", "created"]
-    assert rows[1].content.startswith("[atomize] 2026-08-13 11:38")
+    assert [row.label for row in rows] == ["created"]
+    assert rows[0].content.startswith("[atomize] 2026-08-13 11:38")
     assert diff_browser._checkpoint_operation_identity(checkpoints[1]) is None
+
+
+def test_checkpoint_rows_keep_unrelated_atomize_after_creation():
+    rows = diff_browser._checkpoint_operation_rows(
+        (
+            {
+                "uid": "later-atomize",
+                "timestamp": "2026-08-13T12:00:00",
+                "command": "atomize",
+                "description": "Applied another atomize",
+                "args": {"analysis_uid": "analysis-2"},
+            },
+            {
+                "uid": "creation-checkpoint",
+                "timestamp": "2026-08-13T11:38:00",
+                "command": "init",
+                "description": "Initialized output before applying atomize",
+                "args": {"source_analysis_uid": "analysis-1"},
+            },
+        )
+    )
+
+    assert [row.label for row in rows] == ["atomize", "created"]
 
 
 def test_checkpoint_rows_do_not_infer_creation_origin_from_oldest_entry():

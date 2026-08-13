@@ -28,7 +28,7 @@ read-only verification.
 | --- | --- | --- | --- |
 | `01-context-picker-empty-current.png` | Launch bare `mem revert` equivalent | `REVERT · SELECT A CONTEXT`; empty current Context is the initial tree row | None |
 | `02-empty-history-view.png` | `Enter` | Explicit `0/0` empty History view; no checkpoint can be applied | None |
-| `03-created-atomize-boundary.png` | `Backspace`, `Down`, `Right` | Expanded local Context shows `[add]`, `[atomize]`, and the non-counted `[created] [atomize]` lifecycle boundary | None |
+| `03-created-atomize-boundary.png` | `Backspace`, `Down`, `Right` | Expanded local Context folds its correlated creation-time Atomize into one `[created] [atomize]` row; the later `[add]` remains separate | None |
 | `04-recovery-checkpoints.png` | `Enter` | The selected Context opens with its three exact retained checkpoints | None |
 | `05-target-impact-preview.png` | `Down` × 2 | Init checkpoint is targeted; Viewer shows current-to-target removal impact | None |
 | `06-discard-newer-policy.png` | `Enter` | Exact target is checked and the default `DISCARD NEWER` history policy owns focus | None |
