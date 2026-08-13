@@ -9,8 +9,11 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.commands.find as find_command
 import memcommit.commands.query as query_command
+import memcommit.commands.rationale as rationale_command
 from memcommit.cli import app
 from memcommit.commands.granted_context import resolve_context_access
+from memcommit.commands.memory_picker import MemoryReportTargetSelection
+from memcommit.commands.memory_report_recents import MemoryReportSelectAction
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -327,6 +330,85 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
         "query": (expected, "campus-wiki", "campus-wiki"),
         "find": (expected, "campus-wiki", "campus-wiki"),
     }
+
+
+def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority, editable, _campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    observed: dict[str, object] = {}
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
+            candidate = payload["candidates"][0]
+            return json.dumps(
+                {
+                    "best_supported_reading": "The granted note is readable.",
+                    "contextual_flow": "The selected readable Context supports it.",
+                    "support_ids": [candidate["candidate_id"]],
+                    "unresolved": [],
+                }
+            )
+
+    def select_context(names, *, current, virtual_names, **kwargs):
+        observed["local"] = tuple(names)
+        observed["virtual"] = tuple(virtual_names)
+        observed["current"] = current
+        return "campus-wiki"
+
+    def select_memory(items, *, context_name, catalog_context_names, **kwargs):
+        observed["scope"] = tuple(catalog_context_names)
+        assert any(item.uid == editable.uid for item in items)
+        return MemoryReportTargetSelection(
+            root_context_name=context_name,
+            owner_context_name="campus-wiki",
+            memory_uid=editable.uid,
+            include_descendants=False,
+        )
+
+    monkeypatch.setattr(rationale_command, "interactive_report_terminal", lambda: True)
+    monkeypatch.setattr(
+        rationale_command,
+        "choose_memory_report_recent",
+        lambda *args, **kwargs: MemoryReportSelectAction(),
+    )
+    monkeypatch.setattr(
+        rationale_command,
+        "choose_memory_report_context",
+        select_context,
+    )
+    monkeypatch.setattr(
+        rationale_command,
+        "choose_memory_report_target",
+        select_memory,
+    )
+    monkeypatch.setattr(
+        rationale_command,
+        "connect_codex_chatgpt_provider",
+        Provider,
+    )
+    monkeypatch.setattr(
+        rationale_command,
+        "run_read_only_viewer",
+        lambda body, *, title: observed.update(viewer=(title, body)),
+    )
+
+    result = runner.invoke(app, ["rationale"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert observed["local"] == ("task-root",)
+    assert observed["virtual"] == ("campus-wiki", "campus-wiki/public")
+    assert observed["current"] == "task-root"
+    assert observed["scope"] == ("campus-wiki", "campus-wiki/public")
+    assert observed["viewer"][0] == "RATIONALE REPORT"
+    assert MemoryStore().current_context_name() == "task-root"
 
 
 def test_granted_read_allows_subtree_rationale_but_never_trace_history(

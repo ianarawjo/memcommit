@@ -55,6 +55,15 @@ traverse granted history. Rationale likewise uses only current Memories for a
 granted contributor; it never treats READ as permission to inspect that
 contributor's authority history.
 
+Bare Rationale labels its first target control `PROFILE`, so it uses
+`freeze_profile_readable_context_catalog`: an empty current Context is only the
+initial location, never the namespace boundary. The selector therefore keeps
+ordinary local Contexts and every valid READ-granted public Context visible.
+After one location is chosen, its exact/subtree Memory range uses that same
+frozen catalog; a granted selection retains its exact access and Grant receipt.
+An explicit `--context` remains intentionally narrower and starts directly in
+that Context's exact/subtree selector.
+
 ## Safety and limitations
 
 The catalog is a read view, not a cross-store transaction or a merged Context.

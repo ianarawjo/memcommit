@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃Rationale for [77a85fff]                                                                                                                                                         ^┃
+┃Context: notes/child [a273be9a]                                                                                                                                                   ┃
+┃Rationale scope: notes and readable descendants · 2 Context(s)                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃MEMORY                                                                                                                                                                            ┃
+┃  Retained historical wording                                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃RECORDED ORIGIN                                                                                                                                                                   ┃
+┃  CREATED via add at 2026-08-13 16:19                                                                                                                                             ┃
+┃  Checkpoint: c3428bfa  |  Evidence: RECORDED                                                                                                                                     ┃
+┃  Source occurrence: single item 1/1, original line 1                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃RECORDED RATIONALE                                                                                                                                                                ┃
+┃  No semantic creation or transformation rationale was recorded.                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃SAVED ANALYSIS — not a creation cause                                                                                                                                             ┃
+┃  (no current saved analysis for this Memory)                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃SAVED ATOMIZE ANALYSIS                                                                                                                                                            ┃
+┃  (no saved atomize analysis for this lineage)                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃UNAPPLIED PROPOSALS                                                                                                                                                               ┃
+┃  (none linked to this lineage)                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃CURRENT CONTEXT WINDOW — and readable descendants, deterministic fallback only                                                                                                    ┃
+┃  No semantic relationship is asserted by this list.                                                                                                                              ┃
+┃  [b86d94c7] notes/child · position 1                                                                                                                                             ┃
+┃      Final wording used by both reports                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃UNRESOLVED / UNRECORDED                                                                                                                                                           ┃
+┃  The author's intended meaning cannot be recovered from provenance alone.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ RATIONALE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

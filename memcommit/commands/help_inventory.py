@@ -399,9 +399,9 @@ COMMAND_FORMS = {
         "mem query --show-session [session_name] (show one saved transcript)",
     ),
     "rationale": (
-        "mem rationale (open recent Rationale targets or select a Memory)",
+        "mem rationale (open Recents or browse readable Contexts, then select a Memory)",
         "mem rationale [memory] (explain one current or historical Memory)",
-        "mem rationale --context [context] (open Recents; Memory selection starts there)",
+        "mem rationale --context [context] (start Memory selection in one readable Context)",
         "mem rationale [memory] --context [context] (explicit Context and Memory)",
         "mem rationale [memory] --recorded-only (skip inference and its cache)",
     ),
@@ -493,9 +493,9 @@ COMMAND_FORMS = {
         "mem translate [memory] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
-        "mem trace (open recent Trace targets or select a Memory)",
+        "mem trace (open Recents or browse local Contexts, then select a Memory)",
         "mem trace [memory] (shorthand for mem log --memory [memory])",
-        "mem trace --context [context] (open Recents; Memory selection starts there)",
+        "mem trace --context [context] (start Memory selection in one local Context)",
         "mem trace [memory] --context [context] (explicit Context and Memory)",
         "mem trace [memory] --plain (print instead of opening History explorer)",
     ),

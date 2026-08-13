@@ -1,8 +1,9 @@
 # Trace/Rationale on the task-1 participant study profile
 
-This ordered capture uses the current real study Context
+This ordered capture explicitly targets the real study Context
 `task-1/participant`, rather than the small deterministic fixture used by the
-shared-launcher regression set. The selected row is the first real Memory in
+shared-launcher regression set. It does not switch the Profile's global current
+Context. The selected row is the first real Memory in
 `task-1/participant/construction-updates/building-access` and begins with
 `Modify campus-wiki/building-access`.
 
@@ -17,8 +18,12 @@ separate `[historical]` badge.
 ## Reproduction frame
 
 - Command: `python docs/screenshots/memory-report-study-participant-20260813/capture.py`
+- Entry form: explicit `--context task-1/participant`, which intentionally
+  bypasses the new Profile/local location selector and records the scoped
+  exact/subtree target flow
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
-- Current Context: `task-1/participant`
+- Target Context: `task-1/participant`; the script records and preserves the
+  independently active global current Context
 - PTY: `180` columns × `52` rows; `TERM=xterm-256color`,
   `COLORTERM=truecolor`, and `NO_COLOR` unset
 - Provider boundary: Rationale uses `recorded-only`; neither path connects a

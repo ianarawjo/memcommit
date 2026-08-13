@@ -11,6 +11,7 @@ from memcommit.commands.granted_context import (
 from memcommit.commands.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
+    freeze_profile_readable_context_catalog,
 )
 from memcommit.context import Context, Memory
 from memcommit.derived_policy import authorize_combination
@@ -85,7 +86,45 @@ def load_rationale_scope(
         access,
         include_query_routes=False,
     )
-    root_name = access.display_name
+    return rationale_scope_from_catalog(
+        read_store,
+        access.display_name,
+        include_descendants=include_descendants,
+    )
+
+
+def freeze_rationale_profile_catalog(
+    active_store: MemoryStore,
+    operand: str | None,
+    *,
+    current_name: str | None,
+) -> ReadableContextCatalog:
+    """Freeze the full readable Profile namespace for bare target selection."""
+
+    access = resolve_context_access(
+        active_store,
+        operand,
+        current_name=current_name,
+        required_permission="READ",
+    )
+    return freeze_profile_readable_context_catalog(
+        active_store,
+        access,
+        include_query_routes=False,
+    )
+
+
+def rationale_scope_from_catalog(
+    read_store: ReadableContextCatalog,
+    root_name: str,
+    *,
+    include_descendants: bool,
+) -> RationaleScope:
+    """Project one exact/subtree scope from a command-frozen readable catalog."""
+
+    if type(include_descendants) is not bool:
+        raise TypeError("Rationale descendant scope must be a boolean.")
+    access = read_store.access_for(root_name)
     names = [
         name
         for name in read_store.list_context_names()
@@ -102,9 +141,7 @@ def load_rationale_scope(
         read_store=read_store,
         root_name=root_name,
         contexts=contexts,
-        context_accesses=tuple(
-            (name, read_store.access_for(name)) for name in names
-        ),
+        context_accesses=tuple((name, read_store.access_for(name)) for name in names),
     )
 
 
@@ -116,12 +153,14 @@ def authorize_rationale_inference(scope: RationaleScope) -> None:
         return
     domains = {
         (
-            "grant",
-            access.view.grant.uid,
-            access.view.grant.resource_uid,
+            (
+                "grant",
+                access.view.grant.uid,
+                access.view.grant.resource_uid,
+            )
+            if access.is_granted and access.view is not None
+            else ("local", str(access.store.store_dir), access.context_name)
         )
-        if access.is_granted and access.view is not None
-        else ("local", str(access.store.store_dir), access.context_name)
         for access in accesses
     }
     if len(domains) > 1:
@@ -146,9 +185,7 @@ def rationale_candidates(
                     status="CURRENT",
                 )
                 for position, memory in enumerate(
-                    item
-                    for item in context.iter_items()
-                    if isinstance(item, Memory)
+                    item for item in context.iter_items() if isinstance(item, Memory)
                 )
             )
         else:

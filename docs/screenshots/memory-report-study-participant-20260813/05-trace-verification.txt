@@ -1,1 +1,1 @@
-TRACE CLOSED · task-1/participant · READ ONLY · STUDY STORE UNCHANGED
+TRACE CLOSED · TARGET task-1/participant · CURRENT task-1/description-atomized · READ ONLY · STUDY STORE UNCHANGED

@@ -1,8 +1,10 @@
 # Shared Trace/Rationale launcher capture log
 
 This ordered evidence set records the common read-only launcher used by bare
-`mem trace` and `mem rationale`. Both operations begin with the same Context
-range control and the same Context/Memory tree. Each Memory row exposes the
+`mem trace` and `mem rationale`. Both operations begin with a Profile/local
+Context location selector even though the current Context is empty, then open
+the same Context range control and Context/Memory tree for the chosen nonempty
+location. Each Memory row exposes the
 number of distinct recorded operations retained for its Log/Trace lineage.
 The fixture also retains a removed Memory so both lifecycle forms are visible.
 The compact row uses separate `[UID][rN]` badges; the default current state is
@@ -15,9 +17,9 @@ The recorded PTY quantizes that configured color to xterm-256 color `180`.
 
 - Command: `python docs/screenshots/memory-report-shared-launcher-20260813/capture.py`
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
-- Profile/current Context: a capture-local store with current Context `demo`,
-  empty at the root, and current plus historical-only lineage entries under
-  `demo/child`
+- Profile/current Context: a capture-local store with current Context
+  `empty-current`; a separate `notes` root has current plus historical-only
+  lineage entries under `notes/child`
 - Fixture history: add `First wording`, edit to `Second wording`, then edit to
   `Final wording used by both reports`; the row therefore shows
   `[UID][r3]`. Add then remove `Retained historical wording`; its row shows
@@ -38,20 +40,25 @@ The recorded PTY quantizes that configured color to xterm-256 color `180`.
 
 | Image | Input since preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-trace-exact-entry.png` | Launch bare Trace | Shared `RANGE` frame has the blue heavy focus border on `THIS CONTEXT ONLY`; exact root has no Memory | None |
-| `02-trace-descendants.png` | `Right` | `INCLUDE DESCENDANTS` is selected inside the same focused frame and the child Memory becomes visible | None |
-| `03-trace-memory-focused.png` | `Tab`, `Down` × 3 | Focus moves through the common Surface controller to the retained-only row; its complete `[historical][UID][r2]` target uses the ordinary blue focus treatment while the current `[UID][r3]` row remains lavender | None |
-| `04-trace-result.png` | `Enter` | Trace opens the shared Log temporal `ITEMS + VIEWER` result for the retained historical UID | None |
-| `05-trace-verification.png` | `q` | Child reports the selected UID and unchanged store content | None |
-| `06-rationale-exact-entry.png` | Launch bare Rationale | The same shared framed launcher starts at exact range | None |
-| `07-rationale-descendants.png` | `Right` | The same descendant range exposes the same Memory | None |
-| `08-rationale-memory-focused.png` | `Tab`, `Down` × 3 | The same common target frame gives the historical row the ordinary blue focus treatment | None |
-| `09-rationale-result.png` | `Enter` | Rationale opens its complete common read-only Viewer report for the retained historical UID | None |
-| `10-rationale-verification.png` | `q` | Child reports the selected UID and unchanged store content | None |
+| `01-trace-context-entry.png` | Launch bare Trace | `TRACE · SELECT A CONTEXT · LOCAL CONTEXTS` opens on empty current `empty-current` | None |
+| `02-trace-context-target.png` | `Down` | `notes` is focused without changing global current Context | None |
+| `03-trace-exact-entry.png` | `Enter` | Scoped `RANGE` starts at `THIS CONTEXT ONLY`; exact `notes` root has no Memory | None |
+| `04-trace-descendants.png` | `Right` | `INCLUDE DESCENDANTS` reveals the child Memories | None |
+| `05-trace-memory-focused.png` | `Tab`, `Down` × 3 | The retained-only `[historical][UID][r2]` row is focused | None |
+| `06-trace-result.png` | `Enter` | Trace opens the shared Log temporal result | None |
+| `07-trace-verification.png` | `q` | Child reports `CURRENT empty-current` and unchanged store content | None |
+| `08-rationale-context-entry.png` | Launch bare Rationale | `RATIONALE · SELECT A CONTEXT · PROFILE` opens on the same empty current Context | None |
+| `09-rationale-context-target.png` | `Down` | `notes` is focused process-locally | None |
+| `10-rationale-exact-entry.png` | `Enter` | The same scoped target launcher starts at exact range | None |
+| `11-rationale-descendants.png` | `Right` | The descendant range exposes the child Memories | None |
+| `12-rationale-memory-focused.png` | `Tab`, `Down` × 3 | The same target frame focuses the historical row | None |
+| `13-rationale-result.png` | `Enter` | Rationale opens its complete read-only Viewer report | None |
+| `14-rationale-verification.png` | `q` | Child reports `CURRENT empty-current` and unchanged store content | None |
 
-The launcher reuses `build_focused_frame`, `build_tui_frame`, the service theme,
-and `SurfaceFocusController`; it does not define Trace- or Rationale-specific
-frame chrome. It controls target discovery only. Trace subsequently opens
+The location stage reuses the same Context selector as Log and Switch. The
+scoped launcher reuses `build_focused_frame`, `build_tui_frame`, the service
+theme, and `SurfaceFocusController`; it does not define Trace- or
+Rationale-specific frame chrome. It controls target discovery only. Trace subsequently opens
 the temporal History explorer, while Rationale opens its explanatory report;
 those result adapters remain intentionally different because their documents
 have different semantics.

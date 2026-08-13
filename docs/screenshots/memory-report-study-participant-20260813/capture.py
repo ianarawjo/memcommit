@@ -24,7 +24,9 @@ CURRENT = "task-1/participant"
 _BASE_PATH = (
     ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
 )
-_SPEC = importlib.util.spec_from_file_location("study_participant_capture_base", _BASE_PATH)
+_SPEC = importlib.util.spec_from_file_location(
+    "study_participant_capture_base", _BASE_PATH
+)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_BASE)
@@ -41,9 +43,7 @@ def _durable_study_digest() -> str:
     paths = [store_module.STATE_FILE]
     if store_module.CONTEXTS_DIR.exists():
         paths.extend(
-            path
-            for path in store_module.CONTEXTS_DIR.rglob("*")
-            if path.is_file()
+            path for path in store_module.CONTEXTS_DIR.rglob("*") if path.is_file()
         )
     digest = hashlib.sha256()
     for path in sorted(paths, key=lambda value: str(value)):
@@ -58,22 +58,18 @@ def _run_child(operation: str) -> None:
 
     store = MemoryStore(create=False)
     current = store.current_context_name()
-    if current != CURRENT:
-        raise RuntimeError(
-            f"Expected current Context {CURRENT!r}, found {current!r}."
-        )
     before = _durable_study_digest()
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     if operation == "trace":
-        trace.cmd()
+        trace.cmd(context_name=CURRENT)
     elif operation == "rationale":
-        rationale.cmd(recorded_only=True)
+        rationale.cmd(context_name=CURRENT, recorded_only=True)
     else:
         raise ValueError(f"Unknown operation: {operation}")
     if _durable_study_digest() != before:
         raise RuntimeError("Study Context data changed during read-only capture.")
     print(
-        f"{operation.upper()} CLOSED · {CURRENT} · "
+        f"{operation.upper()} CLOSED · TARGET {CURRENT} · CURRENT {current} · "
         "READ ONLY · STUDY STORE UNCHANGED"
     )
 

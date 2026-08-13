@@ -14,6 +14,7 @@ from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
+    choose_memory_report_context,
     choose_memory_report_target,
 )
 from memcommit.commands.memory_report_recents import (
@@ -42,11 +43,14 @@ from memcommit.rationale import (
 )
 from memcommit.rationale_scope import (
     authorize_rationale_inference,
+    freeze_rationale_profile_catalog,
     load_rationale_scope,
     rationale_candidates,
+    rationale_scope_from_catalog,
     rationale_trace,
     resolve_rationale_target,
 )
+from memcommit.context_targeting.catalog import grant_navigation_annotation
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
@@ -344,8 +348,7 @@ def render_rationale(
             typer.echo(f"  - {safe_terminal_text(unresolved)}")
     else:
         typer.secho(
-            f"\nCURRENT CONTEXT WINDOW — {scope_reach}, "
-            "deterministic fallback only",
+            f"\nCURRENT CONTEXT WINDOW — {scope_reach}, " "deterministic fallback only",
             bold=True,
         )
         typer.secho(
@@ -395,7 +398,8 @@ def cmd(
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit to enter the interactive Memory picker"
+                "direct Memory; omit in a terminal to browse readable "
+                "Contexts and select a Memory"
             )
         ),
     ] = None,
@@ -404,7 +408,10 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help="Context to explain (defaults to current)",
+            help=(
+                "Start Memory selection in this readable Context instead of "
+                "the Profile Context browser"
+            ),
         ),
     ] = None,
     recorded_only: Annotated[
@@ -443,7 +450,8 @@ def cmd(
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
             raise RationaleError("JSON output requires an explicit Memory UID.")
-        if selector is None and interactive_report_terminal():
+        explicit_context = context_name is not None
+        if selector is None and not explicit_context and interactive_report_terminal():
             launch = choose_memory_report_recent(store, operation="rationale")
             if launch is None:
                 typer.echo("Rationale cancelled.")
@@ -459,47 +467,124 @@ def cmd(
             raise RationaleError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
+        selected_from_profile = False
         if selector is None:
-            picker_scope = load_rationale_scope(
+            profile_catalog = (
+                None
+                if explicit_context
+                else freeze_rationale_profile_catalog(
+                    store,
+                    None,
+                    current_name=context_snapshot.current_name,
+                )
+            )
+            location_cursor = name
+            while True:
+                picker_root = context_name
+                if profile_catalog is not None:
+                    catalog_names = tuple(profile_catalog.list_context_names())
+                    local_names = tuple(
+                        candidate_name
+                        for candidate_name in catalog_names
+                        if not profile_catalog.access_for(candidate_name).is_granted
+                    )
+                    granted_names = tuple(
+                        candidate_name
+                        for candidate_name in catalog_names
+                        if profile_catalog.access_for(candidate_name).is_granted
+                    )
+                    granted_annotations = {}
+                    for candidate_name in granted_names:
+                        access = profile_catalog.access_for(candidate_name)
+                        if access.view is None:
+                            raise RationaleError(
+                                "Readable granted Context lost its Grant receipt."
+                            )
+                        granted_annotations[candidate_name] = (
+                            grant_navigation_annotation(
+                                access.view.grant.permissions,
+                            )
+                        )
+                    picker_root = choose_memory_report_context(
+                        local_names,
+                        current=location_cursor,
+                        operation="rationale",
+                        virtual_names=granted_names,
+                        virtual_annotations=granted_annotations,
+                    )
+                    if picker_root is None:
+                        typer.echo("Rationale cancelled.")
+                        return
+                    location_cursor = picker_root
+                    picker_scope = rationale_scope_from_catalog(
+                        profile_catalog,
+                        picker_root,
+                        include_descendants=True,
+                    )
+                else:
+                    picker_scope = load_rationale_scope(
+                        store,
+                        picker_root,
+                        current_name=context_snapshot.current_name,
+                        # Freeze every eligible row before the shared RANGE
+                        # control narrows or broadens selectable Memories.
+                        include_descendants=True,
+                    )
+                candidates, owners = rationale_candidates(picker_scope)
+                scope_names = tuple(context.name for context in picker_scope.contexts)
+                selected = choose_memory_report_target(
+                    tuple(
+                        ScopedMemoryPickerItem(
+                            context_name=owners[candidate.uid][0].name,
+                            uid=candidate.uid,
+                            content=candidate.content,
+                            status=candidate.status,
+                            catalog_context_names=scope_names,
+                            change_count=candidate.change_count,
+                        )
+                        for candidate in candidates
+                    ),
+                    context_name=picker_scope.root_name,
+                    operation="rationale",
+                    catalog_context_names=scope_names,
+                    initial_include_descendants=False,
+                )
+                if selected is None:
+                    if profile_catalog is not None:
+                        # Empty Contexts remain browsable locations. Backing
+                        # out returns to the frozen Profile Context selector.
+                        continue
+                    typer.echo("Rationale cancelled.")
+                    return
+                context_name = selected.root_context_name
+                selector = selected.memory_uid
+                include_descendants = selected.include_descendants
+                selected_from_profile = profile_catalog is not None
+                break
+            # Do not connect the inference provider until an exact Memory has
+            # been chosen. Re-read live state after both full-screen pickers.
+        if selected_from_profile:
+            # Revalidate through the same Profile-wide namespace used by the
+            # picker.  Re-anchoring a granted target to its grant-only catalog
+            # here could silently drop local or separately granted lexical
+            # contributors that were visible in the reviewed range.
+            refreshed_profile_catalog = freeze_rationale_profile_catalog(
                 store,
                 context_name,
                 current_name=context_snapshot.current_name,
-                # Freeze every eligible row before the shared RANGE control
-                # narrows or broadens what can actually be selected.
-                include_descendants=True,
             )
-            candidates, owners = rationale_candidates(picker_scope)
-            selected = choose_memory_report_target(
-                tuple(
-                    ScopedMemoryPickerItem(
-                        context_name=owners[candidate.uid][0].name,
-                        uid=candidate.uid,
-                        content=candidate.content,
-                        status=candidate.status,
-                        catalog_context_names=tuple(
-                            context.name for context in picker_scope.contexts
-                        ),
-                        change_count=candidate.change_count,
-                    )
-                    for candidate in candidates
-                ),
-                context_name=picker_scope.root_name,
-                operation="rationale",
-                initial_include_descendants=False,
+            scope = rationale_scope_from_catalog(
+                refreshed_profile_catalog,
+                context_name,
+                include_descendants=include_descendants,
             )
-            if selected is None:
-                typer.echo("Rationale cancelled.")
-                return
-            selector = selected.memory_uid
-            include_descendants = selected.include_descendants
-            # Do not connect the inference provider until an exact Memory has
-            # been chosen. Re-read live state after the full-screen picker.
-        scope = load_rationale_scope(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-            include_descendants=include_descendants,
-        )
+        else:
+            scope = load_rationale_scope(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                include_descendants=include_descendants,
+            )
         target = resolve_rationale_target(scope, selector)
         if target.access.is_granted and recorded_only:
             raise RationaleError(

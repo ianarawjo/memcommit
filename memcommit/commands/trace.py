@@ -16,6 +16,7 @@ from memcommit.commands.memory_history import (
 )
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
+    choose_memory_report_context,
     choose_memory_report_target,
 )
 from memcommit.commands.memory_report_recents import (
@@ -52,6 +53,7 @@ _EVIDENCE_COLORS = {
     "INFERRED": typer.colors.YELLOW,
     "UNRECORDED": typer.colors.RED,
 }
+
 
 def _render_content(prefix: str, state: MemoryState, *, verbose: bool) -> None:
     typer.secho(f"  {prefix} [{_uid(state.uid, verbose)}]", bold=True)
@@ -324,7 +326,8 @@ def cmd(
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit to enter the interactive Memory picker"
+                "direct Memory; omit in a terminal to browse local Contexts "
+                "and select a Memory"
             )
         ),
     ] = None,
@@ -333,7 +336,10 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help="Context whose retained history to inspect (defaults to current)",
+            help=(
+                "Start Memory selection in this Context instead of the "
+                "local Context browser"
+            ),
         ),
     ] = None,
     verbose: Annotated[
@@ -362,7 +368,8 @@ def cmd(
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
             raise ProvenanceError("JSON output requires an explicit Memory UID.")
-        if selector is None and interactive_report_terminal():
+        explicit_context = context_name is not None
+        if selector is None and not explicit_context and interactive_report_terminal():
             launch = choose_memory_report_recent(store, operation="trace")
             if launch is None:
                 typer.echo("Trace cancelled.")
@@ -378,42 +385,66 @@ def cmd(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
         if selector is None:
-            history_scope = load_retained_history_scope(
-                store,
-                context_locator=context_name,
-                current_name=context_snapshot.current_name,
-                # The shared range control starts narrow but must know every
-                # eligible descendant before the person broadens it.
-                include_descendants=True,
-            )
-            candidate_items = tuple(
-                ScopedMemoryPickerItem(
-                    context_name=context.display_name,
-                    uid=candidate.uid,
-                    content=candidate.content,
-                    status=candidate.status,
-                    catalog_context_names=tuple(
-                        item.display_name for item in history_scope
-                    ),
-                    change_count=candidate.change_count,
+            location_cursor = name
+            while True:
+                # Explicit relative locators were resolved against the command's
+                # frozen current snapshot above.  Keep that canonical result for
+                # every subsequent load and selector identity.
+                picker_root = name
+                if not explicit_context:
+                    picker_root = choose_memory_report_context(
+                        tuple(store.list_context_names()),
+                        current=location_cursor,
+                        operation="trace",
+                    )
+                    if picker_root is None:
+                        typer.echo("Trace cancelled.")
+                        return
+                    location_cursor = picker_root
+                history_scope = load_retained_history_scope(
+                    store,
+                    context_locator=picker_root,
+                    current_name=context_snapshot.current_name,
+                    # Freeze every descendant before the shared RANGE control
+                    # narrows or broadens what can actually be selected.
+                    include_descendants=True,
                 )
-                for context in history_scope
-                for candidate in collect_trace_candidates(store, context.context)
-            )
-            selected = choose_memory_report_target(
-                candidate_items,
-                context_name=name,
-                operation="trace",
-                initial_include_descendants=False,
-            )
-            if selected is None:
-                typer.echo("Trace cancelled.")
-                return
-            selector = selected.memory_uid
-            context_name = selected.owner_context_name
-            # The picker is read-only, but another process may have changed the
-            # Context while it was open. Re-read before resolving the exact UID
-            # so the rendered report never mixes old live state with new history.
+                catalog_names = tuple(item.display_name for item in history_scope)
+                candidate_items = tuple(
+                    ScopedMemoryPickerItem(
+                        context_name=context.display_name,
+                        uid=candidate.uid,
+                        content=candidate.content,
+                        status=candidate.status,
+                        catalog_context_names=catalog_names,
+                        change_count=candidate.change_count,
+                    )
+                    for context in history_scope
+                    for candidate in collect_trace_candidates(
+                        store,
+                        context.context,
+                    )
+                )
+                selected = choose_memory_report_target(
+                    candidate_items,
+                    context_name=picker_root,
+                    operation="trace",
+                    catalog_context_names=catalog_names,
+                    initial_include_descendants=False,
+                )
+                if selected is None:
+                    if not explicit_context:
+                        # An empty or unwanted location returns to the same
+                        # Profile-wide Context selector used by Log.
+                        continue
+                    typer.echo("Trace cancelled.")
+                    return
+                selector = selected.memory_uid
+                context_name = selected.owner_context_name
+                break
+            # The pickers are read-only, but another process may have changed
+            # the Context while they were open. Re-read before resolving the
+            # exact UID so the report never mixes old live state with new history.
         history_context = load_retained_history_context(
             store,
             context_locator=context_name,

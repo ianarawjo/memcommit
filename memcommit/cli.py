@@ -284,16 +284,15 @@ app.command(
 app.command(
     "trace",
     help=(
-        "Memory-focused shorthand for Log history: open recent targets or "
-        "trace one retained lineage in the shared History explorer."
+        "Open recent targets or browse local Contexts, including empty ones, "
+        "then trace one retained Memory lineage in Log's History explorer."
     ),
 )(trace.cmd)
 app.command(
     "rationale",
     help=(
-        "Enter interactive recent reports or the Memory picker when no Memory "
-        "is given, or show recorded evidence and optional labeled contextual "
-        "inference; no Context changes."
+        "Open recent targets or browse readable Contexts, including empty "
+        "ones, then explain one Memory without changing current Context state."
     ),
 )(rationale.cmd)
 app.command(
