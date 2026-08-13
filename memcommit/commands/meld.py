@@ -72,8 +72,8 @@ from memcommit.meld_provider import (
     assess_meld_turn,
     repair_meld_assessment,
 )
-from memcommit.commands.tui_primitives import safe_terminal_text
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )

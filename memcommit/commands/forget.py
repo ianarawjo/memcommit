@@ -20,7 +20,7 @@ from memcommit.commands.granted_context import (
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.forget_resolution_adapter import (
     ForgetResolutionWorkbenchAdapter,

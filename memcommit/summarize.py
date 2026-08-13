@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.context import Context, Memory
@@ -69,7 +70,8 @@ class SummarySource:
 class SummaryFrame:
     context_uid: str
     context_name: str
-    recursive: bool
+    include_descendants: bool
+    follow_embeds: bool
     digest: str
     sources: tuple[SummarySource, ...]
 
@@ -85,8 +87,19 @@ def _strict_json_object(
     return result
 
 
-def collect_summary_frame(ctx: Context, *, recursive: bool = True) -> SummaryFrame:
-    """Freeze ordinary Memory evidence from one already authorized Context graph."""
+def collect_summary_scope(
+    contexts: Sequence[Context],
+    *,
+    root_context_uid: str,
+    root_context_name: str,
+    include_descendants: bool,
+    follow_embeds: bool,
+) -> SummaryFrame:
+    """Freeze ordinary Memory evidence from authorized lexical roots and embeds."""
+
+    roots = tuple(contexts)
+    if not roots or roots[0].uid != root_context_uid:
+        raise ValueError("Summary scope must begin with its selected root Context.")
     sources: list[SummarySource] = []
     visited_contexts: set[str] = set()
 
@@ -105,14 +118,16 @@ def collect_summary_frame(ctx: Context, *, recursive: bool = True) -> SummaryFra
                         content=item.content,
                     )
                 )
-            elif isinstance(item, Context) and recursive:
+            elif isinstance(item, Context) and follow_embeds:
                 visit(item)
 
-    visit(ctx)
+    for context in roots:
+        visit(context)
     digest_payload = {
-        "context_uid": ctx.uid,
-        "context_name": ctx.name,
-        "recursive": recursive,
+        "context_uid": root_context_uid,
+        "context_name": root_context_name,
+        "include_descendants": include_descendants,
+        "follow_embeds": follow_embeds,
         "sources": [
             {
                 "context_uid": source.context_uid,
@@ -130,11 +145,28 @@ def collect_summary_frame(ctx: Context, *, recursive: bool = True) -> SummaryFra
         sort_keys=True,
     ).encode("utf-8")
     return SummaryFrame(
-        context_uid=ctx.uid,
-        context_name=ctx.name,
-        recursive=recursive,
+        context_uid=root_context_uid,
+        context_name=root_context_name,
+        include_descendants=include_descendants,
+        follow_embeds=follow_embeds,
         digest=hashlib.sha256(encoded).hexdigest(),
         sources=tuple(sources),
+    )
+
+
+def collect_summary_frame(
+    ctx: Context,
+    *,
+    follow_embeds: bool = False,
+) -> SummaryFrame:
+    """Freeze one exact Context, optionally following its embedded graph."""
+
+    return collect_summary_scope(
+        (ctx,),
+        root_context_uid=ctx.uid,
+        root_context_name=ctx.name,
+        include_descendants=False,
+        follow_embeds=follow_embeds,
     )
 
 
@@ -142,7 +174,8 @@ def _prompt(frame: SummaryFrame) -> str:
     payload = {
         "context": {
             "name": frame.context_name,
-            "recursive": frame.recursive,
+            "include_descendants": frame.include_descendants,
+            "follow_embeds": frame.follow_embeds,
         },
         "memories": [
             {

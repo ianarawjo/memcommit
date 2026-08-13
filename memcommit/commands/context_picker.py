@@ -17,14 +17,14 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.commands.tui_primitives import (
+from memcommit.commands.tui_primitives import navigable_tree_row_prefix
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.scrollable_pane import WrappedScrollbarMargin
+from memcommit.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
-    SEMANTIC_VIEWER_STYLE,
-    WrappedScrollbarMargin,
     bind_case_insensitive_key,
-    display_escape_text,
-    navigable_tree_row_prefix,
 )
+from memcommit.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_targeting.tui.tree import (
     ContextTree,

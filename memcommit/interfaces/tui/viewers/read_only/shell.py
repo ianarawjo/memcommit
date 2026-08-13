@@ -1,8 +1,6 @@
-"""Common full-screen wrapper for already-rendered read-only reports."""
+"""Full-screen wrapper for already-rendered read-only reports."""
 
 from __future__ import annotations
-
-import sys
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
@@ -12,22 +10,28 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.commands.tui_primitives import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
-    bind_case_insensitive_key,
     bind_focused_frame_style,
-    build_scrollable_text_pane,
     build_tui_frame,
+)
+from memcommit.interfaces.tui.components.scrollable_pane import (
+    build_scrollable_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
+)
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
 )
 
 
 def interactive_report_terminal() -> bool:
     """Return whether a report may replace stdout with a full-screen Viewer."""
-    return sys.stdin.isatty() and sys.stdout.isatty()
+
+    return is_interactive_terminal()
 
 
 def run_read_only_viewer(
@@ -39,6 +43,7 @@ def run_read_only_viewer(
     require_tty: bool = True,
 ) -> None:
     """Show report text in the shared framed, wrapped, scrollable Viewer."""
+
     if require_tty and not interactive_report_terminal():
         raise ValueError("Interactive report Viewer requires a terminal.")
 
@@ -90,10 +95,7 @@ def run_read_only_viewer(
 
     app: Application[None] = Application(
         layout=Layout(
-            build_tui_frame(
-                TuiRegion(pane.container),
-                TuiRegion(footer),
-            ),
+            build_tui_frame(TuiRegion(pane.container), TuiRegion(footer)),
             focused_element=pane.text_area,
         ),
         key_bindings=bindings,

@@ -33,7 +33,7 @@ from memcommit.commands.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.context import Context
 from memcommit.derived_policy import authorize_analysis_save
 from memcommit.findings import FindingsError, FindingsProvider

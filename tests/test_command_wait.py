@@ -17,7 +17,9 @@ from memcommit.commands.command_wait import (
 )
 from memcommit.commands.context_picker import ContextMemoryRow
 from memcommit.commands.help_inventory import CommandEntry
-from memcommit.commands.tui_primitives import ScrollableFormattedTextPane
+from memcommit.interfaces.tui.components.scrollable_pane import (
+    ScrollableFormattedTextPane,
+)
 from memcommit.profile_config import ProfileEntry
 from memcommit.store import MemoryStore
 from memcommit.study_action_log import (

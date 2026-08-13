@@ -1,50 +1,52 @@
 """Render the shared understanding-summary unit for one Context."""
+
 from __future__ import annotations
 
-from typing import Annotated, Optional
+from contextlib import contextmanager
+from typing import Annotated, Iterator, Optional
 
 import typer
 
+from memcommit.bootstrap import build_summarize_console_runner
+from memcommit.clipboard import ClipboardError, write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
-    GrantedReadStore,
-    freeze_granted_context_binding,
-    resolve_context_access,
-    revalidate_granted_context_binding,
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_context_traversal,
+    resolve_scope_preset,
 )
-from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.commands.understanding_render import understanding_lines
+from memcommit.interfaces.console import (
+    ConsoleModeError,
+    SystemTerminalCapabilities,
+    resolve_console_mode,
+)
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.understanding import understanding_lines
 from memcommit.profile_config import ProfileConfigError
-from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.profiles import ProfileError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore
-from memcommit.summarize import (
-    SummarizeError,
-    SummaryFrame,
-    collect_summary_frame,
-    summarize_frame,
-)
+from memcommit.summarize import SummarizeError, SummarizeProvider
+from memcommit.summarize_application import SummarizeRequest
+from memcommit.summarize_runtime import run_summarize_with_store
 
 
-def _load_frame(access, *, recursive: bool, registry=None) -> SummaryFrame:
-    if access.is_granted:
-        store = GrantedReadStore(access, registry=registry)
-        context = (
-            store.load(access.display_name)
-            if recursive
-            else store.load_direct(access.display_name)
-        )
-    else:
-        context = (
-            access.store.load(access.context_name)
-            if recursive
-            else access.store.load_direct(access.context_name)
-        )
-    return collect_summary_frame(context, recursive=recursive)
+@contextmanager
+def _provider_session() -> Iterator[SummarizeProvider]:
+    """Keep terminal progress outside the application/provider contracts."""
+
+    with CommandProgress(
+        "SUMMARIZE",
+        "connecting provider",
+        total=2,
+    ) as progress:
+        provider = connect_codex_chatgpt_provider()
+        progress.update("summarizing memories", step=2)
+        yield provider
 
 
 def cmd(
@@ -60,73 +62,79 @@ def cmd(
     direct: Annotated[
         bool,
         typer.Option(
+            "-d",
             "--direct",
-            help="Summarize only directly owned ordinary Memories",
+            help="Summarize only directly owned Memories in the selected Context",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help=("Include readable lexical descendants and follow embedded Contexts"),
+        ),
+    ] = False,
+    copy_result: Annotated[
+        bool,
+        typer.Option(
+            "--copy",
+            help=(
+                "Copy the verified WHAT MEM UNDERSTOOD document as plain "
+                "text without creating a structured mutation stage"
+            ),
+        ),
+    ] = False,
+    plain: Annotated[
+        bool,
+        typer.Option(
+            "--plain",
+            help="Print the result instead of opening the interactive Viewer",
+        ),
+    ] = False,
+    tui: Annotated[
+        bool,
+        typer.Option(
+            "--tui",
+            help="Require the interactive result Viewer",
         ),
     ] = False,
 ) -> None:
     """Summarize what Mem understands; never change or checkpoint a Context."""
-    recursive = not direct
     try:
-        store = MemoryStore(create=False)
-        snapshot = ContextOperandSnapshot.capture(store)
-        with authority_grant_snapshot_lock() as registry:
-            access = resolve_context_access(
-                store,
-                context_name,
-                current_name=snapshot.current_name,
-                required_permission="READ",
-                registry=registry,
-            )
-            binding = (
-                freeze_granted_context_binding(access)
-                if access.is_granted
-                else None
-            )
-            frame = _load_frame(
-                access,
-                recursive=recursive,
-                registry=registry,
-            )
-        if frame.sources:
-            with CommandProgress(
-                "SUMMARIZE",
-                "connecting provider",
-                total=2,
-            ) as progress:
-                provider = connect_codex_chatgpt_provider()
-                progress.update("summarizing memories", step=2)
-                summary = summarize_frame(frame, provider)
-        else:
-            summary = summarize_frame(frame, _UnavailableProvider())
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        traversal = resolve_context_traversal(preset=preset)
+        mode = resolve_console_mode(plain=plain, tui=tui)
 
-        if binding is not None:
-            with authority_grant_snapshot_lock() as registry:
-                current_access = revalidate_granted_context_binding(
-                    binding,
-                    registry=registry,
-                )
-                current_frame = _load_frame(
-                    current_access,
-                    recursive=recursive,
-                    registry=registry,
-                )
-        else:
-            current_access = resolve_context_access(
-                store,
-                frame.context_name,
-                current_name=snapshot.current_name,
-                required_permission="READ",
+        def execute(request: SummarizeRequest):
+            # Route validation happens before opening durable or semantic
+            # infrastructure, so a forced TUI cannot partially execute when
+            # no terminal is available.
+            store = MemoryStore(create=False)
+            snapshot = ContextOperandSnapshot.capture(store)
+            return run_summarize_with_store(
+                request,
+                store=store,
+                current_context_name=snapshot.current_name,
+                provider_session_factory=_provider_session,
             )
-            current_frame = _load_frame(
-                current_access,
-                recursive=recursive,
-            )
-        if current_frame.digest != frame.digest:
-            raise SummarizeError(
-                "The selected Context changed while summarization was running; "
-                "no summary was published."
-            )
+
+        runner = build_summarize_console_runner(
+            execute=execute,
+            terminal=SystemTerminalCapabilities(),
+        )
+        result = runner.run(
+            SummarizeRequest(
+                context_locator=context_name,
+                include_descendants=traversal.include_descendants,
+                follow_embeds=traversal.follow_embeds,
+            ),
+            mode=mode,
+        )
     except (
         FileNotFoundError,
         OSError,
@@ -135,6 +143,7 @@ def cmd(
         QueryProviderError,
         RuntimeError,
         SummarizeError,
+        ConsoleModeError,
         ValueError,
     ) as error:
         typer.secho(
@@ -144,18 +153,21 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    typer.secho(
-        "SUMMARY · " + display_escape_text(frame.context_name),
-        bold=True,
-    )
-    typer.echo("STATUS · READ-ONLY · " + ("RECURSIVE" if recursive else "DIRECT"))
-    typer.echo()
-    for line in understanding_lines(summary):
-        typer.echo(line)
-
-
-class _UnavailableProvider:
-    """Prove that an empty frame never connects to a semantic provider."""
-
-    def complete(self, *args, **kwargs):
-        raise AssertionError("An empty summary frame must not call a provider.")
+    if copy_result:
+        rendered_understanding = understanding_lines(result.understanding)
+        clipboard_text = "\n".join(rendered_understanding)
+        try:
+            write_system_clipboard(clipboard_text)
+        except ClipboardError as error:
+            typer.secho(
+                f"Copy error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        typer.secho(
+            "Copied WHAT MEM UNDERSTOOD as plain text; no structured "
+            "clipboard stage was created.",
+            fg=typer.colors.GREEN,
+            err=True,
+        )

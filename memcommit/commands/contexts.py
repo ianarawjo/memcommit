@@ -1,7 +1,7 @@
 import typer
 
 from memcommit.commands.switch import _granted_picker_views
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore

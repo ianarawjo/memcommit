@@ -39,22 +39,24 @@ from memcommit.commands.query_execution import (
     OrdinaryQueryResponse,
 )
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.surface_focus import (
+from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+    dispatch_tui_back,
+)
+from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
-    dispatch_tui_back,
     focused_control_style,
-    require_interactive_terminal,
-    safe_terminal_text,
 )
 from memcommit.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,

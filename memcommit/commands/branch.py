@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name

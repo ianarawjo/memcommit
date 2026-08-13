@@ -6,7 +6,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import TypeVar
 
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 
 
 T = TypeVar("T")

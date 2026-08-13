@@ -15,7 +15,7 @@ import time
 from types import TracebackType
 from typing import TextIO, TypeVar
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 
 
 BUSY_FRAMES = (".", "..", "…")

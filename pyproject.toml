@@ -18,14 +18,8 @@ dependencies = [
 [project.scripts]
 mem = "memcommit.cli:app"
 
-[tool.setuptools]
-packages = [
-  "memcommit",
-  "memcommit.commands",
-  "memcommit.semantic",
-  "memcommit.source_projection",
-  "memcommit.eval",
-]
+[tool.setuptools.packages.find]
+include = ["memcommit*"]
 
 [tool.setuptools.package-data]
 "memcommit" = ["assets/*.ttf", "assets/*-OFL.txt"]

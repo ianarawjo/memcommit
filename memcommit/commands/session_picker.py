@@ -32,12 +32,10 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.commands.tui_primitives import (
-    bind_case_insensitive_key,
-    display_escape_text,
-    horizontal_rule,
-)
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import horizontal_rule
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.text_layout import (
     AdaptiveColumn,
     allocate_adaptive_columns,
     elide_terminal_text,

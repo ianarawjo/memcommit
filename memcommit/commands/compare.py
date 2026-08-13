@@ -49,12 +49,12 @@ from memcommit.commands.command_wait import (
 from memcommit.commands.endpoint_setup_flows import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
-from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.commands.understanding_render import understanding_lines
+from memcommit.interfaces.understanding import understanding_lines
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

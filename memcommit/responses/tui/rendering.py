@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.commands.semantic_viewer import semantic_viewer_block_fragments
-from memcommit.commands.tui_primitives import safe_terminal_text
-from memcommit.commands.tui_text_layout import wrap_terminal_text
+from memcommit.interfaces.tui.viewers.semantic import semantic_viewer_block_fragments
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.text_layout import wrap_terminal_text
 from memcommit.responses.model import ResponseDraft, ResponseTarget
 from memcommit.responses.state import ResponseFrameState
 from memcommit.selection.tui import render_vertical_choice_rows

@@ -19,7 +19,7 @@ from memcommit.commands.quality_find_workbench import (
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,

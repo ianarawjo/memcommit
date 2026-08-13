@@ -119,6 +119,24 @@ considered sufficient design history.
   routing boundaries, Qwen evaluation, and the remaining durable provenance
   migration.
 
+## Distribution and application-boundary plan
+
+- [`distribution-boundary-and-architecture-understanding-plan.md`](distribution-boundary-and-architecture-understanding-plan.md)
+  records the evidence-led distribution, public-interface, application,
+  domain, infrastructure, configuration, provider-security, and incremental
+  vertical-slice plan.
+- [`mem-summarize-design-rationale.md`](mem-summarize-design-rationale.md)
+  defines the read-only Summarize semantic contract and shared understanding
+  unit.
+- [`summarize-application-boundary-matrix.md`](summarize-application-boundary-matrix.md)
+  records the first verified internal TUI-independent use case plus its plain
+  and TUI console adapters, callable and provider-security matrices,
+  compatibility evidence, and remaining public API gates.
+- [`tui-component-architecture-design-rationale.md`](tui-component-architecture-design-rationale.md)
+  records the interface-owned frame, focus, scrollable-pane, and Viewer
+  hierarchy, the no-facade consumer migration, Summarize routing contract,
+  wheel check, and ordered PTY evidence.
+
 ## Semantic evaluation harness
 
 - [`semantic-eval-harness-design-rationale.md`](semantic-eval-harness-design-rationale.md)

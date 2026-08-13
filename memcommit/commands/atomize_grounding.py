@@ -26,7 +26,7 @@ from memcommit.atomize_workbench import (
 )
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.review_shell import visible_ordinal_index
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore

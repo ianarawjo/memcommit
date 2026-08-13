@@ -16,21 +16,21 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
-    display_escape_text,
 )
-from memcommit.commands.semantic_viewer import (
+from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerController,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     live_window_content_width,
     single_line_terminal_text,

@@ -33,7 +33,7 @@ from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

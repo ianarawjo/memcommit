@@ -10,7 +10,7 @@ from memcommit.commands.granted_context import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.context import (
     AutoCheckpoint,
     Context,

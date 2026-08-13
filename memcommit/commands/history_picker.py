@@ -28,24 +28,26 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.widgets import Frame
 
-from memcommit.commands.tui_primitives import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
-    display_escape_text,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.commands.surface_focus import (
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+)
+from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.tui.core.text_layout import (
     AdaptiveColumn,
     allocate_adaptive_columns,
     elide_terminal_text,

@@ -26,6 +26,8 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import create_authority_grant, update_authority_grant
 from memcommit.store import MemoryStore
+from memcommit.summarize_application import SummarizeRequest
+from memcommit.summarize_runtime import execute_summarize
 
 
 runner = CliRunner(mix_stderr=False)
@@ -168,6 +170,83 @@ def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
         "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
         in detailed.output
     )
+
+
+def test_summarize_preserves_granted_read_projection_and_binding_freshness(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority, _editable, campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    payloads: list[dict[str, object]] = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(prompt.split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1])
+            payloads.append(payload)
+            memories = payload["memories"]
+            assert isinstance(memories, list)
+            return json.dumps(
+                {
+                    "text": "The readable campus notes retain public access rules.",
+                    "source_ids": [item["source_id"] for item in memories],
+                }
+            )
+
+    monkeypatch.setattr(
+        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        Provider,
+    )
+
+    direct = execute_summarize(
+        SummarizeRequest(
+            context_locator="campus-wiki",
+            include_descendants=True,
+            follow_embeds=True,
+        ),
+        store=MemoryStore(),
+        provider_factory=Provider,
+    )
+
+    visible = runner.invoke(app, ["summarize", "campus-wiki", "-r"])
+
+    assert direct.context_name == "campus-wiki"
+    assert direct.source_count == 2
+    assert visible.exit_code == 0, visible.output
+    assert direct.understanding.text in visible.output
+    assert payloads[0] == payloads[1]
+    for payload in payloads:
+        encoded = json.dumps(payload, ensure_ascii=False)
+        assert PUBLIC in encoded
+        assert SECRET not in encoded
+
+    class RevisionChangingProvider(Provider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            response = super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+            update_authority_grant(
+                campus_grant.uid,
+                permissions=("READ", "CREATE", "UPDATE"),
+            )
+            return response
+
+    monkeypatch.setattr(
+        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        RevisionChangingProvider,
+    )
+
+    stale = runner.invoke(app, ["summarize", "campus-wiki", "-r"])
+
+    assert stale.exit_code == 1
+    assert "authority grant changed" in stale.stderr.casefold()
+    assert "WHAT MEM UNDERSTOOD" not in stale.stdout
 
 
 def test_profile_readable_catalog_stays_profile_wide_from_a_granted_current_view(

@@ -9,7 +9,7 @@ from typing import Any
 import typer
 
 from memcommit.command_history import CommandRestoreResult, ContextCommandUnit
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.context import Checkpoint
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label

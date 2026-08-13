@@ -20,15 +20,20 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.commands.tui_primitives import (
-    MEMCOMMIT_TUI_STYLE,
-    NavigationAccelerator,
-    bind_case_insensitive_key,
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import (
     bind_focused_frame_style,
-    display_escape_text,
     horizontal_rule,
 )
-from memcommit.commands.surface_focus import FocusSurface, SurfaceFocusController
+from memcommit.interfaces.tui.core.keybindings import (
+    NavigationAccelerator,
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.components.focus import (
+    FocusSurface,
+    SurfaceFocusController,
+)
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -457,10 +462,11 @@ COMMAND_FORMS = {
         "mem status --branch (include Profile and Context lineage)",
     ),
     "summarize": (
-        "mem summarize (recursive summary of the current Context)",
-        "mem summarize [context] (recursive summary of an explicit Context)",
-        "mem summarize --direct (direct Memories in the current Context)",
-        "mem summarize [context] --direct (direct Memories in an explicit Context)",
+        "mem summarize (direct summary of the current Context)",
+        "mem summarize [context] (direct summary of an explicit Context)",
+        "mem summarize -r (recursive summary of the current Context)",
+        "mem summarize [context] -r (lexical descendants and embedded Contexts)",
+        "mem summarize [context] --copy (copy verified direct understanding as plain text)",
     ),
     "switch": (
         "mem switch (enter the interactive Context picker)",

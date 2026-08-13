@@ -26,15 +26,19 @@ from prompt_toolkit.widgets import Frame, TextArea
 from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
-    MEMCOMMIT_TUI_STYLE,
     boxed_lines,
-    build_focused_frame,
+)
+from memcommit.interfaces.console.text import (
     display_escape_text,
-    focus_in_order,
-    focused_control_style,
     safe_terminal_text,
 )
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.tui.components.focus import focus_in_order
+from memcommit.interfaces.tui.components.frame import build_focused_frame
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    focused_control_style,
+)
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
     terminal_cell_width,

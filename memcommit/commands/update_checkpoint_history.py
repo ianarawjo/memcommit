@@ -13,7 +13,7 @@ from memcommit.commands.history_picker import (
     choose_history,
 )
 from memcommit.commands.history_location_picker import choose_history_location
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.memory_diff import memory_diff_lines, update_operation_change
 from memcommit.update import UpdateSession
 

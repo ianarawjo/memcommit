@@ -8,7 +8,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.commands.study_name_dialog import choose_study_profile_name
 from memcommit.profile_config import (
     ProfileConfigError,

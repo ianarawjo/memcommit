@@ -23,7 +23,10 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.commands.update_render import (
     render_plan,
     render_update_report_snapshot,

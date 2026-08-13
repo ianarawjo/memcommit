@@ -11,7 +11,7 @@ from memcommit.commands.granted_context import (
     project_grants_into_context,
     resolve_context_access,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

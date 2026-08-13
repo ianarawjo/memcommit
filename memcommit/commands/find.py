@@ -51,7 +51,7 @@ from memcommit.context_targeting.search import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

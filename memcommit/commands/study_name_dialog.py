@@ -16,9 +16,9 @@ from prompt_toolkit.styles import Style, merge_styles
 from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
-    MEMCOMMIT_TUI_STYLE,
-    display_escape_text,
 )
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.profile_config import ProfileConfigError, validate_profile_name
 
 

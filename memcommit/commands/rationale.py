@@ -21,11 +21,11 @@ from memcommit.commands.memory_report_recents import (
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.commands.read_only_viewer import (
+from memcommit.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
     run_read_only_viewer,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )

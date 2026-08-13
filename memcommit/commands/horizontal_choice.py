@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
 from memcommit.selection.tui import (

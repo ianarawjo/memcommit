@@ -9,7 +9,7 @@ from typing import Any
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.commands.history_picker import HistoryPickerItem
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.memory_diff import MemoryChange, memory_diff_lines
 
 

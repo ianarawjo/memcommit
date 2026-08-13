@@ -206,9 +206,7 @@ def bind_surface_navigation(
     """Bind the shared key grammar for capabilities declared by each surface."""
 
     has_active_surface = Condition(lambda: controller.active(get_app()) is not None)
-    can_move = Condition(
-        lambda: controller.active_supports(get_app(), "move_vertical")
-    )
+    can_move = Condition(lambda: controller.active_supports(get_app(), "move_vertical"))
     can_activate = Condition(lambda: controller.active_supports(get_app(), "activate"))
     can_back = Condition(lambda: controller.active_supports(get_app(), "back"))
 

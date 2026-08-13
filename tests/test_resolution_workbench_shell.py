@@ -11,7 +11,7 @@ import memcommit.commands.resolution_workbench_shell as resolution_shell_module
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
-from memcommit.commands.tui_primitives import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.commands.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,

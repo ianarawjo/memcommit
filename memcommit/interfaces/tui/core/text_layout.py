@@ -88,10 +88,7 @@ def wrap_terminal_text(value: str, width: int) -> list[str]:
                 current = ""
             chunk = ""
             for character in word:
-                if (
-                    chunk
-                    and terminal_cell_width(chunk + character) > content_width
-                ):
+                if chunk and terminal_cell_width(chunk + character) > content_width:
                     wrapped.append(leading + chunk)
                     chunk = ""
                 chunk += character
@@ -221,11 +218,7 @@ def live_window_content_width(
         return max(minimum, int(render_info.window_width))
     try:
         app = get_app_or_none()
-        columns = (
-            int(app.output.get_size().columns)
-            if app is not None
-            else fallback
-        )
+        columns = int(app.output.get_size().columns) if app is not None else fallback
     except (AttributeError, RuntimeError):
         columns = fallback
     return max(minimum, columns - fallback_reserved)

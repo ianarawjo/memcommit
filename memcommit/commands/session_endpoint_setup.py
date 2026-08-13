@@ -45,13 +45,15 @@ from memcommit.commands.horizontal_choice import (
 from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
+)
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
-    display_escape_text,
     focused_control_style,
 )
-from memcommit.commands.surface_focus import (
+from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
     focus_in_order,

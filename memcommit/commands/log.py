@@ -29,7 +29,10 @@ from memcommit.commands.trace_projection import (
     format_compact_trace_report,
     open_trace_history,
 )
-from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.history import HistoryError, build_history
 from memcommit.history_search import (
     HistorySearchError,

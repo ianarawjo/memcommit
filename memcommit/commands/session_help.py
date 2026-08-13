@@ -20,7 +20,7 @@ from memcommit.commands.help_inventory import (
     command_entries,
     run_help_selector,
 )
-from memcommit.commands.tui_primitives import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.study_action_log import record_study_action
 
 

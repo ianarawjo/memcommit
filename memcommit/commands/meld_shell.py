@@ -13,16 +13,18 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 
-from memcommit.commands.tui_primitives import (
+from memcommit.commands.tui_primitives import build_framed_multiline_input
+from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
-    bind_case_insensitive_key,
-    build_framed_multiline_input,
     build_tui_frame,
-    dispatch_tui_back,
-    require_interactive_terminal,
-    safe_terminal_text,
 )
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+    dispatch_tui_back,
+)
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )

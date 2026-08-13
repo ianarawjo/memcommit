@@ -9,7 +9,8 @@ from prompt_toolkit.application.current import get_app
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Window
 from prompt_toolkit.layout.margins import ScrollbarMargin
 
-from memcommit.commands.tui_primitives import build_focused_frame, safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import build_focused_frame
 from memcommit.context_targeting.model import ContextSelectionMode
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,

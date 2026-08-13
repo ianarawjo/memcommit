@@ -18,7 +18,7 @@ from memcommit.commands.profile_picker import (
     ProfilePickerRefresh,
     choose_profile,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import (
     ProfileConfigError,
     load_profile_registry,

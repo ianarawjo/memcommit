@@ -35,7 +35,7 @@ from memcommit.commands.context_picker import (
     ContextTree,
     choose_context,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore

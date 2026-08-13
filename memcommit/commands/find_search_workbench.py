@@ -41,16 +41,20 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.commands.tui_primitives import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
-    bind_case_insensitive_key,
     bind_focused_frame_style,
     build_tui_frame,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
     dispatch_tui_back,
-    require_interactive_terminal,
-    safe_terminal_text,
+)
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.commands.search_result_present import (
     SearchResultViewRow,
@@ -58,7 +62,7 @@ from memcommit.commands.search_result_present import (
 )
 from memcommit.commands.save_location_control import SaveLocationView
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.surface_focus import (
+from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,

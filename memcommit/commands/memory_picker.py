@@ -16,8 +16,8 @@ from memcommit.commands.context_picker import (
     choose_context,
 )
 from memcommit.context_targeting.tui.reach import ContextReachState
-from memcommit.commands.tui_primitives import display_escape_text
-from memcommit.commands.tui_text_layout import elide_terminal_text
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.text_layout import elide_terminal_text
 
 
 MemoryPickerOperation = Literal["trace", "rationale"]

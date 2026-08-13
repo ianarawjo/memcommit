@@ -26,10 +26,8 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )
-from memcommit.commands.tui_primitives import (
-    bind_case_insensitive_key,
-    display_escape_text,
-)
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 
 
 @dataclass(frozen=True)

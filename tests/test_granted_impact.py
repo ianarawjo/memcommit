@@ -51,6 +51,8 @@ from memcommit.profiles import (
     delete_authority_grant,
 )
 from memcommit.store import MemoryStore
+from memcommit.summarize_application import SummarizeRequest
+from memcommit.summarize_runtime import execute_summarize
 from memcommit.semantic.changes import RemoveChange, apply_changes
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text
@@ -701,6 +703,89 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     assert mixed_copy.exit_code == 1
     assert "mixed local and granted recursive list" in mixed_copy.stderr
     assert DETAIL_SECRET not in "\n".join(provider.prompts)
+
+
+def test_recursive_summarize_uses_one_local_and_granted_public_namespace(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, _attachment, _wiki, grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        attachment_name="task-root/participant",
+        public_name="task-root/campus-wiki",
+    )
+    active.set_current("task-root")
+    payloads: list[dict[str, object]] = []
+
+    def forbidden_provider():
+        raise AssertionError("a direct empty root must not connect")
+
+    direct = execute_summarize(
+        SummarizeRequest(
+            context_locator="task-root",
+            include_descendants=False,
+            follow_embeds=False,
+        ),
+        store=active,
+        provider_factory=forbidden_provider,
+    )
+    assert direct.source_count == 0
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(
+                prompt.split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1]
+            )
+            payloads.append(payload)
+            return json.dumps(
+                {
+                    "text": "The readable namespace combines local and granted notes.",
+                    "source_ids": [
+                        item["source_id"] for item in payload["memories"]
+                    ],
+                }
+            )
+
+    result = execute_summarize(
+        SummarizeRequest(
+            context_locator="task-root",
+            include_descendants=True,
+            follow_embeds=False,
+        ),
+        store=active,
+        provider_factory=Provider,
+    )
+
+    assert result.source_count == 3
+    encoded = json.dumps(payloads[0], ensure_ascii=False)
+    assert "public service desk moved east" in encoded
+    assert "public service desk is in the west lobby" in encoded
+    assert "service desk is open on weekdays" in encoded
+    assert DETAIL_SECRET not in encoded
+
+    class RevokingProvider(Provider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            response = super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+            delete_authority_grant(grant.uid)
+            return response
+
+    with pytest.raises(ProfileError, match="grant|Grant"):
+        execute_summarize(
+            SummarizeRequest(
+                context_locator="task-root",
+                include_descendants=True,
+                follow_embeds=False,
+            ),
+            store=active,
+            provider_factory=RevokingProvider,
+        )
 
 
 def test_rationale_local_root_combines_authorized_granted_public_subtree(

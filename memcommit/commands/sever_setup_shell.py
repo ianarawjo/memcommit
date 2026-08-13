@@ -37,11 +37,11 @@ from memcommit.source_projection.presentation import (
 from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
-    MEMCOMMIT_TUI_STYLE,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
-    display_escape_text,
 )
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
 from memcommit.store import validate_context_name
 
 

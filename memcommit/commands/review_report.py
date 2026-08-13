@@ -11,7 +11,7 @@ from memcommit.commands.resolution_workbench_shell import (
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionOverviewSection,

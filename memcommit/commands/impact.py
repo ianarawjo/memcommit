@@ -41,7 +41,7 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,

@@ -25,26 +25,36 @@ from memcommit.commands.tui_primitives import (
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
     INLINE_DIRECT_EDIT_TITLE,
-    MEMCOMMIT_TUI_STYLE,
-    NavigationAccelerator,
-    TuiRegion,
     anchored_fragments,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
     build_framed_multiline_input,
     build_inline_direct_edit_input,
+    classify_inline_edit_submission,
+)
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    focused_control_style,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    NavigationAccelerator,
+    bind_case_insensitive_key,
+    dispatch_tui_back,
+)
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    bind_focused_frame_style,
+    build_tui_frame,
+    horizontal_rule,
+)
+from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
     build_scrollable_text_pane,
-    build_tui_frame,
-    classify_inline_edit_submission,
-    dispatch_tui_back,
-    display_escape_text,
     equal_pane_height,
-    focused_control_style,
-    horizontal_rule,
     move_wrapped_read_cursor,
-    safe_terminal_text,
     set_scrollable_pane_text,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
 )
 
 
@@ -83,6 +93,22 @@ def test_horizontal_rule_is_one_fixed_full_width_separator():
 
     assert rule.char == "─"
     assert (rule.height.min, rule.height.preferred, rule.height.max) == (1, 1, 1)
+    assert rule.right_margins == []
+
+
+def test_horizontal_rule_can_reserve_a_blank_right_gutter():
+    rule = horizontal_rule(right_gutter=1)
+
+    assert len(rule.right_margins) == 1
+    margin = rule.right_margins[0]
+    assert margin.get_width(lambda: None) == 1
+    assert margin.create_margin(None, 1, 1) == [("", " ")]
+
+
+@pytest.mark.parametrize("right_gutter", (-1, 1.5, True))
+def test_horizontal_rule_rejects_invalid_gutter_width(right_gutter):
+    with pytest.raises(ValueError, match="nonnegative integer"):
+        horizontal_rule(right_gutter=right_gutter)
 
 
 @pytest.mark.parametrize("key", ("q", "Q"))

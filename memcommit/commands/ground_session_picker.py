@@ -11,7 +11,7 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     SessionPickerLocation,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.ground import GroundSession, validate_ground_contract_name
 from memcommit.store import (
     MemoryStore,

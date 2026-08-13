@@ -31,7 +31,7 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.commands.tui_primitives import safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.context import Context, Memory
 from memcommit.ground import (
     GROUND_SCHEMA_VERSION,

@@ -1,4 +1,5 @@
 """Contracts for the reusable Context understanding-summary unit."""
+
 from __future__ import annotations
 
 import json
@@ -6,6 +7,9 @@ import json
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+from memcommit.clipboard import ClipboardError
+import memcommit.commands.summarize as summarize_command
+from memcommit.commands.help_inventory import COMMAND_FORMS
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import analyze_comparison
@@ -15,6 +19,17 @@ from memcommit.understanding import UnderstandingSummary
 
 
 runner = CliRunner()
+
+
+def test_mem_summarize_inventory_matches_direct_default_and_copy_contract():
+    assert COMMAND_FORMS["summarize"] == (
+        "mem summarize (direct summary of the current Context)",
+        "mem summarize [context] (direct summary of an explicit Context)",
+        "mem summarize -r (recursive summary of the current Context)",
+        "mem summarize [context] -r (lexical descendants and embedded Contexts)",
+        "mem summarize [context] --copy "
+        "(copy verified direct understanding as plain text)",
+    )
 
 
 class SummaryProvider:
@@ -59,7 +74,7 @@ def test_mem_summarize_recurses_and_renders_only_shared_understanding(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["summarize", "summary"])
+    result = runner.invoke(app, ["summarize", "summary", "-r"])
 
     assert result.exit_code == 0
     assert "SUMMARY · summary" in result.output
@@ -94,16 +109,146 @@ def test_mem_summarize_direct_excludes_child_memories(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["summarize", "summary", "--direct"])
+    result = runner.invoke(app, ["summarize", "summary", "-d"])
 
     assert result.exit_code == 0
     assert "STATUS · READ-ONLY · DIRECT" in result.output
     payload = json.loads(
         provider.calls[0][0].split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1]
     )
-    assert [item["content"] for item in payload["memories"]] == [
-        "Root material."
+    assert [item["content"] for item in payload["memories"]] == ["Root material."]
+
+
+def test_mem_summarize_recursive_includes_unembedded_lexical_descendants(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    child = ops.init("summary/child")
+    ops.add(child, "Lexical child material.")
+    root = ops.init("summary")
+    store.save(child)
+    store.save(root)
+    provider = SummaryProvider()
+    monkeypatch.setattr(
+        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["summarize", "summary", "--recursive"])
+
+    assert result.exit_code == 0
+    payload = json.loads(
+        provider.calls[0][0].split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1]
+    )
+    assert [item["context"] for item in payload["memories"]] == ["summary/child"]
+
+
+def test_mem_summarize_rejects_direct_and_recursive_together(isolated_store):
+    store = MemoryStore()
+    store.save(ops.init("summary"))
+
+    result = runner.invoke(app, ["summarize", "summary", "-d", "-r"])
+
+    assert result.exit_code == 1
+    assert "Choose either --direct/-d or --recursive/-r" in result.output
+
+
+def test_mem_summarize_forced_tui_requires_terminal_before_store_execution(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "memcommit.commands.summarize.MemoryStore",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("forced TUI failure must not open the Store")
+        ),
+    )
+
+    result = runner.invoke(app, ["summarize", "summary", "--tui"])
+
+    assert result.exit_code == 1
+    assert "requires a TTY" in result.output
+
+
+def test_mem_summarize_plain_preserves_noninteractive_output(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    store.save(ops.init("plain-summary"))
+    monkeypatch.setattr(
+        "memcommit.commands.summarize.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("empty summary must remain provider-free")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        ["summarize", "plain-summary", "--plain"],
+    )
+
+    assert result.exit_code == 0
+    assert "SUMMARY · plain-summary" in result.output
+    assert "STATUS · READ-ONLY · DIRECT" in result.output
+    assert "contains no ordinary Memories to summarize" in result.output
+
+
+def test_mem_summarize_copy_writes_plain_understanding_without_typed_stage(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("summary")
+    ops.add(context, "Copy this source-grounded commitment.")
+    store.save(context)
+    provider = SummaryProvider()
+    copied: list[str] = []
+    monkeypatch.setattr(
+        summarize_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(summarize_command, "write_system_clipboard", copied.append)
+
+    result = runner.invoke(app, ["summarize", "summary", "--copy"])
+
+    assert result.exit_code == 0, result.output
+    assert copied == [
+        "WHAT MEM UNDERSTOOD\n"
+        "The Context describes a closure while preserving an explicit "
+        "staff-access exception."
     ]
+    assert "no structured clipboard stage was created" in result.output
+    assert not (isolated_store / "clipboard.json").exists()
+
+
+def test_mem_summarize_copy_failure_keeps_result_visible_and_fails_cleanly(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("summary")
+    ops.add(context, "Visible result survives a clipboard failure.")
+    store.save(context)
+    provider = SummaryProvider()
+    monkeypatch.setattr(
+        summarize_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    def fail_copy(_text: str) -> None:
+        raise ClipboardError("clipboard unavailable")
+
+    monkeypatch.setattr(summarize_command, "write_system_clipboard", fail_copy)
+
+    result = runner.invoke(app, ["summarize", "summary", "--copy"])
+
+    assert result.exit_code == 1
+    assert "WHAT MEM UNDERSTOOD" in result.stdout
+    assert "Copy error: clipboard unavailable" in result.output
 
 
 def test_mem_summarize_empty_context_is_provider_free(

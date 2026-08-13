@@ -29,22 +29,28 @@ from prompt_toolkit.utils import get_cwidth
 from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
-    MEMCOMMIT_TUI_STYLE,
-    NavigationAccelerator,
-    SEMANTIC_VIEWER_STYLE,
-    TuiRegion,
-    WrappedScrollbarMargin,
-    bind_case_insensitive_key,
-    bind_focused_frame_style,
     boxed_lines,
     build_framed_multiline_input,
-    build_tui_frame,
-    focused_control_style,
     navigable_tree_row_prefix,
-    require_interactive_terminal,
-    safe_terminal_text,
 )
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    bind_focused_frame_style,
+    build_tui_frame,
+)
+from memcommit.interfaces.tui.components.scrollable_pane import WrappedScrollbarMargin
+from memcommit.interfaces.tui.core.keybindings import (
+    NavigationAccelerator,
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+    focused_control_style,
+)
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
     terminal_cell_width,
@@ -63,12 +69,12 @@ from memcommit.commands.semantic_detail_renderer import (
     semantic_memory_row_fragments,
     semantic_trace_fragments,
 )
-from memcommit.commands.semantic_viewer import (
+from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerController,
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
-from memcommit.commands.surface_focus import (
+from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
     SurfaceFocusController,

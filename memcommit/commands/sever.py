@@ -30,7 +30,10 @@ from memcommit.commands.sever_sessions import (
 )
 from memcommit.commands.switch import _granted_picker_state
 from memcommit.commands.sever_setup_shell import choose_sever_setup
-from memcommit.commands.tui_primitives import display_escape_text, safe_terminal_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.command_attempts import annotate_sever_attempt
 from memcommit.context import (
     AutoCheckpoint,

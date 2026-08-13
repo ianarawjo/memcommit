@@ -25,7 +25,7 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import (

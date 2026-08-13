@@ -42,13 +42,13 @@ from memcommit.commands.result_workbench_shell import (
     render_result_workbench_snapshot,
     result_workbench_fragments,
 )
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
-    bind_case_insensitive_key,
     build_tui_frame,
-    safe_terminal_text,
 )
-from memcommit.commands.tui_text_layout import (
+from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )

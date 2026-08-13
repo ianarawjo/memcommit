@@ -4,7 +4,7 @@ from __future__ import annotations
 import shlex
 from dataclasses import dataclass
 
-from memcommit.commands.tui_primitives import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text
 
 
 @dataclass(frozen=True)
