@@ -5,4 +5,4 @@
     └─   Granted memory  USE     profile=capture-granted-memory · managed · Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=source
 Granted views are permission projections, not copied Profiles.
 Authority Profiles are ordinary switchable owners of source data.
-Removed Profiles hidden from this list: 1
+Deleted Profile tombstones hidden from this list: 1

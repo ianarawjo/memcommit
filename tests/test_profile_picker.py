@@ -7,6 +7,9 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
+    _picker_rows,
+    _removal_action,
+    _removal_review,
     _render_profile_options,
     choose_profile,
 )
@@ -331,7 +334,7 @@ def test_profile_picker_focuses_study_header_as_its_own_row():
     assert "USE" not in rendered.splitlines()[1]
 
 
-def test_profile_picker_study_header_d_then_a_returns_whole_study_action():
+def test_profile_picker_study_header_d_then_enter_returns_whole_study_action():
     entries = (
         ENTRIES[0],
         ProfilePickerEntry(
@@ -358,7 +361,7 @@ def test_profile_picker_study_header_d_then_a_returns_whole_study_action():
         ),
     )
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[Bda")
+        pipe_input.send_text("\x1b[Bd\r")
         selected = choose_profile(
             entries,
             current="authoring",
@@ -374,6 +377,41 @@ def test_profile_picker_study_header_d_then_a_returns_whole_study_action():
         uid="study-uid",
         registry_generation=7,
     )
+
+
+def test_profile_picker_review_warns_that_store_and_checkpoints_are_unrecoverable():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-13T10:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+    row = _picker_rows(entries, current="authoring")[1]
+    action = _removal_action(row, registry_generation=9)
+
+    review = _removal_review(action, row)
+
+    assert any("Memory, session, and checkpoint" in line for line in review.effects)
+    assert "This cannot be undone or recovered by mem." in review.effects
 
 
 def test_profile_picker_child_d_then_a_returns_only_profile_action():

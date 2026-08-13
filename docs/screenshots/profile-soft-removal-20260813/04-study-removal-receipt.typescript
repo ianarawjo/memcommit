@@ -98,14 +98,16 @@
 
 
 
-[11C[0mD r[Cmove Study  Esc/q canc[Cl[C ·  3/5[0m[K[47A[47D[0m[?25l[4A[C[0mR[Cview[Cexact removal[0m[K[0m
+[11C[0mD r[Cmove Study  Esc/q canc[Cl[C ·  3/5[0m[K[47A[47D[0m[?25l[4A[C[0mR[Cview[Cirreversible[Cdeletion[0m
 
 [0mPROPOSED COMMAND[C·[CNOT[CRUN[0m                                                                                            [0m
 [2C[0mmem [Crofile [Cemove-study[Ccapture-study --force[0m                                                                      [0m
 [0m                                                                    [0m
 [0mEFFECTS · ONE COMMAND[0m                                                                                                            [0m
-[2C[0mRemove all 2 P[Cofiles in Study 'capture-study'[Cfrom[Cthe live[Cselector.[0m                                                          [0m
-[0m  Retain every Profile store, Study provenance record, and Grant.[0m
+[2C[0mPerm[2Cently delete[Call 2 Profile stores in[CStudy[C'captur[C-study'.[0m                                                               [0m
+[0m  Delete every Memory, session, and checkpoint in those stores.[0m
+[0m  Remove every Grant connected to those Profiles.[0m
+[0m  This cannot be undone or recovered by mem.[0m
 
 [0mApproval applies only to the exact command shown above.[0m
 
@@ -147,10 +149,8 @@
 
 
 
-
-
-[C[0mA apply exact c[Cmmand  Esc back[C· [Co store[Cdata will be deleted[49A[64D[0m[2A[J[0m[?7h[?1049l[?2004l[32mRemoved Study 'capture-study' from the live selector.[0m
-Profiles removed now: 2
-Profiles retained on disk: 2
-Profile UIDs, Study provenance, stores, and Grants were retained.
+[C[0mEnter/A apply exact command  Esc ba[Ck ·[CIRREVERSIBLE · store and checkpoints will be deleted[49A[93D[0m[2A[J[0m[?7h[?1049l[?2004l[32mPermanently deleted Study 'capture-study' Profile stores.[0m
+Profile stores and checkpoint histories deleted: 2
+Connected Grants removed: 1
+Profile UIDs and Study provenance remain only as tombstones; content cannot be recovered.
 Active Profile unchanged: capture-workspace

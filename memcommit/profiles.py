@@ -190,23 +190,27 @@ class ProfileRenameResult:
 
 @dataclass(frozen=True)
 class ProfileRemovalResult:
-    """One Profile hidden from direct selection without deleting its store."""
+    """One Profile permanently deleted behind a retained identity tombstone."""
 
     profile: ProfileEntry
     study_name: str | None
     active_profile_name: str
     study_profile_count: int
     study_removed_count: int
+    removed_grant_count: int
+    deleted_store: Path
 
 
 @dataclass(frozen=True)
 class StudyRemovalResult:
-    """One complete Study hidden while preserving every member store."""
+    """One complete Study whose Profile stores were permanently deleted."""
 
     uid: str
     name: str
     profiles: tuple[ProfileEntry, ...]
     newly_removed_count: int
+    removed_grant_count: int
+    deleted_stores: tuple[Path, ...]
     active_profile_name: str
 
 
@@ -1143,6 +1147,7 @@ def _read_granted_public_names(
 
 def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
     registry = load_profile_registry()
+    visible = registry.visible_profiles
     base = tuple(
         inspect_store(
             profile_store_dir(item),
@@ -1151,11 +1156,11 @@ def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
                 item.uid,
             ),
         )
-        for item in registry.profiles
+        for item in visible
     )
     cache = {
         profile.uid: inspection
-        for profile, inspection in zip(registry.profiles, base, strict=True)
+        for profile, inspection in zip(visible, base, strict=True)
     }
     return registry, tuple(
         _inspection_with_grants(
@@ -1164,8 +1169,7 @@ def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
             inspection,
             cache=cache,
         )
-        for profile, inspection in zip(registry.profiles, base, strict=True)
-        if not registry.is_removed(profile)
+        for profile, inspection in zip(visible, base, strict=True)
     )
 
 
@@ -1391,13 +1395,113 @@ def _profile_study_target(
     return None
 
 
-def _write_soft_removal(
+def _prepare_profile_deletion_batch(
+    profiles: tuple[ProfileEntry, ...],
+) -> Path:
+    """Move exact managed stores aside before publishing their tombstones.
+
+    The move and registry replacement are separate filesystem operations. A
+    private same-filesystem batch makes the pre-publication half reversible:
+    if the registry write fails, every canonical UID path can be restored
+    before the registry lock is released. Once the registry is published, the
+    batch is recursively destroyed and no mem recovery route remains.
+    """
+
+    stores = profile_stores_dir()
+    batch = stores / f".permanent-profile-removal-{uuid.uuid4().hex}"
+    batch.mkdir(mode=0o700)
+    moved: list[ProfileEntry] = []
+    try:
+        for profile in profiles:
+            source = profile_store_dir(profile)
+            if (
+                profile.kind != "MANAGED"
+                or source.parent != stores
+                or source.name != profile.uid
+                or source.is_symlink()
+                or not source.is_dir()
+            ):
+                raise ProfileError(
+                    f"Profile {profile.name!r} store cannot be permanently deleted."
+                )
+            os.replace(source, batch / profile.uid)
+            moved.append(profile)
+        _fsync_directory(batch)
+        _fsync_directory(stores)
+        return batch
+    except Exception as error:
+        rollback_error: Exception | None = None
+        for profile in reversed(moved):
+            staged = batch / profile.uid
+            destination = profile_store_dir(profile)
+            try:
+                if staged.exists() and not destination.exists():
+                    os.replace(staged, destination)
+            except Exception as candidate_error:  # pragma: no cover - fatal FS fault
+                rollback_error = candidate_error
+        try:
+            if batch.exists() and not batch.is_symlink():
+                batch.rmdir()
+            _fsync_directory(stores)
+        except Exception as candidate_error:  # pragma: no cover - fatal FS fault
+            rollback_error = rollback_error or candidate_error
+        if rollback_error is not None:
+            raise ProfileError(
+                "Profile deletion preparation rollback failed."
+            ) from rollback_error
+        if isinstance(error, ProfileError):
+            raise
+        raise ProfileError("Profile deletion could not be prepared.") from error
+
+
+def _rollback_profile_deletion_batch(
+    batch: Path,
+    profiles: tuple[ProfileEntry, ...],
+) -> None:
+    """Restore a prepared batch after a registry write did not publish."""
+
+    stores = profile_stores_dir()
+    try:
+        for profile in reversed(profiles):
+            staged = batch / profile.uid
+            destination = profile_store_dir(profile)
+            if staged.exists():
+                if destination.exists() or destination.is_symlink():
+                    raise ProfileError(
+                        f"Profile {profile.name!r} rollback destination is occupied."
+                    )
+                os.replace(staged, destination)
+        batch.rmdir()
+        _fsync_directory(stores)
+    except Exception as error:
+        raise ProfileError("Profile deletion rollback failed.") from error
+
+
+def _destroy_profile_deletion_batch(batch: Path) -> None:
+    """Permanently erase a registry-detached batch, including checkpoints."""
+
+    stores = profile_stores_dir()
+    try:
+        if batch.is_symlink() or not batch.is_dir():
+            raise ProfileError("Profile deletion batch is missing or unsafe.")
+        shutil.rmtree(batch)
+        _fsync_directory(stores)
+    except Exception as error:
+        raise ProfileError(
+            "Profile identities were removed, but permanent store cleanup "
+            "did not finish. No mem recovery route is available."
+        ) from error
+
+
+def _publish_permanent_removal(
     previous: ProfileRegistry,
     updated: ProfileRegistry,
     *,
+    batch: Path,
+    profiles: tuple[ProfileEntry, ...],
     label: str,
 ) -> None:
-    """Publish one tombstone generation and distinguish ambiguous durability."""
+    """Publish tombstones, rolling back only before durable registry change."""
 
     try:
         _write_registry(updated)
@@ -1406,18 +1510,23 @@ def _write_soft_removal(
             visible = load_profile_registry()
         except (OSError, ProfileConfigError, ValueError) as read_error:
             raise ProfileError(
-                f"{label} removal registry state could not be confirmed."
+                f"{label} deletion registry state could not be confirmed; "
+                f"prepared data remains at {batch}."
             ) from read_error
+        if visible == previous:
+            _rollback_profile_deletion_batch(batch, profiles)
+            raise ProfileError(f"{label} was not deleted.") from error
         if visible == updated:
+            _destroy_profile_deletion_batch(batch)
             raise ProfileError(
-                f"{label} was removed, but registry durability could not be "
-                "confirmed; it remains removed."
+                f"{label} was permanently deleted, but registry durability "
+                "could not be confirmed; it remains deleted."
             ) from error
-        if visible != previous:
-            raise ProfileError(
-                f"{label} removal changed the registry unexpectedly."
-            ) from error
-        raise ProfileError(f"{label} was not removed.") from error
+        raise ProfileError(
+            f"{label} deletion changed the registry unexpectedly; prepared "
+            f"data remains at {batch}."
+        ) from error
+    _destroy_profile_deletion_batch(batch)
 
 
 def remove_profile(
@@ -1426,7 +1535,7 @@ def remove_profile(
     expected_uid: str | None = None,
     expected_generation: int | None = None,
 ) -> ProfileRemovalResult:
-    """Hide one Profile while retaining its store, provenance, and Grants."""
+    """Permanently delete one Profile store, including every checkpoint."""
 
     canonical = validate_profile_name(name)
     with _registry_lock():
@@ -1450,14 +1559,19 @@ def remove_profile(
                 f"Profile {target.name!r} is active; select another Profile "
                 "before removing it."
             )
-        if registry.is_removed(target):
+        store = profile_store_dir(target)
+        if (
+            registry.is_removed(target)
+            and not store.exists()
+            and not store.is_symlink()
+        ):
             raise ProfileError(f"Profile {target.name!r} is already removed.")
 
-        # Removal changes only live selector visibility. Validating the stable
-        # root first prevents a tombstone from concealing an already unsafe or
-        # missing store, while retaining the path lets in-flight readers finish.
+        # Validate every byte tree before it is moved into the private deletion
+        # batch. This prevents a recursive delete from following an unsafe link
+        # or accepting an already-corrupt Profile as the reviewed target.
         inspect_store(
-            profile_store_dir(target),
+            store,
             allowed_virtual_currents=_read_granted_public_names(
                 registry,
                 target.uid,
@@ -1468,16 +1582,25 @@ def remove_profile(
         ordered_removed = tuple(
             profile.uid for profile in registry.profiles if profile.uid in removed
         )
+        retained_grants = tuple(
+            grant
+            for grant in registry.grants
+            if target.uid
+            not in {grant.authority_profile_uid, grant.grantee_profile_uid}
+        )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=registry.profiles,
-            grants=registry.grants,
+            grants=retained_grants,
             removed_profile_uids=ordered_removed,
         )
-        _write_soft_removal(
+        batch = _prepare_profile_deletion_batch((target,))
+        _publish_permanent_removal(
             registry,
             updated,
+            batch=batch,
+            profiles=(target,),
             label=f"Profile {target.name!r}",
         )
         members = study[2] if study is not None else ()
@@ -1486,9 +1609,9 @@ def remove_profile(
             study_name=study[1] if study is not None else None,
             active_profile_name=registry.active.name,
             study_profile_count=len(members),
-            study_removed_count=sum(
-                member.uid in removed for member in members
-            ),
+            study_removed_count=sum(member.uid in removed for member in members),
+            removed_grant_count=len(registry.grants) - len(retained_grants),
+            deleted_store=store,
         )
 
 
@@ -1498,7 +1621,7 @@ def remove_study(
     expected_uid: str | None = None,
     expected_generation: int | None = None,
 ) -> StudyRemovalResult:
-    """Hide every Profile in one Study as one registry generation."""
+    """Permanently delete every Profile store in one Study."""
 
     with _registry_lock():
         registry = load_profile_registry()
@@ -1517,10 +1640,15 @@ def remove_study(
                 "another Profile before removing it."
             )
         existing_removed = frozenset(registry.removed_profile_uids)
-        newly_removed = member_uids - existing_removed
-        if not newly_removed:
+        stores_to_delete = tuple(
+            profile
+            for profile in profiles
+            if profile_store_dir(profile).exists()
+            or profile_store_dir(profile).is_symlink()
+        )
+        if not stores_to_delete:
             raise ProfileError(f"Study {study_name!r} is already removed.")
-        for profile in profiles:
+        for profile in stores_to_delete:
             inspect_store(
                 profile_store_dir(profile),
                 allowed_virtual_currents=_read_granted_public_names(
@@ -1532,23 +1660,37 @@ def remove_study(
         ordered_removed = tuple(
             profile.uid for profile in registry.profiles if profile.uid in removed
         )
+        retained_grants = tuple(
+            grant
+            for grant in registry.grants
+            if not member_uids.intersection(
+                {grant.authority_profile_uid, grant.grantee_profile_uid}
+            )
+        )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
             profiles=registry.profiles,
-            grants=registry.grants,
+            grants=retained_grants,
             removed_profile_uids=ordered_removed,
         )
-        _write_soft_removal(
+        batch = _prepare_profile_deletion_batch(stores_to_delete)
+        _publish_permanent_removal(
             registry,
             updated,
+            batch=batch,
+            profiles=stores_to_delete,
             label=f"Study {study_name!r}",
         )
         return StudyRemovalResult(
             uid=study_uid,
             name=study_name,
             profiles=profiles,
-            newly_removed_count=len(newly_removed),
+            newly_removed_count=len(stores_to_delete),
+            removed_grant_count=len(registry.grants) - len(retained_grants),
+            deleted_stores=tuple(
+                profile_store_dir(profile) for profile in stores_to_delete
+            ),
             active_profile_name=registry.active.name,
         )
 

@@ -285,16 +285,20 @@ def _pick_profile() -> ProfilePickerAction | None:
 
 def _print_profile_removal(result) -> None:
     typer.secho(
-        "Removed Profile '"
+        "Permanently deleted Profile '"
         + display_escape_text(result.profile.name)
-        + "' from the live selector.",
+        + "'.",
         fg=typer.colors.GREEN,
     )
     typer.echo(
-        "Retained store: "
-        + display_escape_text(str(profile_store_dir(result.profile)))
+        "Deleted store and all checkpoints: "
+        + display_escape_text(str(result.deleted_store))
     )
-    typer.echo("Profile UID, provenance, and Grants were retained.")
+    typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
+    typer.echo(
+        "The Profile UID and Study provenance remain only as a tombstone; "
+        "content cannot be recovered."
+    )
     if result.study_name is not None:
         typer.echo(
             "Study "
@@ -310,14 +314,20 @@ def _print_profile_removal(result) -> None:
 
 def _print_study_removal(result) -> None:
     typer.secho(
-        "Removed Study '"
+        "Permanently deleted Study '"
         + display_escape_text(result.name)
-        + "' from the live selector.",
+        + "' Profile stores.",
         fg=typer.colors.GREEN,
     )
-    typer.echo(f"Profiles removed now: {result.newly_removed_count}")
-    typer.echo(f"Profiles retained on disk: {len(result.profiles)}")
-    typer.echo("Profile UIDs, Study provenance, stores, and Grants were retained.")
+    typer.echo(
+        "Profile stores and checkpoint histories deleted: "
+        + str(result.newly_removed_count)
+    )
+    typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
+    typer.echo(
+        "Profile UIDs and Study provenance remain only as tombstones; content "
+        "cannot be recovered."
+    )
     typer.echo(
         "Active Profile unchanged: "
         + display_escape_text(result.active_profile_name)
@@ -500,7 +510,7 @@ def list_cmd() -> None:
     typer.echo("Authority Profiles are ordinary switchable owners of source data.")
     if registry.removed_profile_uids:
         typer.echo(
-            f"Removed Profiles hidden from this list: "
+            f"Deleted Profile tombstones hidden from this list: "
             f"{len(registry.removed_profile_uids)}"
         )
 
@@ -708,21 +718,23 @@ def use_cmd(
 def remove_cmd(
     name: Annotated[
         str,
-        typer.Argument(help="Visible managed Profile to remove from selection"),
+        typer.Argument(
+            help="Managed Profile whose complete store will be deleted"
+        ),
     ],
     force: Annotated[
         bool,
         typer.Option("-f", "--force", help="Skip the confirmation prompt"),
     ] = False,
 ) -> None:
-    """Soft-remove one Profile while retaining its store and identity."""
+    """Permanently delete one Profile store and all of its checkpoints."""
 
     if not force:
         typer.echo(
-            "This removes only Profile '"
+            "WARNING: This permanently deletes only Profile '"
             + display_escape_text(name)
-            + "' from the live selector. Its store, stable UID, provenance, "
-            "and Grants will be retained."
+            + "', its complete store, every Memory, session, and checkpoint, "
+            "plus connected Grants. This cannot be undone or recovered by mem."
         )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Profile removal cancelled.")
@@ -745,14 +757,14 @@ def remove_study_cmd(
         typer.Option("-f", "--force", help="Skip the confirmation prompt"),
     ] = False,
 ) -> None:
-    """Soft-remove every Profile in one Study as one exact operation."""
+    """Permanently delete every Profile store and checkpoint in one Study."""
 
     if not force:
         typer.echo(
-            "This removes every Profile in Study '"
+            "WARNING: This permanently deletes every Profile in Study '"
             + display_escape_text(name)
-            + "' from the live selector. All stores, stable UIDs, provenance, "
-            "and Grants will be retained."
+            + "', including every store, Memory, session, checkpoint, and "
+            "connected Grant. This cannot be undone or recovered by mem."
         )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Study removal cancelled.")

@@ -1,4 +1,4 @@
-"""Soft-removal contracts for ordinary Profiles and complete Study groups."""
+"""Permanent-deletion contracts for ordinary Profiles and Study groups."""
 
 from __future__ import annotations
 
@@ -43,6 +43,7 @@ def _create_store(root: Path, context_name: str, content: str) -> None:
     context = ops.init(context_name)
     context.add(Memory(uid=str(uuid.uuid4()), content=content))
     store.save(context)
+    store.checkpoint(context, message="Profile deletion fixture")
     store.set_current(context_name)
 
 
@@ -112,7 +113,7 @@ def _prepare_study_registry(
     return participant, authority
 
 
-def test_remove_one_study_child_hides_only_that_profile_and_keeps_pair(
+def test_remove_one_study_child_deletes_only_that_store_and_keeps_header(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -133,8 +134,10 @@ def test_remove_one_study_child_hides_only_that_profile_and_keeps_pair(
     assert result.study_removed_count == 1
     assert current.removed_profile_uids == (authority.uid,)
     assert current.profiles == before.profiles
-    assert current.grants == before.grants
-    assert profile_store_dir(authority).is_dir()
+    assert len(before.grants) == 1
+    assert current.grants == ()
+    assert not profile_store_dir(authority).exists()
+    assert profile_store_dir(participant).is_dir()
     assert study_run_profile_pairs(current.profiles)[0].authority == authority
     listed_registry, inspections = list_profiles()
     assert [profile.name for profile in listed_registry.visible_profiles] == [
@@ -142,11 +145,13 @@ def test_remove_one_study_child_hides_only_that_profile_and_keeps_pair(
         participant.name,
     ]
     assert len(inspections) == 2
-    assert inspections[1].granted_context_count == 1
-    assert inspections[1].granted_memory_count == 1
+    assert inspections[1].granted_context_count == 0
+    assert inspections[1].granted_memory_count == 0
+    assert result.removed_grant_count == 1
+    assert result.deleted_store == profile_store_dir(authority)
 
 
-def test_remove_study_hides_both_members_in_one_generation(
+def test_remove_study_deletes_both_stores_and_checkpoints_in_one_generation(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -166,10 +171,16 @@ def test_remove_study_hides_both_members_in_one_generation(
     assert current.generation == before.generation + 1
     assert current.removed_profile_uids == (participant.uid, authority.uid)
     assert current.profiles == before.profiles
-    assert current.grants == before.grants
+    assert len(before.grants) == 1
+    assert current.grants == ()
     assert [profile.name for profile in current.visible_profiles] == ["authoring"]
-    assert profile_store_dir(participant).is_dir()
-    assert profile_store_dir(authority).is_dir()
+    assert not profile_store_dir(participant).exists()
+    assert not profile_store_dir(authority).exists()
+    assert result.removed_grant_count == 1
+    assert result.deleted_stores == (
+        profile_store_dir(participant),
+        profile_store_dir(authority),
+    )
 
 
 def test_remove_study_finishes_a_partially_removed_study(
@@ -191,6 +202,8 @@ def test_remove_study_finishes_a_partially_removed_study(
         participant.uid,
         authority.uid,
     )
+    assert not profile_store_dir(participant).exists()
+    assert not profile_store_dir(authority).exists()
 
 
 def test_removed_profile_cannot_be_selected_directly(
@@ -258,7 +271,7 @@ def test_tui_review_identity_and_generation_are_revalidated(
     assert not load_profile_registry().removed_profile_uids
 
 
-def test_cli_child_remove_keeps_study_header_and_marks_one_removed(
+def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -276,15 +289,18 @@ def test_cli_child_remove_keeps_study_header_and_marks_one_removed(
     listing = runner.invoke(app, ["profile", "list"])
 
     assert removed.exit_code == 0, removed.output
-    assert f"Removed Profile '{authority.name}'" in removed.output
-    assert "Profile UID, provenance, and Grants were retained." in removed.output
+    assert f"Permanently deleted Profile '{authority.name}'" in removed.output
+    assert "Deleted store and all checkpoints:" in removed.output
+    assert "Connected Grants removed: 1" in removed.output
+    assert "content cannot be recovered" in removed.output
     assert "1 active · 1 removed" in removed.output
     assert listing.exit_code == 0, listing.output
     assert "removal-study  STUDY" in listing.output
     assert "1 removed" in listing.output
     assert f"profile={participant.name}" in listing.output
     assert authority.name not in listing.output
-    assert "Removed Profiles hidden from this list: 1" in listing.output
+    assert "Deleted Profile tombstones hidden from this list: 1" in listing.output
+    assert not profile_store_dir(authority).exists()
 
 
 def test_cli_study_remove_confirmation_can_cancel_without_changes(
@@ -304,6 +320,56 @@ def test_cli_study_remove_confirmation_can_cancel_without_changes(
     assert result.exit_code == 0, result.output
     assert "Study removal cancelled." in result.output
     assert profile_registry_file().read_bytes() == before
+
+
+def test_cli_confirmation_warns_that_profile_checkpoints_are_unrecoverable(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _participant, authority = _prepare_study_registry(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    result = runner.invoke(
+        app,
+        ["profile", "remove", authority.name],
+        input="n\n",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "every Memory, session, and checkpoint" in result.output
+    assert "cannot be undone or recovered by mem" in result.output
+    assert profile_store_dir(authority).is_dir()
+
+
+def test_registry_write_failure_restores_prepared_store_and_checkpoint(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _participant, authority = _prepare_study_registry(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    before_registry = profile_registry_file().read_bytes()
+    store = MemoryStore(root=profile_store_dir(authority))
+    assert store.list_checkpoints("source")
+
+    def fail_registry_write(_registry):
+        raise OSError("simulated registry write failure")
+
+    monkeypatch.setattr("memcommit.profiles._write_registry", fail_registry_write)
+
+    with pytest.raises(ProfileError, match="was not deleted"):
+        remove_profile(authority.name)
+
+    assert profile_registry_file().read_bytes() == before_registry
+    assert profile_store_dir(authority).is_dir()
+    assert store.list_checkpoints("source")
 
 
 def test_registry_v3_rejects_removed_authoring_or_active_identity(

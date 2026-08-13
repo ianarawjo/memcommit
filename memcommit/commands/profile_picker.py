@@ -1,4 +1,4 @@
-"""Full-screen terminal picker for selecting or soft-removing Profiles."""
+"""Full-screen terminal picker for selecting or permanently deleting Profiles."""
 
 from __future__ import annotations
 
@@ -321,17 +321,21 @@ def _removal_review(
 ) -> ExactCommandReview:
     if action.kind == "REMOVE_STUDY":
         effects = (
-            f"Remove all {row.profile_count} Profiles in Study {row.name!r} "
-            "from the live selector.",
-            "Retain every Profile store, Study provenance record, and Grant.",
+            f"Permanently delete all {row.profile_count} Profile stores in "
+            f"Study {row.name!r}.",
+            "Delete every Memory, session, and checkpoint in those stores.",
+            "Remove every Grant connected to those Profiles.",
+            "This cannot be undone or recovered by mem.",
         )
         command = "remove-study"
     else:
         entry = row.entry
         assert entry is not None
         effects_list = [
-            f"Remove only Profile {row.name!r} from the live selector.",
-            "Retain its stable store, provenance record, and Grants.",
+            f"Permanently delete only Profile {row.name!r} and its store.",
+            "Delete every Memory, session, and checkpoint in that store.",
+            "Remove every Grant connected to this Profile.",
+            "This cannot be undone or recovered by mem.",
         ]
         if entry.study_name is not None:
             effects_list.append(
@@ -459,6 +463,7 @@ def choose_profile(
         status["text"] = ""
         event.app.invalidate()
 
+    @bindings.add("enter", filter=review_mode, eager=True)
     @bind_case_insensitive_key(bindings, "a", filter=review_mode, eager=True)
     def _apply_reviewed_removal(event) -> None:
         action = pending["action"]
@@ -481,11 +486,18 @@ def choose_profile(
         event.app.exit(result=None)
 
     def header_text() -> str:
-        return " Review exact removal" if review_mode() else " Select a Profile or Study"
+        return (
+            " Review irreversible deletion"
+            if review_mode()
+            else " Select a Profile or Study"
+        )
 
     def footer_text() -> str:
         if review_mode():
-            return " A apply exact command  Esc back · no store data will be deleted"
+            return (
+                " Enter/A apply exact command  Esc back · IRREVERSIBLE · "
+                "store and checkpoints will be deleted"
+            )
         row = current_row()
         action = "D remove Study" if row.kind == "STUDY" else "Enter use  D remove Profile"
         message = status["text"]

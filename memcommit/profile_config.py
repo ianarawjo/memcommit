@@ -297,13 +297,13 @@ class ProfileRegistry:
 
     @property
     def visible_profiles(self) -> tuple[ProfileEntry, ...]:
-        """Return Profiles that remain available to direct selection."""
+        """Return Profiles whose managed stores have not been deleted."""
 
         removed = frozenset(self.removed_profile_uids)
         return tuple(profile for profile in self.profiles if profile.uid not in removed)
 
     def is_removed(self, profile: ProfileEntry | str) -> bool:
-        """Report whether one stable Profile identity is soft-removed."""
+        """Report whether one stable identity is a deletion tombstone."""
 
         uid = profile.uid if isinstance(profile, ProfileEntry) else profile
         return uid in self.removed_profile_uids

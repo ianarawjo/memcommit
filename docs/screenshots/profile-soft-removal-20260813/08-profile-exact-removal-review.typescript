@@ -148,14 +148,16 @@
 
 
 
-[57C[0m4[2C[0m[K[46A[60D[0m[?25l[5A[C[0mR[Cview[Cexact removal[0m[K[0m
+[57C[0m4[2C[0m[K[46A[60D[0m[?25l[5A[C[0mR[Cview[Cirreversible[Cdeletion[0m
 
 [0mPROPOSED COMMAND[C·[CNOT[CRUN[0m                                                                                            [0m
 [2C[0mmem [Crofile [Cemove capture-participant --force[0m                                                                      [0m
 [0m                                                                    [0m
 [0mEFFECTS · ONE COMMAND[0m                                                                                                            [0m
-[2C[0mRemove only Profile 'capture-participant'[Cfrom[Cthe[Clive selector.[0m                                                               [0m
-[0m  Retain its stable store, provenance record, and Grants.[0m
+[2C[0mPerm[2Cently delete[Conly Profile 'capture-participant' and its stor[C.[0m                                                            [0m
+[0m  Delete every Memory, session, and checkpoint in that store.[0m
+[0m  Remove every Grant connected to this Profile.[0m
+[0m  This cannot be undone or recovered by mem.[0m
 [0m  Keep Study 'capture-study' and its other Profile rows.[0m
 
 [0mApproval applies only to the exact command shown above.[0m
@@ -197,6 +199,4 @@
 
 
 
-
-
-[C[0mA apply exac[C command [CEsc back · no store dat[C wi[Cl[Cbe[Cdeleted[49A[64D[0m
+[C[0mEnter/A apply exact[Ccommand  Esc back[C· IRREVERSIBLE[3Cstore and checkpoints will be deleted[49A[93D[0m

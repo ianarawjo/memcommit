@@ -1,11 +1,13 @@
- Review exact removal                                                                                                                                                               
+ Review irreversible deletion                                                                                                                                                       
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 PROPOSED COMMAND · NOT RUN                                                                                                                                                         ^
   mem profile remove-study capture-study --force                                                                                                                                    
                                                                                                                                                                                     
 EFFECTS · ONE COMMAND                                                                                                                                                               
-  Remove all 2 Profiles in Study 'capture-study' from the live selector.                                                                                                            
-  Retain every Profile store, Study provenance record, and Grant.                                                                                                                   
+  Permanently delete all 2 Profile stores in Study 'capture-study'.                                                                                                                 
+  Delete every Memory, session, and checkpoint in those stores.                                                                                                                     
+  Remove every Grant connected to those Profiles.                                                                                                                                   
+  This cannot be undone or recovered by mem.                                                                                                                                        
                                                                                                                                                                                     
 Approval applies only to the exact command shown above.                                                                                                                             
                                                                                                                                                                                     
@@ -45,8 +47,6 @@ Approval applies only to the exact command shown above.
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
-                                                                                                                                                                                    
-                                                                                                                                                                                    
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- A apply exact command  Esc back · no store data will be deleted
+ Enter/A apply exact command  Esc back · IRREVERSIBLE · store and checkpoints will be deleted

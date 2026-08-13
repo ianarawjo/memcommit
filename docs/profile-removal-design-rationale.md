@@ -1,79 +1,111 @@
-# Profile soft-removal design rationale
+# Permanent Profile removal design rationale
 
 ## Motivation
 
 Repeated Study runs register a participant Profile and a granted-memory
-Profile. The Profile selector can therefore become crowded even when old runs
-must remain available for later research reconstruction. People also need to
-remove one visible child without accidentally removing its sibling, while a
-whole Study action should target the header's complete membership.
+Profile, so old sessions eventually crowd the Profile selector and retain
+substantial checkpoint history. People need two explicit scopes: deleting one
+focused child without deleting its sibling, and deleting the complete Study by
+targeting its header.
+
+Deletion is intentionally permanent. A Profile store owns its Memories,
+workflow sessions, command history, and Context checkpoints. Removing that
+whole directory reclaims the complete run and means `mem` has no source from
+which it could restore the content.
 
 ## Command and interaction contract
 
-- `mem profile remove PROFILE` removes only that Profile from direct selection.
-- `mem profile remove-study STUDY` removes every current or legacy member of
-  that Study in one registry generation.
+- `mem profile remove PROFILE` permanently deletes only that Profile store and
+  removes every Grant whose authority or grantee endpoint is the Profile.
+- `mem profile remove-study STUDY` permanently deletes every current or legacy
+  member store and every Grant connected to those members.
 - In the Profile TUI, Study headers are keyboard rows. `D` on a header reviews
-  `remove-study`; `D` on a Profile child reviews `remove`. `A` applies only the
-  exact frozen command, and Escape returns without mutation.
-- Enter continues to select only Profile rows. A Study header is a grouping and
-  removal target, never an implicit Profile selection.
+  `remove-study`; `D` on a Profile child reviews `remove`.
+- The review lists store, Memory, session, checkpoint, and Grant deletion and
+  says that `mem` cannot undo or recover it. `Enter` or `A` applies only the
+  exact frozen command; Escape returns without mutation.
+- Enter continues to select a Profile while the selector is not in review. A
+  Study header is a grouping and deletion target, never an implicit Profile
+  selection.
 
-Removal is deliberately soft. The registry retains the Profile entry, stable
-UID, source provenance, store path, and Grants, while
-`removed_profile_uids` controls live visibility. The list, picker, and direct
-Profile switching exclude removed identities. A remaining Study child can
-therefore keep using a READ Grant backed by its hidden sibling.
+Registry schema version 3's `removed_profile_uids` remains as an identity
+tombstone. The corresponding store is not retained. Keeping the Profile entry
+and Study provenance lets a surviving Study child retain its header and makes
+a completed deletion distinguishable from a missing or corrupt live store.
+The tombstone is display metadata, not a trash or restore mechanism.
 
 ## Invariants
 
-1. The fixed `authoring` and `study-baseline` Profiles cannot be removed.
-2. The active Profile cannot be removed. A Study containing it cannot be
-   removed; the person must select another Profile first.
+1. The fixed `authoring` and `study-baseline` Profiles cannot be deleted.
+2. The active Profile cannot be deleted. A Study containing it cannot be
+   deleted; the person must select another Profile first.
 3. Study membership is resolved from validated provenance and stable Study UID,
    never from a Profile-name suffix.
-4. Removing one Study child does not break the validated two-Profile or legacy
-   Study topology. All entries and Grants remain registered.
-5. The reviewed registry generation and target UID are revalidated under the
-   registry lock before a TUI action is applied.
-6. A target store is validated before publishing its removal tombstone. Its
-   stable path remains in place so an already-running process can finish.
-7. Registry mutations unrelated to removal preserve every existing tombstone.
-8. No removal path deletes Memory content, sessions, checkpoints, or external
-   exports.
+4. Removing one Study child deletes only that store. The other child stays
+   visible beneath the same Study header.
+5. Every Grant connected to a deleted Profile is removed in the same registry
+   generation, so no live Grant references a store that no longer exists.
+6. The reviewed registry generation and target UID are revalidated under the
+   registry lock before deletion begins.
+7. Every target store is fully validated as a plain, non-symlink tree before
+   any recursive deletion can occur.
+8. The whole UID-rooted store is destroyed. This includes all Context records,
+   Memories, workflow sessions, command receipts, and checkpoints inside it.
 
-## Persistence and compatibility
+## Publication and failure boundary
 
-Profile registry schema version 3 adds the ordered `removed_profile_uids`
-field. Versions 1 and 2 load with an empty removed set and migrate on the next
-registry write. A removed UID must still identify a registered managed Profile;
-the authoring UID and active UID are rejected. Ordering follows the Profile
-registry so equivalent states serialize deterministically.
+Target stores first move to a private batch directory beneath the managed
+stores parent. The move uses exact, validated UID paths on the same filesystem.
+The registry generation then publishes the tombstones and removes incident
+Grants. If publication did not occur, the batch is moved back to the canonical
+UID paths before the registry lock is released.
 
-`archive-study` retains its existing legacy detach behavior for compatibility.
-Unlike soft removal, that command unregisters a complete legacy group after
-writing an archive manifest. The new commands cover current Study pairs and
-individual child visibility without rewriting the older archival contract.
+After publication, the batch is recursively destroyed and the stores directory
+is fsynced. There is deliberately no post-publication rollback: restoring the
+old registry after any bytes had been destroyed could expose an incomplete
+Profile as live. A failure after publication is therefore reported as a failed
+cleanup with no supported `mem` recovery route, never as a successful atomic
+restore.
+
+This registry lock serializes cooperative Profile mutations, but it is not a
+lease held by already-running commands. A process that resolved the deleted
+store before approval may fail when it next accesses that path. The exact
+review's permanent-deletion warning is the boundary chosen for this research
+prototype.
+
+## Compatibility
+
+Registry versions 1 and 2 still load with an empty tombstone set and migrate on
+the next registry write. A version 3 tombstone must identify a registered
+managed Profile and cannot identify `authoring` or the active Profile. A store
+left behind by the earlier selector-only implementation can be permanently
+purged by naming that Profile directly or deleting its complete Study; a
+tombstone whose store is already absent is treated as completed deletion.
+
+`archive-study` retains its existing legacy detach behavior. It writes an
+archive manifest and preserves stores, so it remains semantically distinct
+from permanent `remove-study`.
 
 ## Alternatives considered
 
-Immediate recursive deletion was rejected. A process resolves its Profile
-store before a command runs, so deleting or moving that directory could break
-an in-flight operation. It would also make an accidental TUI key irreversible.
+Keeping every store and hiding only its selector row was the first
+implementation. It protected in-flight readers and preserved Grants, but did
+not reclaim sessions or checkpoints and contradicted the intended permanent
+cleanup contract.
 
-Unregistering one child was rejected because current Study validation requires
-both participant and granted-memory roles, and Grants require both endpoint
-Profile UIDs to remain registered. Reclassifying the sibling as an ordinary
-Profile would destroy provenance needed by later study analysis.
+Unregistering a deleted child entirely was rejected. Current Study validation
+requires both provenance roles, and removing the metadata would make the
+surviving child lose the Study header. A metadata-only tombstone preserves the
+display relationship without preserving content.
 
-Treating any child removal as whole-Study removal was rejected because the
-visible hierarchy already communicates two different target scopes. A
-focusable header makes the whole-Study boundary explicit.
+Treating any child deletion as whole-Study deletion was rejected because the
+visible hierarchy communicates two different target scopes. The focusable
+header owns whole-Study deletion; its child owns only itself.
 
-## Limitations and follow-up
+## Intentional non-goals
 
-This change does not reclaim disk space and does not yet expose a trash,
-restore, or permanent purge command. A future purge needs its own review and a
-process-lease boundary before deleting stable store paths. Removed Profiles can
-continue to serve existing Grants as hidden Study dependencies, but they cannot
-be selected directly or used as endpoints for a newly created Grant.
+There is no trash, restore, undo, or checkpoint-based recovery for Profile or
+Study deletion. External exports and copies outside the managed Profile store
+are not discovered or deleted. Secure overwrite guarantees are also outside
+scope: filesystem snapshots, backups, and storage-level recovery may exist
+outside `mem`'s control.

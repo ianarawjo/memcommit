@@ -1,4 +1,4 @@
-"""Capture Profile and Study soft-removal in a real 180x52 color PTY."""
+"""Capture permanent Profile and Study deletion in a real 180x52 color PTY."""
 
 from __future__ import annotations
 
@@ -74,11 +74,19 @@ def _setup(home: Path, *, active_participant: bool) -> None:
     from memcommit.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
+
+    def save_fixture(store: MemoryStore, *, name: str, content: str) -> None:
+        context = _new_context(name=name, content=content)
+        store.save(context)
+        store.checkpoint(context, message="Permanent deletion capture")
+        store.set_current(name)
+
     authoring_store = MemoryStore(root=home / ".mem")
-    authoring_store.save(
-        _new_context(name="authoring", content="Capture authoring memory")
+    save_fixture(
+        authoring_store,
+        name="authoring",
+        content="Capture authoring memory",
     )
-    authoring_store.set_current("authoring")
     study_uid = "11111111-1111-4111-8111-111111111111"
     baseline_uid = "22222222-2222-4222-8222-222222222222"
     common = {
@@ -107,20 +115,23 @@ def _setup(home: Path, *, active_participant: bool) -> None:
         kind="MANAGED",
     )
     workspace_store = MemoryStore(root=profile_store_dir(workspace))
-    workspace_store.save(
-        _new_context(name="workspace", content="Capture workspace memory")
+    save_fixture(
+        workspace_store,
+        name="workspace",
+        content="Capture workspace memory",
     )
-    workspace_store.set_current("workspace")
     participant_store = MemoryStore(root=profile_store_dir(participant))
-    participant_store.save(
-        _new_context(name="participant", content="Capture participant memory")
+    save_fixture(
+        participant_store,
+        name="participant",
+        content="Capture participant memory",
     )
-    participant_store.set_current("participant")
     authority_store = MemoryStore(root=profile_store_dir(authority))
-    authority_store.save(
-        _new_context(name="source", content="Capture granted memory")
+    save_fixture(
+        authority_store,
+        name="source",
+        content="Capture granted memory",
     )
-    authority_store.set_current("source")
     _write_registry(
         ProfileRegistry(
             generation=1,
@@ -233,19 +244,26 @@ def _capture_study_path(home: Path) -> None:
         recorder,
         "PROPOSED COMMAND · NOT RUN",
         "mem profile remove-study capture-study --force",
+        "cannot be undone or recovered by mem",
     )
     HELPERS._snapshot(recorder, "03-study-exact-removal-review")
 
-    child.send("a")
+    child.send("\r")
     _finish(child, recorder)
-    if "Removed Study 'capture-study'" not in recorder.getvalue():
+    if "Permanently deleted Study 'capture-study'" not in recorder.getvalue():
         raise RuntimeError("Study removal did not produce its success receipt.")
+    for uid in (
+        "33333333-3333-4333-8333-333333333333",
+        "44444444-4444-4444-8444-444444444444",
+    ):
+        if (home / ".mem-profiles" / "stores" / uid).exists():
+            raise RuntimeError("Study removal retained a Profile store.")
     HELPERS._snapshot(recorder, "04-study-removal-receipt")
     _capture_read_only(
         home,
         "05-study-read-only-verification",
         "* capture-workspace",
-        "Removed Profiles hidden from this list: 2",
+        "Deleted Profile tombstones hidden from this list: 2",
     )
 
 
@@ -269,13 +287,22 @@ def _capture_profile_path(home: Path) -> None:
         recorder,
         "PROPOSED COMMAND · NOT RUN",
         "mem profile remove capture-participant --force",
+        "cannot be undone or recovered by mem",
     )
     HELPERS._snapshot(recorder, "08-profile-exact-removal-review")
 
     child.send("a")
     _finish(child, recorder)
-    if "Removed Profile 'capture-participant'" not in recorder.getvalue():
+    if "Permanently deleted Profile 'capture-participant'" not in recorder.getvalue():
         raise RuntimeError("Profile removal did not produce its success receipt.")
+    participant_store = (
+        home / ".mem-profiles" / "stores" / "33333333-3333-4333-8333-333333333333"
+    )
+    authority_store = (
+        home / ".mem-profiles" / "stores" / "44444444-4444-4444-8444-444444444444"
+    )
+    if participant_store.exists() or not authority_store.is_dir():
+        raise RuntimeError("Child removal did not preserve the exact sibling scope.")
     HELPERS._snapshot(recorder, "09-profile-removal-receipt")
     _capture_read_only(
         home,
@@ -283,7 +310,7 @@ def _capture_profile_path(home: Path) -> None:
         "capture-study  STUDY",
         "1 removed",
         "profile=capture-granted-memory",
-        "Removed Profiles hidden from this list: 1",
+        "Deleted Profile tombstones hidden from this list: 1",
     )
 
 
