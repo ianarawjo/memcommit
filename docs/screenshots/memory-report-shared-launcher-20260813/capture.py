@@ -94,7 +94,7 @@ def _prepare_fixture() -> str:
     )
     delete.cmd(historical.uid, context_name=None, force=False)
     switch.cmd("demo")
-    return memory.uid
+    return historical.uid
 
 
 def _run_child(operation: str) -> None:
@@ -163,7 +163,7 @@ def _capture(operation: str, start: int) -> int:
         _BASE._settle(child)
         _snapshot(recorder, f"{start + 1:02d}-{operation}-descendants")
 
-        child.send("\t" + DOWN + DOWN)
+        child.send("\t" + DOWN + DOWN + DOWN)
         _BASE._settle(child)
         _snapshot(recorder, f"{start + 2:02d}-{operation}-memory-focused")
 
@@ -190,8 +190,18 @@ def main() -> None:
     next_index = _capture("trace", 1)
     _capture("rationale", next_index)
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
+    plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
     assert re.search(r"\[[0-9a-f]{8}\]\[r3\]", raw.casefold())
     assert re.search(
+        r"\[historical\]\[[0-9a-f]{8}\]\[r2\]",
+        plain.casefold(),
+    )
+    assert re.search(
+        r"\x1b\[[0-9;]*38;5;180m\[historical\]",
+        raw,
+    )
+    assert re.search(
+        r"\x1b\[[0-9;]*7m\s+› "
         r"\[historical\]\[[0-9a-f]{8}\]\[r2\]",
         raw.casefold(),
     )

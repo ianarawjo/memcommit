@@ -1,14 +1,14 @@
 [32mInitialized context 'demo'.[0m
 [32mInitialized context 'demo/child'.[0m
-[32mAdded [814f9e78] First wording[0m
-[32m[1mEdited [814f9e78] in 'demo/child':[0m
+[32mAdded [ebf2bfeb] First wording[0m
+[32m[1mEdited [ebf2bfeb] in 'demo/child':[0m
 [31m  - First wording[0m
 [32m  + Second wording[0m
-[32m[1mEdited [814f9e78] in 'demo/child':[0m
+[32m[1mEdited [ebf2bfeb] in 'demo/child':[0m
 [31m  - Second wording[0m
 [32m  + Final wording used by both reports[0m
-[32mAdded [3a4bb58d] Retained historical wording[0m
-[32mRemoved [3a4bb58d] Retained historical wording[0m
+[32mAdded [f45ef742] Retained historical wording[0m
+[32mRemoved [f45ef742] Retained historical wording[0m
 [32mSwitched to context 'demo'.[0m
 PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A MEMORY · demo[0m
@@ -67,15 +67,15 @@ PTY 180 52
 
 
 [7C[0m▾[0m
-[C[0;38;5;189m    · [814f9e78][r3] Final wording used by both reports[0m
-[C[0;38;5;189m    · [historical][3a4bb58d][r2] Retained historical wording[6A[60D[0m[?25l[A[0m┌────────────────────────────────────────────────────────────────────────────────────| RANGE |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[C[0;38;5;189m    · [ebf2bfeb][r3] Final wording used by both reports[0m
+[C[0;38;5;189m    · [0;38;5;180m[historical][0;38;5;189m[f45ef742][r2] Retained historical wording[6A[60D[0m[?25l[A[0m┌────────────────────────────────────────────────────────────────────────────────────| RANGE |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  [ THIS CONTEXT ONLY ]  [0;38;5;234;48;5;117m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT                                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m  * ▾ demo                                                                                                                                                                       [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m›     ▾ demo/child                                                                                                                                                               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1;7m    › [814f9e78][r3] Final wording used by both reports[0m                                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m    · [historical][3a4bb58d][r2] Retained historical wording[0m                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m    · [ebf2bfeb][r3] Final wording used by both reports[0m                                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m    › [historical][f45ef742][r2] Retained historical wording[0m                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -117,27 +117,27 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0m↑↓ move[C ←→ expand  A restore tree  m hide Memories[Cher[C  M hide all Memories[C Enter open[Cli[Ceage  q close · 3/4 · 2 selectable[43A[127D[0m[8A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · MEMORY [814f9e78] · demo/child[0m
+[C[0m↑↓ move[C ←→ expand  A restore tree  m hide Memories[Cher[C  M hide all Memories[C Enter open[Cli[Ceage  q close · 4/4 · 2 selectable[42A[127D[0m[9A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · MEMORY [f45ef742] · demo/child[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│ UID          77f62da5-ddbd-4daf-b368-c8802054de43                                                                                                                               [0;1m^[179C[0m│[0m
-[0m│ Time         2026-08-13T15:45:49.447433                                                                                                                                         [0;48;5;238m [179C[0m│[0m
-[0m│ Command      mem edit                                                                                                                                                           [0;48;5;238m [179C[0m│[0m
-[0m│ Description  EDITED · RECORDED · [814f9e78]@1 “Second wording” → [814f9e78]@1 “Final wording used by both reports”                                                              [0;48;5;238m [179C[0m│[0m
-[0m│ Detail       Selected Memory: 814f9e78-3a0b-49f0-ad7f-b564e952d063                                                                                                              [0;48;5;238m [179C[0m│[0m
-[0m│              Lineage UIDs: 814f9e78-3a0b-49f0-ad7f-b564e952d063                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│              NOW:                                                                                                                                                               [0;48;5;238m [179C[0m│[0m
-[0m│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Final wording used by both reports                                                                                      [0;48;5;238m [179C[0m│[0m
+[0m│ UID          465a1e6c-a14f-4c87-9134-991edd52ca2b                                                                                                                               [0;1m^[179C[0m│[0m
+[0m│ Time         2026-08-13T15:55:10.289613                                                                                                                                         [0;48;5;238m [179C[0m│[0m
+[0m│ Command      mem remove                                                                                                                                                         [0;48;5;238m [179C[0m│[0m
+[0m│ Description  REMOVED · RECORDED · [f45ef742]@2 “Retained historical wording” → ∅                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│ Detail       Selected Memory: f45ef742-0c32-44fe-924c-42eef2f1d993                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│              Lineage UIDs: f45ef742-0c32-44fe-924c-42eef2f1d993                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│              NOW: ∅                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
 [0m│              EARLIEST RETAINED:                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 First wording                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│                [f45ef742-0c32-44fe-924c-42eef2f1d993]@2 Retained historical wording                                                                                             [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│              Operation: mem edit                                                                                                                                                [0;48;5;238m [179C[0m│[0m
-[0m│              Effect: EDITED                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│              Operation: mem remove                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│              Effect: REMOVED                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
 [0m│              Evidence: RECORDED                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│              BEFORE:                                                                                                                                                            [0;48;5;238m [179C[0m│[0m
-[0m│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Second wording                                                                                                          [0;48;5;238m [179C[0m│[0m
-[0m│              AFTER:                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
-[0m│                [814f9e78-3a0b-49f0-ad7f-b564e952d063]@1 Final wording used by both reports                                                                                      [0;48;5;238m [179C[0m│[0m
-[0m│              Description: Edited memory [814f9e78]                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│                [f45ef742-0c32-44fe-924c-42eef2f1d993]@2 Retained historical wording                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│              AFTER: ∅                                                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│              Description: Removed memory [f45ef742]: "Retained historical wording"                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -161,11 +161,11 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;1;7m›  2026-08-13 15:45  mem edit  77f62da5  EDITED · RECORDED · [814f9e78]@1 “Second wording” → [814f9e78]@1 “Final wording used by both reports”[0m                                   [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m   2026-08-13 15:45  mem edit  bfdd98f1  EDITED · RECORDED · [814f9e78]@1 “First wording” → [814f9e78]@1 “Second wording”                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m   2026-08-13 15:45  mem add   1765a884  CREATED · RECORDED · ∅ → [814f9e78]@1 “First wording”                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m›  2026-08-13 15:55  mem remove  465a1e6c  REMOVED · RECORDED · [f45ef742]@2 “Retained historical wording” → ∅[0m                                                                   [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m   2026-08-13 15:55  mem add     6f894866  CREATED · RECORDED · ∅ → [f45ef742]@2 “Retained historical wording”                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/3[80D[7A[C[0m[44A[J[0m[?7h[?1049l[?2004lTRACE CLOSED · SELECTED [814f9e78] · READ ONLY · STORE CONTENT UNCHANGED
+[0m FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/2[80D[7A[C[0m[44A[J[0m[?7h[?1049l[?2004lTRACE CLOSED · SELECTED [f45ef742] · READ ONLY · STORE CONTENT UNCHANGED

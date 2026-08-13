@@ -7,6 +7,9 @@ number of distinct recorded operations retained for its Log/Trace lineage.
 The fixture also retains a removed Memory so both lifecycle forms are visible.
 The compact row uses separate `[UID][rN]` badges; the default current state is
 omitted and the retained-only entry renders `[historical][UID][r2]`.
+Only `[historical]` uses muted warm taupe `#c9ad93`; the UID, revision, and
+Memory content retain the shared lavender, while row focus remains blue.
+The recorded PTY quantizes that configured color to xterm-256 color `180`.
 
 ## Reproduction frame
 
@@ -25,8 +28,8 @@ omitted and the retained-only entry renders `[historical][UID][r2]`.
   at the full `1832×1124` Menlo canvas. Raw `.typescript` and plain `.txt`
   evidence are retained beside every PNG.
 - Color verification: the capture requires the shared light-blue ANSI focus
-  style, heavy focused-frame glyphs, and the reverse-video row focus before
-  succeeding.
+  style, heavy focused-frame glyphs, reverse-video row focus, and the exact
+  warm-taupe historical badge before succeeding.
 - Provider boundary: the Rationale evidence invokes recorded-only mode inside
   the child so the shared launcher and result can be verified deterministically
   without any provider connection.
@@ -37,13 +40,13 @@ omitted and the retained-only entry renders `[historical][UID][r2]`.
 | --- | --- | --- | --- |
 | `01-trace-exact-entry.png` | Launch bare Trace | Shared `RANGE` frame has the blue heavy focus border on `THIS CONTEXT ONLY`; exact root has no Memory | None |
 | `02-trace-descendants.png` | `Right` | `INCLUDE DESCENDANTS` is selected inside the same focused frame and the child Memory becomes visible | None |
-| `03-trace-memory-focused.png` | `Tab`, `Down`, `Down` | Focus moves through the common Surface controller to the blue heavy `CONTEXTS & MEMORIES` frame; current `[UID][r3]` and retained-only `[historical][UID][r2]` rows are both visible | None |
-| `04-trace-result.png` | `Enter` | Trace opens the shared Log temporal `ITEMS + VIEWER` result | None |
+| `03-trace-memory-focused.png` | `Tab`, `Down` × 3 | Focus moves through the common Surface controller to the retained-only row; its complete `[historical][UID][r2]` target uses the ordinary blue focus treatment while the current `[UID][r3]` row remains lavender | None |
+| `04-trace-result.png` | `Enter` | Trace opens the shared Log temporal `ITEMS + VIEWER` result for the retained historical UID | None |
 | `05-trace-verification.png` | `q` | Child reports the selected UID and unchanged store content | None |
 | `06-rationale-exact-entry.png` | Launch bare Rationale | The same shared framed launcher starts at exact range | None |
 | `07-rationale-descendants.png` | `Right` | The same descendant range exposes the same Memory | None |
-| `08-rationale-memory-focused.png` | `Tab`, `Down`, `Down` | The same common target frame owns focus and shows the same current and historical badge structures | None |
-| `09-rationale-result.png` | `Enter` | Rationale opens its complete common read-only Viewer report | None |
+| `08-rationale-memory-focused.png` | `Tab`, `Down` × 3 | The same common target frame gives the historical row the ordinary blue focus treatment | None |
+| `09-rationale-result.png` | `Enter` | Rationale opens its complete common read-only Viewer report for the retained historical UID | None |
 | `10-rationale-verification.png` | `q` | Child reports the selected UID and unchanged store content | None |
 
 The launcher reuses `build_focused_frame`, `build_tui_frame`, the service theme,

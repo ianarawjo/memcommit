@@ -87,6 +87,14 @@ CONTEXT_PICKER_STYLE = _CONTEXT_PICKER_STYLE
 
 
 @dataclass(frozen=True)
+class ContextMemoryBadge:
+    """One independently styled badge attached to a Memory preview row."""
+
+    text: str
+    style: str | None = None
+
+
+@dataclass(frozen=True)
 class ContextMemoryRow:
     """One read-only projection below a Context row."""
 
@@ -95,7 +103,8 @@ class ContextMemoryRow:
     style: Literal["memory-object", "report-neutral"] = "memory-object"
     selector: str | None = None
     source: SourceDisplayFacts | None = None
-    badges: tuple[str, ...] = ()
+    label_style: str | None = None
+    badges: tuple[ContextMemoryBadge, ...] = ()
 
 
 def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
@@ -258,20 +267,39 @@ def render_context_options(
                 display_label = (
                     f"{object_label} " if object_label else ""
                 ) + memory.label
-                display_badges = (display_label, *memory.badges)
                 memory_annotations = (
                     source_annotation_tokens(memory.source)
                     if memory.source is not None
                     else ()
                 )
-                leading = (
-                    "  " * (row.depth + 1)
-                    + f"{memory_pointer} "
-                    + "".join(
-                        f"[{display_escape_text(badge)}]"
-                        for badge in display_badges
+                label_style = (
+                    memory_style
+                    if memory_is_focused or memory.label_style is None
+                    else f"class:{memory.label_style}"
+                )
+                styled_leading_fragments = [
+                    (
+                        memory_style,
+                        "  " * (row.depth + 1) + f"{memory_pointer} ",
+                    ),
+                    (label_style, f"[{display_escape_text(display_label)}]"),
+                ]
+                for badge in memory.badges:
+                    badge_style = (
+                        memory_style
+                        if memory_is_focused or badge.style is None
+                        else f"class:{badge.style}"
                     )
-                    + " "
+                    styled_leading_fragments.append(
+                        (badge_style, f"[{display_escape_text(badge.text)}]")
+                    )
+                styled_leading_fragments.append((memory_style, " "))
+                leading = "".join(
+                    text for _style, text in styled_leading_fragments
+                )
+                has_custom_badge_style = not memory_is_focused and (
+                    memory.label_style is not None
+                    or any(badge.style is not None for badge in memory.badges)
                 )
                 annotation_width = get_cwidth(
                     " · ".join(token.text for token in memory_annotations)
@@ -289,9 +317,16 @@ def render_context_options(
                     ),
                 )
                 if not memory_annotations:
-                    fragments.append((memory_style, leading + content_lines[0]))
+                    if has_custom_badge_style:
+                        fragments.extend(styled_leading_fragments)
+                        fragments.append((memory_style, content_lines[0]))
+                    else:
+                        fragments.append((memory_style, leading + content_lines[0]))
                 else:
-                    fragments.append((memory_style, leading))
+                    if has_custom_badge_style:
+                        fragments.extend(styled_leading_fragments)
+                    else:
+                        fragments.append((memory_style, leading))
                     fragments.extend(
                         render_source_display_tokens(
                             memory_annotations,

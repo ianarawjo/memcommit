@@ -19,6 +19,7 @@ import memcommit.commands.context_picker as context_picker
 import memcommit.ops as ops
 from memcommit.provenance import TraceCandidate, collect_trace_candidates
 from memcommit.store import MemoryStore
+from memcommit.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
 
 
 def candidate(
@@ -169,9 +170,20 @@ def test_report_picker_projects_current_and_historical_as_separate_badges(
     )
 
     assert selected is None
-    assert [(row.label, row.badges) for row in observed_rows] == [
-        ("00000000", ("r2",)),
-        ("historical", ("00000000", "r3")),
+    assert [
+        (
+            row.label,
+            row.label_style,
+            tuple((badge.text, badge.style) for badge in row.badges),
+        )
+        for row in observed_rows
+    ] == [
+        ("00000000", None, (("r2", None),)),
+        (
+            "historical",
+            "historical-memory-badge",
+            (("00000000", None), ("r3", None)),
+        ),
     ]
 
 
@@ -318,6 +330,17 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
     )
 
     assert "[historical][00000000][r4]" in rendered
+    historical_style = next(
+        style
+        for style, text in _render_memory_options(
+            options + (candidate(2),), selected=1
+        )
+        if text == "[historical]"
+    )
+    assert historical_style == "class:historical-memory-badge"
+    assert SEMANTIC_VIEWER_STYLE.get_attrs_for_style_str(
+        historical_style
+    ).color == "c9ad93"
     assert "safe\\nFAKE HEADING\\u202e" in rendered
     assert "\u202e" not in rendered
 
