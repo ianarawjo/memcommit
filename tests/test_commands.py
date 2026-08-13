@@ -120,6 +120,25 @@ class TestHelp:
         assert help_inventory._help_group_width(80) == 79
         assert help_inventory._help_group_width(20) == 36
 
+    def test_a_z_box_fills_spare_viewport_rows_inside_its_border(self):
+        fragments = help_inventory._help_group_fragments(
+            [(0, self.selector_entries()[0])],
+            title="A–Z",
+            width=52,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+            viewport_height=8,
+        )
+        lines = "".join(text for _style, text in fragments).splitlines()
+
+        assert help_inventory._help_list_viewport_height(52) == 46
+        assert len(lines) == 8
+        assert all(len(line) == 52 for line in lines)
+        assert lines[-2] == "│" + " " * 50 + "│"
+        assert lines[-1] == "└" + "─" * 50 + "┘"
+
     def test_information_box_is_full_width_and_only_in_by_kind(self):
         fragments = help_inventory._help_information_box_fragments(
             width=100,

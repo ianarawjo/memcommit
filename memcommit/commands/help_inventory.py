@@ -670,6 +670,7 @@ def _help_group_fragments(
     selected_index: int,
     expanded_index: int | None,
     selected_form: int | None,
+    viewport_height: int | None = None,
 ) -> list[tuple[str, str]]:
     """Render one discovery kind and its command records in a single box."""
     if not entries:
@@ -757,13 +758,26 @@ def _help_group_fragments(
                             (border_style, vertical + "\n"),
                         ]
                     )
+    if viewport_height is not None:
+        # A–Z owns one box, so keep spare viewport rows inside that box instead
+        # of implying that more unboxed content exists below the final command.
+        rendered_rows = sum(text.count("\n") for _style, text in fragments)
+        blank_rows = max(0, viewport_height - rendered_rows - 1)
+        for _row in range(blank_rows):
+            fragments.extend(
+                [
+                    (border_style, vertical),
+                    ("", " " * inner_width),
+                    (border_style, vertical + "\n"),
+                ]
+            )
     fragments.append(
         (
             border_style,
             ("┗" if focused else "└")
             + horizontal * inner_width
             + ("┛" if focused else "┘")
-            + "\n",
+            + ("" if viewport_height is not None else "\n"),
         )
     )
     return fragments
@@ -772,6 +786,12 @@ def _help_group_fragments(
 def _help_group_width(terminal_columns: int) -> int:
     """Use the complete Help viewport except its one-column scrollbar."""
     return max(36, terminal_columns - 1)
+
+
+def _help_list_viewport_height(terminal_rows: int) -> int:
+    """Return rows left after Help's fixed header, view, rule, and footer."""
+
+    return max(2, terminal_rows - 6)
 
 
 def _help_information_box_fragments(
@@ -978,6 +998,7 @@ def run_help_selector(
         app = app_ref.get("app")
         list_focused = app is not None and app.layout.has_focus(list_control)
         terminal_columns = app.output.get_size().columns if app is not None else 80
+        terminal_rows = app.output.get_size().rows if app is not None else 24
         card_width = _help_group_width(terminal_columns)
         by_kind = view_state.selected_uid == "CATEGORY"
         fragments.extend(
@@ -1013,6 +1034,11 @@ def run_help_selector(
                     selected_index=selected_index["value"],
                     expanded_index=expanded_index["value"],
                     selected_form=selected_form["value"],
+                    viewport_height=(
+                        None
+                        if by_kind
+                        else _help_list_viewport_height(terminal_rows)
+                    ),
                 )
             )
             if group_index < len(groups) - 1:
@@ -1424,7 +1450,9 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit([header, view_frame, body, horizontal_rule(), footer]),
+            HSplit(
+                [header, view_frame, body, horizontal_rule(right_gutter=1), footer]
+            ),
             focused_element=list_control,
         ),
         key_bindings=bindings,

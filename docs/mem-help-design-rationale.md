@@ -77,6 +77,11 @@ prompt-toolkit selector:
   Aliases remain separate commands in the same box so the inventory still
   describes every registered spelling. `A–Z` has no semantic categories, so
   its complete alphabetic projection occupies one `A–Z` box.
+  Because that projection owns only one box, the box fills any spare list
+  viewport rows with bordered blank lines and places its closing border directly
+  above the pinned footer separator. The blank space therefore remains visibly
+  part of the complete A–Z inventory instead of resembling additional unboxed
+  content. `BY KIND` keeps content-sized boxes and spacing between categories.
 - Each command record keeps its name and description on one aligned line
   inside the owning category box. A description wraps only when the terminal
   width requires it, with continuation text aligned to its original start
@@ -112,11 +117,13 @@ prompt-toolkit selector:
   syntax help.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
 
-The scrollable inventory and its fixed footer are separated by the same
-full-width horizontal-rule primitive used between regions in the common saved
-session picker. Spare terminal height therefore remains part of the list
-viewport, while the rule and key guide stay pinned at the bottom; Help does not
-grow an operation-specific separator convention.
+The scrollable inventory and its fixed footer are separated by the shared
+horizontal-rule primitive configured with a one-column right gutter. Its
+visible length ends at the same content boundary as the inventory boxes,
+leaving the scrollbar's final column blank. This avoids a one-cell overhang
+that otherwise makes the bottom rule look wider than the `A–Z` box. Spare
+terminal height remains part of the list viewport, while the rule and key guide
+stay pinned at the bottom.
 
 The selected command's callback is deliberately never invoked. Some commands
 can change local state with no additional arguments, while other commands
