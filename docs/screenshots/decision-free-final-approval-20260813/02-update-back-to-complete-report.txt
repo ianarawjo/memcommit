@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Staged update: study/direct-final/source -> study/direct-final/update-target                                                                                                    ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · study/direct-final/source                                                                                                                                             ┃
+┃   TARGET · study/direct-final/update-target                                                                                                                                      ┃
+┃ STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ PLAN                                                                                                                                                                             ┃
+┃ The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT WILL CHANGE                                                                                                                                                                 ┃
+┃ 1 exact target Memory changes in the target Context study/direct-final/update-target: 1 EDIT, 0 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exact ┃
+┃ reason and source provenance remain inspectable in Items.                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · UPDATE                                                                                                                                                                  ┃
+┃ These exact target changes are staged. Apply remains a separate explicit action.                                                                                                 ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ ~ [EDIT] study/direct-final/update-target [44444444]                                                                                                                     ┃
+┃             - The north entrance provides public access.                                                                                                                         ┃
+┃             + The south entrance is open and provides step-free access.                                                                                                          ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY is available. Enter to review before anything changes.                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Update report                                                                                                                                          ^│
+│  EDIT           study/direct-final/update-target Memory [44444444-4444-4444-8444-444444444444]                                                                                   │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Update action · APPLY is available. Enter to review before anything changes.                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  H Help  Q close

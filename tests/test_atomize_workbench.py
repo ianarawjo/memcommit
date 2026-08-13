@@ -1408,7 +1408,41 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
     assert view.capabilities == frozenset({"SUBMIT_ITEM"})
     assert view.accept_enabled is False
     assert kwargs["review_and_apply"] is False
+    assert kwargs["start_final_review_when_no_required"] is False
     assert kwargs["global_strategies"] == ()
+
+
+def test_actionable_atomize_enters_final_review_when_no_response_is_required(
+    monkeypatch,
+):
+    ctx = ops.init("workbench/direct-final-review")
+    ops.add(ctx, "Use the same NFC.")
+    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
+    workbench = create_atomize_workbench(analysis)
+    captured = []
+
+    def inspect_view(view_supplier, **kwargs):
+        captured.append((view_supplier(), kwargs))
+        return ResolutionWorkbenchAction(kind="CLOSE")
+
+    monkeypatch.setattr(
+        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        inspect_view,
+    )
+
+    run_atomize_workbench_shell(
+        workbench,
+        analysis,
+        save=lambda _session: None,
+        require_tty=False,
+        workflow_actions=True,
+    )
+
+    view, kwargs = captured[0]
+    assert all(item.effective_obligation == "OPTIONAL" for item in view.items)
+    assert view.accept_enabled is True
+    assert kwargs["review_and_apply"] is True
+    assert kwargs["start_final_review_when_no_required"] is True
 
 
 def test_atomize_uses_shared_save_location_frame_before_final_review():

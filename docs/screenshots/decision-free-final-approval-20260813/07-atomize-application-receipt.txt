@@ -1,0 +1,4 @@
+ATOMIZE APPLICATION RECEIPT                                                                                                                                                         
+STATUS · APPLIED AS IS                                                                                                                                                              
+PRESERVED · 1                                                                                                                                                                       
+UNRESOLVED AT APPLY · 2

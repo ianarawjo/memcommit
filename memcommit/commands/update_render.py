@@ -125,6 +125,7 @@ def review_update_application(
             ),
             split_viewer_items=True,
             review_and_apply=True,
+            start_final_review_when_no_required=True,
             global_strategies=(
                 ResolutionGlobalStrategy(
                     "Revise from comments",

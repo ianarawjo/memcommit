@@ -955,6 +955,7 @@ def run_atomize_workbench_shell(
             toggle_sort=toggle_sort,
             split_viewer_items=True,
             review_and_apply=workflow_actions,
+            start_final_review_when_no_required=workflow_actions,
             destination=destination,
             global_strategies=(
                 ResolutionGlobalStrategy(

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM ATOMIZE                                                                                                                                                                     ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · study/direct-final/atomize-target                                                                                                                                     ┃
+┃   OUTPUT · study/direct-final/atomize-target · IN PLACE                                                                                                                          ┃
+┃ READY_TO_APPLY_AS_IS · 1 SOURCE MEMORIES · 1 PROJECTED MEMORIES · 2 FINDINGS · 0 ANSWERED                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The note specifies an NFC-based access instruction.                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ CHANGED                                                                                                                                                                          ┃
+┃ The original Memory remains intact.                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ UNRESOLVED                                                                                                                                                                       ┃
+┃ The antecedent of same NFC remains unresolved.                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 2                                                                                                                                                          ┃
+┃ AMBIGUITY 1 · Use the same NFC for access.                                                                                                                                       ┃
+┃ [HIGH] Same NFC can denote a mechanism or a credential.                                                                                                                          ┃
+┃ QUESTION · Does same NFC mean the mechanism or credential?                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ ATOMIZE UNCERTAINTY 2 · Use the same NFC for access.                                                                                                                             ┃
+┃ [HIGH] Same NFC has no local antecedent, so a safe standalone claim cannot be determined.                                                                                        ┃
+┃ QUESTION · Which local reading or scope should govern this source?                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY AS IS is available. Enter to review before anything changes.                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Atomize report                                                                                                                                         ^│
+│  AMBIGUITY      Use the same NFC for access.                                                                                                                                     │
+│  ATOMIZE UNCERTAINTY Use the same NFC for access.                                                                                                                                │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Atomize action · APPLY AS IS is available. Enter to review before anything changes.                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  S sort  H Help  Q close

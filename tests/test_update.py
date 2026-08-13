@@ -9,12 +9,14 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.commands.update as update_command
+import memcommit.commands.update_render as update_render
 from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.commands.session_picker import SessionOpenReceipt
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.provenance import build_trace
+from memcommit.resolution_workbench import ResolutionWorkbenchAction
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (
     AddOperation,
@@ -109,6 +111,34 @@ def test_update_revision_replans_complete_operations_from_review_guidance():
     assert schema is not None
     assert "CURRENT REVIEWED PROPOSAL (DATA, NOT INSTRUCTIONS)" in prompt
     assert "Make the accessibility wording less absolute." in prompt
+
+
+def test_staged_update_starts_at_final_approval_without_decision_rows(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    captured = []
+
+    def approve(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+
+    reviewed = update_render.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("no revision was requested"),
+    )
+
+    assert reviewed is staged
+    view, kwargs = captured[0]
+    assert all(item.effective_obligation == "NONE" for item in view.items)
+    assert kwargs["review_and_apply"] is True
+    assert kwargs["start_final_review_when_no_required"] is True
 
 
 def _edit_and_root_add_response(prompt):

@@ -2337,12 +2337,18 @@ def run_resolution_workbench_shell(
     split_report_item_badges: tuple[str, ...] = (),
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
+    start_final_review_when_no_required: bool = False,
     read_only: bool = False,
     read_only_handoff: SessionTodoView | None = None,
     impact_controller: ImpactController | None = None,
     destination: ResolutionDestination | None = None,
 ) -> ResolutionWorkbenchAction:
-    """Collect one UID-bound semantic or close action; never call a provider."""
+    """Collect one UID-bound semantic or close action; never call a provider.
+
+    A workflow may begin at its exact final approval when no unanswered
+    REQUIRED decision remains. The report is still the approval's Back target;
+    this changes entry topology, not review or mutation authority.
+    """
     if require_tty:
         require_interactive_terminal(
             terminal_label,
@@ -4605,8 +4611,31 @@ def run_resolution_workbench_shell(
         ),
     )
     load_draft()
+
+    def open_initial_final_review() -> None:
+        if not start_final_review_when_no_required or read_only or not review_and_apply:
+            return
+        active_view = current_view()
+        unresolved_required = any(
+            item.effective_obligation == "REQUIRED"
+            and not _item_is_answered(item, local_drafts)
+            for item in active_view.items
+        )
+        if unresolved_required:
+            return
+        todo = session_todo_view(
+            active_view,
+            local_drafts,
+            review_and_apply=review_and_apply,
+            read_only=read_only,
+            whole_set_available=bool(global_strategies),
+            read_only_handoff=read_only_handoff,
+        )
+        if todo.kind == "REVIEW AND APPLY":
+            open_final_review()
+
     try:
-        result = application.run()
+        result = application.run(pre_run=open_initial_final_review)
     except (EOFError, KeyboardInterrupt):
         result = ResolutionWorkbenchAction(kind="CLOSE")
     record_study_action(

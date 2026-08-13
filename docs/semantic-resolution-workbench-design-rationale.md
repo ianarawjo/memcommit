@@ -384,6 +384,22 @@ non-TTY explicit command retains its deterministic scripted application
 behavior. Its multi-owner locks, rollback, checkpoints, operation digest, and
 application receipt remain unchanged.
 
+### Decision-free entry policy
+
+An owning workbench may start at its final review only when its adapter has
+declared the proposal applicable and the frozen item set contains no unanswered
+`REQUIRED` decision. This is an entry policy, not automatic application and not
+an inference from an empty-looking report. The exact Apply action remains a
+separate user confirmation, while Back returns to the complete Viewer and any
+optional or no-obligation Items.
+
+Update opts into this policy because its planned-change rows have obligation
+`NONE`. Atomize opts in because its findings are `OPTIONAL` and silence means
+apply the exact structural proposal while retaining those findings as
+unresolved. Meld retains the normal report-first decision path whenever a
+required Conflict is unanswered. Read-only workbenches never enter an Apply
+surface through this policy.
+
 The staged host offers both `G` whole-set guidance and `RESPONSE` on an opened
 Items change. An expanded located Impact row exposes the same response through
 `C`; it does not create a second comment identity. Because Update rows carry

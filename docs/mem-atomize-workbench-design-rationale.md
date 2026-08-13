@@ -330,8 +330,11 @@ An unresolved quality finding is not itself proof that the exact structural
 proposal loses content. The workbench therefore does not turn silence into a
 deferment decision or require one response per finding. Answered unary
 responses must first be incorporated in one complete reanalysis turn. With no
-incorporable response pending, To Do opens Review and Apply, whose final action
-is `APPLY AS IS`; applying
+incorporable response pending, the owning Atomize workbench opens Review and
+Apply directly because every finding is optional. Back returns to the complete
+report so those findings remain inspectable and answerable; this entry shortcut
+does not discard them. The final action is still an explicit `APPLY AS IS`;
+applying
 uses every current `COMPOSITE` split, preserves `UNCERTAIN` sources because
 they have no children, and leaves Conflict semantics unresolved. The action
 records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,

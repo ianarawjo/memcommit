@@ -108,8 +108,12 @@ Update UID and operation digest revision, preventing a stale preview from
 appearing above a newer Apply action.
 
 In a TTY, `mem update` saves or reuses the staged receipt first, displays that
-revision-bound Impact immediately above `REVIEW AND APPLY`, and applies only
-after the final `APPLY` confirmation inside that surface. Closing the
+revision-bound Impact immediately above `REVIEW AND APPLY`, and, because its
+change rows require no decisions, opens that final review directly. Back
+returns to the complete report and exact Impact/change inspection. Update
+applies only after the final `APPLY` confirmation inside that surface; the
+shortcut therefore removes a redundant entry step rather than approval.
+Closing the
 workbench leaves the receipt staged and all target owners unchanged. Non-TTY explicit update retains the
 existing scriptable application behavior; adding an interactive approval to a
 pipeline would make the command unusable rather than safer.

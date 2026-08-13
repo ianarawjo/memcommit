@@ -1876,6 +1876,78 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
     assert action.kind == "ACCEPT"
 
 
+def test_no_required_decision_can_start_at_final_approval_and_back_to_report():
+    optional = replace(
+        _item("optional"),
+        obligation="OPTIONAL",
+    )
+    view = replace(
+        _view(optional),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Direct entry begins at the final-review summary. Down reaches the
+        # exact action card and Enter approves it without a preliminary A or
+        # To Do traversal.
+        pipe_input.send_text("\x1b[B\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            start_final_review_when_no_required=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "ACCEPT"
+
+    with create_pipe_input() as pipe_input:
+        # The shortcut changes only the entry surface. Escape still unwinds
+        # to the complete report, where Q closes without applying.
+        pipe_input.send_text("\x1bq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            start_final_review_when_no_required=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+
+
+def test_required_decision_prevents_direct_final_approval_entry():
+    required = _item("required")
+    view = replace(
+        _view(required),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        # If direct final review incorrectly opened, Down+Enter would approve.
+        # With one unanswered REQUIRED item it instead stays in the decision
+        # workbench; Q then closes without crossing the Apply boundary.
+        pipe_input.send_text("\x1b[B\rq")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            start_final_review_when_no_required=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+
+
 def test_review_after_closing_detail_preserves_its_staged_choice():
     option = ResolutionOption(
         "recommended",
