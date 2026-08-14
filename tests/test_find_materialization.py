@@ -12,7 +12,7 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResponse,
     FindSearchResult,
 )
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
 )

@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.ops as ops
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.query_execution import (
     OrdinaryQueryRequest,
     run_ordinary_query_request,

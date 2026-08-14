@@ -2,7 +2,7 @@ import json
 import uuid
 
 import memcommit.ops as ops
-from memcommit.commands.granted_context import ContextAccess
+from memcommit.authority.access import ContextAccess
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,

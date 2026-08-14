@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Literal
 
-from memcommit.commands.granted_context import ContextAccess
+from memcommit.authority.access import ContextAccess
 from memcommit.profiles import ProfileError
 
 

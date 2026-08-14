@@ -9,7 +9,7 @@ from typing import Literal
 
 import memcommit.ops as ops
 from memcommit.commands.find_search_workbench import FindSearchResponse
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     authorized_context_operation,
 )

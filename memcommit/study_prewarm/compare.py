@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 import uuid
 
 from memcommit.commands.comparison_execution import load_comparison_context
-from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
+from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
@@ -49,7 +49,7 @@ from memcommit.study_prewarm.scope_equivalence import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.commands.granted_context import ContextAccess
+    from memcommit.authority.access import ContextAccess
 
 
 COMPARE_ARTIFACT_KIND = "STUDY_COMPARE_EXACT_PREWARM"

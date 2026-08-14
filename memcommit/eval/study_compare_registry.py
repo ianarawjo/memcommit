@@ -16,7 +16,7 @@ import sys
 from typing import Sequence
 
 from memcommit.commands.comparison_execution import load_comparison_context
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
 from memcommit.profile_config import load_profile_registry, profile_store_dir, study_run_identity

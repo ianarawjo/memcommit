@@ -18,7 +18,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     attached_grants,

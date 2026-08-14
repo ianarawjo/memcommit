@@ -1,4 +1,4 @@
-"""Resolve permissioned cross-Profile Context views for ordinary commands."""
+"""Resolve permissioned cross-Profile Context views for application adapters."""
 
 from __future__ import annotations
 

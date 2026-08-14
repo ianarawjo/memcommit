@@ -11,7 +11,7 @@ from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.clipboard import ClipboardError, write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )

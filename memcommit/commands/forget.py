@@ -11,7 +11,7 @@ from memcommit.commands.command_wait import (
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.forget_setup_workbench import choose_forget_setup
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     authorized_context_mutation,
     context_access_display_facts,
     grant_checkpoint_args,

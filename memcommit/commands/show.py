@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     attached_grants,
     context_access_display_facts,

@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.batch_input import parse_edit_lines, read_text_input
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,

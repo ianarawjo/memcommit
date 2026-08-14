@@ -11,7 +11,7 @@ import memcommit.commands.find as find_command
 import memcommit.commands.query as query_command
 import memcommit.commands.rationale as rationale_command
 from memcommit.cli import app
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.memory_picker import MemoryReportTargetSelection
 from memcommit.commands.memory_report_recents import MemoryReportSelectAction
 from memcommit.commands.readable_context_catalog import (

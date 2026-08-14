@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     authorized_context_operation,
     grant_checkpoint_args,

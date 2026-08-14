@@ -10,7 +10,7 @@ from typing import Iterator, Protocol
 # application boundary and still live under commands. Keep the dependency in
 # this infrastructure adapter so the application and domain remain terminal-
 # independent; move it only after another vertical slice proves the same owner.
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,

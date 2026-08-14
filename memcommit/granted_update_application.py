@@ -8,7 +8,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Literal
 
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_update_target,
     revalidate_granted_context_binding,

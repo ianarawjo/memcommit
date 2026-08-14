@@ -29,7 +29,7 @@ from memcommit.commands.comparison_execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context_locator import resolve_context_locator

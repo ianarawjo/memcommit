@@ -12,7 +12,7 @@ from memcommit.commands.context_picker import (
     ContextMemorySelection,
     choose_context,
 )
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     authorized_context_mutation,
     grant_checkpoint_args,

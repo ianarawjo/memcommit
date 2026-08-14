@@ -17,7 +17,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.commands.command_progress import CommandProgress
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )

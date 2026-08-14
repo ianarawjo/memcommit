@@ -16,7 +16,7 @@ import memcommit.commands.meld as meld_command
 from memcommit.cli import app
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.comparison_store import comparison_analysis_path
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,

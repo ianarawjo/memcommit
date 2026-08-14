@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     revalidate_granted_context_binding,
 )

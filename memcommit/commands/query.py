@@ -9,7 +9,7 @@ import typer
 import memcommit.ops as ops
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )

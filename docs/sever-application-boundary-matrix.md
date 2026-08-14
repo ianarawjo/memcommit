@@ -78,7 +78,7 @@ SeverPersistedApplyResult
 provider-decoder contracts. It does not import terminal or command modules.
 `memcommit.sever_runtime` implements Store, Grant, cache, provider-attempt,
 destination-validation, private-session, and checkpoint ports. Grant mechanics temporarily remain under
-`memcommit.commands.granted_context`; that transitional dependency is confined
+`memcommit.authority.access`; that transitional dependency is confined
 to the runtime adapter, as it is for the Summarize slice.
 
 `memcommit.commands.sever` retains thin `_start` and `_apply` compatibility

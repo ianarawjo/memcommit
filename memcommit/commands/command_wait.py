@@ -43,7 +43,7 @@ from memcommit.commands.context_picker import (
     render_context_options,
     render_context_roots,
 )
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.context import Context
 from memcommit.provenance import TraceReport, build_trace
 from memcommit.store import MemoryStore

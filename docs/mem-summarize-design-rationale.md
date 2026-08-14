@@ -164,7 +164,7 @@ presentation route explicit, and forced TUI failure occurs before Store
 construction.
 
 The runtime has one documented transitional dependency on the existing
-operation-neutral Grant mechanics under `memcommit.commands.granted_context`.
+operation-neutral Grant mechanics under `memcommit.authority.access`.
 Those mechanics are already reused outside commands. They are not copied or
 moved in this slice because a second operation must first confirm their final
 owner and lifecycle.

@@ -16,7 +16,7 @@ from memcommit.commands.comparison_execution import ensure_comparison_analysis
 from memcommit.commands.atomize_sessions import atomize_session_entries
 from memcommit.commands.compare_sessions import comparison_session_entries
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,

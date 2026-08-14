@@ -4,7 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.chunking import ChunkMethod
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,

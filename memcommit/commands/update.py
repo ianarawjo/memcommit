@@ -12,7 +12,7 @@ from memcommit.commands.command_wait import (
     run_command_wait,
 )
 from memcommit.commands.endpoint_setup_flows import choose_update_setup
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_update_target,
     resolve_context_access,

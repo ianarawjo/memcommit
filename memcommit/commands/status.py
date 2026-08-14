@@ -3,7 +3,7 @@ from typing import Annotated
 import typer
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,

@@ -19,7 +19,7 @@ import sys
 import threading
 import time
 
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )

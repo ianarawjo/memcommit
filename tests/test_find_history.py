@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.commands.find import _run_find_search_request
 from memcommit.commands.find_search_workbench import FindSearchRequest
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
 )

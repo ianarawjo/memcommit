@@ -13,7 +13,7 @@ from memcommit.commands import meld as meld_command
 from memcommit.cli import app
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.comparison_execution import ensure_comparison_analysis
-from memcommit.commands.granted_context import ContextAccess
+from memcommit.authority.access import ContextAccess
 from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonInput,

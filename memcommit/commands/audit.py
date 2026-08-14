@@ -19,7 +19,7 @@ from memcommit.commands.command_wait import (
     run_command_wait,
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,

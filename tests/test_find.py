@@ -20,7 +20,7 @@ from memcommit.commands.find import (
     _show_result_proposal,
     _supplement_namespace_branch_coverage,
 )
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
 )

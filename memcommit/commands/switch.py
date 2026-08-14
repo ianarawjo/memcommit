@@ -9,7 +9,7 @@ from memcommit.context_locator import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )

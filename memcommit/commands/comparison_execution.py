@@ -18,7 +18,7 @@ from memcommit.comparison_store import (
     save_comparison_analysis,
 )
 from memcommit.commands.command_wait import CommandWaitView
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,

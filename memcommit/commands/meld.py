@@ -30,7 +30,7 @@ from memcommit.commands.comparison_execution import (
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_locator import resolve_context_locator
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,

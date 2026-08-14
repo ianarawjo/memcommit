@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.config import Config
 from memcommit.context import Context
 from memcommit.derived_policy import (
@@ -541,7 +541,7 @@ def install_declared_sever_prewarms(
 def _local_output_access(store: MemoryStore, name: str):
     # Kept local to avoid broadening the public Context locator contract for a
     # require-new output name.
-    from memcommit.commands.granted_context import ContextAccess
+    from memcommit.authority.access import ContextAccess
 
     validate_context_name(name)
     if store.context_exists(name):

@@ -26,7 +26,7 @@ from memcommit.commands.comparison_execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.commands.granted_context import ContextAccess, resolve_context_access
+from memcommit.authority.access import ContextAccess, resolve_context_access
 from memcommit.comparison import ComparisonAnalysis, ComparisonInput
 from memcommit.comparison_provider import analyze_comparison
 from memcommit.comparison_store import load_comparison_analysis

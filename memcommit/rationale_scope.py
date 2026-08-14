@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     resolve_context_access,
 )

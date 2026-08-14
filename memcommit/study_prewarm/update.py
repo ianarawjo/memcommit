@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_update_target,
     resolve_context_access,

@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,

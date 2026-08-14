@@ -3,7 +3,7 @@ import sys
 import typer
 
 from memcommit.commands.context_picker import choose_context, context_memory_rows
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.commands.readable_context_catalog import (

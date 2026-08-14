@@ -1,5 +1,21 @@
 # Granted operation matrix and artifact boundary
 
+## Ownership boundary
+
+Grant access resolution, frozen binding, authorization locking, and bounded
+READ projection are owned by `memcommit.authority.access`.  They are shared
+application infrastructure, not CLI behavior: command, runtime, evaluation,
+and study adapters import that owner directly.  The former
+`memcommit.commands.granted_context` module was removed rather than retained
+as a compatibility facade so a terminal-facing package cannot remain the
+dependency root for non-terminal application slices.
+
+Profile-registry persistence and its serialized compatibility schema remain in
+`profile_config` and `profiles` for this behavior-preserving move.  Separating
+those persistence responsibilities is independent from locating the shared
+authorization boundary and must preserve existing registry and saved-artifact
+formats when undertaken.
+
 ## Problem
 
 A granted Context should behave like an ordinary Context wherever its grant

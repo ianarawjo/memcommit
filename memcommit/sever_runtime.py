@@ -8,7 +8,7 @@ import uuid
 # Transitional dependency: Grant access mechanics still live under commands.
 # Keeping them in this Store adapter prevents the terminal-independent
 # application boundary from depending on the CLI package during the rollout.
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,

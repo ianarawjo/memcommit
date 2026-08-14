@@ -47,7 +47,7 @@ def _provider_event_count() -> int:
 
 
 def _load_scopes():
-    from memcommit.commands.granted_context import (
+    from memcommit.authority.access import (
         GrantedReadStore,
         resolve_context_access,
     )

@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.sever import _capture_binding, _start
 from memcommit.cli import app
 from memcommit.config import Config

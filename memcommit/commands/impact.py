@@ -29,7 +29,7 @@ from memcommit.commands.command_progress import (
     progressing_provider_factory,
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import (
+from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_update_target,
     resolve_context_access,

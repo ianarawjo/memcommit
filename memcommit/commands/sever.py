@@ -7,7 +7,7 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.commands.granted_context import resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
     SessionOpenReceipt,

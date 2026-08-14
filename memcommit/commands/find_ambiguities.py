@@ -8,7 +8,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.granted_context import GrantedReadStore, resolve_context_access
+from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_heading,
     render_memory,
