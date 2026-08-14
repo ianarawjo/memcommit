@@ -35,8 +35,6 @@ from memcommit.commands.query_execution import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
-    OrdinaryQueryRequest,
-    OrdinaryQueryResponse,
 )
 from memcommit.commands.session_help import bind_session_help
 from memcommit.interfaces.tui.components.focus import (
@@ -75,6 +73,10 @@ from memcommit.source_projection.presentation import (
 from memcommit.find_answer_references import (
     FindAnswerReferenceDocument,
     render_numbered_find_answer_reference,
+)
+from memcommit.query_application import (
+    OrdinaryQueryRequest,
+    OrdinaryQueryResponse,
 )
 
 

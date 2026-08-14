@@ -66,8 +66,12 @@ remain compatible.
 
 ## Shared execution boundary
 
-`commands/query_execution.py` owns the typed request and response contracts
-used by both CLI and TTY:
+Ordinary Query now crosses the terminal-independent
+`query_application.py` request, frozen-source, provider-ordering, and response
+boundary. `query_runtime.py` supplies the `MemoryStore` and readable-catalog
+adapter. CLI and TTY call that same runtime directly, while
+`commands/query_execution.py` re-exports a compatibility facade and continues
+to own the not-yet-extracted granted Query path:
 
 - `OrdinaryQueryRequest` freezes question, exact public Context names,
   descendant policy, and embed policy. It has no top-k evidence limit.
@@ -81,8 +85,10 @@ used by both CLI and TTY:
 The CLI continues to resolve its overloaded positional grammar for backward
 compatibility, then constructs one of these typed requests. The workbench never
 re-enters that string inference path. Presentation and progress stay in the
-calling adapter; provider connection, evidence selection, concealed-source
-opening, session append, and final revalidation stay in shared execution.
+calling adapter. For ordinary Query, readable evidence freezes and whole-frame
+preflight completes before the injected provider factory is called, and no
+durable effect exists. Concealed-source opening, granted-route revalidation,
+and optional session append remain in the separate granted execution path.
 
 ## Authority and persistence invariants
 

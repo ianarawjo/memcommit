@@ -16,10 +16,8 @@ from memcommit.authority.access import (
 from memcommit.commands.query_execution import (
     GrantedQueryRequest,
     GrantedQueryTarget,
-    OrdinaryQueryRequest,
     freeze_granted_query_targets,
     run_granted_query_request,
-    run_ordinary_query_request,
 )
 from memcommit.commands.ordinary_query_provider_policy import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
@@ -45,6 +43,8 @@ from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
+from memcommit.query_application import OrdinaryQueryRequest
+from memcommit.query_runtime import execute_ordinary_query
 from memcommit.query_sessions import (
     AuthorityQueryCatalogEntry,
     QuerySessionError,
@@ -84,13 +84,18 @@ def _query_ordinary_context(
         "connecting provider",
         total=2,
     ) as progress:
-        response = run_ordinary_query_request(
-            store,
-            catalog,
+        response = execute_ordinary_query(
             request,
-            connect_provider=connect_codex_chatgpt_provider,
-            on_stage=lambda stage, step: (
-                progress.update(stage, step=step) if step > 1 else None
+            store=store,
+            catalog=catalog,
+            provider_factory=connect_codex_chatgpt_provider,
+            observer=lambda stage: (
+                progress.update(
+                    "answering from complete frozen corpus",
+                    step=2,
+                )
+                if stage == "ANSWERING"
+                else None
             ),
         )
     if not response.grounded:
@@ -151,11 +156,11 @@ def _open_query_workbench(
         current_context=displayed_current,
         initial_context=access.display_name,
         query_targets=freeze_granted_query_targets(store),
-        run_ordinary=lambda request: run_ordinary_query_request(
-            store,
-            catalog,
+        run_ordinary=lambda request: execute_ordinary_query(
             request,
-            connect_provider=connect_codex_chatgpt_provider,
+            store=store,
+            catalog=catalog,
+            provider_factory=connect_codex_chatgpt_provider,
         ),
         run_granted=lambda request: run_granted_query_request(
             store,

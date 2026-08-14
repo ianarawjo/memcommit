@@ -7,21 +7,6 @@ from dataclasses import dataclass
 import json
 
 from memcommit.commands.readable_context_catalog import ReadableContextCatalog
-from memcommit.context_targeting.search import (
-    collect_readable_search_candidates,
-    load_readable_search_roots,
-)
-from memcommit.find_answer_references import FindAnswerReferenceDocument
-from memcommit.find_scope_evidence import (
-    compact_artifact_references,
-    compact_reference_content,
-    visible_result_evidence,
-)
-from memcommit.ordinary_query_answer import (
-    build_ordinary_query_reference_document,
-    complete_ordinary_query_answer,
-    prepare_ordinary_query_answer,
-)
 from memcommit.profile_config import (
     AuthorityGrant,
     load_profile_registry,
@@ -31,6 +16,11 @@ from memcommit.profiles import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
+from memcommit.query_application import (
+    OrdinaryQueryRequest,
+    OrdinaryQueryResponse,
+)
+from memcommit.query_runtime import execute_ordinary_query
 from memcommit.query_sessions import (
     AuthorityQueryCatalogEntry,
     AuthorityQuerySource,
@@ -48,60 +38,6 @@ from memcommit.store import MemoryStore
 StageReporter = Callable[[str, int], None]
 ProviderConnector = Callable[[], object]
 CatalogLoader = Callable[..., tuple[AuthorityQueryCatalogEntry, ...]]
-
-
-@dataclass(frozen=True)
-class OrdinaryQueryRequest:
-    """One grounded answer request over an exact readable Context set."""
-
-    question: str
-    target_names: tuple[str, ...]
-    include_descendants: bool = False
-    follow_embeds: bool = True
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.question, str) or not self.question.strip():
-            raise ValueError("Enter a nonblank Query question.")
-        if (
-            not self.target_names
-            or len(set(self.target_names)) != len(self.target_names)
-            or any(not isinstance(name, str) or not name for name in self.target_names)
-        ):
-            raise ValueError("Select at least one distinct readable Context.")
-        if not isinstance(self.include_descendants, bool) or not isinstance(
-            self.follow_embeds, bool
-        ):
-            raise ValueError("Query scope choices must be explicit booleans.")
-
-
-@dataclass(frozen=True)
-class OrdinaryQueryResponse:
-    request: OrdinaryQueryRequest
-    answer: str
-    grounded: bool
-    reference_document: FindAnswerReferenceDocument | None = None
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.request, OrdinaryQueryRequest):
-            raise ValueError("Ordinary Query response requires its frozen request.")
-        if not isinstance(self.answer, str) or not self.answer.strip():
-            raise ValueError("Ordinary Query returned an empty answer.")
-        if not isinstance(self.grounded, bool):
-            raise ValueError("Ordinary Query grounded state must be boolean.")
-        if self.reference_document is not None:
-            if not isinstance(
-                self.reference_document,
-                FindAnswerReferenceDocument,
-            ):
-                raise ValueError("Ordinary Query reference document is invalid.")
-            if not self.grounded:
-                raise ValueError(
-                    "An ungrounded Query cannot expose evidence references."
-                )
-            if self.reference_document.text != self.answer:
-                raise ValueError(
-                    "Ordinary Query answer and reference document disagree."
-                )
 
 
 @dataclass(frozen=True)
@@ -219,67 +155,22 @@ def run_ordinary_query_request(
     connect_provider: ProviderConnector,
     on_stage: StageReporter | None = None,
 ) -> OrdinaryQueryResponse:
-    """Answer one ordinary request from the same corpus boundary as Find."""
+    """Compatibility facade over the ordinary Query application runtime."""
 
-    roots = load_readable_search_roots(
-        catalog,
-        request.target_names,
-        include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
-    )
-    local_roots = tuple(
-        root
-        for root in roots
-        if catalog.context_exists(root.name)
-        and not catalog.access_for(root.name).is_granted
-    )
-    candidates = collect_readable_search_candidates(
-        store,
-        roots,
-        follow_embeds=request.follow_embeds,
-        artifact_roots=local_roots,
-    )
-    label = (
-        request.target_names[0]
-        if len(request.target_names) == 1
-        else f"{len(request.target_names)} selected Contexts"
-    )
-    if not candidates:
-        return OrdinaryQueryResponse(
-            request,
-            f"{label}\n  (no grounded answer found)",
-            False,
-        )
+    def observe(stage: str) -> None:
+        if on_stage is None:
+            return
+        if stage == "CONNECTING_PROVIDER":
+            on_stage("connecting provider", 1)
+        elif stage == "ANSWERING":
+            on_stage("answering from complete frozen corpus", 2)
 
-    # Ordinary Query deliberately does not reuse Find's TOP_K_RERANK stage.
-    # The provider sees every frozen candidate once and returns prose plus the
-    # temporary aliases used by that prose in the same structured completion.
-    evidence = visible_result_evidence(candidates)
-    plan = prepare_ordinary_query_answer(request.question, evidence)
-    if on_stage is not None:
-        on_stage("connecting provider", 1)
-    provider = connect_provider()
-    if on_stage is not None:
-        on_stage("answering from complete frozen corpus", 2)
-    answer = complete_ordinary_query_answer(plan, provider)
-    if not answer.grounded:
-        return OrdinaryQueryResponse(
-            request,
-            f"{label}\n  {answer.no_answer}",
-            False,
-        )
-
-    reference_document = build_ordinary_query_reference_document(
-        compact_reference_content(
-            compact_artifact_references(evidence, candidates)
-        ),
-        answer,
-    )
-    return OrdinaryQueryResponse(
+    return execute_ordinary_query(
         request,
-        reference_document.text,
-        True,
-        reference_document,
+        store=store,
+        catalog=catalog,
+        provider_factory=connect_provider,
+        observer=observe,
     )
 
 
