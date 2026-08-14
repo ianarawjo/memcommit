@@ -11,6 +11,10 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.context import Context, QueryContextRef
+from memcommit.context_targeting.catalog import (
+    GrantedContextNavigation,
+    freeze_granted_context_navigation,
+)
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import (
@@ -19,6 +23,7 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import ProfileError
+from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
 
 
@@ -28,6 +33,23 @@ class ReadableContextBinding:
 
     public_name: str
     access: ContextAccess
+
+
+@dataclass(frozen=True)
+class ProfileContextNavigation:
+    """One switch-compatible Profile tree with exact readable bindings."""
+
+    catalog: ReadableContextCatalog
+    local_names: tuple[str, ...]
+    virtual_names: tuple[str, ...]
+    selectable_virtual_names: frozenset[str]
+    virtual_annotations: dict[str, SourceDisplayValue]
+
+    @property
+    def names(self) -> tuple[str, ...]:
+        """Return every visible public name in deterministic tree order."""
+
+        return tuple(sorted((*self.local_names, *self.virtual_names)))
 
 
 class ReadableContextCatalog:
@@ -321,3 +343,52 @@ def freeze_profile_readable_context_catalog(
         ):
             raise ProfileError("Selected readable Context grant changed.")
     return catalog
+
+
+def freeze_profile_context_navigation(
+    active_store: MemoryStore,
+    selected_access: ContextAccess,
+    *,
+    granted_navigation: GrantedContextNavigation | None = None,
+) -> ProfileContextNavigation:
+    """Freeze the same Profile breadth and authority rows used by Switch.
+
+    The selected access fixes only the initial readable row. It must never
+    become an accidental namespace root for controls labelled PROFILE or ALL
+    READABLE CONTEXTS. QUERY-only Grant routes remain visible orientation rows
+    but stay outside the materialized, loadable subset.
+    """
+
+    catalog = freeze_profile_readable_context_catalog(
+        active_store,
+        selected_access,
+        include_query_routes=False,
+    )
+    readable_names = tuple(catalog.list_context_names())
+    local_names = tuple(
+        name for name in readable_names if not catalog.access_for(name).is_granted
+    )
+    readable_virtual_names = frozenset(
+        name for name in readable_names if catalog.access_for(name).is_granted
+    )
+    grants = granted_navigation or freeze_granted_context_navigation(active_store)
+    virtual_names = tuple(
+        sorted((set(grants.names) | set(readable_virtual_names)) - set(local_names))
+    )
+    missing_annotations = set(virtual_names) - set(grants.annotations)
+    if missing_annotations:
+        raise ProfileError("Granted Profile navigation annotations are incomplete.")
+    selectable_virtual_names = readable_virtual_names & frozenset(virtual_names)
+    if selected_access.display_name not in (
+        set(local_names) | set(selectable_virtual_names)
+    ):
+        raise ProfileError("Selected readable Context left Profile navigation.")
+    return ProfileContextNavigation(
+        catalog=catalog,
+        local_names=local_names,
+        virtual_names=virtual_names,
+        selectable_virtual_names=selectable_virtual_names,
+        virtual_annotations={
+            name: grants.annotations[name] for name in virtual_names
+        },
+    )

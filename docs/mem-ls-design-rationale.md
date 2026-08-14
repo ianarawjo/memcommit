@@ -322,10 +322,17 @@ second path.
 ## 10. Interactive terminal browser
 
 With interactive stdin and stdout, and without `--copy` or `--paste`, `mem ls`
-opens the shared Context tree as a read-only browser rooted at the exact
-resolved target. Direct Memory and MemoryRef rows start visible; lowercase
-`m` hides or restores them for the focused Context, while uppercase `M`
-operates on all Contexts. Neither makes Memory rows selectable. Enter opens or
+opens the shared Context tree as a read-only browser over the complete Profile
+navigation catalog used by `mem switch`. The exact resolved target is the
+initial focused row, not the root or visibility boundary of the tree. This
+prevents a nested current Context from hiding its ancestors, siblings, other
+local roots, readable Grant rows, or opaque QUERY-only routes.
+
+Direct Memory and MemoryRef rows start visible only for the resolved target,
+or for its selected subtree under `-R`; unrelated Profile rows remain collapsed
+and unread until explicitly opened. Lowercase `m` hides or restores them for
+the focused Context, while uppercase `M` operates on all Contexts. Neither makes
+Memory rows selectable. Enter opens or
 collapses the focused Context, arrows navigate one depth at a time, `A`
 toggles full expansion, and `q` closes without changing any Context or current
 pointer. A Context leaf is still expandable: its `▸`/`▾` marker, Enter, and
@@ -333,23 +340,26 @@ Left/Right keys control its direct-Memory rows rather than leaving it as a
 non-actionable dot.
 
 Plain `mem ls` starts with the target's direct Context children visible.
-`mem ls -R` starts with every descendant occurrence expanded. The browser is
-adapted from the same frozen recursive snapshot used by the text renderer,
-not reconstructed from names alone. Process-local occurrence IDs therefore
-preserve embedded Contexts, repeated embeds, cycle leaves, query-only opaque
-rows, and namespace-derived children even when two occurrences have the same
-canonical name. Those IDs never become Context locators or persisted state.
+`mem ls -R` starts with the target's lexical descendant subtree expanded,
+while the rest of the Profile remains available for orientation. It does not
+eagerly expand the whole Profile. The TUI tree is reconstructed from the same
+ordinary and granted public-name catalogs as Switch; a QUERY-only route is an
+opaque nonmaterialized row and is never passed to the Memory loader.
 
-The tree interaction is deliberately shared with `mem contexts` and the bare
-`mem switch` picker; command meaning comes from the frozen entry projection
-and the continuation, not from a separate key grammar. `mem contexts` enters
-the complete readable namespace with Memories hidden, `mem list` enters one
-exact occurrence root with direct Memories visible, and `mem switch` consumes
-an accepted Context as a state-changing target. A list occurrence annotation
-must remain partitioned by picker domain: materialized rows use local
-annotations and opaque query rows use virtual annotations. Mixing those maps
-would make an otherwise valid materialized child fail the picker's authority
-validation before the browser opens.
+The stable noninteractive renderer, `--copy`, and `--paste` retain the exact
+target-rooted snapshot contract. That snapshot continues to preserve embedded
+Context occurrences, repeated embeds, cycles, MemoryRef resolution, and opaque
+query pointers. Profile-wide navigation is therefore a presentation contract,
+not a silent broadening of a list receipt or copied scope.
+
+The tree interaction and Profile catalog are deliberately shared with
+`mem contexts` and the bare `mem switch` picker; command meaning comes from the
+initial row, presentation options, and continuation, not from a separate key
+grammar. `mem contexts` enters with Memories hidden, `mem ls` enters with the
+resolved target focused and its in-scope direct Memories visible, and
+`mem switch` consumes an accepted Context as a state-changing target. Opaque
+Grant rows remain virtual annotations, so catalog visibility never becomes
+READ permission.
 
 Noninteractive stdout retains the stable text format for scripts, tests, and
 agents. `--copy`, `--with-ids`, and `--paste` also retain their existing text

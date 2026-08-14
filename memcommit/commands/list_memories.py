@@ -28,12 +28,14 @@ from memcommit.commands.granted_context import (
     revalidate_granted_context_binding,
 )
 from memcommit.commands.readable_context_catalog import (
+    freeze_profile_context_navigation,
     freeze_readable_context_catalog,
 )
 from memcommit.commands.context_picker import (
     ContextMemoryRow,
     ContextTree,
     choose_context,
+    context_memory_rows,
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import AuthorityGrant, ProfileConfigError
@@ -1145,43 +1147,36 @@ def cmd(
         not copy_result
         and _interactive_terminal()
     ):
-        browser_snapshot = (
-            snapshot
-            if recursive
-            else _snapshot_context(
-                ctx,
-                store=store,
-                context_names=context_names,
-                recursive=True,
-            )
+        navigation = freeze_profile_context_navigation(active_store, access)
+        materialized_navigation_names = (
+            set(navigation.local_names)
+            | set(navigation.selectable_virtual_names)
         )
-        (
-            browser_tree,
-            browser_names,
-            browser_virtual_names,
-            browser_labels,
-            browser_local_annotations,
-            browser_virtual_annotations,
-            browser_memories,
-        ) = _snapshot_browser_tree(browser_snapshot)
-        root_id = browser_tree.roots[0]
+        target_memory_contexts = frozenset(
+            name
+            for name in materialized_navigation_names
+            if name == access.display_name
+            or (recursive and name.startswith(access.display_name + "/"))
+        )
 
         choose_context(
-            browser_names,
-            current=root_id,
+            navigation.local_names,
+            current=access.display_name,
             title=f"List · {access.display_name}",
-            local_annotations=browser_local_annotations,
-            virtual_names=browser_virtual_names,
-            virtual_annotations=browser_virtual_annotations,
-            memory_loader=lambda occurrence: browser_memories.get(
-                occurrence, ()
+            virtual_names=navigation.virtual_names,
+            selectable_virtual_names=navigation.selectable_virtual_names,
+            virtual_annotations=navigation.virtual_annotations,
+            memory_loader=lambda name: context_memory_rows(
+                navigation.catalog.load(name)
             ),
             browse_only=True,
             initially_expand_selected=not recursive,
-            initially_expand_all=recursive,
-            initially_show_memories=True,
-            tree_override=browser_tree,
-            display_names=browser_labels,
+            initially_expand_all=False,
+            initially_expand_subtree_root=(
+                access.display_name if recursive else None
+            ),
+            initially_show_memories=False,
+            initially_show_memory_contexts=target_memory_contexts,
         )
         return
     annotated_text = _render_snapshot(

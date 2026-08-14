@@ -121,7 +121,13 @@ Profile's local attachment when the initial row is granted. This retains that
 public granted name as the initial selection while including ordinary local
 names and every other valid READ grant. `freeze_readable_context_catalog`
 retains its narrower selected-view behavior for explicit Query, explicit Find,
-`ls`, rationale, and other operations whose operand defines their whole scope.
+list receipts, rationale, and other operations whose operand defines their
+whole executable scope. Interactive `mem list` / `mem ls` composes that narrow
+result scope with `freeze_profile_context_navigation`: the Profile-wide catalog
+controls orientation, while the resolved operand controls only initial focus,
+initial item visibility, and recursive subtree expansion. `mem contexts` uses
+the same composition, and QUERY-only Grant routes remain visible but
+nonmaterialized exactly as in Switch.
 The blank Find and Query workbenches use the Profile-wide form because they
 render `PROFILE · ALL READABLE CONTEXTS` as an executable target.
 

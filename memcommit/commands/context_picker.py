@@ -494,7 +494,9 @@ def choose_context(
     browse_only: bool = False,
     initially_expand_selected: bool = False,
     initially_expand_all: bool = False,
+    initially_expand_subtree_root: str | None = None,
     initially_show_memories: bool = False,
+    initially_show_memory_contexts: AbstractSet[str] = frozenset(),
     tree_override: ContextTree | None = None,
     display_names: Mapping[str, str] | None = None,
     descendant_scope_names: AbstractSet[str] = frozenset(),
@@ -559,6 +561,21 @@ def choose_context(
         raise ValueError("Context display names are invalid.")
     if memory_scope_root is not None and memory_scope_root not in catalog:
         raise ValueError("The Memory scope root is outside the Context catalog.")
+    initial_memory_contexts = frozenset(initially_show_memory_contexts)
+    materialized_names = frozenset(options) | selectable_virtual
+    if not initial_memory_contexts <= materialized_names:
+        raise ValueError("Initial Memory rows require materialized Contexts.")
+    if initially_show_memories and initial_memory_contexts:
+        raise ValueError(
+            "Initial global and per-Context Memory display cannot both be requested."
+        )
+    if initially_expand_subtree_root is not None:
+        if initially_expand_subtree_root not in catalog:
+            raise ValueError("Initial expansion root is outside the Context catalog.")
+        if initially_expand_all:
+            raise ValueError(
+                "Initial full-tree and subtree expansion cannot both be requested."
+            )
     if (
         not isinstance(title, str)
         or not title.strip()
@@ -591,7 +608,18 @@ def choose_context(
         state.expanded.update(tree.expandable_names)
         state.all_expanded = True
         state._before_expand_all = set()
+    if initially_expand_subtree_root is not None:
+        # Recursive operation scope may open one subtree while the surrounding
+        # Profile remains visible for orientation. Expanding every Profile row
+        # here would silently turn a selected scope into a global read surface.
+        state.expanded.update(
+            expandable_context_subtree(tree, initially_expand_subtree_root)
+        )
     state.show_memories = initially_show_memories and memory_loader is not None
+    if memory_loader is not None:
+        state.memory_visibility_overrides.update(
+            {name: True for name in initial_memory_contexts}
+        )
     memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
     memory_anchor: tuple[str, int] | None = None
     navigation_accelerator = NavigationAccelerator()

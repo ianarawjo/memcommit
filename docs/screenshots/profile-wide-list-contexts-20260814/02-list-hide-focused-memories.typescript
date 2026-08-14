@@ -1,0 +1,100 @@
+LIVE PTY · 52 180
+PRE-BROWSE PROFILE/CURRENT
+Profile: study-20260813T202911Z-f393de78
+Store: /Users/KimMunyeong/.mem-profiles/stores/e98ae7b6-7a0b-4c07-952d-5597efcf0c06
+Contexts 66 owned + 43 granted · Memories 459 owned + 626 granted
+Current Context: task-2/participant/proposal-workspace
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m List · task-2/participant/proposal-workspace[0m
+[0m Roots · practice · practice-atomize · task-1 · task-2 · task-3[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    ▸ practice[165C[0;1m^[0m
+[0m    ▸ practice-atomize[157C[0;48;5;238m [0m
+[0m    ▸ task-1[167C[0;48;5;238m [0m
+[0m    ▾ task-2[167C[0;48;5;238m [0m
+[0m      ▸ task-2/description[153C[0;48;5;238m [0m
+[0m      ▾ task-2/participant[153C[0;48;5;238m [0m
+[0;1;7m› *     ▾ task-2/participant/proposal-workspace[132C[0;48;5;238m [0m
+[0;38;5;189m      · [memory 690ce767] task-2/advisor1[138C[0;48;5;238m [0m
+[0;38;5;189m      · [memory b78cfe59] task-2/advisor2[138C[0;48;5;238m [0m
+[0m      ▸ task-2/advisor1  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[14C[0;48;5;238m [0m
+[0m      ▸ task-2/advisor2  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[14C[0;48;5;238m [0m
+[0m      · task-2/proposal-submission-guidelines  [0;38;5;255;1mQUERY GRANT[0m · [0;38;5;255;1mPERMISSIONS QUERY + SAVE QUERY SESSION[0m · [0;38;5;255mANALYSIS RATIONALE BLOCKED + TRACE BLOCKED[35C[0;48;5;238m [0m
+[0m    ▸ task-3[167C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M show all Memories  Enter open/collapse  q close · 7/13 · 109 selectable[130D[42A[0m[8C[0;1;7m▸[0m
+[0m      ▸ task-2/advisor1  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
+[0m      ▸ task-2/advisor2  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
+[6C[0m·[8Cproposal-submission-guidelines  [0;38;5;255;1mQUE[CY GRANT[0m · [0;38;5;255;1mP[CRMISSIONS QUERY + SAVE QU[CRY SESSION[0m · [0;38;5;255mANALYSIS RATIONALE BLOCKED + T[2CCE BLOCKED[0m                     [0m
+[4C[0m▸[Ctask-3[0m                                                                                                                                                         [0m
+[0m                                                                                                                                                [0m
+[0m            [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[37C[0mshow[71C1[42A[113D[0m

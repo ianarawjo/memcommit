@@ -26,6 +26,12 @@ mem switch ./child       # switch to a child of the current Context
 mem switch ../sibling    # switch to a sibling of the current Context
 ```
 
+In a terminal, `mem contexts` and interactive `mem list` / `mem ls` open the
+same complete Profile namespace tree as bare `mem switch`, but in read-only
+browse mode. The current or explicitly resolved Context is only the initial
+row; it never crops ancestors, siblings, or other Profile roots. Outside a
+terminal, both commands retain their line-oriented output contracts.
+
 Bare `NAME` deliberately remains global. For example, from
 `organization/wiki`, `mem switch facilities` selects the canonical Context
 named exactly `facilities`; only `mem switch ./facilities` selects
@@ -157,17 +163,22 @@ receipt.
 
 ## Dependency map and ownership
 
-`mem contexts` and the interactive form of `mem switch` are two presentations
-of the same ordinary-Context catalog. They do not call each other's CLI command
-or parse each other's output. Instead, both depend directly on the
-`MemoryStore` catalog API:
+`mem contexts`, interactive List, and the interactive form of `mem switch` are
+operational adapters over the same Context picker and ordinary/granted Profile
+catalog. They do not call each other's CLI command or parse each other's output.
+Instead, each depends directly on the catalog and picker components:
 
 ```text
 memcommit.cli
 ├── mem contexts -> commands.contexts.cmd
 │   ├── MemoryStore.list_context_names()
 │   ├── MemoryStore.current_context_name()
-│   └── render the read-only list and current `*` marker
+│   ├── freeze_profile_context_navigation()
+│   └── context_picker.choose_context(browse_only=True)
+├── mem list / mem ls -> commands.list_memories.cmd
+│   ├── freeze exact target result scope
+│   ├── freeze_profile_context_navigation()
+│   └── context_picker.choose_context(browse_only=True)
 └── mem switch -> commands.switch.cmd
     ├── MemoryStore.current_context_name()       # one command-start snapshot
     ├── when NAME is omitted
@@ -181,12 +192,11 @@ memcommit.cli
     └── MemoryStore.set_current_context_if()     # the only switch-state write
 ```
 
-This shared lower-level dependency is intentional. `mem contexts` owns plain
-listing presentation, while `context_picker` owns interactive selection and
-`commands.switch` owns relative resolution, target validation, and mutation.
-Keeping the commands from invoking one another avoids making human-oriented
-output into an internal data contract while still giving both surfaces the
-same sorted names from `MemoryStore.list_context_names()`.
+This shared lower-level dependency is intentional. `context_picker` owns tree
+interaction; `commands.contexts` and List own read-only continuations and
+initial display state; and `commands.switch` owns relative resolution, target
+validation, and mutation. Keeping the commands from invoking one another
+avoids making human-oriented output into an internal data contract.
 
 `choose_context()` accepts caller-owned title and acceptance labels so a
 Compare, Update, Ground, or Switch flow does not mislabel selection as another
@@ -194,13 +204,12 @@ operation. The lower `ContextTreeState` boundary is preferred when selection
 must remain inside an existing full-screen application; launching nested Typer
 commands is not an integration mechanism.
 
-The catalog method scans only ordinary Context records under
-`contexts/**/context.json` and validates their minimum identity header. This is
-why query-only sources are absent from both `mem contexts` and the switch
-picker. A selected target is deliberately validated more deeply by
-`MemoryStore.load()` before the current pointer changes. The picker catalog can
-therefore be read cheaply, but a record with a valid header and malformed
-internal items may still appear in the list and then fail closed when selected.
+The ordinary catalog scans only Context records under
+`contexts/**/context.json`. A separate Grant navigation snapshot contributes
+READ-granted public descendants and opaque QUERY-only roots. Opaque rows are
+visible orientation only: they are not materialized, selectable, or passed to
+an ordinary Memory loader. A Switch target is deliberately validated more
+deeply before the current pointer changes.
 
 The two catalog reads are also not one atomic snapshot today. `mem contexts`
 reads the names and current pointer separately, and `mem switch` captures the

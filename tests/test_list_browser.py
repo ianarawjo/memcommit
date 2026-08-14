@@ -16,10 +16,11 @@ def invoke(*args: str):
     return runner.invoke(app, list(args))
 
 
-def test_tty_ls_roots_shared_browser_at_exact_context(
+def test_tty_ls_uses_profile_catalog_with_exact_context_as_initial_row(
     isolated_store,
     monkeypatch,
 ):
+    invoke("init", "outside")
     invoke("init", "root")
     invoke("add", "root memory")
     invoke("init", "root/child")
@@ -43,17 +44,16 @@ def test_tty_ls_roots_shared_browser_at_exact_context(
     result = invoke("ls", "root")
 
     assert result.exit_code == 0
-    assert len(observed["names"]) == 2
-    root_id = observed["current"]
-    assert observed["display_names"][root_id] == "root"
-    assert set(observed["display_names"].values()) == {"root", "root/child"}
+    assert tuple(observed["names"]) == ("outside", "root", "root/child")
+    assert observed["current"] == "root"
     assert observed["browse_only"] is True
     assert observed["initially_expand_selected"] is True
     assert observed["initially_expand_all"] is False
-    assert observed["initially_show_memories"] is True
-    assert set(observed["local_annotations"]) <= set(observed["names"])
+    assert observed["initially_expand_subtree_root"] is None
+    assert observed["initially_show_memories"] is False
+    assert observed["initially_show_memory_contexts"] == frozenset({"root"})
     assert observed["virtual_annotations"] == {}
-    rows = observed["memory_loader"](root_id)
+    rows = observed["memory_loader"]("root")
     assert [row.content for row in rows] == ["root memory"]
 
 
@@ -61,6 +61,7 @@ def test_tty_ls_recursive_starts_with_root_descendants_fully_expanded(
     isolated_store,
     monkeypatch,
 ):
+    invoke("init", "outside")
     invoke("init", "root")
     invoke("init", "root/child")
     invoke("init", "root/child/deep")
@@ -83,15 +84,20 @@ def test_tty_ls_recursive_starts_with_root_descendants_fully_expanded(
     result = invoke("ls", "-R", "root")
 
     assert result.exit_code == 0
-    assert len(observed["names"]) == 3
-    assert set(observed["display_names"].values()) == {
+    assert tuple(observed["names"]) == (
+        "outside",
         "root",
         "root/child",
         "root/child/deep",
-    }
+    )
+    assert observed["current"] == "root"
     assert observed["initially_expand_selected"] is False
-    assert observed["initially_expand_all"] is True
-    assert observed["initially_show_memories"] is True
+    assert observed["initially_expand_all"] is False
+    assert observed["initially_expand_subtree_root"] == "root"
+    assert observed["initially_show_memories"] is False
+    assert observed["initially_show_memory_contexts"] == frozenset(
+        {"root", "root/child", "root/child/deep"}
+    )
 
 
 def test_snapshot_browser_preserves_repeated_context_occurrences():

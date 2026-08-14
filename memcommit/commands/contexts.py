@@ -7,14 +7,13 @@ from memcommit.commands.granted_context import (
     resolve_context_access,
 )
 from memcommit.commands.readable_context_catalog import (
-    freeze_profile_readable_context_catalog,
+    freeze_profile_context_navigation,
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context_targeting.catalog import (
     freeze_granted_context_navigation,
-    grant_navigation_display_annotation,
 )
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
@@ -34,47 +33,33 @@ def _browse_contexts(
 ) -> None:
     """Open the shared Context tree without returning an executable target."""
 
-    initial_name = current if current in names else names[0]
+    granted_navigation = freeze_granted_context_navigation(store)
+    readable_names = set(names) | set(granted_navigation.selectable_names)
+    initial_name = current if current in readable_names else names[0]
     initial_access = resolve_context_access(
         store,
         initial_name,
         current_name=current,
         required_permission="READ",
     )
-    catalog = freeze_profile_readable_context_catalog(
+    navigation = freeze_profile_context_navigation(
         store,
         initial_access,
-        include_query_routes=False,
+        granted_navigation=granted_navigation,
     )
-    readable_names = tuple(catalog.list_context_names())
-    local_names = tuple(
-        name for name in readable_names if not catalog.access_for(name).is_granted
-    )
-    virtual_names = tuple(
-        name for name in readable_names if catalog.access_for(name).is_granted
-    )
-    virtual_annotations = {}
-    for name in virtual_names:
-        access = catalog.access_for(name)
-        if access.view is None:
-            raise ValueError("Readable granted Context annotations are incomplete.")
-        virtual_annotations[name] = grant_navigation_display_annotation(
-            name,
-            access.view.grant.permissions,
-        )
 
     def load_memories(context_name: str):
-        return context_memory_rows(catalog.load(context_name))
+        return context_memory_rows(navigation.catalog.load(context_name))
 
     # The return value is intentionally discarded. Browse mode never produces
     # a Context target, and this command has no state-writing continuation.
     choose_context(
-        local_names,
+        navigation.local_names,
         current=initial_name,
         title="Browse Contexts",
-        virtual_names=virtual_names,
-        selectable_virtual_names=frozenset(virtual_names),
-        virtual_annotations=virtual_annotations,
+        virtual_names=navigation.virtual_names,
+        selectable_virtual_names=navigation.selectable_virtual_names,
+        virtual_annotations=navigation.virtual_annotations,
         memory_loader=load_memories,
         browse_only=True,
         initially_expand_selected=False,

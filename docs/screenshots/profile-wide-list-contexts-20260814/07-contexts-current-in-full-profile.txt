@@ -1,0 +1,52 @@
+ Browse Contexts                                                                                                                                                                    
+ Roots · practice · practice-atomize · task-1 · task-2 · task-3                                                                                                                     
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    ▸ practice                                                                                                                                                                     ^
+    ▸ practice-atomize                                                                                                                                                              
+    ▸ task-1                                                                                                                                                                        
+    ▾ task-2                                                                                                                                                                        
+      ▸ task-2/description                                                                                                                                                          
+      ▾ task-2/participant                                                                                                                                                          
+› *     ▸ task-2/participant/proposal-workspace                                                                                                                                     
+      ▸ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED               
+      ▸ task-2/advisor2  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED               
+      · task-2/proposal-submission-guidelines  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED                                    
+    ▸ task-3                                                                                                                                                                        
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  Enter open/collapse  q close · 7/11 · 109 selectable
