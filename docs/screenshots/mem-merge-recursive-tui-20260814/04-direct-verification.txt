@@ -1,0 +1,2 @@
+Merged 'source' into 'target': added 1 memory.                                                                                                                                      
+DIRECT VERIFICATION · ROOT COPIED True · CHILD EXISTS False · CHILD COPIED False · PRESERVED EXISTS True · ROOT CHECKPOINTS 1

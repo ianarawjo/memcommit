@@ -1,0 +1,52 @@
+ MEM MERGE · SOURCE → CURRENT TARGET                                                                                                                                                
+ DETERMINISTIC UID UNION · DIRECT OR PATH-ALIGNED DESCENDANTS                                                                                                                       
+┌─────────────────────────────────────────────────────────────────────────────────| DESCENDANTS |──────────────────────────────────────────────────────────────────────────────────┐
+│  RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────| SOURCE · ALL READABLE CONTEXTS · * CURRENT TARGET |───────────────────────────────────────────────────────────────┐
+│› ✓   ▸ source                                                                                                                                                                   ^│
+│  × * ▸ target  UNAVAILABLE                                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
+┃  mem merge source --direct                                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
+┃  Merge the two exact Context roots only into frozen current Target 'target'.                                                                                                     ┃
+┃  Only direct items in Target Context 'target' may change.                                                                                                                        ┃
+┃  Add UID-new direct items; keep Target values for existing UIDs.                                                                                                                 ┃
+┃  No semantic reconciliation and no deletion propagation.                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃Approval applies only to the exact command shown above.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO APPLY THE EXACT MERGE ]                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter apply exact command · ↑ Source · Tab range · Esc cancel

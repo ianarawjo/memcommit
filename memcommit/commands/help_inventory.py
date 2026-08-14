@@ -418,7 +418,11 @@ COMMAND_FORMS = {
         "mem meld --into [baseline_context] (current Context is incoming)",
         "mem meld --from [incoming_context] (current Context is baseline)",
     ),
-    "merge": ("mem merge [source_context] (merge into the current Context)",),
+    "merge": (
+        "mem merge (choose a readable Source and direct or descendant reach in a TTY)",
+        "mem merge [source_context] --direct (exact Source root into current Context; default)",
+        "mem merge [source_context] --recursive (path-aligned descendants into current Context)",
+    ),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",
         "mem profile [profile_name] (select through the concise alias)",

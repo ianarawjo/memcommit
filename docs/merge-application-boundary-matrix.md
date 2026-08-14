@@ -4,8 +4,9 @@
 
 The historical direct Merge contract, its terminal-independent typed
 Application/Runtime boundary, and the path-aligned recursive runtime are
-verified. CLI/TUI exposure of descendant reach remains a separate interface
-gate; direct remains the only public command behavior at this stage.
+verified. The public CLI exposes explicit `--direct` and `--recursive` reach,
+while bare `mem merge` opens a readable Source picker and the same reach
+control in a TTY. Both adapters invoke the same typed application boundary.
 
 ## Motivating distinction
 
@@ -15,10 +16,10 @@ Source items whose durable identities are absent from the current Target. It
 does not interpret equal content, changed content, or deletion as a change to
 propagate.
 
-The proposed descendant form is a path-aligned recursive union. Because that
-new behavior will require multi-Context authority, planning, and persistence,
-the existing single-Context contract must first remain independently
-reproducible through an application boundary.
+The descendant form is a path-aligned recursive union. Because that behavior
+requires multi-Context authority, planning, and persistence, the existing
+single-Context contract remains independently reproducible through the same
+application boundary.
 
 ## Characterized direct contract
 
@@ -44,8 +45,9 @@ reproducible through an application boundary.
 | `prepare_merge`, `run_merge` | Application | Validate before Store access and require the final receipt to match the frozen plan. |
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
-| `render_merge_plain` | Plain CLI adapter | Preserve the historical success sentence from the typed result. |
-| `commands.merge.cmd` | Typer composition boundary | Parse argv, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
+| `render_merge_plain` | Plain CLI adapter | Preserve the historical direct success sentence and explicitly report recursive Context/checkpoint totals. |
+| Merge TUI setup and screen | Interactive adapter | Freeze a readable Source catalog and current Target, select exact/descendant reach, and expose one exact-command review without owning persistence. |
+| `commands.merge.cmd` | Typer composition boundary | Parse argv or route a bare TTY invocation, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
 
 `MergeReach.DESCENDANTS` uses the same typed request and result. Its result
 contains one ordered `MergeContextResult` and one checkpoint UID for every
@@ -91,11 +93,26 @@ cross-Profile recursive Merge copies direct Memory values only, matching the
 existing direct transfer boundary. A granted Target may update existing
 CREATE-authorized descendants but cannot create a missing authority Context.
 
-The internal `execute_merge()` callable now verifies local matching,
+The internal `execute_merge()` callable verifies local matching,
 Source-only creation, Target-only preservation, complete-relative-path
 alignment, granted recursive Source projection, membership freshness, and
-exception rollback. Public `--recursive` parsing and the interactive range
-control belong to the next adapter gate.
+exception rollback. `mem merge SOURCE --recursive` exposes that behavior
+non-interactively. Bare `mem merge` starts with Source focused, keeps Source
+and reach as independent shared controls, shows the exact command and effects,
+and mutates only after Enter on that review. Outside a TTY, omitting Source
+fails with a stable instruction instead of attempting a full-screen UI.
+
+## Interface verification
+
+The focused automated gate covers the unchanged direct sentence and result,
+recursive CLI path creation, conflicting reach flags, non-TTY routing,
+readable Source selection, reach traversal, exact-command projection,
+cancellation, authority, freshness, rollback, checkpoints, and the deliberate
+Undo exclusion. The ordered real-terminal evidence is recorded under
+`docs/screenshots/mem-merge-recursive-tui-20260814/` at 180×52 with color ANSI
+verified. It demonstrates direct root-only mutation, recursive Source-only
+path creation, Target-only descendant preservation, durable receipts, and a
+zero-mutation cancellation path.
 
 ## Restoration boundary
 

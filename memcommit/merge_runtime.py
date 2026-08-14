@@ -113,7 +113,7 @@ class _RecursiveMergeToken:
 
 
 class MemoryStoreMergePort(MergePort):
-    """Plan and commit direct Merge against one current-name snapshot."""
+    """Plan and commit structural Merge against one current-name snapshot."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self._store = store
@@ -123,6 +123,18 @@ class MemoryStoreMergePort(MergePort):
     @classmethod
     def capture(cls, store: MemoryStore) -> "MemoryStoreMergePort":
         return cls(store, current_name=store.current_context_name())
+
+    @property
+    def store(self) -> MemoryStore:
+        """Expose the composed Store only to setup/catalog adapters."""
+
+        return self._store
+
+    @property
+    def current_context_name(self) -> str | None:
+        """Return the one command-start navigation snapshot."""
+
+        return self._current_name
 
     def _load_source(self, access: ContextAccess) -> Context:
         if access.is_granted:

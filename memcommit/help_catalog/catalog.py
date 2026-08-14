@@ -268,11 +268,11 @@ _OPERATIONS = (
     ),
     _operation(
         "merge",
-        "Add UID-new direct items from another Context; no semantic reconciliation.",
+        "Add UID-new items from an exact Source or path-aligned descendants; no semantic reconciliation.",
         "Source Context -> current Target Context",
         ExecutionKind.DETERMINISTIC,
-        "Changes the Target Context directly",
-        "Direct items from one exact Source",
+        "Changes the Target Context tree directly; Source stays unchanged",
+        "Exact roots or matching lexical descendants by complete relative path",
     ),
     _operation(
         "profile",

@@ -1,0 +1,2 @@
+Recursively merged 'source' into 'target': 2 Contexts, 1 created; added 2 memories; 2 checkpoints.                                                                                  
+RECURSIVE VERIFICATION · ROOT COPIED True · CHILD EXISTS True · CHILD COPIED True · PRESERVED EXISTS True · ROOT CHECKPOINTS 1
