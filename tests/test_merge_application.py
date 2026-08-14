@@ -11,6 +11,7 @@ from memcommit.context import Memory
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
+    MergeContextResult,
     MergeError,
     MergeItemKind,
     MergeReach,
@@ -39,6 +40,21 @@ class _FakePort:
             target_uid="target-uid",
             target_digest="target-digest",
             additions=(MergeAddition(uid="memory-uid", kind=MergeItemKind.MEMORY),),
+            contexts=(
+                MergeContextResult(
+                    source_name="source",
+                    source_uid="source-uid",
+                    target_name="target",
+                    target_uid="target-uid",
+                    target_created=False,
+                    additions=(
+                        MergeAddition(
+                            uid="memory-uid",
+                            kind=MergeItemKind.MEMORY,
+                        ),
+                    ),
+                ),
+            ),
             cross_profile_memory_only=False,
             token=self,
         )
@@ -53,7 +69,9 @@ class _FakePort:
             target_uid=plan.target_uid,
             reach=plan.request.reach,
             additions=plan.additions,
+            contexts=plan.contexts,
             checkpoint_uid="checkpoint-uid",
+            checkpoint_uids=("checkpoint-uid",),
             cross_profile_memory_only=plan.cross_profile_memory_only,
         )
 
@@ -67,16 +85,16 @@ def test_application_validates_before_freezing_a_store():
     assert port.requests == []
 
 
-def test_application_reserves_but_rejects_descendant_reach():
+def test_application_accepts_descendant_reach_without_store_knowledge():
     port = _FakePort()
 
-    with pytest.raises(MergeError, match="not available yet"):
-        prepare_merge(
-            MergeRequest(source_locator="source", reach=MergeReach.DESCENDANTS),
-            port=port,
-        )
+    plan = prepare_merge(
+        MergeRequest(source_locator="source", reach=MergeReach.DESCENDANTS),
+        port=port,
+    )
 
-    assert port.requests == []
+    assert plan.request.reach is MergeReach.DESCENDANTS
+    assert port.requests == [plan.request]
 
 
 def test_application_rejects_a_receipt_that_does_not_match_the_plan():

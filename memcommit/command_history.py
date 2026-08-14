@@ -407,6 +407,22 @@ def _context_parts(
             if isinstance(recorded_before, dict)
             else None
         )
+        merge_tree = args.get("merge_tree")
+        is_recursive_merge = (
+            command == "merge"
+            and isinstance(merge_tree, dict)
+            and merge_tree.get("version") == 1
+            and isinstance(merge_tree.get("operation_uid"), str)
+        )
+        if is_recursive_merge:
+            # A recursive Merge can both update and create Contexts. The
+            # current lifecycle restoration archive supports one exact Sever
+            # creation only; exposing a partial tree Undo would be worse than
+            # keeping this checkpoint out of the command stack. Diff/history
+            # still retain every per-Context checkpoint until generic
+            # multi-Context creation restoration is implemented.
+            effective = snapshot
+            continue
         creation = args.get("context_creation")
         is_exact_sever_creation = (
             command == "sever"

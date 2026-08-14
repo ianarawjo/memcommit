@@ -2,9 +2,10 @@
 
 ## Status
 
-The historical direct Merge contract and its terminal-independent typed
-Application/Runtime boundary are verified. Descendant-aware behavior remains a
-separate later gate and is not claimed by this direct baseline.
+The historical direct Merge contract, its terminal-independent typed
+Application/Runtime boundary, and the path-aligned recursive runtime are
+verified. CLI/TUI exposure of descendant reach remains a separate interface
+gate; direct remains the only public command behavior at this stage.
 
 ## Motivating distinction
 
@@ -46,9 +47,9 @@ reproducible through an application boundary.
 | `render_merge_plain` | Plain CLI adapter | Preserve the historical success sentence from the typed result. |
 | `commands.merge.cmd` | Typer composition boundary | Parse argv, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
 
-`MergeReach.DESCENDANTS` is deliberately present in the typed request so later
-adapters do not need a second request shape, but direct extraction rejects that
-value before Store access. Enabling it requires its own multi-Context gate.
+`MergeReach.DESCENDANTS` uses the same typed request and result. Its result
+contains one ordered `MergeContextResult` and one checkpoint UID for every
+Source-relative Target path, while direct contains exactly one of each.
 
 ## Direct compatibility gate
 
@@ -69,18 +70,43 @@ Focused characterization lives in `tests/test_merge_characterization.py` and
 is supplemented by the existing operation, CLI, integration, Grant, reference,
 order, query-only, and concurrency suites.
 
-## Planned descendant contract
+## Descendant contract
 
-The later `--recursive` form will align lexical descendants by their complete
-relative path from the two selected roots. Matching paths receive the same
+The descendant form aligns lexical descendants by their complete relative path
+from the two selected roots. Matching paths receive the same
 direct UID-union rule, Source-only paths become fresh Target-owned Contexts,
 and Target-only paths remain unchanged. A leaf name alone is never sufficient
 to match Contexts under different parents.
 
-The complete plan must pass authority and freshness validation before any
-write. Source-only Contexts must be copied with fresh Context identities and
-internal pointers remapped to the Target subtree; the operation must not attach
-the mutable Source branch to the Target by reference.
+The complete Source and Target lexical membership, every Source record, every
+existing Target identity/digest, every require-new Target path, and every
+write-protection decision are checked before publication. All Target writes
+share the Store command lock, exclusive graph lock, and deterministic Context
+lock set. An exception restores prior Context bytes, removes new checkpoints,
+and deletes only the fresh Context identities created by the transaction.
+
+Source-only Contexts receive fresh Context identities. Same-Store internal
+Context and MemoryRef pointers are remapped to corresponding Target identities;
+cross-Profile recursive Merge copies direct Memory values only, matching the
+existing direct transfer boundary. A granted Target may update existing
+CREATE-authorized descendants but cannot create a missing authority Context.
+
+The internal `execute_merge()` callable now verifies local matching,
+Source-only creation, Target-only preservation, complete-relative-path
+alignment, granted recursive Source projection, membership freshness, and
+exception rollback. Public `--recursive` parsing and the interactive range
+control belong to the next adapter gate.
+
+## Restoration boundary
+
+Every affected Context retains a normal Merge checkpoint for Diff, History,
+and provenance. Recursive Merge checkpoints are intentionally omitted from the
+global Undo stack for now. The existing lifecycle restoration archive can
+recover one exact Sever-created Context, but cannot yet atomically restore a
+mixed command that updates existing Contexts and creates several descendants.
+Offering only the existing subset as Undo would leave a partially merged tree,
+so the command fails closed at discovery instead. Generic multi-Context
+creation restoration is a separately required extension.
 
 ## Intentional non-goals
 
@@ -89,3 +115,6 @@ the mutable Source branch to the Target by reference.
 - No semantic duplicate or conflict reconciliation; Meld owns that behavior.
 - No traversal of embedded Context graphs as if they were lexical descendants.
 - No partial publication when one descendant fails validation.
+- No recursive Merge between overlapping local Source and Target namespaces.
+- No partial Undo of a recursive Merge; generic mixed update/creation
+  restoration remains unimplemented.

@@ -51,6 +51,34 @@ class MergeAddition:
 
 
 @dataclass(frozen=True)
+class MergeContextResult:
+    """One relative-path Source/Target pair in a structural Merge plan."""
+
+    source_name: str
+    source_uid: str
+    target_name: str
+    target_uid: str
+    target_created: bool
+    additions: tuple[MergeAddition, ...]
+
+    def __post_init__(self) -> None:
+        if not all(
+            isinstance(value, str) and value
+            for value in (
+                self.source_name,
+                self.source_uid,
+                self.target_name,
+                self.target_uid,
+            )
+        ):
+            raise ValueError("Merge Context result has an incomplete identity.")
+        if type(self.target_created) is not bool:
+            raise TypeError("Merge target-created state must be a boolean.")
+        if any(not isinstance(value, MergeAddition) for value in self.additions):
+            raise TypeError("Merge Context additions must be MergeAddition values.")
+
+
+@dataclass(frozen=True)
 class FrozenMergePlan:
     """Reviewed identities and additions plus an opaque Store binding."""
 
@@ -62,6 +90,7 @@ class FrozenMergePlan:
     target_uid: str
     target_digest: str
     additions: tuple[MergeAddition, ...]
+    contexts: tuple[MergeContextResult, ...]
     cross_profile_memory_only: bool
     token: object = field(repr=False, compare=False)
 
@@ -76,7 +105,9 @@ class MergeResult:
     target_uid: str
     reach: MergeReach
     additions: tuple[MergeAddition, ...]
+    contexts: tuple[MergeContextResult, ...]
     checkpoint_uid: str
+    checkpoint_uids: tuple[str, ...]
     cross_profile_memory_only: bool
 
     def count(self, kind: MergeItemKind) -> int:
@@ -108,8 +139,6 @@ def validate_merge_request(request: MergeRequest) -> MergeRequest:
         raise MergeError("Merge Target locator must be nonempty text.")
     if not isinstance(request.reach, MergeReach):
         raise MergeError("Merge reach is invalid.")
-    if request.reach is not MergeReach.DIRECT:
-        raise MergeError("Descendant Merge is not available yet.")
     return request
 
 
@@ -139,6 +168,27 @@ def prepare_merge(
         raise MergeError("Merge plan has an incomplete Context binding.")
     if plan.source_uid == plan.target_uid and plan.source_name == plan.target_name:
         raise MergeError("Merge plan cannot target its own Source.")
+    if not plan.contexts:
+        raise MergeError("Merge plan must contain at least one Context pair.")
+    root = plan.contexts[0]
+    if (
+        root.source_name != plan.source_name
+        or root.source_uid != plan.source_uid
+        or root.target_name != plan.target_name
+        or root.target_uid != plan.target_uid
+    ):
+        raise MergeError("Merge root pair does not match the frozen plan.")
+    if (
+        tuple(addition for context in plan.contexts for addition in context.additions)
+        != plan.additions
+    ):
+        raise MergeError("Merge plan additions do not cover its Context pairs.")
+    if plan.request.reach is MergeReach.DIRECT and len(plan.contexts) != 1:
+        raise MergeError("Direct Merge must contain exactly one Context pair.")
+    if len({context.source_name for context in plan.contexts}) != len(plan.contexts):
+        raise MergeError("Merge plan repeats a Source Context.")
+    if len({context.target_name for context in plan.contexts}) != len(plan.contexts):
+        raise MergeError("Merge plan repeats a Target Context.")
     return plan
 
 
@@ -166,8 +216,13 @@ def run_merge(
         or result.target_uid != plan.target_uid
         or result.reach is not plan.request.reach
         or result.additions != plan.additions
+        or result.contexts != plan.contexts
         or result.cross_profile_memory_only != plan.cross_profile_memory_only
         or not result.checkpoint_uid
+        or not result.checkpoint_uids
+        or result.checkpoint_uid != result.checkpoint_uids[0]
+        or len(result.checkpoint_uids) != len(result.contexts)
+        or len(set(result.checkpoint_uids)) != len(result.checkpoint_uids)
     ):
         raise MergeError("Merge receipt does not match the frozen plan.")
     return result
