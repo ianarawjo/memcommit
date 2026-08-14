@@ -176,6 +176,16 @@ The user-facing operation is consistently named `SAVE AS`. The existing
 unchanged so previously written checkpoints and callers retain their exact
 schema; those tokens are implementation history, not terminal language.
 
+The workbench now submits one `FindMaterializationRequest` to the
+terminal-independent application boundary. That boundary validates the exact
+CURRENT response, checked row set, mode, destination, prepared-plan identity,
+and final receipt shape without importing Store, provider, CLI, or TUI code.
+`MemoryStoreFindMaterializationPort` owns live source resolution, derived-use
+authority, output construction, source locks, require-new publication,
+checkpointing, and rollback. The workbench no longer invokes persistence
+mechanics directly, while `commands.find_materialization` remains a thin
+compatibility facade over the same use case.
+
 ## Reuse and limitations
 
 The workbench reuses the common Surface focus controller, Context tree,

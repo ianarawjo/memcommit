@@ -76,7 +76,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         lambda: object(),
     )
     monkeypatch.setattr(
-        "memcommit.commands.find.rank_candidates",
+        "memcommit.find_application.rank_candidates",
         lambda *_args, **_kwargs: [],
     )
 

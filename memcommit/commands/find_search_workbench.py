@@ -75,6 +75,11 @@ from memcommit.context_targeting.tui.name_editor import (
 )
 from memcommit.selection import FlatMultiSelectionState, SelectionOption
 from memcommit.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.find_application import (
+    FindSearchRequest,
+    FindSearchResponse,
+    FindSearchResult,
+)
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
@@ -83,18 +88,6 @@ from memcommit.source_projection.presentation import (
     source_object_label,
 )
 
-
-FindSearchMode = Literal["CURRENT", "HISTORY"]
-FindSearchResultKind = Literal[
-    "memory",
-    "ref",
-    "query",
-    "artifact",
-    "memory_version",
-    "memory_transition",
-    "checkpoint",
-]
-FindSearchRelevance = Literal["primary", "related"]
 
 _RESULT_SOURCE_FORMS = {
     "memory": SourceForm.MEMORY,
@@ -123,106 +116,6 @@ def _has_granted_materialization_source(
     """Keep authority decisions independent from presentation annotations."""
 
     return any(result.context_name in granted_context_names for result in results)
-
-
-@dataclass(frozen=True)
-class FindSearchRequest:
-    """One exact process-local query and readable location scope."""
-
-    query: str
-    target_names: tuple[str, ...]
-    include_descendants: bool = True
-    follow_embeds: bool = True
-    limit: int = 5
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.query, str) or not self.query.strip():
-            raise ValueError("Enter a nonblank Find query.")
-        if (
-            not self.target_names
-            or any(not isinstance(name, str) or not name for name in self.target_names)
-            or len(set(self.target_names)) != len(self.target_names)
-        ):
-            raise ValueError("Select at least one distinct readable Context.")
-        if not isinstance(self.include_descendants, bool) or not isinstance(
-            self.follow_embeds, bool
-        ):
-            raise ValueError("Find scope choices must be explicit booleans.")
-        if isinstance(self.limit, bool) or not 1 <= self.limit <= 20:
-            raise ValueError("Find limit must be between 1 and 20.")
-
-
-@dataclass(frozen=True)
-class FindSearchResult:
-    """One host-resolved row rendered below the frozen search controls."""
-
-    context_name: str
-    kind: FindSearchResultKind
-    uid: str
-    content: str
-    relevance: FindSearchRelevance = "primary"
-    source_context_name: str | None = None
-    source_context_uid: str | None = None
-    source_memory_uid: str | None = None
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.context_name, str) or not self.context_name.strip():
-            raise ValueError("Find results require a Context name.")
-        if self.kind not in {
-            "memory",
-            "ref",
-            "query",
-            "artifact",
-            "memory_version",
-            "memory_transition",
-            "checkpoint",
-        }:
-            raise ValueError("Find returned an unsupported result kind.")
-        if not isinstance(self.uid, str) or not self.uid.strip():
-            raise ValueError("Find results require a local identity.")
-        if not isinstance(self.content, str) or not self.content.strip():
-            raise ValueError("Find results require nonblank content.")
-        if self.relevance not in {"primary", "related"}:
-            raise ValueError("Find returned invalid relevance.")
-        source_values = (
-            self.source_context_name,
-            self.source_context_uid,
-            self.source_memory_uid,
-        )
-        if any(value is not None for value in source_values) and not all(
-            isinstance(value, str) and value.strip() for value in source_values
-        ):
-            raise ValueError(
-                "Find result Save As identity must be complete or absent."
-            )
-
-
-@dataclass(frozen=True)
-class FindSearchResponse:
-    """Results tied to the exact request that produced them."""
-
-    request: FindSearchRequest
-    mode: FindSearchMode
-    results: tuple[FindSearchResult, ...]
-    related_query: str = ""
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.request, FindSearchRequest):
-            raise ValueError("Find responses require the frozen request.")
-        if self.mode not in {"CURRENT", "HISTORY"}:
-            raise ValueError("Find returned an invalid search mode.")
-        if not isinstance(self.results, tuple) or any(
-            not isinstance(result, FindSearchResult) for result in self.results
-        ):
-            raise ValueError("Find returned invalid result rows.")
-        if not isinstance(self.related_query, str):
-            raise ValueError("Find returned an invalid broader query.")
-        related = [result for result in self.results if result.relevance == "related"]
-        primary = [result for result in self.results if result.relevance == "primary"]
-        if related and (primary or not self.related_query.strip()):
-            raise ValueError("Related Find results require one separate broader query.")
-        if not related and self.related_query:
-            raise ValueError("A broader Find query requires related results.")
 
 
 @dataclass(frozen=True)

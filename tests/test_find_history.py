@@ -174,13 +174,13 @@ def test_non_temporal_find_keeps_the_existing_current_state_path(
         observed["limit"] = limit
         return []
 
-    monkeypatch.setattr("memcommit.commands.find.rank_candidates", current_find)
+    monkeypatch.setattr("memcommit.find_application.rank_candidates", current_find)
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find.build_history",
+        "memcommit.find_runtime.build_history",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("ordinary find must not enumerate history")
         ),

@@ -10,7 +10,6 @@ import typer
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import (
     ContextAccess,
-    GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,
 )
@@ -27,14 +26,14 @@ from memcommit.commands.find_chat_shell import (
     run_find_chat_session,
 )
 from memcommit.commands.find_search_workbench import (
-    FindSearchRequest,
-    FindSearchResponse,
-    FindSearchResult,
     run_find_search_workbench,
 )
-from memcommit.commands.find_materialization import (
+from memcommit.find_materialization_application import (
     FindMaterializationError,
-    materialize_find_results,
+    FindMaterializationRequest,
+)
+from memcommit.find_materialization_runtime import (
+    execute_find_materialization,
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.history_picker import choose_history
@@ -66,6 +65,12 @@ from memcommit.find_answer_dialogue import (
 from memcommit.find_answer_references import (
     render_find_answer_references,
 )
+from memcommit.find_application import (
+    FindSearchRequest,
+    FindSearchResponse,
+    FindSearchStage,
+)
+from memcommit.find_runtime import execute_find_search
 from memcommit.find_scope_evidence import (
     collect_outside_context_evidence,
     compact_artifact_references,
@@ -80,12 +85,11 @@ from memcommit.find_turn_dialogue import (
     FindTurnRefine,
     interpret_find_turn,
 )
-from memcommit.history import HistoryError, build_history
+from memcommit.history import HistoryError
 from memcommit.history_search import (
     HistorySearchError,
     HistorySearchResult,
     is_temporal_query,
-    search_history,
 )
 from memcommit.query_provider import (
     QueryProviderError,
@@ -591,71 +595,6 @@ def _supplement_namespace_branch_coverage(
     return result[:limit]
 
 
-def _history_context_names(
-    store: MemoryStore,
-    roots: Sequence[Context],
-    *,
-    recursive: bool,
-) -> tuple[str, ...]:
-    """Collect histories from namespace roots and their embedded graphs."""
-    names: list[str] = []
-    visited: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in visited:
-            return
-        visited.add(context.uid)
-        names.append(context.name)
-        if not recursive:
-            return
-        for item in context.iter_items():
-            if isinstance(item, Context) and store.context_exists(item.name):
-                # Historical traversal follows only explicit embedded
-                # Context pointers and uses non-resolving direct loads.
-                # MemoryRef targets and query-only sources stay unopened.
-                visit(store.load_direct(item.name))
-
-    for root in roots:
-        visit(root)
-    return tuple(names)
-
-
-def _temporal_find_results(
-    store: MemoryStore,
-    roots: Sequence[Context],
-    query: str,
-    *,
-    recursive: bool,
-    limit: int,
-) -> list[HistorySearchResult]:
-    timelines = [
-        build_history(store, name)
-        for name in _history_context_names(
-            store,
-            roots,
-            recursive=recursive,
-        )
-    ]
-    with CommandProgress(
-        "FIND HISTORY",
-        "connecting provider",
-        total=2,
-    ) as progress:
-        provider = connect_codex_chatgpt_provider()
-        progress.update("searching history", step=2)
-        return search_history(
-            timelines,
-            query,
-            provider,
-            result_kinds=(
-                "memory_version",
-                "memory_transition",
-                "checkpoint",
-            ),
-            limit=limit,
-        )
-
-
 def _render_temporal_find(
     root_name: str,
     results: list[HistorySearchResult],
@@ -1074,144 +1013,85 @@ def _run_interactive_find(
     return result
 
 
-def _find_search_result(
-    match: SearchMatch,
-    index: int,
-) -> FindSearchResult:
-    rendered = _chat_result(match, index)
-    candidate = match.candidate
-    item = candidate.item
-    if isinstance(item, Memory):
-        source_identity = (
-            candidate.context_name,
-            candidate.context_uid,
-            item.uid,
-        )
-    elif isinstance(item, MemoryRef):
-        source_identity = (
-            item.target_context_name,
-            item.target_context_uid,
-            item.target_memory_uid,
-        )
-    else:
-        source_identity = (None, None, None)
-    return FindSearchResult(
-        context_name=rendered.context_name,
-        kind=rendered.kind,
-        uid=rendered.uid,
-        content=rendered.content,
-        relevance=rendered.relevance,
-        source_context_name=source_identity[0],
-        source_context_uid=source_identity[1],
-        source_memory_uid=source_identity[2],
-    )
-
-
-def _history_find_search_result(
-    result: HistorySearchResult,
-) -> FindSearchResult:
-    timestamp = (
-        result.timestamp[:16].replace("T", " ") if result.timestamp else "current"
-    )
-    return FindSearchResult(
-        context_name=result.context_name,
-        kind=result.kind,
-        uid=result.checkpoint_uid or result.candidate_id,
-        content=(
-            f"{timestamp} · {result.description} · "
-            f"{history_result_recovery_label(result)}"
-        ),
-    )
-
-
 def _run_find_search_request(
     store: MemoryStore,
     catalog: ReadableContextCatalog,
     request: FindSearchRequest,
+    *,
+    observer=None,
 ) -> FindSearchResponse:
-    """Execute one frozen interactive request without mutating the workbench."""
+    """Compatibility adapter over the terminal-independent Find runtime."""
 
-    roots = _load_find_scope_roots(
-        catalog,
-        request.target_names,
-        include_descendants=request.include_descendants,
-        follow_embeds=request.follow_embeds,
+    return execute_find_search(
+        request,
+        store=store,
+        catalog=catalog,
+        provider_factory=connect_codex_chatgpt_provider,
+        observer=observer,
     )
-    temporal = is_temporal_query(request.query)
-    if temporal:
-        history_names = _history_context_names(
-            catalog,
-            roots,
-            recursive=request.follow_embeds,
+
+
+def _render_find_search_response(
+    response: FindSearchResponse,
+    *,
+    target_names: tuple[str, ...],
+) -> None:
+    """Present one typed application result without rerunning its search."""
+
+    heading = " + ".join(display_escape_text(name) for name in target_names)
+    if response.mode == "HISTORY":
+        history_results = tuple(
+            result.history_result
+            for result in response.results
+            if result.history_result is not None
         )
-        if any(catalog.access_for(name).is_granted for name in history_names):
-            raise RuntimeError(
-                "Temporal Find is unavailable for a granted READ view because "
-                "the grant does not expose authority checkpoint history."
+        if len(history_results) == len(response.results):
+            if _interactive_terminal() and len(target_names) == 1 and history_results:
+                choose_history(
+                    history_result_picker_entries(history_results),
+                    context_name=target_names[0],
+                    mode="log",
+                )
+                return
+            _render_temporal_find(heading, list(history_results))
+            return
+
+    if not response.results:
+        typer.secho(heading, bold=True)
+        typer.echo(
+            "  (no matching historical items)"
+            if response.mode == "HISTORY"
+            else "  (no matching items)"
+        )
+        return
+    if response.related_query:
+        if len(target_names) == 1:
+            typer.secho(heading, bold=True)
+            typer.echo("  (no primary matches)")
+            typer.echo()
+        typer.secho("RELATED RESULTS", bold=True)
+        typer.echo(
+            "  Broader search: " + display_escape_text(response.related_query)
+        )
+        typer.echo("  Related items do not satisfy the original query.")
+        typer.echo()
+    groups = group_search_items(
+        response.results,
+        context_name=lambda result: result.context_name,
+    )
+    for group_index, (owner_name, results) in enumerate(groups):
+        if group_index or response.related_query:
+            typer.echo()
+        typer.secho(display_escape_text(owner_name), bold=True)
+        for result in results:
+            if result.current_match is not None:
+                _render_match(result.current_match)
+                continue
+            related = " · RELATED" if result.relevance == "related" else ""
+            _render_labeled_content(
+                f"[{result.kind} {result.uid[:8]}]{related}",
+                result.content,
             )
-        timelines = [build_history(store, name) for name in history_names]
-        provider = connect_codex_chatgpt_provider()
-        history_results = search_history(
-            timelines,
-            request.query,
-            provider,
-            result_kinds=(
-                "memory_version",
-                "memory_transition",
-                "checkpoint",
-            ),
-            limit=request.limit,
-        )
-        return FindSearchResponse(
-            request=request,
-            mode="HISTORY",
-            results=tuple(
-                _history_find_search_result(result) for result in history_results
-            ),
-        )
-
-    # Activity evidence belongs to the active Profile. READ-granted roots can
-    # contribute their authorized Memories, but never the authority Profile's
-    # private checkpoints, sessions, traces, or rationale records.
-    local_roots: list[Context] = []
-    for root in roots:
-        try:
-            access = catalog.access_for(root.name)
-        except FileNotFoundError:
-            continue
-        if not access.is_granted:
-            local_roots.append(root)
-    candidates = collect_readable_search_candidates(
-        store,
-        roots,
-        follow_embeds=request.follow_embeds,
-        artifact_roots=local_roots,
-    )
-    provider = connect_codex_chatgpt_provider()
-    matches = rank_candidates(
-        request.query,
-        candidates,
-        provider,
-        limit=request.limit,
-    )
-    if len(request.target_names) == 1 and request.include_descendants:
-        matches = _supplement_namespace_branch_coverage(
-            request.query,
-            candidates,
-            matches,
-            provider,
-            root_name=request.target_names[0],
-            limit=request.limit,
-        )
-    return FindSearchResponse(
-        request=request,
-        mode="CURRENT",
-        results=tuple(
-            _find_search_result(match, index)
-            for index, match in enumerate(matches, start=1)
-        ),
-        related_query=_related_query_for_matches(matches),
-    )
 
 
 def _open_find_search_workbench(
@@ -1268,13 +1148,15 @@ def _open_find_search_workbench(
     assert workbench_result.response is not None
     assert workbench_result.materialize_as is not None
     assert workbench_result.save_location is not None
-    materialized = materialize_find_results(
-        store,
-        catalog,
-        workbench_result.response,
-        selected_result_indices=workbench_result.selected_result_indices,
-        mode=workbench_result.materialize_as,
-        destination_name=workbench_result.save_location,
+    materialized = execute_find_materialization(
+        FindMaterializationRequest(
+            response=workbench_result.response,
+            selected_result_indices=workbench_result.selected_result_indices,
+            mode=workbench_result.materialize_as,
+            destination_name=workbench_result.save_location,
+        ),
+        store=store,
+        catalog=catalog,
     )
     typer.secho(
         f"Saved {len(materialized.item_uids)} checked Find result(s) as "
@@ -1437,8 +1319,16 @@ def cmd(
             raise typer.Exit(1)
         return
 
-    if len(target_names) > 1:
-        try:
+    request = FindSearchRequest(
+        query=query,
+        target_names=target_names,
+        include_descendants=include_descendants,
+        follow_embeds=follow_embeds,
+        limit=limit,
+    )
+    temporal_query = is_temporal_query(query)
+    try:
+        if len(target_names) > 1:
             catalog = freeze_profile_readable_context_catalog(
                 store,
                 access,
@@ -1446,207 +1336,57 @@ def cmd(
             )
             for target_access in accesses:
                 catalog.access_for(target_access.display_name)
-            response = _run_find_search_request(
-                store,
-                catalog,
-                FindSearchRequest(
-                    query=query,
-                    target_names=target_names,
-                    include_descendants=include_descendants,
-                    follow_embeds=follow_embeds,
-                    limit=limit,
-                ),
-            )
-        except (
-            FindError,
-            HistoryError,
-            HistorySearchError,
-            QueryProviderError,
-            FileNotFoundError,
-            OSError,
-            RuntimeError,
-            ValueError,
-        ) as error:
-            typer.secho(
-                f"Find error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if not response.results:
-            typer.secho(
-                " + ".join(display_escape_text(name) for name in target_names),
-                bold=True,
-            )
-            typer.echo(
-                "  (no matching historical items)"
-                if response.mode == "HISTORY"
-                else "  (no matching items)"
-            )
-            return
-        if response.related_query:
-            typer.secho("RELATED RESULTS", bold=True)
-            typer.echo(
-                "  Broader search: "
-                + display_escape_text(response.related_query)
-            )
-            typer.echo("  Related items do not satisfy the original query.")
-            typer.echo()
-        grouped: dict[str, list[FindSearchResult]] = {}
-        for result in response.results:
-            grouped.setdefault(result.context_name, []).append(result)
-        for group_index, (owner_name, results) in enumerate(grouped.items()):
-            if group_index:
-                typer.echo()
-            typer.secho(display_escape_text(owner_name), bold=True)
-            for result in results:
-                related = " · RELATED" if result.relevance == "related" else ""
-                _render_labeled_content(
-                    f"[{result.kind} {result.uid[:8]}]{related}",
-                    result.content,
-                )
-        return
-
-    temporal = is_temporal_query(query)
-    try:
-        if temporal and access.is_granted:
-            raise RuntimeError(
-                "Temporal Find is unavailable for a granted READ view because "
-                "the grant does not expose authority checkpoint history."
-            )
-        if temporal:
-            read_store = GrantedReadStore(access) if access.is_granted else store
-            ctx = read_store.load_direct(access.display_name)
+            response = _run_find_search_request(store, catalog, request)
         else:
-            read_store = freeze_readable_context_catalog(
+            catalog = freeze_readable_context_catalog(
                 store,
                 access,
                 include_query_routes=follow_embeds,
             )
-            ctx = (
-                read_store.load(access.display_name)
-                if follow_embeds
-                else read_store.load_direct(access.display_name)
-            )
-        frame_roots = _load_find_frame_roots(
-            read_store,
-            ctx,
-            recursive=include_descendants,
-            resolve_embeds=follow_embeds and not temporal,
-        )
+            with CommandProgress(
+                "FIND HISTORY" if temporal_query else "FIND",
+                "connecting provider",
+                total=2 if temporal_query else 3,
+            ) as progress:
+
+                def observe(stage: FindSearchStage) -> None:
+                    if stage == "SEARCHING":
+                        progress.update(
+                            (
+                                "searching history"
+                                if temporal_query
+                                else "ranking candidates"
+                            ),
+                            step=2,
+                        )
+                    elif stage == "CHECKING_COVERAGE":
+                        progress.update("checking namespace coverage", step=3)
+
+                response = _run_find_search_request(
+                    store,
+                    catalog,
+                    request,
+                    observer=observe,
+                )
+        _render_find_search_response(response, target_names=target_names)
     except (
+        FindError,
+        HistoryError,
+        HistorySearchError,
+        QueryProviderError,
         FileNotFoundError,
         OSError,
         RuntimeError,
         ValueError,
     ) as error:
+        error_label = (
+            "Find history error"
+            if len(target_names) == 1 and temporal_query
+            else "Find error"
+        )
         typer.secho(
-            f"Error: {display_escape_text(str(error))}",
+            f"{error_label}: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
-
-    if temporal:
-        try:
-            history_results = _temporal_find_results(
-                read_store,
-                frame_roots,
-                query,
-                recursive=follow_embeds,
-                limit=limit,
-            )
-        except (
-            HistoryError,
-            HistorySearchError,
-            QueryProviderError,
-            OSError,
-            RuntimeError,
-            ValueError,
-        ) as error:
-            typer.secho(
-                f"Find history error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if _interactive_terminal() and history_results:
-            try:
-                choose_history(
-                    history_result_picker_entries(history_results),
-                    context_name=ctx.name,
-                    mode="log",
-                )
-            except ValueError as error:
-                typer.secho(
-                    "Find history error: " + display_escape_text(str(error)),
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
-            return
-        _render_temporal_find(ctx.name, history_results)
-        return
-
-    try:
-        frame_candidates = _collect_find_frame_candidates(
-            store,
-            frame_roots,
-            recursive=follow_embeds,
-            include_artifacts=not access.is_granted,
-        )
-        with CommandProgress(
-            "FIND",
-            "connecting provider",
-            total=3,
-        ) as progress:
-            provider = connect_codex_chatgpt_provider()
-            progress.update("ranking candidates", step=2)
-            matches = rank_candidates(
-                query,
-                list(frame_candidates),
-                provider,
-                limit=limit,
-            )
-            if include_descendants:
-                progress.update("checking namespace coverage", step=3)
-                matches = _supplement_namespace_branch_coverage(
-                    query,
-                    frame_candidates,
-                    matches,
-                    provider,
-                    root_name=ctx.name,
-                    limit=limit,
-                )
-    except (FindError, QueryProviderError) as error:
-        typer.secho(
-            f"Find error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    if not matches:
-        typer.secho(display_escape_text(ctx.name), bold=True)
-        typer.echo("  (no matching items)")
-        return
-
-    related_query = _related_query_for_matches(matches)
-    if related_query:
-        typer.secho(display_escape_text(ctx.name), bold=True)
-        typer.echo("  (no primary matches)")
-        typer.echo()
-        typer.secho("RELATED RESULTS", bold=True)
-        typer.echo("  Broader search: " + display_escape_text(related_query))
-        typer.echo("  Related items do not satisfy the original query.")
-
-    groups = group_search_items(
-        matches,
-        context_name=lambda match: match.candidate.context_name,
-    )
-    for group_index, (owner_name, owner_matches) in enumerate(groups):
-        if group_index or related_query:
-            typer.echo()
-        typer.secho(display_escape_text(owner_name), bold=True)
-        for match in owner_matches:
-            _render_match(match)

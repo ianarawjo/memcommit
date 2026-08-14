@@ -1,11 +1,15 @@
 """Host-owned presentation projections for checkpoint and semantic history."""
+
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from typing import Any
 
 from memcommit.commands.history_picker import HistoryPickerEntry
-from memcommit.history_search import HistorySearchResult
+from memcommit.history_search import (
+    HistorySearchResult,
+    history_result_recovery_label,
+)
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 
@@ -13,43 +17,6 @@ from memcommit.source_projection.presentation import source_object_label
 _MEMORY_REF_LABEL = source_object_label(SourceForm.MEMORY_REF)
 _QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW)
 _EMBEDDED_CONTEXT_LABEL = "embedded " + source_object_label(SourceForm.CONTEXT)
-
-
-def history_result_recovery_label(result: HistorySearchResult) -> str:
-    """Describe whether and how one semantic result can restore Context state."""
-    checkpoint = result.checkpoint_uid
-    checkpoint_short = checkpoint[:8] if checkpoint else None
-    if result.kind == "checkpoint":
-        if result.selectable:
-            return "active checkpoint · restorable"
-        return "archived checkpoint · non-restorable"
-    if result.kind == "memory_version":
-        if result.state is not None and result.state.current and checkpoint is None:
-            return "current-uncheckpointed Memory version · non-restorable"
-        if result.selectable and checkpoint_short is not None:
-            return (
-                "Memory version · restorable via checkpoint "
-                f"{checkpoint_short}"
-            )
-        if checkpoint_short is not None:
-            return (
-                f"Memory version · archived checkpoint {checkpoint_short} "
-                "· non-restorable"
-            )
-        return "uncheckpointed Memory version · non-restorable"
-
-    transition = result.transition
-    if (
-        transition is not None
-        and transition.kind == "RESTORED"
-        and checkpoint_short is not None
-    ):
-        boundary = f"operation receipt {checkpoint_short}"
-    elif checkpoint_short is not None:
-        boundary = f"checkpoint boundary {checkpoint_short}"
-    else:
-        boundary = "uncheckpointed event boundary"
-    return f"event boundary · {boundary} · not a direct restore target"
 
 
 def _snapshot_items(snapshot: object) -> tuple[dict[str, dict[str, Any]], list[str]]:
@@ -67,11 +34,7 @@ def _snapshot_items(snapshot: object) -> tuple[dict[str, dict[str, Any]], list[s
     )
     raw_order = snapshot.get("order")
     order = (
-        [
-            uid
-            for uid in raw_order
-            if isinstance(uid, str) and uid in items
-        ]
+        [uid for uid in raw_order if isinstance(uid, str) and uid in items]
         if isinstance(raw_order, list)
         else list(items)
     )
@@ -104,21 +67,11 @@ def _transition_detail(before: object, after: object) -> str:
     common = before_uids & after_uids
     added = len(after_uids - before_uids)
     removed = len(before_uids - after_uids)
-    edited = sum(
-        before_items[uid] != after_items[uid]
-        for uid in common
-    )
-    before_positions = {
-        uid: index
-        for index, uid in enumerate(before_order)
-    }
-    after_positions = {
-        uid: index
-        for index, uid in enumerate(after_order)
-    }
+    edited = sum(before_items[uid] != after_items[uid] for uid in common)
+    before_positions = {uid: index for index, uid in enumerate(before_order)}
+    after_positions = {uid: index for index, uid in enumerate(after_order)}
     reordered = sum(
-        before_positions.get(uid) != after_positions.get(uid)
-        for uid in common
+        before_positions.get(uid) != after_positions.get(uid) for uid in common
     )
     return (
         f"+{added} added · ~{edited} edited · "
@@ -154,9 +107,7 @@ def checkpoint_picker_entries(
         if not isinstance(uid, str) or not uid:
             raise ValueError("Checkpoint history contains an invalid UID.")
         if not isinstance(timestamp, str) or not timestamp:
-            raise ValueError(
-                f"Checkpoint [{uid[:8]}] contains an invalid timestamp."
-            )
+            raise ValueError(f"Checkpoint [{uid[:8]}] contains an invalid timestamp.")
         command = checkpoint.get("command")
         if not isinstance(command, str) or not command:
             command = "checkpoint"
@@ -181,8 +132,7 @@ def checkpoint_picker_entries(
         transition_line = (
             "Transition: baseline · no preceding recoverable checkpoint"
             if before is None
-            else "Transition: "
-            + _transition_detail(before, checkpoint.get("snapshot"))
+            else "Transition: " + _transition_detail(before, checkpoint.get("snapshot"))
         )
         detail = "\n".join(
             (
@@ -192,9 +142,7 @@ def checkpoint_picker_entries(
             )
         )
         extra = (
-            extra_detail_by_uid.get(uid)
-            if extra_detail_by_uid is not None
-            else None
+            extra_detail_by_uid.get(uid) if extra_detail_by_uid is not None else None
         )
         if extra:
             detail = f"{detail}\n{extra}"
@@ -221,17 +169,12 @@ def history_result_picker_entries(
         if result.kind == "checkpoint":
             uid = result.checkpoint_uid or result.candidate_id
             command = result.state.command if result.state is not None else "checkpoint"
-            memory_count = (
-                len(result.state.memories)
-                if result.state is not None
-                else 0
-            )
+            memory_count = len(result.state.memories) if result.state is not None else 0
             detail = "\n".join(
                 (
                     f"Checkpoint: {checkpoint}",
                     f"Direct Memories: {memory_count}",
-                    "History status: "
-                    + history_result_recovery_label(result),
+                    "History status: " + history_result_recovery_label(result),
                 )
             )
         elif result.kind == "memory_transition":
@@ -262,8 +205,7 @@ def history_result_picker_entries(
                     boundary_line,
                     f"Before: {before}",
                     f"After: {after}",
-                    "History role: event boundary · "
-                    "not a direct restore target",
+                    "History role: event boundary · not a direct restore target",
                     "Changes in one checkpoint are simultaneous.",
                 )
             )
@@ -271,17 +213,12 @@ def history_result_picker_entries(
             version = result.memory_version
             uid = result.candidate_id
             command = "memory-version"
-            content = (
-                version.content
-                if version is not None
-                else result.description
-            )
+            content = version.content if version is not None else result.description
             detail = "\n".join(
                 (
                     f"Checkpoint occurrence: {checkpoint}",
                     f"Memory: {content}",
-                    "History status: "
-                    + history_result_recovery_label(result),
+                    "History status: " + history_result_recovery_label(result),
                 )
             )
         entries.append(
@@ -289,9 +226,7 @@ def history_result_picker_entries(
                 uid=uid,
                 timestamp=timestamp,
                 command=command,
-                description=(
-                    f"{result.context_name} · {result.description}"
-                ),
+                description=(f"{result.context_name} · {result.description}"),
                 detail=detail,
             )
         )

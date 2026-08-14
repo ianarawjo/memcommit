@@ -1,4 +1,5 @@
 """Strict semantic planning and deterministic filtering over Context history."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -45,12 +46,8 @@ HistoryResultKind = Literal[
     "memory_transition",
     "checkpoint",
 ]
-_RESULT_KINDS = frozenset(
-    {"memory_version", "memory_transition", "checkpoint"}
-)
-_TRANSITION_KINDS = frozenset(
-    {"CREATED", "EDITED", "REMOVED", "RESTORED"}
-)
+_RESULT_KINDS = frozenset({"memory_version", "memory_transition", "checkpoint"})
+_TRANSITION_KINDS = frozenset({"CREATED", "EDITED", "REMOVED", "RESTORED"})
 _RELATIONS = frozenset(
     {
         "NONE",
@@ -138,6 +135,41 @@ class HistorySearchResult:
     memory_version: MemoryVersion | None = None
 
 
+def history_result_recovery_label(result: HistorySearchResult) -> str:
+    """Describe the locally verified recovery boundary of a search result."""
+
+    checkpoint = result.checkpoint_uid
+    checkpoint_short = checkpoint[:8] if checkpoint else None
+    if result.kind == "checkpoint":
+        if result.selectable:
+            return "active checkpoint · restorable"
+        return "archived checkpoint · non-restorable"
+    if result.kind == "memory_version":
+        if result.state is not None and result.state.current and checkpoint is None:
+            return "current-uncheckpointed Memory version · non-restorable"
+        if result.selectable and checkpoint_short is not None:
+            return f"Memory version · restorable via checkpoint {checkpoint_short}"
+        if checkpoint_short is not None:
+            return (
+                f"Memory version · archived checkpoint {checkpoint_short} "
+                "· non-restorable"
+            )
+        return "uncheckpointed Memory version · non-restorable"
+
+    transition = result.transition
+    if (
+        transition is not None
+        and transition.kind == "RESTORED"
+        and checkpoint_short is not None
+    ):
+        boundary = f"operation receipt {checkpoint_short}"
+    elif checkpoint_short is not None:
+        boundary = f"checkpoint boundary {checkpoint_short}"
+    else:
+        boundary = "uncheckpointed event boundary"
+    return f"event boundary · {boundary} · not a direct restore target"
+
+
 @dataclass(frozen=True)
 class _Candidate:
     alias: str
@@ -153,7 +185,9 @@ class _Catalog:
     by_alias: dict[str, _Candidate]
 
     def candidates_of_kind(self, kind: HistoryResultKind) -> tuple[_Candidate, ...]:
-        return tuple(candidate for candidate in self.candidates if candidate.kind == kind)
+        return tuple(
+            candidate for candidate in self.candidates if candidate.kind == kind
+        )
 
 
 @dataclass(frozen=True)
@@ -244,10 +278,7 @@ def _version_aliases(catalog: _Catalog) -> dict[tuple[str, str, str], str]:
 def _description_projection(text: str, catalog: _Catalog) -> str:
     """Redact locally known identity tokens from searchable checkpoint labels."""
     projected = text
-    durable_ids = {
-        timeline.context_uid
-        for timeline in catalog.timelines
-    }
+    durable_ids = {timeline.context_uid for timeline in catalog.timelines}
     durable_ids.update(
         version.memory_uid
         for timeline in catalog.timelines
@@ -444,8 +475,7 @@ def _build_prompt(
         "an empty array. Use RANKED for semantic order, EARLIEST/LATEST for "
         "temporal reduction, or ALL for all locally qualifying subjects.\n"
         "Return exactly one JSON object matching the supplied schema.\n\n"
-        "HISTORY SEARCH PAYLOAD:\n"
-        + payload
+        "HISTORY SEARCH PAYLOAD:\n" + payload
     )
 
 
@@ -464,22 +494,17 @@ def _bounded_text(value: object) -> str:
         or not value.strip()
         or len(value) > HISTORY_SEARCH_TEXT_LIMIT
         or any(
-            unicodedata.category(character) == "Cc"
-            and character not in {"\n", "\t"}
+            unicodedata.category(character) == "Cc" and character not in {"\n", "\t"}
             for character in value
         )
     ):
-        raise HistorySearchError(
-            "History search returned invalid structured output."
-        )
+        raise HistorySearchError("History search returned invalid structured output.")
     return value.strip()
 
 
 def _string_list(value: object) -> tuple[str, ...]:
     if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
-        raise HistorySearchError(
-            "History search returned invalid structured output."
-        )
+        raise HistorySearchError("History search returned invalid structured output.")
     result = tuple(value)
     if len(result) != len(set(result)):
         raise HistorySearchError("History search returned duplicate candidate IDs.")
@@ -492,9 +517,7 @@ def _parse_plan(
     result_kinds: tuple[HistoryResultKind, ...],
 ) -> HistorySearchPlan:
     if not isinstance(raw, str) or len(raw) > HISTORY_SEARCH_RESPONSE_CHAR_LIMIT:
-        raise HistorySearchError(
-            "History search returned invalid structured output."
-        )
+        raise HistorySearchError("History search returned invalid structured output.")
     try:
         value = json.loads(raw, object_pairs_hook=_strict_object)
     except (json.JSONDecodeError, ValueError) as error:
@@ -514,9 +537,7 @@ def _parse_plan(
         "reduce",
     }
     if not isinstance(value, dict) or set(value) != expected:
-        raise HistorySearchError(
-            "History search returned invalid structured output."
-        )
+        raise HistorySearchError("History search returned invalid structured output.")
     result_kind = value["result_kind"]
     subject_mode = value["subject_mode"]
     anchor_kind = value["anchor_kind"]
@@ -532,27 +553,19 @@ def _parse_plan(
         or relation not in _RELATIONS
         or reduction not in {"RANKED", "EARLIEST", "LATEST", "ALL"}
     ):
-        raise HistorySearchError(
-            "History search returned invalid structured output."
-        )
+        raise HistorySearchError("History search returned invalid structured output.")
     subject_ids = _string_list(value["subject_ids"])
     anchor_ids = _string_list(value["anchor_ids"])
     event_kinds = _string_list(value["event_kinds"])
     if any(item not in _TRANSITION_KINDS for item in event_kinds):
-        raise HistorySearchError(
-            "History search returned invalid transition kinds."
-        )
+        raise HistorySearchError("History search returned invalid transition kinds.")
     if subject_mode == "ALL" and subject_ids:
         raise HistorySearchError("ALL history subjects must not list candidate IDs.")
     for alias in (*subject_ids, *anchor_ids):
         if alias not in catalog.by_alias:
-            raise HistorySearchError(
-                "History search selected an unknown candidate."
-            )
+            raise HistorySearchError("History search selected an unknown candidate.")
     if any(catalog.by_alias[alias].kind != result_kind for alias in subject_ids):
-        raise HistorySearchError(
-            "History search selected a subject of the wrong kind."
-        )
+        raise HistorySearchError("History search selected a subject of the wrong kind.")
     expected_anchor_kind = {
         "MEMORY_PRESENCE": "memory_version",
         "MEMORY_TRANSITION": "memory_transition",
@@ -565,16 +578,13 @@ def _parse_plan(
         if not anchor_ids or expected_anchor_kind is None:
             raise HistorySearchError("History search returned an empty anchor.")
         if any(
-            catalog.by_alias[alias].kind != expected_anchor_kind
-            for alias in anchor_ids
+            catalog.by_alias[alias].kind != expected_anchor_kind for alias in anchor_ids
         ):
             raise HistorySearchError(
                 "History search selected an anchor of the wrong kind."
             )
     if anchor_kind == "MEMORY_PRESENCE" and occurrence != "ANY":
-        raise HistorySearchError(
-            "Memory-presence anchors require occurrence ANY."
-        )
+        raise HistorySearchError("Memory-presence anchors require occurrence ANY.")
     valid_relations = {
         "NONE": {"NONE"},
         "MEMORY_PRESENCE": {
@@ -610,9 +620,7 @@ def _parse_plan(
             "Only Memory-transition results may filter event kinds."
         )
     if relation.startswith("WHILE_") and result_kind != "memory_transition":
-        raise HistorySearchError(
-            "WHILE relations require Memory-transition results."
-        )
+        raise HistorySearchError("WHILE relations require Memory-transition results.")
     if relation in {"PRESENT", "ABSENT"} and result_kind == "memory_transition":
         raise HistorySearchError(
             "Transition results require a WHILE presence relation."
@@ -717,9 +725,7 @@ def _presence_positions(
         # edit can change its content while the same notice remains present.
         state_lineages = {
             (version.context_uid, version.memory_uid)
-            for version in candidate.timeline.state(
-                condition_index
-            ).memories
+            for version in candidate.timeline.state(condition_index).memories
         }
         condition = bool(state_lineages & lineages)
         if condition == present:
@@ -831,9 +837,7 @@ def _temporal_key(
     *,
     latest: bool,
 ) -> tuple[str, int]:
-    position = (
-        max(qualified.positions) if latest else min(qualified.positions)
-    )
+    position = max(qualified.positions) if latest else min(qualified.positions)
     state = qualified.candidate.timeline.state(position)
     # Uncheckpointed current state is logically newest in its own timeline.
     timestamp = state.timestamp or "9999-12-31T23:59:59"
@@ -859,17 +863,14 @@ def _reduce(
     result: list[_Qualified] = []
     for context_candidates in by_context.values():
         keys = [
-            _temporal_key(candidate, latest=latest)
-            for candidate in context_candidates
+            _temporal_key(candidate, latest=latest) for candidate in context_candidates
         ]
         chosen = max(keys) if latest else min(keys)
         for candidate, key in zip(context_candidates, keys):
             if key != chosen:
                 continue
             chosen_position = (
-                max(candidate.positions)
-                if latest
-                else min(candidate.positions)
+                max(candidate.positions) if latest else min(candidate.positions)
             )
             result.append(
                 _Qualified(
@@ -955,9 +956,8 @@ def search_history(
     if not 1 <= limit <= 20:
         raise HistorySearchError("History search limit must be between 1 and 20.")
     normalized_kinds = tuple(dict.fromkeys(result_kinds))
-    if (
-        not normalized_kinds
-        or any(kind not in _RESULT_KINDS for kind in normalized_kinds)
+    if not normalized_kinds or any(
+        kind not in _RESULT_KINDS for kind in normalized_kinds
     ):
         raise HistorySearchError("History search result kinds are invalid.")
     catalog = _build_catalog(timeline)
