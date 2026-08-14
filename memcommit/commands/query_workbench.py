@@ -31,7 +31,7 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.commands.query_execution import (
+from memcommit.granted_query_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,

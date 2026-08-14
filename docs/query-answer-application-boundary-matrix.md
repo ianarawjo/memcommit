@@ -13,9 +13,10 @@ controls, select a provider factory, project progress, and present the result.
 
 This slice deliberately excludes authority QUERY routes, legacy
 `QueryContextRef`, saved transcript inspection, and `SESSION_LOG` persistence.
-Those paths retain their existing behavior in `commands.query_execution` and
-`commands.query`; a later slice can separate them without making this read-only
-contract accidentally authorize a durable effect.
+Granted QUERY reads and optional saved-turn publication are now separated by
+the follow-on contract in
+`granted-query-read-publication-design-rationale.md`; they do not broaden this
+ordinary read-only contract.
 
 ## Execution shape
 
@@ -109,9 +110,9 @@ that unrelated implementation.
 
 ## Remaining boundaries and non-goals
 
-1. Granted QUERY execution still combines route revalidation, optional
-   descendant routing, authority snapshot locks, provider use, and optional
-   `SESSION_LOG` publication. It requires its own typed read-versus-write split.
+1. Granted QUERY execution has its own typed read-versus-publication split;
+   its process-local publication plans are intentionally not part of this
+   ordinary Query result.
 2. Legacy `QueryContextRef` intentionally authenticates its provider before
    opening concealed source content and remains unchanged.
 3. Query transcript listing and viewing are read-only adapters over durable

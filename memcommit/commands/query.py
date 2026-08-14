@@ -13,11 +13,13 @@ from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.commands.query_execution import (
+from memcommit.granted_query_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
+)
+from memcommit.granted_query_runtime import (
+    execute_granted_query_request,
     freeze_granted_query_targets,
-    run_granted_query_request,
 )
 from memcommit.commands.ordinary_query_provider_policy import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
@@ -162,10 +164,10 @@ def _open_query_workbench(
             catalog=catalog,
             provider_factory=connect_codex_chatgpt_provider,
         ),
-        run_granted=lambda request: run_granted_query_request(
-            store,
+        run_granted=lambda request: execute_granted_query_request(
             request,
-            connect_provider=lambda: connect_query_provider("codex_chatgpt"),
+            store=store,
+            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
             load_catalog=load_authority_query_catalog,
         ),
         annotations=annotations,
@@ -594,8 +596,7 @@ def cmd(
     try:
         if progress is not None:
             progress.start()
-        response = run_granted_query_request(
-            store,
+        response = execute_granted_query_request(
             GrantedQueryRequest(
                 target=GrantedQueryTarget(
                     grant_uid=effective_grant.uid,
@@ -611,9 +612,20 @@ def cmd(
                 memory_handle=memory_handle,
                 federate_descendants=True,
             ),
-            connect_provider=lambda: connect_query_provider("codex_chatgpt"),
-            on_stage=(
-                (lambda stage, step: progress.update(stage, step=step))
+            store=store,
+            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
+            observer=(
+                (
+                    lambda stage: progress.update(
+                        {
+                            "PREPARING_SOURCES": "preparing authorized sources",
+                            "ANSWERING": "answering query",
+                        }[stage],
+                        step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
+                    )
+                    if stage in {"PREPARING_SOURCES", "ANSWERING"}
+                    else None
+                )
                 if progress is not None
                 else None
             ),

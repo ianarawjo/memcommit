@@ -69,9 +69,13 @@ remain compatible.
 Ordinary Query now crosses the terminal-independent
 `query_application.py` request, frozen-source, provider-ordering, and response
 boundary. `query_runtime.py` supplies the `MemoryStore` and readable-catalog
-adapter. CLI and TTY call that same runtime directly, while
-`commands/query_execution.py` re-exports a compatibility facade and continues
-to own the not-yet-extracted granted Query path:
+adapter. Granted Query separately crosses
+`granted_query_application.py`, whose answer/catalog read returns an optional
+still-unpublished session-turn plan, and `granted_query_runtime.py`, whose
+publication adapter independently revalidates `SESSION_LOG`, Source freshness,
+and the session CAS. CLI and TTY call those runtimes directly, while
+`commands/query_execution.py` retains implementation-free compatibility
+facades:
 
 - `OrdinaryQueryRequest` freezes question, exact public Context names,
   descendant policy, and embed policy. It has no top-k evidence limit.
@@ -87,8 +91,11 @@ compatibility, then constructs one of these typed requests. The workbench never
 re-enters that string inference path. Presentation and progress stay in the
 calling adapter. For ordinary Query, readable evidence freezes and whole-frame
 preflight completes before the injected provider factory is called, and no
-durable effect exists. Concealed-source opening, granted-route revalidation,
-and optional session append remain in the separate granted execution path.
+durable effect exists. For granted Query, provider construction still precedes
+concealed-source opening; the read releases an answer only after route and
+Source revalidation. Merely returning its process-local publication plan does
+not write. The optional append is a second use case that rechecks current
+authority and Source identity before the profile-guarded, locked CAS write.
 
 ## Authority and persistence invariants
 
@@ -103,6 +110,9 @@ and optional session append remain in the separate granted execution path.
 - Authentication precedes concealed source loading.
 - Every published query-only answer is preceded by a post-provider grant and
   source-binding recheck under the registry snapshot lock.
+- A completed session-shaped read is not publication authority. The separate
+  append rechecks `SESSION_LOG` and the Source binding under a fresh authority
+  snapshot, then CAS-checks the exact visible transcript snapshot.
 - Federation offers only public descendant names to its routing turn and opens
   only the returned authorized subset.
 - Saved sessions remain bound to one exact grant/source/language projection and
