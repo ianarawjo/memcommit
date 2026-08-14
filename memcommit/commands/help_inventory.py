@@ -60,6 +60,7 @@ COMMAND_ANNOTATIONS = {
 # operation's discovery row. Conditional compatibility commands such as
 # checkout do not belong here because they route to more than one operation.
 COMMAND_DISPLAY_ALIASES = {
+    "delete": ("remove",),
     "list": ("ls",),
 }
 
@@ -148,7 +149,6 @@ HELP_CATEGORY_GROUPS = (
             "edit",
             "chunk",
             "forget",
-            "remove",
             "delete",
             "clear",
         ),
@@ -463,11 +463,6 @@ COMMAND_FORMS = {
     "reference": (
         "mem reference [memory] --from [source_context] (add to current Context)",
         "mem reference [memory] --from [source_context] --into [target_context]",
-    ),
-    "remove": (
-        "mem remove [item] (delete a Context or current direct item)",
-        "mem remove (select a Context or direct item interactively)",
-        "mem remove [item] --context [context] (explicit direct-item scope)",
     ),
     "rename": (
         "mem rename [new_name] (rename the active Profile)",

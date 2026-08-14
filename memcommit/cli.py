@@ -181,7 +181,8 @@ app.command(
 )(edit.cmd)
 app.command(
     "remove",
-    help=operation_summary("remove"),
+    help=operation_summary("delete"),
+    hidden=True,
 )(remove.cmd)
 app.command(
     "chunk",

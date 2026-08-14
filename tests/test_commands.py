@@ -109,23 +109,40 @@ class TestHelp:
             for line in lines
         )
 
-    def test_list_discovery_folds_the_hidden_exact_ls_spelling(self):
+    def test_discovery_folds_hidden_exact_spellings(self):
         root = get_command(app)
         context = click.Context(root)
         list_command = root.get_command(context, "list")
         ls_command = root.get_command(context, "ls")
+        delete_command = root.get_command(context, "delete")
+        remove_command = root.get_command(context, "remove")
 
         assert list_command is not None and not list_command.hidden
         assert ls_command is not None and ls_command.hidden
-        assert help_inventory.COMMAND_DISPLAY_ALIASES == {"list": ("ls",)}
+        assert delete_command is not None and not delete_command.hidden
+        assert remove_command is not None and remove_command.hidden
+        assert help_inventory.COMMAND_DISPLAY_ALIASES == {
+            "delete": ("remove",),
+            "list": ("ls",),
+        }
         assert list_command.callback.__wrapped__ is ls_command.callback.__wrapped__
+        assert (
+            delete_command.callback.__wrapped__
+            is remove_command.callback.__wrapped__
+        )
 
-        result = invoke("--help")
+        root_result = invoke("--help")
+        inventory_result = invoke("help")
 
-        assert result.exit_code == 0
-        assert "│ list " in result.output
-        assert "equivalent compact spelling" in result.output
-        assert "│ ls " not in result.output
+        assert root_result.exit_code == 0
+        assert "│ list " in root_result.output
+        assert "│ delete " in root_result.output
+        assert "equivalent compact spelling" in root_result.output
+        assert "│ ls " not in root_result.output
+        assert "│ remove " not in root_result.output
+        assert inventory_result.exit_code == 0
+        assert "\ndelete (remove) " in inventory_result.output
+        assert "\nremove " not in inventory_result.output
 
     def test_integrate_is_not_a_public_command(self):
         result = invoke("integrate", "new information")
@@ -232,7 +249,7 @@ class TestHelp:
         assert help_inventory.HELP_CATEGORY_BY_COMMAND["reference"] == "MEMORIES"
         names = (
             "clear", "branch", "status", "delete", "add", "reference",
-            "show", "switch", "contexts", "edit", "remove",
+            "show", "switch", "contexts", "edit",
         )
         entries = [
             CommandEntry(
@@ -250,7 +267,7 @@ class TestHelp:
 
         assert [entry.name for entry in by_kind] == [
             "status", "contexts", "show", "switch", "branch",
-            "add", "reference", "edit", "remove", "delete", "clear",
+            "add", "reference", "edit", "delete", "clear",
         ]
         assert [entry.name for entry in a_z] == sorted(names, key=str.casefold)
 
@@ -384,9 +401,6 @@ class TestHelp:
             "(explicit equivalent for the active Profile)",
             "mem profile rename [profile_name] [new_name] "
             "(explicit equivalent for a named Profile)",
-        )
-        assert help_inventory.COMMAND_FORMS["remove"][0].startswith(
-            "mem remove [item]"
         )
 
     def test_forms_include_meaningful_bare_entry_routes(self):

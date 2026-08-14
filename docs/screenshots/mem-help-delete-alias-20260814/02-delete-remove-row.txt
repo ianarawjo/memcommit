@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ MEMORY      An atomic unit of information stored in a Context.                                                                                                                  │ 
+│ CONTEXT     A named workspace that organizes Memories and other Contexts.                                                                                                       │ 
+│ PROFILE     An ownership and storage boundary for Contexts.                                                                                                                     │ 
+│ GRANT       A permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  │ 
+│             permitted operations on them, while the Grant remains valid.                                                                                                        │ 
+│ SESSION     A saved record of an analysis or review workflow that can be reopened and continued; it does not itself mean Context changes were applied.                          │ 
+│ CHECKPOINT  A recoverable history boundary created for each applied operation and recorded per affected Context.                                                                │ 
+├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤ 
+│ ↑/↓              Move or scroll within the focused surface.                                                                                                                     │ 
+│ ←/→              Change a horizontal choice, expand, or go back according to focus.                                                                                             │ 
+│ Tab / Shift-Tab  Move focus between visible surfaces.                                                                                                                           │ 
+│ Enter            Open, select, or submit the focused action.                                                                                                                    │ 
+│ H                Open or hide Help from a session's read-only navigation surface.                                                                                               │ 
+│ Esc / Backspace  Go back one layer; Backspace edits text in writable fields.                                                                                                    │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ CONTEXTS ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                                                                                                 │ 
+│ ▸ mem pwd        Print the current canonical Context name without loading its contents.                                                                                         │ 
+│ ▸ mem contexts   Browse local Contexts and readable cross-Profile Context views without switching.                                                                              │ 
+│ ▸ mem list (ls)  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                                                 │ 
+│ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                              │ 
+│ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit Context.                                                                                        │ 
+│ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    │ 
+│ ▸ mem init       Create a named Context, optionally ensure its parents, and switch to it.                                                                                       │ 
+│ ▸ mem branch     Copy a Context or subtree into a new branch and switch to it.                                                                                                  │ 
+│ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          │ 
+│ ▸ mem embed      Place a Child Context inside a target while retaining its identity and ownership.                                                                              │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ MEMORIES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem add              Add one or more Memories to the current or explicit Context.                                                                                             ┃ 
+┃ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                                         ┃ 
+┃ ▸ mem edit             Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                       ┃ 
+┃ ▸ mem chunk            Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                                ┃ 
+┃ ▸ mem forget           Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                    ┃ 
+┃ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                          ┃ 
+┃ ▸ mem clear            Remove all direct items from the current or explicit Context after confirmation.                                                                         ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+                                                                                                                                                                                    
+┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem find              Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                   │ 
+│ ▸ mem query             Ask readable Context knowledge or an authorized concealed query-only view.                                                                              │ 
+│ ▸ mem summarize         Show what Mem understands from a Context's visible ordinary Memories.                                                                                   │ 
+│ ▸ mem trace             Trace one retained Memory through its recorded lineage.                                                                                                 │v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

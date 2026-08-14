@@ -81,7 +81,9 @@ prompt-toolkit selector:
   operations that reshape or reconcile Memory material; `TRANSFORM` is broad
   enough for Atomize, Translate, Merge, and Update where `RESOLVE` was not.
   An exact alternate spelling that adds no operation may instead be folded into
-  its canonical label, as in `list (ls)`, while remaining directly executable.
+  its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
+  directly executable. `remove` is therefore not a second deletion operation:
+  both spellings reach the same callback and the canonical Delete contract.
   `A–Z` has no semantic categories, so its complete visible-operation
   projection occupies one `A–Z` box.
   Because that projection owns only one box, the box fills any spare list
@@ -189,11 +191,12 @@ nearly every row adds noise without helping a person choose a command. A
 parenthesized status annotation is reserved for exceptional compatibility
 state: `config (legacy)` remains callable but sits outside the current
 workflow. A separate exact-spelling annotation groups an executable hidden
-spelling with its canonical operation, as in `list (ls)`; it does not classify
-a conditional dispatcher such as `checkout` as an alias. Retired commands such
-as `integrate` are omitted instead of occupying an inventory row that suggests
-they can still be selected. Ordinary TUI entry is described inside expanded
-Forms instead of repeating a badge across the inventory.
+spelling with its canonical operation, as in `list (ls)` and
+`delete (remove)`; it does not classify a conditional dispatcher such as
+`checkout` as an alias. Retired commands such as `integrate` are omitted
+instead of occupying an inventory row that suggests they can still be selected.
+Ordinary TUI entry is described inside expanded Forms instead of repeating a
+badge across the inventory.
 
 ## Invocation forms
 

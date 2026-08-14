@@ -327,14 +327,6 @@ _OPERATIONS = (
         "One direct Source Memory and one exact Target",
     ),
     _operation(
-        "remove",
-        "Select a Context or direct item to delete, or name it by locator, name, or UID.",
-        "Context or direct item -> removed",
-        ExecutionKind.DETERMINISTIC,
-        "Destructive change after confirmation",
-        "One exact Context or direct item",
-    ),
-    _operation(
         "rename",
         "Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.",
         "Managed Profile name -> new Profile name",
