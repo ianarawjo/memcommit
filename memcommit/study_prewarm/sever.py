@@ -519,12 +519,12 @@ def install_declared_sever_prewarms(
         authorize_derived_transfer(source_access, output_access)
         authorize_derived_transfer(criteria_access, output_access)
         authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
-        # Import lazily so the command can independently consult this module at
-        # runtime without a module-import cycle.
-        from memcommit.commands.sever import _capture_binding
+        # Import lazily because the runtime cache adapter consults this module;
+        # Study installation must not route through the terminal command.
+        from memcommit.sever_runtime import capture_sever_binding
 
-        source = _capture_binding(source_access, include_descendants=True)
-        criteria = _capture_binding(criteria_access, include_descendants=True)
+        source = capture_sever_binding(source_access, include_descendants=True)
+        criteria = capture_sever_binding(criteria_access, include_descendants=True)
         _fresh_review(prepared, source=source, criteria=criteria)
         if publish:
             record_declared_installation(
@@ -641,10 +641,10 @@ def find_installed_projectable_sever_prewarm(
             continue
         try:
             _validate_description(store, description)
-            from memcommit.commands.sever import _capture_binding
+            from memcommit.sever_runtime import capture_sever_binding
 
             current_name = store.current_context_name()
-            canonical_source = _capture_binding(
+            canonical_source = capture_sever_binding(
                 resolve_context_access(
                     store,
                     SOURCE_NAME,
@@ -653,7 +653,7 @@ def find_installed_projectable_sever_prewarm(
                 ),
                 include_descendants=True,
             )
-            canonical_criteria = _capture_binding(
+            canonical_criteria = capture_sever_binding(
                 resolve_context_access(
                     store,
                     CRITERIA_NAME,

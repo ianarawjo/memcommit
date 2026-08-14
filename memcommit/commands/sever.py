@@ -3,17 +3,11 @@
 from __future__ import annotations
 
 import sys
-import uuid
 from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.commands.granted_context import (
-    ContextAccess,
-    GrantedReadStore,
-    freeze_granted_context_binding,
-    resolve_context_access,
-)
+from memcommit.commands.granted_context import resolve_context_access
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -34,150 +28,66 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.command_attempts import annotate_sever_attempt
-from memcommit.context import (
-    AutoCheckpoint,
-    Context,
-    Memory,
-    MemoryRef,
-    QueryContextRef,
-)
-from memcommit.context_targeting.model import ContextScope
-from memcommit.context_targeting.resolution import expand_lexical_context_names
-from memcommit.derived_policy import (
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.query_provider import (
     QueryProviderError,
-    QueryProviderTimeoutError,
     connect_codex_chatgpt_provider,
 )
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.sever import (
-    SeverApplication,
-    SeverContextBinding,
     SeverError,
-    SeverMemory,
     SeverSelection,
     SeverSession,
-    sever_frame_digest,
     sever_record_digest,
 )
-from memcommit.sever_provider import SeverProviderError, analyze_sever
+from memcommit.sever_application import (
+    SeverAnalysisProgress,
+    SeverAnalysisRequest,
+    SeverAnalysisResult,
+    SeverApplicationError,
+    SeverApplyRequest,
+)
+from memcommit.sever_provider import SeverProviderError
 from memcommit.sever_resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
+from memcommit.sever_runtime import (
+    capture_sever_binding,
+    execute_sever_analysis,
+    execute_sever_apply,
+)
 from memcommit.sever_store import SeverSessionStore
-from memcommit.store import MemoryStore, context_record_digest, validate_context_name
+from memcommit.store import MemoryStore, validate_context_name
 
 
-class SeverCommandError(RuntimeError):
-    pass
+# Compatibility name for callers that historically caught the command-local
+# error. New non-terminal code owns the error at the application boundary.
+SeverCommandError = SeverApplicationError
 
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _capture_binding(
-    access: ContextAccess,
-    *,
-    include_descendants: bool,
-) -> SeverContextBinding:
-    read_store = GrantedReadStore(access) if access.is_granted else access.store
-    root_name = access.display_name if access.is_granted else access.context_name
-    load_direct = read_store.load_direct
-    load_recursive = read_store.load
-    scope = ContextScope.create(
-        (root_name,),
-        include_descendants=include_descendants,
-    )
-    root = load_recursive(root_name) if include_descendants else load_direct(root_name)
-    roots = [root]
-    if include_descendants:
-        seen_root_uids = {root.uid}
-        # Namespace descendants and embedded children are both part of a
-        # SUBTREE scope. UID de-duplication prevents the same Context from
-        # entering provider input twice when both relationships expose it.
-        for name in expand_lexical_context_names(
-            scope,
-            read_store.list_context_names(),
-        )[1:]:
-            descendant = load_recursive(name)
-            if descendant.uid in seen_root_uids:
-                continue
-            seen_root_uids.add(descendant.uid)
-            roots.append(descendant)
-    contexts: list[tuple[str, str, str]] = []
-    memories: list[SeverMemory] = []
-    excluded_query_context_names: list[str] = []
-    seen_contexts: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in seen_contexts:
-            return
-        seen_contexts.add(context.uid)
-        contexts.append((context.name, context.uid, context_record_digest(context)))
-        for item in context.iter_items():
-            if isinstance(item, Memory):
-                memories.append(
-                    SeverMemory(
-                        uid=item.uid, context_name=context.name, content=item.content
-                    )
-                )
-            elif isinstance(item, Context):
-                if include_descendants:
-                    visit(item)
-            elif isinstance(item, QueryContextRef):
-                # Query-only routes never become Sever frames or provider input.
-                if item.name not in excluded_query_context_names:
-                    excluded_query_context_names.append(item.name)
-                continue
-            elif isinstance(item, MemoryRef):
-                raise SeverCommandError(
-                    f"Sever does not copy live Memory references from '{context.name}'."
-                )
-
-    for frame_root in roots:
-        visit(frame_root)
-    context_tuple = tuple(contexts)
-    memory_tuple = tuple(memories)
-    return SeverContextBinding(
-        root_uid=root.uid,
-        root_name=access.display_name,
-        frame_digest=sever_frame_digest(
-            root_uid=root.uid,
-            root_name=access.display_name,
-            contexts=context_tuple,
-            memories=memory_tuple,
-            include_descendants=include_descendants,
-        ),
-        contexts=context_tuple,
-        memories=memory_tuple,
-        granted=(
-            freeze_granted_context_binding(access).to_dict()
-            if access.is_granted
-            else None
-        ),
-        include_descendants=include_descendants,
-        excluded_query_context_names=tuple(excluded_query_context_names),
-    )
+_capture_binding = capture_sever_binding
 
 
-def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
-    return ContextAccess(
-        store=store,
-        context_name=name,
-        display_name=name,
-        attachment_name=None,
-        permission="CREATE",
-    )
+def _start_progress(progress, event: SeverAnalysisProgress) -> None:
+    """Project typed application stages into the existing command wait view."""
+
+    if event.stage == "PREPARED_REUSED":
+        progress.update("reusing prepared analysis", step=3)
+    elif event.stage == "CONNECTING_PROVIDER":
+        progress.update("connecting provider", step=2)
+    elif event.stage == "ANALYZING":
+        progress.update(
+            f"analyzing {event.source_count} source x "
+            f"{event.criteria_count} criteria",
+            step=3,
+        )
 
 
-def _start(
+def _start_analysis(
     *,
     store: MemoryStore,
     source_name: str,
@@ -186,28 +96,30 @@ def _start(
     source_descendants: bool = True,
     criteria_descendants: bool = True,
     provider_factory=None,
-) -> SeverSession:
-    current = store.current_context_name()
+) -> SeverAnalysisResult:
+    current_name = store.current_context_name()
     source_access = resolve_context_access(
-        store, source_name, current_name=current, required_permission="READ"
+        store,
+        source_name,
+        current_name=current_name,
+        required_permission="READ",
     )
     criteria_access = resolve_context_access(
-        store, criteria_name, current_name=current, required_permission="READ"
+        store,
+        criteria_name,
+        current_name=current_name,
+        required_permission="READ",
     )
-    if (
-        source_access.display_name == criteria_access.display_name
-        and source_access.store.store_dir == criteria_access.store.store_dir
-    ):
-        raise SeverCommandError("Source and Criteria Contexts must be distinct.")
-    validate_context_name(output_name)
-    if store.context_exists(output_name):
-        raise SeverCommandError(f"Output Context '{output_name}' already exists.")
-    output_access = _local_output_access(store, output_name)
-    authorize_combination((source_access, criteria_access))
-    authorize_derived_transfer(source_access, output_access)
-    authorize_derived_transfer(criteria_access, output_access)
-    authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
-
+    # Freeze relative locators into canonical public names before confirmation.
+    # The application repeats authority checks before cache lookup or provider
+    # construction, so this display preparation cannot authorize execution.
+    request = SeverAnalysisRequest(
+        source_locator=source_access.display_name,
+        criteria_locator=criteria_access.display_name,
+        output_name=output_name,
+        source_include_descendants=source_descendants,
+        criteria_include_descendants=criteria_descendants,
+    )
     wait_view = CommandWaitView(
         title="SEVER CONFIRMED INPUTS · READ-ONLY",
         text="\n".join(
@@ -238,91 +150,15 @@ def _start(
         ),
     )
 
-    def freeze_and_analyze(progress):
-        source = _capture_binding(
-            source_access,
-            include_descendants=source_descendants,
-        )
-        criteria = _capture_binding(
-            criteria_access,
-            include_descendants=criteria_descendants,
-        )
-        annotate_sever_attempt(
-            source_name=source.root_name,
-            source_scope=(
-                "INCLUDE_DESCENDANTS"
-                if source.include_descendants
-                else "THIS_CONTEXT_ONLY"
-            ),
-            source_memory_count=len(source.memories),
-            criteria_name=criteria.root_name,
-            criteria_scope=(
-                "INCLUDE_DESCENDANTS"
-                if criteria.include_descendants
-                else "THIS_CONTEXT_ONLY"
-            ),
-            criteria_memory_count=len(criteria.memories),
-            output_name=output_name,
-            excluded_query_context_count=len(
-                set(source.excluded_query_context_names)
-                | set(criteria.excluded_query_context_names)
-            ),
-        )
-        # Study prewarms remain hidden artifacts. An exact hit is cloned into
-        # a fresh review only after the ordinary authority and frame freezes.
-        from memcommit.study_prewarm.sever import (
-            find_installed_projectable_sever_prewarm,
-        )
-
-        prewarm = find_installed_projectable_sever_prewarm(
+    def freeze_and_analyze(progress) -> SeverAnalysisResult:
+        return execute_sever_analysis(
+            request,
             store=store,
-            source=source,
-            criteria=criteria,
-            output_name=output_name,
+            provider_factory=provider_factory or connect_codex_chatgpt_provider,
+            progress_callback=lambda event: _start_progress(progress, event),
         )
-        if prewarm is not None:
-            progress.update("reusing prepared analysis", step=3)
-            return prewarm.session
-        progress.update("connecting provider", step=2)
-        provider = (provider_factory or connect_codex_chatgpt_provider)()
-        identity = getattr(provider, "identity", None)
-        provider_name = getattr(identity, "provider", None)
-        provider_timeout = getattr(provider, "timeout", None)
-        provider_details: dict[str, object] = {}
-        if isinstance(provider_name, str) and provider_name:
-            provider_details["provider"] = provider_name
-        if (
-            isinstance(provider_timeout, (int, float))
-            and not isinstance(provider_timeout, bool)
-            and provider_timeout > 0
-        ):
-            provider_details["provider_timeout_seconds"] = provider_timeout
-        if provider_details:
-            annotate_sever_attempt(**provider_details)
-        progress.update(
-            f"analyzing {len(source.memories)} source x "
-            f"{len(criteria.memories)} criteria",
-            step=3,
-        )
-        try:
-            return analyze_sever(source, criteria, output_name, provider)
-        except QueryProviderError as error:
-            annotate_sever_attempt(
-                failure_kind=(
-                    "TIMEOUT"
-                    if isinstance(error, QueryProviderTimeoutError)
-                    else "PROVIDER"
-                )
-            )
-            raise SeverCommandError(
-                f"{error} Frozen frame: {len(source.memories)} Source Memories x "
-                f"{len(criteria.memories)} Criteria Memories."
-            ) from error
-        except SeverProviderError:
-            annotate_sever_attempt(failure_kind="VALIDATION")
-            raise
 
-    return run_command_wait(
+    result = run_command_wait(
         "SEVER",
         "freezing source and criteria",
         total=3,
@@ -333,6 +169,30 @@ def _start(
         ),
         context_view=wait_view,
     )
+    return result
+
+
+def _start(
+    *,
+    store: MemoryStore,
+    source_name: str,
+    criteria_name: str,
+    output_name: str,
+    source_descendants: bool = True,
+    criteria_descendants: bool = True,
+    provider_factory=None,
+) -> SeverSession:
+    """Compatibility facade for historical command-level test callers."""
+
+    return _start_analysis(
+        store=store,
+        source_name=source_name,
+        criteria_name=criteria_name,
+        output_name=output_name,
+        source_descendants=source_descendants,
+        criteria_descendants=criteria_descendants,
+        provider_factory=provider_factory,
+    ).session
 
 
 def render_sever(session: SeverSession) -> str:
@@ -399,87 +259,11 @@ def render_sever(session: SeverSession) -> str:
     return "\n".join(lines)
 
 
-def _result_uid(session_uid: str, source_uid: str, content: str) -> str:
-    return str(
-        uuid.uuid5(uuid.UUID(session_uid), f"result\x1f{source_uid}\x1f{content}")
-    )
-
-
 def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
-    if session.state == "APPLIED":
-        return session
-    output = Context(uid=str(uuid.uuid4()), name=session.output_name)
-    result_uids: list[str] = []
-    sources: list[dict[str, str]] = []
-    for candidate, source, content in session.results():
-        uid = _result_uid(session.uid, source.uid, content)
-        output.add(Memory(uid=uid, content=content))
-        result_uids.append(uid)
-        sources.append(
-            {
-                "candidate_uid": candidate.uid,
-                "source_context": source.context_name,
-                "source_memory_uid": source.uid,
-                "selection": candidate.selection,
-            }
-        )
-    local_bindings: list[tuple[str, str, str]] = []
-    for binding in (session.source, session.criteria):
-        if binding.granted is None:
-            local_bindings.extend(binding.contexts)
-    deduplicated = tuple(dict.fromkeys(local_bindings))
-    auto_checkpoint = AutoCheckpoint(
-        command="sever",
-        args={
-            "context_creation": {
-                "version": 1,
-                "context_uid": output.uid,
-                "context_name": output.name,
-            },
-            "sever": {
-                "session_uid": session.uid,
-                "session_digest": sever_record_digest(session),
-                "source": session.source.root_name,
-                "source_scope": (
-                    "INCLUDE_DESCENDANTS"
-                    if session.source.include_descendants
-                    else "THIS_CONTEXT_ONLY"
-                ),
-                "criteria": session.criteria.root_name,
-                "criteria_scope": (
-                    "INCLUDE_DESCENDANTS"
-                    if session.criteria.include_descendants
-                    else "THIS_CONTEXT_ONLY"
-                ),
-                "output": session.output_name,
-                "results": sources,
-            },
-        },
-        description=(
-            f"Created local Sever result '{session.output_name}' from "
-            f"'{session.source.root_name}' under '{session.criteria.root_name}'; "
-            "source unchanged"
-        ),
-    )
-    if deduplicated:
-        checkpoint = store.create_context_with_sources(
-            output,
-            auto_checkpoint,
-            source_bindings=deduplicated,
-        )
-    else:
-        # Fully granted inputs are retained snapshots, so there is no local
-        # Context path to lock while publishing the new local draft.
-        checkpoint = store.create_context(output, auto_checkpoint)
-    if checkpoint is None:
-        raise SeverCommandError("Sever output creation produced no checkpoint.")
-    return session.with_application(
-        SeverApplication(
-            output_context_uid=output.uid,
-            checkpoint_uid=checkpoint.uid,
-            result_memory_uids=tuple(result_uids),
-        )
-    )
+    return execute_sever_apply(
+        SeverApplyRequest(session=session),
+        store=store,
+    ).session
 
 
 def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] | None:
@@ -824,7 +608,7 @@ def cmd(
                 raise SeverCommandError(
                     "Starting Sever requires --source or a current Context."
                 )
-            session = _start(
+            analysis = _start_analysis(
                 store=store,
                 source_name=source_name,
                 criteria_name=criteria_name,
@@ -832,13 +616,9 @@ def cmd(
                 source_descendants=source_descendants,
                 criteria_descendants=criteria_descendants,
             )
-            from memcommit.study_prewarm.sever import installed_sever_request_origin
-
-            sever_prewarm_origin = installed_sever_request_origin(
-                store=store,
-                source=session.source,
-                criteria=session.criteria,
-                output_name=session.output_name,
+            session = analysis.session
+            sever_prewarm_origin = (
+                analysis.origin if analysis.origin != "PROVIDER" else None
             )
             session_store.save(session, expected_digest=None)
 
@@ -889,11 +669,14 @@ def cmd(
         if sever_prewarm_origin:
             label = (
                 "EXACT PREWARM"
-                if sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
-                and session.source.root_name == "task-3/local/personal-memory"
-                and session.criteria.root_name == "task-3/local/guardrails"
-                and session.source.include_descendants
-                and session.criteria.include_descendants
+                if sever_prewarm_origin == "EXACT_PREWARM"
+                or (
+                    sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
+                    and session.source.root_name == "task-3/local/personal-memory"
+                    and session.criteria.root_name == "task-3/local/guardrails"
+                    and session.source.include_descendants
+                    and session.criteria.include_descendants
+                )
                 else "EQUIVALENT SCOPE PREWARM"
                 if sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
                 else "PROJECTED PREWARM"
