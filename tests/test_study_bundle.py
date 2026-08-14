@@ -254,6 +254,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert campus["permissions"] == [
             "CREATE",
             "READ",
+            "EMBED",
             "UPDATE",
             "DELETE",
             "QUERY",
@@ -286,6 +287,7 @@ def _assert_grant_templates(task, manifest, context_uids):
     elif task == 2:
         advisor_permissions = [
             "READ",
+            "EMBED",
             "DERIVE",
             "COMBINE",
             "EXPORT",
@@ -310,6 +312,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert healthcare["provider"] == "codex_chatgpt"
         assert grants["task-3-healthcare-transmission-guidance-view"]["permissions"] == [
             "READ",
+            "EMBED",
             "DERIVE",
             "COMBINE",
             "EXPORT",
