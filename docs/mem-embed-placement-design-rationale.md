@@ -9,8 +9,9 @@ mem embed
 mem embed CHILD --into CONTEXT [--before ITEM | --after ITEM]
 ```
 
-The flagless form is a local-only terminal setup. The explicit form remains the
-non-interactive and scripting route.
+The flagless form presents owned local Contexts plus visible Grant rows as
+possible Children; only local owned Contexts can be targets. The explicit form
+remains the non-interactive and scripting route.
 
 The implementation now enters through `memcommit.embed_application`, with
 `memcommit.embed_runtime` owning Store loading, concurrency checks, checkpoint
@@ -125,6 +126,10 @@ Child retains identity and ownership, and which exact neighbor gap is used.
 - The existing target digest compare-and-set and source binding remain the
   final locked persistence boundary. No partial Context order is published
   after a rejected or concurrent change.
+- A granted Child additionally requires explicit `EMBED` authority. The
+  registry Grant lock and exact authority-source lock remain held through the
+  local target compare-and-set, closing revoke-after-review and
+  change-after-review races.
 - Escape and Backspace cancel from every read-only TUI surface. Cancellation
   does not create a checkpoint or alter the current Context.
 
@@ -160,5 +165,7 @@ the application contract nor the Store runtime imports it.
 - This operation does not reorder existing items, move a Child's own Memories,
   embed a lexical subtree, or infer a namespace relationship. It inserts one
   live Context pointer into one exact direct-item gap.
+- Grant-backed Embed does not copy or cache authority content. It persists a
+  typed revocable link and reauthorizes it whenever traversal opens the Child.
 - Indirect Embed cycles remain governed by the existing graph behavior. This
   change adds placement, not a new cycle policy.

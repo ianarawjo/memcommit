@@ -1,10 +1,17 @@
-"""MemoryStore infrastructure adapter for the local Embed use case."""
+"""MemoryStore and Grant infrastructure adapter for Embed."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 import memcommit.ops as ops
+from memcommit.authority.access import (
+    ContextAccess,
+    authorized_context_operation,
+    grant_checkpoint_args,
+    granted_context_link,
+    resolve_context_access,
+)
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.context_locator import resolve_context_locator
 from memcommit.embed_application import (
@@ -21,9 +28,10 @@ from memcommit.store import MemoryStore, context_record_digest
 
 @dataclass(frozen=True)
 class _LocalEmbedToken:
-    """Mark a frozen plan as owned by this local Store adapter instance."""
+    """Bind a frozen plan to this runtime and its exact source authority."""
 
     owner: object
+    source_access: ContextAccess
 
 
 def _placement_for_context(
@@ -75,7 +83,7 @@ def _gap_description(placement: EmbedPlacement) -> str:
 
 
 class MemoryStoreEmbedPort(EmbedPort):
-    """Freeze and commit one local Embed against exact source and target CAS."""
+    """Freeze and commit local or granted Child into one owned local target."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self._store = store
@@ -92,6 +100,12 @@ class MemoryStoreEmbedPort(EmbedPort):
         return tuple(self._store.list_context_names())
 
     @property
+    def store(self) -> MemoryStore:
+        """Expose the composed active Store to presentation catalog adapters."""
+
+        return self._store
+
+    @property
     def current_context_name(self) -> str | None:
         return self._current_name
 
@@ -100,14 +114,32 @@ class MemoryStoreEmbedPort(EmbedPort):
 
         return self._store.load_direct(name)
 
-    def _canonical_name(self, locator: str) -> str:
+    def _canonical_local_name(self, locator: str) -> str:
         return resolve_context_locator(locator, current=self._current_name)
+
+    def _source_access(self, locator: str) -> ContextAccess:
+        return resolve_context_access(
+            self._store,
+            locator,
+            current_name=self._current_name,
+            required_permission="EMBED",
+        )
+
+    @staticmethod
+    def _source_snapshot(access: ContextAccess) -> tuple[Context, Context]:
+        """Return raw identity bytes and the public Context used for validation."""
+
+        raw = access.store.load_direct(access.context_name)
+        public = Context(uid=raw.uid, name=access.display_name)
+        return raw, public
 
     def _freeze_loaded(
         self,
         *,
         request: EmbedRequest,
-        child: Context,
+        child_record: Context,
+        public_child: Context,
+        source_access: ContextAccess,
         parent: Context,
         placement: EmbedPlacement,
     ) -> FrozenEmbedPlan:
@@ -129,28 +161,29 @@ class MemoryStoreEmbedPort(EmbedPort):
             raise RuntimeError(
                 "The reviewed Embed insertion gap does not match the target order."
             )
-        ops.validate_embed(child, parent, position=placement.position)
+        ops.validate_embed(public_child, parent, position=placement.position)
         return FrozenEmbedPlan(
             request=request,
-            child_name=child.name,
-            child_uid=child.uid,
-            child_digest=context_record_digest(child),
+            child_name=public_child.name,
+            child_uid=child_record.uid,
+            child_digest=context_record_digest(child_record),
             into_name=parent.name,
             into_uid=parent.uid,
             into_digest=context_record_digest(parent),
             placement=placement,
             item_count=len(ordered_uids),
-            token=_LocalEmbedToken(self._owner),
+            token=_LocalEmbedToken(self._owner, source_access),
         )
 
     def freeze(self, request: EmbedRequest) -> FrozenEmbedPlan:
         request = validate_embed_request(request)
-        child_name = self._canonical_name(request.child_locator)
-        into_name = self._canonical_name(request.into_locator)
-        for name in (child_name, into_name):
-            if not self._store.context_exists(name):
-                raise FileNotFoundError(f"Context '{name}' does not exist.")
-        child = self._store.load_direct(child_name)
+        source_access = self._source_access(request.child_locator)
+        into_name = self._canonical_local_name(request.into_locator)
+        if not self._store.context_exists(into_name):
+            raise FileNotFoundError(
+                f"Embed target Context '{into_name}' does not exist locally."
+            )
+        child_record, public_child = self._source_snapshot(source_access)
         parent = self._store.load_for_update(into_name)
         placement = _placement_for_context(
             parent,
@@ -159,7 +192,9 @@ class MemoryStoreEmbedPort(EmbedPort):
         )
         return self._freeze_loaded(
             request=request,
-            child=child,
+            child_record=child_record,
+            public_child=public_child,
+            source_access=source_access,
             parent=parent,
             placement=placement,
         )
@@ -179,11 +214,19 @@ class MemoryStoreEmbedPort(EmbedPort):
             before=before,
             after=after,
         )
-        child = self._store.load_direct(child_name)
+        source_access = self._source_access(child_name)
+        into_name = self._canonical_local_name(into_name)
+        if not self._store.context_exists(into_name):
+            raise FileNotFoundError(
+                f"Embed target Context '{into_name}' does not exist locally."
+            )
+        child_record, public_child = self._source_snapshot(source_access)
         parent = self._store.load_for_update(into_name)
         return self._freeze_loaded(
             request=request,
-            child=child,
+            child_record=child_record,
+            public_child=public_child,
+            source_access=source_access,
             parent=parent,
             placement=placement,
         )
@@ -192,15 +235,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         token = plan.token
         if not isinstance(token, _LocalEmbedToken) or token.owner is not self._owner:
             raise ValueError("The frozen Embed plan belongs to another runtime.")
-        child = self._store.load_direct(plan.child_name)
         parent = self._store.load_for_update(plan.into_name)
-        if (
-            child.uid != plan.child_uid
-            or context_record_digest(child) != plan.child_digest
-        ):
-            raise RuntimeError(
-                "The Child Context changed after the exact Embed command was reviewed."
-            )
         if (
             parent.uid != plan.into_uid
             or context_record_digest(parent) != plan.into_digest
@@ -216,28 +251,59 @@ class MemoryStoreEmbedPort(EmbedPort):
                 "The reviewed Embed insertion gap no longer resolves to the "
                 "same direct-item neighbors."
             )
-        ops.embed(child, parent, position=plan.placement.position)
-        checkpoint = self._store.save_context_with_sources(
-            parent,
-            AutoCheckpoint(
-                command="embed",
-                args={
-                    "child": plan.child_name,
-                    "into": plan.into_name,
-                    "position": plan.placement.position,
-                    "after_uid": plan.placement.previous_uid,
-                    "before_uid": plan.placement.next_uid,
-                },
-                description=(
-                    f"Embedded '{plan.child_name}' into '{plan.into_name}' "
-                    f"{_gap_description(plan.placement)}"
-                ),
-            ),
-            expected_context_digest=plan.into_digest,
-            source_bindings=(
-                (plan.child_name, plan.child_uid, plan.child_digest),
+        access = token.source_access
+        checkpoint_args = {
+            "child": plan.child_name,
+            "into": plan.into_name,
+            "position": plan.placement.position,
+            "after_uid": plan.placement.previous_uid,
+            "before_uid": plan.placement.next_uid,
+            **grant_checkpoint_args(access),
+        }
+        checkpoint_record = AutoCheckpoint(
+            command="embed",
+            args=checkpoint_args,
+            description=(
+                f"Embedded '{plan.child_name}' into '{plan.into_name}' "
+                f"{_gap_description(plan.placement)}"
             ),
         )
+        if access.is_granted:
+            # The registry lock closes revoke-after-check, while the authority
+            # source lock keeps the reviewed identity exact through local CAS.
+            with authorized_context_operation(((access, ("EMBED",)),)):
+                with access.store.locked_context_snapshot(
+                    access.context_name,
+                    expected_uid=plan.child_uid,
+                    expected_digest=plan.child_digest,
+                ) as source_record:
+                    child = Context(uid=source_record.uid, name=plan.child_name)
+                    child._granted_link = granted_context_link(
+                        access,
+                        context_uid=source_record.uid,
+                    )
+                    ops.embed(child, parent, position=plan.placement.position)
+                    checkpoint = self._store.save(parent, checkpoint_record)
+        else:
+            child = access.store.load_direct(access.context_name)
+            if (
+                child.uid != plan.child_uid
+                or context_record_digest(child) != plan.child_digest
+            ):
+                raise RuntimeError(
+                    "The Child Context changed after the exact Embed command "
+                    "was reviewed."
+                )
+            child.name = plan.child_name
+            ops.embed(child, parent, position=plan.placement.position)
+            checkpoint = self._store.save_context_with_sources(
+                parent,
+                checkpoint_record,
+                expected_context_digest=plan.into_digest,
+                source_bindings=(
+                    (access.context_name, plan.child_uid, plan.child_digest),
+                ),
+            )
         if checkpoint is None:
             raise RuntimeError("Embed saved no checkpoint.")
         return EmbedResult(

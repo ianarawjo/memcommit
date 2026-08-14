@@ -14,7 +14,7 @@ from memcommit.commands.command_wait import (
 from memcommit.commands.endpoint_setup_flows import choose_update_setup
 from memcommit.authority.access import (
     GrantedReadStore,
-    freeze_granted_update_target,
+    freeze_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.commands.session_picker import (
@@ -447,12 +447,12 @@ def cmd(
             include_descendants=target_descendants,
         )
         granted_source = (
-            freeze_granted_update_target(source_access)
+            freeze_granted_context_binding(source_access)
             if source_access.is_granted
             else None
         )
         granted_target = (
-            freeze_granted_update_target(target_access)
+            freeze_granted_context_binding(target_access)
             if target_access.is_granted
             else None
         )

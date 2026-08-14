@@ -10,7 +10,7 @@ import uuid
 
 from memcommit.authority.access import (
     GrantedReadStore,
-    freeze_granted_update_target,
+    freeze_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.config import Config
@@ -747,12 +747,12 @@ def find_installed_projectable_update_prewarm(
                 source=exact_source,
                 target=exact_target,
                 granted_source=(
-                    freeze_granted_update_target(source_access)
+                    freeze_granted_context_binding(source_access)
                     if source_access.is_granted
                     else None
                 ),
                 granted_target=(
-                    freeze_granted_update_target(target_access)
+                    freeze_granted_context_binding(target_access)
                     if target_access.is_granted
                     else None
                 ),
@@ -899,8 +899,8 @@ def install_declared_update_prewarms(
             prepared,
             source=source,
             target=target,
-            granted_source=freeze_granted_update_target(source_access) if source_access.is_granted else None,
-            granted_target=freeze_granted_update_target(target_access) if target_access.is_granted else None,
+            granted_source=freeze_granted_context_binding(source_access) if source_access.is_granted else None,
+            granted_target=freeze_granted_context_binding(target_access) if target_access.is_granted else None,
         )
         if not session_matches(
             current, source, target,

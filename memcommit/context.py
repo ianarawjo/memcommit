@@ -139,6 +139,77 @@ class QueryContextRef:
         )
 
 
+@dataclass(frozen=True)
+class GrantedContextLink:
+    """Revocable authority binding persisted without copied Context content."""
+
+    context_uid: str
+    public_name: str
+    authority_context_name: str
+    authority_profile_uid: str
+    grantee_profile_uid: str
+    attachment_context_uid: str
+    attachment_context_name: str
+    grant_uid: str
+    grant_revision_at_creation: int
+    resource_uid: str
+    resource_name: str
+
+    def __post_init__(self) -> None:
+        text_fields = (
+            self.context_uid,
+            self.public_name,
+            self.authority_context_name,
+            self.authority_profile_uid,
+            self.grantee_profile_uid,
+            self.attachment_context_uid,
+            self.attachment_context_name,
+            self.grant_uid,
+            self.resource_uid,
+            self.resource_name,
+        )
+        if any(not isinstance(value, str) or not value for value in text_fields):
+            raise ValueError("Granted Context link fields must be nonempty text.")
+        if (
+            isinstance(self.grant_revision_at_creation, bool)
+            or not isinstance(self.grant_revision_at_creation, int)
+            or self.grant_revision_at_creation < 1
+        ):
+            raise ValueError("Granted Context link revision must be positive.")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "type": "granted_context_ref",
+            "uid": self.context_uid,
+            "name": self.public_name,
+            "authority_context_name": self.authority_context_name,
+            "authority_profile_uid": self.authority_profile_uid,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "attachment_context_uid": self.attachment_context_uid,
+            "attachment_context_name": self.attachment_context_name,
+            "grant_uid": self.grant_uid,
+            "grant_revision_at_creation": self.grant_revision_at_creation,
+            "resource_uid": self.resource_uid,
+            "resource_name": self.resource_name,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "GrantedContextLink":
+        return cls(
+            context_uid=data["uid"],
+            public_name=data["name"],
+            authority_context_name=data["authority_context_name"],
+            authority_profile_uid=data["authority_profile_uid"],
+            grantee_profile_uid=data["grantee_profile_uid"],
+            attachment_context_uid=data["attachment_context_uid"],
+            attachment_context_name=data["attachment_context_name"],
+            grant_uid=data["grant_uid"],
+            grant_revision_at_creation=data["grant_revision_at_creation"],
+            resource_uid=data["resource_uid"],
+            resource_name=data["resource_name"],
+        )
+
+
 class Context:
     """
     Abstract memory store.
@@ -151,6 +222,10 @@ class Context:
         self.name = name
         self.memories: dict[str, Information] = {}
         self.order: list[str] = []
+        # A resolved granted embed remains a Context for every existing graph
+        # traversal, but serialization must retain the revocable Grant binding
+        # instead of degrading it into an ordinary same-Store context_ref.
+        self._granted_link: GrantedContextLink | None = None
         # Set by MemoryStore loads and deliberately excluded from JSON. It is
         # the optimistic-concurrency base for a later save of this object.
         self._store_digest: str | None = None
@@ -245,7 +320,11 @@ class Context:
                 memories[uid] = info.to_dict()
                 order.append(uid)
             elif isinstance(info, Context):
-                memories[uid] = {"type": "context_ref", "uid": info.uid, "name": info.name}
+                memories[uid] = (
+                    info._granted_link.to_dict()
+                    if info._granted_link is not None
+                    else {"type": "context_ref", "uid": info.uid, "name": info.name}
+                )
                 order.append(uid)
         return {
             "uid": self.uid,
@@ -260,6 +339,7 @@ class Context:
         data: dict[str, Any],
         loader: Callable[[str], Context | None] | None = None,
         memory_loader: Callable[[str, str, str], Memory | None] | None = None,
+        granted_loader: Callable[[GrantedContextLink], Context | None] | None = None,
     ) -> Context:
         """
         Deserialize from a dict produced by to_dict().
@@ -320,6 +400,22 @@ class Context:
                 if nested is not None and nested.uid != item["uid"]:
                     nested = None
                 if nested is not None:
+                    ctx.add(nested)
+            elif item["type"] == "granted_context_ref":
+                link = GrantedContextLink.from_dict(item)
+                # Direct reads retain an opaque, serializable placeholder.
+                # Recursive reads supply a reauthorizing loader; it may raise
+                # when the Grant or exact authority identity is unavailable.
+                nested = (
+                    Context(uid=link.context_uid, name=link.public_name)
+                    if granted_loader is None
+                    else granted_loader(link)
+                )
+                if nested is not None and nested.uid != link.context_uid:
+                    nested = None
+                if nested is not None:
+                    nested.name = link.public_name
+                    nested._granted_link = link
                     ctx.add(nested)
         return ctx
 

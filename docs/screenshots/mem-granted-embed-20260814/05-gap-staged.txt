@@ -1,0 +1,52 @@
+ MEM EMBED · CHILD → INTO                                                                                                                                                           
+ CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                        
+┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────┐
+│› ✓   ▾ advisor  READ GRANT · PERMISSIONS READ + EMBED · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                              ^│
+│  ×     · advisor/private  QUERY GRANT · PERMISSIONS QUERY · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED · UNAVAILABLE                                                             │
+│  ·   · archive                                                                                                                                                                   │
+│  · * · guide                                                                                                                                                                    v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ·   · archive                                                                                                                                                                  ^┃
+┃  ✓ * ▾ guide                                                                                                                                                                     ┃
+┃  · [memory f2bca513] Opening proposal note.                                                                                                                                      ┃
+┃  › ✓ ───────── POSITION · 2/3 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃
+┃  · [memory 75808252] Closing proposal note.                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem embed advisor --into guide --before 75808252-d5ee-4c46-ab7e-bdf2edd62ced                                                                                                    │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Only Context 'guide' is changed.                                                                                                                                                │
+│  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 │
+│  Insert at gap 2/3, between [f2bca513] and [75808252].                                                                                                                           │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move one position line · Enter/Space stage · Tab review · Esc back to Context                                                                                                  

@@ -68,7 +68,7 @@ def _provider_event_count() -> int:
 def _load_inputs():
     from memcommit.authority.access import (
         GrantedReadStore,
-        freeze_granted_update_target,
+        freeze_granted_context_binding,
         resolve_context_access,
     )
     from memcommit.context_targeting.loading import load_context_scope
@@ -106,7 +106,7 @@ def _load_inputs():
         source,
         target,
         collect_update_inputs(source, target),
-        freeze_granted_update_target(target_access) if target_access.is_granted else None,
+        freeze_granted_context_binding(target_access) if target_access.is_granted else None,
     )
 
 

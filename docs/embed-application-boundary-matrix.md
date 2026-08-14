@@ -39,10 +39,11 @@ text.
 
 ## Compatibility and remaining boundary
 
-This slice deliberately preserves local-only Embed authority and the existing
-`context_ref` storage schema. Grant-backed Embed is a separate permission and
-schema change, so it follows only after this structural migration passes the
-existing CLI, TUI, checkpoint, concurrency, undo, and redo tests.
+Local Embed retains the existing `context_ref` schema. A granted Child uses the
+separate `granted_context_ref` schema and explicit `EMBED` authority documented
+in `granted-context-embed-design-rationale.md`; the target remains owned and
+local. This separation keeps same-Store locators from being mistaken for
+cross-Profile authority bindings.
 
 The shared direct-item placement renderer still lives in the older command
 component family because it composes the pre-existing Context preview. That is

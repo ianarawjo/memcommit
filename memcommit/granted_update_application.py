@@ -10,7 +10,7 @@ from typing import Literal
 
 from memcommit.authority.access import (
     GrantedReadStore,
-    freeze_granted_update_target,
+    freeze_granted_context_binding,
     revalidate_granted_context_binding,
     resolve_context_access,
 )
@@ -245,7 +245,7 @@ def _resolve_exact_access(
         required_permission="READ",
         registry=registry,
     )
-    current = freeze_granted_update_target(access)
+    current = freeze_granted_context_binding(access)
     if current != binding:
         raise ConcurrentContextUpdateError(
             "The granted update target changed before application."

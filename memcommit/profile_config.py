@@ -29,6 +29,7 @@ GRANT_PERMISSIONS = frozenset(
     {
         "CREATE",
         "READ",
+        "EMBED",
         "UPDATE",
         "DELETE",
         "QUERY",
@@ -45,6 +46,7 @@ GRANT_PERMISSIONS = frozenset(
 _GRANT_PERMISSION_ORDER = (
     "CREATE",
     "READ",
+    "EMBED",
     "UPDATE",
     "DELETE",
     "QUERY",
@@ -213,6 +215,8 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
         )
     if normalized & {"CREATE", "UPDATE", "DELETE"} and "READ" not in normalized:
         raise ProfileConfigError("Create, update, and delete grants require READ.")
+    if "EMBED" in normalized and "READ" not in normalized:
+        raise ProfileConfigError("EMBED requires READ permission.")
     return tuple(item for item in _GRANT_PERMISSION_ORDER if item in normalized)
 
 

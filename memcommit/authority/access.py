@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Iterator
 
-from memcommit.context import Context, MemoryRef, QueryContextRef
+from memcommit.context import Context, GrantedContextLink, MemoryRef, QueryContextRef
 from memcommit.context_locator import resolve_context_locator
 from memcommit.profile_config import AuthorityGrant, ProfileRegistry, load_profile_registry
 from memcommit.profiles import (
@@ -44,6 +44,90 @@ class ContextAccess:
         return self.view is not None
 
 
+def granted_context_link(
+    access: ContextAccess,
+    *,
+    context_uid: str,
+) -> GrantedContextLink:
+    """Create one content-free persistent link from exact granted access."""
+
+    view = access.view
+    if view is None or access.attachment_name is None:
+        raise ValueError("Granted Context links require granted access.")
+    if "EMBED" not in view.grant.permissions:
+        raise ProfileError(
+            f"Grant {view.grant.uid[:8]} does not allow embed access "
+            f"to {access.display_name!r}."
+        )
+    return GrantedContextLink(
+        context_uid=context_uid,
+        public_name=access.display_name,
+        authority_context_name=access.context_name,
+        authority_profile_uid=view.authority.uid,
+        grantee_profile_uid=view.grantee.uid,
+        attachment_context_uid=view.grant.attachment_context_uid,
+        attachment_context_name=access.attachment_name,
+        grant_uid=view.grant.uid,
+        grant_revision_at_creation=view.grant.revision,
+        resource_uid=view.grant.resource_uid,
+        resource_name=view.grant.resource_name,
+    )
+
+
+def load_granted_context_link(
+    link: GrantedContextLink,
+    *,
+    active_store: MemoryStore,
+    loading: frozenset[str] = frozenset(),
+) -> Context:
+    """Reauthorize and resolve one persisted link without cached content.
+
+    Permission and effective nested overrides are checked on every recursive
+    load. Grant revision may advance while the same authority/resource binding
+    remains valid; revocation, scope replacement, or identity replacement fails
+    closed and leaves the direct serialized link untouched.
+    """
+
+    if not isinstance(link, GrantedContextLink):
+        raise TypeError("Granted Context link is invalid.")
+    registry = load_profile_registry()
+    if registry.active.uid != link.grantee_profile_uid:
+        raise ProfileError(
+            "The active Profile no longer matches the granted Context link."
+        )
+    access = resolve_context_access(
+        active_store,
+        link.public_name,
+        current_name=link.attachment_context_name,
+        required_permission="EMBED",
+        registry=registry,
+    )
+    view = access.view
+    if view is None:
+        raise ProfileError("The embedded authority Context is no longer granted.")
+    grant = view.grant
+    if (
+        grant.uid != link.grant_uid
+        or grant.revision < link.grant_revision_at_creation
+        or view.authority.uid != link.authority_profile_uid
+        or view.grantee.uid != link.grantee_profile_uid
+        or grant.attachment_context_uid != link.attachment_context_uid
+        or grant.attachment_context_name != link.attachment_context_name
+        or grant.resource_uid != link.resource_uid
+        or grant.resource_name != link.resource_name
+        or access.context_name != link.authority_context_name
+    ):
+        raise ProfileError(
+            "The authority Grant binding behind an embedded Context changed."
+        )
+    if link.public_name in loading:
+        return Context(uid=link.context_uid, name=link.public_name)
+    context = GrantedReadStore(access, registry=registry).load(link.public_name)
+    if context.uid != link.context_uid:
+        raise ProfileError("Granted embedded Context identity changed.")
+    return context
+
+
 def context_access_display_facts(
     access: ContextAccess,
     *,
@@ -75,7 +159,7 @@ def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget
 
     view = access.view
     if view is None or access.attachment_name is None:
-        raise ValueError("Expected a granted update target.")
+        raise ValueError("Expected a granted Context binding.")
     grant = view.grant
     return GrantedUpdateTarget(
         public_name=access.display_name,
@@ -91,14 +175,6 @@ def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget
         authority_context_name=view.authority_context_name,
         permissions=grant.permissions,
     )
-
-
-def freeze_granted_update_target(access: ContextAccess) -> GrantedUpdateTarget:
-    """Compatibility wrapper for persisted Update-session bindings."""
-
-    return freeze_granted_context_binding(access)
-
-
 def revalidate_granted_context_binding(
     binding: GrantedUpdateTarget,
     *,

@@ -31,7 +31,7 @@ from memcommit.commands.command_progress import (
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import (
     GrantedReadStore,
-    freeze_granted_update_target,
+    freeze_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
@@ -428,12 +428,12 @@ def _directional_impact(
             else store.load(target_access.context_name)
         )
         granted_source = (
-            freeze_granted_update_target(source_access)
+            freeze_granted_context_binding(source_access)
             if source_access.is_granted
             else None
         )
         granted_target = (
-            freeze_granted_update_target(target_access)
+            freeze_granted_context_binding(target_access)
             if target_access.is_granted
             else None
         )
@@ -510,12 +510,12 @@ def _directional_impact(
                 else store.load(current_target_access.context_name)
             )
             current_granted_source = (
-                freeze_granted_update_target(current_source_access)
+                freeze_granted_context_binding(current_source_access)
                 if current_source_access.is_granted
                 else None
             )
             current_granted_target = (
-                freeze_granted_update_target(current_target_access)
+                freeze_granted_context_binding(current_target_access)
                 if current_target_access.is_granted
                 else None
             )

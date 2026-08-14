@@ -176,6 +176,7 @@ TASK_SPECS = {
                 permissions=(
                     "CREATE",
                     "READ",
+                    "EMBED",
                     "UPDATE",
                     "DELETE",
                     "QUERY",
@@ -238,6 +239,7 @@ TASK_SPECS = {
                     if permission == "QUERY"
                     else (
                         "READ",
+                        "EMBED",
                         "DERIVE",
                         "COMBINE",
                         "EXPORT",
@@ -325,6 +327,7 @@ TASK_SPECS = {
                 ),
                 permissions=(
                     "READ",
+                    "EMBED",
                     "DERIVE",
                     "COMBINE",
                     "EXPORT",

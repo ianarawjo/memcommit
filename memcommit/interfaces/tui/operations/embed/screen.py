@@ -126,15 +126,12 @@ def run_embed_tui(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> FrozenEmbedPlan | None:
-    """Choose two local Contexts and one exact gap in the target's item order."""
+    """Choose one authorized Child and one owned target insertion gap."""
 
     if not isinstance(setup, EmbedTuiSetup):
         raise TypeError("Embed TUI requires an EmbedTuiSetup.")
-    names = setup.names
-    if len(names) < 2:
-        raise ValueError("Interactive Embed requires at least two local Contexts.")
-    if len(set(names)) != len(names):
-        raise ValueError("Interactive Embed requires a distinct local catalog.")
+    child_names = setup.child_names
+    into_names = setup.into_names
     if require_tty:
         require_interactive_terminal(
             "Interactive Embed setup",
@@ -142,15 +139,26 @@ def run_embed_tui(
         )
 
     current = setup.current_context
-    initial_into = current if current in names else names[0]
-    initial_child = next(name for name in names if name != initial_into)
-    selector_height = min(6, max(3, len(names)))
+    initial_into = current if current in into_names else into_names[0]
+    try:
+        initial_child = next(
+            name
+            for name in child_names
+            if name != initial_into and name in setup.child_selectable_names
+        )
+    except StopIteration as error:
+        raise ValueError(
+            "Interactive Embed requires an authorized Child distinct from its target."
+        ) from error
+    selector_height = min(6, max(3, len(child_names)))
     child_selector = ContextSelectorControl(
         ContextSelectorView(
-            names=names,
+            names=child_names,
             selected=(initial_child,),
             label="CHILD · EMBED THIS CONTEXT",
             current_context=current,
+            selectable_names=setup.child_selectable_names,
+            annotations=setup.child_annotations,
         ),
         height=selector_height,
     )
@@ -161,12 +169,12 @@ def run_embed_tui(
     )
     into_selector = ContextSelectorControl(
         ContextSelectorView(
-            names=names,
+            names=into_names,
             selected=(initial_into,),
             label="INTO + POSITION · CHANGE THIS CONTEXT · * CURRENT",
             current_context=current,
         ),
-        height=selector_height,
+        height=min(6, max(3, len(into_names))),
         row_projector=placement.project,
     )
     status = {"value": ""}

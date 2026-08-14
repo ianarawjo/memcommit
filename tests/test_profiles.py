@@ -490,7 +490,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + "
+        "READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + "
         "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
         "SAVE_ANALYSIS"
         in contexts.stdout
@@ -583,7 +583,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
     assert "task-2/advisor1" in task_two_contexts.stdout
     assert (
-        "READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + "
+        "READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + "
         "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS" in task_two_contexts.stdout
     )
     read_only_add = _subprocess_mem(
@@ -607,12 +607,12 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki" in virtual_names
     assert "task-1/campus-wiki/route-changes" in virtual_names
     assert source_display_text(annotations["task-1/campus-wiki"]) == (
-        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + "
+        "READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + "
         "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
         "SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
     )
     assert source_display_text(annotations["task-2/advisor1"]) == (
-        "READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + "
+        "READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + "
         "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · "
         "ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
     )

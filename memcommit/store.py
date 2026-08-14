@@ -397,6 +397,16 @@ def _rewrite_context_pointers(
             if previous == "query_context_ref":
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
+        elif kind == "granted_context_ref":
+            target_name = item.get("name")
+            if not isinstance(target_name, str):
+                raise ValueError("Granted Context reference has no valid public name.")
+            # A granted public locator belongs to the authority binding. Local
+            # namespace rename must never reinterpret or rewrite it.
+            previous = selector_names.get(target_name)
+            if previous == "query_context_ref":
+                collisions.add(target_name)
+            selector_names[target_name] = "context_ref"
         elif kind == "memory_ref":
             target = item.get("target_context")
             if not isinstance(target, dict):
@@ -523,6 +533,13 @@ def _rewrite_branched_context_pointers(
             name = item.get("name")
             if not isinstance(name, str):
                 raise ValueError("Context reference has no valid target name.")
+            ordinary_names.add(name)
+        elif kind == "granted_context_ref":
+            name = item.get("name")
+            if not isinstance(name, str):
+                raise ValueError("Granted Context reference has no valid public name.")
+            # Branch copies the revocable link as-is. Its authority identity is
+            # external to the local subtree UID remapping.
             ordinary_names.add(name)
         elif kind == "memory_ref":
             target_context = item.get("target_context")
@@ -3125,11 +3142,23 @@ class MemoryStore:
                 return None
             return self.load(ref_name, _loading | {name})
 
+        def granted_loader(link):
+            # Import lazily: authority access depends on MemoryStore, while the
+            # Store needs only this runtime reauthorization callback.
+            from memcommit.authority.access import load_granted_context_link
+
+            return load_granted_context_link(
+                link,
+                active_store=self,
+                loading=_loading | {name},
+            )
+
         try:
             ctx = Context.from_dict(
                 data,
                 loader=loader,
                 memory_loader=self._load_direct_memory,
+                granted_loader=granted_loader,
             )
             # A loaded Context carries the exact logical version it was based
             # on. Every later ordinary save uses it for optimistic concurrency
@@ -3180,12 +3209,29 @@ class MemoryStore:
             for uid, item in data["memories"].items()
             if isinstance(item, dict) and item.get("type") == "context_ref"
         }
+        direct_granted_refs = {
+            uid: item.get("name")
+            for uid, item in data["memories"].items()
+            if isinstance(item, dict) and item.get("type") == "granted_context_ref"
+        }
         ctx = self.load(name)
         for uid, expected_name in direct_context_refs.items():
             item = ctx.memories.get(uid)
             if not isinstance(item, Context) or item.name != expected_name:
                 raise ValueError(
                     f"Context '{name}' contains an unavailable embedded "
+                    f"Context reference '{expected_name}'. Refusing to save "
+                    "a partial load."
+                )
+        for uid, expected_name in direct_granted_refs.items():
+            item = ctx.memories.get(uid)
+            if (
+                not isinstance(item, Context)
+                or item.name != expected_name
+                or item._granted_link is None
+            ):
+                raise ValueError(
+                    f"Context '{name}' contains an unavailable granted "
                     f"Context reference '{expected_name}'. Refusing to save "
                     "a partial load."
                 )
