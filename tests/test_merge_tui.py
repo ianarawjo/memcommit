@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
+import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.interfaces.tui.operations.merge.adapter as merge_tui_adapter
 from memcommit.cli import app
 from memcommit.interfaces.tui.operations.merge import (
     MergeTuiSetup,
@@ -17,6 +21,7 @@ from memcommit.interfaces.tui.operations.merge import (
 from memcommit.merge_application import (
     MergeAddition,
     MergeContextResult,
+    MergeError,
     MergeItemKind,
     MergeReach,
     MergeRequest,
@@ -127,15 +132,15 @@ def test_tui_application_failure_stays_open_and_returns_no_receipt() -> None:
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\rq")
-        returned = run_merge_tui(
-            setup=_setup(),
-            execute=fail,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+        with pytest.raises(MergeError, match="injected Merge failure"):
+            run_merge_tui(
+                setup=_setup(),
+                execute=fail,
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
 
-    assert returned is None
     assert requests == [MergeRequest(source_locator="source", reach=MergeReach.DIRECT)]
 
 
@@ -168,6 +173,52 @@ def test_tui_setup_freezes_local_source_and_current_target(isolated_store) -> No
     assert setup.target_context == "target"
     assert setup.current_context == "target"
     assert setup.initial_recursive is True
+
+
+def test_tui_setup_uses_profile_readable_breadth_without_query_only_routes(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    for name in ("local-source", "other-local", "target"):
+        store.create_context(ops.init(name))
+    store.set_current("target")
+    observed = []
+
+    def freeze_profile(_store, selected_access):
+        observed.append(selected_access.display_name)
+        return SimpleNamespace(
+            local_names=("local-source", "other-local", "target"),
+            selectable_virtual_names=frozenset({"granted/readable"}),
+            virtual_annotations={
+                "granted/readable": "READ GRANT",
+                "granted/query-only": "QUERY GRANT",
+            },
+        )
+
+    monkeypatch.setattr(
+        merge_tui_adapter,
+        "freeze_profile_context_navigation",
+        freeze_profile,
+    )
+
+    setup = build_merge_tui_setup(
+        MemoryStoreMergePort.capture(store),
+        initial_recursive=False,
+    )
+
+    assert observed == ["target"]
+    assert setup.names == (
+        "granted/readable",
+        "local-source",
+        "other-local",
+        "target",
+    )
+    assert setup.selectable_names == frozenset(
+        {"granted/readable", "local-source", "other-local"}
+    )
+    assert setup.annotations == (("granted/readable", "READ GRANT"),)
+    assert "granted/query-only" not in setup.names
 
 
 def test_cli_recursive_merge_creates_path_aligned_target_descendant(

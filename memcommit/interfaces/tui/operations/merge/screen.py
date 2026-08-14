@@ -49,7 +49,12 @@ from memcommit.interfaces.tui.core.theme import (
     focused_control_style,
 )
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
-from memcommit.merge_application import MergeReach, MergeRequest, MergeResult
+from memcommit.merge_application import (
+    MergeError,
+    MergeReach,
+    MergeRequest,
+    MergeResult,
+)
 from memcommit.merge_runtime import merge_summary
 
 
@@ -124,6 +129,7 @@ def run_merge_tui(
     bindings = KeyBindings()
     result: MergeResult | None = None
     status = {"value": ""}
+    last_error: dict[str, Exception | None] = {"value": None}
 
     range_control: FormattedTextControl
     range_control = FormattedTextControl(
@@ -254,6 +260,7 @@ def run_merge_tui(
             status["value"] = str(error)
         else:
             status["value"] = ""
+            last_error["value"] = None
         return "HANDLED"
 
     def submit(event) -> SurfaceActionResult:
@@ -275,9 +282,11 @@ def run_merge_tui(
                 raise TypeError("Merge application returned an invalid result.")
         except (OSError, RuntimeError, TypeError, ValueError) as error:
             status["value"] = f"Merge failed · {error}"
+            last_error["value"] = error
             return "HANDLED"
         result = completed
         status["value"] = ""
+        last_error["value"] = None
         event.app.layout.focus(todo_control)
         event.app.invalidate()
         return "HANDLED"
@@ -317,12 +326,14 @@ def run_merge_tui(
     def _range_left(event) -> None:
         reach.move(-1)
         status["value"] = ""
+        last_error["value"] = None
         event.app.invalidate()
 
     @bindings.add("right", filter=has_focus(range_control), eager=True)
     def _range_right(event) -> None:
         reach.move(1)
         status["value"] = ""
+        last_error["value"] = None
         event.app.invalidate()
 
     @bindings.add("left", filter=has_focus(selector.control), eager=True)
@@ -360,6 +371,9 @@ def run_merge_tui(
         close(event)
 
     try:
-        return app.run()
+        outcome = app.run()
     except (EOFError, KeyboardInterrupt):
-        return result
+        outcome = result
+    if outcome is None and last_error["value"] is not None:
+        raise MergeError(f"Interactive Merge failed: {last_error['value']}")
+    return outcome

@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    │^
+│ ▸ mem init       Create a named Context, optionally ensure its parents, and switch to it.                                                                                       │ 
+│ ▸ mem branch     Copy a Context or subtree into a new branch and switch to it.                                                                                                  │ 
+│ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          │ 
+│ ▸ mem embed      Place a Child Context inside a target while retaining its identity and ownership.                                                                              │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem add              Add one or more Memories to the current or explicit Context.                                                                                             │ 
+│ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                                         │ 
+│ ▸ mem edit             Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                       │ 
+│ ▸ mem chunk            Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                                │ 
+│ ▸ mem forget           Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                    │ 
+│ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                          │ 
+│ ▸ mem clear            Remove all direct items from the current or explicit Context after confirmation.                                                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem find              Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                   │ 
+│ ▸ mem query             Ask readable Context knowledge or an authorized concealed query-only view.                                                                              │ 
+│ ▸ mem summarize         Show what Mem understands from a Context's visible ordinary Memories.                                                                                   │ 
+│ ▸ mem trace             Trace one retained Memory through its recorded lineage.                                                                                                 │ 
+│ ▸ mem rationale         Explain one Memory from recorded provenance and, when needed, inference.                                                                                │ 
+│ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                │ 
+│ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                │ 
+│ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                          │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks and review one saved report.                                                                                     ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped directional meld.                                                                     ┃ 
+┃ ▸ mem compare    Compare two equal-authority Contexts without changing either one.                                                                                              ┃ 
+┃ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.                                                               ┃ 
+┃ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never apply Memories.                                                                  ┃ 
+┃ ▸ mem meld       Combine two equal-authority Contexts in the current empty Context; --from is normalized to INCOMING --into authoritative BASELINE.                             ┃ 
+┃ ▸ mem update     Review a directional plan and apply it to a local target; no shared publication.                                                                               ┃ 
+┃ ▸ mem sever      Review Source against Criteria and create a derived Result while leaving Source unchanged.                                                                     ┃ 
+┃ ▸ mem translate  Show and save a reusable translation view; materialize it only through an explicit route.                                                                      ┃ 
+┃ ▾ mem merge      Add UID-new items from an exact Source or path-aligned descendants; no semantic reconciliation.                                                                ┃ 
+┃   FLOW      · Source Context -> current Target Context                                                                                                                          ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · Changes the Target Context tree directly; Source stays unchanged                                                                                                  ┃ 
+┃   RANGE     · Exact roots or matching lexical descendants by complete relative path                                                                                             ┃ 
+┃   FORM 1 · mem merge (choose a readable Source and direct or descendant reach in a TTY)                                                                                         ┃ 
+┃   FORM 2 · mem merge [source_context] --direct (exact Source root into current Context; default)                                                                                ┃ 
+┃   FORM 3 · mem merge [source_context] --recursive (path-aligned descendants into current Context)                                                                               ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

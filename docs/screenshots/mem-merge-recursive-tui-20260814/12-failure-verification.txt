@@ -1,0 +1,3 @@
+Error: Interactive Merge failed: injected capture failure before persistence                                                                                                        
+FAILURE COMMAND EXIT · 1                                                                                                                                                            
+FAILURE VERIFICATION · ROOT COPIED False · CHILD EXISTS False · CHILD COPIED False · PRESERVED EXISTS True · ROOT CHECKPOINTS 0

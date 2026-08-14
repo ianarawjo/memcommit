@@ -34,6 +34,9 @@ Store.
 | `07-recursive-success.png` | `Enter` | Success receipt reports descendant reach, two Contexts, one created, and two checkpoints | Root updated and `target/child` created atomically |
 | `08-recursive-verification.png` | `Enter` | Store verification confirms root and child copied, Target-only descendant preserved, and the root checkpoint present | No additional mutation |
 | `09-cancel-verification.png` | Separate launch, `Q` | Post-close Store verification confirms neither root nor child was copied and no root checkpoint exists | None |
+| `10-merge-help-detail.png` | Separate `mem help`; `Tab` three times, `Down` nine times, `Right`, then `Down` twice | Analyze & Transform exposes one Merge record with typed direct and recursive Forms plus deterministic Flow, Effect, and Range | None |
+| `11-failure-before-persistence.png` | Separate launch, `Tab`, `Enter`; the capture port raises before persistence | Exact review stays open with an explicit Merge failure and no success receipt | None |
+| `12-failure-verification.png` | `Q` | CLI preserves the failure as exit 1, then Store verification confirms neither root nor child was copied and no checkpoint exists | None |
 
 Direct and recursive execution share one typed application boundary. The TUI
 only selects a readable Source, reach, and exact reviewed command; it neither

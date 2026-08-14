@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from memcommit.authority.access import resolve_context_access
-from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.commands.readable_context_catalog import (
+    freeze_profile_context_navigation,
+)
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
 from memcommit.merge_runtime import MemoryStoreMergePort
 
@@ -21,12 +23,26 @@ def build_merge_tui_setup(
         current_name=port.current_context_name,
         required_permission="CREATE",
     )
-    local_names = tuple(port.store.list_context_names())
-    navigation = freeze_granted_context_navigation(port.store)
-    names = tuple(sorted(set(local_names) | set(navigation.names), key=str.casefold))
-    selectable = (set(local_names) | set(navigation.readable_names)) - {
-        target.display_name
-    }
+    # ALL READABLE CONTEXTS is Profile-wide. A granted current Target is only
+    # orientation, so anchor discovery at its local attachment and retain each
+    # Source name's exact frozen READ binding through the common catalog.
+    orientation_name = (
+        target.attachment_name if target.is_granted else target.display_name
+    )
+    orientation = resolve_context_access(
+        port.store,
+        orientation_name,
+        current_name=port.current_context_name,
+        required_permission="READ",
+    )
+    navigation = freeze_profile_context_navigation(port.store, orientation)
+    names = tuple(
+        sorted(
+            (*navigation.local_names, *navigation.selectable_virtual_names),
+            key=str.casefold,
+        )
+    )
+    selectable = set(names) - {target.display_name}
     if not selectable:
         raise ValueError(
             "Interactive Merge requires a readable Source distinct from its Target."
@@ -40,8 +56,8 @@ def build_merge_tui_setup(
         initial_recursive=initial_recursive,
         current_context=port.current_context_name,
         annotations=tuple(
-            (name, navigation.annotations[name])
-            for name in navigation.names
-            if name in names
+            (name, navigation.virtual_annotations[name])
+            for name in names
+            if name in navigation.virtual_annotations
         ),
     )

@@ -5,10 +5,10 @@ from __future__ import annotations
 import importlib.util
 import io
 import os
-from pathlib import Path
-from types import SimpleNamespace
+import shutil
 import sys
 import tempfile
+from pathlib import Path
 
 import pexpect
 
@@ -19,6 +19,7 @@ COLUMNS = 180
 ROWS = 52
 SHIFT_TAB = "\x1b[Z"
 RIGHT = "\x1b[C"
+DOWN = "\x1b[B"
 
 _BASE_PATH = (
     ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
@@ -53,16 +54,6 @@ def _configure_isolated_store(store_root: Path) -> None:
     for name, value in values.items():
         setattr(store_module, name, value)
 
-    # The capture proves the real local catalog and Merge runtime without
-    # depending on the host's registered Profiles or Grants.
-    import memcommit.interfaces.tui.operations.merge.adapter as merge_adapter
-
-    merge_adapter.freeze_granted_context_navigation = lambda _store: SimpleNamespace(
-        names=(),
-        readable_names=frozenset(),
-        annotations={},
-    )
-
 
 def _initialize() -> tuple[str, str]:
     import memcommit.ops as ops
@@ -84,14 +75,35 @@ def _initialize() -> tuple[str, str]:
 
 
 def _run_merge_child(kind: str) -> None:
+    import click
+
     from memcommit.cli import app
     from memcommit.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")
         root_uid, child_uid = _initialize()
+        if kind == "failure":
+            from memcommit.merge_runtime import MemoryStoreMergePort
+
+            def fail_before_persistence(_port, _plan):
+                raise OSError("injected capture failure before persistence")
+
+            MemoryStoreMergePort.apply = fail_before_persistence
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
-        app(args=["merge"], prog_name="mem", standalone_mode=False)
+        command_exit = 0
+        try:
+            returned = app(args=["merge"], prog_name="mem", standalone_mode=False)
+        except click.exceptions.Exit as error:
+            if kind != "failure" or error.exit_code != 1:
+                raise
+            command_exit = error.exit_code
+        else:
+            if isinstance(returned, int):
+                command_exit = returned
+        if kind == "failure":
+            assert command_exit == 1
+            print(f"FAILURE COMMAND EXIT · {command_exit}")
 
         store = MemoryStore()
         target = store.load_direct("target")
@@ -206,12 +218,67 @@ def _capture_cancel() -> None:
             child.close(force=True)
 
 
+def _capture_help() -> None:
+    executable = shutil.which("mem")
+    if executable is None:
+        raise RuntimeError("mem executable is unavailable")
+    recorder = _BASE._StreamRecorder()
+    child = pexpect.spawn(
+        executable,
+        ["help"],
+        cwd=str(ROOT),
+        env=_environment(),
+        encoding="utf-8",
+        codec_errors="replace",
+        timeout=15,
+        dimensions=(ROWS, COLUMNS),
+    )
+    child.logfile_read = recorder
+    try:
+        child.expect("command inventory")
+        # Contexts -> Memories -> Search & Explain -> Analyze & Transform,
+        # then move from Audit to Merge and open its complete typed detail.
+        child.send("\t" * 3 + DOWN * 9 + RIGHT + DOWN * 2)
+        _BASE._settle(child)
+        _snapshot(recorder, "10-merge-help-detail")
+        detail = (OUT / "10-merge-help-detail.txt").read_text(encoding="utf-8")
+        assert "▾ mem merge" in detail
+        assert "mem merge [source_context] --direct" in detail
+        assert "mem merge [source_context] --recursive" in detail
+        child.send("q")
+        child.expect(pexpect.EOF)
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
+def _capture_failure() -> None:
+    child, recorder = _spawn("failure")
+    try:
+        child.expect("MEM MERGE")
+        child.send("\t\r")
+        child.expect("Merge failed")
+        _BASE._settle(child)
+        _snapshot(recorder, "11-failure-before-persistence")
+
+        child.send("q")
+        child.expect("FAILURE VERIFICATION")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, "12-failure-verification")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     _capture_direct()
     _capture_recursive()
     _capture_cancel()
+    _capture_help()
+    _capture_failure()
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
+    assert "PTY 180 52" in raw
     assert "\x1b[" in raw
     assert "38;" in raw
     assert "48;" in raw

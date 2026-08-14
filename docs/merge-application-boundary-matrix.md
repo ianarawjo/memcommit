@@ -110,9 +110,18 @@ readable Source selection, reach traversal, exact-command projection,
 cancellation, authority, freshness, rollback, checkpoints, and the deliberate
 Undo exclusion. The ordered real-terminal evidence is recorded under
 `docs/screenshots/mem-merge-recursive-tui-20260814/` at 180×52 with color ANSI
-verified. It demonstrates direct root-only mutation, recursive Source-only
-path creation, Target-only descendant preservation, durable receipts, and a
-zero-mutation cancellation path.
+verified. It demonstrates typed Help, direct root-only mutation, recursive
+Source-only path creation, Target-only descendant preservation, durable
+receipts, a zero-mutation cancellation path, and a pre-persistence failure
+that remains reviewable without publishing a receipt or partial state.
+
+The TUI's `ALL READABLE CONTEXTS` label is a Profile-wide contract, not a
+command-local union of Store names and Grant rows. Its setup therefore freezes
+the shared Profile readable catalog, retains ordinary local and exact
+READ-granted public names, and excludes QUERY-only routes that Merge cannot
+materialize. Source selection only establishes readability; operation-owned
+DERIVE, EXPORT, and write authority remains enforced when the typed request is
+frozen and applied.
 
 ## Restoration boundary
 
