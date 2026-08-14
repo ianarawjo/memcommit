@@ -188,6 +188,14 @@ class TestHelp:
         assert all(len(line) == 100 for line in lines)
         assert "MEMORY" in rendered
         assert "An atomic unit of information" in rendered
+        assert any(
+            style == "class:memory-object" and "MEMORY" in text
+            for style, text in fragments
+        )
+        assert not any(
+            style == "class:memory-object" and "An atomic unit" in text
+            for style, text in fragments
+        )
         assert "without direct ownership" in prose
         assert "read or query a Context" in prose
         assert "run permitted operations" in prose

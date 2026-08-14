@@ -23,6 +23,7 @@ from prompt_toolkit.widgets import Frame
 
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
@@ -105,6 +106,13 @@ HELP_CORE_CONCEPTS = (
         "recorded per affected Context.",
     ),
 )
+
+# The primer doubles as the legend for the existing object-level color
+# contract. Only the Memory type label adopts the Memory token; its explanatory
+# prose remains neutral so a report sentence is not mistaken for Memory data.
+HELP_CORE_CONCEPT_STYLES = {
+    "MEMORY": "class:memory-object",
+}
 
 HELP_COMMON_KEYS = (
     ("↑/↓", "Move or scroll within the focused surface."),
@@ -983,6 +991,7 @@ def _help_information_box_fragments(
         items: tuple[tuple[str, str], ...],
         *,
         selectable: bool,
+        label_styles: dict[str, str] | None = None,
     ) -> None:
         label_width = max(len(label) for label, _description in items)
         for item_index, (label, description) in enumerate(items):
@@ -1016,14 +1025,25 @@ def _help_information_box_fragments(
                 if not row_focused:
                     fragments.extend(
                         [
-                            (label_style if line_index == 0 else "", row_prefix),
+                            (
+                                (
+                                    (label_styles or {}).get(label, label_style)
+                                    if line_index == 0
+                                    else ""
+                                ),
+                                row_prefix,
+                            ),
                             ("", line + padding + " "),
                         ]
                     )
                 fragments.append((border_style, ("┃" if guide_focused else "│") + "\n"))
 
     border("CORE CONCEPTS", middle=False)
-    rows(HELP_CORE_CONCEPTS, selectable=True)
+    rows(
+        HELP_CORE_CONCEPTS,
+        selectable=True,
+        label_styles=HELP_CORE_CONCEPT_STYLES,
+    )
     border("COMMON KEYS", middle=True)
     rows(HELP_COMMON_KEYS, selectable=False)
     fragments.append(
@@ -1663,6 +1683,7 @@ def run_help_selector(
         style=merge_styles(
             [
                 MEMCOMMIT_TUI_STYLE,
+                SEMANTIC_VIEWER_STYLE,
                 Style.from_dict(
                     {
                         "title": "bold",

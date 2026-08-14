@@ -64,6 +64,11 @@ prompt-toolkit selector:
   qualifier in the heading or navigation action. Operation-specific footers
   remain authoritative for keys that are not common enough to appear in this
   primer.
+  The `MEMORY` type label uses the shared light-lavender Memory token, making
+  the primer a compact legend for Memory-object text elsewhere in the TUI.
+  Only that label is tinted: its definition and the other concepts remain
+  neutral explanatory prose, while focus may temporarily replace the tint with
+  the shared blue treatment.
   Each Core Concept row participates in the same vertical focus path before
   the first command: Up from that command reaches Checkpoint, continued Up
   visits Session through Memory, and only Up from Memory reaches VIEW. Down
