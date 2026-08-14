@@ -31,6 +31,7 @@ from memcommit.commands import (
     list_memories,
     log,
     meld,
+    pwd,
     show,
     merge,
     query,
@@ -60,6 +61,7 @@ from memcommit.commands.semantic_eval import eval_app
 from memcommit.commands.profile import app as profile_app
 from memcommit.commands.provider import app as provider_app
 from memcommit.commands.root_group import MemCommandGroup
+from memcommit.help_catalog import operation_summary
 
 app = typer.Typer(
     cls=MemCommandGroup,
@@ -70,352 +72,224 @@ app = typer.Typer(
 # --- Core ---
 app.command(
     "init",
-    help=(
-        "Edit a suggested name, or create an explicitly named Context, and "
-        "switch to it; --parents ensures its hierarchy."
-    ),
+    help=operation_summary("init"),
 )(init.cmd)
 app.command(
     "import",
-    help=(
-        "Import a clean-baseline Profile, Context tree, or Memory by value "
-        "while preserving resource identity."
-    ),
+    help=operation_summary("import"),
 )(import_profile.cmd)
 app.command(
     "init-study",
-    help="Copy one Study baseline into an isolated participant/authority Profile pair.",
+    help=operation_summary("init-study"),
 )(init_study.cmd)
 app.command(
     "add",
-    help="Add one or more Memories to the current or explicit Context.",
+    help=operation_summary("add"),
 )(add.cmd)
 app.command(
     "status",
-    help="Show current Context counts, recent Memories, and checkpoints.",
+    help=operation_summary("status"),
 )(status.cmd)
 app.command(
+    "pwd",
+    help=operation_summary("pwd"),
+)(pwd.cmd)
+app.command(
     "summarize",
-    help=("Show what Mem understands from a Context's visible ordinary Memories."),
+    help=operation_summary("summarize"),
 )(summarize.cmd)
 app.command(
     "list",
-    help=(
-        "Enter the interactive Context browser for the current Context in a "
-        "TTY, or print child Contexts and direct items."
-    ),
+    help=operation_summary("list"),
 )(list_memories.cmd)
-app.command(
-    "ls",
-    help=(
-        "Enter the interactive Context browser for the current Context in a "
-        "TTY, or print child Contexts and direct items."
-    ),
-)(list_memories.cmd)
+# Keep the compact spelling executable without presenting it as a second
+# operation in command discovery.
+app.command("ls", hidden=True)(list_memories.cmd)
 app.command(
     "show",
-    help=(
-        "Show a Memory, reference, embedded Context, or the direct contents "
-        "of a current/explicit Context."
-    ),
+    help=operation_summary("show"),
 )(show.cmd)
 app.command(
     "contexts",
-    help=(
-        "List ordinary local Contexts and readable cross-Profile Context views, "
-        "marking the current Context and each granted permission set."
-    ),
+    help=operation_summary("contexts"),
 )(contexts.cmd)
 app.add_typer(
     write_protection.lock_app,
     name="lock",
-    help="Lock the current Context, a recursive Context set, Memory, or Profile.",
+    help=operation_summary("lock"),
 )
 app.add_typer(
     write_protection.unlock_app,
     name="unlock",
-    help="Unlock the current Context, a recursive set, Memory, or Profile.",
+    help=operation_summary("unlock"),
 )
 app.command(
     "clear",
-    help=(
-        "Remove all direct items from the current or explicit Context after "
-        "confirmation."
-    ),
+    help=operation_summary("clear"),
 )(clear_cmd)
 app.command(
     "delete",
-    help=(
-        "Select a Context or direct item to delete, or name it by locator, "
-        "name, or UID."
-    ),
+    help=operation_summary("delete"),
 )(delete.cmd)
 app.command(
     "diff",
-    help=(
-        "Select or name a Context and browse its checkpoint changes in a TTY, "
-        "or render the active Update record outside a TTY."
-    ),
+    help=operation_summary("diff"),
 )(diff.cmd)
 app.command(
     "compare",
-    help=(
-        "Enter the interactive Compare session launcher with no endpoints, or compare "
-        "the active "
-        "Context with an equal-authority PEER; save no target changes."
-    ),
+    help=operation_summary("compare"),
 )(compare.cmd)
 
 # --- Navigation ---
 app.command(
     "switch",
-    help="Enter the interactive Context picker, or switch to an explicit Context.",
+    help=operation_summary("switch"),
 )(switch.cmd)
 app.command(
     "rename",
-    help="Rename an ordinary Context namespace and all lexical descendants.",
+    help=operation_summary("rename"),
 )(rename.cmd)
 app.command(
     "branch",
-    help=(
-        "Choose a local Source range and exact fresh target when unnamed, "
-        "or branch the current Context or subtree to an explicit new name."
-    ),
+    help=operation_summary("branch"),
 )(branch.cmd)
 app.command(
     "merge",
-    help="Add UID-new direct items from another Context; no semantic reconciliation.",
+    help=operation_summary("merge"),
 )(merge.cmd)
 app.command(
     "meld",
-    help=(
-        "Enter the interactive Meld session launcher with no operands, combine two "
-        "equal-authority "
-        "Contexts into the current empty Context, or directionally use "
-        "INCOMING --into authoritative BASELINE; --from INCOMING uses the "
-        "current authoritative BASELINE and is normalized to INCOMING "
-        "--into BASELINE."
-    ),
+    help=operation_summary("meld"),
 )(meld.cmd)
 app.command(
     "embed",
-    help=(
-        "Choose a Child, target, and direct-item insertion gap interactively, "
-        "or add one Context at an explicit before/after position while the "
-        "Child retains its identity and ownership."
-    ),
+    help=operation_summary("embed"),
 )(embed.cmd)
 app.command(
     "reference",
-    help=(
-        "Add a read-only live pointer to a directly owned source Memory; the "
-        "target stores identity metadata rather than copying its content."
-    ),
+    help=operation_summary("reference"),
 )(reference.cmd)
 app.command(
     "query",
-    help=(
-        "Open interactive Query with a read-only saved transcript browser, or "
-        "ask visible Context knowledge or a concealed query-only view; sessions "
-        "retain only visible Q/A when permitted."
-    ),
+    help=operation_summary("query"),
 )(query.cmd)
 
 # --- Editing ---
 app.command(
     "edit",
-    help=(
-        "Replace direct Memory content by UID or prefix in the current or "
-        "explicit Context."
-    ),
+    help=operation_summary("edit"),
 )(edit.cmd)
 app.command(
     "remove",
-    help=(
-        "Select a Context or direct item to delete, or name it by locator, "
-        "name, or UID."
-    ),
+    help=operation_summary("remove"),
 )(remove.cmd)
 app.command(
     "chunk",
-    help=(
-        "Preview and, after confirmation, split one direct current-Context "
-        "Memory by headers, paragraphs, or sentences."
-    ),
+    help=operation_summary("chunk"),
 )(chunk.cmd)
 app.command(
     "atomize",
-    help=(
-        "Enter an interactive Atomize session; --evaluate runs its issue-scoped "
-        "directional meld, changes require explicit acceptance, and "
-        "--sessions enters the interactive cross-Context session launcher."
-    ),
+    help=operation_summary("atomize"),
 )(atomize.cmd)
 app.command(
     "checkpoint",
-    help=(
-        "Save the current Context state as a manual recovery point for later "
-        "Diff or Revert, optionally labeled with a message."
-    ),
+    help=operation_summary("checkpoint"),
 )(checkpoint.cmd)
 app.command(
     "revert",
-    help=(
-        "Choose a local Context and checkpoint interactively when no selector "
-        "is given, or restore an exact or semantically found checkpoint. The "
-        "TUI reviews whether newer checkpoints are discarded or kept."
-    ),
+    help=operation_summary("revert"),
 )(revert.cmd)
 app.command(
     "log",
-    help=(
-        "Browse Context checkpoints, inspect one Memory lineage with --memory, "
-        "search history, or list Profile command attempts."
-    ),
+    help=operation_summary("log"),
 )(log.cmd)
 app.command(
     "undo",
-    help="Undo the most recent recorded Context command across its affected Contexts.",
+    help=operation_summary("undo"),
 )(undo.cmd)
 app.command(
     "redo",
-    help="Redo the most recently undone recorded Context command.",
+    help=operation_summary("redo"),
 )(redo.cmd)
 app.command(
     "trace",
-    help=(
-        "Open recent targets or browse local Contexts, including empty ones, "
-        "then trace one retained Memory lineage in Log's History explorer."
-    ),
+    help=operation_summary("trace"),
 )(trace.cmd)
 app.command(
     "rationale",
-    help=(
-        "Open recent targets or browse readable Contexts, including empty "
-        "ones, then explain one Memory without changing current Context state."
-    ),
+    help=operation_summary("rationale"),
 )(rationale.cmd)
 app.command(
     "translate",
-    help=(
-        "Show and save a reusable translation view without changing the source; "
-        "materialize only through explicit --save-as or --in-place routes."
-    ),
+    help=operation_summary("translate"),
 )(translate.cmd)
 
 # --- Semantic (legacy configured LLM or isolated Codex provider) ---
 app.command(
     "forget",
-    help=(
-        "Enter interactive instruction and direct-Source setup when no operand "
-        "is supplied, or analyze one instruction against the current direct "
-        "Memories; review each keep/edit/delete decision and apply only the "
-        "accepted batch."
-    ),
+    help=operation_summary("forget"),
 )(forget.cmd)
 app.command(
     "find",
-    help=(
-        "Open interactive search when QUERY is omitted, or search once when "
-        "QUERY is supplied. The default scope includes each selected Context "
-        "root, its namespace descendants, and embedded Contexts. Descendant "
-        "and embedded reach have independent flags; --direct disables both. "
-        "Explicitly temporal wording searches retained Memory history."
-    ),
+    help=operation_summary("find"),
 )(find.cmd)
 app.command(
     "find-duplicates",
-    help=(
-        "Report duplicate direct Memories in the current or explicit Context; "
-        "no Context changes."
-    ),
+    help=operation_summary("find-duplicates"),
 )(find_duplicates.cmd)
 app.command(
     "find-ambiguities",
-    help=(
-        "Report ambiguous direct Memories in the current or explicit Context; "
-        "no Context changes."
-    ),
+    help=operation_summary("find-ambiguities"),
 )(find_ambiguities.cmd)
 app.command(
     "find-conflicts",
-    help=(
-        "Report conflicting direct Memory pairs in the current or explicit "
-        "Context; no Context changes."
-    ),
+    help=operation_summary("find-conflicts"),
 )(find_conflicts.cmd)
 app.command(
     "audit",
-    help=(
-        "Run the Duplicate, Ambiguity, and Conflict finders over one frozen "
-        "direct Context, save their exact combined snapshot, and open Review."
-    ),
+    help=operation_summary("audit"),
 )(audit.cmd)
 app.command(
     "review",
-    help=(
-        "Enter an interactive Review session or stage semantic review responses; "
-        "never apply Memories."
-    ),
+    help=operation_summary("review"),
 )(review.cmd)
 app.command(
     "sever",
-    help=(
-        "Enter the interactive Sever session launcher with no operands, or review one "
-        "Source root "
-        "against one scoped Criteria root and create a local result that "
-        "forgets selected content while leaving Source unchanged."
-    ),
+    help=operation_summary("sever"),
 )(sever.cmd)
 app.command(
     "share",
-    help=(
-        "Enter interactive Source and endpoint setup when operands are incomplete, "
-        "or send one ordinary Context through a grant-backed receiver endpoint."
-    ),
+    help=operation_summary("share"),
 )(share.cmd)
 app.command(
     "ground",
-    help=(
-        "Enter an interactive Ground session, or open one named "
-        "Goal–Rules–Memories workbench; --sessions enters its launcher."
-    ),
+    help=operation_summary("ground"),
 )(ground.cmd)
 app.command(
     "impact",
-    help=(
-        "Preview a directional Update or Atomize analysis, or inspect a saved "
-        "Meld, Sever, or Update Impact; no Context changes occur in the Impact "
-        "view, and APPLY? hands saved work to its normal Apply flow."
-    ),
+    help=operation_summary("impact"),
 )(impact.cmd)
 app.command(
     "update",
-    help=(
-        "Enter the interactive Update session launcher with no endpoints, or apply a "
-        "directional plan to a local target; no shared publication."
-    ),
+    help=operation_summary("update"),
 )(update.cmd)
 
 # --- Sub-apps ---
 app.add_typer(
     eval_app,
     name="eval",
-    help="Run and inspect staged semantic evaluation campaigns.",
+    help=operation_summary("eval"),
 )
-app.add_typer(config_app, name="config", help="Read and write global configuration.")
+app.add_typer(config_app, name="config", help=operation_summary("config"))
 app.add_typer(
     provider_app,
     name="provider",
-    help="Select and verify Codex, Ollama, or OpenRouter semantic execution.",
+    help=operation_summary("provider"),
 )
 app.add_typer(
     profile_app,
     name="profile",
-    help=(
-        "Enter the interactive Profile selector, or manage complete local "
-        "MemoryStore Profiles."
-    ),
+    help=operation_summary("profile"),
 )
 app.add_typer(
     dev_app, name="dev", help="Developer tools (eval, diagnostics).", hidden=True
@@ -424,18 +298,18 @@ app.add_typer(
 
 app.command(
     "help",
-    help="Enter the interactive command browser and open syntax help.",
+    help=operation_summary("help"),
 )(help_inventory.cmd)
 app.command(
     "shell-init",
-    help="Print opt-in shell integration for interactive command prefill.",
+    help=operation_summary("shell-init"),
 )(shell_init.cmd)
 
 
-# checkout: complete switch alias, with -b to branch instead
+# checkout preserves Git-style navigation syntax across two distinct operations.
 @app.command(
     "checkout",
-    help="Alias for switch, including its picker; with -b, alias for branch.",
+    help=operation_summary("checkout"),
 )
 def _checkout(
     name: Annotated[
@@ -455,11 +329,34 @@ def _checkout(
             help="Create a branch; without NAME choose its local Source and name",
         ),
     ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="With -b, branch only the selected Source root",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="With -b, branch the Source root and lexical descendants",
+        ),
+    ] = False,
 ) -> None:
-    """Alias for all switch entry routes; with -b, alias for branch."""
+    """Route Git-style checkout syntax to Switch or, with ``-b``, Branch."""
     if b:
-        branch.cmd(name)
+        branch.cmd(
+            name,
+            source_descendants=None,
+            direct=direct,
+            recursive=recursive,
+        )
     else:
+        if direct or recursive:
+            raise typer.BadParameter("-d/-r require -b/--branch.")
         switch.cmd(name)
 
 

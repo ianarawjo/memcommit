@@ -1,4 +1,5 @@
 """Present the top-level CLI command inventory."""
+
 from __future__ import annotations
 
 import sys
@@ -20,16 +21,20 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.frame import (
-    bind_focused_frame_style,
-    horizontal_rule,
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
 )
 from memcommit.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.components.frame import (
+    bind_focused_frame_style,
+    horizontal_rule,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
@@ -39,10 +44,33 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
+from memcommit.help_catalog import (
+    OPERATION_HELP_BY_NAME,
+    OperationHelp,
+    compose_operation_help,
+    operation_help,
+)
 
 
 COMMAND_ANNOTATIONS = {
     "config": "legacy",
+}
+
+# Exact alternate spellings stay executable but share their canonical
+# operation's discovery row. Conditional compatibility commands such as
+# checkout do not belong here because they route to more than one operation.
+COMMAND_DISPLAY_ALIASES = {
+    "list": ("ls",),
+}
+
+# Related spellings can live under another command group while remaining
+# visible in the canonical operation's detail. They are kept separate from
+# owned forms so parser-validation and shell-prefill semantics stay explicit.
+COMMAND_RELATED_FORMS = {
+    "rename": (
+        "mem profile rename [new_name] (explicit equivalent for the active Profile)",
+        "mem profile rename [profile_name] [new_name] (explicit equivalent for a named Profile)",
+    ),
 }
 
 HELP_CORE_CONCEPTS = (
@@ -99,29 +127,58 @@ HELP_CATEGORY_GROUPS = (
     (
         "CONTEXTS",
         (
-            "status", "contexts", "list", "ls", "show", "switch",
-            "checkout", "init", "branch", "rename", "import", "embed",
+            "status",
+            "pwd",
+            "contexts",
+            "list",
+            "show",
+            "switch",
+            "checkout",
+            "init",
+            "branch",
+            "import",
+            "embed",
         ),
     ),
     (
         "MEMORIES",
         (
-            "add", "reference", "edit", "chunk", "forget", "remove",
-            "delete", "clear",
+            "add",
+            "reference",
+            "edit",
+            "chunk",
+            "forget",
+            "remove",
+            "delete",
+            "clear",
         ),
     ),
     (
         "SEARCH & EXPLAIN",
         (
-            "find", "query", "summarize", "trace", "rationale",
-            "find-duplicates", "find-ambiguities", "find-conflicts",
+            "find",
+            "query",
+            "summarize",
+            "trace",
+            "rationale",
+            "find-duplicates",
+            "find-ambiguities",
+            "find-conflicts",
         ),
     ),
     (
         "ANALYZE & TRANSFORM",
         (
-            "audit", "atomize", "compare", "impact", "review", "meld", "update",
-            "sever", "translate", "merge",
+            "audit",
+            "atomize",
+            "compare",
+            "impact",
+            "review",
+            "meld",
+            "update",
+            "sever",
+            "translate",
+            "merge",
         ),
     ),
     (
@@ -134,7 +191,7 @@ HELP_CATEGORY_GROUPS = (
     ),
     (
         "PROFILE & SHARING",
-        ("profile", "share", "lock", "unlock"),
+        ("profile", "rename", "share", "lock", "unlock"),
     ),
     (
         "SYSTEM",
@@ -159,6 +216,8 @@ HELP_COMMAND_ORDER = {
 COMMAND_FORMS = {
     "add": (
         'mem add "[memory]" (add one Memory to the current Context)',
+        "mem add (open the interactive multi-Memory editor)",
+        'mem add --memory "[memory]" --memory "[memory]" (add an explicit batch)',
         "mem add --input [file] (add one Memory per non-empty line)",
         "mem add --paste (paste one or more Memories)",
         'mem add "[memory]" --context [context] (add to an explicit Context)',
@@ -179,12 +238,14 @@ COMMAND_FORMS = {
     "branch": (
         "mem branch (choose a local Source, parent location, and fresh target)",
         "mem branch [new_context] (branch the current Context and switch)",
+        "mem branch [new_context] -r (branch the current Context subtree)",
     ),
     "checkout": (
-        "mem checkout (enter the interactive Context picker; switch alias)",
-        "mem checkout [context] (switch alias)",
-        "mem checkout -b (interactive branch-and-checkout)",
-        "mem checkout -b [new_context] (branch-and-checkout)",
+        "mem checkout (enter the Git-style interactive Context picker)",
+        "mem checkout [context] (switch using Git-style syntax)",
+        "mem checkout -b (choose, create, and switch to a Context branch)",
+        "mem checkout -b [new_context] (create and switch to a Context branch)",
+        "mem checkout -b [new_context] -r (create and switch to a recursive Context branch)",
     ),
     "checkpoint": (
         "mem checkpoint (save without a message)",
@@ -203,6 +264,7 @@ COMMAND_FORMS = {
         "mem compare --sessions (enter the interactive Compare session launcher)",
         "mem compare --to [context2] (current Context is context1)",
         "mem compare --from [context1] --to [context2] (explicit Contexts)",
+        "mem compare --from [context1] --to [context2] -r (both readable subtrees)",
         "mem compare --from [context1] --to [context2] --reference-descendants --compared-descendants (include each readable subtree)",
     ),
     "config": (
@@ -240,13 +302,14 @@ COMMAND_FORMS = {
     ),
     "find": (
         "mem find (interactive search, checked COPY/REFERENCE, and Save Location)",
-        'mem find "[query]" (current Context, namespace descendants, and embedded Contexts)',
+        'mem find "[query]" (direct current Context scope)',
+        'mem find -r "[query]" (namespace descendants and embedded Contexts)',
         'mem find "[temporal_query]" (retained history when the query explicitly asks about time)',
-        'mem find --context [context] "[query]" (explicit Context root, descendants, and embeds)',
+        'mem find --context [context] "[query]" (direct explicit Context root)',
         'mem find --context [context1] --context [context2] --descendants "[query]" (multiple roots with lexical descendants)',
         'mem find --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
         'mem find --descendants --exclude-embeds "[query]" (lexical subtrees without embedded traversal)',
-        'mem find --direct "[query]" (compatibility shorthand for context-only plus exclude-embeds)',
+        'mem find -d "[query]" (direct preset: context-only plus exclude-embeds)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
@@ -282,6 +345,7 @@ COMMAND_FORMS = {
         "mem impact update (inspect the saved Update Impact; APPLY? opens its Apply flow)",
         "mem impact update --session [uid] (inspect the exact saved Update Impact; APPLY? opens its Apply flow)",
         "mem impact --from [source_context] --to [target_context] (directional preview)",
+        "mem impact -r --from [source_context] --to [target_context] (recursive endpoints)",
         "mem impact --from [source_context] (current Context is target)",
         "mem impact --to [target_context] (current Context is source)",
     ),
@@ -291,7 +355,7 @@ COMMAND_FORMS = {
         "mem import profile [profile_name] --from-profile [source_profile] (clean baseline from a registered Profile)",
         "mem import context [source_context] --from-profile [source_profile] (one Context root)",
         "mem import context [source_context] --from-profile [source_profile] --as [new_root] (renamed Context root)",
-        "mem import context [source_context] --from-profile [source_profile] --recursive (Context tree)",
+        "mem import context [source_context] --from-profile [source_profile] -r (Context tree)",
         "mem import memory [memory] --from-profile [source_profile] --context [source_context] (into current Context)",
         "mem import memory [memory] --from-profile [source_profile] --context [source_context] --into [target_context]",
         "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
@@ -311,7 +375,7 @@ COMMAND_FORMS = {
     "list": (
         "mem list (enter the interactive Context browser in a TTY; print otherwise)",
         "mem list [context] (explicit Context listing)",
-        "mem list -R (recursive current-Context listing)",
+        "mem list -r (recursive current-Context listing; -R remains an alias)",
         "mem list [context] -R (recursive Context listing)",
         "mem list --copy (copy and stage the current listing)",
         "mem list [context] --copy (copy and stage an explicit listing)",
@@ -319,7 +383,7 @@ COMMAND_FORMS = {
     ),
     "lock": (
         "mem lock (lock the current Context)",
-        "mem lock --recursive (lock the current Context namespace)",
+        "mem lock -r (lock the current Context namespace)",
         "mem lock context [context] (lock an explicit Context)",
         "mem lock context [context] --recursive (lock an explicit Context namespace)",
         "mem lock memory [memory] (lock a direct Memory in the current Context)",
@@ -334,29 +398,19 @@ COMMAND_FORMS = {
         "mem log --operations (Profile command attempts)",
         "mem log --actions (current Study Profile action events)",
     ),
-    "ls": (
-        "mem ls (enter the interactive Context browser in a TTY; print otherwise)",
-        "mem ls [context] (explicit Context listing)",
-        "mem ls -R (recursive current-Context listing)",
-        "mem ls [context] -R (recursive Context listing)",
-        "mem ls --copy (copy and stage the current listing)",
-        "mem ls [context] --copy (copy and stage an explicit listing)",
-        "mem ls --paste (reopen the frozen copied result)",
-    ),
     "meld": (
         "mem meld (enter the interactive Meld session launcher)",
         "mem meld --sessions (enter the interactive Meld session launcher)",
         "mem meld [context1] [context2] (symmetric into current empty Context)",
         "mem meld [context1] [context2] --to [result_context] (symmetric new Result)",
+        "mem meld [context1] [context2] -r --to [result_context] (both subtrees)",
         "mem meld [context1] [context2] --left-descendants --right-descendants --to [result_context] (symmetric readable subtrees)",
         "mem meld [incoming_context] --into [baseline_context] (directional)",
         "mem meld [incoming_context] --left-descendants --into [baseline_context] --right-descendants (directional selected subtrees with owner-aware baseline writes)",
         "mem meld --into [baseline_context] (current Context is incoming)",
         "mem meld --from [incoming_context] (current Context is baseline)",
     ),
-    "merge": (
-        "mem merge [source_context] (merge into the current Context)",
-    ),
+    "merge": ("mem merge [source_context] (merge into the current Context)",),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",
         "mem profile [profile_name] (select through the concise alias)",
@@ -388,7 +442,8 @@ COMMAND_FORMS = {
     ),
     "query": (
         "mem query (open the interactive Question, Source, and saved transcript workbench)",
-        'mem query "[question]" (ask the current ordinary Context)',
+        'mem query "[question]" (ask the direct current ordinary Context)',
+        'mem query -r "[question]" (include descendants and embedded Contexts)',
         'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
         "mem query [query_view] (browse opaque Memory handles)",
         'mem query [query_view] "[question]" (ask a query-only view)',
@@ -415,7 +470,8 @@ COMMAND_FORMS = {
         "mem remove [item] --context [context] (explicit direct-item scope)",
     ),
     "rename": (
-        "mem rename [existing_context] [new_context]",
+        "mem rename [new_name] (rename the active Profile)",
+        "mem rename [profile_name] [new_name] (rename an explicit Profile)",
     ),
     "redo": ("mem redo (redo the most recently undone Context command)",),
     "revert": (
@@ -443,6 +499,7 @@ COMMAND_FORMS = {
         "mem sever (enter the interactive Sever session launcher)",
         "mem sever --sessions (enter the interactive Sever session launcher)",
         "mem sever --source [source_context] --criteria [criteria_context] --save-as [result_context]",
+        "mem sever -r --source [source_context] --criteria [criteria_context] --save-as [result_context]",
         "mem sever --criteria [criteria_context] --save-as [result_context] (current Context is source)",
         "mem sever --resume [uid] (open an exact saved Sever session)",
     ),
@@ -467,6 +524,7 @@ COMMAND_FORMS = {
         "mem status --short (one-line status)",
         "mem status --branch (include Profile and Context lineage)",
     ),
+    "pwd": ("mem pwd (print the current canonical Context name)",),
     "summarize": (
         "mem summarize (direct summary of the current Context)",
         "mem summarize [context] (direct summary of an explicit Context)",
@@ -502,7 +560,7 @@ COMMAND_FORMS = {
     "undo": ("mem undo (undo the latest recorded Context command)",),
     "unlock": (
         "mem unlock (unlock the current Context)",
-        "mem unlock --recursive (unlock the current Context namespace)",
+        "mem unlock -r (unlock the current Context namespace)",
         "mem unlock context [context] (unlock an explicit Context)",
         "mem unlock context [context] --recursive (unlock an explicit Context namespace)",
         "mem unlock memory [memory] (unlock a direct Memory in the current Context)",
@@ -512,6 +570,7 @@ COMMAND_FORMS = {
     "update": (
         "mem update (enter the interactive Update session launcher)",
         "mem update --from [source_context] --to [target_context] (explicit direction)",
+        "mem update -r --from [source_context] --to [target_context] (both subtrees)",
         "mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)",
         "mem update --from [source_context] (current Context is target)",
         "mem update --to [target_context] (current Context is source)",
@@ -528,6 +587,8 @@ class CommandEntry:
     description: str
     command: object
     forms: tuple[str, ...]
+    aliases: tuple[str, ...] = ()
+    operation_help: OperationHelp | None = None
 
 
 @dataclass(frozen=True)
@@ -603,7 +664,9 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
     visible_names = {name for name, _ in commands}
     configured_names = (
         COMMAND_ANNOTATIONS.keys()
+        | COMMAND_DISPLAY_ALIASES.keys()
         | COMMAND_FORMS.keys()
+        | COMMAND_RELATED_FORMS.keys()
         | HELP_CATEGORY_BY_COMMAND.keys()
     )
     stale = sorted(configured_names - visible_names)
@@ -615,11 +678,66 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
             err=True,
         )
         raise typer.Exit(1)
+
+    commands_by_name = dict(commands)
+    group = root.command
+    for name, aliases in COMMAND_DISPLAY_ALIASES.items():
+        command = commands_by_name[name]
+        command_callback = getattr(command, "callback", None)
+        command_target = getattr(command_callback, "__wrapped__", command_callback)
+        for alias in aliases:
+            alias_command = group.get_command(root, alias)
+            alias_callback = getattr(alias_command, "callback", None)
+            alias_target = getattr(alias_callback, "__wrapped__", alias_callback)
+            if (
+                alias_command is None
+                or not getattr(alias_command, "hidden", False)
+                or alias_target is not command_target
+            ):
+                typer.secho(
+                    "Help inventory error: displayed alias must be a hidden "
+                    f"exact callback spelling: {name} ({alias})",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
     uncategorized = sorted(visible_names - HELP_CATEGORY_BY_COMMAND.keys())
     if uncategorized:
         typer.secho(
             "Help inventory error: command category missing: "
             + ", ".join(uncategorized),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    missing_operation_help = sorted(visible_names - OPERATION_HELP_BY_NAME.keys())
+    stale_operation_help = sorted(OPERATION_HELP_BY_NAME.keys() - visible_names)
+    if missing_operation_help or stale_operation_help:
+        details = []
+        if missing_operation_help:
+            details.append("missing: " + ", ".join(missing_operation_help))
+        if stale_operation_help:
+            details.append("not registered: " + ", ".join(stale_operation_help))
+        typer.secho(
+            "Help inventory error: Operation Help coverage mismatch ("
+            + "; ".join(details)
+            + ")",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    description_mismatches = sorted(
+        name
+        for name, command in commands
+        if " ".join((getattr(command, "help", None) or "").split())
+        != operation_help(name).summary
+    )
+    if description_mismatches:
+        typer.secho(
+            "Help inventory error: registered summary differs from Operation "
+            "Help: " + ", ".join(description_mismatches),
             fg=typer.colors.RED,
             err=True,
         )
@@ -633,10 +751,24 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
                 (getattr(command, "help", None) or "No description.").split()
             ),
             command=command,
-            forms=COMMAND_FORMS.get(name, _default_command_forms(name, command)),
+            forms=(
+                COMMAND_FORMS.get(name, _default_command_forms(name, command))
+                + COMMAND_RELATED_FORMS.get(name, ())
+            ),
+            aliases=COMMAND_DISPLAY_ALIASES.get(name, ()),
+            operation_help=operation_help(name),
         )
         for name, command in commands
     ]
+
+
+def _entry_label(entry: CommandEntry) -> str:
+    label = entry.name
+    if entry.aliases:
+        label += f" ({', '.join(entry.aliases)})"
+    if entry.annotation:
+        label += f" ({entry.annotation})"
+    return label
 
 
 def _entry_line(
@@ -644,9 +776,7 @@ def _entry_line(
     *,
     name_width: int,
 ) -> str:
-    label = entry.name
-    if entry.annotation:
-        label += f" ({entry.annotation})"
+    label = _entry_label(entry)
     return f"{label:<{name_width}} - {entry.description}"
 
 
@@ -654,10 +784,7 @@ def _render_plain_inventory(entries: list[CommandEntry]) -> None:
     typer.secho("mem command inventory", bold=True)
     typer.echo()
 
-    name_width = max(
-        len(entry.name) + (len(entry.annotation) + 3 if entry.annotation else 0)
-        for entry in entries
-    )
+    name_width = max(len(_entry_label(entry)) for entry in entries)
     for entry in entries:
         typer.echo(
             _entry_line(
@@ -693,11 +820,7 @@ def _help_group_fragments(
     fragments: list[tuple[str, str]] = [(border_style, top + "\n")]
     vertical = "┃" if focused else "│"
     labels = {
-        index: display_escape_text(
-            entry.name
-            + (f" ({entry.annotation})" if entry.annotation else "")
-        )
-        for index, entry in entries
+        index: display_escape_text(_entry_label(entry)) for index, entry in entries
     }
     name_width = max(len(label) for label in labels.values())
     for index, entry in entries:
@@ -717,16 +840,12 @@ def _help_group_fragments(
         ) or [""]
         for description_index, line in enumerate(description_lines):
             prefix = (
-                command_prefix
-                if description_index == 0
-                else " " * len(command_prefix)
+                command_prefix if description_index == 0 else " " * len(command_prefix)
             )
             padding = " " * max(0, content_width - len(prefix) - len(line))
             fragments.append((border_style, vertical))
             if command_focused:
-                fragments.append(
-                    ("class:selected", f" {prefix}{line}{padding} ")
-                )
+                fragments.append(("class:selected", f" {prefix}{line}{padding} "))
             else:
                 fragments.extend(
                     [
@@ -736,6 +855,33 @@ def _help_group_fragments(
                 )
             fragments.append((border_style, vertical + "\n"))
         if expanded:
+            if entry.operation_help is not None:
+                composed = compose_operation_help(
+                    entry.operation_help,
+                    cli_forms=entry.forms,
+                )
+                detail_label_width = max(len(row.label) for row in composed.overview)
+                for row in composed.overview:
+                    prefix = f"  {row.label:<{detail_label_width}} · "
+                    lines = textwrap.wrap(
+                        display_escape_text(row.value),
+                        width=content_width,
+                        initial_indent=prefix,
+                        subsequent_indent=" " * len(prefix),
+                        break_long_words=True,
+                        break_on_hyphens=False,
+                    ) or [prefix]
+                    for line in lines:
+                        fragments.extend(
+                            [
+                                (border_style, vertical),
+                                (
+                                    "",
+                                    f" {line:<{content_width}} ",
+                                ),
+                                (border_style, vertical + "\n"),
+                            ]
+                        )
             for form_index, form in enumerate(entry.forms):
                 form_focused = (
                     focused and owns_selection and selected_form == form_index
@@ -756,9 +902,7 @@ def _help_group_fragments(
                         [
                             (border_style, vertical),
                             (
-                                "class:selected"
-                                if form_focused
-                                else "class:form",
+                                "class:selected" if form_focused else "class:form",
                                 f" {line:<{content_width}} ",
                             ),
                             (border_style, vertical + "\n"),
@@ -847,11 +991,7 @@ def _help_information_box_fragments(
     ) -> None:
         label_width = max(len(label) for label, _description in items)
         for item_index, (label, description) in enumerate(items):
-            row_focused = (
-                selectable
-                and focused
-                and focused_concept_index == item_index
-            )
+            row_focused = selectable and focused and focused_concept_index == item_index
             prefix = f"{label:<{label_width}}  "
             lines = textwrap.wrap(
                 display_escape_text(description),
@@ -885,9 +1025,7 @@ def _help_information_box_fragments(
                             ("", line + padding + " "),
                         ]
                     )
-                fragments.append(
-                    (border_style, ("┃" if guide_focused else "│") + "\n")
-                )
+                fragments.append((border_style, ("┃" if guide_focused else "│") + "\n"))
 
     border("CORE CONCEPTS", middle=False)
     rows(HELP_CORE_CONCEPTS, selectable=True)
@@ -947,9 +1085,7 @@ def run_help_selector(
         raise ValueError("Help mode must be SELECT or EXPLORE.")
     if not explore_title.strip() or not explore_return_label.strip():
         raise ValueError("Help exploration labels must be nonblank.")
-    if require_tty and (
-        not sys.stdin.isatty() or not sys.stdout.isatty()
-    ):
+    if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive help requires a terminal.")
 
     view_state = HorizontalChoiceState(
@@ -1037,9 +1173,7 @@ def run_help_selector(
         title, rows = group
         row_indexes = {index for index, _entry in rows}
         retained = category_cursors.get(title)
-        selected_index["value"] = (
-            retained if retained in row_indexes else rows[0][0]
-        )
+        selected_index["value"] = retained if retained in row_indexes else rows[0][0]
         selected_concept_index["value"] = None
         expanded_index["value"] = None
         selected_form["value"] = None
@@ -1068,8 +1202,10 @@ def run_help_selector(
             title, _rows = groups[group_index]
             category_cursors[title] = selected_index["value"]
         target_index = (
-            0 if group_index is None and direction > 0
-            else group_index + direction if group_index is not None
+            0
+            if group_index is None and direction > 0
+            else group_index + direction
+            if group_index is not None
             else -1
         )
         if 0 <= target_index < len(groups):
@@ -1107,9 +1243,13 @@ def run_help_selector(
             fragments.append(("", "\n"))
         groups = visible_groups()
         for group_index, (title, group_entries) in enumerate(groups):
-            group_focused = list_focused and any(
-                index == selected_index["value"] for index, _entry in group_entries
-            ) and not concept_focus_active()
+            group_focused = (
+                list_focused
+                and any(
+                    index == selected_index["value"] for index, _entry in group_entries
+                )
+                and not concept_focus_active()
+            )
             fragments.extend(
                 _help_group_fragments(
                     group_entries,
@@ -1120,9 +1260,7 @@ def run_help_selector(
                     expanded_index=expanded_index["value"],
                     selected_form=selected_form["value"],
                     viewport_height=(
-                        None
-                        if by_kind
-                        else _help_list_viewport_height(terminal_rows)
+                        None if by_kind else _help_list_viewport_height(terminal_rows)
                     ),
                 )
             )
@@ -1210,10 +1348,7 @@ def run_help_selector(
 
     @bindings.add("up", filter=has_focus(list_control))
     def _previous_command(event) -> None:
-        if (
-            concept_focus_active()
-            and selected_concept_index["value"] == 0
-        ):
+        if concept_focus_active() and selected_concept_index["value"] == 0:
             navigation_accelerator.reset()
             surface_focus.focus_relative(
                 event.app,
@@ -1247,9 +1382,7 @@ def run_help_selector(
         selected_form["value"] = None
         expanded_index["value"] = None
         concept_count = (
-            len(HELP_CORE_CONCEPTS)
-            if view_state.selected_uid == "CATEGORY"
-            else 0
+            len(HELP_CORE_CONCEPTS) if view_state.selected_uid == "CATEGORY" else 0
         )
         position = (
             selected_concept_index["value"]
@@ -1273,9 +1406,7 @@ def run_help_selector(
         selected_form["value"] = None
         expanded_index["value"] = None
         concept_count = (
-            len(HELP_CORE_CONCEPTS)
-            if view_state.selected_uid == "CATEGORY"
-            else 0
+            len(HELP_CORE_CONCEPTS) if view_state.selected_uid == "CATEGORY" else 0
         )
         position = (
             selected_concept_index["value"]
@@ -1479,13 +1610,10 @@ def run_help_selector(
 
     def footer_text() -> str:
         return_label = (
-            f"return to {explore_return_label}"
-            if mode == "EXPLORE"
-            else "cancel"
+            f"return to {explore_return_label}" if mode == "EXPLORE" else "cancel"
         )
-        if (
-            app_ref.get("app") is not None
-            and app_ref["app"].layout.has_focus(view_control)
+        if app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
+            view_control
         ):
             toggle = " · H hide Help" if mode == "EXPLORE" else ""
             tab_hint = (
@@ -1493,10 +1621,7 @@ def run_help_selector(
                 if view_state.selected_uid == "CATEGORY"
                 else "Tab list"
             )
-            return (
-                f" VIEW: ←/→ choose · ↓ list · {tab_hint}"
-                f"{toggle} · Q {return_label}"
-            )
+            return f" VIEW: ←/→ choose · ↓ list · {tab_hint}{toggle} · Q {return_label}"
         if concept_focus_active():
             toggle = (
                 f" H hide Help · Q return to {explore_return_label}"
@@ -1517,9 +1642,7 @@ def run_help_selector(
             else "H full help"
         )
         tab_hint = (
-            "Tab next kind"
-            if view_state.selected_uid == "CATEGORY"
-            else "Tab surface"
+            "Tab next kind" if view_state.selected_uid == "CATEGORY" else "Tab surface"
         )
         return (
             " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "
@@ -1533,9 +1656,7 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit(
-                [header, view_frame, body, horizontal_rule(right_gutter=1), footer]
-            ),
+            HSplit([header, view_frame, body, horizontal_rule(right_gutter=1), footer]),
             focused_element=list_control,
         ),
         key_bindings=bindings,
@@ -1578,6 +1699,21 @@ def _show_selected_command_help(
     """Render syntax help without invoking the selected command callback."""
     typer.secho(f"Command: mem {entry.name}", bold=True)
     typer.echo()
+
+    if entry.operation_help is not None:
+        composed = compose_operation_help(
+            entry.operation_help,
+            cli_forms=entry.forms,
+        )
+        typer.secho("Overview", bold=True)
+        label_width = max(len(row.label) for row in composed.overview)
+        for row in composed.overview:
+            typer.echo(f"  {row.label:<{label_width}}  {row.value}")
+        typer.echo()
+        typer.secho("Command line", bold=True)
+        for form in composed.cli_forms:
+            typer.echo(f"  {form}")
+        typer.echo()
 
     # Use a display-only root so Usage always names the installed `mem`
     # executable, including when this is exercised through CliRunner.
@@ -1675,7 +1811,5 @@ def cmd(
     if not selection.show_help:
         typer.echo(selection.command_line)
         return
-    selected = next(
-        entry for entry in entries if entry.name == selection.command_name
-    )
+    selected = next(entry for entry in entries if entry.name == selection.command_name)
     _show_selected_command_help(root, selected)

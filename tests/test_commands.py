@@ -50,7 +50,7 @@ class TestHelp:
             for name in ("alpha", "beta", "gamma")
         ]
 
-    def test_lists_commands_with_exception_annotations_and_descriptions(self):
+    def test_lists_commands_with_compact_annotations_and_descriptions(self):
         result = invoke("help")
 
         assert result.exit_code == 0
@@ -70,18 +70,18 @@ class TestHelp:
             and "no shared publication" in line
             for line in lines
         )
-        list_row = next(line for line in lines if line.startswith("list "))
-        ls_row = next(line for line in lines if line.startswith("ls "))
-        assert list_row.split(" - ", 1)[1] == ls_row.split(" - ", 1)[1]
-        assert "interactive Context browser" in list_row
-        assert "print child Contexts and direct items" in list_row
+        list_row = next(line for line in lines if line.startswith("list (ls) "))
+        assert not any(line.startswith("ls ") for line in lines)
+        assert "Browse child Contexts and direct items" in list_row
+        assert "equivalent compact spelling" in list_row
         assert any(
             line.startswith("checkout ")
-            and "Alias for switch" in line
-            and "including its picker" in line
-            and "alias for branch" in line
+            and "Git-style syntax" in line
+            and "with -b, create and switch" in line
             for line in lines
         )
+        assert "Alias for switch" not in result.output
+        assert "alias for branch" not in result.output
         assert not any(line.startswith("integrate ") for line in lines)
         assert any(line.startswith("config (legacy) ") for line in lines)
         assert any(line.startswith("switch ") for line in lines)
@@ -108,6 +108,24 @@ class TestHelp:
             and "keep/edit/delete decision" in line
             for line in lines
         )
+
+    def test_list_discovery_folds_the_hidden_exact_ls_spelling(self):
+        root = get_command(app)
+        context = click.Context(root)
+        list_command = root.get_command(context, "list")
+        ls_command = root.get_command(context, "ls")
+
+        assert list_command is not None and not list_command.hidden
+        assert ls_command is not None and ls_command.hidden
+        assert help_inventory.COMMAND_DISPLAY_ALIASES == {"list": ("ls",)}
+        assert list_command.callback.__wrapped__ is ls_command.callback.__wrapped__
+
+        result = invoke("--help")
+
+        assert result.exit_code == 0
+        assert "│ list " in result.output
+        assert "equivalent compact spelling" in result.output
+        assert "│ ls " not in result.output
 
     def test_integrate_is_not_a_public_command(self):
         result = invoke("integrate", "new information")
@@ -356,8 +374,16 @@ class TestHelp:
         assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
             'mem edit [memory] "[new_content]"'
         )
-        assert help_inventory.COMMAND_FORMS["rename"][0] == (
-            "mem rename [existing_context] [new_context]"
+        assert help_inventory.COMMAND_FORMS["rename"] == (
+            "mem rename [new_name] (rename the active Profile)",
+            "mem rename [profile_name] [new_name] "
+            "(rename an explicit Profile)",
+        )
+        assert help_inventory.COMMAND_RELATED_FORMS["rename"] == (
+            "mem profile rename [new_name] "
+            "(explicit equivalent for the active Profile)",
+            "mem profile rename [profile_name] [new_name] "
+            "(explicit equivalent for a named Profile)",
         )
         assert help_inventory.COMMAND_FORMS["remove"][0].startswith(
             "mem remove [item]"
@@ -379,10 +405,11 @@ class TestHelp:
             "mem init-study [profile_name] (use an explicit Study Profile name)",
         )
         assert help_inventory.COMMAND_FORMS["checkout"][0] == (
-            "mem checkout (enter the interactive Context picker; switch alias)"
+            "mem checkout (enter the Git-style interactive Context picker)"
         )
         assert help_inventory.COMMAND_FORMS["checkout"][3] == (
-            "mem checkout -b [new_context] (branch-and-checkout)"
+            "mem checkout -b [new_context] "
+            "(create and switch to a Context branch)"
         )
         assert help_inventory.COMMAND_FORMS["init"][0].startswith("mem init (")
         assert help_inventory.COMMAND_FORMS["branch"][0].startswith("mem branch (")
@@ -528,10 +555,7 @@ class TestHelp:
         )
         assert any("--context-only --follow-embeds" in form for form in forms)
         assert any("--descendants --exclude-embeds" in form for form in forms)
-        assert any(
-            "--direct" in form and "compatibility shorthand" in form
-            for form in forms
-        )
+        assert any("-d" in form and "direct preset" in form for form in forms)
 
     def test_free_text_placeholders_include_shell_quotes(self):
         assert help_inventory._selectable_form_line(

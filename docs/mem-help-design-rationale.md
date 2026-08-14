@@ -14,7 +14,7 @@ The stable non-TTY inventory remains case-insensitive A–Z for scripts and
 captured study output:
 
 ```text
-name [(exception)] - short description
+name [(exact spelling)] [(status)] - short description
 ```
 
 It reports capabilities; it does not recommend a command sequence or perform
@@ -73,15 +73,17 @@ prompt-toolkit selector:
   Common Keys remains reference prose rather than five additional focus stops.
   Inside a category it preserves an intentional workflow order: orient and
   inspect first, then navigate or create, then perform semantic work, with
-  destructive or broad cleanup actions last. Primary commands and their aliases
-  remain adjacent. This order comes from `HELP_CATEGORY_GROUPS`; the renderer
-  must not alphabetize it again. `A–Z` alone provides lexical lookup.
+  destructive or broad cleanup actions last. Primary commands and any
+  separately presented compatibility commands remain adjacent. This order
+  comes from `HELP_CATEGORY_GROUPS`; the renderer must not alphabetize it
+  again. `A–Z` alone provides lexical lookup.
   `ANALYZE & TRANSFORM` intentionally covers both read-only inspection and
   operations that reshape or reconcile Memory material; `TRANSFORM` is broad
   enough for Atomize, Translate, Merge, and Update where `RESOLVE` was not.
-  Aliases remain separate commands in the same box so the inventory still
-  describes every registered spelling. `A–Z` has no semantic categories, so
-  its complete alphabetic projection occupies one `A–Z` box.
+  An exact alternate spelling that adds no operation may instead be folded into
+  its canonical label, as in `list (ls)`, while remaining directly executable.
+  `A–Z` has no semantic categories, so its complete visible-operation
+  projection occupies one `A–Z` box.
   Because that projection owns only one box, the box fills any spare list
   viewport rows with bordered blank lines and places its closing border directly
   above the pinned footer separator. The blank space therefore remains visibly
@@ -180,16 +182,18 @@ When stdin or stdout is not a TTY, `mem help` retains the stable plain-text
 inventory. This keeps pipes, captured study records, and automated tests
 deterministic instead of emitting a terminal-control interface.
 
-## Exceptional annotations
+## Compact annotations
 
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
-parenthesized annotation is reserved for exceptional compatibility state:
-`config (legacy)` remains callable but sits outside the current workflow.
-Retired commands such as `integrate` are omitted instead of occupying an
-inventory row that suggests they can still be selected. Ordinary TUI entry is
-described inside the expanded Forms instead of repeating a badge across the
-inventory.
+parenthesized status annotation is reserved for exceptional compatibility
+state: `config (legacy)` remains callable but sits outside the current
+workflow. A separate exact-spelling annotation groups an executable hidden
+spelling with its canonical operation, as in `list (ls)`; it does not classify
+a conditional dispatcher such as `checkout` as an alias. Retired commands such
+as `integrate` are omitted instead of occupying an inventory row that suggests
+they can still be selected. Ordinary TUI entry is described inside expanded
+Forms instead of repeating a badge across the inventory.
 
 ## Invocation forms
 
@@ -269,7 +273,7 @@ registered syntax reference. A selected Form preserves its bracketed
 placeholders when prefilled as editable shell text by the opt-in zsh
 integration; selection never executes it.
 
-A deliberately bounded command needs no exception annotation when its
+A deliberately bounded command needs no status annotation when its
 advertised contract is available. For example, `merge` intentionally performs
 structural UID union without semantic reconciliation, and `diff` intentionally
 renders the active update rather than comparing arbitrary Contexts. The
@@ -278,22 +282,51 @@ operation suggested by the command's name or a production-readiness claim.
 Individual commands may still have documented permission, provider,
 concurrency, or remote-persistence boundaries.
 
-An implementation can expose two related public spellings through one
-internal callback. `mem list` and `mem ls` deliberately have the same
-description: participants may learn and use either spelling. The `checkout`
-compatibility alias identifies both underlying operations directly in its
-description instead of adding another status column. Bare `checkout` is also
-listed because it delegates to the same interactive picker as bare `switch`;
-bare `checkout -b` names the interactive branch-and-checkout route and
-`checkout -b NAME` names its explicit counterpart.
+An implementation can keep two executable spellings without presenting them
+as two operations. Help shows the canonical `list` entry once as `list (ls)`;
+the hidden `ls` registration remains an exact compact spelling with the same
+callback and grammar. This keeps discovery beginner-readable while preserving
+the shell-familiar form in scripts and direct use.
+
+`checkout` is not described as an alias because its public grammar selects
+between two distinct operations. It is a Git-style compatibility command:
+without `-b` it routes to Switch, while `-b` routes to Branch. Bare `checkout`
+therefore enters the Switch picker, and bare `checkout -b` enters Branch's
+Source-and-name setup. The inventory states those behaviors directly instead
+of implying that the complete `checkout` command is interchangeable with
+either underlying command.
 
 ## Consistency boundary
 
-Descriptions are read from the same Click/Typer command registrations used by
-`mem --help`; the inventory does not maintain a second description catalog.
-Exceptional annotations and multi-route invocation forms are explicit because
-compatibility status and semantic entry routes cannot be inferred safely from
-Click registration alone.
+The small interface-neutral `OperationHelp` catalog owns each public
+operation's canonical summary plus four deliberately bounded semantic fields:
+flow, execution kind, effect, and an optional range. The root Typer
+registration reads its summary from that catalog, and command inventory
+construction fails closed if either coverage or the registered summary
+diverges. Callback docstrings remain implementation documentation; they are
+not copied into user-facing Help because many callbacks are compatibility or
+adapter entry points rather than the complete operation contract.
+
+The catalog is intentionally not a second implementation. CLI flag spelling,
+parameter types, and defaults remain owned by Typer. Audited invocation Forms
+remain CLI projections because interactive entry routes and semantic route
+labels cannot be inferred from parser syntax alone. Current Profile authority,
+Grant resolution, cache decisions, and provider receipts remain runtime
+results. Detailed algorithms and design tradeoffs remain in focused rationale
+notes. These boundaries keep routine CLI changes from requiring a parallel
+semantic policy update.
+
+The pure Help composer combines `OperationHelp` with interface-owned material.
+The expanded TUI entry projects the common flow, execution, effect, and range
+before its exact CLI Forms. Selected full Help renders the same overview and
+Forms before Typer's complete syntax reference. Plain non-TTY inventory stays
+compact and deterministic. Future Python or agent-tool adapters may project
+the same catalog without importing prompt-toolkit or reconstructing CLI
+strings.
+
+Compact spelling/status annotations and multi-route invocation forms remain
+explicit because equivalent spellings, compatibility state, and semantic entry
+routes cannot be inferred safely from Click registration alone.
 
 The renderer fails closed if an annotated or explicitly formed command is no
 longer registered. Tests also require every visible command to have an audited

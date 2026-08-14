@@ -1,0 +1,5 @@
+52 180
+[0m[1m[31mbranch [0m          - Copy a Context or subtree into a new branch and switch to it.
+[0m[1m[31mcheckout [0m        - Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.
+[0m[1m[31mlist [0m(ls)        - Browse child Contexts and direct items; ls is the equivalent compact spelling.
+[0m[1m[31mswitch [0m          - Enter the interactive Context picker, or switch to an explicit Context.

@@ -1,0 +1,5 @@
+52 180
+[0m[1m[31mbranch [0m          - Choose a local Source range and exact fresh target when unnamed, or branch the current Context or subtree to an explicit new name.
+[0m[1m[31mcheckout [0m        - Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.
+[0m[1m[31mlist [0m(ls)        - Browse child Contexts and direct items in the current or explicit Context; ls is the equivalent compact spelling.
+[0m[1m[31mswitch [0m          - Enter the interactive Context picker, or switch to an explicit Context.

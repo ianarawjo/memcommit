@@ -1,0 +1,33 @@
+Command: mem update                                                                                                                                                                 
+                                                                                                                                                                                    
+Overview                                                                                                                                                                            
+  FLOW       Source Context -> Target Context                                                                                                                                       
+  EXECUTION  SEMANTIC                                                                                                                                                               
+  EFFECT     Changes local Target only after reviewed Apply                                                                                                                         
+  RANGE      Each endpoint exact or readable descendants                                                                                                                            
+                                                                                                                                                                                    
+Command line                                                                                                                                                                        
+  mem update (enter the interactive Update session launcher)                                                                                                                        
+  mem update --from [source_context] --to [target_context] (explicit direction)                                                                                                     
+  mem update -r --from [source_context] --to [target_context] (both subtrees)                                                                                                       
+  mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)                                               
+  mem update --from [source_context] (current Context is target)                                                                                                                    
+  mem update --to [target_context] (current Context is source)                                                                                                                      
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+ Usage: mem update [OPTIONS]                                                                                                                                                        
+                                                                                                                                                                                    
+ Review a directional plan and apply it to a local target; no shared publication.                                                                                                   
+                                                                                                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --from                                     <str>          Source Context A; if --to is omitted, current supplies B                                                               │
+│ --to                                       <str>          Target Context B; if --from is omitted, current supplies A                                                             │
+│ --replace-stage                                           Replace a different, stale, or applied update record                                                                   │
+│ --direct              -d                                  Use only the selected Source and Target roots                                                                          │
+│ --recursive           -r                                  Include descendants under both Source and Target roots                                                                 │
+│ --source-descendants      --source-only                   Include all readable descendant Contexts under Source A                                                                │
+│ --target-descendants      --target-only                   Include all writable descendant Contexts under Target B                                                                │
+│ --source-memory                            UID_OR_PREFIX  Use one Source Memory as provenance while its neighbors remain non-actionable context                                  │
+│ --target-memory                            UID_OR_PREFIX  Restrict edits/removal to one Target Memory while its neighbors remain non-actionable context                          │
+│ --help                                                    Show this message and exit.                                                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
