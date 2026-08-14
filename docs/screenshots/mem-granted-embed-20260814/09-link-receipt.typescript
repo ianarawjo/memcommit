@@ -10,8 +10,8 @@ CAPTURE PTY · 180x52
 [0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  ·   · archive                                                                                                                                                                  [0;1m^[179C[0m│[0m
 [0m│› ✓ * ▾ [0;38;5;234;48;5;117mguide[0m                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [memory f2bca513] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [memory 75808252] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [memory ec35b830] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
 [0m│    ✓ ───────── [0;38;5;234;48;5;117mLAST · DEFAULT · 3/3[0m ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -38,12 +38,12 @@ CAPTURE PTY · 180x52
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│PROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C│[0m
-[0m│  mem embed advisor --into guide --after 75808252-d5ee-4c46-ab7e-bdf2edd62ced                                                                                                     [179C│[0m
+[0m│  mem embed advisor --into guide --after ffcfdc92-f853-4771-af87-c74d4915dc8d                                                                                                     [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│EFFECTS · ONE COMMAND                                                                                                                                                             [179C│[0m
 [0m│  Only Context 'guide' is changed.                                                                                                                                                [179C│[0m
 [0m│  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 [179C│[0m
-[0m│  Insert at gap 3/3, after [75808252] at the end.                                                                                                                                 [179C│[0m
+[0m│  Insert at gap 3/3, after [ffcfdc92] at the end.                                                                                                                                 [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│Approval applies only to the exact command shown above.                                                                                                                           [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
@@ -107,8 +107,8 @@ CAPTURE PTY · 180x52
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m  ·   · archive                                                                                                                                                                  [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1;7m› ✓ * ▾ [0;38;5;234;48;5;117;1mguide[0m                                                                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [memory f2bca513] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [memory 75808252] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [memory ec35b830] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m    ✓ ───────── [0;38;5;234;48;5;117mLAST · DEFAULT · 3/3[0m ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -189,7 +189,7 @@ CAPTURE PTY · 180x52
 
 
 [10C[0mo[Ce position line[C· Enter/Space stage · Tab[Creview · Esc back to Context[0m[K[38A[81D[0m[?25l[A[0;1;7m  › ✓ ───────── [0;38;5;234;48;5;117;1mPOSITION · 2/3[0;1;7m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[C[0;38;5;189m  · [memory 75808252] Closing proposal note.[0m                                                                                                                                     [0m
+[C[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[0m                                                                                                                                     [0m
 
 
 
@@ -215,17 +215,17 @@ CAPTURE PTY · 180x52
 
 
 
-[36C[0mbefo[Ce 75808252-d5[Ce-4c46-ab7e-bdf2e[Cd62ced[0m
+[36C[0mbefo[Ce [Cfcfdc92-f853-4[C71-af87-c74d4915dc8d[0m
 
 
 
 
-[17C[0m2[4Cbe[Cween [f2bca513] and [75808252].[32A[55D[0m[?25l[4A[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[17C[0m2[4Cbe[Cween [ec35b830] and [ffcfdc92].[32A[55D[0m[?25l[4A[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  ·   · archive                                                                                                                                                                  [0;1m^[179C[0m│[0m
 [0m│  ✓ * ▾ [0;38;5;234;48;5;117mguide[0m                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [memory f2bca513] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [memory ec35b830] Opening proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
 [0m│  › ✓ ───────── [0;38;5;234;48;5;117mPOSITION · 2/3[0m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [memory 75808252] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[0m                                                                                                                                     [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -251,19 +251,19 @@ CAPTURE PTY · 180x52
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0mPROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  mem embed advisor --into guide --before 75808252-d5ee-4c46-ab7e-bdf2edd62ced                                                                                                    [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  mem embed advisor --into guide --before ffcfdc92-f853-4771-af87-c74d4915dc8d                                                                                                    [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mEFFECTS · ONE COMMAND                                                                                                                                                             [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m  Only Context 'guide' is changed.                                                                                                                                                [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  Insert at gap 2/3, between [f2bca513] and [75808252].                                                                                                                           [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  Insert at gap 2/3, between [ec35b830] and [ffcfdc92].                                                                                                                           [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mApproval applies only to the exact command shown above.                                                                                                                           [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ][0m                                                                                                                                      [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0mEnter apply exact c[Cmmand · ↑ position ·[CEsc cancel[0m[K[3A[51D[0m[48A[J[0m[?7h[?1049l[?2004l[32mEmbedded 'advisor' into 'guide' between [f2bca513] and [75808252].[0m
+[C[0mEnter apply exact c[Cmmand · ↑ position ·[CEsc cancel[0m[K[3A[51D[0m[48A[J[0m[?7h[?1049l[?2004l[32mEmbedded 'advisor' into 'guide' between [ec35b830] and [ffcfdc92].[0m
 CAPTURE PAUSE · press Enter for read-only verification
 
 CAPTURE VERIFICATION COMMAND · mem ls -R guide
@@ -272,9 +272,9 @@ CAPTURE VERIFICATION COMMAND · mem ls -R guide
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0m    ▸ archive[166C[0;1m^[0m
 [0;1;7m› * ▾ guide[168C[0;48;5;238m [0m
-[0;38;5;189m  · [memory f2bca513] Opening proposal note.[135C[0;48;5;238m [0m
-[0;38;5;231m  · [context 4fcc1a39] VIA EMBED · advisor[137C[0;48;5;238m [0m
-[0;38;5;189m  · [memory 75808252] Closing proposal note.[135C[0;48;5;238m [0m
+[0;38;5;189m  · [memory ec35b830] Opening proposal note.[135C[0;48;5;238m [0m
+[0;38;5;231m  · [context fb1f6317] VIA EMBED · advisor[137C[0;48;5;238m [0m
+[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[135C[0;48;5;238m [0m
 [0m    ▸ advisor  [0;38;5;231;1mREAD GRANT[0m · [0;38;5;231;1mPERMISSIONS READ + EMBED[0m · [0;38;5;231mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[82C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
@@ -319,14 +319,14 @@ CAPTURE VERIFICATION COMMAND · mem ls -R guide
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0m ↑↓ move  ←→ expand  A expand all  m hide items here  M show all items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 2/6 · 3 selectable[160D[47A[0m[?25l[A[4C[0m▾[0m
-[0;38;5;189m  · [memory 7c046da3] Owned archive remains a second local Child option.[0m
+[0;38;5;189m  · [memory 1ab5395d] Owned archive remains a second local Child option.[0m
 [0;1;7m› * ▾ guide[0m                                 [0m
-[0;38;5;189m  · [memory f2bca513] Opening proposal note.[0m
-[0;38;5;231m  · [context 4fcc1a39] VIA EMBED · advisor[0m  [0m
-[0;38;5;189m  · [memory 75808252] Closing proposal note.[0m                                                     [0m
+[0;38;5;189m  · [memory ec35b830] Opening proposal note.[0m
+[0;38;5;231m  · [context fb1f6317] VIA EMBED · advisor[0m  [0m
+[0;38;5;189m  · [memory ffcfdc92] Closing proposal note.[0m                                                     [0m
 [0m    ▾ advisor  [0;38;5;231;1mREAD GRANT[0m · [0;38;5;231;1mPERMISSIONS READ + EMBED[0m · [0;38;5;231mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[0m
-[0;38;5;189m  · [memory 0da58c0a] Use evidence from the live advisor Context.[0m
-[0;38;5;231m  · [query view 00aa53a9] advisor/private[0m
+[0;38;5;189m  · [memory 8515633e] Use evidence from the live advisor Context.[0m
+[0;38;5;231m  · [query view 8c6e0aad] advisor/private[0m
 [0m      · advisor/private  [0;38;5;231;1mQUERY GRANT[0m · [0;38;5;231;1mPERMISSIONS QUERY[0m · [0;38;5;231mANALYSIS RATIONALE BLOCKED + TRACE BLOCKED[0m
 
 
@@ -367,6 +367,6 @@ CAPTURE VERIFICATION COMMAND · mem ls -R guide
 
 
 [23C[0mrestore tree [Cm hide items h[Cre [CM hide all items [Cy copy Context [CY copy v[Csible branch  Enter open/collapse [Cq close[C· 3/10 · 3 selectable[46A[163D[0m[5A[J[0m[?7h[?1049l[?2004lLINK TYPE · granted_context_ref
-LINK GRANT · 3a361d32
+LINK GRANT · 2a685c64
 LINK CONTENT CACHED · NO
 CURRENT CONTEXT · guide

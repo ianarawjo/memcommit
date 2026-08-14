@@ -135,20 +135,20 @@ Child retains identity and ownership, and which exact neighbor gap is used.
 
 ## Reuse boundary
 
-`memcommit.commands.direct_item_placement` currently owns the operation-neutral row
-projection, gap model, separate hover/selection state, and single moving-line
-renderer. It delegates item presentation to Switch's common direct-item
-preview renderer. The common `ContextSelectorControl` exposes a narrow nested
-row projection hook so Embed can compose that order under the selected Context
-without cloning Context-tree navigation. Embed owns which object is inserted,
-its exact command, authority, validation, checkpoint, and success receipt.
-Later Add or Reference placement work may reuse the shared gap component
-without inheriting Embed semantics.
+`memcommit.interfaces.tui.components.direct_item_placement` owns the
+operation-neutral row projection, gap model, separate hover/selection state,
+and single moving-line renderer. The neighboring exact-command receipt is a
+separate component. The common `ContextSelectorControl` exposes a narrow
+nested-row projection hook so Embed can compose the order under the selected
+Context without cloning Context-tree navigation. Embed owns which object is
+inserted, its exact command, authority, validation, checkpoint, and success
+receipt. Later Add or Reference placement work may reuse the shared gap
+component without inheriting Embed semantics.
 
-This placement component predates the interface-package migration and still
-depends on the older shared Context preview renderer. Moving that common visual
-component is intentionally separate from the Embed use-case boundary: neither
-the application contract nor the Store runtime imports it.
+The component projects only the target's frozen direct-item sequence. It does
+not import a command adapter or gain storage, authority, or apply behavior.
+Older command screens still have legacy placement/review helpers; migrating
+those callers is a separate rollout and Embed does not reach through them.
 
 ## Alternatives and intentional non-goals
 

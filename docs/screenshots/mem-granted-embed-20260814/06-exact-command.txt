@@ -9,9 +9,9 @@
 ┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────┐
 │  ·   · archive                                                                                                                                                                  ^│
 │  ✓ * ▾ guide                                                                                                                                                                     │
-│  · [memory f2bca513] Opening proposal note.                                                                                                                                      │
+│  · [memory ec35b830] Opening proposal note.                                                                                                                                      │
 │  › ✓ ───────── POSITION · 2/3 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
-│  · [memory 75808252] Closing proposal note.                                                                                                                                      │
+│  · [memory ffcfdc92] Closing proposal note.                                                                                                                                      │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -37,12 +37,12 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
-┃  mem embed advisor --into guide --before 75808252-d5ee-4c46-ab7e-bdf2edd62ced                                                                                                    ┃
+┃  mem embed advisor --into guide --before ffcfdc92-f853-4771-af87-c74d4915dc8d                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
 ┃  Only Context 'guide' is changed.                                                                                                                                                ┃
 ┃  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 ┃
-┃  Insert at gap 2/3, between [f2bca513] and [75808252].                                                                                                                           ┃
+┃  Insert at gap 2/3, between [ec35b830] and [ffcfdc92].                                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃
 ┃Approval applies only to the exact command shown above.                                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.direct_item_placement import (
+from memcommit.interfaces.tui.components.direct_item_placement import (
     DirectItemGap,
     DirectItemGapState,
     direct_item_gap,
@@ -25,7 +25,7 @@ from memcommit.interfaces.tui.operations.embed import (
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.tui.tree import ContextTreeRow
 from memcommit.source_projection.model import SourceForm, SourceReach
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)

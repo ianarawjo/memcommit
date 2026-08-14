@@ -18,12 +18,12 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.commands.direct_item_placement import (
+from memcommit.interfaces.tui.components.direct_item_placement import (
     DirectItemGap,
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.commands.exact_command_review import (
+from memcommit.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )

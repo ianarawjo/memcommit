@@ -9,8 +9,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃  ·   · archive                                                                                                                                                                  ^┃
 ┃  ✓ * ▾ guide                                                                                                                                                                     ┃
-┃  · [memory f2bca513] Opening proposal note.                                                                                                                                      ┃
-┃  · [memory 75808252] Closing proposal note.                                                                                                                                      ┃
+┃  · [memory ec35b830] Opening proposal note.                                                                                                                                      ┃
+┃  · [memory ffcfdc92] Closing proposal note.                                                                                                                                      ┃
 ┃  › ✓ ───────── LAST · DEFAULT · 3/3 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -37,12 +37,12 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
 │PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem embed advisor --into guide --after 75808252-d5ee-4c46-ab7e-bdf2edd62ced                                                                                                     │
+│  mem embed advisor --into guide --after ffcfdc92-f853-4771-af87-c74d4915dc8d                                                                                                     │
 │                                                                                                                                                                                  │
 │EFFECTS · ONE COMMAND                                                                                                                                                             │
 │  Only Context 'guide' is changed.                                                                                                                                                │
 │  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 │
-│  Insert at gap 3/3, after [75808252] at the end.                                                                                                                                 │
+│  Insert at gap 3/3, after [ffcfdc92] at the end.                                                                                                                                 │
 │                                                                                                                                                                                  │
 │Approval applies only to the exact command shown above.                                                                                                                           │
 │                                                                                                                                                                                  │

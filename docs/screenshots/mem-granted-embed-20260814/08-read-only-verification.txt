@@ -2,14 +2,14 @@
  Roots · archive · guide · advisor                                                                                                                                                  
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     ▾ archive                                                                                                                                                                      ^
-  · [memory 7c046da3] Owned archive remains a second local Child option.                                                                                                            
+  · [memory 1ab5395d] Owned archive remains a second local Child option.                                                                                                            
 › * ▾ guide                                                                                                                                                                         
-  · [memory f2bca513] Opening proposal note.                                                                                                                                        
-  · [context 4fcc1a39] VIA EMBED · advisor                                                                                                                                          
-  · [memory 75808252] Closing proposal note.                                                                                                                                        
+  · [memory ec35b830] Opening proposal note.                                                                                                                                        
+  · [context fb1f6317] VIA EMBED · advisor                                                                                                                                          
+  · [memory ffcfdc92] Closing proposal note.                                                                                                                                        
     ▾ advisor  READ GRANT · PERMISSIONS READ + EMBED · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                   
-  · [memory 0da58c0a] Use evidence from the live advisor Context.                                                                                                                   
-  · [query view 00aa53a9] advisor/private                                                                                                                                           
+  · [memory 8515633e] Use evidence from the live advisor Context.                                                                                                                   
+  · [query view 8c6e0aad] advisor/private                                                                                                                                           
       · advisor/private  QUERY GRANT · PERMISSIONS QUERY · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED                                                                               
                                                                                                                                                                                     
                                                                                                                                                                                     
