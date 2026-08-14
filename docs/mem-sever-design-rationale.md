@@ -188,6 +188,13 @@ names of excluded query-only Context references, and an application receipt.
 Writes use a record-digest compare-and-swap. Versions 1 and 2 remain readable;
 new serialization emits version 3.
 
+The terminal-independent application boundary owns that complete private
+session lifecycle through `SeverSessionRepository`. Create and open return a
+`SeverSessionSnapshot` with an opaque version token; candidate decisions,
+destination changes, and persisted Apply consume that exact token. The Store
+adapter alone interprets it as a record digest. CLI and TUI adapters therefore
+cannot bypass CAS by directly saving a session or recomputing its digest.
+
 The workbench shows a compact focusable `SAVE LOCATION` frame between `ITEMS`
 and `TO DO`. Enter opens its shared one-line direct editor. Saving a new exact
 name updates the REVIEWING session under its record-digest CAS, then returns to

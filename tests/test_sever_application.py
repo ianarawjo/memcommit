@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+import memcommit.commands.sever as sever_command
 import memcommit.ops as ops
 from memcommit.sever import (
     SeverApplication,
@@ -22,17 +23,36 @@ from memcommit.sever_application import (
     FrozenSeverInputs,
     SeverAnalysisProgress,
     SeverAnalysisRequest,
+    SeverAnalysisResult,
     SeverApplicationError,
     SeverApplyRequest,
+    SeverDecisionRequest,
+    SeverDestinationRequest,
+    SeverPersistedApplyRequest,
     SeverPreparedAnalysis,
     SeverPreparedOrigin,
+    SeverSessionSnapshot,
     run_sever_analysis,
     run_sever_apply,
+    run_sever_session_apply,
+    run_sever_session_decision,
+    run_sever_session_destination_change,
+    run_sever_session_open,
+    run_sever_session_start,
 )
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
 import memcommit.sever_runtime as sever_runtime
-from memcommit.sever_runtime import execute_sever_analysis, execute_sever_apply
-from memcommit.store import MemoryStore
+from memcommit.sever_runtime import (
+    execute_sever_analysis,
+    execute_sever_apply,
+    execute_sever_session_apply,
+    execute_sever_session_decision,
+    execute_sever_session_destination_change,
+    execute_sever_session_open,
+    execute_sever_session_start,
+)
+from memcommit.sever_store import SeverSessionStore
+from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
 SOURCE_CONTEXT_UID = "11111111-1111-4111-8111-111111111111"
@@ -113,6 +133,66 @@ class _StaticInputPort:
     def freeze(self, request: SeverAnalysisRequest) -> FrozenSeverInputs:
         self.requests.append(request)
         return self.inputs
+
+
+class _SessionRepository:
+    def __init__(self):
+        self.current: SeverSessionSnapshot | None = None
+
+    @staticmethod
+    def _snapshot(session: SeverSession) -> SeverSessionSnapshot:
+        return SeverSessionSnapshot(
+            session=session,
+            version_token=f"revision-{session.revision}",
+        )
+
+    def create(self, session: SeverSession) -> SeverSessionSnapshot:
+        if self.current is not None:
+            raise RuntimeError("duplicate session")
+        self.current = self._snapshot(session)
+        return self.current
+
+    def load(self, uid: str) -> SeverSessionSnapshot:
+        if self.current is None or self.current.session.uid != uid:
+            raise RuntimeError("missing session")
+        return self.current
+
+    def replace(
+        self,
+        session: SeverSession,
+        *,
+        expected_version: str,
+    ) -> SeverSessionSnapshot:
+        if self.current is None or self.current.version_token != expected_version:
+            raise RuntimeError("stale session")
+        self.current = self._snapshot(session)
+        return self.current
+
+
+class _DestinationPort:
+    def __init__(self, *taken: str):
+        self.taken = frozenset(taken)
+        self.calls: list[tuple[str, str]] = []
+
+    def validate(self, output_name: str, *, current_output_name: str) -> None:
+        self.calls.append((output_name, current_output_name))
+        if output_name != current_output_name and output_name in self.taken:
+            raise SeverApplicationError("destination already exists")
+
+
+class _OutputPort:
+    def __init__(self):
+        self.materialized: list[SeverSession] = []
+
+    def materialize(self, review: SeverSession) -> SeverSession:
+        self.materialized.append(review)
+        return review.with_application(
+            SeverApplication(
+                output_context_uid="77777777-7777-4777-8777-777777777777",
+                checkpoint_uid="88888888-8888-4888-8888-888888888888",
+                result_memory_uids=("99999999-9999-4999-8999-999999999999",),
+            )
+        )
 
 
 class _Provider:
@@ -278,6 +358,147 @@ def test_run_sever_apply_validates_receipt_and_is_idempotent():
     assert second.session is first.session
 
 
+def test_saved_session_lifecycle_owns_start_review_destination_and_apply():
+    review = _review(_inputs())
+    repository = _SessionRepository()
+    destination = _DestinationPort()
+    output = _OutputPort()
+
+    started = run_sever_session_start(
+        SeverAnalysisResult(session=review, origin="PROVIDER"),
+        repository=repository,
+    )
+    opened = run_sever_session_open(review.uid, repository=repository)
+    decided = run_sever_session_decision(
+        SeverDecisionRequest(
+            snapshot=opened,
+            candidate_uid=CANDIDATE_UID,
+            selection="AS_WRITTEN",
+        ),
+        repository=repository,
+    )
+    relocated = run_sever_session_destination_change(
+        SeverDestinationRequest(
+            snapshot=decided,
+            output_name="relocated-result",
+        ),
+        repository=repository,
+        destination_port=destination,
+    )
+    applied = run_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=relocated),
+        repository=repository,
+        output_port=output,
+    )
+    repeated = run_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=applied.snapshot),
+        repository=repository,
+        output_port=output,
+    )
+
+    assert started.origin == "PROVIDER"
+    assert opened == started.snapshot
+    assert decided.session.revision == 2
+    assert decided.session.candidates[0].selection == "AS_WRITTEN"
+    assert relocated.session.revision == 3
+    assert relocated.session.output_name == "relocated-result"
+    assert destination.calls == [("relocated-result", "result")]
+    assert applied.created is True
+    assert applied.snapshot.session.state == "APPLIED"
+    assert repeated.created is False
+    assert repeated.snapshot == applied.snapshot
+    assert output.materialized == [relocated.session]
+    assert repository.current == applied.snapshot
+
+
+def test_saved_session_lifecycle_rejects_stale_and_invalid_review_requests():
+    repository = _SessionRepository()
+    started = run_sever_session_start(
+        SeverAnalysisResult(session=_review(_inputs()), origin="PROVIDER"),
+        repository=repository,
+    )
+    first = run_sever_session_decision(
+        SeverDecisionRequest(
+            snapshot=started.snapshot,
+            candidate_uid=CANDIDATE_UID,
+            selection="FORGET",
+        ),
+        repository=repository,
+    )
+
+    with pytest.raises(RuntimeError, match="stale session"):
+        run_sever_session_decision(
+            SeverDecisionRequest(
+                snapshot=started.snapshot,
+                candidate_uid=CANDIDATE_UID,
+                selection="AS_WRITTEN",
+            ),
+            repository=repository,
+        )
+    stale_output = _OutputPort()
+    with pytest.raises(SeverApplicationError, match="changed before Apply"):
+        run_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            repository=repository,
+            output_port=stale_output,
+        )
+    assert stale_output.materialized == []
+    with pytest.raises(SeverApplicationError, match="requires nonempty"):
+        run_sever_session_decision(
+            SeverDecisionRequest(
+                snapshot=first,
+                candidate_uid=CANDIDATE_UID,
+                selection="CUSTOM",
+            ),
+            repository=repository,
+        )
+    with pytest.raises(SeverApplicationError, match="destination already exists"):
+        run_sever_session_destination_change(
+            SeverDestinationRequest(snapshot=first, output_name="taken"),
+            repository=repository,
+            destination_port=_DestinationPort("taken"),
+        )
+
+    class WrongIdentityRepository:
+        def load(self, _uid: str) -> SeverSessionSnapshot:
+            return SeverSessionSnapshot(
+                session=replace(
+                    first.session,
+                    uid="aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                ),
+                version_token=first.version_token,
+            )
+
+    with pytest.raises(SeverApplicationError, match="different session identity"):
+        run_sever_session_open(
+            first.session.uid,
+            repository=WrongIdentityRepository(),  # type: ignore[arg-type]
+        )
+
+    assert repository.current == first
+
+    applied = run_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=first),
+        repository=repository,
+        output_port=stale_output,
+    )
+    application = applied.snapshot.session.application
+    assert application is not None
+    after_undo = applied.snapshot.session.clear_application(
+        output_context_uid=application.output_context_uid,
+        checkpoint_uid=application.checkpoint_uid,
+    )
+    repository.current = repository._snapshot(after_undo)
+
+    with pytest.raises(SeverApplicationError, match="changed before Apply"):
+        run_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=applied.snapshot),
+            repository=repository,
+            output_port=stale_output,
+        )
+    assert stale_output.materialized == [first.session]
+
+
 def test_sever_application_has_no_command_typer_or_tui_imports():
     source = Path(sever_application.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -314,6 +535,17 @@ def test_sever_runtime_has_no_typer_or_tui_imports():
         if name == "typer" or name.startswith("prompt_toolkit")
     )
     assert forbidden == ()
+
+
+def test_sever_command_does_not_own_session_mutation_or_persistence():
+    source = Path(sever_command.__file__).read_text(encoding="utf-8")
+
+    assert "session_store.save(" not in source
+    assert "session_store.load(" not in source
+    assert "sessions.save(" not in source
+    assert ".select(" not in source
+    assert ".with_output_name(" not in source
+    assert "sever_record_digest" not in source
 
 
 def test_real_store_analysis_and_apply_are_terminal_free_and_preserve_source(
@@ -360,6 +592,86 @@ def test_real_store_analysis_and_apply_are_terminal_free_and_preserve_source(
     ]
     [checkpoint] = store.list_checkpoints("application/result")
     assert checkpoint["command"] == "sever"
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_real_store_saved_lifecycle_persists_cas_and_source_invariants(
+    isolated_store,
+    capsys,
+):
+    store = MemoryStore()
+    source = ops.init("lifecycle/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("lifecycle/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    source_before = store.load_direct(source.name).to_dict()
+
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="lifecycle/result",
+            source_include_descendants=False,
+            criteria_include_descendants=False,
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+    opened = execute_sever_session_open(analysis.session.uid, store=store)
+    decided = execute_sever_session_decision(
+        SeverDecisionRequest(
+            snapshot=opened,
+            candidate_uid=opened.session.candidates[0].uid,
+            selection="AS_WRITTEN",
+        ),
+        store=store,
+    )
+    relocated = execute_sever_session_destination_change(
+        SeverDestinationRequest(
+            snapshot=decided,
+            output_name="lifecycle/final",
+        ),
+        store=store,
+    )
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="changed before it could be saved",
+    ):
+        execute_sever_session_decision(
+            SeverDecisionRequest(
+                snapshot=opened,
+                candidate_uid=opened.session.candidates[0].uid,
+                selection="FORGET",
+            ),
+            store=store,
+        )
+
+    applied = execute_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=relocated),
+        store=store,
+    )
+    repeated = execute_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=applied.snapshot),
+        store=store,
+    )
+
+    assert opened == started.snapshot
+    assert applied.created is True
+    assert repeated.created is False
+    assert SeverSessionStore(store).load(analysis.session.uid) == applied.snapshot.session
+    assert store.load_direct(source.name).to_dict() == source_before
+    result = store.load_direct("lifecycle/final")
+    assert [item.content for item in result.iter_items()] == [
+        "Keep only the access requirement."
+    ]
+    [checkpoint] = store.list_checkpoints("lifecycle/final")
+    assert checkpoint["args"]["sever"]["session_digest"] == relocated.version_token
     captured = capsys.readouterr()
     assert captured.out == ""
     assert captured.err == ""

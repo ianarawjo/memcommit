@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.sever import SeverContextBinding, SeverSession
+from memcommit.sever import SeverContextBinding, SeverSelection, SeverSession
 from memcommit.sever_provider import analyze_sever
 
 
@@ -92,6 +92,59 @@ class SeverApplyResult:
     created: bool
 
 
+@dataclass(frozen=True)
+class SeverSessionSnapshot:
+    """One validated durable session plus its opaque optimistic-CAS token."""
+
+    session: SeverSession
+    version_token: str
+
+    def __post_init__(self) -> None:
+        if not self.version_token:
+            raise SeverApplicationError("A saved Sever session requires a version token.")
+
+
+@dataclass(frozen=True)
+class SeverStoredAnalysisResult:
+    """A newly saved review and the origin of its semantic analysis."""
+
+    snapshot: SeverSessionSnapshot
+    origin: SeverAnalysisOrigin
+
+
+@dataclass(frozen=True)
+class SeverDecisionRequest:
+    """One exact review decision against a previously opened session version."""
+
+    snapshot: SeverSessionSnapshot
+    candidate_uid: str
+    selection: SeverSelection
+    custom_content: str = ""
+
+
+@dataclass(frozen=True)
+class SeverDestinationRequest:
+    """Rebind an unapplied review to one validated require-new destination."""
+
+    snapshot: SeverSessionSnapshot
+    output_name: str
+
+
+@dataclass(frozen=True)
+class SeverPersistedApplyRequest:
+    """Apply and persist one exact saved review under its version token."""
+
+    snapshot: SeverSessionSnapshot
+
+
+@dataclass(frozen=True)
+class SeverPersistedApplyResult:
+    """The durable APPLIED snapshot and whether this call created the output."""
+
+    snapshot: SeverSessionSnapshot
+    created: bool
+
+
 class SeverInputPort(Protocol):
     """Resolve authority and freeze the exact Source and Criteria frames."""
 
@@ -125,6 +178,31 @@ class SeverOutputPort(Protocol):
 
     def materialize(self, session: SeverSession) -> SeverSession:
         """Return the same review advanced to its durable APPLIED state."""
+
+
+class SeverSessionRepository(Protocol):
+    """Persist private review sessions without exposing filesystem mechanics."""
+
+    def create(self, session: SeverSession) -> SeverSessionSnapshot:
+        """Create one previously absent session and return its CAS snapshot."""
+
+    def load(self, uid: str) -> SeverSessionSnapshot:
+        """Load one exact durable session and its current CAS token."""
+
+    def replace(
+        self,
+        session: SeverSession,
+        *,
+        expected_version: str,
+    ) -> SeverSessionSnapshot:
+        """Replace one session only if its opaque version token is unchanged."""
+
+
+class SeverDestinationPort(Protocol):
+    """Validate one local require-new output name against current runtime state."""
+
+    def validate(self, output_name: str, *, current_output_name: str) -> None:
+        """Fail unless the proposed destination remains safe for this review."""
 
 
 def _observe(
@@ -240,3 +318,138 @@ def run_sever_apply(
             "Sever Apply returned a receipt outside the reviewed session."
         )
     return SeverApplyResult(session=applied, created=True)
+
+
+def _validated_snapshot(
+    snapshot: SeverSessionSnapshot,
+    *,
+    expected_session: SeverSession,
+) -> SeverSessionSnapshot:
+    if snapshot.session != expected_session:
+        raise SeverApplicationError(
+            "Sever session persistence returned a different session."
+        )
+    return snapshot
+
+
+def run_sever_session_start(
+    analysis: SeverAnalysisResult,
+    *,
+    repository: SeverSessionRepository,
+) -> SeverStoredAnalysisResult:
+    """Persist one complete analysis as a new private review session."""
+
+    session = analysis.session
+    if session.state != "REVIEWING" or session.application is not None:
+        raise SeverApplicationError("Only a fresh Sever review can start a session.")
+    snapshot = _validated_snapshot(
+        repository.create(session),
+        expected_session=session,
+    )
+    return SeverStoredAnalysisResult(snapshot=snapshot, origin=analysis.origin)
+
+
+def run_sever_session_open(
+    uid: str,
+    *,
+    repository: SeverSessionRepository,
+) -> SeverSessionSnapshot:
+    """Open one exact saved session through the application-owned repository."""
+
+    snapshot = repository.load(uid)
+    if snapshot.session.uid != uid:
+        raise SeverApplicationError(
+            "Sever session persistence returned a different session identity."
+        )
+    return snapshot
+
+
+def run_sever_session_decision(
+    request: SeverDecisionRequest,
+    *,
+    repository: SeverSessionRepository,
+) -> SeverSessionSnapshot:
+    """Persist one exact candidate decision under optimistic session CAS."""
+
+    custom = request.custom_content
+    if request.selection == "CUSTOM":
+        if not custom.strip():
+            raise SeverApplicationError(
+                "A custom Sever decision requires nonempty result content."
+            )
+    elif custom:
+        raise SeverApplicationError(
+            "Custom Sever content is valid only for a CUSTOM decision."
+        )
+    changed = request.snapshot.session.select(
+        request.candidate_uid,
+        request.selection,
+        custom,
+    )
+    return _validated_snapshot(
+        repository.replace(
+            changed,
+            expected_version=request.snapshot.version_token,
+        ),
+        expected_session=changed,
+    )
+
+
+def run_sever_session_destination_change(
+    request: SeverDestinationRequest,
+    *,
+    repository: SeverSessionRepository,
+    destination_port: SeverDestinationPort,
+) -> SeverSessionSnapshot:
+    """Validate and persist one review destination revision."""
+
+    session = request.snapshot.session
+    destination_port.validate(
+        request.output_name,
+        current_output_name=session.output_name,
+    )
+    changed = session.with_output_name(request.output_name)
+    if changed is session:
+        return request.snapshot
+    return _validated_snapshot(
+        repository.replace(
+            changed,
+            expected_version=request.snapshot.version_token,
+        ),
+        expected_session=changed,
+    )
+
+
+def run_sever_session_apply(
+    request: SeverPersistedApplyRequest,
+    *,
+    repository: SeverSessionRepository,
+    output_port: SeverOutputPort,
+) -> SeverPersistedApplyResult:
+    """Materialize and CAS-save one reviewed session through one use case."""
+
+    current = repository.load(request.snapshot.session.uid)
+    if current != request.snapshot:
+        raise SeverApplicationError(
+            "The Sever session changed before Apply. Reopen the review."
+        )
+    applied = run_sever_apply(
+        SeverApplyRequest(session=current.session),
+        output_port=output_port,
+    )
+    if not applied.created:
+        return SeverPersistedApplyResult(
+            snapshot=current,
+            created=False,
+        )
+    # Result creation remains intentionally before the session CAS save. This
+    # preserves the documented crash boundary and Undo/Redo receipt contract;
+    # transaction recovery is a separate Store-level design problem.
+    snapshot = _validated_snapshot(
+        repository.replace(
+            applied.session,
+            expected_version=current.version_token,
+        ),
+        expected_session=applied.session,
+    )
+    return SeverPersistedApplyResult(snapshot=snapshot, created=True)

@@ -37,7 +37,6 @@ from memcommit.sever import (
     SeverError,
     SeverSelection,
     SeverSession,
-    sever_record_digest,
 )
 from memcommit.sever_application import (
     SeverAnalysisProgress,
@@ -45,6 +44,10 @@ from memcommit.sever_application import (
     SeverAnalysisResult,
     SeverApplicationError,
     SeverApplyRequest,
+    SeverDecisionRequest,
+    SeverDestinationRequest,
+    SeverPersistedApplyRequest,
+    SeverSessionSnapshot,
 )
 from memcommit.sever_provider import SeverProviderError
 from memcommit.sever_resolution_adapter import (
@@ -55,6 +58,11 @@ from memcommit.sever_runtime import (
     capture_sever_binding,
     execute_sever_analysis,
     execute_sever_apply,
+    execute_sever_session_apply,
+    execute_sever_session_decision,
+    execute_sever_session_destination_change,
+    execute_sever_session_open,
+    execute_sever_session_start,
 )
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore, validate_context_name
@@ -342,9 +350,14 @@ def _run_workbench(
     from memcommit.impact_controller import ImpactController
     from memcommit.review_report_adapters import sever_review_report
 
-    sessions = SeverSessionStore(store)
+    snapshot = execute_sever_session_open(session.uid, store=store)
+    if snapshot.session != session:
+        raise SeverCommandError(
+            "The Sever session changed before its workbench opened. Reopen it."
+        )
     navigation = ResolutionNavigation()
-    while session.state == "REVIEWING":
+    while snapshot.session.state == "REVIEWING":
+        session = snapshot.session
 
         def validate_destination(name: str) -> None:
             validate_context_name(name)
@@ -391,39 +404,52 @@ def _run_workbench(
         )
         if action.kind == "CLOSE":
             break
-        expected = sever_record_digest(session)
         if action.kind == "CHANGE_DESTINATION":
             if not allow_apply or action.destination is None:
                 raise SeverCommandError("Review cannot change a Sever output location.")
             validate_destination(action.destination)
-            changed = session.with_output_name(action.destination)
-            if changed is not session:
-                sessions.save(changed, expected_digest=expected)
-                session = changed
+            snapshot = execute_sever_session_destination_change(
+                SeverDestinationRequest(
+                    snapshot=snapshot,
+                    output_name=action.destination,
+                ),
+                store=store,
+            )
             continue
         if action.kind == "ACCEPT":
             if not allow_apply:
                 raise SeverCommandError("Review cannot apply a Sever output.")
-            applied = _apply(store, session)
-            sessions.save(applied, expected_digest=expected)
-            session = applied
+            snapshot = execute_sever_session_apply(
+                SeverPersistedApplyRequest(snapshot=snapshot),
+                store=store,
+            ).snapshot
             break
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise SeverCommandError("Unsupported Sever workbench action.")
+        selection: SeverSelection
         if action.comment.strip():
-            session = session.select(action.item_uid, "CUSTOM", action.comment.strip())
+            selection = "CUSTOM"
+            custom_content = action.comment.strip()
         else:
             suffix = (action.option_uid or "").rpartition(":")[2]
-            selection: SeverSelection = {
+            selection = {
                 "recommended": "RECOMMENDED",
                 "as-written": "AS_WRITTEN",
                 "forget": "FORGET",
             }.get(suffix)  # type: ignore[assignment]
             if selection is None:
                 raise SeverCommandError("Unsupported Sever decision.")
-            session = session.select(action.item_uid, selection)
-        sessions.save(session, expected_digest=expected)
-    return session
+            custom_content = ""
+        snapshot = execute_sever_session_decision(
+            SeverDecisionRequest(
+                snapshot=snapshot,
+                candidate_uid=action.item_uid,
+                selection=selection,
+                custom_content=custom_content,
+            ),
+            store=store,
+        )
+    return snapshot.session
 
 
 def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
@@ -535,6 +561,7 @@ def cmd(
             and not accept
         )
         session: SeverSession | None = None
+        snapshot: SeverSessionSnapshot | None = None
         sever_prewarm_origin: str | None = None
         start_from_launcher = False
         if sessions_flag or bare_launcher:
@@ -558,7 +585,15 @@ def cmd(
                     raise SeverCommandError(
                         "Sever session picker returned no selected session."
                     )
-                session = selected_session
+                snapshot = execute_sever_session_open(
+                    selected_session.uid,
+                    store=store,
+                )
+                if snapshot.session != selected_session:
+                    raise SeverCommandError(
+                        "The selected Sever session changed before it opened."
+                    )
+                session = snapshot.session
             elif launcher_action == "NEW":
                 start_from_launcher = True
             else:
@@ -575,7 +610,8 @@ def cmd(
                 raise SeverCommandError(
                     "--resume cannot be combined with Source, Criteria, or output operands."
                 )
-            session = session_store.load(resume)
+            snapshot = execute_sever_session_open(resume, store=store)
+            session = snapshot.session
         else:
             if (
                 start_from_launcher
@@ -616,11 +652,15 @@ def cmd(
                 source_descendants=source_descendants,
                 criteria_descendants=criteria_descendants,
             )
-            session = analysis.session
+            stored = execute_sever_session_start(analysis, store=store)
+            snapshot = stored.snapshot
+            session = snapshot.session
             sever_prewarm_origin = (
-                analysis.origin if analysis.origin != "PROVIDER" else None
+                stored.origin if stored.origin != "PROVIDER" else None
             )
-            session_store.save(session, expected_digest=None)
+
+        if session is None or snapshot is None:
+            raise SeverCommandError("Sever session lifecycle produced no snapshot.")
 
         if candidate is not None or choice is not None or comment is not None:
             if candidate is None or choice is None:
@@ -649,20 +689,24 @@ def cmd(
                 )
             if normalized != "custom" and comment is not None:
                 raise SeverCommandError("--comment is valid only with --choice custom.")
-            expected = sever_record_digest(session)
-            session = session.select(
-                matches[0].uid,
-                selections[normalized],
-                (comment or "").strip(),
+            snapshot = execute_sever_session_decision(
+                SeverDecisionRequest(
+                    snapshot=snapshot,
+                    candidate_uid=matches[0].uid,
+                    selection=selections[normalized],
+                    custom_content=(comment or "").strip(),
+                ),
+                store=store,
             )
-            session_store.save(session, expected_digest=expected)
+            session = snapshot.session
 
         if accept:
-            expected = sever_record_digest(session)
-            applied = _apply(store, session)
-            if applied is not session:
-                session_store.save(applied, expected_digest=expected)
-            session = applied
+            applied = execute_sever_session_apply(
+                SeverPersistedApplyRequest(snapshot=snapshot),
+                store=store,
+            )
+            snapshot = applied.snapshot
+            session = snapshot.session
         elif sys.stdin.isatty() and sys.stdout.isatty():
             session = _run_workbench(store, session)
 

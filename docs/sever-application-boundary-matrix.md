@@ -2,13 +2,14 @@
 
 ## Status
 
-`MIGRATING`, reviewed 2026-08-14.
+`VERIFIED` for the internal application boundary, reviewed 2026-08-14.
 
 Sever is the second operation slice used to test the target application
-architecture after Summarize. Its semantic analysis and require-new Apply now
-have typed, terminal-independent entry points. Existing CLI setup, saved-session
-launching, Resolution review, and session persistence remain compatibility
-adapters and have not yet been presented as a stable Python API.
+architecture after Summarize. Its semantic analysis, private saved-session
+lifecycle, review revisions, and require-new Apply now have typed,
+terminal-independent entry points. Existing CLI setup, saved-session launching,
+and Resolution presentation remain interface adapters and have not yet been
+presented as a stable Python API.
 
 ## Motivation
 
@@ -38,10 +39,20 @@ run_sever_analysis
 SeverAnalysisResult(session, origin)
         |
         v
-existing review/session adapters
+run_sever_session_start
         |
         v
-SeverApplyRequest -> run_sever_apply -> SeverApplyResult
+SeverSessionSnapshot(session, opaque CAS token)
+  | decision revision
+  | destination revision
+        |
+        v
+run_sever_session_apply
+  | require-new output + checkpoint
+  | APPLIED-session CAS save
+        |
+        v
+SeverPersistedApplyResult
 ```
 
 ## Boundary matrix
@@ -52,26 +63,31 @@ SeverApplyRequest -> run_sever_apply -> SeverApplyResult
 | Frozen evidence | `FrozenSeverInputs` | `capture_sever_binding` | No interface may append hidden Memories | Source and Criteria each retain exact Context identities, digests, ordinary Memories, Grant binding, range, and excluded query-only names |
 | Cache | `SeverPreparedLookup` | installed Sever prewarm adapter | Interface receives the typed exact/equivalent/projected origin | Lookup runs only after authority and complete frame capture; a prepared review must exactly match the requested frozen bindings and output name after any adapter-owned safe projection |
 | Provider | lazy `SeverProviderFactory` | configured provider supplied by the composition boundary | Progress is projected from typed stages | Cache hits never construct a provider; live work remains one whole-frame selective-curation turn |
-| Review result | `SeverAnalysisResult` | strict provider decoder or fresh prepared review | Existing session store and Resolution Workbench | The review covers every Source Memory exactly once and creates no Result Context |
-| Apply input | `SeverApplyRequest` | `MemoryStoreSeverOutputPort` | CLI `--accept` and TUI Accept call the same typed use case | Only the reviewed session crosses the materialization boundary |
-| Apply result | `SeverApplyResult` | require-new Context creation and checkpoint | Existing command saves the returned APPLIED session under record-digest CAS | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply |
-| Idempotence | `run_sever_apply` | output port is skipped for an already APPLIED session | Reopening an applied session remains read-only | A repeated application call does not create a second Context |
+| Review result | `SeverAnalysisResult` | strict provider decoder or fresh prepared review | Resolution Workbench renders the typed review | The review covers every Source Memory exactly once and creates no Result Context |
+| Session lifecycle | `SeverSessionRepository`, `SeverSessionSnapshot` | `MemoryStoreSeverSessionRepository` | launchers and `--resume` open a snapshot; interfaces never calculate a record digest | Create, load, and replace share one opaque optimistic-CAS contract |
+| Review revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer review; custom content is valid only for `CUSTOM` |
+| Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | an existing or invalid output cannot alter the review, and changing a name does not rerun analysis |
+| Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; only that exact snapshot crosses materialization, then its APPLIED revision is CAS-saved |
+| Apply result | `SeverPersistedApplyResult` | require-new Context, checkpoint, and APPLIED-session replacement | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply |
+| Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates neither a second Context nor a second session revision |
 | Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `sever_application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
 
 ## Dependency direction
 
 `memcommit.sever_application` depends only on the Sever domain/session and
 provider-decoder contracts. It does not import terminal or command modules.
-`memcommit.sever_runtime` implements Store, Grant, cache, provider-attempt, and
-checkpoint ports. Grant mechanics temporarily remain under
+`memcommit.sever_runtime` implements Store, Grant, cache, provider-attempt,
+destination-validation, private-session, and checkpoint ports. Grant mechanics temporarily remain under
 `memcommit.commands.granted_context`; that transitional dependency is confined
 to the runtime adapter, as it is for the Summarize slice.
 
 `memcommit.commands.sever` retains thin `_start` and `_apply` compatibility
-facades because existing internal tests and Study setup code historically
-called them. New Study frame capture imports the runtime owner directly rather
-than reaching through the command. The command's visible progress screen maps
-typed stages to its existing text and does not enter the application module.
+facades because existing internal tests historically called the analysis-only
+and materialization-only paths. The executable command no longer calls the
+session Store's `load` or `save`, calculates record digests, selects a candidate,
+or changes an output name. Its CLI and TUI routes pass application-owned
+snapshots and opaque version tokens to the runtime. New Study frame capture
+imports the runtime owner directly rather than reaching through the command.
 
 ## Safety and compatibility invariants
 
@@ -82,6 +98,12 @@ typed stages to its existing text and does not enter the application module.
   rather than being copied into a retained frame.
 - Prepared and provider-produced reviews cross the same validation gate;
   neither may change Source, Criteria, ranges, output name, or review state.
+- Every durable review mutation consumes the exact version token returned by
+  create or open. The repository is the only layer that interprets that token
+  as the current record digest.
+- Apply reloads the durable snapshot before output creation. A stale REVIEWING
+  or stale APPLIED snapshot fails before materialization; the final CAS still
+  catches a race that occurs during the existing Context-creation crash window.
 - Apply creates a new local ordinary Context and checkpoint. It never updates,
   deletes, or checkpoints the Source.
 - Local contributing Context digests remain the Store materializer's CAS set.
@@ -99,41 +121,42 @@ The focused boundary and compatibility run currently covers:
 - prepared reuse with provider construction prohibited and its projection origin retained;
 - rejection of a prepared review that changes the frozen Source or output;
 - typed Apply receipt validation and idempotence;
+- typed session create/open, decision, destination, persisted Apply, and stale-
+  snapshot rejection;
 - AST-level application independence from commands, Typer, and prompt-toolkit;
 - runtime independence from Typer and prompt-toolkit;
 - real-Store analysis with no terminal output or premature Result creation;
 - real-Store Apply, checkpoint creation, exact result content, and byte-for-byte
   Source preservation;
 - missing Source failure before provider construction;
+- real-Store session CAS, destination validation, persisted Apply, and repeat-
+  Apply idempotence without terminal output;
 - existing CLI, TUI setup, authority, exact Study prewarm, review, Apply,
   Undo/Redo, and application-report behavior.
 
-The focused run passed 61 tests. No visible TUI flow changed, so the existing
+The focused lifecycle and compatibility run passed 53 tests. No visible TUI flow changed, so the existing
 ordered Sever captures remain the applicable presentation evidence; this
 structural extraction does not claim a new TUI design.
 
-An expanded 353-test run across Sever, authority, command attempts/wait,
-Context scope, Impact/session/restoration, Share interaction, Study
-installation, and Context-operand consumers completed with 352 passed and one
-failure. The single failure is the unrelated Compare help contract expecting
-`--reference-memory`; its assertion and stack do not enter a Sever module.
+An expanded 368-test run across Sever, authority, command attempts/wait,
+Context scope, Impact/session/restoration, Study installation, write
+protection, and Context-operand consumers passed in full.
 
 ## Remaining boundaries and non-goals
 
-1. Saved-session creation, review decisions, destination revisions, and the
-   record-digest save after Apply are still orchestrated by the command adapter.
-   Moving that lifecycle requires a typed session repository port and must
-   preserve Undo/Redo compatibility.
-2. Result creation and the subsequent APPLIED-session save retain the existing
+1. Result creation and the subsequent APPLIED-session save retain the existing
    crash window documented in `mem-sever-design-rationale.md`. This extraction
    does not claim transactionality or receipt recovery.
-3. This boundary preserves `EXACT`, `EQUIVALENT_SCOPE`, and `PROJECTED` cache
+2. This boundary preserves `EXACT`, `EQUIVALENT_SCOPE`, and `PROJECTED` cache
    origins but does not decide when projection is safe. The Study prewarm
    adapter remains authoritative for that separate cache contract.
-4. The setup TUI and Resolution Workbench remain command-hosted adapters. They
-   now reach the same typed analysis/Apply use cases, but have not yet moved
+3. The setup TUI and Resolution Workbench remain command-hosted adapters. They
+   now reach the complete typed lifecycle, but have not yet moved
    under a Sever-specific `interfaces.tui.operations` package.
-5. `execute_sever_analysis` and `execute_sever_apply` are internal callable
+4. The production private-session adapter still uses the existing POSIX
+   `fcntl` lock. The repository contract is platform-neutral, but a Windows
+   lock implementation remains part of the cross-platform infrastructure work.
+5. The `execute_sever_*` functions are internal callable
    evidence, not a versioned public Python facade. Store-root ownership,
-   configured-provider bootstrap, error taxonomy, and session lifecycle must be
-   decided before public export.
+   configured-provider bootstrap, error taxonomy, and compatibility policy must
+   be decided before public export.

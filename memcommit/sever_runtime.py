@@ -39,18 +39,78 @@ from memcommit.sever_application import (
     SeverApplicationError,
     SeverApplyRequest,
     SeverApplyResult,
+    SeverDecisionRequest,
+    SeverDestinationRequest,
+    SeverPersistedApplyRequest,
+    SeverPersistedApplyResult,
     SeverPreparedAnalysis,
     SeverProviderFactory,
     SeverProgressObserver,
+    SeverSessionSnapshot,
+    SeverStoredAnalysisResult,
     run_sever_analysis,
     run_sever_apply,
+    run_sever_session_apply,
+    run_sever_session_decision,
+    run_sever_session_destination_change,
+    run_sever_session_open,
+    run_sever_session_start,
 )
 from memcommit.sever_provider import SeverProviderError
+from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore, context_record_digest, validate_context_name
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
 
 
 SeverProgressCallback = SeverProgressObserver
+
+
+@dataclass
+class MemoryStoreSeverSessionRepository:
+    """Private Store-backed session persistence with opaque digest CAS tokens."""
+
+    store: MemoryStore
+
+    @property
+    def sessions(self) -> SeverSessionStore:
+        return SeverSessionStore(self.store)
+
+    @staticmethod
+    def _snapshot(session: SeverSession) -> SeverSessionSnapshot:
+        return SeverSessionSnapshot(
+            session=session,
+            version_token=sever_record_digest(session),
+        )
+
+    def create(self, session: SeverSession) -> SeverSessionSnapshot:
+        self.sessions.save(session, expected_digest=None)
+        return self._snapshot(session)
+
+    def load(self, uid: str) -> SeverSessionSnapshot:
+        return self._snapshot(self.sessions.load(uid))
+
+    def replace(
+        self,
+        session: SeverSession,
+        *,
+        expected_version: str,
+    ) -> SeverSessionSnapshot:
+        self.sessions.save(session, expected_digest=expected_version)
+        return self._snapshot(session)
+
+
+@dataclass
+class MemoryStoreSeverDestinationPort:
+    """Validate one local require-new destination against the live Store."""
+
+    store: MemoryStore
+
+    def validate(self, output_name: str, *, current_output_name: str) -> None:
+        validate_context_name(output_name)
+        if output_name != current_output_name and self.store.context_exists(output_name):
+            raise SeverApplicationError(
+                f"Output Context '{output_name}' already exists."
+            )
 
 
 def capture_sever_binding(
@@ -430,5 +490,72 @@ def execute_sever_apply(
 
     return run_sever_apply(
         request,
+        output_port=MemoryStoreSeverOutputPort(store),
+    )
+
+
+def execute_sever_session_start(
+    analysis: SeverAnalysisResult,
+    *,
+    store: MemoryStore,
+) -> SeverStoredAnalysisResult:
+    """Persist one newly analyzed review through the private session adapter."""
+
+    return run_sever_session_start(
+        analysis,
+        repository=MemoryStoreSeverSessionRepository(store),
+    )
+
+
+def execute_sever_session_open(
+    uid: str,
+    *,
+    store: MemoryStore,
+) -> SeverSessionSnapshot:
+    """Load one exact saved session without terminal or interface behavior."""
+
+    return run_sever_session_open(
+        uid,
+        repository=MemoryStoreSeverSessionRepository(store),
+    )
+
+
+def execute_sever_session_decision(
+    request: SeverDecisionRequest,
+    *,
+    store: MemoryStore,
+) -> SeverSessionSnapshot:
+    """Persist one reviewed candidate decision under session CAS."""
+
+    return run_sever_session_decision(
+        request,
+        repository=MemoryStoreSeverSessionRepository(store),
+    )
+
+
+def execute_sever_session_destination_change(
+    request: SeverDestinationRequest,
+    *,
+    store: MemoryStore,
+) -> SeverSessionSnapshot:
+    """Validate and persist one require-new destination revision."""
+
+    return run_sever_session_destination_change(
+        request,
+        repository=MemoryStoreSeverSessionRepository(store),
+        destination_port=MemoryStoreSeverDestinationPort(store),
+    )
+
+
+def execute_sever_session_apply(
+    request: SeverPersistedApplyRequest,
+    *,
+    store: MemoryStore,
+) -> SeverPersistedApplyResult:
+    """Materialize and persist one saved review through the lifecycle boundary."""
+
+    return run_sever_session_apply(
+        request,
+        repository=MemoryStoreSeverSessionRepository(store),
         output_port=MemoryStoreSeverOutputPort(store),
     )
