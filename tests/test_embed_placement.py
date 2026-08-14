@@ -8,15 +8,17 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands import embed as embed_command
 from memcommit.commands.direct_item_placement import (
+    DirectItemGap,
     DirectItemGapState,
     direct_item_gap,
     direct_item_placement_rows,
     render_direct_item_tree_fragments,
 )
-from memcommit.commands.embed_dialog import (
-    EmbedSetupReceipt,
+from memcommit.embed_application import EmbedPlacement
+from memcommit.embed_runtime import MemoryStoreEmbedPort
+from memcommit.interfaces.cli import embed as embed_command
+from memcommit.interfaces.tui.operations.embed import (
     choose_embed_setup,
     embed_exact_command_review,
 )
@@ -353,7 +355,7 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
         # then advance to the exact-command action and approve the receipt.
         pipe_input.send_text("\t\t\x1b[A\r\t\r")
         receipt = choose_embed_setup(
-            store,
+            MemoryStoreEmbedPort.capture(store),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -362,10 +364,20 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
     assert receipt is not None
     assert receipt.child_name == child.name
     assert receipt.into_name == parent.name
-    assert receipt.gap.position == 1
-    assert receipt.gap.previous_uid == first.uid
-    assert receipt.gap.next_uid == second.uid
-    assert receipt.review.argv == (
+    assert receipt.placement.position == 1
+    assert receipt.placement.previous_uid == first.uid
+    assert receipt.placement.next_uid == second.uid
+    assert receipt.request.before == second.uid
+    assert embed_exact_command_review(
+        receipt.child_name,
+        receipt.into_name,
+        DirectItemGap(
+            position=receipt.placement.position,
+            previous_uid=receipt.placement.previous_uid,
+            next_uid=receipt.placement.next_uid,
+        ),
+        item_count=receipt.item_count,
+    ).argv == (
         "mem",
         "embed",
         child.name,
@@ -381,27 +393,23 @@ def test_flagless_embed_applies_only_the_exact_reviewed_gap(
     monkeypatch,
 ) -> None:
     store, child, parent, first, second = _ordered_store()
-    child_snapshot = store.load_direct(child.name)
-    parent_snapshot = store.load_direct(parent.name)
-    gap = direct_item_gap(direct_item_placement_rows(parent_snapshot), 1)
-    review = embed_exact_command_review(
+    port = MemoryStoreEmbedPort.capture(store)
+    gap = direct_item_gap(
+        direct_item_placement_rows(store.load_direct(parent.name)),
+        1,
+    )
+    receipt = port.freeze_exact_gap(
         child.name,
         parent.name,
-        gap,
-        item_count=2,
-    )
-    receipt = EmbedSetupReceipt(
-        child_name=child.name,
-        into_name=parent.name,
-        gap=gap,
-        child_uid=child_snapshot.uid,
-        child_digest=context_record_digest(child_snapshot),
-        into_uid=parent_snapshot.uid,
-        into_digest=context_record_digest(parent_snapshot),
-        review=review,
+        EmbedPlacement(gap.position, gap.previous_uid, gap.next_uid),
     )
     monkeypatch.setattr(embed_command, "_interactive_terminal", lambda: True)
-    monkeypatch.setattr(embed_command, "choose_embed_setup", lambda _store: receipt)
+    monkeypatch.setattr(
+        embed_command.MemoryStoreEmbedPort,
+        "capture",
+        lambda _store: port,
+    )
+    monkeypatch.setattr(embed_command, "choose_embed_setup", lambda _port: receipt)
 
     result = runner.invoke(app, ["embed"])
 
@@ -418,24 +426,15 @@ def test_flagless_embed_rejects_target_order_drift_after_review(
     monkeypatch,
 ) -> None:
     store, child, parent, _first, _second = _ordered_store()
-    child_snapshot = store.load_direct(child.name)
-    parent_snapshot = store.load_direct(parent.name)
-    gap = direct_item_gap(direct_item_placement_rows(parent_snapshot), 1)
-    review = embed_exact_command_review(
+    port = MemoryStoreEmbedPort.capture(store)
+    gap = direct_item_gap(
+        direct_item_placement_rows(store.load_direct(parent.name)),
+        1,
+    )
+    receipt = port.freeze_exact_gap(
         child.name,
         parent.name,
-        gap,
-        item_count=2,
-    )
-    receipt = EmbedSetupReceipt(
-        child_name=child.name,
-        into_name=parent.name,
-        gap=gap,
-        child_uid=child_snapshot.uid,
-        child_digest=context_record_digest(child_snapshot),
-        into_uid=parent_snapshot.uid,
-        into_digest=context_record_digest(parent_snapshot),
-        review=review,
+        EmbedPlacement(gap.position, gap.previous_uid, gap.next_uid),
     )
 
     def choose_and_race(_store):
@@ -445,6 +444,11 @@ def test_flagless_embed_rejects_target_order_drift_after_review(
         return receipt
 
     monkeypatch.setattr(embed_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        embed_command.MemoryStoreEmbedPort,
+        "capture",
+        lambda _store: port,
+    )
     monkeypatch.setattr(embed_command, "choose_embed_setup", choose_and_race)
 
     result = runner.invoke(app, ["embed"])

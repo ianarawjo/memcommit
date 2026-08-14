@@ -16,7 +16,6 @@ from memcommit.commands import (
     delete,
     diff,
     edit,
-    embed,
     find,
     find_ambiguities,
     find_conflicts,
@@ -54,6 +53,7 @@ from memcommit.commands import (
     update,
     write_protection,
 )
+from memcommit.interfaces.cli import embed
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app

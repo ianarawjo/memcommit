@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Callable
 
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition
@@ -18,7 +18,6 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-import memcommit.ops as ops
 from memcommit.commands.direct_item_placement import (
     DirectItemGap,
     DirectItemPlacementTreeProjection,
@@ -52,21 +51,12 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.store import MemoryStore, context_record_digest
-
-
-@dataclass(frozen=True)
-class EmbedSetupReceipt:
-    """One reviewed canonical relationship and frozen insertion gap."""
-
-    child_name: str
-    into_name: str
-    gap: DirectItemGap
-    child_uid: str
-    child_digest: str
-    into_uid: str
-    into_digest: str
-    review: ExactCommandReview
+from memcommit.context import Context
+from memcommit.embed_application import (
+    EmbedPlacement,
+    FrozenEmbedPlan,
+)
+from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 
 
 def _placement_argv(gap: DirectItemGap) -> tuple[str, ...]:
@@ -124,16 +114,23 @@ def embed_exact_command_review(
     )
 
 
-def choose_embed_setup(
-    store: MemoryStore,
+def run_embed_tui(
+    setup: EmbedTuiSetup,
     *,
+    inspect_context: Callable[[str], Context],
+    freeze_exact_gap: Callable[
+        [str, str, EmbedPlacement],
+        FrozenEmbedPlan,
+    ],
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> EmbedSetupReceipt | None:
+) -> FrozenEmbedPlan | None:
     """Choose two local Contexts and one exact gap in the target's item order."""
 
-    names = tuple(store.list_context_names())
+    if not isinstance(setup, EmbedTuiSetup):
+        raise TypeError("Embed TUI requires an EmbedTuiSetup.")
+    names = setup.names
     if len(names) < 2:
         raise ValueError("Interactive Embed requires at least two local Contexts.")
     if len(set(names)) != len(names):
@@ -144,7 +141,7 @@ def choose_embed_setup(
             snapshot_hint="Pass CHILD --into CONTEXT outside a terminal.",
         )
 
-    current = store.current_context_name()
+    current = setup.current_context
     initial_into = current if current in names else names[0]
     initial_child = next(name for name in names if name != initial_into)
     selector_height = min(6, max(3, len(names)))
@@ -157,7 +154,7 @@ def choose_embed_setup(
         ),
         height=selector_height,
     )
-    target_snapshot = {"value": store.load_direct(initial_into)}
+    target_snapshot = {"value": inspect_context(initial_into)}
     placement = DirectItemPlacementTreeProjection.create(
         initial_into,
         direct_item_placement_rows(target_snapshot["value"]),
@@ -287,7 +284,7 @@ def choose_embed_setup(
             changed = into_selector.choose_cursor()
             if changed:
                 name = selected_into_name()
-                snapshot = store.load_direct(name)
+                snapshot = inspect_context(name)
                 target_snapshot["value"] = snapshot
                 placement.replace_context(
                     name,
@@ -335,27 +332,38 @@ def choose_embed_setup(
 
     def finish(event) -> SurfaceActionResult:
         try:
-            child = store.load_direct(selected_child_name())
             target = target_snapshot["value"]
             if target.name != selected_into_name():
                 raise RuntimeError("The visible Embed target is no longer selected.")
             gap = placement.state.selected_gap
-            ops.validate_embed(child, target, position=gap.position)
-            review = selected_review()
+            frozen = freeze_exact_gap(
+                selected_child_name(),
+                target.name,
+                EmbedPlacement(
+                    position=gap.position,
+                    previous_uid=gap.previous_uid,
+                    next_uid=gap.next_uid,
+                ),
+            )
+            expected_review = selected_review()
+            if embed_exact_command_review(
+                frozen.child_name,
+                frozen.into_name,
+                DirectItemGap(
+                    position=frozen.placement.position,
+                    previous_uid=frozen.placement.previous_uid,
+                    next_uid=frozen.placement.next_uid,
+                ),
+                item_count=frozen.item_count,
+            ) != expected_review:
+                raise RuntimeError(
+                    "The exact Embed command changed while it was reviewed."
+                )
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
             status["value"] = str(error)
             return "HANDLED"
         event.app.exit(
-            result=EmbedSetupReceipt(
-                child_name=child.name,
-                into_name=target.name,
-                gap=gap,
-                child_uid=child.uid,
-                child_digest=context_record_digest(child),
-                into_uid=target.uid,
-                into_digest=context_record_digest(target),
-                review=review,
-            )
+            result=frozen
         )
         return "HANDLED"
 
@@ -476,7 +484,7 @@ def choose_embed_setup(
         TuiRegion(todo_frame),
         TuiRegion(footer),
     )
-    app: Application[EmbedSetupReceipt | None] = Application(
+    app: Application[FrozenEmbedPlan | None] = Application(
         layout=Layout(root, focused_element=child_selector.control),
         key_bindings=bindings,
         full_screen=True,

@@ -12,6 +12,14 @@ mem embed CHILD --into CONTEXT [--before ITEM | --after ITEM]
 The flagless form is a local-only terminal setup. The explicit form remains the
 non-interactive and scripting route.
 
+The implementation now enters through `memcommit.embed_application`, with
+`memcommit.embed_runtime` owning Store loading, concurrency checks, checkpoint
+creation, and persistence. The plain command adapter is
+`memcommit.interfaces.cli.embed`; the interactive adapter is the
+`memcommit.interfaces.tui.operations.embed` package. The former
+`memcommit.commands.embed` and `memcommit.commands.embed_dialog` modules were
+removed instead of retained as compatibility facades.
+
 The representative `180×52` color-PTY interaction against the actual current
 Study Participant Profile is retained under
 [`screenshots/mem-embed-placement-participant-20260813/`](screenshots/mem-embed-placement-participant-20260813/README.md).
@@ -122,7 +130,7 @@ Child retains identity and ownership, and which exact neighbor gap is used.
 
 ## Reuse boundary
 
-`memcommit.commands.direct_item_placement` owns the operation-neutral row
+`memcommit.commands.direct_item_placement` currently owns the operation-neutral row
 projection, gap model, separate hover/selection state, and single moving-line
 renderer. It delegates item presentation to Switch's common direct-item
 preview renderer. The common `ContextSelectorControl` exposes a narrow nested
@@ -131,6 +139,11 @@ without cloning Context-tree navigation. Embed owns which object is inserted,
 its exact command, authority, validation, checkpoint, and success receipt.
 Later Add or Reference placement work may reuse the shared gap component
 without inheriting Embed semantics.
+
+This placement component predates the interface-package migration and still
+depends on the older shared Context preview renderer. Moving that common visual
+component is intentionally separate from the Embed use-case boundary: neither
+the application contract nor the Store runtime imports it.
 
 ## Alternatives and intentional non-goals
 
