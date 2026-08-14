@@ -94,7 +94,7 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
         _rename(store, "old", "new")
         return original_merge(candidate, target)
 
-    monkeypatch.setattr("memcommit.commands.merge.ops.merge", rename_then_merge)
+    monkeypatch.setattr("memcommit.merge_runtime.ops.merge", rename_then_merge)
 
     result = runner.invoke(app, ["merge", "old"])
 
