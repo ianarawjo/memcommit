@@ -7,11 +7,28 @@ import typer
 
 
 def render_zsh_init() -> str:
-    """Return a zsh wrapper that prefills a selected help command."""
+    """Return a zsh wrapper for command prefill and Study history isolation."""
     return """\
-# memcommit: make `mem help` place its selection in the next zsh edit buffer.
+# memcommit: isolate Study history and prefill selections from `mem help`.
 function mem {
   emulate -L zsh
+  if [[ -o interactive && $ZSH_SUBSHELL -eq 0
+        && -t 0 && -t 1 && -t 2
+        && $# -ge 1 && $1 == init-study ]]; then
+    local _mem_arg _mem_init_study_help=0
+    for _mem_arg in "$@"; do
+      if [[ $_mem_arg == --help ]]; then
+        _mem_init_study_help=1
+        break
+      fi
+    done
+    if (( ! _mem_init_study_help )); then
+      # A child process cannot edit its parent's history. Push rather than
+      # erase the prior list so accidental Up-arrow recall starts empty while
+      # an intentional `fc -P` can still restore the previous shell owner.
+      builtin fc -p
+    fi
+  fi
   if [[ -o interactive && $ZSH_SUBSHELL -eq 0
         && -t 0 && -t 1 && -t 2
         && $# -eq 1 && $1 == help ]]; then

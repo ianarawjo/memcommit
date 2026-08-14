@@ -24,6 +24,7 @@ def test_shell_init_prints_valid_zsh_without_editing_files():
 
     assert result.exit_code == 0
     assert "command mem help --emit-selection" in result.output
+    assert "builtin fc -p" in result.output
     assert 'print -rz -- "${_mem_selected} "' in result.output
     assert 'command mem "$@"' in result.output
 
@@ -167,3 +168,99 @@ mem status
     assert returncode == 0, output
     assert f"buffer={selected_command} " in output
     assert "delegated:status" in output
+
+
+@pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")
+def test_init_study_pushes_prior_history_without_deleting_it(tmp_path):
+    executable = tmp_path / "mem"
+    executable.write_text(
+        """#!/bin/zsh
+print -r -- "delegated:$*"
+"""
+    )
+    executable.chmod(0o755)
+
+    environment = os.environ.copy()
+    environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
+    environment["MEMCOMMIT_ZSH_INIT"] = render_zsh_init()
+    script = """\
+eval "$MEMCOMMIT_ZSH_INIT"
+print -s -- 'mem prior-participant-secret'
+mem init-study participant-run
+print -s -- 'mem participant-status'
+print -r -- 'CURRENT-BEGIN'
+fc -l -10
+print -r -- 'CURRENT-END'
+fc -P
+print -r -- 'ORIGINAL-BEGIN'
+fc -l -10
+print -r -- 'ORIGINAL-END'
+"""
+
+    master_fd, slave_fd = pty.openpty()
+    process = subprocess.Popen(
+        [shutil.which("zsh"), "-f", "-ic", script],
+        stdin=slave_fd,
+        stdout=slave_fd,
+        stderr=slave_fd,
+        env=environment,
+        close_fds=True,
+    )
+    os.close(slave_fd)
+    chunks: list[bytes] = []
+    try:
+        while True:
+            try:
+                chunk = os.read(master_fd, 4096)
+            except OSError as error:
+                if error.errno == errno.EIO:
+                    break
+                raise
+            if not chunk:
+                break
+            chunks.append(chunk)
+    finally:
+        os.close(master_fd)
+    returncode = process.wait(timeout=5)
+    output = b"".join(chunks).decode(errors="replace").replace("\r", "")
+
+    current = output.split("CURRENT-BEGIN\n", 1)[1].split("CURRENT-END\n", 1)[0]
+    original = output.split("ORIGINAL-BEGIN\n", 1)[1].split("ORIGINAL-END\n", 1)[0]
+    assert returncode == 0, output
+    assert "delegated:init-study participant-run" in output
+    assert "mem participant-status" in current
+    assert "prior-participant-secret" not in current
+    assert "mem prior-participant-secret" in original
+
+
+@pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")
+def test_init_study_help_does_not_push_shell_history(tmp_path):
+    executable = tmp_path / "mem"
+    executable.write_text(
+        """#!/bin/zsh
+print -r -- "delegated:$*"
+"""
+    )
+    executable.chmod(0o755)
+
+    environment = os.environ.copy()
+    environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
+    environment["MEMCOMMIT_ZSH_INIT"] = render_zsh_init()
+    script = """\
+eval "$MEMCOMMIT_ZSH_INIT"
+print -s -- 'mem retained-before-help'
+mem init-study --help
+fc -l -10
+"""
+
+    checked = subprocess.run(
+        [shutil.which("zsh"), "-f", "-ic", script],
+        text=True,
+        capture_output=True,
+        env=environment,
+        check=False,
+    )
+
+    assert checked.returncode == 0, checked.stderr
+    assert "delegated:init-study --help" in checked.stdout
+    assert "mem retained-before-help" in checked.stdout
