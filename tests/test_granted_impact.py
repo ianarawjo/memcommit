@@ -2020,6 +2020,70 @@ def test_granted_impact_then_update_changes_only_run_authority(
     assert len(authority_store.list_checkpoints("campus-wiki/services")) == 1
 
 
+def test_granted_target_empty_update_records_only_an_idempotent_receipt(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active_store, authority_store, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    authority_before = {
+        name: authority_store.load_direct(name).to_dict()
+        for name in (wiki.name, "campus-wiki/services")
+    }
+    checkpoints_before = {
+        name: tuple(authority_store.list_checkpoints(name))
+        for name in authority_before
+    }
+    provider_calls = 0
+
+    class Provider:
+        def complete(self, _prompt, **_kwargs):
+            nonlocal provider_calls
+            provider_calls += 1
+            return _empty_plan()
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: Provider(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.update.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("the matching empty impact plan must be reused"),
+    )
+
+    impact = runner.invoke(
+        app,
+        ["impact", "--from", source.name, "--to", wiki.name],
+    )
+    update = runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    )
+    receipt_bytes = (isolated_store / "staged-update.json").read_bytes()
+    repeated = runner.invoke(
+        app,
+        ["update", "--from", source.name, "--to", wiki.name],
+    )
+
+    assert impact.exit_code == 0, impact.output
+    assert update.exit_code == 0, update.output
+    assert repeated.exit_code == 0, repeated.output
+    assert "already applied locally" in repeated.output
+    assert provider_calls == 1
+    applied = active_store.load_staged_update()
+    assert applied.status == "applied"
+    assert applied.operations == ()
+    assert applied.application.checkpoints == ()
+    assert (isolated_store / "staged-update.json").read_bytes() == receipt_bytes
+    for name, before in authority_before.items():
+        assert authority_store.load_direct(name).to_dict() == before
+        assert tuple(authority_store.list_checkpoints(name)) == checkpoints_before[name]
+
+
 def test_granted_diff_revalidates_authority_and_keeps_public_names(
     isolated_store,
     tmp_path,

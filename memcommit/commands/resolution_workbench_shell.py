@@ -26,6 +26,7 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 from prompt_toolkit.utils import get_cwidth
 
+from memcommit.application_review_policy import DecisionFreeBehavior
 from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
@@ -2346,6 +2347,7 @@ def run_resolution_workbench_shell(
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
     start_final_review_when_no_required: bool = False,
+    decision_free_behavior: DecisionFreeBehavior | None = None,
     read_only: bool = False,
     read_only_handoff: SessionTodoView | None = None,
     impact_controller: ImpactController | None = None,
@@ -2353,15 +2355,34 @@ def run_resolution_workbench_shell(
 ) -> ResolutionWorkbenchAction:
     """Collect one UID-bound semantic or close action; never call a provider.
 
-    A workflow may begin at its exact final approval when no unanswered
-    REQUIRED decision remains. The report is still the approval's Back target;
-    this changes entry topology, not review or mutation authority.
+    A workflow may begin at its exact final approval, or return its exact
+    Accept action without rendering, when no unanswered REQUIRED decision
+    remains. The operation chooses that behavior from its mutation authority
+    and recovery boundary.
     """
     if require_tty:
         require_interactive_terminal(
             terminal_label,
             snapshot_hint=snapshot_hint,
         )
+    if decision_free_behavior is None:
+        # Keep legacy callers on their published final-review topology while
+        # each operation adopts the ownership-aware policy explicitly.
+        decision_free_behavior = (
+            "FINAL_REVIEW"
+            if start_final_review_when_no_required
+            else "REPORT_FIRST"
+        )
+    elif start_final_review_when_no_required:
+        raise ValueError(
+            "Use either the legacy final-review flag or decision-free behavior."
+        )
+    if decision_free_behavior not in {
+        "REPORT_FIRST",
+        "FINAL_REVIEW",
+        "AUTO_ACCEPT",
+    }:
+        raise ValueError("Unsupported decision-free application behavior.")
     current_navigation = navigation or ResolutionNavigation()
     supplier = (
         view_or_supplier if callable(view_or_supplier) else lambda: view_or_supplier
@@ -4620,9 +4641,9 @@ def run_resolution_workbench_shell(
     )
     load_draft()
 
-    def open_initial_final_review() -> None:
-        if not start_final_review_when_no_required or read_only or not review_and_apply:
-            return
+    def decision_free_apply_available() -> bool:
+        if read_only or not review_and_apply:
+            return False
         active_view = current_view()
         unresolved_required = any(
             item.effective_obligation == "REQUIRED"
@@ -4630,7 +4651,7 @@ def run_resolution_workbench_shell(
             for item in active_view.items
         )
         if unresolved_required:
-            return
+            return False
         todo = session_todo_view(
             active_view,
             local_drafts,
@@ -4639,7 +4660,38 @@ def run_resolution_workbench_shell(
             whole_set_available=bool(global_strategies),
             read_only_handoff=read_only_handoff,
         )
-        if todo.kind == "REVIEW AND APPLY":
+        if todo.kind != "REVIEW AND APPLY":
+            return False
+        review_action = session_review_action_view(
+            active_view,
+            local_drafts,
+            whole_set_available=bool(global_strategies),
+        )
+        return review_action.kind in {"APPLY", "APPLY AS IS"}
+
+    if (
+        decision_free_behavior == "AUTO_ACCEPT"
+        and decision_free_apply_available()
+    ):
+        automatic = semantic_action("ACCEPT")
+        if automatic is not None:
+            record_study_action(
+                "DECISION_FREE_AUTO_ACCEPT",
+                surface="resolution",
+                action=automatic.kind,
+            )
+            record_study_action(
+                "TUI_ACTION",
+                surface="resolution",
+                action=automatic.kind,
+            )
+            return automatic
+
+    def open_initial_final_review() -> None:
+        if (
+            decision_free_behavior == "FINAL_REVIEW"
+            and decision_free_apply_available()
+        ):
             open_final_review()
 
     try:

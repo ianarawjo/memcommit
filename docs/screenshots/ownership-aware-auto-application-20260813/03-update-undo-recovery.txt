@@ -1,0 +1,5 @@
+52 180                                                                                                                                                                              
+Undid command: mem update --from study/ownership-auto/source --to study/ownership-auto/update-target · Affected Contexts: 1 · Affected Memories: 1 · ~ 1 edited                     
+RECOVERY VERIFICATION · LOCAL UPDATE                                                                                                                                                
+STATUS · UNDONE                                                                                                                                                                     
+MEMORY · The north entrance provides public access.

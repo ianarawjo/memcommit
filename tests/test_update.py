@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 import json
 
 import pytest
@@ -21,6 +22,7 @@ from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.update import (
     AddOperation,
     EditOperation,
+    GrantedUpdateTarget,
     UpdateError,
     UpdateSession,
     applied_session_matches,
@@ -113,7 +115,7 @@ def test_update_revision_replans_complete_operations_from_review_guidance():
     assert "Make the accessibility wording less absolute." in prompt
 
 
-def test_staged_update_starts_at_final_approval_without_decision_rows(monkeypatch):
+def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -138,7 +140,134 @@ def test_staged_update_starts_at_final_approval_without_decision_rows(monkeypatc
     view, kwargs = captured[0]
     assert all(item.effective_obligation == "NONE" for item in view.items)
     assert kwargs["review_and_apply"] is True
-    assert kwargs["start_final_review_when_no_required"] is True
+    assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
+
+
+def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    staged = replace(
+        staged,
+        granted_source=GrantedUpdateTarget(
+            public_name="shared/construction-updates",
+            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
+            authority_profile_uid="22222222-2222-4222-8222-222222222222",
+            attachment_context_uid="attachment-context",
+            attachment_context_name="shared",
+            grant_uid="33333333-3333-4333-8333-333333333333",
+            grant_revision=1,
+            grant_digest="a" * 64,
+            resource_uid=source.uid,
+            resource_name=source.name,
+            authority_context_name=source.name,
+            permissions=("READ", "DERIVE", "EXPORT"),
+        ),
+    )
+    captured = []
+
+    def approve(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+
+    reviewed = update_render.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("no revision was requested"),
+    )
+
+    assert reviewed is staged
+    assert captured[0][1]["decision_free_behavior"] == "AUTO_ACCEPT"
+
+
+def test_granted_target_update_retains_exact_final_review(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    staged = replace(
+        staged,
+        granted_target=GrantedUpdateTarget(
+            public_name="shared/campus-wiki",
+            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
+            authority_profile_uid="22222222-2222-4222-8222-222222222222",
+            attachment_context_uid="attachment-context",
+            attachment_context_name="shared",
+            grant_uid="33333333-3333-4333-8333-333333333333",
+            grant_revision=1,
+            grant_digest="a" * 64,
+            resource_uid=target.uid,
+            resource_name=target.name,
+            authority_context_name=target.name,
+            permissions=("READ", "UPDATE"),
+        ),
+    )
+    captured = []
+
+    def close(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="CLOSE")
+
+    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", close)
+
+    reviewed = update_render.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("no revision was requested"),
+    )
+
+    assert reviewed is None
+    assert captured[0][1]["decision_free_behavior"] == "FINAL_REVIEW"
+
+
+def test_granted_target_noop_auto_accepts_without_authority_review(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider({"edits": [], "additions": []}),
+        status="staged",
+    )
+    staged = replace(
+        staged,
+        granted_target=GrantedUpdateTarget(
+            public_name="shared/campus-wiki",
+            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
+            authority_profile_uid="22222222-2222-4222-8222-222222222222",
+            attachment_context_uid="attachment-context",
+            attachment_context_name="shared",
+            grant_uid="33333333-3333-4333-8333-333333333333",
+            grant_revision=1,
+            grant_digest="a" * 64,
+            resource_uid=target.uid,
+            resource_name=target.name,
+            authority_context_name=target.name,
+            permissions=("READ", "UPDATE"),
+        ),
+    )
+    captured = []
+
+    def approve(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+
+    reviewed = update_render.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("no revision was requested"),
+    )
+
+    assert reviewed is staged
+    assert staged.operations == ()
+    assert captured[0][1]["decision_free_behavior"] == "AUTO_ACCEPT"
 
 
 def _edit_and_root_add_response(prompt):
@@ -1858,6 +1987,16 @@ def test_empty_update_records_applied_receipt_without_context_checkpoint(
         path: path.read_bytes()
         for path in (isolated_store / "contexts" / "campus-wiki").rglob("context.json")
     } == target_bytes_before
+    assert store.list_checkpoints(TASK1_TARGET) == []
+    assert store.list_checkpoints(TASK1_TARGET_CHILD) == []
+    receipt_bytes = (isolated_store / "staged-update.json").read_bytes()
+
+    repeated = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert repeated.exit_code == 0, repeated.output
+    assert "already applied locally" in repeated.output
+    assert len(provider.calls) == 1
+    assert (isolated_store / "staged-update.json").read_bytes() == receipt_bytes
     assert store.list_checkpoints(TASK1_TARGET) == []
     assert store.list_checkpoints(TASK1_TARGET_CHILD) == []
 

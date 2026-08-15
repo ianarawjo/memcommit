@@ -1897,7 +1897,7 @@ def test_no_required_decision_can_start_at_final_approval_and_back_to_report():
             view,
             split_viewer_items=True,
             review_and_apply=True,
-            start_final_review_when_no_required=True,
+            decision_free_behavior="FINAL_REVIEW",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -1913,13 +1913,37 @@ def test_no_required_decision_can_start_at_final_approval_and_back_to_report():
             view,
             split_viewer_items=True,
             review_and_apply=True,
-            start_final_review_when_no_required=True,
+            decision_free_behavior="FINAL_REVIEW",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
     assert action.kind == "CLOSE"
+
+
+def test_legacy_final_review_flag_remains_compatible_during_operation_rollout():
+    optional = replace(_item("optional"), obligation="OPTIONAL")
+    view = replace(
+        _view(optional),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            start_final_review_when_no_required=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "ACCEPT"
 
 
 def test_required_decision_prevents_direct_final_approval_entry():
@@ -1931,15 +1955,69 @@ def test_required_decision_prevents_direct_final_approval_entry():
     )
 
     with create_pipe_input() as pipe_input:
-        # If direct final review incorrectly opened, Down+Enter would approve.
-        # With one unanswered REQUIRED item it instead stays in the decision
-        # workbench; Q then closes without crossing the Apply boundary.
-        pipe_input.send_text("\x1b[B\rq")
+        # An unanswered REQUIRED item must suppress the local auto-accept path;
+        # Q proves the ordinary decision workbench remained active.
+        pipe_input.send_text("q")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
             review_and_apply=True,
-            start_final_review_when_no_required=True,
+            decision_free_behavior="AUTO_ACCEPT",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+
+
+def test_reversible_local_decision_free_proposal_auto_accepts_without_rendering():
+    optional = replace(
+        _item("optional"),
+        obligation="OPTIONAL",
+    )
+    view = replace(
+        _view(optional),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+
+    action = run_resolution_workbench_shell(
+        view,
+        split_viewer_items=True,
+        review_and_apply=True,
+        decision_free_behavior="AUTO_ACCEPT",
+        app_output=DummyOutput(),
+        require_tty=False,
+    )
+
+    assert action.kind == "ACCEPT"
+
+
+def test_pending_response_blocks_local_auto_accept_and_requires_incorporation():
+    change = replace(
+        _item("change"),
+        obligation="NONE",
+        commentable=True,
+    )
+    view = replace(
+        _view(change),
+        capabilities=frozenset({"SUBMIT_ALL", "ACCEPT"}),
+        accept_enabled=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            decision_free_behavior="AUTO_ACCEPT",
+            global_strategies=(
+                ResolutionGlobalStrategy("Revise", "CUSTOM", "Revise proposal."),
+            ),
+            draft_loader=lambda _uid: (None, "Use narrower wording."),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,

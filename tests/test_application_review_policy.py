@@ -39,6 +39,18 @@ def test_local_mutation_without_complete_undo_retains_final_review():
     assert policy.mutation_boundary == "LOCAL"
 
 
+def test_zero_change_completion_auto_accepts_without_a_mutation_boundary():
+    policy = ownership_aware_application_review(
+        mutates_granted_authority=True,
+        local_undo_available=False,
+        publishes_context_mutation=False,
+    )
+
+    assert policy.decision_free_behavior == "AUTO_ACCEPT"
+    assert policy.mutation_boundary == "NONE"
+    assert policy.recovery == "NO CONTEXT MUTATION"
+
+
 @pytest.mark.parametrize(
     ("authority", "undo"),
     (("false", True), (False, "yes"), (0, True), (False, 1)),
@@ -48,6 +60,15 @@ def test_policy_rejects_non_boolean_safety_metadata(authority, undo):
         ownership_aware_application_review(
             mutates_granted_authority=authority,
             local_undo_available=undo,
+        )
+
+
+def test_policy_rejects_non_boolean_context_mutation_metadata():
+    with pytest.raises(TypeError, match="Context-mutation metadata"):
+        ownership_aware_application_review(
+            mutates_granted_authority=False,
+            local_undo_available=True,
+            publishes_context_mutation=1,  # type: ignore[arg-type]
         )
 
 

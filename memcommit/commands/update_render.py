@@ -7,6 +7,9 @@ from dataclasses import replace
 
 import typer
 
+from memcommit.application_review_policy import (
+    ownership_aware_application_review,
+)
 from memcommit.impact_controller import ImpactController
 from memcommit.memory_diff import update_operation_change
 from memcommit.commands.resolution_workbench_shell import (
@@ -125,7 +128,11 @@ def review_update_application(
             ),
             split_viewer_items=True,
             review_and_apply=True,
-            start_final_review_when_no_required=True,
+            decision_free_behavior=ownership_aware_application_review(
+                mutates_granted_authority=current.granted_target is not None,
+                local_undo_available=True,
+                publishes_context_mutation=bool(current.operations),
+            ).decision_free_behavior,
             global_strategies=(
                 ResolutionGlobalStrategy(
                     "Revise from comments",
@@ -209,6 +216,8 @@ def render_plan(
         )
         typer.echo("REQUIRED TO APPLY · " + " + ".join(required))
         typer.echo("GRANT PERMISSIONS · " + ("READY" if ready else "BLOCKED"))
+    elif applied and session.operations:
+        typer.echo("RECOVERY · mem undo")
     if not session.operations:
         typer.echo("\n(no changes needed)")
     if view.items:

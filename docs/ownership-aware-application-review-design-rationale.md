@@ -59,9 +59,9 @@ the owning command still performs its normal application path.
 | --- | --- | --- | --- |
 | Merge, local Target | Local direct or recursive Target graph | Apply directly when no conflict remains; a verified no-op still records a command checkpoint; recover with operation-unit Undo | `VERIFIED` first vertical slice |
 | Merge, granted Target | Authority Target graph | Retain final review; exact noninteractive argv remains the explicit action | `VERIFIED` policy routing and runtime authority metadata |
-| Update, local Target | Local Target owner graph | Apply directly; recover with Undo | `NOT VERIFIED HERE` |
-| Update, granted Source and local Target | Local Target owner graph | Apply directly; granted input remains read-only | `NOT VERIFIED HERE` |
-| Update, granted Target | Authority Target owner graph | Require final review | `NOT VERIFIED HERE` |
+| Update, local Target | Local Target owner graph | Apply directly; recover with operation-unit Undo | `VERIFIED` policy, application, failure, and recovery tests |
+| Update, granted Source and local Target | Local Target owner graph | Apply directly; granted input remains read-only | `VERIFIED` ownership routing test |
+| Update, granted Target | Authority Target owner graph | Require final review when at least one Context change will be published; a validated zero-change receipt has boundary `NONE` and needs no authority review | `VERIFIED` routing tests and Task 1 granted-target replay |
 | Atomize in place or planned local Output | Local Input or new local Output | Apply directly; retain unresolved-at-apply audit | `NOT VERIFIED HERE` |
 | Meld, local Result/Baseline | Local target | Apply directly once required issues are resolved | `NOT VERIFIED HERE` |
 | Meld, granted Incoming and local Baseline | Local Baseline | Apply directly; granted input remains read-only | `NOT VERIFIED HERE` |
