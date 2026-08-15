@@ -19,6 +19,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint
+from memcommit.context_locator import resolve_context_locator
 from memcommit.store import MemoryStore
 from memcommit.store import ConcurrentContextUpdateError
 
@@ -96,17 +97,31 @@ def _checkpoint_description(request: AddRequest) -> str:
 class MemoryStoreAddTargetPort(AddTargetPort):
     """Commit Add against one current-Context snapshot and exact target CAS."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(
+        self,
+        store: MemoryStore,
+        *,
+        current_name: str | None,
+        local_only: bool = False,
+    ):
         self._store = store
         # Relative target meaning must not drift if another process switches
         # the global current Context while this request is being composed.
         self._current_name = current_name
+        self._local_only = local_only
 
     @classmethod
     def capture(cls, store: MemoryStore) -> "MemoryStoreAddTargetPort":
         return cls(store, current_name=store.current_context_name())
 
     def freeze(self, context_locator: str | None) -> FrozenAddTarget:
+        if self._local_only:
+            operand = context_locator or self._current_name
+            if operand is None:
+                raise RuntimeError("No current context. Run 'mem init <name>' first.")
+            canonical = resolve_context_locator(operand, current=self._current_name)
+            if not self._store.context_exists(canonical):
+                raise FileNotFoundError(f"Context {canonical!r} not found.")
         access = resolve_context_access(
             self._store,
             context_locator,

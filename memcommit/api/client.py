@@ -1,11 +1,30 @@
-"""Stable Python entry point over MemCommit's Query application boundaries."""
+"""Stable Python entry point over reviewed MemCommit application boundaries."""
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+import json
 from pathlib import Path
 
+from memcommit.add_application import (
+    AddError as ApplicationAddError,
+    AddRequest,
+    AddSource,
+    run_add,
+    validate_add_request,
+)
+from memcommit.add_runtime import MemoryStoreAddTargetPort
+from memcommit.api.add import (
+    AddMemoriesResult,
+    AddedMemoryResult,
+)
 from memcommit.api.errors import (
+    AddAuthorityError,
+    AddConflictError,
+    AddContextError,
+    AddExecutionError,
+    AddInputError,
+    AddStorageError,
     QueryAuthorityError,
     QueryConfigurationError,
     QueryContextError,
@@ -61,6 +80,7 @@ from memcommit.query_provider import QueryProviderError
 from memcommit.query_sessions import QuerySessionError
 from memcommit.search import FindError
 from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError
 
 
 ProviderFactory = Callable[[], object]
@@ -100,9 +120,7 @@ class MemCommitClient:
         except (TypeError, ValueError) as error:
             _raise(QueryConfigurationError, error)
         if not isinstance(config, QueryProviderConfig):
-            raise QueryConfigurationError(
-                "query_config must be a QueryProviderConfig."
-            )
+            raise QueryConfigurationError("query_config must be a QueryProviderConfig.")
 
         registry: ProfileRegistry | None = None
         selected_profile: ProfileEntry | None = None
@@ -113,9 +131,8 @@ class MemCommitClient:
                     selected_profile = registry.active
                 else:
                     selected_profile = registry.by_name(profile)
-                    if (
-                        selected_profile is None
-                        or registry.is_removed(selected_profile)
+                    if selected_profile is None or registry.is_removed(
+                        selected_profile
                     ):
                         raise QueryConfigurationError(
                             f"Profile {profile!r} is not available."
@@ -192,6 +209,96 @@ class MemCommitClient:
             return self._store.current_context_name()
         except (OSError, ValueError) as error:
             _raise(QueryStorageError, error)
+
+    def add_memories(
+        self,
+        contents: Sequence[str],
+        *,
+        context_name: str | None = None,
+    ) -> AddMemoriesResult:
+        """Append one exact ordered batch and publish one Add checkpoint."""
+
+        try:
+            if isinstance(contents, (str, bytes)):
+                raise TypeError("contents must be a sequence of Memory texts.")
+            values = tuple(contents)
+            if context_name is not None and (
+                not isinstance(context_name, str) or not context_name
+            ):
+                raise ValueError("context_name must be nonblank text.")
+            request = validate_add_request(
+                AddRequest(
+                    contents=values,
+                    context_locator=context_name,
+                    source=AddSource(
+                        mode="EXPLICIT_BATCH",
+                        kind="python-api",
+                        parser="exact-memory-sequence-v1",
+                        raw_text=json.dumps(
+                            values,
+                            ensure_ascii=False,
+                            separators=(",", ":"),
+                        ),
+                    ),
+                )
+            )
+        except (ApplicationAddError, TypeError, ValueError) as error:
+            _raise(AddInputError, error)
+
+        try:
+            current_name = (
+                self._store.current_context_name()
+                if self._store.state_file.exists()
+                else None
+            )
+            operand = context_name or current_name
+            if operand is None:
+                raise FileNotFoundError(
+                    "No current Context; pass context_name or initialize one."
+                )
+            canonical = resolve_context_locator(operand, current=current_name)
+            target_is_local = self._store.context_exists(canonical)
+            if not target_is_local:
+                if self._registry is None:
+                    raise FileNotFoundError(f"Context {canonical!r} not found.")
+                registry = load_profile_registry()
+                if (
+                    self._profile is None
+                    or self._profile.uid != registry.active.uid
+                    or self._store_root != profile_store_dir(registry.active).resolve()
+                ):
+                    raise AddAuthorityError(
+                        "CREATE-granted Add requires a client bound to the "
+                        "active Profile."
+                    )
+            port = MemoryStoreAddTargetPort(
+                self._store,
+                current_name=current_name,
+                local_only=target_is_local,
+            )
+            result = run_add(request, target_port=port)
+        except AddAuthorityError:
+            raise
+        except FileNotFoundError as error:
+            _raise(AddContextError, error)
+        except (ProfileConfigError, ProfileError) as error:
+            _raise(AddAuthorityError, error)
+        except ConcurrentContextUpdateError as error:
+            _raise(AddConflictError, error)
+        except OSError as error:
+            _raise(AddStorageError, error)
+        except (ApplicationAddError, RuntimeError, TypeError, ValueError) as error:
+            _raise(AddExecutionError, error)
+
+        return AddMemoriesResult(
+            context_name=result.context_name,
+            context_uid=result.context_uid,
+            memories=tuple(
+                AddedMemoryResult(uid=memory.uid, content=memory.content)
+                for memory in result.memories
+            ),
+            checkpoint_uid=result.checkpoint_uid,
+        )
 
     def query_ordinary(
         self,

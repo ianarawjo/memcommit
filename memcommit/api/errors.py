@@ -5,6 +5,34 @@ class MemCommitError(RuntimeError):
     """Base class for failures exposed by the public Python API."""
 
 
+class AddError(MemCommitError):
+    """Base class for public Add failures."""
+
+
+class AddInputError(AddError):
+    """The caller supplied an invalid ordered Memory batch."""
+
+
+class AddContextError(AddError):
+    """The requested Add target Context is unavailable."""
+
+
+class AddAuthorityError(AddError):
+    """The active Profile or Grant does not authorize Add."""
+
+
+class AddConflictError(AddError):
+    """The Add target changed before its single checkpoint could commit."""
+
+
+class AddStorageError(AddError):
+    """Add could not safely read or publish local durable state."""
+
+
+class AddExecutionError(AddError):
+    """An authorized Add failed without publishing a complete receipt."""
+
+
 class QueryError(MemCommitError):
     """Base class for public Query failures."""
 
@@ -42,6 +70,13 @@ class QueryStorageError(QueryError):
 
 
 __all__ = [
+    "AddAuthorityError",
+    "AddConflictError",
+    "AddContextError",
+    "AddError",
+    "AddExecutionError",
+    "AddInputError",
+    "AddStorageError",
     "MemCommitError",
     "QueryAuthorityError",
     "QueryConfigurationError",

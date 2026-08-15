@@ -1,4 +1,5 @@
 """memcommit — a git-like memory store."""
+
 from memcommit.context import (
     Checkpoint,
     Context,
@@ -10,6 +11,15 @@ from memcommit.context import (
 from memcommit.store import MemoryStore
 from memcommit import ops
 from memcommit.api import (
+    AddAuthorityError,
+    AddConflictError,
+    AddContextError,
+    AddError,
+    AddExecutionError,
+    AddInputError,
+    AddMemoriesResult,
+    AddStorageError,
+    AddedMemoryResult,
     GrantedQueryResult,
     MemCommitClient,
     MemCommitError,
@@ -31,6 +41,15 @@ from memcommit.api import (
 )
 
 __all__ = [
+    "AddAuthorityError",
+    "AddConflictError",
+    "AddContextError",
+    "AddError",
+    "AddExecutionError",
+    "AddInputError",
+    "AddMemoriesResult",
+    "AddStorageError",
+    "AddedMemoryResult",
     "Context",
     "Memory",
     "MemoryRef",

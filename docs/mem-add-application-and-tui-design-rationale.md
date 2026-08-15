@@ -86,8 +86,8 @@ own component.
 - `E to edit` is an internal TUI buffer, not `$EDITOR` or a subprocess.
 - Add does not call a provider and has no semantic cache.
 - Drafts are process-local and are not resumable sessions.
-- The internal application/runtime callables are not yet a versioned public
-  Python API; Store-root ownership and public error compatibility remain open.
+- The public Python projection and its Store/Profile/error boundary are
+  specified separately in `add-public-python-api-design-rationale.md`.
 - This slice does not relocate every historical operation screen. It moves
   only component contracts whose existing consumers share the same mechanics.
 - Physical-line file and paste parsing remains intentionally distinct from

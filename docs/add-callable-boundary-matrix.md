@@ -1,0 +1,34 @@
+# Add callable and effect boundary matrix
+
+Last verified: 2026-08-15.
+
+This matrix records ownership and effects for the first writable operation
+exposed through several adapters. A callable's layer determines where it may be
+reused; sharing a result type does not transfer authority or durable effects to
+an interface.
+
+| Callable | Owner | Input → output | Allowed effects | Required invariant | State |
+| --- | --- | --- | --- | --- | --- |
+| `add_application.validate_add_request` | application | `AddRequest` → validated request | none | complete nonblank ordered batch before target access | `VERIFIED` |
+| `add_application.prepare_add_target` | application | locator + target port → frozen target | target identity/authority read only | one canonical name and Context UID | `VERIFIED` |
+| `add_application.run_add` | application | request + port → `AddResult` | effects delegated once to port | receipt covers every exact input in order and the frozen target | `VERIFIED` |
+| `add_runtime.MemoryStoreAddTargetPort.freeze` | infrastructure | locator → frozen target/token | Store/Profile/Grant reads | one current snapshot; optional local-only boundary; CREATE authority | `VERIFIED` |
+| `add_runtime.MemoryStoreAddTargetPort.append` | infrastructure | frozen target + request → result | one authorized Context save and Add checkpoint | target UID/digest and Grant revalidation; no overwrite | `VERIFIED` |
+| `add_runtime.execute_add` | infrastructure composition | request + Store → result | same Store effects as port | no terminal or provider dependency | `VERIFIED` |
+| `interfaces.cli.add.render_add_plain` | CLI adapter | typed result + intake mode → terminal text | stdout only | no Store, authority, or mutation decisions | `VERIFIED` |
+| `interfaces.tui.operations.add.run_add_tui` | TUI adapter | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
+| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
+| `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
+
+## Operation effect summary
+
+| Entry route | Provider/cache/session | Durable success | Failure publication |
+| --- | --- | --- | --- |
+| CLI single, explicit batch, file, or paste | none | exact Memories and one Add checkpoint | none before completed Store save |
+| Add TUI | process-local drafts only | exact reviewed drafts and one Add checkpoint | cancel/edit failure publishes nothing |
+| Public Python | none | explicit ordered sequence and one Add checkpoint | typed error; no partial public receipt |
+
+The public method does not call the CLI and the application does not call the
+public facade. CLI, TUI, Python, and later agent adapters point inward to the
+same application/runtime boundary. A concrete tool host remains a deployment
+owner rather than an Add callable.

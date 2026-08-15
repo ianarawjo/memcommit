@@ -1,7 +1,15 @@
 """Stable public Python API for MemCommit."""
 
 from memcommit.api.client import MemCommitClient
+from memcommit.api.add import AddMemoriesResult, AddedMemoryResult
 from memcommit.api.errors import (
+    AddAuthorityError,
+    AddConflictError,
+    AddContextError,
+    AddError,
+    AddExecutionError,
+    AddInputError,
+    AddStorageError,
     MemCommitError,
     QueryAuthorityError,
     QueryConfigurationError,
@@ -24,6 +32,15 @@ from memcommit.api.query import (
 )
 
 __all__ = [
+    "AddAuthorityError",
+    "AddConflictError",
+    "AddContextError",
+    "AddError",
+    "AddExecutionError",
+    "AddInputError",
+    "AddMemoriesResult",
+    "AddStorageError",
+    "AddedMemoryResult",
     "GrantedQueryResult",
     "MemCommitClient",
     "MemCommitError",
