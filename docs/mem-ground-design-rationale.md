@@ -1155,7 +1155,7 @@ hierarchy is:
 | Concept | Responsibility |
 | --- | --- |
 | `ground` | Persist and validate Goal–Rules–Memories judgments through deterministic actions used by the conversational orchestrator. |
-| `fit` (planned) | Judge how the current generalized Rule propositions relate to the concrete Example propositions: support, contradiction, boundary, non-applicability, or underdetermination. |
+| `fit` | Judge how the current generalized Rule propositions relate to the concrete Example propositions: fit, contradiction, non-applicability, or underdetermination. |
 | coverage check | Derive whether the reviewed Example set adequately covers the Ground's target requirements; this remains distinct from semantic fit. |
 | `induct` | Propose a reusable Rule, exception, narrowing, or broadening from reviewed Ground Memories. |
 | Memory curation | Find, enter, or retain fit, boundary, and contrast Ground Memories. It is initially an internal grounding action rather than a public command. |
@@ -1169,10 +1169,27 @@ inside an ordinary Context, so this document originally rejected a public
 Ground `fit` and called Rule-to-Memory coverage a coverage check. The
 proposition model changes the boundary: `fit` now names a read-only relation
 judgment between generalized Rule propositions and concrete Example
-propositions, while coverage remains a separate completeness measure. This is
-a revised design direction, not current implementation. The existing
-`--fit-rule` option only attaches a proposed Ground Memory to an existing Rule;
-it does not calculate semantic fit.
+propositions, while coverage remains a separate completeness measure. The
+operation-independent Fit core now implements that exhaustive read-only
+judgment. The existing `--fit-rule` option still only attaches a proposed
+Ground Memory to an existing Rule; it does not calculate semantic fit.
+
+The first adapter preserves version-2 Ground records by projecting their
+`content` plus singleton `expected` fields as one visible proposition while
+keeping exact input/output replay authoritative. Expected output is withheld
+from the provider and compared by the host. Native proposition Examples use
+the same report contract but receive one of `FIT`, `CONTRADICTS`,
+`UNDERDETERMINED`, or `NOT_APPLICABLE`. One report cannot mix the two
+projection kinds: migration must make the representation boundary explicit
+rather than producing a report whose rows were judged by hidden, inconsistent
+semantics.
+
+Every report freezes the Ground UID, name, semantic revision, record digest,
+Rules, and Examples and requires exactly one judgment per Example. The core is
+whole-frame-only because neighboring Rules may jointly determine a result and
+a counterexample may change the interpretation of an otherwise plausible
+generalization. Persistence, `mem fit`, current/stale receipt lookup, and the
+Cases-pane projection remain the next adapter steps.
 
 Fit does not add a fifth peer layer to the Ground workbench. The established
 `GOAL / CONTEXTS / RULES / CASES` structure remains intact (the version-2 UI
