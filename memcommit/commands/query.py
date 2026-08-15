@@ -21,7 +21,7 @@ from memcommit.operations.query.granted_runtime import (
     execute_granted_query_request,
     freeze_granted_query_targets,
 )
-from memcommit.commands.ordinary_query_provider_policy import (
+from memcommit.commands.find_query_provider_policy import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )

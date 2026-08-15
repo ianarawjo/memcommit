@@ -1,29 +1,11 @@
-"""Pinned provider boundary for one-shot ordinary Query."""
-
 from __future__ import annotations
 
+from pathlib import Path
+
 from memcommit.commands import find_query_provider_policy as policy
-from memcommit.commands import ordinary_query_provider_policy as compatibility
-from memcommit.commands.find_query_provider_policy import QUERY_PROVIDER_POLICY
 
 
-def test_ordinary_query_compatibility_constants_follow_shared_policy():
-    assert compatibility.ORDINARY_QUERY_MODEL == QUERY_PROVIDER_POLICY.model
-    assert (
-        compatibility.ORDINARY_QUERY_REASONING_EFFORT
-        == QUERY_PROVIDER_POLICY.reasoning_effort
-    )
-    assert (
-        compatibility.connect_ordinary_query_provider
-        is policy.connect_ordinary_query_provider
-    )
-    assert (
-        compatibility.connect_query_route_provider
-        is policy.connect_query_route_provider
-    )
-
-
-def test_ordinary_query_pins_sol_none_and_keeps_shared_timeout(monkeypatch):
+def test_find_pins_terra_low_query_pins_sol_none_and_keep_timeout(monkeypatch):
     captured: list[dict[str, object]] = []
     events: list[tuple[object, ...]] = []
 
@@ -38,11 +20,15 @@ def test_ordinary_query_pins_sol_none_and_keeps_shared_timeout(monkeypatch):
     class _Provider:
         identity = _Identity()
 
+    def connect(**kwargs):
+        captured.append(kwargs)
+        return _Provider()
+
     monkeypatch.setattr(policy, "Config", _Settings)
     monkeypatch.setattr(
         policy.CodexChatGPTProvider,
         "connect",
-        staticmethod(lambda **kwargs: captured.append(kwargs) or _Provider()),
+        staticmethod(connect),
     )
     monkeypatch.setattr(
         policy,
@@ -57,21 +43,32 @@ def test_ordinary_query_pins_sol_none_and_keeps_shared_timeout(monkeypatch):
         ),
     )
 
+    assert policy.connect_find_provider() is not None
     assert policy.connect_ordinary_query_provider() is not None
+
     assert captured == [
+        {
+            "timeout": 777.0,
+            "model": "gpt-5.6-terra",
+            "reasoning_effort": "low",
+        },
         {
             "timeout": 777.0,
             "model": "gpt-5.6-sol",
             "reasoning_effort": "none",
-        }
+        },
     ]
     assert events == [
+        ("started", "find"),
+        ("finished", "find", 1.0, {"provider": "codex_chatgpt"}),
         ("started", "query"),
         ("finished", "query", 1.0, {"provider": "codex_chatgpt"}),
     ]
 
 
-def test_query_route_pins_codex_but_preserves_non_codex_authority(monkeypatch):
+def test_query_route_pins_codex_but_preserves_non_codex_authority(
+    monkeypatch,
+):
     pinned = object()
     routed = object()
     calls: list[str] = []
@@ -90,3 +87,14 @@ def test_query_route_pins_codex_but_preserves_non_codex_authority(monkeypatch):
     assert policy.connect_query_route_provider("codex_chatgpt") is pinned
     assert policy.connect_query_route_provider("openrouter") is routed
     assert calls == ["openrouter"]
+
+
+def test_find_and_query_commands_import_the_shared_policy_owner():
+    commands = Path(__file__).parents[1] / "memcommit" / "commands"
+    find_source = (commands / "find.py").read_text(encoding="utf-8")
+    query_source = (commands / "query.py").read_text(encoding="utf-8")
+
+    owner = "from memcommit.commands.find_query_provider_policy import ("
+    assert owner in find_source
+    assert owner in query_source
+    assert "memcommit.commands.ordinary_query_provider_policy" not in query_source

@@ -85,16 +85,16 @@ from memcommit.find_turn_dialogue import (
     FindTurnRefine,
     interpret_find_turn,
 )
+from memcommit.commands.find_query_provider_policy import (
+    connect_find_provider as connect_codex_chatgpt_provider,
+)
 from memcommit.history import HistoryError
 from memcommit.history_search import (
     HistorySearchError,
     HistorySearchResult,
     is_temporal_query,
 )
-from memcommit.query_provider import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.query_provider import QueryProviderError
 from memcommit.search import (
     FindError,
     SearchArtifact,
