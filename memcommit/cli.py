@@ -22,6 +22,7 @@ from memcommit.commands import (
     find_ambiguities,
     find_conflicts,
     find_duplicates,
+    fit,
     forget,
     ground,
     help_inventory,
@@ -202,6 +203,10 @@ app.command(
     "check-conformance",
     help=operation_summary("check-conformance"),
 )(check_conformance.cmd)
+app.command(
+    "fit",
+    help=operation_summary("fit"),
+)(fit.cmd)
 app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),

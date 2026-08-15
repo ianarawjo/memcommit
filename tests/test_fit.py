@@ -4,7 +4,11 @@ import json
 import uuid
 
 import pytest
+from typer.testing import CliRunner
 
+import memcommit.commands.fit as fit_command
+import memcommit.ops as ops
+from memcommit.cli import app
 from memcommit.fit import (
     FitError,
     FitExample,
@@ -12,6 +16,16 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
+from memcommit.fit_runtime import execute_and_save_ground_fit
+from memcommit.fit_store import FitStore
+from memcommit.ground import (
+    GroundTargetSpec,
+    bind_ground_workbench,
+    create_ground_session,
+    propose_ground_case,
+    propose_ground_rule,
+)
+from memcommit.store import MemoryStore, ground_session_record_digest
 
 
 def _uid() -> str:
@@ -141,3 +155,169 @@ def test_fit_rejects_mixed_projection_and_incomplete_coverage() -> None:
             examples=(proposition,),
             provider=_Provider({"overview": "none", "judgments": []}),
         )
+
+
+def _saved_ground(store: MemoryStore):
+    raw = ops.init("ticker/raw")
+    candidates = ops.init("ticker/cases")
+    case = ops.add(candidates, "Axiom AI Technologies")
+    target = ops.init("ticker/output")
+    for context in (raw, candidates, target):
+        store.create_context(context)
+    session = bind_ground_workbench(
+        create_ground_session("ticker", goal="Generate reviewed ticker symbols."),
+        description="Fit ticker-generation Rules to concrete Examples.",
+        raw_context=raw,
+        derived_context=candidates,
+        target_contexts=(target,),
+        target_requirements=(
+            GroundTargetSpec(
+                context_name=target.name,
+                description="Publish checked ticker outputs.",
+                role="PUBLICATION_TARGET",
+            ),
+        ),
+    )
+    contexts = (raw, candidates, target)
+    session = propose_ground_rule(
+        session,
+        rule="Use uppercase initials after removing legal suffixes.",
+        rationale="This is the current generalized ticker policy.",
+        current_contexts=contexts,
+    )
+    rule = session.items_of_kind("RULE")[0]
+    session = propose_ground_case(
+        session,
+        rule_selector=rule.uid,
+        case=case.content,
+        source_context_uid=candidates.uid,
+        source_memory_uid=case.uid,
+        target_context_names=(target.name,),
+        expected="AAT",
+        rationale="This is the reviewed concrete outcome.",
+        current_contexts=contexts,
+    )
+    store.save_ground_session(session)
+    return session, contexts
+
+
+def _passing_provider() -> _Provider:
+    return _Provider(
+        {
+            "overview": "The active Rule reproduces the reviewed Example.",
+            "predictions": [
+                {
+                    "case_id": "e1",
+                    "disposition": "PREDICTED",
+                    "predicted": "AAT",
+                    "reason": "The initials produce the expected symbol.",
+                }
+            ],
+        }
+    )
+
+
+def test_fit_store_publishes_current_receipt_then_reports_stale(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, contexts = _saved_ground(store)
+    report = execute_and_save_ground_fit(
+        store=store,
+        ground_name=session.contract_name,
+        provider_factory=_passing_provider,
+    )
+    receipt = FitStore(store).latest_for_ground(session)
+
+    assert receipt is not None and receipt.current
+    assert receipt.report.uid == report.uid
+    assert FitStore(store).load(report.uid) == report
+
+    revised = propose_ground_rule(
+        session,
+        rule="Preserve an established short symbol when explicitly supplied.",
+        rationale="A later Rule changes the fitted Rule set.",
+        current_contexts=contexts,
+    )
+    store.save_ground_session(
+        revised,
+        replace=True,
+        expected_uid=session.uid,
+        expected_revision=session.revision,
+        expected_digest=ground_session_record_digest(session),
+    )
+    stale = FitStore(store).latest_for_ground(revised)
+
+    assert stale is not None and not stale.current
+    assert stale.report.uid == report.uid
+
+
+def test_fit_store_rejects_publication_after_ground_changes(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, contexts = _saved_ground(store)
+    report = fit_ground_examples(
+        ground_uid=session.uid,
+        ground_name=session.contract_name,
+        ground_revision=session.revision,
+        ground_digest=ground_session_record_digest(session),
+        rules=(
+            FitRule(
+                session.items_of_kind("RULE")[0].uid,
+                "r1",
+                session.items_of_kind("RULE")[0].content,
+            ),
+        ),
+        examples=(
+            FitExample(
+                session.items_of_kind("CASE")[0].uid,
+                "e1",
+                "Axiom AI Technologies -> AAT",
+                "EXACT_OUTPUT",
+                (session.items_of_kind("RULE")[0].uid,),
+                input_text="Axiom AI Technologies",
+                expected_output="AAT",
+            ),
+        ),
+        provider=_passing_provider(),
+    )
+    revised = propose_ground_rule(
+        session,
+        rule="A later Rule.",
+        rationale="Makes the report stale before publication.",
+        current_contexts=contexts,
+    )
+    store.save_ground_session(revised, replace=True)
+
+    with pytest.raises(FitError, match="changed before"):
+        FitStore(store).save(report)
+
+
+def test_mem_fit_runs_and_reopens_immutable_receipt(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, _contexts = _saved_ground(store)
+    monkeypatch.setattr(
+        fit_command,
+        "connect_semantic_provider",
+        _passing_provider,
+    )
+
+    result = CliRunner().invoke(app, ["fit", session.contract_name])
+
+    assert result.exit_code == 0, result.output
+    assert "FIT · ticker · REVISION" in result.output
+    assert "e1 · FIT" in result.output
+    receipt = FitStore(store).latest_for_ground(session)
+    assert receipt is not None
+
+    reopened = CliRunner().invoke(
+        app,
+        ["fit", session.contract_name, "--receipt", receipt.report.uid],
+    )
+    assert reopened.exit_code == 0, reopened.output
+    assert "STATUS · READ-ONLY · CURRENT" in reopened.output
+    assert receipt.report.digest in reopened.output

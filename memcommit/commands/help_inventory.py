@@ -179,6 +179,7 @@ HELP_CATEGORY_GROUPS = (
         (
             "audit",
             "atomize",
+            "distill",
             "compare",
             "impact",
             "review",
@@ -195,7 +196,7 @@ HELP_CATEGORY_GROUPS = (
     ),
     (
         "GROUND & EVALUATION",
-        ("ground", "init-study", "eval"),
+        ("ground", "fit", "check-conformance", "init-study", "eval"),
     ),
     (
         "PROFILE & SHARING",
@@ -235,7 +236,18 @@ COMMAND_FORMS = {
     "audit": (
         "mem audit (choose one Context, run Duplicate + Ambiguity + Conflict, save, and review)",
         "mem audit --context [context] (run and save all three finders for one exact Context)",
+        "mem audit --context [context] --against [rules_context] (add the shared Conformance check)",
         "mem audit --context [context] --snapshot (save and print the combined report)",
+    ),
+    "check-conformance": (
+        "mem check-conformance (show the required Ground or Rules input error)",
+        "mem check-conformance --ground [ground] (replay Rules without exposing expected outputs)",
+        "mem check-conformance [target_context] --against [rules_context] (check Context adherence)",
+        "mem check-conformance --against [rules_context] (use the current Context as Target)",
+    ),
+    "fit": (
+        "mem fit [ground] (fit every active Example and save an immutable receipt)",
+        "mem fit [ground] --receipt [uid] (reopen one current or stale receipt read-only)",
     ),
     "atomize": (
         "mem atomize (enter the current Context's interactive Atomize session)",
@@ -291,6 +303,16 @@ COMMAND_FORMS = {
         "mem diff --raw (exact unified diff)",
         "mem diff --stat (summary only)",
         "mem diff --verbose (complete UIDs and source/target fingerprints)",
+    ),
+    "distill": (
+        "mem distill (review Rules distilled from the current Context)",
+        "mem distill [context] (review Rules from one explicit Context)",
+        'mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)',
+        "mem distill [context] -r (include descendants and embedded Contexts)",
+        "mem distill [context] --save-as [result_context] "
+        "(review without creating the Result)",
+        "mem distill [context] --save-as [result_context] --apply "
+        "(create the exact reviewed Rule Context)",
     ),
     "edit": (
         'mem edit [memory] "[new_content]" (replace one direct Memory)',

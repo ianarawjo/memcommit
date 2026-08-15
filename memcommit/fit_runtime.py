@@ -14,6 +14,7 @@ from memcommit.fit import (
     fit_ground_examples,
 )
 from memcommit.ground import GROUND_SCHEMA_VERSION, GroundSession
+from memcommit.fit_store import FitStore
 from memcommit.store import MemoryStore, ground_session_record_digest
 
 
@@ -114,3 +115,19 @@ def execute_ground_fit(
         raise FitError("The Ground changed during Fit; no report was published.")
     return report
 
+
+def execute_and_save_ground_fit(
+    *,
+    store: MemoryStore,
+    ground_name: str,
+    provider_factory: FitProviderFactory,
+) -> FitReport:
+    """Run Fit and publish its immutable receipt at one freshness boundary."""
+
+    report = execute_ground_fit(
+        store=store,
+        ground_name=ground_name,
+        provider_factory=provider_factory,
+    )
+    FitStore(store).save(report)
+    return report

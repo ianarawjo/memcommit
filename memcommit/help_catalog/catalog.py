@@ -42,8 +42,8 @@ _OPERATIONS = (
     ),
     _operation(
         "audit",
-        "Run Duplicate, Ambiguity, and Conflict checks and review one saved report.",
-        "Context -> saved quality report",
+        "Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review one saved report.",
+        "Context + Rules? -> saved Audit report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
         "One exact direct Context",
@@ -70,6 +70,14 @@ _OPERATIONS = (
         "Context state -> checkpoint",
         ExecutionKind.DETERMINISTIC,
         "Adds recoverable history; content is unchanged",
+    ),
+    _operation(
+        "check-conformance",
+        "Check Ground examples or one Context against explicit Rules.",
+        "Rules + Ground Memories or Context -> Conformance report",
+        ExecutionKind.SEMANTIC,
+        "Read-only; no Rule, Ground, Context, or Memory changes",
+        "One saved Ground, or one exact local Target and Rules Context",
     ),
     _operation(
         "chunk",
@@ -127,6 +135,14 @@ _OPERATIONS = (
         "One exact Context or active Update",
     ),
     _operation(
+        "distill",
+        "Derive evidence-bound reusable Rules from a Context, optionally guided by a Goal.",
+        "Goal? + Source Context -> reviewed Rule Context",
+        ExecutionKind.SEMANTIC,
+        "Source stays unchanged; only explicit Apply creates a new Result",
+        "One exact local Source or its readable descendants",
+    ),
+    _operation(
         "edit",
         "Replace direct Memory content by UID or prefix in the current or explicit Context.",
         "Memory -> replacement Memory content",
@@ -156,6 +172,14 @@ _OPERATIONS = (
         ExecutionKind.SEMANTIC,
         "Read-only search",
         "Selected roots; lexical and embedded reach are independent",
+    ),
+    _operation(
+        "fit",
+        "Fit every active Ground Example against its active Rules and save an immutable receipt.",
+        "Ground Rules + Examples -> revision-bound Fit receipt",
+        ExecutionKind.SEMANTIC,
+        "Read-only Ground judgment; saves only a derived receipt",
+        "One exact saved Ground revision",
     ),
     _operation(
         "find-ambiguities",

@@ -1188,8 +1188,21 @@ Every report freezes the Ground UID, name, semantic revision, record digest,
 Rules, and Examples and requires exactly one judgment per Example. The core is
 whole-frame-only because neighboring Rules may jointly determine a result and
 a counterexample may change the interpretation of an otherwise plausible
-generalization. Persistence, `mem fit`, current/stale receipt lookup, and the
-Cases-pane projection remain the next adapter steps.
+generalization.
+
+`mem fit GROUND` now executes this contract and publishes a create-only report
+under the Profile's private `ground-fit-receipts` directory. Publication takes
+the same per-Ground lock as Ground mutation and revalidates the frozen UID,
+revision, and digest before writing, so a result cannot be attached to a
+different concurrent revision. A later Ground change does not mutate or erase
+the old receipt. Lookup instead projects it as `STALE`; an exact receipt UID
+can still be reopened read-only for audit. Only a report whose Ground identity,
+revision, and digest all match is `CURRENT`. The receipt changes no Context,
+Ground, checkpoint, or current-Context pointer.
+
+The Cases-pane projection remains the next adapter step. It must consume the
+same receipt store and freshness predicate rather than copying Fit status into
+the Ground item schema.
 
 Fit does not add a fifth peer layer to the Ground workbench. The established
 `GOAL / CONTEXTS / RULES / CASES` structure remains intact (the version-2 UI

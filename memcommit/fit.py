@@ -9,6 +9,7 @@ Example.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import hashlib
 import json
 from typing import Literal, Protocol
@@ -174,6 +175,21 @@ def _provider_identity(provider: object) -> ProviderIdentity | None:
     return identity if isinstance(identity, ProviderIdentity) else None
 
 
+def _created_at(value: object) -> str:
+    text = _text(value, "creation time")
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise FitError("Invalid Fit creation time.") from error
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise FitError("Fit creation time must include a timezone.")
+    return text
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
 @dataclass(frozen=True)
 class FitRule:
     uid: str
@@ -327,6 +343,7 @@ class FitReport:
     examples: tuple[FitExample, ...]
     judgments: tuple[FitJudgment, ...]
     overview: str
+    created_at: str
     provider_identity: ProviderIdentity | None = None
     schema_version: int = FIT_SCHEMA_VERSION
     ruleset_version: str = FIT_RULESET_VERSION
@@ -339,6 +356,7 @@ class FitReport:
             raise FitError("Invalid Fit Ground revision.")
         _digest(self.ground_digest, "Ground digest")
         _text(self.overview, "overview")
+        _created_at(self.created_at)
         if self.schema_version != FIT_SCHEMA_VERSION or self.ruleset_version != FIT_RULESET_VERSION:
             raise FitError("Unsupported Fit schema or ruleset.")
         if not self.rules or not self.examples:
@@ -385,6 +403,7 @@ class FitReport:
             "examples": [example.to_dict() for example in self.examples],
             "judgments": [judgment.to_dict() for judgment in self.judgments],
             "overview": self.overview,
+            "created_at": self.created_at,
             "provider_identity": _identity_dict(self.provider_identity),
         }
 
@@ -404,6 +423,7 @@ class FitReport:
                 "examples",
                 "judgments",
                 "overview",
+                "created_at",
                 "provider_identity",
             },
             "report",
@@ -426,6 +446,7 @@ class FitReport:
             examples=tuple(FitExample.from_dict(item) for item in data["examples"]),  # type: ignore[union-attr]
             judgments=tuple(FitJudgment.from_dict(item) for item in data["judgments"]),  # type: ignore[union-attr]
             overview=_text(data["overview"], "overview"),
+            created_at=_created_at(data["created_at"]),
             provider_identity=_identity(data["provider_identity"]),
         )
 
@@ -506,6 +527,7 @@ def _exact_output_fit(
             for judgment in conformance.case_judgments
         ),
         overview=conformance.overview,
+        created_at=_now(),
         provider_identity=conformance.provider_identity,
     )
 
@@ -639,6 +661,7 @@ def _proposition_fit(
         examples=examples,
         judgments=tuple(judgments),
         overview=_text(decoded["overview"], "overview"),
+        created_at=_now(),
         provider_identity=_provider_identity(provider),
     )
 
