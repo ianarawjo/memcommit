@@ -1,0 +1,3 @@
+Recursively merged 'source' into 'target': 3 Contexts, 1 created; added 2 memories, 1 embedded context; 3 checkpoints; resolved 2 conflict(s); 1 unchanged.                         
+COMMAND EXIT · 0                                                                                                                                                                    
+RECURSIVE VERIFICATION · TARGET ['source revision: library closes at 6 p.m.', 'source-only structural addition'] · CHILD True · NEW PATH True · CHECKPOINTS 1

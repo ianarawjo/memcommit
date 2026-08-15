@@ -1,0 +1,3 @@
+Merged 'source' into 'target': added 1 memory; resolved 1 conflict(s); checkpoint recorded.                                                                                         
+COMMAND EXIT · 0                                                                                                                                                                    
+DIRECT VERIFICATION · TARGET ['target revision: library closes at 5 p.m.', 'source-only structural addition'] · CHILD False · NEW PATH False · CHECKPOINTS 1

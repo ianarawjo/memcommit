@@ -1,0 +1,52 @@
+ MEM MERGE · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY                                                                                                                            
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER · COMPLETE REPORT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MERGE PLAN · source → target                                                                                                                                                     ^┃
+┃STATUS · FROZEN · NOT APPLIED                                                                                                                                                     ┃
+┃RANGE · DESCENDANTS                                                                                                                                                               ┃
+┃CONTEXTS · 3 · CREATE 1                                                                                                                                                           ┃
+┃ADDITIONS · 2 memories, 1 embedded context                                                                                                                                        ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃REQUIRED CONFLICTS · 2                                                                                                                                                            ┃
+┃CHECKPOINTS · 3                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃MAPPING 1/3 · source → target                                                                                                                                                     ┃
+┃TARGET · EXISTING                                                                                                                                                                 ┃
+┃NEW · 1 memory, 1 embedded context                                                                                                                                                ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃CONFLICT · 1                                                                                                                                                                      ┃
+┃ITEMS                                                                                                                                                                             ┃
+┃  MEMORY · [e3573458]                                                                                                                                                             ┃
+┃  CONTEXT · [04493ea8]                                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃MAPPING 2/3 · source/child → target/child                                                                                                                                        v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED CONFLICTS ONLY |────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 2 · ANSWERED 0 · REMAINING 2                                                                                                                                             │
+│· 1. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│· 2. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────┐
+│OPEN FIRST UNRESOLVED · Memory [00000000]                                                                                                                                         │
+│Enter opens this required item. Apply stays unavailable.                                                                                                                          │
+│[ PRESS ENTER ] · K KEEP ALL TARGET · S TAKE ALL SOURCE                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close

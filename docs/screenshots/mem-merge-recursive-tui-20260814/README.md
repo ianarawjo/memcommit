@@ -1,5 +1,11 @@
 # Merge direct and recursive TUI capture log
 
+> Historical interaction evidence: this set records the explicit frozen-plan
+> review that preceded ownership-aware auto-application. Conflict-free local
+> plans now skip that duplicate review while retaining checkpointed Undo/Redo;
+> see `../mem-merge-decision-free-auto-apply-20260815/`. Granted-authority and
+> conflict-bearing plans retain their respective review boundaries.
+
 This ordered set records the public `mem merge` TUI, the unchanged direct
 contract, the path-aligned recursive contract, and cancellation. Every launch
 uses the real Typer route and Store-backed application in an isolated temporary

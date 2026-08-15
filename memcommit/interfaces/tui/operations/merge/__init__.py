@@ -10,6 +10,11 @@ from memcommit.interfaces.tui.operations.merge.screen import (
     project_merge_plan,
     run_merge_plan_review,
 )
+from memcommit.interfaces.tui.operations.merge.resolution import (
+    merge_resolution_exact_review,
+    merge_resolution_spec,
+    run_merge_conflict_review,
+)
 from memcommit.interfaces.tui.operations.merge.setup import (
     choose_merge_setup,
     merge_endpoint_setup_spec,
@@ -24,4 +29,7 @@ __all__ = [
     "merge_plan_exact_command_review",
     "project_merge_plan",
     "run_merge_plan_review",
+    "merge_resolution_exact_review",
+    "merge_resolution_spec",
+    "run_merge_conflict_review",
 ]

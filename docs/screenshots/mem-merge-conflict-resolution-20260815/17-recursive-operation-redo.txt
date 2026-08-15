@@ -1,0 +1,9 @@
+Recursively merged 'source' into 'target': 3 Contexts, 1 created; added 2 memories, 1 embedded context; 3 checkpoints; resolved 2 conflict(s); 1 unchanged.                         
+COMMAND EXIT · 0                                                                                                                                                                    
+RECURSIVE VERIFICATION · TARGET ['source revision: library closes at 6 p.m.', 'source-only structural addition'] · CHILD True · NEW PATH True · CHECKPOINTS 1                       
+                                                                                                                                                                                    
+Undid command: mem merge source · Affected Contexts: 3 · Affected Memories: 4 · ~ 2 edited · - 2 removed · Other: 1 Embedded context removed                                        
+RECURSIVE UNDO VERIFICATION · TARGET ['target revision: library closes at 5 p.m.'] · CHILD True · NEW PATH False · CHECKPOINTS 2                                                    
+                                                                                                                                                                                    
+Redid command: mem merge source · Affected Contexts: 3 · Affected Memories: 4 · + 2 added · ~ 2 edited · Other: 1 Embedded context added                                            
+RECURSIVE REDO VERIFICATION · TARGET ['source revision: library closes at 6 p.m.', 'source-only structural addition'] · CHILD True · NEW PATH True · CHECKPOINTS 3

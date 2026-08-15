@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
@@ -19,17 +20,24 @@ from memcommit.interfaces.tui.operations.merge import (
     merge_exact_command_review,
     merge_endpoint_setup_spec,
     merge_plan_exact_command_review,
+    merge_resolution_spec,
     project_merge_plan,
+    run_merge_conflict_review,
     run_merge_plan_review,
 )
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
+    MergeConflict,
+    MergeConflictKind,
     MergeContextResult,
+    MergeDecision,
     MergeError,
     MergeItemKind,
+    MergeItemSnapshot,
     MergeReach,
     MergeRequest,
+    MergeResolution,
     MergeResult,
     prepare_merge,
     run_merge,
@@ -98,6 +106,59 @@ def _plan(request: MergeRequest | None = None) -> FrozenMergePlan:
     )
 
 
+def _conflict_plan() -> FrozenMergePlan:
+    plan = _plan()
+    conflict = MergeConflict(
+        uid="merge-conflict:test",
+        kind=MergeConflictKind.CONTENT_DIVERGENCE,
+        source_name="source",
+        target_name="target",
+        source=MergeItemSnapshot(
+            "memory-uid",
+            MergeItemKind.MEMORY,
+            "Memory [memory-u]",
+            "source revision",
+        ),
+        targets=(
+            MergeItemSnapshot(
+                "memory-uid",
+                MergeItemKind.MEMORY,
+                "Memory [memory-u]",
+                "target revision",
+            ),
+        ),
+        reason="The same Memory identity has different content.",
+    )
+    context = replace(plan.contexts[0], additions=(), conflicts=(conflict,))
+    return replace(
+        plan,
+        additions=(),
+        contexts=(context,),
+        conflicts=(conflict,),
+    )
+
+
+def _resolved_result(
+    plan: FrozenMergePlan,
+    resolutions: tuple[MergeResolution, ...],
+) -> MergeResult:
+    return MergeResult(
+        source_name=plan.source_name,
+        source_uid=plan.source_uid,
+        target_name=plan.target_name,
+        target_uid=plan.target_uid,
+        reach=plan.request.reach,
+        additions=plan.additions,
+        contexts=plan.contexts,
+        checkpoint_uid="checkpoint-uid",
+        checkpoint_uids=("checkpoint-uid",),
+        cross_profile_memory_only=False,
+        unchanged=plan.unchanged,
+        conflicts=plan.conflicts,
+        resolutions=resolutions,
+    )
+
+
 def test_frozen_plan_projection_exposes_complete_mapping_before_apply() -> None:
     document = project_merge_plan(_plan())
     rendered = "".join(
@@ -148,6 +209,71 @@ def test_plan_review_cancel_does_not_apply() -> None:
 
     assert returned is None
     assert applied == []
+
+
+def test_conflict_workbench_bulk_review_applies_one_exact_whole_set() -> None:
+    plan = _conflict_plan()
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        # Viewer → Items → To Do, K opens the fused bulk exact review, then
+        # Enter applies and the next Enter closes the visible receipt.
+        pipe_input.send_text("\t\tk\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions)
+                or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert applied == [
+        (
+            MergeResolution(
+                "merge-conflict:test",
+                MergeDecision.KEEP_TARGET,
+            ),
+        )
+    ]
+
+
+def test_conflict_workbench_item_choice_and_clipboard_contract() -> None:
+    plan = _conflict_plan()
+    copied: list[str] = []
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        # y/Y copy the focused and complete report. Open the item, choose the
+        # first real response, then separately enter final review and Apply.
+        pipe_input.send_text("yY\t\r\t\r\t\t\r\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions)
+                or _resolved_result(frozen, resolutions)
+            ),
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert len(copied) == 2
+    assert "MERGE PLAN" in copied[0]
+    assert "MAPPING 1/1" in copied[1]
+    assert applied[0][0].decision is MergeDecision.KEEP_TARGET
+
+
+def test_merge_resolution_spec_has_no_custom_choice() -> None:
+    spec = merge_resolution_spec(_conflict_plan())
+
+    assert [choice.uid for choice in spec.items[0].choices] == [
+        "KEEP_TARGET",
+        "TAKE_SOURCE",
+    ]
 
 
 def test_store_backed_frozen_plan_is_read_only_until_review_apply(

@@ -1,0 +1,52 @@
+ MEM MERGE · REVIEW FROZEN PLAN                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY                                                                                                                           
+┌───────────────────────────────────────────────────────────────────| FROZEN PLAN · COMPLETE CONTEXT MAPPINGS |────────────────────────────────────────────────────────────────────┐
+│MERGE PLAN · source → target                                                                                                                                                     ^│
+│STATUS · FROZEN · NOT APPLIED                                                                                                                                                     │
+│RANGE · DIRECT                                                                                                                                                                    │
+│CONTEXTS · 1 · CREATE 0                                                                                                                                                           │
+│ADDITIONS · nothing new                                                                                                                                                           │
+│UNCHANGED · 1                                                                                                                                                                     │
+│REQUIRED CONFLICTS · 0                                                                                                                                                            │
+│CHECKPOINTS · 1                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│MAPPING 1/1 · source → target                                                                                                                                                     │
+│TARGET · EXISTING                                                                                                                                                                 │
+│NEW · nothing new                                                                                                                                                                 │
+│UNCHANGED · 1                                                                                                                                                                     │
+│CONFLICT · 0                                                                                                                                                                      │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT FROZEN PLAN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃STATUS · SUCCESS                                                                                                                                                                  ┃
+┃OUTCOME · NO TARGET CHANGE                                                                                                                                                        ┃
+┃SOURCE · source                                                                                                                                                                   ┃
+┃TARGET · target                                                                                                                                                                   ┃
+┃RANGE · DIRECT                                                                                                                                                                    ┃
+┃CONTEXTS · 1 · CREATED 0                                                                                                                                                          ┃
+┃ADDED · nothing new                                                                                                                                                               ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃CHECKPOINTS · 1                                                                                                                                                                   ┃
+┃RECOVERY · mem undo                                                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO CLOSE ]                                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter/Esc/Q close · durable receipt shown above

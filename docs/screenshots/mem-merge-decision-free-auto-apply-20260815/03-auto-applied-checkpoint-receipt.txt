@@ -1,0 +1,2 @@
+Merged 'source' into 'target': added 1 memory; checkpoint recorded.                                                                                                                 
+ADDITION AFTER MERGE · TARGET HAS UID True · CHECKPOINTS 1

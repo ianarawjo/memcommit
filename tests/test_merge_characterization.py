@@ -30,8 +30,11 @@ def test_direct_merge_keeps_target_revision_for_an_existing_uid(isolated_store):
     _create(store, target)
     store.set_current(target.name)
 
-    result = runner.invoke(app, ["merge", source.name])
+    unresolved = runner.invoke(app, ["merge", source.name])
+    result = runner.invoke(app, ["merge", source.name, "--keep-target-all"])
 
+    assert unresolved.exit_code == 1
+    assert "CONTENT_DIVERGENCE" in unresolved.output
     assert result.exit_code == 0, result.output + result.stderr
     assert "added 1 memory" in result.output
     merged = store.load_direct(target.name)
@@ -90,7 +93,7 @@ def test_direct_merge_copies_one_embedded_context_pointer(isolated_store):
     assert (embedded.uid, embedded.name) == (child.uid, child.name)
 
 
-def test_direct_merge_records_one_checkpoint_and_is_idempotent(isolated_store):
+def test_direct_merge_records_one_checkpoint_and_a_noop_receipt(isolated_store):
     store = MemoryStore()
     source = ops.init("source")
     ops.add(source, "one addition")

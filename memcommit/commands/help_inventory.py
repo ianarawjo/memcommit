@@ -446,6 +446,9 @@ COMMAND_FORMS = {
         "mem merge (choose a readable Source and direct or descendant reach in a TTY)",
         "mem merge [source_context] --direct (exact Source root into current Context; default)",
         "mem merge [source_context] --recursive (path-aligned descendants into current Context)",
+        "mem merge [source_context] --keep-target-all (resolve every structural conflict by retaining Target)",
+        "mem merge [source_context] --take-source-all (resolve every structural conflict with exact Source values)",
+        "mem merge [source_context] --resolve [conflict_id]=keep-target (repeat one exact frozen decision per conflict)",
     ),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",

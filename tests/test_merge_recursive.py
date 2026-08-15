@@ -12,6 +12,7 @@ import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory
 from memcommit.merge_application import (
+    MergeDecision,
     MergeReach,
     MergeRequest,
     prepare_merge,
@@ -75,6 +76,7 @@ def test_recursive_merge_aligns_paths_and_clones_source_only_contexts(
     result = execute_merge(
         MergeRequest(source_locator="source", reach=MergeReach.DESCENDANTS),
         store=store,
+        bulk=MergeDecision.KEEP_TARGET,
     )
 
     assert [context.target_name for context in result.contexts] == [
@@ -218,7 +220,7 @@ def test_recursive_merge_rolls_back_every_written_context_on_failure(
     assert store.list_checkpoints(target.name) == []
 
 
-def test_recursive_merge_checkpoints_are_not_exposed_as_partial_undo(
+def test_recursive_merge_is_exposed_as_one_complete_undo(
     isolated_store,
 ):
     store = MemoryStore()
@@ -237,10 +239,10 @@ def test_recursive_merge_checkpoints_are_not_exposed_as_partial_undo(
 
     undo = runner.invoke(app, ["undo"])
 
-    assert undo.exit_code == 1
-    assert "no recorded Context command to undo" in undo.stderr
-    assert _contents(store.load_direct("target")) == ["root addition"]
-    assert _contents(store.load_direct("target/child")) == ["child addition"]
+    assert undo.exit_code == 0, undo.output + undo.stderr
+    assert "Affected Contexts: 2" in undo.output
+    assert _contents(store.load_direct("target")) == []
+    assert not store.context_exists("target/child")
 
 
 def test_recursive_merge_copies_a_read_granted_subtree_as_local_values(

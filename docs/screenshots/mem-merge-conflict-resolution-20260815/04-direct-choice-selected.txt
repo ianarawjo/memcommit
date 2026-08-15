@@ -1,0 +1,52 @@
+ MEM MERGE · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY                                                                                                                            
+┌──────────────────────────────────────────────────────────────────────| VIEWER · REQUIRED CONFLICT DETAIL |───────────────────────────────────────────────────────────────────────┐
+│MERGE CONFLICT · CONTENT_DIVERGENCE                                                                                                                                              ^│
+│ID · merge-conflict:181e47bbdd467805efbb                                                                                                                                          │
+│MAPPING · source → target                                                                                                                                                         │
+│WHY · The same Memory identity has different Source and Target content.                                                                                                           │
+│                                                                                                                                                                                  │
+│TARGET                                                                                                                                                                            │
+│  Memory [00000000]                                                                                                                                                               │
+│  target revision: library closes at 5 p.m.                                                                                                                                       │
+│                                                                                                                                                                                  │
+│SOURCE                                                                                                                                                                            │
+│  Memory [00000000]                                                                                                                                                               │
+│  source revision: library closes at 6 p.m.                                                                                                                                       │
+│                                                                                                                                                                                  │
+│DETERMINISTIC DIFF                                                                                                                                                                │
+│- target revision: library closes at 5 p.m.                                                                                                                                      v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES · REQUIRED · DETERMINISTIC ONLY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃QUESTION · Memory [00000000]                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃✓ 1. KEEP TARGET                                                                                                                                                                  ┃
+┃  Retain the conflicting Target item or placement.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃  2. TAKE SOURCE                                                                                                                                                                  ┃
+┃  Replace the conflicting Target member(s) with the exact Source item.                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED CONFLICTS ONLY |────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
+│✓ 1. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────┐
+│REVIEW AND APPLY                                                                                                                                                                  │
+│Enter opens the exact whole-set final review.                                                                                                                                     │
+│[ PRESS ENTER ] · K KEEP ALL TARGET · S TAKE ALL SOURCE                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close

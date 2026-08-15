@@ -5,7 +5,6 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-import memcommit.ops as ops
 from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
@@ -16,10 +15,7 @@ from memcommit.authority.access import (
 from memcommit.context import (
     AutoCheckpoint,
     Context,
-    Information,
     Memory,
-    MemoryRef,
-    QueryContextRef,
 )
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
@@ -29,12 +25,20 @@ from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
     MergeContextResult,
+    MergeDecision,
     MergeItemKind,
     MergePort,
     MergeReach,
     MergeRequest,
+    MergeResolution,
     MergeResult,
     run_merge,
+)
+from memcommit.merge_planning import (
+    PlannedContextMerge,
+    materialize_context_merge,
+    plan_context_merge,
+    resolution_map,
 )
 from memcommit.merge_tree import (
     align_context_names,
@@ -43,6 +47,7 @@ from memcommit.merge_tree import (
 )
 from memcommit.merge_tree_persistence import MergeTreeWrite, commit_merge_tree
 from memcommit.store import MemoryStore, context_record_digest
+from memcommit.write_protection import WriteProtectionError
 
 
 def _memory_only_source(source: Context) -> Context:
@@ -55,18 +60,42 @@ def _memory_only_source(source: Context) -> Context:
     return result
 
 
-def _addition(item: Information) -> MergeAddition:
-    if isinstance(item, Memory):
-        kind = MergeItemKind.MEMORY
-    elif isinstance(item, MemoryRef):
-        kind = MergeItemKind.MEMORY_REF
-    elif isinstance(item, QueryContextRef):
-        kind = MergeItemKind.QUERY_VIEW
-    elif isinstance(item, Context):
-        kind = MergeItemKind.CONTEXT
-    else:  # pragma: no cover - Information is a closed type alias.
-        raise TypeError("Merge produced an unsupported direct item.")
-    return MergeAddition(uid=item.uid, kind=kind)
+def _take_source_allowed(access: ContextAccess) -> bool:
+    """Do not advertise replacement when a granted Target lacks UPDATE."""
+
+    return access.view is None or "UPDATE" in access.view.grant.permissions
+
+
+def _target_plan_protection(
+    access: ContextAccess,
+    target: Context,
+) -> tuple[bool, frozenset[str]]:
+    """Freeze the Target policy that determines reviewable replacements."""
+
+    state = access.store.write_protection_state()
+    if state.profile_is_protected():
+        raise WriteProtectionError(
+            "Profile is locked against writes. Unlock that Profile first."
+        )
+    return (
+        not state.context_is_protected(target.uid),
+        state.protected_memory_uids(target.uid),
+    )
+
+
+def _require_planned_additions_mutable(
+    *,
+    target: Context,
+    context_plan: PlannedContextMerge,
+    target_context_mutable: bool,
+) -> None:
+    """Reject a review whose unconditional additions cannot be applied."""
+
+    if context_plan.additions and not target_context_mutable:
+        raise WriteProtectionError(
+            f"Context '{target.name}' is locked against changes. "
+            "Unlock that Context first."
+        )
 
 
 @dataclass(frozen=True)
@@ -74,9 +103,12 @@ class _StoreMergeToken:
     """Bind a frozen direct plan to its exact authority and candidate state."""
 
     owner: object
+    operation_uid: str
     source_access: ContextAccess
     target_access: ContextAccess
-    candidate: Context
+    source: Context
+    target: Context
+    context_plan: PlannedContextMerge
     source_projection_digest: str
 
 
@@ -91,6 +123,8 @@ class _RecursiveSourceFrame:
 class _RecursiveTargetFrame:
     access: ContextAccess | None
     context: Context
+    source: Context
+    context_plan: PlannedContextMerge
     expected_digest: str | None
 
     @property
@@ -235,15 +269,33 @@ class MemoryStoreMergePort(MergePort):
         merge_source = _memory_only_source(source) if cross_profile else source
         source_projection_digest = context_record_digest(source)
         target_digest = target._store_digest or context_record_digest(target)
-        added = ops.merge(merge_source, target)
-        additions = tuple(_addition(item) for item in added)
+        target_context_mutable, protected_target_uids = _target_plan_protection(
+            target_access,
+            target,
+        )
+        context_plan = plan_context_merge(
+            merge_source,
+            target,
+            source_name=source_access.display_name,
+            target_name=target_access.display_name,
+            take_source_allowed=_take_source_allowed(target_access),
+            target_context_mutable=target_context_mutable,
+            protected_target_uids=protected_target_uids,
+        )
+        _require_planned_additions_mutable(
+            target=target,
+            context_plan=context_plan,
+            target_context_mutable=target_context_mutable,
+        )
         context_result = MergeContextResult(
             source_name=source_access.display_name,
             source_uid=source.uid,
             target_name=target_access.display_name,
             target_uid=target.uid,
             target_created=False,
-            additions=additions,
+            additions=context_plan.additions,
+            unchanged=context_plan.unchanged,
+            conflicts=context_plan.conflicts,
         )
         return FrozenMergePlan(
             request=request,
@@ -253,16 +305,22 @@ class MemoryStoreMergePort(MergePort):
             target_name=target_access.display_name,
             target_uid=target.uid,
             target_digest=target_digest,
-            additions=additions,
+            additions=context_plan.additions,
             contexts=(context_result,),
             cross_profile_memory_only=cross_profile,
             token=_StoreMergeToken(
                 owner=self._owner,
+                operation_uid=str(uuid.uuid4()),
                 source_access=source_access,
                 target_access=target_access,
-                candidate=target,
+                source=merge_source,
+                target=target,
+                context_plan=context_plan,
                 source_projection_digest=source_projection_digest,
             ),
+            mutates_granted_authority=target_access.is_granted,
+            unchanged=context_plan.unchanged,
+            conflicts=context_plan.conflicts,
         )
 
     def _freeze_recursive(self, request: MergeRequest) -> FrozenMergePlan:
@@ -356,7 +414,9 @@ class MemoryStoreMergePort(MergePort):
         source_by_uid = {source.uid: source for source in sources}
         target_frames: list[_RecursiveTargetFrame] = []
         context_results: list[MergeContextResult] = []
-        all_additions: list[MergeAddition] = []
+        all_additions = []
+        all_unchanged = []
+        all_conflicts = []
         any_cross_profile = False
         for frame in source_frames:
             source = frame.context
@@ -380,12 +440,32 @@ class MemoryStoreMergePort(MergePort):
                 target_by_source_uid=target_by_source_uid,
                 memory_only=cross_profile,
             )
-            additions = tuple(_addition(item) for item in ops.merge(projected, target))
-            all_additions.extend(additions)
+            target_context_mutable, protected_target_uids = (
+                _target_plan_protection(authorization_target, target)
+            )
+            context_plan = plan_context_merge(
+                projected,
+                target,
+                source_name=frame.access.display_name,
+                target_name=target_display_name,
+                take_source_allowed=_take_source_allowed(authorization_target),
+                target_context_mutable=target_context_mutable,
+                protected_target_uids=protected_target_uids,
+            )
+            _require_planned_additions_mutable(
+                target=target,
+                context_plan=context_plan,
+                target_context_mutable=target_context_mutable,
+            )
+            all_additions.extend(context_plan.additions)
+            all_unchanged.extend(context_plan.unchanged)
+            all_conflicts.extend(context_plan.conflicts)
             target_frames.append(
                 _RecursiveTargetFrame(
                     access=target_access,
                     context=target,
+                    source=projected,
+                    context_plan=context_plan,
                     expected_digest=expected_digest,
                 )
             )
@@ -396,7 +476,9 @@ class MemoryStoreMergePort(MergePort):
                     target_name=target_display_name,
                     target_uid=target.uid,
                     target_created=target_access is None,
-                    additions=additions,
+                    additions=context_plan.additions,
+                    unchanged=context_plan.unchanged,
+                    conflicts=context_plan.conflicts,
                 )
             )
 
@@ -428,24 +510,46 @@ class MemoryStoreMergePort(MergePort):
                     access.context_name for access in target_accesses
                 ),
             ),
+            mutates_granted_authority=target_root_access.is_granted,
+            unchanged=tuple(all_unchanged),
+            conflicts=tuple(all_conflicts),
         )
 
-    def apply(self, plan: FrozenMergePlan) -> MergeResult:
+    def apply(
+        self,
+        plan: FrozenMergePlan,
+        resolutions: tuple[MergeResolution, ...],
+    ) -> MergeResult:
         token = plan.token
         if isinstance(token, _RecursiveMergeToken):
-            return self._apply_recursive(plan, token)
+            return self._apply_recursive(plan, token, resolutions)
         if not isinstance(token, _StoreMergeToken) or token.owner is not self._owner:
             raise ValueError("The frozen Merge plan belongs to another runtime.")
         source_access = token.source_access
         target_access = token.target_access
         target_store = target_access.store
-        candidate = token.candidate
+        decisions = resolution_map(resolutions)
+        candidate = materialize_context_merge(
+            token.source,
+            token.target,
+            token.context_plan,
+            resolutions=decisions,
+        )
         summary = merge_summary(plan.additions)
+        contexts = [{"uid": candidate.uid, "name": candidate.name}]
         checkpoint = AutoCheckpoint(
             command="merge",
             args={
                 "source": source_access.display_name,
                 "cross_profile_memory_only": plan.cross_profile_memory_only,
+                "command_contexts": contexts,
+                "merge_tree": {
+                    "version": 2,
+                    "operation_uid": token.operation_uid,
+                    "source_root": plan.source_name,
+                    "target_root": plan.target_name,
+                    "target_created": False,
+                },
                 **grant_checkpoint_args(target_access),
             },
             description=(
@@ -453,10 +557,18 @@ class MemoryStoreMergePort(MergePort):
                 f"'{target_access.display_name}': added {summary}"
             ),
         )
+        target_permissions = (
+            ("CREATE", "UPDATE")
+            if any(
+                resolution.decision.value == "TAKE_SOURCE"
+                for resolution in resolutions
+            )
+            else ("CREATE",)
+        )
         with authorized_context_operation(
             (
                 (source_access, ("READ",)),
-                (target_access, ("CREATE",)),
+                (target_access, target_permissions),
             )
         ):
             try:
@@ -502,12 +614,16 @@ class MemoryStoreMergePort(MergePort):
             checkpoint_uid=saved.uid,
             checkpoint_uids=(saved.uid,),
             cross_profile_memory_only=plan.cross_profile_memory_only,
+            unchanged=plan.unchanged,
+            conflicts=plan.conflicts,
+            resolutions=resolutions,
         )
 
     def _apply_recursive(
         self,
         plan: FrozenMergePlan,
         token: _RecursiveMergeToken,
+        resolutions: tuple[MergeResolution, ...],
     ) -> MergeResult:
         if token.owner is not self._owner:
             raise ValueError("The frozen Merge plan belongs to another runtime.")
@@ -545,17 +661,32 @@ class MemoryStoreMergePort(MergePort):
                 "could be saved."
             )
 
+        decisions = resolution_map(resolutions)
+        candidates = tuple(
+            materialize_context_merge(
+                frame.source,
+                frame.context,
+                frame.context_plan,
+                resolutions=decisions,
+            )
+            for frame in token.targets
+        )
         contexts = [
             {"uid": frame.context.uid, "name": frame.context.name}
             for frame in token.targets
         ]
         writes: list[MergeTreeWrite] = []
-        for result, frame in zip(plan.contexts, token.targets, strict=True):
+        for result, frame, candidate in zip(
+            plan.contexts,
+            token.targets,
+            candidates,
+            strict=True,
+        ):
             access = frame.access or token.target_root_access
             summary = merge_summary(result.additions)
             writes.append(
                 MergeTreeWrite(
-                    context=frame.context,
+                    context=candidate,
                     expected_uid=frame.context.uid,
                     expected_digest=frame.expected_digest,
                     checkpoint=AutoCheckpoint(
@@ -567,10 +698,11 @@ class MemoryStoreMergePort(MergePort):
                             ),
                             "command_contexts": contexts,
                             "merge_tree": {
-                                "version": 1,
+                                "version": 2,
                                 "operation_uid": token.operation_uid,
                                 "source_root": plan.source_name,
                                 "target_root": plan.target_name,
+                                "target_created": result.target_created,
                             },
                             **grant_checkpoint_args(access),
                         },
@@ -595,11 +727,18 @@ class MemoryStoreMergePort(MergePort):
             if same_store_sources
             else ()
         )
-        authority_pairs = [(frame.access, ("READ",)) for frame in token.sources] + [
-            (frame.access, ("CREATE",))
-            for frame in token.targets
-            if frame.access is not None
-        ]
+        authority_pairs = [(frame.access, ("READ",)) for frame in token.sources]
+        for frame in token.targets:
+            if frame.access is None:
+                continue
+            take_source = any(
+                decisions.get(conflict.uid) is not None
+                and decisions[conflict.uid].value == "TAKE_SOURCE"
+                for conflict in frame.context_plan.conflicts
+            )
+            authority_pairs.append(
+                (frame.access, ("CREATE", "UPDATE") if take_source else ("CREATE",))
+            )
         if any(frame.access is None for frame in token.targets):
             authority_pairs.append((token.target_root_access, ("CREATE",)))
         with authorized_context_operation(tuple(authority_pairs)):
@@ -629,6 +768,9 @@ class MemoryStoreMergePort(MergePort):
             checkpoint_uid=checkpoints[0].uid,
             checkpoint_uids=tuple(checkpoint.uid for checkpoint in checkpoints),
             cross_profile_memory_only=plan.cross_profile_memory_only,
+            unchanged=plan.unchanged,
+            conflicts=plan.conflicts,
+            resolutions=resolutions,
         )
 
 
@@ -649,7 +791,20 @@ def merge_summary(additions: tuple[MergeAddition, ...]) -> str:
     return ", ".join(parts) if parts else "nothing new"
 
 
-def execute_merge(request: MergeRequest, *, store: MemoryStore) -> MergeResult:
+def execute_merge(
+    request: MergeRequest,
+    *,
+    store: MemoryStore,
+    resolutions: tuple[MergeResolution, ...] = (),
+    bulk: MergeDecision | None = None,
+) -> MergeResult:
     """Execute Merge against a real Store with no terminal output."""
 
-    return run_merge(request, port=MemoryStoreMergePort.capture(store))
+    if bulk is not None and not isinstance(bulk, MergeDecision):
+        raise TypeError("Merge bulk decision must be a MergeDecision.")
+    return run_merge(
+        request,
+        port=MemoryStoreMergePort.capture(store),
+        resolutions=resolutions,
+        bulk=bulk,
+    )

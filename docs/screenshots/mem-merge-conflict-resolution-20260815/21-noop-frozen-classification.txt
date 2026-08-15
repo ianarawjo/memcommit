@@ -1,0 +1,52 @@
+ MEM MERGE · REVIEW FROZEN PLAN                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY                                                                                                                           
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ FROZEN PLAN · COMPLETE CONTEXT MAPPINGS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MERGE PLAN · source → target                                                                                                                                                     ^┃
+┃STATUS · FROZEN · NOT APPLIED                                                                                                                                                     ┃
+┃RANGE · DIRECT                                                                                                                                                                    ┃
+┃CONTEXTS · 1 · CREATE 0                                                                                                                                                           ┃
+┃ADDITIONS · nothing new                                                                                                                                                           ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃REQUIRED CONFLICTS · 0                                                                                                                                                            ┃
+┃CHECKPOINTS · 1                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃MAPPING 1/1 · source → target                                                                                                                                                     ┃
+┃TARGET · EXISTING                                                                                                                                                                 ┃
+┃NEW · nothing new                                                                                                                                                                 ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃CONFLICT · 0                                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────| TO DO · EXACT FROZEN PLAN |───────────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem merge source --direct                                                                                                                                                       │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Apply the frozen DIRECT plan to 1 Context mapping(s).                                                                                                                           │
+│  Create 0 Source-only Target path(s).                                                                                                                                            │
+│  Add nothing new; retain 1 unchanged item(s); resolve 0 conflict(s); record 1 checkpoint(s).                                                                                     │
+│  Revalidate every frozen identity, digest, and subtree membership before writing.                                                                                                │
+│  Publish the complete plan atomically or publish none of it.                                                                                                                     │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│[ PRESS ENTER TO APPLY THE FROZEN MERGE PLAN ]                                                                                                                                    │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ mapping · Home/End · Tab exact plan · Esc cancel

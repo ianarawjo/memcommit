@@ -1,1 +1,1 @@
-"""Reusable terminal workbench compositions."""
+"""Shared terminal workbench compositions."""

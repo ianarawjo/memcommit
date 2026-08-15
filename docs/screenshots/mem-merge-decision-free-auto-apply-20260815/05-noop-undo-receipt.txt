@@ -1,0 +1,7 @@
+NO TARGET CHANGE · Merged 'source' into 'target': added nothing new; 1 unchanged; checkpoint recorded.                                                                              
+NOOP AFTER MERGE · TARGET HAS UID True · CHECKPOINTS 1                                                                                                                              
+CAPTURE PAUSE · PRESS ENTER FOR UNDO                                                                                                                                                
+                                                                                                                                                                                    
+Undid command: mem merge source · Affected Contexts: 1 · Affected Memories: 0                                                                                                       
+NOOP AFTER UNDO · TARGET HAS UID True · CHECKPOINTS 2                                                                                                                               
+CAPTURE PAUSE · PRESS ENTER FOR REDO

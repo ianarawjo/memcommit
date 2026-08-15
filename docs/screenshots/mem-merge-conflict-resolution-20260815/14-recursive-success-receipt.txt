@@ -1,0 +1,52 @@
+ MEM MERGE · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY                                                                                                                            
+┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
+│MERGE PLAN · source → target                                                                                                                                                     ^│
+│STATUS · FROZEN · NOT APPLIED                                                                                                                                                     │
+│RANGE · DESCENDANTS                                                                                                                                                               │
+│CONTEXTS · 3 · CREATE 1                                                                                                                                                           │
+│ADDITIONS · 2 memories, 1 embedded context                                                                                                                                        │
+│UNCHANGED · 1                                                                                                                                                                     │
+│REQUIRED CONFLICTS · 2                                                                                                                                                            │
+│CHECKPOINTS · 3                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│MAPPING 1/3 · source → target                                                                                                                                                     │
+│TARGET · EXISTING                                                                                                                                                                 │
+│NEW · 1 memory, 1 embedded context                                                                                                                                                │
+│UNCHANGED · 1                                                                                                                                                                     │
+│CONFLICT · 1                                                                                                                                                                     v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED CONFLICTS ONLY |────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 2 · ANSWERED 0 · REMAINING 2                                                                                                                                             │
+│· 1. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│· 2. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃STATUS · SUCCESS                                                                                                                                                                  ┃
+┃SOURCE · source                                                                                                                                                                   ┃
+┃TARGET · target                                                                                                                                                                   ┃
+┃RANGE · DESCENDANTS                                                                                                                                                               ┃
+┃CONTEXTS · 3 · CREATED 1                                                                                                                                                          ┃
+┃NEW · 2 memories, 1 embedded context                                                                                                                                              ┃
+┃UNCHANGED · 1                                                                                                                                                                     ┃
+┃RESOLVED · 2 · TAKE SOURCE 2                                                                                                                                                      ┃
+┃CHECKPOINTS · 3 · RECOVERY · mem undo                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO CLOSE ]                                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter/Esc/Q close · durable receipt shown

@@ -1,0 +1,3 @@
+NO TARGET CHANGE · Merged 'source' into 'target': added nothing new; 1 unchanged; checkpoint recorded.                                                                              
+COMMAND EXIT · 0                                                                                                                                                                    
+NOOP VERIFICATION · TARGET ['identical retained fact'] · CHILD False · NEW PATH False · CHECKPOINTS 1

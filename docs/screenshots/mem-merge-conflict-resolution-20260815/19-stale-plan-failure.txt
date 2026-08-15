@@ -1,0 +1,52 @@
+ MEM MERGE · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY                                                                                                                            
+┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
+│MERGE PLAN · source → target                                                                                                                                                     ^│
+│STATUS · FROZEN · NOT APPLIED                                                                                                                                                     │
+│RANGE · DIRECT                                                                                                                                                                    │
+│CONTEXTS · 1 · CREATE 0                                                                                                                                                           │
+│ADDITIONS · 1 memory                                                                                                                                                              │
+│UNCHANGED · 0                                                                                                                                                                     │
+│REQUIRED CONFLICTS · 1                                                                                                                                                            │
+│CHECKPOINTS · 1                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│MAPPING 1/1 · source → target                                                                                                                                                     │
+│TARGET · EXISTING                                                                                                                                                                 │
+│NEW · 1 memory                                                                                                                                                                    │
+│UNCHANGED · 0                                                                                                                                                                     │
+│CONFLICT · 1                                                                                                                                                                     v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED CONFLICTS ONLY |────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 0 · REMAINING 1                                                                                                                                             │
+│· 1. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃BULK WHOLE-SET REVIEW · FUSED APPROVAL                                                                                                                                            ┃
+┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
+┃  mem merge source --direct --keep-target-all                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
+┃  Apply the frozen DIRECT plan to 1 Context mapping(s).                                                                                                                           ┃
+┃  Create 0 Source-only Target path(s).                                                                                                                                            ┃
+┃  Add 1 memory; retain 0 unchanged item(s); resolve 1 conflict(s); record 1 checkpoint(s).                                                                                        ┃
+┃  Revalidate every frozen identity, digest, and subtree membership before writing.                                                                                                ┃
+┃  Publish the complete plan atomically or publish none of it.                                                                                                                     ┃
+┃  Required decisions · KEEP TARGET 1 · TAKE SOURCE 0.                                                                                                                             ┃
+┃  Existing Target-only items remain; no custom or semantic rewrite is allowed.                                                                                                    ┃
+┃  Recovery is one operation-level mem undo, including created descendants.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃Approval applies only to the exact command shown above.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO APPLY THIS EXACT WHOLE SET ]                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Apply failed · The merge source changed before the target could be saved.

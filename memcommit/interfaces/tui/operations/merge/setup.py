@@ -22,7 +22,7 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
         raise TypeError("Merge endpoint setup requires a MergeTuiSetup.")
     return EndpointSetupSpec(
         title="NEW MERGE · A → B",
-        subtitle="DETERMINISTIC UID UNION · SETUP BEFORE FROZEN PLAN REVIEW",
+        subtitle="DETERMINISTIC · REQUIRED CONFLICTS REVIEWED BEFORE APPLY",
         modes=(
             EndpointSetupMode(
                 MergeReach.DIRECT.value,
@@ -62,7 +62,7 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
                 height=2,
             ),
         ),
-        action_label="CONTINUE TO FROZEN MERGE PLAN",
+        action_label="CLASSIFY · APPLY IF NO DECISION IS REQUIRED",
     )
 
 

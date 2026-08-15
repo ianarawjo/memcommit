@@ -1,0 +1,52 @@
+ MEM MERGE · RESOLUTION SESSION                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY                                                                                                                            
+┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
+│MERGE PLAN · source → target                                                                                                                                                     ^│
+│STATUS · FROZEN · NOT APPLIED                                                                                                                                                     │
+│RANGE · DESCENDANTS                                                                                                                                                               │
+│CONTEXTS · 3 · CREATE 1                                                                                                                                                           │
+│ADDITIONS · 2 memories, 1 embedded context                                                                                                                                        │
+│UNCHANGED · 1                                                                                                                                                                     │
+│REQUIRED CONFLICTS · 2                                                                                                                                                            │
+│CHECKPOINTS · 3                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│MAPPING 1/3 · source → target                                                                                                                                                     │
+│TARGET · EXISTING                                                                                                                                                                 │
+│NEW · 1 memory, 1 embedded context                                                                                                                                                │
+│UNCHANGED · 1                                                                                                                                                                     │
+│CONFLICT · 1                                                                                                                                                                     v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED CONFLICTS ONLY |────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 2 · ANSWERED 0 · REMAINING 2                                                                                                                                             │
+│· 1. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│· 2. CONTENT_DIVERGENCE · Memory [00000000]                                                                                                                                       │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃BULK WHOLE-SET REVIEW · FUSED APPROVAL                                                                                                                                            ┃
+┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
+┃  mem merge source --recursive --take-source-all                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
+┃  Apply the frozen DESCENDANTS plan to 3 Context mapping(s).                                                                                                                      ┃
+┃  Create 1 Source-only Target path(s).                                                                                                                                            ┃
+┃  Add 2 memories, 1 embedded context; retain 1 unchanged item(s); resolve 2 conflict(s); record 3 checkpoint(s).                                                                  ┃
+┃  Revalidate every frozen identity, digest, and subtree membership before writing.                                                                                                ┃
+┃  Publish the complete plan atomically or publish none of it.                                                                                                                     ┃
+┃  Required decisions · KEEP TARGET 0 · TAKE SOURCE 2.                                                                                                                             ┃
+┃  Existing Target-only items remain; no custom or semantic rewrite is allowed.                                                                                                    ┃
+┃  Recovery is one operation-level mem undo, including created descendants.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃Approval applies only to the exact command shown above.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO APPLY THIS EXACT WHOLE SET ]                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter applies the displayed exact command · Esc/Backspace returns

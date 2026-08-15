@@ -1,0 +1,3 @@
+Error: Context 'target' is locked against changes. Unlock that Context first.                                                                                                       
+COMMAND EXIT · 1                                                                                                                                                                    
+PROTECTED-CONTEXT VERIFICATION · TARGET [] · CHILD False · NEW PATH False · CHECKPOINTS 0

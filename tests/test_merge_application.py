@@ -12,11 +12,13 @@ from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
     MergeContextResult,
+    MergeDecision,
     MergeError,
     MergeItemKind,
     MergeReach,
     MergeRequest,
     MergeResult,
+    MergeResolution,
     prepare_merge,
     run_merge,
 )
@@ -61,7 +63,11 @@ class _FakePort:
         self.plans.append(plan)
         return plan
 
-    def apply(self, plan: FrozenMergePlan) -> MergeResult:
+    def apply(
+        self,
+        plan: FrozenMergePlan,
+        resolutions: tuple[MergeResolution, ...],
+    ) -> MergeResult:
         return MergeResult(
             source_name=plan.source_name,
             source_uid=plan.source_uid,
@@ -73,6 +79,7 @@ class _FakePort:
             checkpoint_uid="checkpoint-uid",
             checkpoint_uids=("checkpoint-uid",),
             cross_profile_memory_only=plan.cross_profile_memory_only,
+            resolutions=resolutions,
         )
 
 
@@ -99,8 +106,15 @@ def test_application_accepts_descendant_reach_without_store_knowledge():
 
 def test_application_rejects_a_receipt_that_does_not_match_the_plan():
     class WrongPort(_FakePort):
-        def apply(self, plan: FrozenMergePlan) -> MergeResult:
-            return replace(super().apply(plan), target_uid="other-target")
+        def apply(
+            self,
+            plan: FrozenMergePlan,
+            resolutions: tuple[MergeResolution, ...],
+        ) -> MergeResult:
+            return replace(
+                super().apply(plan, resolutions),
+                target_uid="other-target",
+            )
 
     with pytest.raises(MergeError, match="receipt does not match"):
         run_merge(MergeRequest(source_locator="source"), port=WrongPort())
@@ -118,7 +132,11 @@ def test_store_runtime_merges_without_terminal_output(isolated_store, capsys):
     store.create_context(target)
     store.set_current(target.name)
 
-    result = execute_merge(MergeRequest(source_locator="source"), store=store)
+    result = execute_merge(
+        MergeRequest(source_locator="source"),
+        store=store,
+        bulk=MergeDecision.KEEP_TARGET,
+    )
 
     assert capsys.readouterr() == ("", "")
     assert result.source_name == "source"

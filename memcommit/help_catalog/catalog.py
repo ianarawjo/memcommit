@@ -303,10 +303,10 @@ _OPERATIONS = (
     ),
     _operation(
         "merge",
-        "Add UID-new items from an exact Source or path-aligned descendants; no semantic reconciliation.",
+        "Classify structural Source/Target differences, then add or deterministically resolve them without semantic reconciliation.",
         "Source Context -> current Target Context",
         ExecutionKind.DETERMINISTIC,
-        "Changes the Target Context tree directly; Source stays unchanged",
+        "Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; Source stays unchanged",
         "Exact roots or matching lexical descendants by complete relative path",
     ),
     _operation(

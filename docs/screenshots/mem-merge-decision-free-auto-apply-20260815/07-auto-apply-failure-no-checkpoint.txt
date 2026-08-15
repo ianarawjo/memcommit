@@ -1,0 +1,3 @@
+Error: injected auto-apply failure before persistence                                                                                                                               
+FAILURE COMMAND EXIT · 1                                                                                                                                                            
+FAILURE VERIFICATION · TARGET HAS UID False · CHECKPOINTS 0

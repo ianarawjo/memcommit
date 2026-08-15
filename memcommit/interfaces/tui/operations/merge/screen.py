@@ -85,7 +85,8 @@ def merge_exact_command_review(
         effects=(
             f"Merge {scope} into frozen current Target '{target_name}'.",
             target_effect,
-            "Add UID-new direct items; keep Target values for existing UIDs.",
+            "Classify every Source item as NEW, UNCHANGED, or required CONFLICT.",
+            "Resolve conflicts only by keeping Target or taking Source.",
             "No semantic reconciliation and no deletion propagation.",
         ),
     )
@@ -108,7 +109,9 @@ def merge_plan_exact_command_review(plan: FrozenMergePlan) -> ExactCommandReview
             f"Apply the frozen {plan.request.reach.value} plan to "
             f"{len(plan.contexts)} Context mapping(s).",
             f"Create {created} Source-only Target path(s).",
-            f"Add {merge_summary(plan.additions)} and record "
+            f"Add {merge_summary(plan.additions)}; retain "
+            f"{len(plan.unchanged)} unchanged item(s); resolve "
+            f"{len(plan.conflicts)} conflict(s); record "
             f"{len(plan.contexts)} checkpoint(s).",
             "Revalidate every frozen identity, digest, and subtree membership before writing.",
             "Publish the complete plan atomically or publish none of it.",
@@ -138,6 +141,8 @@ def project_merge_plan(plan: FrozenMergePlan) -> SemanticViewerDocument:
                         f"RANGE · {plan.request.reach.value}\n"
                         f"CONTEXTS · {len(plan.contexts)} · CREATE {created}\n"
                         f"ADDITIONS · {safe_terminal_text(merge_summary(plan.additions))}\n"
+                        f"UNCHANGED · {len(plan.unchanged)}\n"
+                        f"REQUIRED CONFLICTS · {len(plan.conflicts)}\n"
                         f"CHECKPOINTS · {len(plan.contexts)}\n\n",
                     ),
                 )
@@ -156,7 +161,9 @@ def project_merge_plan(plan: FrozenMergePlan) -> SemanticViewerDocument:
             (
                 "class:viewer-body",
                 f"TARGET · {target_state}\n"
-                f"ADDITIONS · {safe_terminal_text(merge_summary(context.additions))}\n",
+                f"NEW · {safe_terminal_text(merge_summary(context.additions))}\n"
+                f"UNCHANGED · {len(context.unchanged)}\n"
+                f"CONFLICT · {len(context.conflicts)}\n",
             ),
         ]
         if context.additions:
@@ -247,16 +254,28 @@ def run_merge_plan_review(
                 ),
             ]
         created = sum(context.target_created for context in result.contexts)
+        no_target_change = (
+            not result.additions
+            and not created
+            and not any(
+                resolution.decision.value == "TAKE_SOURCE"
+                for resolution in result.resolutions
+            )
+        )
+        outcome_line = "OUTCOME · NO TARGET CHANGE\n" if no_target_change else ""
         return [
             ("class:report-label", "STATUS · SUCCESS\n"),
             (
                 "class:report-neutral",
-                f"SOURCE · {safe_terminal_text(result.source_name)}\n"
+                outcome_line
+                + f"SOURCE · {safe_terminal_text(result.source_name)}\n"
                 f"TARGET · {safe_terminal_text(result.target_name)}\n"
                 f"RANGE · {result.reach.value}\n"
                 f"CONTEXTS · {len(result.contexts)} · CREATED {created}\n"
                 f"ADDED · {safe_terminal_text(merge_summary(result.additions))}\n"
-                f"CHECKPOINTS · {len(result.checkpoint_uids)}\n\n",
+                f"UNCHANGED · {len(result.unchanged)}\n"
+                f"CHECKPOINTS · {len(result.checkpoint_uids)}\n"
+                "RECOVERY · mem undo\n\n",
             ),
             *cursor,
             (
