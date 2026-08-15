@@ -15,7 +15,7 @@ from memcommit.interfaces.tui.components.direct_item_placement import (
     direct_item_placement_rows,
     render_direct_item_tree_fragments,
 )
-from memcommit.embed_application import EmbedPlacement
+from memcommit.embed_application import EmbedPlacement, run_embed
 from memcommit.embed_runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.cli import embed as embed_command
 from memcommit.interfaces.tui.operations.embed import (
@@ -386,6 +386,68 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
         "--before",
         second.uid,
     )
+
+
+def test_embed_enter_applies_only_the_returned_frozen_plan_once(
+    isolated_store,
+) -> None:
+    store, child, parent, first, second = _ordered_store()
+    port = MemoryStoreEmbedPort.capture(store)
+    before = store.load_direct(parent.name).to_dict()
+
+    with create_pipe_input() as pipe_input:
+        # Review the middle gap and approve the focused exact command with
+        # Enter. The TUI may freeze the plan, but it must not apply it itself.
+        pipe_input.send_text("\t\t\x1b[A\r\t\r")
+        plan = choose_embed_setup(
+            port,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is not None
+    assert store.load_direct(parent.name).to_dict() == before
+    assert store.list_checkpoints(parent.name) == []
+
+    result = run_embed(plan.request, port=port, frozen_plan=plan)
+
+    assert result.placement == plan.placement
+    assert store.load_direct(parent.name).ordered_uids() == [
+        first.uid,
+        child.uid,
+        second.uid,
+    ]
+    assert len(store.list_checkpoints(parent.name)) == 1
+
+    # Reusing the reviewed plan after its first commit must fail closed: the
+    # target digest changed, and no second checkpoint may be published.
+    try:
+        run_embed(plan.request, port=port, frozen_plan=plan)
+    except RuntimeError as error:
+        assert "changed after" in str(error)
+    else:
+        raise AssertionError("an already-applied Embed plan was applied twice")
+    assert len(store.list_checkpoints(parent.name)) == 1
+
+
+def test_embed_escape_cancels_before_freeze_or_application(isolated_store) -> None:
+    store, _child, parent, _first, _second = _ordered_store()
+    port = MemoryStoreEmbedPort.capture(store)
+    before = store.load_direct(parent.name).to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        plan = choose_embed_setup(
+            port,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is None
+    assert store.load_direct(parent.name).to_dict() == before
+    assert store.list_checkpoints(parent.name) == []
 
 
 def test_flagless_embed_applies_only_the_exact_reviewed_gap(
