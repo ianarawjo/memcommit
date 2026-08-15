@@ -26,8 +26,11 @@ owning modules and inherit that module's boundary unless named below.
 | `operations.query.granted_runtime:execute_granted_query_request` | compatibility composition, internal | request + concrete dependencies -> response | may read and explicitly publish one requested turn | invokes the read use case and then the distinct publication use case; contains no alternate policy | CLI and Query TUI runner | `VERIFIED` |
 | `operations.query.reference_application:run_query_reference` | application | `QueryReferenceRequest` -> `QueryReferenceResponse` | one provider query | constructs/authenticates provider before the Source port may open concealed content; no durable effect | reference runtime; `query-reference-application-boundary-matrix.md` | `VERIFIED` |
 | `operations.query.reference_runtime:execute_query_reference` | Store-backed application facade, internal | request + Store/provider factory -> response | exact Query Source read and provider call | exact UID/name/language load; no terminal or session behavior | CLI legacy-reference route | `VERIFIED` |
-| `commands.find_query_provider_policy:connect_ordinary_query_provider` | concrete provider composition | no semantic input -> pinned provider | endpoint authentication/connection | Query is pinned to Sol/none; selection is centralized with Find but never inferred from a request | Query command and TUI composition; provider-policy tests | `VERIFIED` |
-| `commands.find_query_provider_policy:connect_query_route_provider` | concrete provider composition | persisted provider id -> provider | endpoint authentication/connection | allowlisted adapter routing; legacy identifiers remain authoritative | granted/reference Query composition | `VERIFIED` |
+| `infrastructure.providers.find_query:connect_ordinary_query_provider` | concrete provider composition | optional frozen non-secret config -> pinned provider | endpoint authentication/connection | Query defaults to Sol/none; timeout/model/reasoning injection is explicit and does not mutate CLI config | public client, Query command/TUI composition; provider-policy tests | `VERIFIED` |
+| `infrastructure.providers.find_query:connect_query_route_provider` | concrete provider composition | persisted provider id + optional frozen config -> provider | endpoint authentication/connection | allowlisted adapter routing; legacy identifiers remain authoritative; non-Codex route policy is not overridden | public reference client and Query composition | `VERIFIED` |
+| `api.client:MemCommitClient.query_ordinary` | public Python facade | question + exact Context operands/scope -> `OrdinaryQueryResult` | authorized Store reads and optional provider call | one current snapshot; explicit roots are local-only; no durable write; internal response is projected to stable typed citations | public API tests and root package exports | `VERIFIED` |
+| `api.client:MemCommitClient.query_granted` | public Python facade | public route/question/session intent -> `GrantedQueryResult` | active-Profile authority reads, provider call, optional session CAS | successful session call includes separate publication; publication failure returns no partial success; concealed content/token never exposed | public API authority/session tests | `VERIFIED` |
+| `api.client:MemCommitClient.query_reference` | public Python facade | `QueryContextRef` + question -> `ReferenceQueryResult` | provider authentication, exact concealed Source read, one query | provider is constructed before Source open; no durable write | public API ordering and preservation tests | `VERIFIED` |
 | `interfaces.cli.query:split_query_memory_selector` | CLI adapter | selector -> view and optional opaque handle | none | exact syntax only; performs no route lookup or Source open | Query command; CLI adapter tests | `VERIFIED` |
 | `interfaces.cli.query:render_ordinary_query_response` | CLI adapter | typed response -> terminal output | stdout | terminal-safe projection only | Query command; CLI adapter tests | `VERIFIED` |
 | `interfaces.cli.query:render_granted_query_response` | CLI adapter | typed catalog/answer -> terminal output | stdout | catalog shows only opaque handles/placeholders; no concealed content recovery | Query command; CLI adapter tests | `VERIFIED` |
@@ -43,19 +46,21 @@ owning modules and inherit that module's boundary unless named below.
 
 | Operation family | Entry points | Application request/result | Provider boundary | Durable writes | Interface verification | State |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ordinary Context Query | CLI one-shot, Query TUI | `OrdinaryQueryRequest` / `OrdinaryQueryResponse` | authority/source freeze and whole-frame preflight before one completion | none | typed CLI renderer, typed TUI Answer/Reference document, application and architecture tests | `VERIFIED` |
-| Authority-granted Query | CLI catalog/answer/session, Query TUI | `GrantedQueryRequest` / read outcome / optional publication receipt | provider authentication before concealed Source; post-call Grant/Source revalidation | only explicit `SESSION_LOG` CAS publication | opaque catalog/answer presenters, TUI, authority/session tests | `VERIFIED` |
-| Local `QueryContextRef` | CLI one-shot | `QueryReferenceRequest` / `QueryReferenceResponse` | provider authentication before exact concealed Source open | none | safe plain renderer and ordering tests | `VERIFIED` |
+| Ordinary Context Query | Python API, CLI one-shot, Query TUI | public `OrdinaryQueryResult`; internal `OrdinaryQueryRequest` / `OrdinaryQueryResponse` | authority/source freeze and whole-frame preflight before one completion | none | typed public citations, CLI renderer, typed TUI Answer/Reference document, application and architecture tests | `VERIFIED` |
+| Authority-granted Query | Python API, CLI catalog/answer/session, Query TUI | public `GrantedQueryResult`; internal request/read outcome/publication receipt | provider authentication before concealed Source; post-call Grant/Source revalidation | only explicit `SESSION_LOG` CAS publication | public high-level publication result, opaque presenters, TUI, authority/session tests | `VERIFIED` |
+| Local `QueryContextRef` | Python API, CLI one-shot | public `ReferenceQueryResult`; internal `QueryReferenceRequest` / `QueryReferenceResponse` | provider authentication before exact concealed Source open | none | public and CLI safe projections plus ordering tests | `VERIFIED` |
 
 ## Deliberate remaining boundary
 
-The Query application/runtime callables are stable internal seams, not a
-versioned public API. A public Python or agent facade still needs explicit
-decisions for Store-root ownership, provider/config snapshot injection, typed
-public error taxonomy, cancellation/lifecycle, and whether granted-session
-publication is exposed as one high-level call or two capabilities. Publishing
-before those decisions would freeze process globals and command-era defaults as
-library contracts.
+The first versioned Python facade is now bounded by
+`query-public-python-api-design-rationale.md`: one frozen Store root and
+provider config, three explicit Query methods, public result/error projection,
+and high-level granted-session completion over an internally separate
+publication. The agent tool schema, asynchronous cancellation, and an
+overloaded convenience router remain deliberately unshipped. Granted Query is
+also intentionally restricted to a client whose frozen Profile is still the
+active Profile; changing that requires authority infrastructure that no longer
+depends on one process-global registry lock.
 
 The two command-local helpers remain composition functions rather than policy.
 Moving them into the CLI presenter would be incorrect; moving them into a

@@ -106,8 +106,11 @@ subscription-authentication checks remain authoritative.
 
 ## Production owner and compatibility
 
-`memcommit.commands.find_query_provider_policy` is the single production owner
-of both operation pins. Find and Query import that owner directly. The former
-`ordinary_query_provider_policy` path remains an implementation-free
-compatibility export so existing captures and Python callers retain the same
-Sol/none constants and connector objects without creating a second policy.
+`memcommit.infrastructure.providers.find_query` is the single production owner
+of both operation pins. Find, Query, and the public Python client import that
+owner directly. The former `commands.find_query_provider_policy` and
+`commands.ordinary_query_provider_policy` paths remain implementation-free
+compatibility exports so existing captures and Python callers retain the same
+policy and connector objects without creating a second policy. Optional
+model/reasoning/timeout arguments exist only to inject one already-frozen
+non-secret client snapshot; no connector mutates user configuration.

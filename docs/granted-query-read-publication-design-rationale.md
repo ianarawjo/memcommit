@@ -134,11 +134,12 @@ answer for a session-shaped request. Treating the target's
 display hint that can become stale.
 
 The publication plan is process-local and intentionally opaque. It is not a
-portable receipt, cache artifact, public Python API, or agent-tool payload.
-Catalog and answer reads still depend on the existing authority registry and
-Source projection implementation. Legacy `QueryContextRef`, transcript
-listing/viewing, provider configuration, and public API versioning remain
-separate work.
+portable receipt, cache artifact, or agent-tool payload. The public Python API
+keeps it internal: a high-level call either returns the separately published
+`QuerySessionReceipt` or raises `QueryPublicationError` with no partial result.
+Catalog and answer reads still depend on the existing active-Profile authority
+registry and Source projection implementation. Legacy `QueryContextRef`,
+transcript listing/viewing, and agent versioning remain separate work.
 
 ## Verification
 

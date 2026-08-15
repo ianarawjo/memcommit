@@ -1,11 +1,8 @@
-"""Compatibility exports for the shared Find/Query provider policy.
-
-New code imports :mod:`memcommit.commands.find_query_provider_policy`.
-"""
+"""Compatibility exports for the infrastructure-owned Query policy."""
 
 from __future__ import annotations
 
-from memcommit.commands.find_query_provider_policy import (
+from memcommit.infrastructure.providers.find_query import (
     QUERY_PROVIDER_POLICY,
     connect_ordinary_query_provider,
     connect_query_route_provider,

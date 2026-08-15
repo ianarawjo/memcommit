@@ -71,5 +71,6 @@ large because the public `mem query` syntax overloads ordinary questions,
 opaque query views, legacy references, sessions, and the no-argument TUI route.
 A later bootstrap/router extraction may turn that route choice into a typed
 request, but it must preserve the existing authority checks, provider timing,
-session CAS boundary, and error/exit behavior. This change does not create the
-agent adapter or a new public Python facade.
+session CAS boundary, and error/exit behavior. The public Python facade now
+uses three explicit methods rather than copying this overloaded grammar; an
+agent adapter remains separate.

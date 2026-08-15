@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.commands import find_query_provider_policy as policy
 from memcommit.commands import ordinary_query_provider_policy as compatibility
-from memcommit.commands.find_query_provider_policy import QUERY_PROVIDER_POLICY
+from memcommit.infrastructure.providers import find_query as policy
+from memcommit.infrastructure.providers.find_query import QUERY_PROVIDER_POLICY
 
 
 def test_ordinary_query_compatibility_constants_follow_shared_policy():

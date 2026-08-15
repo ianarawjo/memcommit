@@ -93,7 +93,9 @@ post-provider authority revalidation, or `SESSION_LOG` capability. Reusing
 ordinary Query was rejected because concealed Query Sources are deliberately
 outside the READable Context corpus.
 
-The callable is internal, not yet a versioned public Python or agent API. The
+The callable remains internal, while `MemCommitClient.query_reference`
+projects it through the versioned public result/error surface recorded in
+`query-public-python-api-design-rationale.md`; no agent schema is shipped. The
 CLI still owns overloaded selector routing. Query's workbench now lives under
 `interfaces.tui.operations.query`, and its plain selector/result projections
 live under `interfaces.cli.query`; neither interface changes this route's

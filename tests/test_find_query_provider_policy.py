@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.commands import find_query_provider_policy as policy
+from memcommit.infrastructure.providers import find_query as policy
 
 
 def test_find_pins_terra_low_query_pins_sol_none_and_keep_timeout(monkeypatch):
@@ -89,12 +89,54 @@ def test_query_route_pins_codex_but_preserves_non_codex_authority(
     assert calls == ["openrouter"]
 
 
+def test_query_accepts_one_frozen_public_configuration(monkeypatch):
+    captured: list[dict[str, object]] = []
+
+    class _Identity:
+        provider = "codex_chatgpt"
+
+    class _Provider:
+        identity = _Identity()
+
+    monkeypatch.setattr(
+        policy.CodexChatGPTProvider,
+        "connect",
+        staticmethod(lambda **kwargs: captured.append(kwargs) or _Provider()),
+    )
+    monkeypatch.setattr(
+        policy,
+        "record_provider_connection_started",
+        lambda _operation: 1.0,
+    )
+    monkeypatch.setattr(
+        policy,
+        "record_provider_connection_finished",
+        lambda *_args, **_kwargs: None,
+    )
+
+    policy.connect_ordinary_query_provider(
+        model="gpt-5.6-sol",
+        reasoning_effort="low",
+        timeout_seconds=42.0,
+    )
+
+    assert captured == [
+        {
+            "timeout": 42.0,
+            "model": "gpt-5.6-sol",
+            "reasoning_effort": "low",
+        }
+    ]
+
+
 def test_find_and_query_commands_import_the_shared_policy_owner():
     commands = Path(__file__).parents[1] / "memcommit" / "commands"
     find_source = (commands / "find.py").read_text(encoding="utf-8")
     query_source = (commands / "query.py").read_text(encoding="utf-8")
 
-    owner = "from memcommit.commands.find_query_provider_policy import ("
+    owner = "from memcommit.infrastructure.providers.find_query import ("
     assert owner in find_source
     assert owner in query_source
+    assert "memcommit.commands.find_query_provider_policy" not in find_source
+    assert "memcommit.commands.find_query_provider_policy" not in query_source
     assert "memcommit.commands.ordinary_query_provider_policy" not in query_source

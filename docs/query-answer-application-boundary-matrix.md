@@ -119,7 +119,10 @@ that unrelated implementation.
    opening concealed source content and remains unchanged.
 3. Query transcript listing and viewing are read-only adapters over durable
    task-owned session records; creating a turn is not part of ordinary Query.
-4. The new modules are internal boundaries, not yet a versioned public Python
-   API or agent tool contract.
+4. `MemCommitClient.query_ordinary` now projects this internal result through
+   the versioned Python types recorded in
+   `query-public-python-api-design-rationale.md`; the internal request and
+   response remain non-public implementation seams.
 5. Provider and runtime configuration remain injected composition concerns;
-   this slice does not select a model, endpoint, timeout, or profile.
+   the public client freezes a Query-only non-secret snapshot but this use case
+   still does not select a model, endpoint, timeout, or profile.

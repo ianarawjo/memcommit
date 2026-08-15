@@ -1,8 +1,4 @@
-"""Compatibility exports for the infrastructure-owned provider policy.
-
-New application and library code imports
-``memcommit.infrastructure.providers.find_query`` directly.
-"""
+"""Provider connection adapters for semantic operations."""
 
 from memcommit.infrastructure.providers.find_query import (
     FIND_PROVIDER_POLICY,

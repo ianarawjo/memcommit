@@ -1,43 +1,29 @@
-"""memcommit — a git-like memory store."""
-from memcommit.context import (
-    Checkpoint,
-    Context,
-    Information,
-    Memory,
-    MemoryRef,
-    QueryContextRef,
-)
-from memcommit.store import MemoryStore
-from memcommit import ops
-from memcommit.api import (
-    GrantedQueryResult,
-    MemCommitClient,
+"""Stable public Python API for MemCommit."""
+
+from memcommit.api.client import MemCommitClient
+from memcommit.api.errors import (
     MemCommitError,
-    OrdinaryQueryResult,
     QueryAuthorityError,
-    QueryCatalogEntry,
-    QueryCitation,
     QueryConfigurationError,
     QueryContextError,
     QueryError,
     QueryExecutionError,
     QueryInputError,
-    QueryProviderConfig,
     QueryProviderFailure,
     QueryPublicationError,
-    QuerySessionReceipt,
     QueryStorageError,
+)
+from memcommit.api.query import (
+    GrantedQueryResult,
+    OrdinaryQueryResult,
+    QueryCatalogEntry,
+    QueryCitation,
+    QueryProviderConfig,
+    QuerySessionReceipt,
     ReferenceQueryResult,
 )
 
 __all__ = [
-    "Context",
-    "Memory",
-    "MemoryRef",
-    "QueryContextRef",
-    "Information",
-    "Checkpoint",
-    "MemoryStore",
     "GrantedQueryResult",
     "MemCommitClient",
     "MemCommitError",
@@ -56,5 +42,4 @@ __all__ = [
     "QuerySessionReceipt",
     "QueryStorageError",
     "ReferenceQueryResult",
-    "ops",
 ]
