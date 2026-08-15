@@ -36,20 +36,25 @@ TICKERS = (
 )
 
 
+def _proposition(company: str, ticker: str) -> str:
+    return (
+        f'Applying the ticker Rules to "{company}" produces "{ticker}".'
+    )
+
+
 class _DelayedTickerFitProvider:
     def complete(self, _prompt, *, operation, output_schema=None):
-        if operation != "check_case_conformance":
+        if operation != "fit_ground_propositions":
             raise RuntimeError(f"Unexpected Fit operation: {operation}")
         time.sleep(1.4)
         return json.dumps(
             {
                 "overview": "The Rule reproduces all four reviewed ticker examples.",
-                "predictions": [
+                "judgments": [
                     {
-                        "case_id": f"e{index}",
-                        "disposition": "PREDICTED",
-                        "predicted": expected,
-                        "reason": "The active Rule produces the reviewed symbol.",
+                        "example_id": f"e{index}",
+                        "status": "FIT",
+                        "reason": "The active Rule supports the reviewed proposition.",
                     }
                     for index, (_content, expected, _role) in enumerate(TICKERS, 1)
                 ],
@@ -63,8 +68,9 @@ def _prepare_store(root: Path):
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
-        propose_ground_case,
+        propose_ground_example,
         propose_ground_rule,
+        upgrade_ground_to_propositions,
     )
     from memcommit.store import MemoryStore
 
@@ -94,6 +100,7 @@ def _prepare_store(root: Path):
             ),
         ),
     )
+    session = upgrade_ground_to_propositions(session)
     contexts = (raw, candidates, target)
     session = propose_ground_rule(
         session,
@@ -103,14 +110,15 @@ def _prepare_store(root: Path):
     )
     rule = session.items_of_kind("RULE")[0]
     for source, (content, expected, role) in zip(source_memories, TICKERS):
-        session = propose_ground_case(
+        session = propose_ground_example(
             session,
-            rule_selector=rule.uid,
-            case=content,
+            proposition=_proposition(content, expected),
+            rule_selectors=(rule.uid,),
             source_context_uid=candidates.uid,
             source_memory_uid=source.uid,
             target_context_names=(target.name,),
-            expected=expected,
+            input_text=content,
+            expected_output=expected,
             rationale="This is one concrete reviewed ticker expectation.",
             current_contexts=contexts,
             case_role=role,
@@ -155,6 +163,7 @@ def _run_child(store_root: Path) -> None:
     print("GROUND CLOSED · READ-ONLY VERIFICATION")
     print(f"  SHELL RESULT · {result.status}")
     print(f"  SAVED MEMORIES · {len(result.session.items_of_kind('CASE'))}")
+    print(f"  SCHEMA · {result.session.schema_version} · PROPOSITION")
     print(f"  FIT JUDGMENTS · {len(latest.report.judgments) if latest else 0}")
     print(f"  FIT CURRENT · {latest.current if latest else False}", flush=True)
 
@@ -203,6 +212,8 @@ def main() -> None:
 
             child.send("v")
             BASE._settle(child, seconds=0.3)
+            child.send("\x1b[C\x1b[C\x1b[C\x1b[C")
+            BASE._settle(child, seconds=0.2)
             BASE._snapshot(recorder, "03-full-metadata-table")
 
             child.send("v")

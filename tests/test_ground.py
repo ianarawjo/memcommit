@@ -1309,6 +1309,106 @@ def test_named_ground_dialogue_applies_bind_rule_review_and_case_one_at_a_time(
     )
 
 
+def test_named_ground_proposition_action_applies_one_reviewed_example(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "proposition-dialogue",
+            goal="Check concrete ticker propositions against reviewed Rules.",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = upgrade_ground_to_propositions(session)
+    session = propose_ground_rule(
+        session,
+        rule="Use the reviewed ticker mapping for this company.",
+        rationale="This Rule is exercised by an exact concrete Example.",
+        current_contexts=contexts,
+        target_context_names=(targets[0].name,),
+    )
+    store.save_ground_session(session)
+    proposition = (
+        f'Applying the ticker Rules to "{candidate.content}" '
+        'produces "RER".'
+    )
+
+    def run_in_process(argv):
+        invoked = runner.invoke(app, list(argv[1:]))
+        return subprocess.CompletedProcess(
+            argv,
+            invoked.exit_code,
+            stdout=invoked.output,
+            stderr="",
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        run_in_process,
+    )
+    action = GroundTurnAction(
+        kind="PROPOSE_CASE",
+        understanding="Record one concrete ticker proposition.",
+        question="Approve this exact proposition and projection?",
+        content=proposition,
+        selector="r1",
+        source_selector=candidate.uid[:8],
+        targets=(targets[0].name,),
+        expected="RER",
+        rationale="The candidate is the reviewed exact input.",
+        case_role="FIT",
+        disposition="INCLUDE",
+    )
+
+    proposal = ground_command._ground_action_proposal(session, action)
+
+    assert "--propose-example" in proposal.review.argv
+    assert "--propose-source" not in proposal.review.argv
+    assert ground_command._argv_option_values(
+        proposal.review.argv,
+        "--propose-example",
+    ) == (proposition,)
+    assert ground_command._argv_option_values(
+        proposal.review.argv,
+        "--example-input",
+    ) == (candidate.content,)
+    assert ground_command._argv_option_values(
+        proposal.review.argv,
+        "--example-expected",
+    ) == ("RER",)
+    proposal = ground_command._ground_retarget_proposal(
+        session,
+        proposal,
+        targets[1].name,
+    )
+    assert ground_command._argv_option_values(
+        proposal.review.argv,
+        "--example-target",
+    ) == (targets[1].name,)
+
+    updated, _output = ground_command._apply_named_ground_proposal(
+        session,
+        proposal,
+    )
+    example = updated.items_of_kind("CASE")[0]
+
+    assert updated.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+    assert example.proposition == proposition
+    assert example.content == candidate.content
+    assert example.expected == "RER"
+    assert example.source_refs[0].memory_uid == candidate.uid
+    assert example.target_context_uids == (targets[1].uid,)
+
+
 def test_ready_rule_draft_reuses_the_guarded_rule_proposal_path(
     isolated_store,
 ):

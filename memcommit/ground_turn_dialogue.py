@@ -13,6 +13,7 @@ from typing import Callable, Literal, Protocol, TypeAlias, cast
 
 from memcommit.ground import (
     GROUND_GOAL_WORD_LIMIT,
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
     GroundItem,
@@ -393,23 +394,24 @@ def ground_turn_aliases(
             ),
             "",
         )
-        cases.append(
-            {
-                "id": alias,
-                "status": item.status,
-                "content": item.content,
-                "expected": item.expected,
-                "rationale": item.rationale,
-                "role": item.case_role,
-                "disposition": item.disposition,
-                "rule": linked_rule,
-                "targets": [
-                    target_name_by_uid[uid]
-                    for uid in item.target_context_uids
-                    if uid in target_name_by_uid
-                ],
-            }
-        )
+        case_payload: dict[str, object] = {
+            "id": alias,
+            "status": item.status,
+            "content": item.content,
+            "expected": item.expected,
+            "rationale": item.rationale,
+            "role": item.case_role,
+            "disposition": item.disposition,
+            "rule": linked_rule,
+            "targets": [
+                target_name_by_uid[uid]
+                for uid in item.target_context_uids
+                if uid in target_name_by_uid
+            ],
+        }
+        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+            case_payload["proposition"] = item.proposition
+        cases.append(case_payload)
     bound = is_bound_ground_schema(session.schema_version)
     target_contexts = [
         frame.context_name
@@ -427,6 +429,7 @@ def ground_turn_aliases(
     payload = {
         "name": session.contract_name,
         "state": "BOUND" if bound else "UNBOUND",
+        "schema_version": session.schema_version,
         "revision": session.revision,
         "goal": session.goal,
         "rules": rules,
@@ -662,6 +665,7 @@ def _parse_turn(
     raw: object,
     *,
     bound: bool,
+    schema_version: int,
     user_text: str,
 ) -> GroundTurn:
     if (
@@ -830,6 +834,8 @@ def _parse_turn(
             "case_role",
             "disposition",
         }
+        if schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+            allowed.add("content")
         _require_blank_fields(value, except_fields=allowed)
         disposition = value["disposition"]
         case_role = value["case_role"]
@@ -847,6 +853,14 @@ def _parse_turn(
         )
         return GroundTurnAction(
             **common,
+            content=(
+                _bounded_text(
+                    value["content"],
+                    "Ground Memory proposition",
+                )
+                if schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                else ""
+            ),
             selector=_bounded_text(
                 value["selector"],
                 "Rule selector",
@@ -908,6 +922,19 @@ def _build_prompt(
         ensure_ascii=False,
     )
     state = ground_payload["state"]
+    proposition_contract = (
+        "This Ground uses schema version 3. For PROPOSE_CASE, content is the "
+        "authoritative concrete proposition that the person will review, for "
+        "example ‘Applying the ticker Rules to Apple Inc. produces AAPL.’ "
+        "The source and expected fields remain separately typed evidence and "
+        "an exact-output projection; they do not replace the proposition. "
+        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+        else (
+            "This Ground uses the legacy version-2 Case shape. For "
+            "PROPOSE_CASE, leave content empty; the host retains the exact "
+            "source Memory and expected output separately. "
+        )
+    )
     allowed = (
         "ASK, DRAFTS, or BIND"
         if state == "UNBOUND"
@@ -970,7 +997,9 @@ def _build_prompt(
         "PROPOSE_CASE proposes one Ground Memory and requires a listed Rule "
         "id, a locally supplied source alias from the visible turn, listed "
         "target names, rationale, role, disposition, and expected output for "
-        "INCLUDE. Never invent a source alias. REVIEW_ITEM requires a listed "
+        "INCLUDE. Never invent a source alias. "
+        + proposition_contract
+        + "REVIEW_ITEM requires a listed "
         "item "
         "id and decision; REFINE also requires replacement response text.\n"
         "Visible Ground Memory records identify their linked Rule, role, "
@@ -1024,5 +1053,6 @@ def interpret_ground_turn(
     return _parse_turn(
         raw,
         bound=is_bound_ground_schema(session.schema_version),
+        schema_version=session.schema_version,
         user_text=source_text,
     )

@@ -1,5 +1,6 @@
 GROUND CLOSED · READ-ONLY VERIFICATION                                                                                                                                              
   SHELL RESULT · CLOSED                                                                                                                                                             
   SAVED MEMORIES · 4                                                                                                                                                                
+  SCHEMA · 3 · PROPOSITION                                                                                                                                                          
   FIT JUDGMENTS · 4                                                                                                                                                                 
   FIT CURRENT · True

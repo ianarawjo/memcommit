@@ -674,15 +674,20 @@ keeps the Memory vocabulary. The interactive list is a scanning surface and
 presents every Case as one non-wrapping physical row:
 
 ```text
-c1 ✓ North Star Energy Inc. → NSE
-c2 ✓ [BOUNDARY] North Star Energy Inc., Class B → NSE.B
+c1 ✓ Applying the ticker Rules to "North Star Energy Inc." produces "NSE".
+c2 ✓ [BOUNDARY] Applying the ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".
 ```
 
 This is a presentation contract, not a stored-schema migration: `content`,
-`expected`, and `rationale` remain the serialized field names. The arrow's
-left and right sides display input and output. Embedded newlines are folded to
-`↵` in this list only, without rewriting stored text, and terminal wrapping is
-disabled so one Memory never expands merely because it is selected or long.
+`expected`, and `rationale` remain compatibility and exact-projection fields.
+For a version-3 Ground, List displays the authoritative `proposition` and does
+not synthesize a statement from those fields. Its detailed `V` table exposes
+`PROPOSITION`, exact `INPUT`, and exact `EXPECTED` as separate columns. A
+version-2 Ground retains the legacy `content → expected` List projection so
+old records remain readable without pretending that their stored shape was
+silently migrated. Embedded newlines are folded to `↵` in List only, without
+rewriting stored text, and terminal wrapping is disabled so one Memory never
+expands merely because it is selected or long.
 The leading `·`, `✓`, `!`, or `◷` is the independent Fit-operation result.
 The ordinary working classification—`PROPOSED` review state, `FIT` case role,
 and `INCLUDE` disposition—is implicit in List because repeating it on every
@@ -1116,6 +1121,17 @@ links narrow that relation and are stored reciprocally. This default makes
 pre-Rule observations useful after Rules are distilled while preserving an
 inspectable override for Examples that exercise only part of a composed
 policy.
+
+The named-Ground agent adapter retains `PROPOSE_CASE` only as a compatibility
+wire action. Its provider payload includes the Ground schema version and, for
+version 3, every saved Example's authoritative proposition. A version-3
+proposal must return a reviewed proposition in `content`; the host maps that
+typed action to `--propose-example`, with source, linked Rule, placement, and
+exact input/output carried separately through `--example-*` options. Version 2
+continues to require an empty action `content` and maps to the legacy
+`--propose-source`, `--fit-rule`, and `--expected` command. This schema-aware
+split prevents the conversational route from flattening a new proposition
+back into an input/output Case while preserving exact old command receipts.
 
 Version-3 `REFINE` replaces the authoritative proposition and leaves optional
 evidence, projection, placement, and Rule links unchanged. Version-2 REFINE

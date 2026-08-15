@@ -7,11 +7,13 @@ import pytest
 
 from memcommit import ops
 from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
     propose_ground_case,
     propose_ground_rule,
+    upgrade_ground_to_propositions,
 )
 from memcommit.ground_turn_dialogue import (
     GROUND_TURN_OPERATION,
@@ -183,6 +185,7 @@ def test_unbound_turn_can_ask_or_propose_one_explicit_binding():
     assert "no longer than 40 words" in prompt
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
     assert payload["ground"]["state"] == "UNBOUND"
+    assert payload["ground"]["schema_version"] == 1
     assert payload["ground"]["target_contexts"] == []
     assert "completion" not in payload["ground"]
     assert "command" not in schema["properties"]
@@ -207,6 +210,7 @@ def test_bound_turn_exposes_aliases_not_item_uids_and_proposes_rule():
     prompt = provider.calls[0][0]
     payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
     assert payload["ground"]["state"] == "BOUND"
+    assert payload["ground"]["schema_version"] == 2
     assert payload["ground"]["candidate_context"] == "derived"
     assert payload["ground"]["target_contexts"] == ["wiki"]
     assert "completion" not in payload["ground"]
@@ -562,6 +566,67 @@ def test_ground_memory_payload_keeps_case_wire_aliases_without_uids():
     assert case.uid not in serialized
     assert candidate.uid not in serialized
     assert all(frame.context_uid not in serialized for frame in session.frames)
+
+
+def test_proposition_ground_turn_keeps_statement_authoritative() -> None:
+    legacy, _candidate = _bound_ground_with_case()
+    session = upgrade_ground_to_propositions(legacy)
+    proposition = (
+        'Applying the ticker Rules to "Apple Inc." produces "AAPL".'
+    )
+    provider = FakeProvider(
+        _turn(
+            "PROPOSE_CASE",
+            content=proposition,
+            selector="r1",
+            source_selector="m1",
+            targets=["wiki"],
+            expected="AAPL",
+            rationale="This is the concrete reviewed ticker judgment.",
+            case_role="FIT",
+            disposition="INCLUDE",
+        )
+    )
+
+    result = interpret_ground_turn(
+        session,
+        "Use Memory m1 as the Apple ticker Example.",
+        provider,
+    )
+
+    assert isinstance(result, GroundTurnAction)
+    assert result.content == proposition
+    assert result.expected == "AAPL"
+    prompt = provider.calls[0][0]
+    payload = json.loads(prompt.split("GROUND TURN PAYLOAD:\n", 1)[1])
+    assert payload["ground"]["schema_version"] == (
+        GROUND_PROPOSITION_SCHEMA_VERSION
+    )
+    assert payload["ground"]["cases"][0]["proposition"] == (
+        "The rear entrance closes during construction. -> "
+        "Publish the rear-entrance closure."
+    )
+    assert "content is the authoritative concrete proposition" in prompt
+
+
+def test_legacy_ground_turn_rejects_hidden_proposition_content() -> None:
+    session, _candidate = _bound_ground_with_case()
+    provider = FakeProvider(
+        _turn(
+            "PROPOSE_CASE",
+            content="This must not be smuggled into a version-2 Case.",
+            selector="r1",
+            source_selector="m1",
+            targets=["wiki"],
+            expected="Expected output.",
+            rationale="A legacy proposal.",
+            case_role="FIT",
+            disposition="INCLUDE",
+        )
+    )
+
+    with pytest.raises(GroundTurnError, match="unexpected content"):
+        interpret_ground_turn(session, "Propose one legacy Case.", provider)
 
 
 def test_prompt_injection_remains_json_data_without_command_authority():

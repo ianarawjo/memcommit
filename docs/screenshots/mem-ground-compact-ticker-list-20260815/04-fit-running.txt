@@ -26,10 +26,10 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› c1 · Apple Inc. → AAPL                                                                                                                                                         ^┃
-┃c2 · Google LLC → GOOG                                                                                                                                                            ┃
-┃c3 · Microsoft Corporation → MSFT                                                                                                                                                 ┃
-┃c4 · [BOUNDARY] Berkshire Hathaway Class B → BRK.B                                                                                                                                ┃
+┃› c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                                ^┃
+┃c2 · Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                                   ┃
+┃c3 · Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                        ┃
+┃c4 · [BOUNDARY] Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                       ┃
 ┃                                                                                                                                                                                  ┃
 ┃PLACEMENT · DIRECT SELECTION                                                                                                                                                      ┃
 ┃ticker/output                                                                                                                                                                     ┃

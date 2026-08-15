@@ -582,19 +582,48 @@ def _case_argv(
         target not in allowed_targets for target in action.targets
     ):
         raise GroundError("The proposed Ground Memory names an invalid target.")
-    argv = [
-        "mem",
-        "ground",
-        session.contract_name,
-        "--propose-source",
-        matches[0].uid,
-        "--fit-rule",
-        rule_uid,
-    ]
-    for target in action.targets:
-        argv.extend(["--propose-target", target])
-    if action.expected:
-        argv.extend(["--expected", action.expected])
+    if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+        if not action.content.strip():
+            raise GroundError(
+                "A version-3 Ground Memory proposal requires its reviewed "
+                "proposition."
+            )
+        argv = [
+            "mem",
+            "ground",
+            session.contract_name,
+            "--propose-example",
+            action.content,
+            "--example-source",
+            matches[0].uid,
+            "--example-rule",
+            rule_uid,
+        ]
+        for target in action.targets:
+            argv.extend(["--example-target", target])
+        if action.expected:
+            argv.extend(
+                [
+                    "--example-input",
+                    matches[0].content,
+                    "--example-expected",
+                    action.expected,
+                ]
+            )
+    else:
+        argv = [
+            "mem",
+            "ground",
+            session.contract_name,
+            "--propose-source",
+            matches[0].uid,
+            "--fit-rule",
+            rule_uid,
+        ]
+        for target in action.targets:
+            argv.extend(["--propose-target", target])
+        if action.expected:
+            argv.extend(["--expected", action.expected])
     argv.extend(
         [
             "--rationale",
@@ -878,7 +907,11 @@ def _ground_retarget_proposal(
         )
     option_and_anchor = {
         "PROPOSE_RULE": ("--propose-rule-target", "--propose-rule"),
-        "PROPOSE_CASE": ("--propose-target", "--propose-source"),
+        "PROPOSE_CASE": (
+            ("--example-target", "--propose-example")
+            if "--propose-example" in proposal.review.argv
+            else ("--propose-target", "--propose-source")
+        ),
     }.get(proposal.kind)
     if option_and_anchor is None:
         raise GroundError("This Ground proposal has no placement target.")
@@ -957,7 +990,15 @@ def _ground_direct_edit_proposal(
                 f"{target.title()} {selector} is {item.status}; only a "
                 "PROPOSED or ACCEPTED item can be directly refined."
             )
-        layer = "Rule" if target == "RULE" else "Ground Memory expected output"
+        layer = (
+            "Rule"
+            if target == "RULE"
+            else (
+                "Ground Memory proposition"
+                if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                else "Ground Memory expected output"
+            )
+        )
         action = GroundTurnAction(
             kind="REVIEW_ITEM",
             understanding=(

@@ -110,6 +110,31 @@ _NAMED_MEMORY_TABLE_COLUMNS = (
     TuiTableColumn("fit", "FIT", 18),
 )
 
+_NAMED_PROPOSITION_MEMORY_TABLE_COLUMNS = (
+    TuiTableColumn("id", "ID", 6),
+    TuiTableColumn("status", "STATUS", 12),
+    TuiTableColumn("role", "ROLE", 12),
+    TuiTableColumn("decision", "DECISION", 14),
+    TuiTableColumn("proposition", "PROPOSITION", 36),
+    TuiTableColumn("input", "INPUT", 24),
+    TuiTableColumn("expected", "EXPECTED", 24),
+    TuiTableColumn("notes", "NOTES", 24),
+    TuiTableColumn("rules", "RULES", 14),
+    TuiTableColumn("sources", "SOURCES", 10),
+    TuiTableColumn("targets", "TARGETS", 10),
+    TuiTableColumn("fit", "FIT", 18),
+)
+
+
+def _named_memory_table_columns(
+    session: GroundSession,
+) -> tuple[TuiTableColumn, ...]:
+    return (
+        _NAMED_PROPOSITION_MEMORY_TABLE_COLUMNS
+        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+        else _NAMED_MEMORY_TABLE_COLUMNS
+    )
+
 
 class NamedGroundInterpreter(Protocol):
     def __call__(
@@ -571,21 +596,30 @@ def _render_named_ground_memory_table(
             for uid in item.related_uids
             if uid in aliases and aliases[uid].startswith("r")
         ]
+        identity_cells = (
+            alias,
+            item.status,
+            item.case_role or "—",
+            item.disposition or "—",
+        )
+        statement_cells = (
+            (
+                item.proposition,
+                item.content or "(no exact input)",
+                item.expected or "(no exact output)",
+            )
+            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+            else (
+                item.content,
+                item.expected or "(no output)",
+            )
+        )
         rows.append(
             TuiTableRow(
                 row_id=alias,
                 cells=(
-                    alias,
-                    item.status,
-                    item.case_role or "—",
-                    item.disposition or "—",
-                    (
-                        item.proposition
-                        if session.schema_version
-                        == GROUND_PROPOSITION_SCHEMA_VERSION
-                        else item.content
-                    ),
-                    item.expected or "(no output)",
+                    *identity_cells,
+                    *statement_cells,
                     item.rationale or "(none)",
                     ", ".join(linked_rules) or "—",
                     str(len(item.source_refs)) if item.source_refs else "—",
@@ -599,7 +633,7 @@ def _render_named_ground_memory_table(
             )
         )
     return render_tui_table(
-        columns=_NAMED_MEMORY_TABLE_COLUMNS,
+        columns=_named_memory_table_columns(session),
         rows=rows,
         selected_row=selected_memory_index,
         selected_column=selected_memory_column,
@@ -675,10 +709,18 @@ def _review_item_effects(
     item_name = (
         "Ground Memory" if target.kind == "CASE" else target.kind.title()
     )
+    statement = (
+        target.proposition
+        if (
+            target.kind == "CASE"
+            and session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+        )
+        else target.content
+    )
     details = [
         (
             f"Selected item: {alias} · {item_name} · {target.status} · "
-            f"{_line(target.content)}"
+            f"{_line(statement)}"
         )
     ]
     if action == "REFINE":
@@ -697,10 +739,15 @@ def _review_item_effects(
                 ]
             )
         else:
+            field_name = (
+                "proposition"
+                if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                else "expected output"
+            )
             details.extend(
                 [
                     (
-                        f"REFINE: replace {alias} expected output with "
+                        f"REFINE: replace {alias} {field_name} with "
                         f"'{_line(replacement)}'"
                     ),
                     (
@@ -715,8 +762,18 @@ def _review_item_effects(
             "DEFER": "DEFERRED",
             "REJECT": "REJECTED",
         }[action]
+        unchanged_field = (
+            "proposition"
+            if (
+                target.kind == "CASE"
+                and session.schema_version
+                == GROUND_PROPOSITION_SCHEMA_VERSION
+            )
+            else "content"
+        )
         details.append(
-            f"{action}: mark {alias} {status}; its content remains unchanged"
+            f"{action}: mark {alias} {status}; its {unchanged_field} "
+            "remains unchanged"
         )
     details.append("One review Decision record: ADD")
     return tuple(details)
@@ -770,7 +827,11 @@ def _proposal_item_effects(
         )
     if proposal.kind == "PROPOSE_CASE":
         aliases = _item_aliases_by_uid(session)
-        rule_uid = _option_value(argv, "--fit-rule")
+        native = bool(_option_value(argv, "--propose-example"))
+        rule_uid = _option_value(
+            argv,
+            "--example-rule" if native else "--fit-rule",
+        )
         rule = next(
             (item for item in session.items if item.uid == rule_uid),
             None,
@@ -789,7 +850,12 @@ def _proposal_item_effects(
             ),
             (
                 "Targets: "
-                + ", ".join(_option_values(argv, "--propose-target"))
+                + ", ".join(
+                    _option_values(
+                        argv,
+                        "--example-target" if native else "--propose-target",
+                    )
+                )
             ),
             (
                 "Expected output: "
@@ -803,6 +869,22 @@ def _proposal_item_effects(
                 "candidate Context"
             ),
         ]
+        if native:
+            details.insert(
+                1,
+                "Proposition: "
+                + _line(_option_value(argv, "--propose-example")),
+            )
+            exact_input = _option_value(argv, "--example-input")
+            exact_expected = _option_value(argv, "--example-expected")
+            details[4] = (
+                "Exact projection: "
+                + (
+                    f"{_line(exact_input)} → {_line(exact_expected)}"
+                    if exact_input and exact_expected
+                    else "(none)"
+                )
+            )
         return tuple(details)
     if proposal.kind == "REVIEW_ITEM":
         return _review_item_effects(session, proposal)
@@ -1454,7 +1536,7 @@ def run_named_ground_shell(
         cases = _aliased_items(current["value"], "CASE")
         row, column = clamp_table_position(
             row_count=len(cases),
-            column_count=len(_NAMED_MEMORY_TABLE_COLUMNS),
+            column_count=len(_named_memory_table_columns(current["value"])),
             row=selected_memory_index["value"],
             column=selected_memory_column["value"],
         )
@@ -2291,7 +2373,7 @@ def run_named_ground_shell(
         acknowledge_pane("MEMORIES")
         row, column = clamp_table_position(
             row_count=len(_aliased_items(current["value"], "CASE")),
-            column_count=len(_NAMED_MEMORY_TABLE_COLUMNS),
+            column_count=len(_named_memory_table_columns(current["value"])),
             row=selected_memory_index["value"] + row_step,
             column=selected_memory_column["value"] + column_step,
         )
@@ -2605,9 +2687,14 @@ def run_named_ground_shell(
         open_inline_editor(
             target="MEMORY",
             selector=alias,
-            # Source text is immutable trace evidence. REFINE edits only the
-            # expected output while the source remains visible above it.
-            original=item.expected,
+            # Version 3 makes the proposition authoritative. Legacy version 2
+            # keeps its exact source immutable and refines expected output.
+            original=(
+                item.proposition
+                if current["value"].schema_version
+                == GROUND_PROPOSITION_SCHEMA_VERSION
+                else item.expected
+            ),
         )
 
     @bindings.add(

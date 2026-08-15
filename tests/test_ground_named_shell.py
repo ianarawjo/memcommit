@@ -271,6 +271,50 @@ def test_named_goal_inline_direct_edit_freezes_one_command_before_apply():
     assert len(result.applied_argvs) == 1
 
 
+def test_named_proposition_memory_editor_starts_from_authoritative_statement():
+    original = session_with_rule_and_case()
+    rule, legacy = original.items
+    proposition = (
+        'Applying the ticker Rules to "Apple Inc." produces "AAPL".'
+    )
+    session = replace(
+        original,
+        schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+        items=(rule, replace(legacy, proposition=proposition)),
+    )
+    prepared = []
+
+    def prepare(current, target, selector, edited, comment):
+        prepared.append((target, selector, edited, comment))
+        return proposal(current, edited, kind="REVIEW_ITEM")
+
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            pipe_input.send_text(("\t" * 4) + "e Revised.\r")
+            deadline = time.monotonic() + 2
+            while not prepared and time.monotonic() < deadline:
+                time.sleep(0.01)
+            pipe_input.send_text("\x03")
+
+        feeder = threading.Thread(target=drive)
+        feeder.start()
+        run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            prepare_direct_edit=prepare,
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert not feeder.is_alive()
+    assert prepared == [
+        ("MEMORY", "c1", proposition + " Revised.", "")
+    ]
+
+
 def test_applied_goal_change_marks_goal_and_chat_as_unseen(monkeypatch):
     session = replace(
         create_ground_session(
@@ -1068,19 +1112,33 @@ def test_ground_memory_list_scans_four_tickers_as_four_rows() -> None:
             content=content,
             expected=expected,
             case_role=role,
+            proposition=(
+                f'Applying the ticker Rules to "{content}" '
+                f'produces "{expected}".'
+            ),
         )
         for index, (content, expected, role) in enumerate(examples, 1)
     )
 
     rendered = render_named_ground_cases_pane(
-        replace(original, items=(rule, *cases))
+        replace(
+            original,
+            schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+            items=(rule, *cases),
+        )
     )
 
     assert rendered.splitlines() == [
-        "c1 · Apple Inc. → AAPL",
-        "c2 · Google LLC → GOOG",
-        "c3 · Microsoft Corporation → MSFT",
-        "c4 · [BOUNDARY] Berkshire Hathaway Class B → BRK.B",
+        'c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".',
+        'c2 · Applying the ticker Rules to "Google LLC" produces "GOOG".',
+        (
+            'c3 · Applying the ticker Rules to "Microsoft Corporation" '
+            'produces "MSFT".'
+        ),
+        (
+            'c4 · [BOUNDARY] Applying the ticker Rules to '
+            '"Berkshire Hathaway Class B" produces "BRK.B".'
+        ),
     ]
 
 
@@ -1201,6 +1259,39 @@ def test_named_ground_memory_table_exposes_fields_as_cells():
     assert "TARGETS" in rendered
     assert "CELL · c2 · EXPECTED" in rendered
     assert "Publishthecontinuedelevatorservice." in "".join(rendered.split())
+
+
+def test_proposition_memory_table_separates_statement_from_exact_projection():
+    original = session_with_rule_and_case()
+    rule, legacy = original.items
+    proposition = (
+        'Applying the ticker Rules to "Apple Inc." produces "AAPL".'
+    )
+    example = replace(
+        legacy,
+        proposition=proposition,
+        content="Apple Inc.",
+        expected="AAPL",
+    )
+    session = replace(
+        original,
+        schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+        items=(rule, example),
+    )
+
+    rendered = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        view="TABLE",
+        selected_memory_index=0,
+        selected_memory_column=4,
+    )
+
+    assert "COLUMN PROPOSITION" in rendered
+    assert "PROPOSITION" in rendered
+    assert "INPUT" in rendered
+    assert "EXPECTED" in rendered
+    compact = "".join(rendered.split())
+    assert "ApplyingthetickerRulesto\"AppleInc.\"produces\"AAPL\"." in compact
 
 
 def test_ground_memory_without_notes_remains_one_row():
@@ -1439,6 +1530,68 @@ def test_ground_memory_proposal_effects_name_alias_rule_targets_and_expected():
         "Source: exact Context Memory selected from the bound candidate "
         "Context"
     ) in effects
+
+
+def test_proposition_memory_proposal_effects_separate_statement_and_projection():
+    original = session_with_rule_and_case()
+    rule, legacy = original.items
+    session = replace(
+        original,
+        schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+        items=(
+            rule,
+            replace(
+                legacy,
+                proposition="The existing concrete proposition.",
+            ),
+        ),
+    )
+    proposition = (
+        'Applying the ticker Rules to "Apple Inc." produces "AAPL".'
+    )
+    proposed = GroundCommandProposal(
+        kind="PROPOSE_CASE",
+        understanding="Add one proposition-authoritative Ground Memory.",
+        question="Approve this exact Ground Memory proposal?",
+        review=ExactCommandReview(
+            argv=(
+                "mem",
+                "ground",
+                session.contract_name,
+                "--propose-example",
+                proposition,
+                "--example-source",
+                "33333333-3333-4333-8333-333333333333",
+                "--example-rule",
+                rule.uid,
+                "--example-target",
+                "wiki",
+                "--example-input",
+                "Apple Inc.",
+                "--example-expected",
+                "AAPL",
+                "--rationale",
+                "It is a concrete reviewed mapping proposition.",
+                "--case-role",
+                "FIT",
+                "--disposition",
+                "INCLUDE",
+            ),
+            effects=(
+                "Ground Memories: ADD one traceable PROPOSED Ground Memory",
+            ),
+        ),
+        expected_ground_uid=session.uid,
+        expected_revision=session.revision,
+        expected_state_digest="test-digest",
+    )
+
+    _command, effects = render_named_ground_proposal_blocks(session, proposed)
+
+    assert f"Proposition: {proposition}" in effects
+    assert "Exact projection: Apple Inc. → AAPL" in effects
+    assert "Linked Rule: r1" in effects
+    assert "Targets: wiki" in effects
 
 
 def test_ask_accumulates_only_the_current_unresolved_turn_cycle():

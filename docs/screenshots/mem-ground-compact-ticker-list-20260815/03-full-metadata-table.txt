@@ -26,15 +26,15 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃TABLE · 4 MEMORIES · ROW 1/4 · COLUMN ID                                                                                                                                         ^┃
-┃ID     │ STATUS       │ ROLE         │ DECISION       │ INPUT                    │ EXPECTED                 │ NOTES                    │ RULES          │ SOURCES    │ TARGETS    ┃
-┃───────┼──────────────┼──────────────┼────────────────┼──────────────────────────┼──────────────────────────┼──────────────────────────┼────────────────┼────────────┼─────────── ┃
-┃c1     │ PROPOSED     │ FIT          │ INCLUDE        │ Apple Inc.               │ AAPL                     │ This is one concrete re… │ r1             │ 1          │ 1          ┃
-┃c2     │ PROPOSED     │ FIT          │ INCLUDE        │ Google LLC               │ GOOG                     │ This is one concrete re… │ r1             │ 1          │ 1          ┃
-┃c3     │ PROPOSED     │ FIT          │ INCLUDE        │ Microsoft Corporation    │ MSFT                     │ This is one concrete re… │ r1             │ 1          │ 1          ┃
-┃c4     │ PROPOSED     │ BOUNDARY     │ INCLUDE        │ Berkshire Hathaway Clas… │ BRK.B                    │ This is one concrete re… │ r1             │ 1          │ 1          ┃
+┃TABLE · 4 MEMORIES · ROW 1/4 · COLUMN PROPOSITION                                                                                                                                ^┃
+┃ID     │ STATUS       │ ROLE         │ DECISION       │ PROPOSITION                          │ INPUT                    │ EXPECTED                 │ NOTES                    │ R ┃
+┃───────┼──────────────┼──────────────┼────────────────┼──────────────────────────────────────┼──────────────────────────┼──────────────────────────┼──────────────────────────┼── ┃
+┃c1     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Apple… │ Apple Inc.               │ AAPL                     │ This is one concrete re… │ r ┃
+┃c2     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Googl… │ Google LLC               │ GOOG                     │ This is one concrete re… │ r ┃
+┃c3     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Micro… │ Microsoft Corporation    │ MSFT                     │ This is one concrete re… │ r ┃
+┃c4     │ PROPOSED     │ BOUNDARY     │ INCLUDE        │ Applying the ticker Rules to "Berks… │ Berkshire Hathaway Clas… │ BRK.B                    │ This is one concrete re… │ r ┃
 ┃                                                                                                                                                                                  ┃
-┃CELL · c1 · ID                                                                                                                                                                   v┃
+┃                                                        CELL · c1 · PROPOSITION                                                                                                  v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌─────────────────────────────────────────────────────────────────────────────────────| CHAT |─────────────────────────────────────────────────────────────────────────────────────┐
 │OPEN QUESTION · REVIEW OR CONTINUE                                                                                                                                               ^│
