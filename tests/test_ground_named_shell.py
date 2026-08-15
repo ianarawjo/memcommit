@@ -932,8 +932,8 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
     assert "r2 [PROPOSED]" in rules
     assert "Preserve exceptions and continued service." in rules
     assert "Otherwise the fixture overstates closures." in rules
-    assert "c1 · [PROPOSED · FIT / INCLUDE]" in cases
-    assert "c2 · [PROPOSED · FIT / INCLUDE]" in cases
+    assert "c1 · The rear entrance closes" in cases
+    assert "c2 · The east elevator remains" in cases
     assert (
         "The east elevator remains in service. → "
         "Publish the continued elevator service."
@@ -946,7 +946,7 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
         session,
         selected_memory_index=1,
     )
-    assert "› c2 · [PROPOSED · FIT / INCLUDE]" in selected
+    assert "› c2 · The east elevator remains" in selected
     assert len(selected.splitlines()) == 2
     assert "DETAILS" not in selected
 
@@ -967,7 +967,7 @@ def test_ground_memory_folds_multiline_content_into_one_row():
         replace(original, items=(rule, ticker_case))
     )
 
-    assert "c1 · [PROPOSED · FIT / INCLUDE]" in rendered
+    assert "c1 · North Star Energy Inc." in rendered
     assert "North Star Energy Inc. ↵ Class B → NSE.B" in rendered
     assert "Ignore the legal suffix" not in rendered
     assert "\n" not in rendered
@@ -1021,13 +1021,67 @@ def test_ground_memory_projects_compact_fit_marks() -> None:
         fit_receipt=fit_receipt_for(session, current=False),
     )
 
-    assert "c1 · [PROPOSED · FIT / INCLUDE]" in not_run
-    assert "c1 ✓ [PROPOSED · FIT / INCLUDE]" in current
-    assert "c1 ! [PROPOSED · FIT / INCLUDE]" in issue
-    assert "c1 ◷ [PROPOSED · FIT / INCLUDE]" in stale
+    assert "c1 · The rear entrance closes" in not_run
+    assert "c1 ✓ The rear entrance closes" in current
+    assert "c1 ! The rear entrance closes" in issue
+    assert "c1 ◷ The rear entrance closes" in stale
     assert "FIT RECEIPT" not in current
     assert "FIT WHY" not in current
     assert "FIT STALE" not in stale
+
+
+def test_ground_memory_list_names_only_exceptional_metadata() -> None:
+    original = session_with_rule_and_case()
+    rule, memory = original.items
+    exceptional = replace(
+        memory,
+        status="ACCEPTED",
+        case_role="BOUNDARY",
+        disposition="EXCLUDE",
+    )
+
+    rendered = render_named_ground_cases_pane(
+        replace(original, items=(rule, exceptional))
+    )
+
+    assert (
+        "c1 · [ACCEPTED · BOUNDARY · EXCLUDE] "
+        "The rear entrance closes"
+    ) in rendered
+    assert "PROPOSED" not in rendered
+    assert "FIT / INCLUDE" not in rendered
+
+
+def test_ground_memory_list_scans_four_tickers_as_four_rows() -> None:
+    original = session_with_rule_and_case()
+    rule, memory = original.items
+    examples = (
+        ("Apple Inc.", "AAPL", "FIT"),
+        ("Google LLC", "GOOG", "FIT"),
+        ("Microsoft Corporation", "MSFT", "FIT"),
+        ("Berkshire Hathaway Class B", "BRK.B", "BOUNDARY"),
+    )
+    cases = tuple(
+        replace(
+            memory,
+            uid=f"{index:08d}-2222-4222-8222-222222222222",
+            content=content,
+            expected=expected,
+            case_role=role,
+        )
+        for index, (content, expected, role) in enumerate(examples, 1)
+    )
+
+    rendered = render_named_ground_cases_pane(
+        replace(original, items=(rule, *cases))
+    )
+
+    assert rendered.splitlines() == [
+        "c1 · Apple Inc. → AAPL",
+        "c2 · Google LLC → GOOG",
+        "c3 · Microsoft Corporation → MSFT",
+        "c4 · [BOUNDARY] Berkshire Hathaway Class B → BRK.B",
+    ]
 
 
 def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> None:
@@ -1078,7 +1132,7 @@ def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> N
 
     assert result.status == "CLOSED"
     assert ran == [session.revision]
-    assert "c1 ✓ [PROPOSED · FIT / INCLUDE]" in panes["MEMORIES"].text_area.text
+    assert "c1 ✓ The rear entrance closes" in panes["MEMORIES"].text_area.text
 
 
 def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> None:
@@ -1751,7 +1805,7 @@ def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
     assert result.status == "CLOSED"
     memories = panes["MEMORIES"].text_area
     assert "TABLE ·" not in memories.text
-    assert "› c2 · [PROPOSED · FIT / INCLUDE]" in memories.text
+    assert "› c2 · The east elevator remains" in memories.text
     assert not memories.window.wrap_lines()
 
 

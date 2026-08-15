@@ -509,20 +509,28 @@ def render_named_ground_memories_pane(
     fit_by_example = _fit_judgments_by_example(fit_receipt)
     rows: list[str] = []
     for index, (alias, item) in enumerate(cases):
-        classification = " / ".join(
-            value
-            for value in (item.case_role, item.disposition)
-            if value
-        )
         marker = "› " if index == selected_memory_index else ""
-        heading_labels = [item.status]
-        if classification:
-            heading_labels.append(safe_terminal_text(classification))
         fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
-        prefix = (
-            f"{marker}{alias} {fit_label} "
-            f"[{' · '.join(heading_labels)}]"
+        # PROPOSED/FIT/INCLUDE is the ordinary working state. Repeating all
+        # three on every row hides the proposition and makes FIT look like the
+        # independently computed fit mark. Keep defaults implicit here; the V
+        # table remains the lossless view, while exceptional values stay
+        # visible in full words instead of introducing an opaque code system.
+        qualifiers = [
+            value
+            for value, default in (
+                (item.status, "PROPOSED"),
+                (item.case_role, "FIT"),
+                (item.disposition, "INCLUDE"),
+            )
+            if value and value != default
+        ]
+        qualifier_label = (
+            f" [{' · '.join(safe_terminal_text(value) for value in qualifiers)}]"
+            if qualifiers
+            else ""
         )
+        prefix = f"{marker}{alias} {fit_label}{qualifier_label}"
         # LIST is the scanning surface: one durable Ground Memory must consume
         # one physical terminal row. TABLE remains the explicit path to Notes,
         # links, source/target counts, and other review metadata.
@@ -535,7 +543,7 @@ def render_named_ground_memories_pane(
                 else "(no output)"
             )
             value = f"{_case_card_value(item.content)} → {expected}"
-        rows.append(f"{prefix} · {value}")
+        rows.append(f"{prefix} {value}")
     if placement_hint:
         rows.extend(
             (

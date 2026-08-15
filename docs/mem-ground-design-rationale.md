@@ -674,7 +674,8 @@ keeps the Memory vocabulary. The interactive list is a scanning surface and
 presents every Case as one non-wrapping physical row:
 
 ```text
-c1 ✓ [PROPOSED · FIT / INCLUDE] · North Star Energy Inc. → NSE
+c1 ✓ North Star Energy Inc. → NSE
+c2 ✓ [BOUNDARY] North Star Energy Inc., Class B → NSE.B
 ```
 
 This is a presentation contract, not a stored-schema migration: `content`,
@@ -682,6 +683,16 @@ This is a presentation contract, not a stored-schema migration: `content`,
 left and right sides display input and output. Embedded newlines are folded to
 `↵` in this list only, without rewriting stored text, and terminal wrapping is
 disabled so one Memory never expands merely because it is selected or long.
+The leading `·`, `✓`, `!`, or `◷` is the independent Fit-operation result.
+The ordinary working classification—`PROPOSED` review state, `FIT` case role,
+and `INCLUDE` disposition—is implicit in List because repeating it on every
+row obscures the proposition and makes the role named `FIT` look like a Fit
+result. Non-default values remain visible in full, such as `[ACCEPTED]`,
+`[BOUNDARY]`, `[CONTRAST]`, `[EXCLUDE]`, or `[UNRESOLVED]`; multiple exceptions
+share one bracket. This exception-only projection deliberately avoids compact
+but opaque status codes. The `V` table remains the lossless place to inspect
+all three axes, including their default values. `CLOSED` is not a fourth item
+state: it is only the named-Ground shell's return value after the TUI closes.
 Ground-local Notes, linked Rules, source references, targets, and other fields
 remain available through the detailed `V` table instead of expanding the List.
 A later `fill` or other materialization operation may propose the arrow's right
