@@ -25,7 +25,6 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.commands.help_inventory import CommandEntry
-from memcommit.commands.quality_find_workbench import choose_quality_find_setup
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -36,6 +35,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.tui.operations.audit import choose_audit_setup
 from memcommit.context import Context
 from memcommit.conformance import ConformanceError, check_context_conformance
 from memcommit.conformance_runtime import freeze_context_conformance
@@ -328,19 +328,18 @@ def _interactive_source(store: MemoryStore, *, current_name: str | None):
         for name in names
         if catalog.access_for(name).is_granted
     }
-    receipt = choose_quality_find_setup(
+    selected_name = choose_audit_setup(
         names,
         current=access.display_name,
-        kind="audit",
         annotations=annotations,
     )
-    if receipt is None:
+    if selected_name is None:
         return None
-    selected_access = catalog.access_for(receipt.context_name)
+    selected_access = catalog.access_for(selected_name)
     # Audit retains source-derived content and provider judgments. READ alone
     # is sufficient for one-shot Find, but not for this durable artifact.
     authorize_analysis_save((selected_access,), retention="RETAINED")
-    return selected_access, catalog.load_direct(receipt.context_name)
+    return selected_access, catalog.load_direct(selected_name)
 
 
 def cmd(
