@@ -4,6 +4,11 @@ __pycache__/
 *.egg
 *.egg-info/
 
+# Python build products are derived from the canonical package tree. Keeping
+# them untracked prevents incremental wheel builds from reusing stale modules.
+/build/
+/dist/
+
 .venv/
 .env/
 .pytest_cache/
