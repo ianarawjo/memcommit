@@ -39,7 +39,7 @@ from memcommit.commands.command_wait import (
     build_report_loading_view,
     run_command_wait,
 )
-from memcommit.commands.endpoint_setup_flows import choose_meld_setup
+from memcommit.commands.meld_setup import choose_meld_setup
 from memcommit.derived_policy import (
     analysis_retention,
     authorize_analysis_save,

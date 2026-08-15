@@ -172,12 +172,19 @@ def run_endpoint_setup(
         if not role.allow_new:
             continue
 
-        def validate_new_name(candidate: str, *, names=role.names) -> None:
+        def validate_new_name(
+            candidate: str,
+            *,
+            names=role.names,
+            operation_validator=role.new_name_validator,
+        ) -> None:
             validate_context_name(candidate)
             if candidate in names:
                 raise ValueError(
                     "That Context already exists; choose its available tree row."
                 )
+            if operation_validator is not None:
+                operation_validator(candidate)
 
         new_name_fields[role.uid] = ExactNameFieldControl.create(
             ExactNameFieldView(

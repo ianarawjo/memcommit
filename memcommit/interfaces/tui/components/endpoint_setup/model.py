@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from memcommit.source_projection.presentation import SourceDisplayValue
@@ -115,6 +116,7 @@ class EndpointSetupRole:
     new_label: str = "CREATE NEW CONTEXT"
     initial_new_name: str = ""
     prefer_new: bool = False
+    new_name_validator: Callable[[str], object] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -169,6 +171,12 @@ class EndpointSetupRole:
         if (self.initial_new_name or self.prefer_new) and not self.allow_new:
             raise ValueError(
                 "Endpoint role cannot prefer or initialize an unavailable new name."
+            )
+        if self.new_name_validator is not None and (
+            not self.allow_new or not callable(self.new_name_validator)
+        ):
+            raise ValueError(
+                "Endpoint new-name validation requires a creatable role callback."
             )
         if self.selected_memory_uid is not None:
             if (

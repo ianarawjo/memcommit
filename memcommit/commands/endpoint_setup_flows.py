@@ -11,7 +11,7 @@ from memcommit.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.commands.meld_target_picker import eligible_meld_targets
+from memcommit.commands.meld_setup import choose_meld_setup
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -92,41 +92,6 @@ def _readable_endpoint_catalog(
         if not access.is_granted:
             continue
         annotations[name] = context_access_display_facts(access)
-    return names, first, second, annotations
-
-
-def _meld_source_catalog(
-    store: MemoryStore,
-) -> tuple[tuple[str, ...], str, str, dict[str, SourceDisplayFacts]]:
-    """Freeze local and granted public names offered as Meld sources."""
-
-    local_names = tuple(store.list_context_names())
-    if not local_names:
-        raise ValueError("Starting Meld requires an ordinary local Context.")
-    current = store.current_context_name()
-    root_name = current if current in local_names else local_names[0]
-    root_access = ContextAccess(
-        store=store,
-        context_name=root_name,
-        display_name=root_name,
-        attachment_name=None,
-        permission="READ",
-    )
-    catalog = freeze_profile_readable_context_catalog(
-        store,
-        root_access,
-        include_query_routes=False,
-    )
-    names = tuple(catalog.list_context_names())
-    if len(names) < 2:
-        raise ValueError("Starting Meld requires two readable Contexts.")
-    first = current if current in names else names[0]
-    second = next(name for name in names if name != first)
-    annotations = {
-        name: context_access_display_facts(catalog.access_for(name))
-        for name in names
-        if catalog.access_for(name).is_granted
-    }
     return names, first, second, annotations
 
 
@@ -304,93 +269,4 @@ def choose_update_setup(
         draft.value("B").context_name,
         source_descendants=draft.value("A").include_descendants,
         target_descendants=draft.value("B").include_descendants,
-    )
-
-
-def choose_meld_setup(
-    store: MemoryStore,
-    *,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> MeldSetupReceipt | None:
-    names, first, second, annotations = _meld_source_catalog(store)
-    # Eligibility is frozen independently of the initial A/B defaults. The
-    # adapter's distinctness check excludes whichever peers are finally chosen.
-    eligible = frozenset(eligible_meld_targets(store, source_names=("", "")))
-
-    def validate(draft: EndpointSetupDraft) -> str | None:
-        distinct = _distinct_ab(draft)
-        if distinct:
-            return distinct
-        if draft.mode_uid == "SYMMETRIC":
-            target = draft.value("C")
-            if target.context_name in {
-                draft.value("A").context_name,
-                draft.value("B").context_name,
-            }:
-                return "Symmetric Meld result C must differ from A and B."
-        return None
-
-    draft = choose_session_endpoints(
-        names,
-        title="NEW MELD",
-        modes=(
-            EndpointModeSpec(
-                "SYMMETRIC",
-                "SYMMETRIC · A + B → C",
-                ("A", "B", "C"),
-                {"A": "A · PEER", "B": "B · PEER", "C": "C · RESULT"},
-                "A and B are equal peers. A saved ordered Compare is required; the result is separate C.",
-                descendant_roles=frozenset({"A", "B"}),
-            ),
-            EndpointModeSpec(
-                "DIRECTIONAL",
-                "DIRECTIONAL · A → B",
-                ("A", "B"),
-                {"A": "A · INCOMING", "B": "B · BASELINE + RESULT"},
-                "A is incoming evidence. B remains authoritative and is the result target.",
-                descendant_roles=frozenset({"A", "B"}),
-            ),
-        ),
-        roles=(
-            EndpointRoleSpec(
-                "A",
-                frozenset(names),
-                first,
-                allow_descendants=True,
-            ),
-            EndpointRoleSpec(
-                "B",
-                frozenset(names),
-                second,
-                allow_descendants=True,
-            ),
-            EndpointRoleSpec(
-                "C",
-                eligible,
-                next(iter(eligible), first),
-                allow_new=True,
-                new_label="CREATE NEW RESULT CONTEXT",
-                prefer_new=True,
-            ),
-        ),
-        initial_mode_uid="SYMMETRIC",
-        annotations=annotations,
-        validate_draft=validate,
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-    if draft is None:
-        return None
-    target = draft.value("C") if draft.mode_uid == "SYMMETRIC" else None
-    return MeldSetupReceipt(
-        mode=draft.mode_uid.casefold(),
-        left_name=draft.value("A").context_name,
-        right_name=draft.value("B").context_name,
-        target_name=target.context_name if target is not None else None,
-        create_target=target.create if target is not None else False,
-        left_descendants=draft.value("A").include_descendants,
-        right_descendants=draft.value("B").include_descendants,
     )

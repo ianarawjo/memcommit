@@ -67,3 +67,14 @@ The migration requires three forms of evidence:
 The screenshots are behavior evidence, not a second implementation. They must
 record exact keys, terminal size, profile/current Context, and durable mutation
 at each step.
+
+## Progress
+
+- `1b0e6ae8` extended the shared Endpoint Setup contract and proved symmetric
+  and directional drafts independently of Meld orchestration.
+- Meld setup now freezes readable authority in `commands.meld_setup`, projects
+  only typed values through `interfaces.tui.operations.meld.setup`, and enters
+  the existing application boundary with the same receipt fields. The legacy
+  `endpoint_setup_flows` module no longer owns Meld setup behavior.
+- Saved-session presentation relocation and ordered PTY evidence remain the
+  next steps; neither changes provider, cache, receipt, or Apply semantics.
