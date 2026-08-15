@@ -11,7 +11,7 @@ from memcommit.commands.command_wait import (
     build_report_loading_view,
     run_command_wait,
 )
-from memcommit.commands.endpoint_setup_flows import choose_update_setup
+from memcommit.commands.update_setup import choose_update_setup
 from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -34,6 +34,11 @@ from memcommit.commands.update_render import (
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
+)
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.granted_source_update_application import (
     apply_granted_source_staged_update,
@@ -52,6 +57,7 @@ from memcommit.update import (
     UpdateError,
     UpdateSession,
     applied_session_matches,
+    collect_update_inputs,
     plan_update,
     revise_update,
     session_matches,
@@ -135,12 +141,17 @@ def _browse_saved_update(store: MemoryStore) -> None:
         if setup is None:
             typer.echo("New Update cancelled; no session was created.")
             return
-        cmd(
-            source_name=setup.source_name,
-            target_name=setup.target_name,
-            source_descendants=setup.source_descendants,
-            target_descendants=setup.target_descendants,
-        )
+        start_kwargs = {
+            "source_name": setup.source_name,
+            "target_name": setup.target_name,
+            "source_descendants": setup.source_descendants,
+            "target_descendants": setup.target_descendants,
+        }
+        if setup.source_memory_uid is not None:
+            start_kwargs["source_memory"] = setup.source_memory_uid
+        if setup.target_memory_uid is not None:
+            start_kwargs["target_memory"] = setup.target_memory_uid
+        cmd(**start_kwargs)
         return
     if (
         not isinstance(receipt, SessionOpenReceipt)
@@ -283,6 +294,8 @@ def _plan_update_with_wait(
     target_descendants: bool,
     granted_source: GrantedUpdateTarget | None,
     granted_target: GrantedUpdateTarget | None,
+    source_memory_selector: str | None = None,
+    target_memory_selector: str | None = None,
 ) -> UpdateSession:
     """Plan one complete Update while sharing the interactive command wait."""
 
@@ -301,6 +314,8 @@ def _plan_update_with_wait(
             target_include_descendants=target_descendants,
             granted_source=granted_source,
             granted_target=granted_target,
+            source_memory_selector=source_memory_selector,
+            target_memory_selector=target_memory_selector,
         )
 
     return run_command_wait(
@@ -378,22 +393,90 @@ def cmd(
             help="Replace a different, stale, or applied update record",
         ),
     ] = False,
-    source_descendants: Annotated[
+    direct: Annotated[
         bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Use only the selected Source and Target roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both Source and Target roots",
+        ),
+    ] = False,
+    source_descendants: Annotated[
+        Optional[bool],
         typer.Option(
             "--source-descendants/--source-only",
             help="Include all readable descendant Contexts under Source A",
         ),
-    ] = False,
+    ] = None,
     target_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--target-descendants/--target-only",
             help="Include all writable descendant Contexts under Target B",
         ),
-    ] = False,
+    ] = None,
+    source_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--source-memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "Use one Source Memory as provenance while its neighbors "
+                "remain non-actionable context"
+            ),
+        ),
+    ] = None,
+    target_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--target-memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "Restrict edits/removal to one Target Memory while its "
+                "neighbors remain non-actionable context"
+            ),
+        ),
+    ] = None,
 ) -> None:
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or source_descendants is not None
+        or target_descendants is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        source_descendants, target_descendants = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(source_descendants, target_descendants),
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Update error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if source_name is None and target_name is None:
+        if source_memory is not None or target_memory is not None or scope_flags_supplied:
+            typer.secho(
+                "Update error: scope flags require --from or --to.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         store = MemoryStore(create=False)
         try:
             _browse_saved_update(store)
@@ -401,6 +484,23 @@ def cmd(
             typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
         return
+
+    if source_memory is not None and source_descendants:
+        typer.secho(
+            "Update error: --source-memory cannot be combined with "
+            "--source-descendants.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if target_memory is not None and target_descendants:
+        typer.secho(
+            "Update error: --target-memory cannot be combined with "
+            "--target-descendants.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
 
     store = MemoryStore()
     try:
@@ -457,11 +557,18 @@ def cmd(
             else None
         )
         authorize_derived_transfer(source_access, target_access)
+        requested_inputs = collect_update_inputs(
+            source,
+            target,
+            source_memory_selector=source_memory,
+            target_memory_selector=target_memory,
+        )
     except (
         FileNotFoundError,
         ProfileConfigError,
         ProfileError,
         RuntimeError,
+        UpdateError,
         ValueError,
     ) as error:
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
@@ -477,6 +584,8 @@ def cmd(
         if (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
+            and existing.source_memory_uid == requested_inputs.source_memory_uid
+            and existing.target_memory_uid == requested_inputs.target_memory_uid
             and applied_session_matches(
                 existing,
                 source,
@@ -517,6 +626,8 @@ def cmd(
         if (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
+            and existing.source_memory_uid == requested_inputs.source_memory_uid
+            and existing.target_memory_uid == requested_inputs.target_memory_uid
             and session_matches(
                 existing,
                 source,
@@ -562,6 +673,8 @@ def cmd(
                 cached is not None
                 and cached.source_include_descendants == source_descendants
                 and cached.target_include_descendants == target_descendants
+                and cached.source_memory_uid == requested_inputs.source_memory_uid
+                and cached.target_memory_uid == requested_inputs.target_memory_uid
                 and session_matches(
                     cached,
                     source,
@@ -593,14 +706,18 @@ def cmd(
                     find_installed_projectable_update_prewarm,
                 )
 
-                update_prewarm_match = find_installed_projectable_update_prewarm(
-                    store=store,
-                    source=source,
-                    target=target,
-                    source_include_descendants=source_descendants,
-                    target_include_descendants=target_descendants,
-                    granted_source=granted_source,
-                    granted_target=granted_target,
+                update_prewarm_match = (
+                    None
+                    if source_memory is not None or target_memory is not None
+                    else find_installed_projectable_update_prewarm(
+                        store=store,
+                        source=source,
+                        target=target,
+                        source_include_descendants=source_descendants,
+                        target_include_descendants=target_descendants,
+                        granted_source=granted_source,
+                        granted_target=granted_target,
+                    )
                 )
                 if update_prewarm_match is not None:
                     session = update_prewarm_match.session.with_status("staged")
@@ -624,6 +741,8 @@ def cmd(
                         target_descendants=target_descendants,
                         granted_source=granted_source,
                         granted_target=granted_target,
+                        source_memory_selector=source_memory,
+                        target_memory_selector=target_memory,
                     )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one

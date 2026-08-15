@@ -69,10 +69,12 @@ directly.
 
 ## Intentional limitations
 
-- This step does not migrate the existing Meld/Compare/Update shell. They can
-  move incrementally after their in-progress Memory-focus behavior is stable.
-- The rebuilt component does not yet create new Context endpoints or select a
-  focused Memory. Those capabilities should be added only when the first
+- Compare and Update now use the rebuilt component. Their provider, cache,
+  session, result/review, and Apply behavior intentionally remains outside it.
+- The existing shell still serves Atomize and Meld until their new-Context and
+  mode-dependent-role contracts are available in the rebuilt component.
+- The rebuilt component does not yet create new Context endpoints or support
+  mode-dependent active roles. Those capabilities should be added only when a
   migrated operation requires them.
 - A fixed Merge Target avoids inventing a TUI-only command. Selectable targets
   require a separately supported public `--into TARGET` contract.

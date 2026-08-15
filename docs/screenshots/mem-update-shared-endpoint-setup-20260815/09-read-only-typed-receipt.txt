@@ -1,0 +1,14 @@
+
+UPDATE SETUP RECEIPT · UpdateSetupReceipt(source_name='participant/construction-updates', target_name='campus-wiki', source_descendants=False, target_descendants=True, source_memor
+y_uid='a0f119be-5bd9-4832-af0f-4432badb10a7', target_memory_uid=None)
+  A SOURCE · DESCENDANTS=False · MEMORY=a0f119be-5bd9-4832-af0f-4432badb10a7
+  B TARGET · DESCENDANTS=True · MEMORY=None
+  EXPECTED SOURCE MEMORY · a0f119be-5bd9-4832-af0f-4432badb10a7 · MATCH=True
+  DIRECT MEMORY PROJECTIONS · ['participant/construction-updates', 'campus-wiki']
+READ-ONLY SETUP VERIFICATION
+  CONTEXT BYTES UNCHANGED · True
+  CURRENT CONTEXT · participant/construction-updates
+  CONTEXT CHECKPOINTS · 0
+  STAGED UPDATE · None
+  IMPACT CACHE · None
+  PROVIDER CALLS · 0

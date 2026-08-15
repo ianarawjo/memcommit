@@ -85,7 +85,8 @@ cache/session/semantic regressions.  Ordered 180×52 PTY evidence records the
 actual command adapter from entry through reviewed receipt and cancellation,
 including unchanged Store bytes, zero checkpoints, and zero provider calls.
 
-The legacy endpoint shell remains necessary for Atomize, Update, Meld, and
-operations that require new-Context editing or mode-dependent roles.  Update
-is the next suitable A/B migration once its mutation, session, and Apply
-boundaries are held fixed separately.
+Update now uses the same shared component while retaining its mutation,
+session, cache, and Apply boundaries. The legacy endpoint shell remains
+necessary for Atomize, Meld, and operations that require new-Context editing
+or mode-dependent active roles. Those missing capabilities must be
+characterized before the next migration.

@@ -1,0 +1,10 @@
+
+CANCEL RECEIPT · None
+  DIRECT MEMORY PROJECTIONS · ['participant/construction-updates', 'campus-wiki']
+READ-ONLY SETUP VERIFICATION
+  CONTEXT BYTES UNCHANGED · True
+  CURRENT CONTEXT · participant/construction-updates
+  CONTEXT CHECKPOINTS · 0
+  STAGED UPDATE · None
+  IMPACT CACHE · None
+  PROVIDER CALLS · 0
