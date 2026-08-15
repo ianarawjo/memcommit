@@ -16,10 +16,12 @@ owners. It must not create a second Fit-only common layer.
 - The interactive Fit action is embedded in the named Ground Cases flow.
   That shell already reuses the shared frame, scrollable-pane, multiline-input,
   theme, and keybinding components.
-- Its Case cards, compact Fit-mark projection, and table composition still
-  live in the Ground command adapter. The table also still depends on the
-  legacy command-hosted `commands.tui_table` component. Only the blocking Fit
-  turn lifecycle moves to the shared background-turn component in this slice.
+- Its saved-Memory list, compact Fit-mark projection, and Enter detail still
+  live in the Ground command adapter. The former named-Ground `V` table was
+  later removed as a duplicate of that list/detail path; the blank first-turn
+  preview remains the separate Ground consumer of the command-hosted
+  `commands.tui_table` component. Only the blocking Fit turn lifecycle moved to
+  the shared background-turn component in this slice.
 - Fit's semantic report and immutable receipt remain application/domain data.
   They must not acquire prompt-toolkit, terminal styling, or clipboard state.
 
@@ -45,9 +47,10 @@ Handle Fit as one bounded vertical slice of the semantic result inventory:
 
 ## Remaining boundary
 
-Do not move the Ground Case cards or legacy table merely to make this Fit slice
-look complete. `commands.tui_table` still has multiple Ground consumers and
-requires a separately characterized migration. Conformance, Audit, Distill,
+Do not move the Ground Memory list/detail or blank-Ground preview table merely
+to make this Fit slice look complete. The named-Ground table was removed only
+after USE, FIT, and Enter detail gave each remaining surface one distinct job;
+that is not a general table-component migration. Conformance, Audit, Distill,
 Compare, and other compatible reports remain later `TUI-05` candidates; Fit's
 adapter is evidence for the shared mechanics, not a template that determines
 their semantic documents.
@@ -63,5 +66,5 @@ close, one receipt, and unchanged Ground content.
 
 The repository-wide matrix remains `MIGRATING`, because this proves one Fit
 vertical slice rather than completing Conformance, Audit, Distill, Compare, or
-the remaining command-hosted viewers. The legacy Ground table is still a named
-follow-up rather than hidden unfinished work in this slice.
+the remaining command-hosted viewers. The blank-Ground draft table remains a
+named follow-up rather than hidden unfinished work in this slice.

@@ -12,19 +12,19 @@ boundary and completed Fit receipt be captured without provider variability.
    with Goal focused. Four Ground Memories already exist; no Fit receipt exists
    and no durable state changes.
 2. `02-four-memories-before-fit` — Tab is pressed four times to focus Memories.
-   Default `PROPOSED · FIT / INCLUDE` metadata is implicit, so the three ordinary
-   proposition sentences occupy one row each. Berkshire keeps its exceptional
-   `[BOUNDARY]` role visible. No arrow statement is synthesized by the renderer.
-3. `03-full-metadata-table` — `V`, then Right four times, switches the same
-   Memories pane to its lossless table and focuses the authoritative
-   `PROPOSITION` cell. The proposition, exact `INPUT`, exact `EXPECTED`, and
-   `PROPOSED`/`FIT`/`INCLUDE` metadata remain distinct fields; compact List
-   projection has not discarded or rewritten them. `V` then returns to List.
+   The `USE · ID · FIT · EXAMPLE` header makes persisted participation and the
+   independent Fit result explicit. All four INCLUDE Memories show `[x]`, every
+   not-yet-run result shows `·`, and each authoritative proposition occupies one
+   row. The stored legacy BOUNDARY role for Berkshire is intentionally absent.
+3. `03-memory-detail` — `Enter` opens the selected Memory's vertical detail.
+   The proposition, exact `INPUT`, exact `EXPECTED`, Notes, linked Rule, Source,
+   Target, USE, and FIT remain separately inspectable without a duplicate wide
+   table. `Backspace` then returns to the same selected List row.
 4. `04-fit-running` — `F` is pressed. The application service evaluates all four
    frozen Examples in one Fit operation; Ground and Contexts remain unchanged.
 5. `05-four-memories-fit` — one immutable current receipt contains four
-   judgments. Every row projects `✓`, and the footer reports `✓ 4/4`; the
-   independent `[BOUNDARY]` role remains visible on Berkshire.
+   judgments. Every row projects `✓`, and the footer reports `✓ 4/4`; each `[x]`
+   USE mark remains unchanged.
 6. `06-close-verification` — `Q` closes the shell. The result named `CLOSED`
    describes only that UI exit. The read-only check confirms schema version 3,
    four saved proposition Memories, four Fit judgments, and a current receipt.

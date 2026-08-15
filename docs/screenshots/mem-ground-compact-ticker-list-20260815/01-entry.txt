@@ -26,14 +26,14 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────┐
-│› c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                                ^│
-│c2 · Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                                   │
-│c3 · Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                        │
-│c4 · [BOUNDARY] Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                       │
+│  USE ID  FIT EXAMPLE                                                                                                                                                            ^│
+│› [x] c1  ·  Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                           │
+│  [x] c2  ·  Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                           │
+│  [x] c3  ·  Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                │
+│  [x] c4  ·  Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                          │
 │                                                                                                                                                                                  │
 │PLACEMENT · DIRECT SELECTION                                                                                                                                                      │
 │ticker/output                                                                                                                                                                     │
-│                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHAT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

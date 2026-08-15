@@ -492,7 +492,6 @@ def test_named_focused_comment_escape_collapses_before_second_escape_closes():
         (1, "GOAL"),
         (2, "CONTEXTS"),
         (3, "RULE r1"),
-        (4, "MEMORY c1"),
     ],
 )
 def test_named_enter_opens_conversation_inside_each_semantic_pane(
@@ -524,6 +523,36 @@ def test_named_enter_opens_conversation_inside_each_semantic_pane(
     assert len(seen) == 1
     _current, dialogue_text, source_text = seen[0]
     assert f"FOCUS · {focus}" in dialogue_text
+    assert source_text == comment
+    assert result.applied_argvs == ()
+
+
+def test_named_c_opens_conversation_for_selected_memory():
+    seen = []
+    comment = "Discuss memory c1 here."
+
+    def interpret(current, dialogue_text, source_text):
+        seen.append((current, dialogue_text, source_text))
+        return Ask(
+            kind="ASK",
+            understanding="The focused Memory comment was received.",
+            question="What should happen next?",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(f"\t\t\t\tc{comment}\r\x1b")
+        result = run_named_ground_shell(
+            session_with_rule_and_case(),
+            interpret=interpret,
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert len(seen) == 1
+    _current, dialogue_text, source_text = seen[0]
+    assert "FOCUS · MEMORY c1" in dialogue_text
     assert source_text == comment
     assert result.applied_argvs == ()
 
@@ -976,13 +1005,13 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
     assert "r2 [PROPOSED]" in rules
     assert "Preserve exceptions and continued service." in rules
     assert "Otherwise the fixture overstates closures." in rules
-    assert "c1 · The rear entrance closes" in cases
-    assert "c2 · The east elevator remains" in cases
+    assert "[x] c1  ·  The rear entrance closes" in cases
+    assert "[x] c2  ·  The east elevator remains" in cases
     assert (
         "The east elevator remains in service. → "
         "Publish the continued elevator service."
     ) in cases
-    assert len(cases.splitlines()) == 2
+    assert len(cases.splitlines()) == 3
     assert "NOTES" not in cases
     assert "LINKED RULES" not in cases
 
@@ -990,8 +1019,8 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
         session,
         selected_memory_index=1,
     )
-    assert "› c2 · The east elevator remains" in selected
-    assert len(selected.splitlines()) == 2
+    assert "› [x] c2  ·  The east elevator remains" in selected
+    assert len(selected.splitlines()) == 3
     assert "DETAILS" not in selected
 
 
@@ -1011,10 +1040,10 @@ def test_ground_memory_folds_multiline_content_into_one_row():
         replace(original, items=(rule, ticker_case))
     )
 
-    assert "c1 · North Star Energy Inc." in rendered
+    assert "[x] c1  ·  North Star Energy Inc." in rendered
     assert "North Star Energy Inc. ↵ Class B → NSE.B" in rendered
     assert "Ignore the legal suffix" not in rendered
-    assert "\n" not in rendered
+    assert len(rendered.splitlines()) == 2
     assert "EXPECTED" not in rendered
     assert "WHY" not in rendered
 
@@ -1040,7 +1069,7 @@ def test_native_example_card_leads_with_one_line_proposition() -> None:
     rendered = render_named_ground_cases_pane(session)
     assert "On August 15 the observed sky was yellow." in rendered
     assert "optional exact input → optional exact output" not in rendered
-    assert "\n" not in rendered
+    assert len(rendered.splitlines()) == 2
 
 
 def test_ground_memory_projects_compact_fit_marks() -> None:
@@ -1065,16 +1094,16 @@ def test_ground_memory_projects_compact_fit_marks() -> None:
         fit_receipt=fit_receipt_for(session, current=False),
     )
 
-    assert "c1 · The rear entrance closes" in not_run
-    assert "c1 ✓ The rear entrance closes" in current
-    assert "c1 ! The rear entrance closes" in issue
-    assert "c1 ◷ The rear entrance closes" in stale
+    assert "c1  ·  The rear entrance closes" in not_run
+    assert "c1  ✓  The rear entrance closes" in current
+    assert "c1  !  The rear entrance closes" in issue
+    assert "c1  ◷  The rear entrance closes" in stale
     assert "FIT RECEIPT" not in current
     assert "FIT WHY" not in current
     assert "FIT STALE" not in stale
 
 
-def test_ground_memory_list_names_only_exceptional_metadata() -> None:
+def test_ground_memory_list_projects_use_and_only_exceptional_review_status() -> None:
     original = session_with_rule_and_case()
     rule, memory = original.items
     exceptional = replace(
@@ -1088,12 +1117,34 @@ def test_ground_memory_list_names_only_exceptional_metadata() -> None:
         replace(original, items=(rule, exceptional))
     )
 
-    assert (
-        "c1 · [ACCEPTED · BOUNDARY · EXCLUDE] "
-        "The rear entrance closes"
-    ) in rendered
+    assert "[ ] c1  ·  [ACCEPTED] The rear entrance closes" in rendered
     assert "PROPOSED" not in rendered
-    assert "FIT / INCLUDE" not in rendered
+    assert "BOUNDARY" not in rendered
+    assert "EXCLUDE" not in rendered
+
+
+def test_ground_memory_use_column_projects_each_persisted_disposition() -> None:
+    original = session_with_rule_and_case()
+    rule, memory = original.items
+    cases = tuple(
+        replace(
+            memory,
+            uid=f"{index:08d}-2222-4222-8222-222222222222",
+            disposition=disposition,
+        )
+        for index, disposition in enumerate(
+            ("INCLUDE", "EXCLUDE", "UNRESOLVED"),
+            1,
+        )
+    )
+
+    rendered = render_named_ground_cases_pane(
+        replace(original, items=(rule, *cases))
+    )
+
+    assert "[x] c1" in rendered
+    assert "[ ] c2" in rendered
+    assert "[?] c3" in rendered
 
 
 def test_ground_memory_list_scans_four_tickers_as_four_rows() -> None:
@@ -1129,14 +1180,15 @@ def test_ground_memory_list_scans_four_tickers_as_four_rows() -> None:
     )
 
     assert rendered.splitlines() == [
-        'c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".',
-        'c2 · Applying the ticker Rules to "Google LLC" produces "GOOG".',
+        "  USE ID  FIT EXAMPLE",
+        '  [x] c1  ·  Applying the ticker Rules to "Apple Inc." produces "AAPL".',
+        '  [x] c2  ·  Applying the ticker Rules to "Google LLC" produces "GOOG".',
         (
-            'c3 · Applying the ticker Rules to "Microsoft Corporation" '
+            '  [x] c3  ·  Applying the ticker Rules to "Microsoft Corporation" '
             'produces "MSFT".'
         ),
         (
-            'c4 · [BOUNDARY] Applying the ticker Rules to '
+            '  [x] c4  ·  Applying the ticker Rules to '
             '"Berkshire Hathaway Class B" produces "BRK.B".'
         ),
     ]
@@ -1190,7 +1242,7 @@ def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> N
 
     assert result.status == "CLOSED"
     assert ran == [session.revision]
-    assert "c1 ✓ The rear entrance closes" in panes["MEMORIES"].text_area.text
+    assert "c1  ✓  The rear entrance closes" in panes["MEMORIES"].text_area.text
 
 
 def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> None:
@@ -1238,30 +1290,41 @@ def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> No
     assert calls == [session.revision]
 
 
-def test_named_ground_memory_table_exposes_fields_as_cells():
-    rendered = ground_named_shell_module.render_named_ground_memories_pane(
+def test_named_ground_memory_detail_exposes_review_fields():
+    rendered = ground_named_shell_module.render_named_ground_memory_detail(
         session_with_two_cases(),
-        view="TABLE",
         selected_memory_index=1,
-        selected_memory_column=5,
     )
 
-    assert "TABLE · 2 MEMORIES · ROW 2/2 · COLUMN EXPECTED" in rendered
-    assert "ID" in rendered
-    assert "STATUS" in rendered
-    assert "ROLE" in rendered
-    assert "DECISION" in rendered
+    assert "MEMORY · c2" in rendered
+    assert "STATUS · PROPOSED" in rendered
+    assert "USE · [x] INCLUDE" in rendered
+    assert "FIT · ·" in rendered
     assert "INPUT" in rendered
     assert "EXPECTED" in rendered
     assert "NOTES" in rendered
     assert "RULES" in rendered
     assert "SOURCES" in rendered
     assert "TARGETS" in rendered
-    assert "CELL · c2 · EXPECTED" in rendered
-    assert "Publishthecontinuedelevatorservice." in "".join(rendered.split())
+    assert "Publish the continued elevator service." in rendered
+    assert "ROLE" not in rendered
+    assert "DECISION" not in rendered
 
 
-def test_proposition_memory_table_separates_statement_from_exact_projection():
+def test_named_ground_memory_detail_exposes_full_fit_judgment():
+    session = session_with_rule_and_case()
+    rendered = ground_named_shell_module.render_named_ground_memory_detail(
+        session,
+        selected_memory_index=0,
+        fit_receipt=fit_receipt_for(session, status="UNDERDETERMINED"),
+    )
+
+    assert "FIT · !" in rendered
+    assert "FIT JUDGMENT · UNDERDETERMINED" in rendered
+    assert "The Rule reproduces the reviewed expected result." in rendered
+
+
+def test_proposition_memory_detail_separates_statement_from_exact_projection():
     original = session_with_rule_and_case()
     rule, legacy = original.items
     proposition = (
@@ -1279,19 +1342,17 @@ def test_proposition_memory_table_separates_statement_from_exact_projection():
         items=(rule, example),
     )
 
-    rendered = ground_named_shell_module.render_named_ground_memories_pane(
+    rendered = ground_named_shell_module.render_named_ground_memory_detail(
         session,
-        view="TABLE",
         selected_memory_index=0,
-        selected_memory_column=4,
     )
 
-    assert "COLUMN PROPOSITION" in rendered
     assert "PROPOSITION" in rendered
     assert "INPUT" in rendered
     assert "EXPECTED" in rendered
-    compact = "".join(rendered.split())
-    assert "ApplyingthetickerRulesto\"AppleInc.\"produces\"AAPL\"." in compact
+    assert proposition in rendered
+    assert "Apple Inc." in rendered
+    assert "AAPL" in rendered
 
 
 def test_ground_memory_without_notes_remains_one_row():
@@ -1302,7 +1363,7 @@ def test_ground_memory_without_notes_remains_one_row():
     )
 
     assert "NOTES" not in rendered
-    assert "\n" not in rendered
+    assert len(rendered.splitlines()) == 2
 
 
 def test_saved_directional_provenance_is_presented_as_neutral_distillation():
@@ -1927,7 +1988,7 @@ def test_named_focused_comment_key_is_disabled_during_approval():
     assert result.applied_argvs == tuple(applied)
 
 
-def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
+def test_named_memory_enter_opens_detail_and_backspace_returns_list(monkeypatch):
     original_builder = (
         ground_named_shell_module.build_scrollable_text_pane
     )
@@ -1944,8 +2005,65 @@ def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
         capturing_builder,
     )
 
+    detail_seen = []
+    feeder_errors = []
+
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\tv\x1b[B\x1b[Cv\x1b")
+        def open_then_return() -> None:
+            try:
+                pipe_input.send_text("\t\t\t\t\r")
+                deadline = time.monotonic() + 2
+                while time.monotonic() < deadline:
+                    pane = panes.get("MEMORIES")
+                    if pane is not None and "MEMORY · c1" in pane.text_area.text:
+                        detail_seen.append(pane.text_area.text)
+                        pipe_input.send_text("\x7f\x1b[B\x1b")
+                        return
+                    time.sleep(0.01)
+                raise AssertionError("Memory detail never opened")
+            except Exception as error:  # pragma: no cover - assertion relay
+                feeder_errors.append(error)
+                pipe_input.send_text("\x03")
+
+        feeder = threading.Thread(target=open_then_return)
+        feeder.start()
+        result = run_named_ground_shell(
+            session_with_two_cases(),
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert feeder_errors == []
+    assert detail_seen
+    assert result.status == "CLOSED"
+    memories = panes["MEMORIES"].text_area
+    assert "TABLE ·" not in memories.text
+    assert "› [x] c2  ·  The east elevator remains" in memories.text
+    assert not memories.window.wrap_lines()
+
+
+def test_named_v_no_longer_replaces_memory_list(monkeypatch):
+    original_builder = (
+        ground_named_shell_module.build_scrollable_text_pane
+    )
+    panes = {}
+    def capturing_builder(title, *args, **kwargs):
+        pane = original_builder(title, *args, **kwargs)
+        panes[title] = pane
+        return pane
+
+    monkeypatch.setattr(
+        ground_named_shell_module,
+        "build_scrollable_text_pane",
+        capturing_builder,
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\tvq")
         result = run_named_ground_shell(
             session_with_two_cases(),
             interpret=lambda *_args: pytest.fail("must not interpret"),
@@ -1957,51 +2075,8 @@ def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
 
     assert result.status == "CLOSED"
     memories = panes["MEMORIES"].text_area
+    assert "USE ID  FIT EXAMPLE" in memories.text
     assert "TABLE ·" not in memories.text
-    assert "› c2 · The east elevator remains" in memories.text
-    assert not memories.window.wrap_lines()
-
-
-def test_named_approval_table_navigation_keeps_the_exact_receipt(monkeypatch):
-    original_builder = (
-        ground_named_shell_module.build_scrollable_text_pane
-    )
-    panes = {}
-    applied = []
-
-    def capturing_builder(title, *args, **kwargs):
-        pane = original_builder(title, *args, **kwargs)
-        panes[title] = pane
-        return pane
-
-    monkeypatch.setattr(
-        ground_named_shell_module,
-        "build_scrollable_text_pane",
-        capturing_builder,
-    )
-
-    def apply(current, frozen):
-        applied.append(frozen.review.argv)
-        return current, "applied"
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "Propose another Rule.\r\t\t\t\tv\x1b[B\x1b[Ca\x03"
-        )
-        result = run_named_ground_shell(
-            session_with_two_cases(),
-            interpret=lambda current, text, _source: proposal(current, text),
-            apply=apply,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result.applied_argvs == tuple(applied)
-    assert len(applied) == 1
-    memories = panes["MEMORIES"].text_area
-    assert "TABLE · 2 MEMORIES · ROW 2/2 · COLUMN STATUS" in memories.text
-    assert "CELL · c2 · STATUS" in memories.text
     assert not memories.window.wrap_lines()
 
 

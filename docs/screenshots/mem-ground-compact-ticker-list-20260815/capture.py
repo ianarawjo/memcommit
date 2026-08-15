@@ -210,13 +210,11 @@ def main() -> None:
             BASE._settle(child, seconds=0.4)
             BASE._snapshot(recorder, "02-four-memories-before-fit")
 
-            child.send("v")
-            BASE._settle(child, seconds=0.3)
-            child.send("\x1b[C\x1b[C\x1b[C\x1b[C")
-            BASE._settle(child, seconds=0.2)
-            BASE._snapshot(recorder, "03-full-metadata-table")
+            child.send("\r")
+            BASE._settle(child, seconds=0.4)
+            BASE._snapshot(recorder, "03-memory-detail")
 
-            child.send("v")
+            child.send("\x7f")
             BASE._settle(child, seconds=0.2)
             child.send("f")
             BASE._settle(child, seconds=0.25)

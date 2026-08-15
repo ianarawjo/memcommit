@@ -674,32 +674,35 @@ keeps the Memory vocabulary. The interactive list is a scanning surface and
 presents every Case as one non-wrapping physical row:
 
 ```text
-c1 ✓ Applying the ticker Rules to "North Star Energy Inc." produces "NSE".
-c2 ✓ [BOUNDARY] Applying the ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".
+  USE ID  FIT EXAMPLE
+  [x] c1  ✓  Applying the ticker Rules to "North Star Energy Inc." produces "NSE".
+  [x] c2  ✓  Applying the ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".
 ```
 
 This is a presentation contract, not a stored-schema migration: `content`,
 `expected`, and `rationale` remain compatibility and exact-projection fields.
 For a version-3 Ground, List displays the authoritative `proposition` and does
-not synthesize a statement from those fields. Its detailed `V` table exposes
-`PROPOSITION`, exact `INPUT`, and exact `EXPECTED` as separate columns. A
-version-2 Ground retains the legacy `content → expected` List projection so
-old records remain readable without pretending that their stored shape was
-silently migrated. Embedded newlines are folded to `↵` in List only, without
-rewriting stored text, and terminal wrapping is disabled so one Memory never
-expands merely because it is selected or long.
-The leading `·`, `✓`, `!`, or `◷` is the independent Fit-operation result.
-The ordinary working classification—`PROPOSED` review state, `FIT` case role,
-and `INCLUDE` disposition—is implicit in List because repeating it on every
-row obscures the proposition and makes the role named `FIT` look like a Fit
-result. Non-default values remain visible in full, such as `[ACCEPTED]`,
-`[BOUNDARY]`, `[CONTRAST]`, `[EXCLUDE]`, or `[UNRESOLVED]`; multiple exceptions
-share one bracket. This exception-only projection deliberately avoids compact
-but opaque status codes. The `V` table remains the lossless place to inspect
-all three axes, including their default values. `CLOSED` is not a fourth item
-state: it is only the named-Ground shell's return value after the TUI closes.
-Ground-local Notes, linked Rules, source references, targets, and other fields
-remain available through the detailed `V` table instead of expanding the List.
+not synthesize a statement from those fields. Pressing `Enter` on one row
+opens a vertical detail that separates `PROPOSITION`, exact `INPUT`, and exact
+`EXPECTED`. A version-2 Ground retains the legacy `content → expected` List
+projection so old records remain readable without pretending that their
+stored shape was silently migrated. Embedded newlines are folded to `↵` in
+List only, without rewriting stored text, and terminal wrapping is disabled so
+one Memory never expands merely because it is selected or long.
+
+`USE` projects the stored Fit-participation disposition as `[x]` for
+`INCLUDE`, `[ ]` for `EXCLUDE`, or `[?]` for `UNRESOLVED`. `FIT` independently
+projects the latest Fit receipt as `·`, `✓`, `!`, or `◷`. The legacy
+`FIT`/`BOUNDARY`/`CONTRAST` authoring role remains in stored JSON and exact
+commands for compatibility, but it is not shown in the list: the role does not
+control executable Fit membership and its name `FIT` was repeatedly mistaken
+for the computed result. Non-default review state such as `[ACCEPTED]` remains
+visible beside the Example. The checkbox-shaped USE mark is a projection of a
+reviewed durable value in this slice, not an unreviewed process-local toggle.
+`CLOSED` is not an item state; it is only the named-Ground shell's return value
+after the TUI closes. Ground-local Notes, linked Rules, source references,
+targets, exact projections, and the full Fit judgment remain available through
+the selected Memory's `Enter` detail instead of expanding the List.
 A later `fill` or other materialization operation may propose the arrow's right
 side as ordinary Context content, but it must not copy Notes. One independently
 reviewable example is one Ground Memory, so a nine-cell evaluation matrix
@@ -724,37 +727,27 @@ parser and wire schema keep the compatibility tokens. A later schema
 migration would need dual parsing and explicit versioning rather than a
 display-only rename.
 
-### List and table views for Ground Memories
+### Ground Memory list and selected detail
 
-Ground Memories support two equivalent read-only presentations inside the
-same focusable pane. `LIST` remains the default and preserves exactly one
-physical row per saved Memory. `TABLE` exposes the same records as cells so
-several examples can be compared by field and so omitted List metadata remains
-inspectable. Pressing `V` while MEMORIES is focused switches in either
-direction; it is deliberately scoped to that pane so typing `v` in Message is
-still ordinary text.
+Ground Memories use one list rather than two equivalent List/Table
+presentations. The wide `V` table repeated the same Examples, forced horizontal
+cell navigation, and made the user-chosen authoring role look equivalent to a
+computed Fit result. Once USE and FIT are visible on every one-line row, that
+duplicate comparison surface has no independent job.
 
-The blank table separates `FROM` and `CHECK`, turning labels such as
-`[Suggested] [Unverified]` into independently comparable cells alongside
-input, expected output, role, decision, and Rule. The named table exposes
-status, role, decision, input, expected output, Notes, linked Rules, and source
-and target counts. `Up`/`Down` clamp at the first and last Memory;
-`Left`/`Right` clamp at the first and last column. The selected cell is
-reverse-bold, its full folded value appears beneath the grid, and the buffer
-cursor follows it so a non-wrapping table scrolls horizontally on narrower
-terminals. `Tab` still leaves the whole Memories pane, `Enter` opens a
-conversation anchored to the selected row, and `E` directly edits that saved
-row's expected output. Neither view wraps a Memory into additional physical
-rows.
+`Up`/`Down` select one saved Memory and clamp at the first and last row.
+`Enter` replaces the list with that Memory's vertical read-only detail;
+`Escape` or `Backspace` returns to the same selected row. The detail exposes
+review status, USE, FIT, authoritative proposition where present, exact input
+and expected projections, Notes, linked Rules, source references, target
+Contexts, and the latest full Fit judgment. `C` remains the explicit path to a
+conversation anchored to the selected Memory, while `E` edits that row through
+the existing exact-review path. `V` has no MEMORIES binding.
 
-This is presentation state, not Ground state. View mode and cell coordinates
-are process-local, reset to List when a shell starts, and are clamped when a
-provider batch or reloaded Ground changes row count. They are never sent to a
+Selection and detail-open state are process-local. They are never sent to a
 provider, persisted in Ground JSON, included in a digest or exact command, or
-treated as approval. During exact approval the same grid navigation remains
-available because command/effects arrows are active only when Chat is
-focused. `Enter` applies only while that reviewed Chat receipt is focused;
-the compatibility `A` alias may still apply from another read-only Ground pane.
+treated as approval. The stored role and disposition remain unchanged by this
+presentation migration.
 
 ### First-turn Rule and Memory previews
 

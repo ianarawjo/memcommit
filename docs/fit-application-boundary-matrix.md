@@ -77,12 +77,13 @@ This slice reuses `interfaces.tui.viewers.semantic`,
 the Fit adapter; full observations and receipt evidence stay below the
 presentation boundary.
 
-The Ground Case table and cards are intentionally not relocated. Their current
-legacy table owner has more than one consumer, so moving them requires a
-separate inventory and parity pass. Fit also does not join hidden Study
-prewarming in this slice: an immutable Fit receipt is an explicit derived
-artifact tied to a Ground revision, not evidence that the operation satisfies
-the prepared-analysis cache contract.
+The named Ground keeps its saved-Memory list and Enter detail in the Ground
+adapter; a later presentation pass removed its redundant `V` table without
+moving Fit meaning into shared UI. The blank first-turn draft flow still owns a
+separate table projection and remains a separately characterized migration.
+Fit also does not join hidden Study prewarming in this slice: an immutable Fit
+receipt is an explicit derived artifact tied to a Ground revision, not evidence
+that the operation satisfies the prepared-analysis cache contract.
 
 ## Verification gate
 

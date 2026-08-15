@@ -26,15 +26,15 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃TABLE · 4 MEMORIES · ROW 1/4 · COLUMN PROPOSITION                                                                                                                                ^┃
-┃ID     │ STATUS       │ ROLE         │ DECISION       │ PROPOSITION                          │ INPUT                    │ EXPECTED                 │ NOTES                    │ R ┃
-┃───────┼──────────────┼──────────────┼────────────────┼──────────────────────────────────────┼──────────────────────────┼──────────────────────────┼──────────────────────────┼── ┃
-┃c1     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Apple… │ Apple Inc.               │ AAPL                     │ This is one concrete re… │ r ┃
-┃c2     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Googl… │ Google LLC               │ GOOG                     │ This is one concrete re… │ r ┃
-┃c3     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Micro… │ Microsoft Corporation    │ MSFT                     │ This is one concrete re… │ r ┃
-┃c4     │ PROPOSED     │ BOUNDARY     │ INCLUDE        │ Applying the ticker Rules to "Berks… │ Berkshire Hathaway Clas… │ BRK.B                    │ This is one concrete re… │ r ┃
+┃MEMORY · c1                                                                                                                                                                      ^┃
+┃STATUS · PROPOSED                                                                                                                                                                 ┃
+┃USE · [x] INCLUDE                                                                                                                                                                 ┃
+┃FIT · ·                                                                                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃
-┃                                                        CELL · c1 · PROPOSITION                                                                                                  v┃
+┃PROPOSITION                                                                                                                                                                       ┃
+┃Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃INPUT                                                                                                                                                                            v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌─────────────────────────────────────────────────────────────────────────────────────| CHAT |─────────────────────────────────────────────────────────────────────────────────────┐
 │OPEN QUESTION · REVIEW OR CONTINUE                                                                                                                                               ^│
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- CASES · TABLE: ↑/↓ row · ←/→ column · V · list    F · run Fit    P · placement    C · comment    Enter · talk here    E · edit selected    B · Grounds    Q · quit
+ MEMORY DETAIL: Esc/Backspace · list    F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit

@@ -72,14 +72,6 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.commands.tui_table import (
-    RenderedTuiTable,
-    SelectedTableCellProcessor,
-    TuiTableColumn,
-    TuiTableRow,
-    clamp_table_position,
-    render_tui_table,
-)
 from memcommit.ground import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
@@ -94,46 +86,6 @@ from memcommit.ground_turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )
-
-
-_NAMED_MEMORY_TABLE_COLUMNS = (
-    TuiTableColumn("id", "ID", 6),
-    TuiTableColumn("status", "STATUS", 12),
-    TuiTableColumn("role", "ROLE", 12),
-    TuiTableColumn("decision", "DECISION", 14),
-    TuiTableColumn("input", "INPUT", 24),
-    TuiTableColumn("expected", "EXPECTED", 24),
-    TuiTableColumn("notes", "NOTES", 24),
-    TuiTableColumn("rules", "RULES", 14),
-    TuiTableColumn("sources", "SOURCES", 10),
-    TuiTableColumn("targets", "TARGETS", 10),
-    TuiTableColumn("fit", "FIT", 18),
-)
-
-_NAMED_PROPOSITION_MEMORY_TABLE_COLUMNS = (
-    TuiTableColumn("id", "ID", 6),
-    TuiTableColumn("status", "STATUS", 12),
-    TuiTableColumn("role", "ROLE", 12),
-    TuiTableColumn("decision", "DECISION", 14),
-    TuiTableColumn("proposition", "PROPOSITION", 36),
-    TuiTableColumn("input", "INPUT", 24),
-    TuiTableColumn("expected", "EXPECTED", 24),
-    TuiTableColumn("notes", "NOTES", 24),
-    TuiTableColumn("rules", "RULES", 14),
-    TuiTableColumn("sources", "SOURCES", 10),
-    TuiTableColumn("targets", "TARGETS", 10),
-    TuiTableColumn("fit", "FIT", 18),
-)
-
-
-def _named_memory_table_columns(
-    session: GroundSession,
-) -> tuple[TuiTableColumn, ...]:
-    return (
-        _NAMED_PROPOSITION_MEMORY_TABLE_COLUMNS
-        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-        else _NAMED_MEMORY_TABLE_COLUMNS
-    )
 
 
 class NamedGroundInterpreter(Protocol):
@@ -513,52 +465,33 @@ def render_named_ground_memories_pane(
     session: GroundSession,
     *,
     selected_memory_index: int | None = None,
-    view: Literal["LIST", "TABLE"] = "LIST",
-    selected_memory_column: int = 0,
     placement_hint: str = "",
     fit_receipt: GroundFitReceipt | None = None,
 ) -> str:
-    """Render reviewed Ground Memories as compact rows or a detailed table."""
-    if view == "TABLE":
-        return _render_named_ground_memory_table(
-            session,
-            selected_memory_index=selected_memory_index or 0,
-            selected_memory_column=selected_memory_column,
-            fit_receipt=fit_receipt,
-        ).text
-    if view != "LIST":
-        raise ValueError("Memory view must be LIST or TABLE.")
+    """Render saved Ground Memories as one compact, non-wrapping list."""
     cases = _aliased_items(session, "CASE")
     if not cases:
         return "(none yet)"
     fit_by_example = _fit_judgments_by_example(fit_receipt)
-    rows: list[str] = []
+    rows = ["  USE ID  FIT EXAMPLE"]
     for index, (alias, item) in enumerate(cases):
-        marker = "› " if index == selected_memory_index else ""
+        marker = "›" if index == selected_memory_index else " "
         fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
-        # PROPOSED/FIT/INCLUDE is the ordinary working state. Repeating all
-        # three on every row hides the proposition and makes FIT look like the
-        # independently computed fit mark. Keep defaults implicit here; the V
-        # table remains the lossless view, while exceptional values stay
-        # visible in full words instead of introducing an opaque code system.
-        qualifiers = [
-            value
-            for value, default in (
-                (item.status, "PROPOSED"),
-                (item.case_role, "FIT"),
-                (item.disposition, "INCLUDE"),
-            )
-            if value and value != default
-        ]
+        # USE is the durable participation decision; FIT is an independently
+        # computed receipt projection. Keep the two axes adjacent and do not
+        # ask readers to decode the legacy FIT/BOUNDARY/CONTRAST authoring
+        # classification, which does not change executable Fit membership.
+        use = _memory_use_checkbox(item.disposition)
+        qualifiers = [item.status] if item.status != "PROPOSED" else []
         qualifier_label = (
-            f" [{' · '.join(safe_terminal_text(value) for value in qualifiers)}]"
+            f"[{' · '.join(safe_terminal_text(value) for value in qualifiers)}] "
             if qualifiers
             else ""
         )
-        prefix = f"{marker}{alias} {fit_label}{qualifier_label}"
+        prefix = f"{marker} {use} {alias:<3} {fit_label}  {qualifier_label}"
         # LIST is the scanning surface: one durable Ground Memory must consume
-        # one physical terminal row. TABLE remains the explicit path to Notes,
-        # links, source/target counts, and other review metadata.
+        # one physical terminal row. Enter opens the selected record's complete
+        # vertical detail without duplicating the list as a wide table.
         if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
             value = _case_card_value(item.proposition)
         else:
@@ -568,7 +501,7 @@ def render_named_ground_memories_pane(
                 else "(no output)"
             )
             value = f"{_case_card_value(item.content)} → {expected}"
-        rows.append(f"{prefix} {value}")
+        rows.append(f"{prefix}{value}")
     if placement_hint:
         rows.extend(
             (
@@ -580,65 +513,98 @@ def render_named_ground_memories_pane(
     return "\n".join(rows)
 
 
-def _render_named_ground_memory_table(
+def _memory_use_checkbox(disposition: str) -> str:
+    """Project persisted Fit participation without changing its authority."""
+    return {
+        "INCLUDE": "[x]",
+        "EXCLUDE": "[ ]",
+        "UNRESOLVED": "[?]",
+    }.get(disposition, "[?]")
+
+
+def render_named_ground_memory_detail(
     session: GroundSession,
     *,
     selected_memory_index: int,
-    selected_memory_column: int,
     fit_receipt: GroundFitReceipt | None = None,
-) -> RenderedTuiTable:
+) -> str:
+    """Render one selected Ground Memory as an inspectable vertical record."""
+    cases = _aliased_items(session, "CASE")
+    if not cases:
+        return "(none yet)"
+    selected_memory_index = max(
+        0,
+        min(selected_memory_index, len(cases) - 1),
+    )
+    alias, item = cases[selected_memory_index]
     aliases = _item_aliases_by_uid(session)
     fit_by_example = _fit_judgments_by_example(fit_receipt)
-    rows: list[TuiTableRow] = []
-    for alias, item in _aliased_items(session, "CASE"):
-        linked_rules = [
-            aliases[uid]
-            for uid in item.related_uids
-            if uid in aliases and aliases[uid].startswith("r")
-        ]
-        identity_cells = (
-            alias,
-            item.status,
-            item.case_role or "—",
-            item.disposition or "—",
+    linked_rules = [
+        f"{aliases[uid]} · {linked.content}"
+        for uid in item.related_uids
+        for linked in session.items
+        if linked.uid == uid
+        and uid in aliases
+        and aliases[uid].startswith("r")
+    ]
+    context_names = {
+        frame.context_uid: frame.context_name for frame in session.frames
+    }
+    sources = [
+        (
+            f"{context_names.get(source.context_uid, source.context_uid[:8])}"
+            f" · {source.memory_uid[:8]}"
         )
-        statement_cells = (
-            (
-                item.proposition,
-                item.content or "(no exact input)",
-                item.expected or "(no exact output)",
-            )
-            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-            else (
-                item.content,
-                item.expected or "(no output)",
-            )
+        for source in item.source_refs
+    ]
+    targets = [
+        context_names.get(uid, uid[:8]) for uid in item.target_context_uids
+    ]
+    lines = [
+        f"MEMORY · {alias}",
+        f"STATUS · {safe_terminal_text(item.status)}",
+        (
+            f"USE · {_memory_use_checkbox(item.disposition)} "
+            f"{safe_terminal_text(item.disposition)}"
+        ),
+        f"FIT · {_fit_label(item.uid, fit_receipt, fit_by_example)}",
+    ]
+    if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+        lines.extend(("", "PROPOSITION", safe_terminal_text(item.proposition)))
+    lines.extend(
+        (
+            "",
+            "INPUT",
+            safe_terminal_text(item.content) if item.content else "(none)",
+            "",
+            "EXPECTED",
+            safe_terminal_text(item.expected) if item.expected else "(none)",
+            "",
+            "RULES",
+            *(safe_terminal_text(value) for value in linked_rules or ["(none)"]),
+            "",
+            "SOURCES",
+            *(safe_terminal_text(value) for value in sources or ["(none)"]),
+            "",
+            "TARGETS",
+            *(safe_terminal_text(value) for value in targets or ["(none)"]),
+            "",
+            "NOTES",
+            safe_terminal_text(item.rationale) if item.rationale else "(none)",
         )
-        rows.append(
-            TuiTableRow(
-                row_id=alias,
-                cells=(
-                    *identity_cells,
-                    *statement_cells,
-                    item.rationale or "(none)",
-                    ", ".join(linked_rules) or "—",
-                    str(len(item.source_refs)) if item.source_refs else "—",
-                    (
-                        str(len(item.target_context_uids))
-                        if item.target_context_uids
-                        else "—"
-                    ),
-                    _fit_label(item.uid, fit_receipt, fit_by_example),
-                ),
-            )
-        )
-    return render_tui_table(
-        columns=_named_memory_table_columns(session),
-        rows=rows,
-        selected_row=selected_memory_index,
-        selected_column=selected_memory_column,
-        noun="MEMORIES",
     )
+    judgment = fit_by_example.get(item.uid)
+    if judgment is not None:
+        lines.extend(
+            (
+                "",
+                f"FIT JUDGMENT · {safe_terminal_text(judgment.status)}",
+                safe_terminal_text(judgment.reason),
+            )
+        )
+        if judgment.observed:
+            lines.extend(("OBSERVED", safe_terminal_text(judgment.observed)))
+    return "\n".join(lines)
 
 
 def render_named_ground_cases_pane(session: GroundSession) -> str:
@@ -1033,11 +999,7 @@ def run_named_ground_shell(
     suspended_message = {"value": ""}
     selected_rule_index = {"value": 0}
     selected_memory_index = {"value": 0}
-    selected_memory_column = {"value": 0}
-    memory_view: dict[str, Literal["LIST", "TABLE"]] = {"value": "LIST"}
-    memory_table_render: dict[str, RenderedTuiTable | None] = {
-        "value": None
-    }
+    memory_detail_open = {"value": False}
     bound_target_names = tuple(
         frame.context_name
         for frame in session.frames
@@ -1172,18 +1134,10 @@ def run_named_ground_shell(
         height=pane_height,
         notification=lambda: pane_notifications["MEMORIES"],
     )
-    # Both LIST and TABLE preserve one physical row per Memory. LIST is a
-    # compact scanner; V opens the detailed cell-oriented TABLE.
-    cases_pane.text_area.window.wrap_lines = Condition(lambda: False)
-    cases_pane.text_area.control.input_processors.append(
-        SelectedTableCellProcessor(
-            lambda: (
-                memory_table_render["value"].selected_span
-                if memory_view["value"] == "TABLE"
-                and memory_table_render["value"] is not None
-                else None
-            )
-        )
+    # Saved Memories remain one physical row in List. Their Enter detail may
+    # wrap naturally because it is a reading surface rather than a scanner.
+    cases_pane.text_area.window.wrap_lines = Condition(
+        lambda: memory_detail_open["value"]
     )
 
     def conversation_text() -> str:
@@ -1313,18 +1267,18 @@ def run_named_ground_shell(
             and _aliased_items(current["value"], "CASE")
         ):
             tail = (
-                "Enter · talk here    E · edit selected"
+                "E · edit selected"
                 if active_mode == "INPUT"
-                else "Enter · exact approval"
+                else "A · exact approval"
             )
-            if memory_view["value"] == "TABLE":
+            if memory_detail_open["value"]:
                 return (
-                    " CASES · TABLE: ↑/↓ row · ←/→ column · "
-                    f"V · list    F · run Fit    P · placement    C · comment    {tail}    "
+                    " MEMORY DETAIL: Esc/Backspace · list    "
+                    f"F · run Fit    P · placement    C · comment    {tail}    "
                     "B · Grounds    Q · quit"
                 )
             return (
-                " CASES · LIST: ↑/↓ Case · V · table    F · run Fit    "
+                " MEMORIES: ↑/↓ Example · Enter · details    F · run Fit    "
                 f"P · placement    C · comment    {tail}    B · Grounds    Q · quit"
             )
         if active_mode == "INPUT" and application.layout.has_focus(
@@ -1534,35 +1488,28 @@ def run_named_ground_shell(
 
     def sync_memories_pane(*, align_selection: bool = False) -> None:
         cases = _aliased_items(current["value"], "CASE")
-        row, column = clamp_table_position(
-            row_count=len(cases),
-            column_count=len(_named_memory_table_columns(current["value"])),
-            row=selected_memory_index["value"],
-            column=selected_memory_column["value"],
+        row = max(
+            0,
+            min(selected_memory_index["value"], max(0, len(cases) - 1)),
         )
         selected_memory_index["value"] = row
-        selected_memory_column["value"] = column
-        if memory_view["value"] == "TABLE":
-            rendered = _render_named_ground_memory_table(
+        if not cases:
+            memory_detail_open["value"] = False
+        if memory_detail_open["value"]:
+            rendered_text = render_named_ground_memory_detail(
                 current["value"],
                 selected_memory_index=row,
-                selected_memory_column=column,
                 fit_receipt=fit_receipt["value"],
             )
-            memory_table_render["value"] = rendered
-            table_text = rendered.text
             if placement_choice["MEMORIES"]:
-                table_text += (
+                rendered_text += (
                     "\n\nPLACEMENT TARGET · DIRECT SELECTION\n"
                     + safe_terminal_text(placement_choice["MEMORIES"])
                 )
-            cases_pane.set_text(table_text, anchor="preserve")
-            if align_selection and rendered.selected_span is not None:
-                cases_pane.text_area.buffer.cursor_position = (
-                    rendered.cursor_position
-                )
+            cases_pane.set_text(rendered_text, anchor="preserve")
+            if align_selection:
+                cases_pane.text_area.buffer.cursor_position = 0
             return
-        memory_table_render["value"] = None
         rendered_text = render_named_ground_memories_pane(
             current["value"],
             selected_memory_index=row,
@@ -1571,7 +1518,7 @@ def run_named_ground_shell(
         )
         cases_pane.set_text(rendered_text, anchor="preserve")
         if align_selection and cases:
-            marker = rendered_text.find(f"› c{row + 1} ")
+            marker = rendered_text.find("› ")
             if marker >= 0:
                 cases_pane.text_area.buffer.cursor_position = marker
 
@@ -1586,9 +1533,7 @@ def run_named_ground_shell(
             anchor="preserve",
         )
         sync_rules_pane()
-        sync_memories_pane(
-            align_selection=memory_view["value"] == "TABLE"
-        )
+        sync_memories_pane()
         dialogue_pane.set_text(
             conversation_text(),
             anchor=dialogue_anchor,
@@ -2152,8 +2097,8 @@ def run_named_ground_shell(
             lambda: bool(_aliased_items(current["value"], "CASE"))
         )
     )
-    memory_table_focus = memory_pane_focus & Condition(
-        lambda: memory_view["value"] == "TABLE"
+    memory_detail_focus = memory_pane_focus & Condition(
+        lambda: memory_detail_open["value"]
     )
     rule_draft_focus = (
         input_mode
@@ -2174,7 +2119,7 @@ def run_named_ground_shell(
         & has_focus(cases_pane.text_area)
     )
     saved_memory_list_focus = saved_memory_focus & Condition(
-        lambda: memory_view["value"] == "LIST"
+        lambda: not memory_detail_open["value"]
     )
     inline_field_focus = inline_editor_mode & (
         has_focus(direct_edit_area) | has_focus(input_area)
@@ -2355,36 +2300,24 @@ def run_named_ground_shell(
         target, focus = selected
         open_panel_comment(target=target, focus=focus)
 
-    def toggle_memory_view() -> None:
+    def open_memory_detail() -> None:
         if not _aliased_items(current["value"], "CASE"):
             return
         acknowledge_pane("MEMORIES")
-        memory_view["value"] = (
-            "TABLE" if memory_view["value"] == "LIST" else "LIST"
-        )
+        memory_detail_open["value"] = True
         sync_memories_pane(align_selection=True)
         application.invalidate()
 
-    def move_memory_table_cell(
-        *,
-        row_step: int = 0,
-        column_step: int = 0,
-    ) -> None:
-        acknowledge_pane("MEMORIES")
-        row, column = clamp_table_position(
-            row_count=len(_aliased_items(current["value"], "CASE")),
-            column_count=len(_named_memory_table_columns(current["value"])),
-            row=selected_memory_index["value"] + row_step,
-            column=selected_memory_column["value"] + column_step,
-        )
-        selected_memory_index["value"] = row
-        selected_memory_column["value"] = column
+    def collapse_memory_detail(_event) -> bool:
+        if not memory_detail_open["value"]:
+            return False
+        memory_detail_open["value"] = False
         sync_memories_pane(align_selection=True)
-        application.invalidate()
+        return True
 
-    @bindings.add("v", filter=memory_pane_focus, eager=True)
-    def _toggle_memory_view(_event) -> None:
-        toggle_memory_view()
+    @bindings.add("enter", filter=saved_memory_list_focus, eager=True)
+    def _open_memory_detail(_event) -> None:
+        open_memory_detail()
 
     @bindings.add(
         "f",
@@ -2464,22 +2397,6 @@ def run_named_ground_shell(
                 "FIT ALREADY RUNNING · wait for the current receipt boundary"
             )
         event.app.invalidate()
-
-    @bindings.add("down", filter=memory_table_focus, eager=True)
-    def _next_memory_table_row(_event) -> None:
-        move_memory_table_cell(row_step=1)
-
-    @bindings.add("up", filter=memory_table_focus, eager=True)
-    def _previous_memory_table_row(_event) -> None:
-        move_memory_table_cell(row_step=-1)
-
-    @bindings.add("right", filter=memory_table_focus, eager=True)
-    def _next_memory_table_column(_event) -> None:
-        move_memory_table_cell(column_step=1)
-
-    @bindings.add("left", filter=memory_table_focus, eager=True)
-    def _previous_memory_table_column(_event) -> None:
-        move_memory_table_cell(column_step=-1)
 
     def move_saved_item(
         *,
@@ -2699,7 +2616,11 @@ def run_named_ground_shell(
 
     @bindings.add(
         "enter",
-        filter=normal_input_mode & read_pane_focus,
+        filter=(
+            normal_input_mode
+            & read_pane_focus
+            & ~has_focus(cases_pane.text_area)
+        ),
         eager=True,
     )
     def _talk_in_focused_pane(_event) -> None:
@@ -2981,6 +2902,7 @@ def run_named_ground_shell(
     def _close_on_escape(event) -> None:
         dispatch_tui_back(
             event,
+            collapse_memory_detail,
             collapse_panel_comment,
             collapse_inline_editor,
             close=lambda current_event: exit_view(
@@ -2988,6 +2910,10 @@ def run_named_ground_shell(
                 status="CLOSED",
             ),
         )
+
+    @bindings.add("backspace", filter=memory_detail_focus, eager=True)
+    def _back_from_memory_detail(event) -> None:
+        collapse_memory_detail(event)
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)

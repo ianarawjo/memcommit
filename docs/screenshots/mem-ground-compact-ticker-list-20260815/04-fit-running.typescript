@@ -28,14 +28,14 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│› c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                                [0;1m^[179C[0m│[0m
-[0m│c2 · Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
-[0m│c3 · Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
-[0m│c4 · [BOUNDARY] Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  USE ID  FIT EXAMPLE                                                                                                                                                            [0;1m^[179C[0m│[0m
+[0m│› [x] c1  ·  Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  [x] c2  ·  Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  [x] c3  ·  Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  [x] c4  ·  Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                         [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│PLACEMENT · DIRECT SELECTION                                                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ticker/output                                                                                                                                                                    [0;48;2;68;68;68m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHAT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
@@ -52,14 +52,14 @@ PTY 180 52
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m Enter · send    Ctrl-J · newline    Tab · panes (B Grounds · Q quit)[69D[4A[3C[0m[?12l[?25h[?25l[20A[3D[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;2;139;213;255;1m┃[0m› c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                                [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0mc2 · Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0mc3 · Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0mc4 · [BOUNDARY] Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  USE ID  FIT EXAMPLE                                                                                                                                                            [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m› [x] c1  ·  Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  [x] c2  ·  Applying the ticker Rules to "Google LLC" produces "GOOG".                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  [x] c3  ·  Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  [x] c4  ·  Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B".                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0mPLACEMENT · DIRECT SELECTION                                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0mticker/output                                                                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────────────| CHAT |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
@@ -75,15 +75,15 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[C[0mCASES[3CLIST:[C↑/↓ Case[3CV · table[2C  F[3Cru[C Fit [C  P · placement    C · comment    Enter · talk here    E · edit selected    B · Grounds    Q · quit[23A[150D[0m[?12l[?25h[?25l[0mTABLE · 4 MEMORIES · ROW 1/4 · COLUMN ID                          [0m
-[C[0mID[C [C  │ STATUS  [C    │ ROLE  [C  [C   │ DECISION       │[CPR[CPOSITION                          │ INPUT                    │ EXPECTED                 │ NOTES                    │ R[0m
-[C[0m───────┼──────────────┼──────────────┼────────────────┼──────────────────────────────────────┼──────────────────────────┼──────────────────────────┼──────────────────────────┼──[0m
-[C[0;1;7mc1    [0m │ PROPOSED     │ FIT [C      [C │ INCLUDE        │[CApplying[Cthe ticker Rules to "Apple… │ Apple Inc.               │ AAPL                     │ This is one concrete re… │ r[0m
-[C[0mc2     │ PROPOSED     │ FIT          │ INCLUDE        │ Applying the ticker Rules to "Googl… │ Google LLC               │ GOOG                     │ This is one concrete re… │ r[0;48;2;68;68;68m [0m
-[C[0mc3     │ PROPOS[CD [C   │ F[CT [C        │ INCLUDE        │ Applying the ticker Rules to "Micro… │ Microsoft Corporation    │ MSFT                     │ This is one concrete re… │ r[0;48;2;170;170;170m [0m
-[C[0mc4     │ PROPOSED     │ BOUNDARY     │ INCLUDE        │ Applying the ticker Rules to "Berks… │ Berkshire Hathaway Clas… │ BRK.B                    │ This is one concrete re… │ r[0;48;2;170;170;170m [0m
-[C[0m [176C[0;48;2;170;170;170m [0m
-[C[0mCELL · c1 · ID [0m
+[C[0mMEMORIES: ↑/↓[CExamp[Ce · E[Cter · details[C [C F · run[CFit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit[23A[134D[0m[?12l[?25h[?25l[0mMEMORY ·[Cc1           [0m
+[C[0mSTATUS ·[CPROPOSED                                                       [0m
+[C[0mUSE ·[C[x][CINCLUDE                                                       [105C[0;48;2;68;68;68m [0m
+[C[0mFIT ·[C·                                                                            [94C[0;48;2;170;170;170m [0m
+[2C[0m                                                                                        [88C[0;48;2;170;170;170m [0m
+[C[0mPROPOSITION [165C[0;48;2;170;170;170m [0m
+[C[0mApplying the ticker Rules to[C"Apple Inc." produces "AAPL". [118C[0;48;2;170;170;170m [0m
+[C[0m              [163C[0;48;2;170;170;170m [0m
+[C[0mINPUT [0m
 
 
 
@@ -98,23 +98,15 @@ PTY 180 52
 
 
 
-[9C[0mTABLE: ↑/↓ row[3C←/→[Ccolumn[C·[CV[3Clist   [CF[C· run Fit    P[C·[Cplacement   [CC[C· comment    Enter[C·[Ctalk[Chere[C   E · edit[Cselected   [CB[C· Grounds    Q · quit[20A[162D[0m[?12l[?25h[?25l[3A[38C[0mPROPOSITION [0m
-
-
-[C[0mc1    [50C[0;1;7mApplying the ticker Rules to "Apple…[0m
-
-
-
-
-[C[0m    [C [C  [C [C  [C                                         CELL · c1 · PROPOSITION [5A[24D[0m[?12l[?25h[?25l[3A[56D[0m› c1 · Applying the ticker Rules to "Apple Inc." produces "AAPL". [0m
-[C[0mc2[C·[CApplying the[Cticker Rules[Cto[C"Google LLC" produces[C"G[COG".                                                                                                                  [0m
-[C[0mc3 · Applying the ticker Rules to "Microsoft Corporation" produces "MSFT".                                                                                                       [0m
-[2C[0m4[C·[C[BOUNDARY] Applying the[Cticker[CRules to "Berkshire[CHathaway Class B" produces "BRK.B".                                                                                      [0m
-[C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
-[C[0mPLACEMENT · DIR[CCT[CSELECT[CON[C                                                                                                                                                    [0;48;2;68;68;68m [0m
-[C[0mticker/output                                                                                                                                                                    [0;48;2;68;68;68m [0m
-[C[0m [176C[0;48;2;68;68;68m [0m
-[C[0m                                                                                [0m
+[6C[0mY DETAIL: Esc/Backspac[C · lis[C    F[C·[Crun[CFit[C   P[C·[Cplacement    C[C·[Ccomment    E[C·[Cedit selected    B[C·[CGrounds    Q[C·[Cquit[0m[K[23A[130D[0m[?12l[?25h[?25l[0m  USE ID[C FIT EXAMPLE [0m
+[C[0m› [x] c1[C ·  Applying the ticker Rules to "Apple Inc." produces "AAPL". [0m
+[C[0m  [x][Cc2 [C·  Applying the ticker Rules to "Google LLC" produces "GOOG". [105C[0;48;2;68;68;68m [0m
+[C[0m  [x][Cc3  ·  Applying the ticker Rules to "Microsoft Corporation" produces "MSFT". [94C[0;48;2;68;68;68m [0m
+[2C[0m [x] c4  ·  Applying the ticker Rules to "Berkshire Hathaway Class B" produces "BRK.B". [88C[0;48;2;68;68;68m [0m
+[C[0m            [165C[0;48;2;68;68;68m [0m
+[C[0mPLACEMENT · DIRECT SELECTION[C                              [118C[0;48;2;68;68;68m [0m
+[C[0mticker/output [163C[0;48;2;68;68;68m [0m
+[C[0m      [0m
 
 
 
@@ -129,7 +121,7 @@ PTY 180 52
 
 
 
-[9C[0mLIST: ↑/↓ Case[3CV ·[Ctable [C [CF[3Crun Fit[C [C P · placement[C [C C · comment[C [C Enter · talk here[C [C E ·[Cedit[Cselected   [CB · Grounds[C [C Q · quit[0m[K[23A[150D[0m[?12l[?25h[?25l[0m
+[6C[0mIES: ↑/↓ Example · Ent[Cr · de[Cails [C [CF ·[Crun[CFit [C [CP · placement [C [CC · comment [C [CE · edit selected [C [CB · Grounds [C [CQ · quit[22A[134D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -151,5 +143,4 @@ PTY 180 52
 
 
 
-
-[C[0mFIT RUNNING. · Ground and Con[Cexts[Cunchanged · Esc/Q[Ccloses aft[Cr the[Creceipt boundary[0m[K[23A[86D[0m[?12l[?25h
+[C[0mFIT [CUNNING. · Ground[Cand Contexts unchanged[3CEsc/Q closes[Cafter th[C receipt boundary[0m[K[22A[86D[0m[?12l[?25h
