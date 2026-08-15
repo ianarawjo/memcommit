@@ -15,7 +15,9 @@ from memcommit.cli import app
 from memcommit.interfaces.tui.operations.merge import (
     MergeTuiSetup,
     build_merge_tui_setup,
+    choose_merge_setup,
     merge_exact_command_review,
+    merge_endpoint_setup_spec,
     run_merge_tui,
 )
 from memcommit.merge_application import (
@@ -154,6 +156,49 @@ def test_exact_review_names_recursive_path_and_frozen_target() -> None:
     assert review.argv == ("mem", "merge", "source", "--recursive")
     assert any("complete relative path" in effect for effect in review.effects)
     assert any("Target subtree 'target'" in effect for effect in review.effects)
+
+
+def test_meld_style_setup_projects_coupled_reach_and_frozen_target() -> None:
+    spec = merge_endpoint_setup_spec(_setup())
+
+    assert tuple(mode.uid for mode in spec.modes) == ("DIRECT", "DESCENDANTS")
+    assert spec.roles[0].uid == "A"
+    assert spec.roles[0].fixed is False
+    assert spec.roles[1].uid == "B"
+    assert spec.roles[1].selected_name == "target"
+    assert spec.roles[1].fixed is True
+
+
+def test_meld_style_setup_returns_typed_recursive_request() -> None:
+    with create_pipe_input() as pipe_input:
+        # Source owns first focus. Shift-Tab reaches the coupled shape,
+        # Right selects recursive, and two Tabs reach Continue.
+        pipe_input.send_text("\x1b[Z\x1b[C\t\t\r")
+        request = choose_merge_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert request == MergeRequest(
+        source_locator="source",
+        target_locator="target",
+        reach=MergeReach.DESCENDANTS,
+    )
+
+
+def test_meld_style_setup_cancel_returns_no_request() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        request = choose_merge_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert request is None
 
 
 def test_tui_setup_freezes_local_source_and_current_target(isolated_store) -> None:
