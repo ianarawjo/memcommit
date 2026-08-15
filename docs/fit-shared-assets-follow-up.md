@@ -16,7 +16,7 @@ owners. It must not create a second Fit-only common layer.
 - The interactive Fit action is embedded in the named Ground Cases flow.
   That shell already reuses the shared frame, scrollable-pane, multiline-input,
   theme, and keybinding components.
-- Its Case cards, Fit status/detail projection, and table composition still
+- Its Case cards, compact Fit-mark projection, and table composition still
   live in the Ground command adapter. The table also still depends on the
   legacy command-hosted `commands.tui_table` component. Only the blocking Fit
   turn lifecycle moves to the shared background-turn component in this slice.
@@ -32,13 +32,15 @@ Handle Fit as one bounded vertical slice of the semantic result inventory:
 
 1. keep Fit's typed report, judgment vocabulary, receipt identity, Ground
    revision freshness, and provider execution operation-owned;
-2. make independent plain CLI and TUI projections consume that typed report;
+2. make a one-line plain CLI projection and compact TUI projection consume
+   that typed report without discarding receipt evidence;
 3. reuse the shared semantic Viewer for section navigation and read-only close,
    and the shared clipboard component for focused `y` and whole-document `Y`;
 4. reuse `BackgroundExecutorTurn` for the embedded Ground Fit action so its
    provider call does not freeze prompt-toolkit or disappear during close;
-5. protect non-TTY plain output, current/stale receipt reopening, clipboard
-   scope, duplicate-run exclusion, and close-after-turn with tests;
+5. protect one-line non-TTY output, the `·`/`✓`/`!`/`◷` contract,
+   receipt reopening, clipboard scope, duplicate-run exclusion, and
+   close-after-turn with tests;
 6. refresh ordered 180x52 PTY evidence for the changed interactive paths.
 
 ## Remaining boundary
@@ -55,9 +57,9 @@ their semantic documents.
 The selected slice is implemented and verified by focused Fit, semantic
 Viewer, Summarize parity, and named-Ground tests. The ordered true-color PTY
 record is under `docs/screenshots/mem-fit-shared-viewer-20260815` and covers
-provider progress, current and stale standalone reports, focused `y`, complete
-`Y`, embedded Ground execution, duplicate-run exclusion, deferred close, one
-receipt, and unchanged Ground content.
+provider progress, current, issue, and stale standalone results, focused `y`,
+complete `Y`, Ground's empty/current marks, duplicate-run exclusion, deferred
+close, one receipt, and unchanged Ground content.
 
 The repository-wide matrix remains `MIGRATING`, because this proves one Fit
 vertical slice rather than completing Conformance, Audit, Distill, Compare, or

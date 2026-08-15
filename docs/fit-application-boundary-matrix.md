@@ -17,10 +17,10 @@ moving Fit's meaning into a terminal component.
 | --- | --- | --- |
 | Domain/application | Fit Rules, Examples, judgments, statuses, report digest, Ground revision/digest, strict provider decoding | Terminal detection, ANSI styling, keybindings, clipboard state |
 | Runtime/infrastructure | Ground load/freeze, provider construction, exact-revision publication, immutable receipt store, current/stale lookup | CLI prose or TUI section layout |
-| Plain CLI adapter | Stable line-oriented projection of one typed `FitReport` plus explicit current/stale state | Provider calls, Ground loading, receipt freshness decisions |
-| TUI operation adapter | Typed semantic Viewer document, stable section identities, focused and whole-document clipboard projections | Re-parsing plain output or changing Fit judgments |
+| Plain CLI adapter | One stable summary line derived from a typed `FitResult` | Provider calls, Ground loading, receipt freshness decisions, full receipt expansion |
+| TUI operation adapter | Compact summary and Example sections, issue-only reasons, focused and whole-document clipboard projections | Re-parsing plain output, session state, or changing Fit judgments |
 | Shared semantic Viewer | Focus, scrolling, read-only close, copy-key dispatch, copy status | Which Fit fields compose an Example section or what a status means |
-| Ground shell adapter | When its Cases surface requests Fit and how the returned report refreshes Ground-local state | Thread/executor lifecycle or a second Fit implementation |
+| Ground shell adapter | When its Memories surface requests Fit and how `·`, `✓`, `!`, and `◷` project the returned state | Thread/executor lifecycle, Fit detail prose, or a second Fit implementation |
 | Shared background turn | Mutual exclusion, animation, ContextVar propagation, non-abandoning executor shutdown, deferred close | Ground refresh, Fit success text, provider selection, receipt semantics |
 
 ## Request and result contracts
@@ -34,9 +34,23 @@ The executable request is one exact saved Ground name and either:
 
 Both plain and interactive adapters consume the same typed `FitReport` and an
 explicit `current: bool`. Neither adapter may infer freshness from rendered
-text. The TUI projection assigns stable identities to title, status, overview,
-each Example judgment, totals, and receipt evidence. Lowercase `y` copies the
-focused semantic section; uppercase `Y` copies the complete typed report.
+text. Fit is not a workbench session: the only durable result is the immutable
+receipt. That receipt retains the provider overview, exact statuses, reasons,
+observations, identities, and digests even though ordinary presentation omits
+them.
+
+The shared compact marks are:
+
+- `·`: no judgment has been run for the Ground Memory;
+- `✓`: the current receipt judges the Example `FIT`;
+- `!`: the current receipt reports any non-`FIT` status; and
+- `◷`: a receipt exists but no longer describes the current Ground revision.
+
+Non-interactive output is exactly one summary line. The TUI assigns stable
+identities only to the summary and Example rows; it shows a classification and
+one reason only for a current `!`. It deliberately omits `WHAT MEM UNDERSTOOD`,
+provider, totals, digest, and receipt chrome. Lowercase `y` copies the focused
+compact section; uppercase `Y` copies the complete compact Viewer projection.
 
 ## Invariants
 
@@ -46,19 +60,22 @@ focused semantic section; uppercase `Y` copies the complete typed report.
 3. A new run publishes no receipt unless every active Example receives exactly
    one valid judgment for the frozen Rule/Example frame.
 4. Publication fails if the Ground revision or digest changed after freezing.
-5. Plain output remains the automatic non-TTY behavior and is available
-   explicitly with `--plain`.
+5. Plain output remains the automatic non-TTY behavior, is exactly one line,
+   and is available explicitly with `--plain`.
 6. TUI projection consumes typed fields directly; it never parses the plain
    renderer.
 7. Ground's embedded run and standalone Fit use the same application/runtime
    execution, even though their presentations differ.
+8. Compact presentation never removes evidence from the persisted receipt or
+   weakens exhaustive one-judgment-per-Example validation.
 
 ## Shared components and intentional limits
 
 This slice reuses `interfaces.tui.viewers.semantic`,
 `components.plain_text_clipboard`, the console router, and
-`components.background_turn`. Fit-specific aliases, statuses, reasons,
-observations, totals, and receipt evidence remain in the Fit adapter.
+`components.background_turn`. Fit-specific aliases and issue reasons remain in
+the Fit adapter; full observations and receipt evidence stay below the
+presentation boundary.
 
 The Ground Case table and cards are intentionally not relocated. Their current
 legacy table owner has more than one consumer, so moving them requires a
@@ -81,12 +98,12 @@ Completed 2026-08-15:
 
 - application/runtime and CLI tests preserve new-run and receipt-reopen
   behavior, stable non-TTY output, `--plain`, and pre-storage `--tui` failure;
-- typed adapter tests cover section identities, current/stale state, status
-  totals, focused Example copy, complete-report copy, and plain-text parity;
+- typed adapter tests cover compact section identities, all-fit/issue/stale
+  marks, focused Example copy, complete compact copy, and one-line plain text;
 - shared Viewer interaction tests exercise lowercase `y` and uppercase `Y` in
   a real prompt-toolkit pipe;
-- named-Ground tests prove one executor call during repeated `F` and require a
-  requested close to wait for the receipt callback; and
+- named-Ground tests cover all four marks, prove one executor call during
+  repeated `F`, and require a requested close to wait for the receipt callback;
 - `docs/screenshots/mem-fit-shared-viewer-20260815` retains the ordered
   `180 × 52` true-color PTY stream, native PNGs, plain canvases, exact inputs,
   and read-only verification.

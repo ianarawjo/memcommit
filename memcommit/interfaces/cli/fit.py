@@ -9,6 +9,6 @@ from memcommit.interfaces.fit import fit_result_text
 
 
 def render_fit_plain(result: FitResult) -> None:
-    """Preserve Fit's stable non-interactive document."""
+    """Print Fit's stable one-line non-interactive result."""
 
     typer.echo(fit_result_text(result))

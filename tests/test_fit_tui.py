@@ -70,19 +70,17 @@ def test_fit_projects_typed_result_with_stable_example_sections() -> None:
     document = project_fit_result(_result())
 
     assert [section.uid for section in document.sections] == [
-        "FIT:TITLE",
-        "FIT:STATUS",
-        "FIT:OVERVIEW",
+        "FIT:SUMMARY",
         f"FIT:EXAMPLE:{FIT_EXAMPLE_UID}",
         f"FIT:EXAMPLE:{ISSUE_EXAMPLE_UID}",
-        "FIT:TOTALS",
-        "FIT:RECEIPT",
     ]
     rendered = "".join(text for _style, text in document.render(focused_uid=None))
-    assert "FIT · ticker · REVISION 7" in rendered
-    assert "STATUS · READ-ONLY · CURRENT" in rendered
-    assert "e2 · UNDERDETERMINED · RULES r1" in rendered
-    assert "TOTALS · FIT 1 · CONTRADICTS 0 · UNDERDETERMINED 1" in rendered
+    assert "! ticker · 1/2" in rendered
+    assert "✓ e1 · Apple Inc." in rendered
+    assert "! e2 · Axiom AI Technologies" in rendered
+    assert "UNDERDETERMINED · The Rule does not choose" in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
+    assert "RECEIPT" not in rendered
 
 
 def test_fit_clipboard_uses_typed_focused_and_complete_projections() -> None:
@@ -96,10 +94,13 @@ def test_fit_clipboard_uses_typed_focused_and_complete_projections() -> None:
     complete = project_fit_clipboard(result, whole_document=True)
 
     assert focused.label == "Fit Example e2"
-    assert focused.text.startswith("e2 · UNDERDETERMINED · RULES r1\n")
-    assert "e1 · FIT" not in focused.text
-    assert complete.label == "complete Fit report"
-    assert complete.text == fit_result_text(result)
+    assert focused.text.startswith("! e2 · Axiom AI Technologies")
+    assert "UNDERDETERMINED · The Rule does not choose" in focused.text
+    assert "✓ e1" not in focused.text
+    assert complete.label == "complete Fit result"
+    assert complete.text.startswith(fit_result_text(result) + "\n\n✓ e1")
+    assert "! e2" in complete.text
+    assert "WHAT MEM UNDERSTOOD" not in complete.text
 
 
 def test_fit_viewer_y_and_uppercase_y_copy_focused_then_complete() -> None:
@@ -107,9 +108,9 @@ def test_fit_viewer_y_and_uppercase_y_copy_focused_then_complete() -> None:
     result = _result()
 
     with create_pipe_input() as pipe_input:
-        # The Viewer begins at TITLE. Move to the first Example, copy it, then
+        # The Viewer begins at SUMMARY. Move to the first Example, copy it, then
         # copy the complete report without changing semantic focus.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[ByYq")
+        pipe_input.send_text("\x1b[ByYq")
         returned = run_fit_tui(
             result,
             clipboard_writer=copied.append,
@@ -119,25 +120,29 @@ def test_fit_viewer_y_and_uppercase_y_copy_focused_then_complete() -> None:
         )
 
     assert returned == result
-    assert copied[0].startswith("e1 · FIT · RULES r1\n")
-    assert "e2 · UNDERDETERMINED" not in copied[0]
-    assert copied[1] == fit_result_text(result)
+    assert copied[0].startswith("✓ e1 · Apple Inc.")
+    assert "! e2" not in copied[0]
+    assert copied[1].startswith("! ticker · 1/2\n\n✓ e1")
+    assert "! e2" in copied[1]
 
 
-def test_fit_stale_state_is_visible_in_document_and_receipt_copy() -> None:
+def test_fit_stale_state_replaces_prior_judgment_marks() -> None:
     result = _result(current=False)
     rendered = "".join(
         text
         for _style, text in project_fit_result(result).render(
-            focused_uid="FIT:RECEIPT"
+            focused_uid="FIT:SUMMARY"
         )
     )
-    receipt = project_fit_clipboard(
+    focused = project_fit_clipboard(
         result,
-        focused_uid="FIT:RECEIPT",
+        focused_uid=f"FIT:EXAMPLE:{ISSUE_EXAMPLE_UID}",
         whole_document=False,
     )
 
-    assert "STATUS · READ-ONLY · STALE" in rendered
-    assert "Ground changed after this immutable Fit receipt" in rendered
-    assert "Ground changed after this immutable Fit receipt" in receipt.text
+    assert "◷ ticker · 1/2" in rendered
+    assert "◷ e1" in rendered
+    assert "◷ e2" in rendered
+    assert "UNDERDETERMINED" not in rendered
+    assert focused.text.startswith("◷ e2")
+    assert "UNDERDETERMINED" not in focused.text

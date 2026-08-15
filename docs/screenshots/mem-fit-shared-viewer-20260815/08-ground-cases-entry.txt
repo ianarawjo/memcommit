@@ -26,7 +26,7 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› c1 [PROPOSED · FIT / INCLUDE]                                                                                                                                                  ^┃
+┃› c1 · [PROPOSED · FIT / INCLUDE]                                                                                                                                                ^┃
 ┃Axiom AI Technologies → AAT                                                                                                                                                       ┃
 ┃NOTES · This is the reviewed concrete ticker outcome.                                                                                                                             ┃
 ┃DETAILS                                                                                                                                                                           ┃
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- FIT RUNNING... · Ground and Contexts unchanged · CLOSE REQUESTED · waiting for receipt boundary
+ CASES · LIST: ↑/↓ Case · V · table    F · run Fit    P · placement    C · comment    Enter · talk here    E · edit selected    B · Grounds    Q · quit

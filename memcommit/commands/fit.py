@@ -47,14 +47,14 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print the Fit report instead of opening the interactive Viewer",
+            help="Print one compact Fit result instead of opening the Viewer",
         ),
     ] = False,
     tui: Annotated[
         bool,
         typer.Option(
             "--tui",
-            help="Require the interactive Fit result Viewer",
+            help="Require the compact interactive Fit Viewer",
         ),
     ] = False,
 ) -> None:

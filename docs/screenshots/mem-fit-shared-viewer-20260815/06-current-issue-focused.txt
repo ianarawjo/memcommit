@@ -1,8 +1,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ ✓ ticker-fit · 1/1                                                                                                                                                              ^┃
+┃ ! ticker-fit · 0/1                                                                                                                                                              ^┃
 ┃                                                                                                                                                                                  ┃
-┃ ✓ e1 · Axiom AI Technologies -> AAT                                                                                                                                              ┃
-┃                                                                                                                                                                                  ┃
+┃ ! e1 · Axiom AI Technologies -> AAT                                                                                                                                              ┃
+┃   CONTRADICTS · The Rule includes the second word's initials.                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -49,4 +49,4 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- FIT · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only · COPIED · Fit Example e1
+ FIT · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only

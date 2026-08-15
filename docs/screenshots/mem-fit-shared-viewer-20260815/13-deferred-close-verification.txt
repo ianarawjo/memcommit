@@ -1,0 +1,6 @@
+GROUND FIT CLOSED · READ-ONLY VERIFICATION                                                                                                                                          
+  FIT CALLS · 1                                                                                                                                                                     
+  RECEIPTS · 1                                                                                                                                                                      
+  RECEIPT CURRENT · True                                                                                                                                                            
+  GROUND CONTENT UNCHANGED · True                                                                                                                                                   
+  CLOSE STATUS · CLOSED

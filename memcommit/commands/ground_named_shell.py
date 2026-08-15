@@ -87,7 +87,9 @@ from memcommit.ground import (
     is_bound_ground_schema,
 )
 from memcommit.fit import FitJudgment, FitReport
+from memcommit.fit_application import FitResult
 from memcommit.fit_store import GroundFitReceipt
+from memcommit.interfaces.fit import fit_fraction, fit_mark
 from memcommit.ground_turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
@@ -517,10 +519,11 @@ def render_named_ground_memories_pane(
         heading_labels = [item.status]
         if classification:
             heading_labels.append(safe_terminal_text(classification))
-        if fit_receipt is not None:
-            fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
-            heading_labels.append("FIT " + fit_label)
-        heading = f"{marker}{alias} [{' · '.join(heading_labels)}]"
+        fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
+        heading = (
+            f"{marker}{alias} {fit_label} "
+            f"[{' · '.join(heading_labels)}]"
+        )
         # A Ground Memory is the durable case used to teach or check a Rule.
         # Keep its list card compact: only the right side of the arrow is
         # candidate material for a later Context operation, while NOTES stay
@@ -574,21 +577,6 @@ def render_named_ground_memories_pane(
                 )
             if details:
                 lines.extend(["DETAILS", *details])
-            judgment = fit_by_example.get(item.uid)
-            if judgment is not None and fit_receipt is not None:
-                rule_alias = {
-                    rule.uid: rule.alias for rule in fit_receipt.report.rules
-                }
-                lines.extend(
-                    [
-                        "FIT RECEIPT · "
-                        + ("CURRENT" if fit_receipt.current else "STALE")
-                        + f" · {fit_receipt.report.uid[:8]}",
-                        "FIT RULES · "
-                        + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
-                        "FIT WHY · " + safe_terminal_text(judgment.reason),
-                    ]
-                )
         blocks.append("\n".join(lines))
     if placement_hint:
         blocks.append(
@@ -671,10 +659,12 @@ def _fit_label(
     judgments: dict[str, FitJudgment],
 ) -> str:
     judgment = judgments.get(example_uid)
-    if judgment is None:
-        return "NOT RUN"
-    status = judgment.status
-    return status if receipt is not None and receipt.current else f"STALE · {status}"
+    if receipt is None or judgment is None:
+        return "·"
+    return fit_mark(
+        FitResult(receipt.report, receipt.current),
+        status=judgment.status,
+    )
 
 
 def _option_values(argv: tuple[str, ...], option: str) -> tuple[str, ...]:
@@ -2377,9 +2367,13 @@ def run_named_ground_shell(
                 )
             else:
                 fit_receipt["value"] = lookup_fit(current["value"])
+            receipt = fit_receipt["value"]
+            result = FitResult(
+                report,
+                current=receipt.current if receipt is not None else True,
+            )
             status_message["value"] = (
-                f"FIT COMPLETE · {len(report.judgments)} Cases · "
-                f"{report.issue_count} issue(s) · receipt {report.uid[:8]}"
+                f"{fit_mark(result)} {fit_fraction(result)}"
             )
             mark_pane_updates("MEMORIES")
             sync_memories_pane(align_selection=True)

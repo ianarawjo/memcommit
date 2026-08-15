@@ -29,61 +29,53 @@ def fit_status_counts(result: FitResult) -> tuple[tuple[FitStatus, int], ...]:
     )
 
 
+def fit_mark(result: FitResult, *, status: FitStatus | None = None) -> str:
+    """Project freshness and conformance into Fit's compact shared marks."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit marks require a typed Fit result.")
+    # A stale judgment must not look currently passing or failing. Its stored
+    # classification remains in the immutable receipt, while the public mark
+    # asks the person or agent to run Fit again.
+    if not result.current:
+        return "◷"
+    if status is None:
+        return "✓" if result.report.issue_count == 0 else "!"
+    return "✓" if status == "FIT" else "!"
+
+
+def fit_fraction(result: FitResult) -> str:
+    """Return the fitted Example count without exposing report machinery."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit fractions require a typed Fit result.")
+    fitted = sum(
+        judgment.status == "FIT" for judgment in result.report.judgments
+    )
+    return f"{fitted}/{len(result.report.judgments)}"
+
+
+def fit_summary_line(result: FitResult) -> str:
+    """Return Fit's stable one-line non-interactive result."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit summaries require a typed Fit result.")
+    return (
+        f"{fit_mark(result)} "
+        f"{safe_terminal_text(result.report.ground_name)} · "
+        f"{fit_fraction(result)}"
+    )
+
+
 def fit_result_lines(result: FitResult) -> tuple[str, ...]:
-    """Project the stable complete plain document from typed Fit fields."""
+    """Project the intentionally compact plain result from typed Fit fields."""
 
     if not isinstance(result, FitResult):
         raise TypeError("Fit presentation requires a typed Fit result.")
-    report = result.report
-    identity = report.provider_identity
-    example_by_uid = {example.uid: example for example in report.examples}
-    rule_alias = {rule.uid: rule.alias for rule in report.rules}
-    lines = [
-        f"FIT · {safe_terminal_text(report.ground_name)} · "
-        f"REVISION {report.ground_revision}",
-        "STATUS · READ-ONLY · " + ("CURRENT" if result.current else "STALE"),
-        f"RULES {len(report.rules)} · EXAMPLES {len(report.examples)}",
-        "PROVIDER · "
-        + (identity.display_name() if identity is not None else "UNRECORDED"),
-        "",
-        "WHAT MEM UNDERSTOOD",
-        safe_terminal_text(report.overview),
-        "",
-        "EXAMPLE FIT",
-    ]
-    for judgment in report.judgments:
-        example = example_by_uid[judgment.example_uid]
-        lines.extend(
-            [
-                "",
-                f"{example.alias} · {judgment.status} · RULES "
-                + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
-                f"  {safe_terminal_text(example.statement)}",
-                f"  WHY · {safe_terminal_text(judgment.reason)}",
-            ]
-        )
-        if judgment.observed:
-            lines.append(
-                f"  OBSERVED · {safe_terminal_text(judgment.observed)}"
-            )
-    lines.extend(
-        [
-            "",
-            "TOTALS · "
-            + " · ".join(
-                f"{status} {count}"
-                for status, count in fit_status_counts(result)
-            ),
-            f"RECEIPT · {report.uid} · {report.digest}",
-            "GROUND DIGEST · " + report.ground_digest,
-        ]
-    )
-    if not result.current:
-        lines.append("STALE · Ground changed after this immutable Fit receipt.")
-    return tuple(lines)
+    return (fit_summary_line(result),)
 
 
 def fit_result_text(result: FitResult) -> str:
-    """Return the complete stable Fit document as plain text."""
+    """Return Fit's stable one-line plain text."""
 
     return "\n".join(fit_result_lines(result))

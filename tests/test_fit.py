@@ -360,8 +360,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
     result = CliRunner().invoke(app, ["fit", session.contract_name])
 
     assert result.exit_code == 0, result.output
-    assert "FIT · ticker · REVISION" in result.output
-    assert "e1 · FIT" in result.output
+    assert result.output == "✓ ticker · 1/1\n"
     receipt = FitStore(store).latest_for_ground(session)
     assert receipt is not None
 
@@ -370,11 +369,10 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
         ["fit", session.contract_name, "--receipt", receipt.report.uid],
     )
     assert reopened.exit_code == 0, reopened.output
-    assert "STATUS · READ-ONLY · CURRENT" in reopened.output
-    assert receipt.report.digest in reopened.output
+    assert reopened.output == "✓ ticker · 1/1\n"
 
 
-def test_mem_fit_plain_flag_preserves_noninteractive_report(
+def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -389,8 +387,7 @@ def test_mem_fit_plain_flag_preserves_noninteractive_report(
     result = CliRunner().invoke(app, ["fit", session.contract_name, "--plain"])
 
     assert result.exit_code == 0, result.output
-    assert "FIT · ticker · REVISION" in result.output
-    assert "STATUS · READ-ONLY · CURRENT" in result.output
+    assert result.output == "✓ ticker · 1/1\n"
 
 
 def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:

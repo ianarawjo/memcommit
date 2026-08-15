@@ -48,6 +48,36 @@ class _ImmediateFitProvider(_DelayedFitProvider):
         return _fit_response(operation)
 
 
+class _IssueFitProvider:
+    def complete(self, _prompt, *, operation, output_schema=None):
+        if operation == "fit_ground_propositions":
+            return json.dumps(
+                {
+                    "overview": "The active Rule leaves the Example open.",
+                    "judgments": [
+                        {
+                            "example_id": "e1",
+                            "status": "UNDERDETERMINED",
+                            "reason": "The Rule does not choose between AAT and AAIT.",
+                        }
+                    ],
+                }
+            )
+        return json.dumps(
+            {
+                "overview": "The active Rule produces a different symbol.",
+                "predictions": [
+                    {
+                        "case_id": "e1",
+                        "disposition": "PREDICTED",
+                        "predicted": "AAIT",
+                        "reason": "The Rule includes the second word's initials.",
+                    }
+                ],
+            }
+        )
+
+
 def _fit_response(operation: str) -> str:
     if operation == "fit_ground_propositions":
         payload = {
@@ -108,7 +138,12 @@ def _stale_receipt(root: Path):
     return store, revised, report
 
 
-def _run_standalone_child(store_root: Path, *, stale: bool) -> None:
+def _run_standalone_child(
+    store_root: Path,
+    *,
+    stale: bool,
+    issue: bool = False,
+) -> None:
     import memcommit.commands.fit as fit_command
     from memcommit.fit_store import FitStore
     from memcommit.store import MemoryStore
@@ -121,7 +156,9 @@ def _run_standalone_child(store_root: Path, *, stale: bool) -> None:
         store, session, _contexts = FIXTURE._prepare_store(store_root)
         receipt_uid = None
     _use_store_root(store_root)
-    fit_command.connect_semantic_provider = _DelayedFitProvider
+    fit_command.connect_semantic_provider = (
+        _IssueFitProvider if issue else _DelayedFitProvider
+    )
     fit_command.write_system_clipboard = copied.append
 
     print(
@@ -225,7 +262,7 @@ def _capture_standalone_current(store_root: Path) -> None:
         BASE._snapshot(recorder, "01-standalone-fit-running")
         BASE._settle(child, seconds=1.8)
         BASE._snapshot(recorder, "02-current-viewer-entry")
-        child.send("\x1b[B\x1b[B\x1b[B")
+        child.send("\x1b[B")
         BASE._settle(child, seconds=0.25)
         BASE._snapshot(recorder, "03-example-focused")
         child.send("y")
@@ -233,7 +270,7 @@ def _capture_standalone_current(store_root: Path) -> None:
         BASE._snapshot(recorder, "04-focused-copy")
         child.send("Y")
         BASE._settle(child, seconds=0.2)
-        BASE._snapshot(recorder, "05-whole-report-copy")
+        BASE._snapshot(recorder, "05-whole-result-copy")
         child.send("q")
         child.expect("FIT VIEWER CLOSED")
         child.expect(pexpect.EOF)
@@ -246,9 +283,8 @@ def _capture_standalone_stale(store_root: Path) -> None:
     child, recorder = _spawn("standalone-stale", store_root)
     try:
         BASE._settle(child, seconds=0.8)
-        child.send("\x1b[6~")
         BASE._settle(child, seconds=0.2)
-        BASE._snapshot(recorder, "06-stale-receipt-reopen")
+        BASE._snapshot(recorder, "07-stale-receipt-reopen")
         child.send("q")
         child.expect("FIT VIEWER CLOSED")
         child.expect(pexpect.EOF)
@@ -257,22 +293,54 @@ def _capture_standalone_stale(store_root: Path) -> None:
             child.close(force=True)
 
 
-def _capture_ground(store_root: Path) -> None:
+def _capture_standalone_issue(store_root: Path) -> None:
+    child, recorder = _spawn("standalone-issue", store_root)
+    try:
+        BASE._settle(child, seconds=0.8)
+        child.send("\x1b[B")
+        BASE._settle(child, seconds=0.2)
+        BASE._snapshot(recorder, "06-current-issue-focused")
+        child.send("q")
+        child.expect("FIT VIEWER CLOSED")
+        child.expect(pexpect.EOF)
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
+def _capture_ground_current(store_root: Path) -> None:
     child, recorder = _spawn("ground", store_root)
     try:
         BASE._settle(child, seconds=0.7)
         child.send("\t\t\t\t")
         BASE._settle(child, seconds=0.3)
-        BASE._snapshot(recorder, "07-ground-cases-entry")
+        BASE._snapshot(recorder, "08-ground-cases-entry")
         child.send("f")
         BASE._settle(child, seconds=0.25)
-        BASE._snapshot(recorder, "08-ground-fit-running")
-        child.send("fq")
-        BASE._settle(child, seconds=0.25)
-        BASE._snapshot(recorder, "09-duplicate-run-close-deferred")
+        BASE._snapshot(recorder, "09-ground-fit-running")
+        BASE._settle(child, seconds=1.8)
+        BASE._snapshot(recorder, "10-ground-fit-current")
+        child.send("q")
         child.expect("GROUND FIT CLOSED", timeout=5)
         child.expect(pexpect.EOF)
-        BASE._snapshot(recorder, "10-ground-fit-verification")
+        BASE._snapshot(recorder, "11-ground-fit-verification")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
+def _capture_ground_deferred_close(store_root: Path) -> None:
+    child, recorder = _spawn("ground", store_root)
+    try:
+        BASE._settle(child, seconds=0.7)
+        child.send("\t\t\t\tf")
+        BASE._settle(child, seconds=0.25)
+        child.send("fq")
+        BASE._settle(child, seconds=0.25)
+        BASE._snapshot(recorder, "12-duplicate-run-close-deferred")
+        child.expect("GROUND FIT CLOSED", timeout=5)
+        child.expect(pexpect.EOF)
+        BASE._snapshot(recorder, "13-deferred-close-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -283,8 +351,10 @@ def main() -> None:
     with tempfile.TemporaryDirectory(prefix="memcommit-fit-shared-") as directory:
         root = Path(directory)
         _capture_standalone_current(root / "standalone-current")
+        _capture_standalone_issue(root / "standalone-issue")
         _capture_standalone_stale(root / "standalone-stale")
-        _capture_ground(root / "ground")
+        _capture_ground_current(root / "ground-current")
+        _capture_ground_deferred_close(root / "ground-deferred")
     raw = "".join(
         path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
     )
@@ -298,6 +368,8 @@ if __name__ == "__main__":
         root = Path(sys.argv[3])
         if kind == "standalone-current":
             _run_standalone_child(root, stale=False)
+        elif kind == "standalone-issue":
+            _run_standalone_child(root, stale=False, issue=True)
         elif kind == "standalone-stale":
             _run_standalone_child(root, stale=True)
         elif kind == "ground":

@@ -1,10 +1,10 @@
-"""Project typed Fit results into the shared semantic Viewer."""
+"""Project typed Fit results into the compact semantic Viewer."""
 
 from __future__ import annotations
 
 from memcommit.fit_application import FitResult
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.interfaces.fit import fit_result_text, fit_status_counts
+from memcommit.interfaces.fit import fit_mark, fit_result_text, fit_summary_line
 from memcommit.interfaces.tui.operations.fit.model import FitClipboardProjection
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
@@ -16,7 +16,6 @@ from memcommit.interfaces.tui.viewers.semantic import (
 def _example_text(result: FitResult, example_uid: str) -> str:
     report = result.report
     example_by_uid = {example.uid: example for example in report.examples}
-    rule_alias = {rule.uid: rule.alias for rule in report.rules}
     judgment = next(
         (
             item
@@ -28,14 +27,14 @@ def _example_text(result: FitResult, example_uid: str) -> str:
     if judgment is None:
         raise ValueError("The focused Fit Example is unavailable.")
     example = example_by_uid[judgment.example_uid]
+    mark = fit_mark(result, status=judgment.status)
     lines = [
-        f"{example.alias} · {judgment.status} · RULES "
-        + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
-        safe_terminal_text(example.statement),
-        "WHY · " + safe_terminal_text(judgment.reason),
+        f"{mark} {example.alias} · {safe_terminal_text(example.statement)}",
     ]
-    if judgment.observed:
-        lines.append("OBSERVED · " + safe_terminal_text(judgment.observed))
+    if result.current and judgment.status != "FIT":
+        lines.append(
+            f"{judgment.status} · {safe_terminal_text(judgment.reason)}"
+        )
     return "\n".join(lines)
 
 
@@ -51,32 +50,19 @@ def project_fit_clipboard(
         raise TypeError("Fit clipboard requires a typed result.")
     report = result.report
     if whole_document:
-        return FitClipboardProjection(fit_result_text(result), "complete Fit report")
-    if focused_uid == "FIT:TITLE":
-        text = (
-            f"FIT · {safe_terminal_text(report.ground_name)} · "
-            f"REVISION {report.ground_revision}"
-        )
-        label = "Fit title"
-    elif focused_uid == "FIT:STATUS":
-        identity = report.provider_identity
-        text = "\n".join(
+        text = "\n\n".join(
             (
-                "STATUS · READ-ONLY · "
-                + ("CURRENT" if result.current else "STALE"),
-                f"RULES {len(report.rules)} · EXAMPLES {len(report.examples)}",
-                "PROVIDER · "
-                + (
-                    identity.display_name()
-                    if identity is not None
-                    else "UNRECORDED"
+                fit_result_text(result),
+                *(
+                    _example_text(result, judgment.example_uid)
+                    for judgment in report.judgments
                 ),
             )
         )
-        label = "Fit status"
-    elif focused_uid == "FIT:OVERVIEW":
-        text = "WHAT MEM UNDERSTOOD\n" + safe_terminal_text(report.overview)
-        label = "Fit overview"
+        return FitClipboardProjection(text, "complete Fit result")
+    if focused_uid == "FIT:SUMMARY":
+        text = fit_summary_line(result)
+        label = "Fit summary"
     elif focused_uid and focused_uid.startswith("FIT:EXAMPLE:"):
         example_uid = focused_uid.removeprefix("FIT:EXAMPLE:")
         text = _example_text(result, example_uid)
@@ -91,23 +77,6 @@ def project_fit_clipboard(
         if example is None:
             raise ValueError("The focused Fit Example is unavailable.")
         label = f"Fit Example {example.alias}"
-    elif focused_uid == "FIT:TOTALS":
-        text = "TOTALS · " + " · ".join(
-            f"{status} {count}"
-            for status, count in fit_status_counts(result)
-        )
-        label = "Fit totals"
-    elif focused_uid == "FIT:RECEIPT":
-        lines = [
-            f"RECEIPT · {report.uid} · {report.digest}",
-            "GROUND DIGEST · " + report.ground_digest,
-        ]
-        if not result.current:
-            lines.append(
-                "STALE · Ground changed after this immutable Fit receipt."
-            )
-        text = "\n".join(lines)
-        label = "Fit receipt"
     else:
         raise ValueError("The focused Fit section is unavailable.")
     return FitClipboardProjection(text, label)
@@ -119,93 +88,47 @@ def project_fit_result(result: FitResult) -> SemanticViewerDocument:
     if not isinstance(result, FitResult):
         raise TypeError("Fit TUI requires a typed result.")
     report = result.report
-    identity = report.provider_identity
-    rule_alias = {rule.uid: rule.alias for rule in report.rules}
     example_by_uid = {example.uid: example for example in report.examples}
     sections: list[SemanticViewerSection] = [
         SemanticViewerSection(
-            "FIT:TITLE",
-            "TITLE",
+            "FIT:SUMMARY",
+            "SUMMARY",
             SemanticViewerBlock(
                 (
                     (
                         "class:title",
-                        f" FIT · {safe_terminal_text(report.ground_name)} · "
-                        f"REVISION {report.ground_revision}\n",
+                        " " + fit_summary_line(result) + "\n",
                     ),
                 )
-            ),
-        ),
-        SemanticViewerSection(
-            "FIT:STATUS",
-            "STATUS",
-            SemanticViewerBlock(
-                (
-                    (
-                        "class:report-label",
-                        " STATUS · READ-ONLY · "
-                        + ("CURRENT" if result.current else "STALE")
-                        + "\n",
-                    ),
-                    (
-                        "class:viewer-body",
-                        f" RULES {len(report.rules)} · "
-                        f"EXAMPLES {len(report.examples)}\n",
-                    ),
-                    (
-                        "class:viewer-body",
-                        " PROVIDER · "
-                        + (
-                            identity.display_name()
-                            if identity is not None
-                            else "UNRECORDED"
-                        )
-                        + "\n",
-                    ),
-                ),
-                focus_indices=(0, 1, 2),
-            ),
-        ),
-        SemanticViewerSection(
-            "FIT:OVERVIEW",
-            "OVERVIEW",
-            SemanticViewerBlock(
-                (
-                    ("class:section", "\n WHAT MEM UNDERSTOOD\n"),
-                    (
-                        "class:viewer-body",
-                        " " + safe_terminal_text(report.overview) + "\n",
-                    ),
-                    ("class:section", "\n EXAMPLE FIT\n"),
-                ),
-                focus_indices=(0, 1),
             ),
         ),
     ]
     for judgment in report.judgments:
         example = example_by_uid[judgment.example_uid]
+        mark = fit_mark(result, status=judgment.status)
+        mark_style = (
+            "class:impact.custom"
+            if not result.current
+            else "class:impact.keep"
+            if judgment.status == "FIT"
+            else "class:impact.remove"
+        )
         fragments: list[tuple[str, str]] = [
             (
-                "class:detail-card",
-                f"\n {example.alias} · {judgment.status} · RULES "
-                + ", ".join(rule_alias[uid] for uid in judgment.rule_uids)
-                + "\n",
+                mark_style,
+                f"\n {mark} ",
             ),
             (
-                "class:viewer-body",
-                " " + safe_terminal_text(example.statement) + "\n",
-            ),
-            (
-                "class:viewer-body",
-                " WHY · " + safe_terminal_text(judgment.reason) + "\n",
+                "class:memory-object",
+                f"{example.alias} · {safe_terminal_text(example.statement)}\n",
             ),
         ]
-        if judgment.observed:
+        if result.current and judgment.status != "FIT":
             fragments.append(
                 (
                     "class:viewer-body",
-                    " OBSERVED · "
-                    + safe_terminal_text(judgment.observed)
+                    f"   {judgment.status} · "
+                    + safe_terminal_text(judgment.reason)
                     + "\n",
                 )
             )
@@ -220,50 +143,4 @@ def project_fit_result(result: FitResult) -> SemanticViewerDocument:
                 ),
             )
         )
-    receipt_fragments: list[tuple[str, str]] = [
-        (
-            "class:viewer-body",
-            f" RECEIPT · {report.uid} · {report.digest}\n",
-        ),
-        (
-            "class:viewer-body",
-            " GROUND DIGEST · " + report.ground_digest + "\n",
-        ),
-    ]
-    if not result.current:
-        receipt_fragments.append(
-            (
-                "class:report-label",
-                " STALE · Ground changed after this immutable Fit receipt.\n",
-            )
-        )
-    sections.extend(
-        (
-            SemanticViewerSection(
-                "FIT:TOTALS",
-                "TOTALS",
-                SemanticViewerBlock(
-                    (
-                        (
-                            "class:report-label",
-                            "\n TOTALS · "
-                            + " · ".join(
-                                f"{status} {count}"
-                                for status, count in fit_status_counts(result)
-                            )
-                            + "\n",
-                        ),
-                    )
-                ),
-            ),
-            SemanticViewerSection(
-                "FIT:RECEIPT",
-                "RECEIPT",
-                SemanticViewerBlock(
-                    tuple(receipt_fragments),
-                    focus_indices=tuple(range(len(receipt_fragments))),
-                ),
-            ),
-        )
-    )
     return SemanticViewerDocument(tuple(sections))

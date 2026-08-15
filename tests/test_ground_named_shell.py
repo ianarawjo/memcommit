@@ -932,8 +932,8 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
     assert "r2 [PROPOSED]" in rules
     assert "Preserve exceptions and continued service." in rules
     assert "Otherwise the fixture overstates closures." in rules
-    assert "c1 [PROPOSED · FIT / INCLUDE]" in cases
-    assert "c2 [PROPOSED · FIT / INCLUDE]" in cases
+    assert "c1 · [PROPOSED · FIT / INCLUDE]" in cases
+    assert "c2 · [PROPOSED · FIT / INCLUDE]" in cases
     assert (
         "The east elevator remains in service. → "
         "Publish the continued elevator service."
@@ -945,7 +945,7 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
         session,
         selected_memory_index=1,
     )
-    assert "› c2 [PROPOSED · FIT / INCLUDE]" in selected
+    assert "› c2 · [PROPOSED · FIT / INCLUDE]" in selected
     assert "DETAILS\nLINKED RULES · r2" in selected
 
 
@@ -965,7 +965,7 @@ def test_ground_memory_renders_as_multiline_case_with_non_output_notes():
         replace(original, items=(rule, ticker_case))
     )
 
-    assert "c1 [PROPOSED · FIT / INCLUDE]" in rendered
+    assert "c1 · [PROPOSED · FIT / INCLUDE]" in rendered
     assert (
         "North Star Energy Inc. ↵ Class B → NSE.B\n"
         "NOTES · Ignore the legal suffix and append .B for the share "
@@ -1009,12 +1009,21 @@ def test_native_example_card_leads_with_one_line_proposition() -> None:
     )
 
 
-def test_ground_memory_projects_current_and_stale_fit_receipts() -> None:
+def test_ground_memory_projects_compact_fit_marks() -> None:
     session = session_with_rule_and_case()
+    not_run = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        selected_memory_index=0,
+    )
     current = ground_named_shell_module.render_named_ground_memories_pane(
         session,
         selected_memory_index=0,
         fit_receipt=fit_receipt_for(session),
+    )
+    issue = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        selected_memory_index=0,
+        fit_receipt=fit_receipt_for(session, status="UNDERDETERMINED"),
     )
     stale = ground_named_shell_module.render_named_ground_memories_pane(
         session,
@@ -1022,12 +1031,13 @@ def test_ground_memory_projects_current_and_stale_fit_receipts() -> None:
         fit_receipt=fit_receipt_for(session, current=False),
     )
 
-    assert "c1 [PROPOSED · FIT / INCLUDE · FIT FIT]" in current
-    assert "FIT RECEIPT · CURRENT · 55555555" in current
-    assert "FIT RULES · r1" in current
-    assert "FIT WHY · The Rule reproduces" in current
-    assert "FIT STALE · FIT" in stale
-    assert "FIT RECEIPT · STALE · 55555555" in stale
+    assert "c1 · [PROPOSED · FIT / INCLUDE]" in not_run
+    assert "c1 ✓ [PROPOSED · FIT / INCLUDE]" in current
+    assert "c1 ! [PROPOSED · FIT / INCLUDE]" in issue
+    assert "c1 ◷ [PROPOSED · FIT / INCLUDE]" in stale
+    assert "FIT RECEIPT" not in current
+    assert "FIT WHY" not in current
+    assert "FIT STALE" not in stale
 
 
 def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> None:
@@ -1078,7 +1088,7 @@ def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> N
 
     assert result.status == "CLOSED"
     assert ran == [session.revision]
-    assert "FIT FIT" in panes["MEMORIES"].text_area.text
+    assert "c1 ✓ [PROPOSED · FIT / INCLUDE]" in panes["MEMORIES"].text_area.text
 
 
 def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> None:
@@ -1750,7 +1760,7 @@ def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
     assert result.status == "CLOSED"
     memories = panes["MEMORIES"].text_area
     assert "TABLE ·" not in memories.text
-    assert "› c2 [PROPOSED · FIT / INCLUDE]" in memories.text
+    assert "› c2 · [PROPOSED · FIT / INCLUDE]" in memories.text
     assert memories.window.wrap_lines()
 
 
