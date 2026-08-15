@@ -24,7 +24,12 @@ Meld now separates three terminal-independent contracts:
   publishes either a directional review or a symmetric Result session.
 
 The command remains responsible for argument and TUI presentation, progress
-text, exact approval, and rendering. It must not become the semantic or
+text, exact approval, and rendering. Both direct CLI setup and the
+Compare-to-Meld handoff now construct `MeldStartRequest` and enter the same
+runtime used by Python and agent adapters. The CLI may construct a provisional
+directional frame solely to decide whether a provider progress surface is
+needed, but that frame is never persisted; the runtime repeats the cache and
+authority decision before publication. It must not become the semantic or
 persistence authority.
 
 ## Cache invariants
@@ -55,4 +60,7 @@ review values and exposes start, open, comment, preserve, defer, and exact
 Apply without importing terminal code. The shipped `memcommit_meld` agent adapter
 now maps a strict versioned JSON action union to that facade and returns bounded
 errors without exposing provider responses or host paths. CLI routing remains
-the final interface migration.
+visually compatible while no longer owning new-session persistence. Restart is
+an explicit replacement of an existing target-bound session and remains a
+separate CAS operation; it must not be implemented as a new start that first
+deletes or hides the durable prior review.

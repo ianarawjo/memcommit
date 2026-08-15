@@ -10,7 +10,6 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
@@ -69,6 +68,7 @@ from memcommit.meld import (
 from memcommit.meld_provider import (
     MeldProviderError,
 )
+from memcommit.meld_start_application import MeldStartRequest
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
@@ -2637,86 +2637,24 @@ def start_reviewed_symmetric_meld(
         raise MeldCommandError(
             "The symmetric Meld result must differ from both source Contexts."
         )
-    current_name = store.current_context_name()
-    left_access = _resolve_meld_source(
-        store,
-        left_name,
-        current_name=current_name,
-    )
-    right_access = _resolve_meld_source(
-        store,
-        right_name,
-        current_name=current_name,
-    )
-    authorize_combination((left_access, right_access))
-    left_ctx = _load_meld_source(
-        left_access,
-        include_descendants=analysis.include_descendants[0],
-    )
-    right_ctx = _load_meld_source(
-        right_access,
-        include_descendants=analysis.include_descendants[1],
-    )
+    from memcommit.meld_runtime import execute_meld_start
 
-    if create_target:
-        store.assert_context_creatable(target_name)
-        target = ops.init(target_name)
-    else:
-        if not store.context_exists(target_name):
-            raise MeldCommandError(f"RESULT Context '{target_name}' no longer exists.")
-        target = store.load_direct(target_name)
-        if tuple(target.iter_items()):
-            raise MeldCommandError(
-                f"RESULT Context '{target_name}' is no longer empty."
-            )
-        if store.load_meld_session(target.uid) is not None:
-            raise MeldCommandError(
-                f"RESULT Context '{target_name}' already owns a Meld session."
-            )
-
-    target_access = ContextAccess(
+    session = execute_meld_start(
+        MeldStartRequest(
+            mode="SYMMETRIC",
+            left_name=left_name,
+            right_name=right_name,
+            target_name=target_name,
+            left_descendants=analysis.include_descendants[0],
+            right_descendants=analysis.include_descendants[1],
+            create_target=create_target,
+            comparison=analysis,
+        ),
         store=store,
-        context_name=target_name,
-        display_name=target_name,
-        attachment_name=None,
-        permission="READ",
-    )
-    authorize_derived_transfer(left_access, target_access)
-    authorize_derived_transfer(right_access, target_access)
-    reviewed = _load_symmetric_comparison(
-        left=left_ctx,
-        right=right_ctx,
-        target=target,
-        create_target=create_target,
-        include_descendants=analysis.include_descendants,
-    )
-    if reviewed.uid != analysis.uid:
-        raise MeldCommandError(
-            "The selected Compare analysis changed before Meld started. "
-            "Reopen Compare and choose the target again."
-        )
-    session = MeldSession.create_symmetric_from_comparison(reviewed, target)
-    _assert_source_bindings(session, left_ctx, right_ctx)
-    _assert_unapplied_target(session, target)
-    if create_target:
-        store.create_meld_target_with_session(
-            target,
-            session,
-            AutoCheckpoint(
-                command="meld",
-                args={
-                    "left": left_name,
-                    "right": right_name,
-                    "to": target_name,
-                },
-                description=(
-                    f"Initialized symmetric Meld result '{target_name}' from "
-                    f"'{left_name}' and '{right_name}'"
-                ),
-            ),
-        )
-    else:
-        store.save_meld_session(session, expected_session_digest=None)
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("Symmetric Meld start connected a provider.")
+        ),
+    ).session
     if sys.stdin.isatty() and sys.stdout.isatty():
         session = _run_interactive(
             store=store,
@@ -3280,7 +3218,10 @@ def cmd(
                     "a new name; --to never adopts or overwrites an existing "
                     "Context."
                 )
-            target = ops.init(target_name)
+            # The runtime allocates and publishes the real Context atomically
+            # with its session. This placeholder carries only the reviewed name
+            # through the CLI's provider-free Compare prerequisite flow.
+            target = Context(uid="", name=target_name)
             session = None
         else:
             target = (
@@ -3367,6 +3308,7 @@ def cmd(
                 )
             )
             meld_analysis_origin: str | None = None
+            comparison: ComparisonAnalysis | None = None
             if requested_mode == "DIRECTIONAL":
                 granted_incoming = (
                     freeze_granted_context_binding(left_access)
@@ -3440,34 +3382,6 @@ def cmd(
                     prewarm.origin if prewarm is not None else None
                 )
                 meld_analysis_origin = directional_prewarm_origin
-                if prewarm is None:
-                    session = _assess_and_save(
-                        store=store,
-                        session=session,
-                        provider_factory=connect_codex_chatgpt_provider,
-                        expected_session_digest=None,
-                    )
-                else:
-                    session = prewarm.session
-                    _assert_source_bindings(session, left_ctx, right_ctx)
-                    _assert_unapplied_target(session, right_ctx)
-                    if session.granted_target is not None:
-                        with authority_grant_snapshot_lock() as registry:
-                            revalidate_granted_context_binding(
-                                session.granted_target,
-                                registry=registry,
-                            )
-                            assessment = session.current_assessment
-                            assert assessment is not None
-                            _validate_owner_aware_grant_permissions(
-                                session,
-                                assessment.proposals,
-                                registry=registry,
-                            )
-                    store.save_meld_session(
-                        session,
-                        expected_session_digest=None,
-                    )
             else:
                 assert left_access is not None
                 assert right_access is not None
@@ -3492,38 +3406,57 @@ def cmd(
                     store,
                     comparison,
                 )
-                session = MeldSession.create_symmetric_from_comparison(
-                    comparison,
-                    target,
+            from memcommit.meld_runtime import execute_meld_start
+
+            request = MeldStartRequest(
+                mode=requested_mode,
+                left_name=left_name,
+                right_name=right_name,
+                target_name=target_name,
+                left_descendants=left_descendants,
+                right_descendants=right_descendants,
+                create_target=create_target,
+                comparison=comparison,
+            )
+            if requested_mode == "DIRECTIONAL" and prewarm is None:
+                provisional = session
+
+                def start_meld(progress):
+                    def connected_provider():
+                        provider = _connect_meld_provider(
+                            connect_codex_chatgpt_provider
+                        )
+                        progress.update("analyzing meld turn", step=2)
+                        return provider
+
+                    return execute_meld_start(
+                        request,
+                        store=store,
+                        provider_factory=connected_provider,
+                    )
+
+                started = run_command_wait(
+                    "MELD",
+                    "connecting provider",
+                    total=2,
+                    work=start_meld,
+                    return_view=_meld_wait_view(provisional),
+                    context_view=_meld_wait_context_view(provisional),
                 )
-                # Importing Compare is provider-free, but the exact source and
-                # empty-target bindings still need one last local recheck
-                # before the target-scoped session is made durable.
-                _assert_source_bindings(session, left_ctx, right_ctx)
-                _assert_unapplied_target(session, target)
-                if create_target:
-                    store.create_meld_target_with_session(
-                        target,
-                        session,
-                        AutoCheckpoint(
-                            command="meld",
-                            args={
-                                "left": left_name,
-                                "right": right_name,
-                                "to": target_name,
-                            },
-                            description=(
-                                f"Initialized symmetric Meld result "
-                                f"'{target_name}' from '{left_name}' and "
-                                f"'{right_name}'"
-                            ),
-                        ),
-                    )
-                else:
-                    store.save_meld_session(
-                        session,
-                        expected_session_digest=None,
-                    )
+            else:
+                started = execute_meld_start(
+                    request,
+                    store=store,
+                    provider_factory=lambda: (_ for _ in ()).throw(
+                        AssertionError("A prepared Meld start connected a provider.")
+                    ),
+                )
+            session = started.session
+            if requested_mode == "DIRECTIONAL":
+                directional_prewarm_origin = (
+                    started.origin if started.origin != "PROVIDER" else None
+                )
+                meld_analysis_origin = directional_prewarm_origin
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,
