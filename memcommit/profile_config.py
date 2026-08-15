@@ -621,7 +621,7 @@ def profile_store_dir(profile: ProfileEntry) -> Path:
 
 
 def resolve_active_store_dir() -> Path:
-    """Freeze the selected store root for the importing process."""
+    """Resolve the selected Store root for a caller to freeze."""
 
     registry = load_profile_registry()
     return profile_store_dir(registry.active)

@@ -626,7 +626,11 @@ def test_context_lifecycle_events_are_scoped_to_profile_store(
 
     other_profile_dir = isolated_store.parent / "other-profile"
     monkeypatch.setattr(store_module, "STORE_DIR", other_profile_dir)
-    assert store.list_context_lifecycle_events() == []
+    # Existing Store objects retain the root selected at construction. A new
+    # object observes the newly selected Profile boundary.
+    assert store.list_context_lifecycle_events() == [event]
+    other_store = MemoryStore()
+    assert other_store.list_context_lifecycle_events() == []
     assert not (other_profile_dir / "ledger").exists()
 
     monkeypatch.setattr(store_module, "STORE_DIR", original_store_dir)
