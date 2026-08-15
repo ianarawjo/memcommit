@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity      │ Reusing a Memory while keeping one authoritative copy.                                 │^
+│                        metadata rather than copying content.                           │                                                                                        │ 
+│ ▸ mem edit             Replace direct Memory content by UID or prefix in the current   │ Correcting or revising a known Memory in place.                                        │ 
+│                        or explicit Context.                                            │                                                                                        │ 
+│ ▸ mem chunk            Preview and split one direct Memory by headers, paragraphs, or  │ Mechanically splitting a long Memory at structural boundaries.                         │ 
+│                        sentences.                                                      │                                                                                        │ 
+│ ▸ mem forget           Review keep/edit/delete decisions for one instruction, then     │ Removing or transforming material according to a semantic criterion.                   │ 
+│                        apply the accepted batch.                                       │                                                                                        │ 
+│ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by        │ Removing a specific Context or item that is no longer needed.                          │ 
+│                        locator, name, or UID.                                          │                                                                                        │ 
+│ ▸ mem clear            Remove all direct items from the current or explicit Context    │ Emptying a Context while retaining the Context itself.                                 │ 
+│                        after confirmation.                                             │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ ▸ mem find              Search selected Contexts with explicit lexical-descendant and  │ Finding relevant Memories across a selected Context scope.                             │ 
+│                         embedded-Context reach.                                        │                                                                                        │ 
+│ ▸ mem query             Ask readable Context knowledge or an authorized concealed      │ Getting a cited answer from readable or query-authorized knowledge.                    │ 
+│                         query-only view.                                               │                                                                                        │ 
+│ ▸ mem summarize         Show what Mem understands from a Context's visible ordinary    │ Obtaining a concise overview of a Context or subtree.                                  │ 
+│                         Memories.                                                      │                                                                                        │ 
+│ ▸ mem trace             Trace one retained Memory through its recorded lineage.        │ Determining where a Memory came from and how it changed.                               │ 
+│ ▸ mem rationale         Explain one Memory from recorded provenance and, when needed,  │ Understanding why a Memory exists or reached its current form.                         │ 
+│                         inference.                                                     │                                                                                        │ 
+│ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit    │ Locating semantically redundant Memories before cleanup.                               │ 
+│                         Context; no Context changes.                                   │                                                                                        │ 
+│ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit    │ Finding Memories that permit unclear or multiple interpretations.                      │ 
+│                         Context; no Context changes.                                   │                                                                                        │ 
+│ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or       │ Finding mutually incompatible claims or instructions.                                  │ 
+│                         explicit Context; no Context changes.                          │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks plus optional Rule      │ Performing a combined quality review before revising a Context.                        ┃ 
+┃                  Conformance, then review one saved report.                            │                                                                                        ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an           │ Separating a composite Memory into independently reviewable requirements.              ┃ 
+┃                  issue-scoped directional meld.                                        │                                                                                        ┃ 
+┃ ▸ mem distill    Derive evidence-bound reusable Rules from a Context, optionally       │ Extracting reusable rules from evidence-rich source material.                          ┃ 
+┃                  guided by a Goal.                                                     │                                                                                        ┃ 
+┃ ▸ mem compare    Compare Memories in two Contexts and report what they share, what     │ Comparing two Contexts as a whole to understand where they align and differ.           ┃ 
+┃                  differs, and what appears only on one side.                           │                                                                                        ┃ 
+┃ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before  │ Checking expected consequences before accepting a transformation.                      ┃ 
+┃                  its reviewed Apply handoff.                                           │                                                                                        ┃ 
+┃ ▸ mem review     Enter an interactive Review session or stage semantic review          │ Resolving issues in a saved analysis before a later Apply.                             ┃ 
+┃                  responses; never apply Memories.                                      │                                                                                        ┃ 
+┃ ▸ mem meld       Combine two Contexts and resolve their differences, either into a     │ Combining independently edited Contexts into one shared version, or incorporating      ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

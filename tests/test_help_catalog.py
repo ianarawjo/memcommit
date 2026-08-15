@@ -90,6 +90,27 @@ def test_compare_help_includes_the_reviewed_use_case():
     ) in [(row.label, row.value) for row in composed.overview]
 
 
+def test_meld_help_distinguishes_symmetric_and_directional_modes():
+    composed = compose_operation_help(operation_help("meld"))
+    overview = [(row.label, row.value) for row in composed.overview]
+
+    assert composed.operation.summary == (
+        "Combine two Contexts and resolve their differences, either into a "
+        "separate Result or into one authoritative Baseline."
+    )
+    assert ("FLOW", "PEER A + PEER B -> RESULT; INCOMING -> BASELINE") in overview
+    assert (
+        "EFFECT",
+        "Symmetric mode requires a distinct empty Result; directional mode "
+        "changes only the Baseline after reviewed Apply",
+    ) in overview
+    assert (
+        "BEST FOR",
+        "Combining independently edited Contexts into one shared version, or "
+        "incorporating proposed changes into the current baseline.",
+    ) in overview
+
+
 def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
     root, context = _root_context()
     try:

@@ -44,7 +44,10 @@ BEST_FOR_BY_OPERATION = {
     "list": "Inspecting the structure and direct contents of a Context.",
     "lock": "Preventing accidental modification of stable material.",
     "log": "Investigating previous operations, checkpoints, or Memory history.",
-    "meld": "Reconciling two overlapping bodies of material into a new result.",
+    "meld": (
+        "Combining independently edited Contexts into one shared version, or "
+        "incorporating proposed changes into the current baseline."
+    ),
     "merge": (
         "Returning branch additions while explicitly resolving stored-identity "
         "collisions before changing the current Context."

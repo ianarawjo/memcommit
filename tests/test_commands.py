@@ -362,11 +362,11 @@ class TestHelp:
 
         assert meld.exit_code == 0
         meld_help = " ".join(meld.output.split())
-        assert "two equal-authority Contexts" in meld_help
-        assert "current empty Context" in meld_help
+        assert "Combine two Contexts and resolve their differences" in meld_help
+        assert "separate Result" in meld_help
+        assert "authoritative Baseline" in meld_help
         assert "--atomic" not in meld_help
         assert "--into" in meld_help
-        assert "authoritative BASELINE" in meld_help
 
         forms = help_inventory.COMMAND_FORMS["meld"]
         assert "mem meld (enter the interactive Meld session launcher)" in forms
@@ -378,6 +378,14 @@ class TestHelp:
             "mem meld [incoming_context] --into [baseline_context] (directional)"
             in forms
         )
+        assert (
+            "mem meld team/draft-a team/draft-b --to team/merged-draft "
+            "(example: symmetric Result)"
+        ) in forms
+        assert (
+            "mem meld team/proposed-changes --into team/current-policy "
+            "(example: directional Baseline)"
+        ) in forms
         assert (
             "mem meld --into [baseline_context] (current Context is incoming)"
             in forms

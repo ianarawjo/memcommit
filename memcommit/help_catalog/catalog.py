@@ -293,10 +293,12 @@ _OPERATIONS = (
     ),
     _operation(
         "meld",
-        "Combine two equal-authority Contexts in the current empty Context; --from is normalized to INCOMING --into authoritative BASELINE.",
-        "Context <-> Context or Incoming -> Baseline",
+        "Combine two Contexts and resolve their differences, either into a "
+        "separate Result or into one authoritative Baseline.",
+        "PEER A + PEER B -> RESULT; INCOMING -> BASELINE",
         ExecutionKind.SEMANTIC,
-        "Creates or changes material only after reviewed Apply",
+        "Symmetric mode requires a distinct empty Result; directional mode "
+        "changes only the Baseline after reviewed Apply",
         "Each side exact or readable descendants",
     ),
     _operation(
