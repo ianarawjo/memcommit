@@ -1,0 +1,84 @@
+# Meld application boundary matrix
+
+## Goal
+
+Meld must produce the same authorized, cache-aware, versioned result whether
+it is invoked through the CLI, Python facade, or agent tool. Terminal adapters
+may collect values and present progress or review state, but they are not an
+independent source of provider, cache, session, or Apply behavior.
+
+## Operation routes
+
+| Route | Application contract | Production runtime | Public Python | Agent action | CLI |
+| --- | --- | --- | --- | --- | --- |
+| New directional review | `MeldStartRequest` | source/Grant checks, ordered Compare reuse, directional prewarm or provider, session publication | `start_meld(mode="directional")` | `start` | positional/`--into`/`--from` normalize to the same request |
+| New symmetric review | `MeldStartRequest` | source/transfer checks, exact ordered Compare, empty Result, atomic new target plus session when requested | `start_meld(mode="symmetric")` | `start` | current Result or `--to`; Compare handoff uses the same runtime |
+| Replace saved review | `MeldRestartRequest` with opaque expected version | fail stale before provider, then share start authorization/Compare/cache construction and CAS-replace the session | `restart_meld` | `restart` | `--restart` |
+| Open saved review | `MeldSessionRepository.load` | target UID lookup and canonical-digest version | `open_meld` | `open` | direct resume or saved-session picker |
+| Semantic follow-up | `MeldTurnRequest` plus `FrozenMeldAssessment` | exact turn preparation, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld` | `comment` | issue choice/comment and TUI response actions |
+| Preserve remaining distinctions | `MeldPreservationRequest` | provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld` | `preserve` | `--preserve-all` or TUI action |
+| Defer review | `MeldSessionSnapshot` | provider-free session transition and CAS | `defer_meld` | `defer` | `--defer-all` or TUI action |
+| Change symmetric destination | `MeldDestinationRequest` | empty-target validation and atomic Context/session relocation | not yet public | not yet exposed | TUI destination action |
+| Apply reviewed proposal | `MeldApplyRequest` | complete local or Grant-owner transaction, recovery, checkpoint receipts, rollback, and session CAS | `apply_meld` | `apply` | `--accept` or exact TUI Apply |
+
+## Cache matrix
+
+| Semantic basis | Exact | Equivalent graph/scope | Safe subset projection | Provider construction on hit | Durable visible session before invocation |
+| --- | --- | --- | --- | --- | --- |
+| Ordered Compare imported by Meld | supported | supported where the declared comparison proof matches | supported where the comparison adapter proves a complete requested projection | forbidden | no |
+| Initial directional Meld review | supported | supported for the declared graph-equivalent scope | supported for a validated requested subtree/subset | forbidden | no |
+| Meld follow-up resolution branch | exact full-request key | not inferred across different dialogue | not inferred across partial issue turns | forbidden | no |
+
+Every lookup is performed only after the canonical Context names, descendant
+reach, frozen Memories, authority, provider identity, request schema, and
+operation version are known. A shared Study bundle remains immutable and is
+referenced rather than copied into participant state. A validated shared hit is
+promoted to the profile-local hidden cache; only the invoked operation may then
+publish its ordinary target-bound session. Empty frames and zero-relation
+results follow the same key and decoder rules rather than bypassing cache
+validation.
+
+## Invariants now enforced outside terminal code
+
+- Directional source order is always `INCOMING, BASELINE`; the BASELINE is the
+  target and remains authoritative.
+- Symmetric source order is the exact saved Compare order; the Result is
+  distinct, local, empty, and session-free when starting.
+- Source/target authority and frozen digests are rechecked before provider
+  construction and again before durable publication where the operation spans
+  a semantic turn.
+- Cache replay crosses the same strict decoder as a provider completion and
+  cannot publish a partial assessment.
+- Restart observes one opaque saved version before expensive work and replaces
+  that exact version; it never deletes the prior review or creates a target.
+- Apply never calls the provider and consumes only the exact reviewed session
+  version. Recovery must match its checkpoint and complete post-image.
+- `commands.meld` contains no target/session publication primitive. The CLI
+  retains locator grammar, progress, rendering, and TUI orchestration.
+
+## Verification map
+
+- Application contracts: `test_meld_start_application.py`,
+  `test_meld_restart_application.py`, `test_meld_lifecycle_application.py`,
+  and `test_meld_application.py`.
+- Runtime, CAS, cache, and boundary ownership: `test_meld_runtime.py`,
+  `test_meld_provenance.py`, and `test_meld_application_flow.py`.
+- Public and agent adapters: `test_meld_public_api.py`,
+  `test_meld_agent_adapter.py`, and `test_agent_tool_registry.py`.
+- CLI, saved sessions, and review UI compatibility: `test_meld.py`,
+  `test_meld_sessions.py`, `test_meld_target_picker.py`, and
+  `test_meld_shell_directional.py`.
+- Study exact/equivalent/projected reuse: `test_study_compare_graph_prewarm.py`
+  and `test_study_meld_directional_exact_registry.py`.
+- Grant-owner authority cases are additionally selected from
+  `test_granted_impact.py` and `test_authority_grants.py`.
+
+## Remaining presentation boundary
+
+The interactive Meld shell and the mode-dependent A/B/C setup adapter are still
+physically hosted under `memcommit.commands`. They call the application/runtime
+boundary and contain no durable authority, so CLI-free execution is complete.
+Their later relocation under `interfaces.tui.operations.meld` is intentionally
+a presentation-only migration. It should be done with the shared Endpoint Setup
+capabilities for mode-dependent roles and new Result names, plus refreshed
+ordered PTY snapshots; it must not introduce another Meld application path.
