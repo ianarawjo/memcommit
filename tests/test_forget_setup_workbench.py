@@ -11,7 +11,7 @@ from memcommit.commands.forget_setup_workbench import (
     ForgetSetupReceipt,
     choose_forget_setup,
 )
-from memcommit.semantic.changes import RemoveChange, apply_changes
+from memcommit.semantic.changes import RemoveChange
 from memcommit.store import MemoryStore
 
 
@@ -101,7 +101,7 @@ def test_flagless_forget_uses_the_frozen_selected_context(
     monkeypatch,
 ):
     _store, current_name, selected_name = _store_with_two_contexts()
-    observed: list[tuple[str, str]] = []
+    observed: list[tuple[str, str, bool]] = []
 
     monkeypatch.setattr(forget_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
@@ -119,14 +119,19 @@ def test_flagless_forget_uses_the_frozen_selected_context(
     monkeypatch.setattr(
         forget_command,
         "_run_interactive_forget",
-        lambda ctx, info, _provider: observed.append((ctx.name, info)) or [],
+        lambda ctx, info, _provider, **kwargs: observed.append(
+            (ctx.name, info, kwargs["mutates_granted_authority"])
+        )
+        or [],
     )
 
     result = runner.invoke(app, ["forget"])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert current_name != selected_name
-    assert observed == [(selected_name, "Forget the old desk location.")]
+    assert observed == [
+        (selected_name, "Forget the old desk location.", False)
+    ]
 
 
 def test_flagless_forget_cancel_does_not_connect_provider(
@@ -185,7 +190,7 @@ def test_explicit_forget_instruction_keeps_the_existing_fast_path(
     monkeypatch.setattr(
         forget_command,
         "_run_interactive_forget",
-        lambda ctx, info, _provider: observed.append((ctx.name, info)) or [],
+        lambda ctx, info, _provider, **_kwargs: observed.append((ctx.name, info)) or [],
     )
 
     result = runner.invoke(app, ["forget", "Forget the old desk location."])
@@ -204,13 +209,12 @@ def test_tty_forget_prints_a_receipt_only_after_the_checkpoint_succeeds(
     store.create_context(context)
     store.set_current(context.name)
 
-    def approve_remove(ctx, _info, _provider):
+    def approve_remove(ctx, _info, _provider, **_kwargs):
         change = RemoveChange(
             uid=memory.uid,
             content=memory.content,
             reason="The reviewed instruction covers this Memory.",
         )
-        apply_changes(ctx, [change])
         return [change]
 
     monkeypatch.setattr(forget_command, "_interactive_terminal", lambda: True)
@@ -231,4 +235,5 @@ def test_tty_forget_prints_a_receipt_only_after_the_checkpoint_succeeds(
     assert "Forget applied · SOURCE forget/receipt · 1 removed · checkpoint [" in (
         result.output
     )
+    assert "recovery mem undo" in result.output
     assert memory.uid not in store.load_direct(context.name).memories

@@ -1,0 +1,4 @@
+ MEM FORGET · 1/1 · ANALYZING 1 SOURCE MEMORIES X 1 INSTRUCTION . · 0s                                                                                                              
+┌───────────────────────────────────────────────────────────────────────────| FORGET REPORT · BUILDING |───────────────────────────────────────────────────────────────────────────┐
+│MEM FORGET · REPORT BUILDING                                                                                                                                                     ^│
+│CONTENT PENDING · THIS IS NOT A RESULT

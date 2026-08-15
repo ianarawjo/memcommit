@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · forget/granted                                                                                                                                                        ┃
+┃ REVIEWING · 1 SOURCE · 1 instruction CRITERION · 1 CHANGES                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ ASSESSMENT                                                                                                                                                                       ┃
+┃ Reviewed the complete frozen Source.                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIES                                                                                                                                                                     ┃
+┃ The one Forget instruction was evaluated against all 1 direct Source Memories in one batch. The current reviewed result changes 1; unchanged Memories remain explicit and inspec ┃
+┃table in Items.                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · PROPOSED SOURCE REVISION                                                                                                                                                ┃
+┃ These are the exact changes Apply would make to the frozen Source. Nothing has changed yet.                                                                                      ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ − [DROP] forget/granted [22222222]                                                                                                                                       ┃
+┃             - The service desk used to be beside the west entrance.                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY is available. Enter to review before anything changes.                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Forget report                                                                                                                                          ^│
+│  FORGET DECISION The service desk used to be beside the west entrance.                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Forget action · APPLY is available. Enter to review before anything changes.                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A review & apply  H Help  y/Y copy  Q close

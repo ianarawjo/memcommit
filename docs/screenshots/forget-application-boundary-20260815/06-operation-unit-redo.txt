@@ -1,0 +1,3 @@
+52 180                                                                                                                                                                              
+Redid command: mem forget <INSTRUCTION> · Affected Contexts: 1 · Affected Memories: 1 · - 1 removed                                                                                 
+REDO VERIFICATION · DIRECT MEMORIES 0

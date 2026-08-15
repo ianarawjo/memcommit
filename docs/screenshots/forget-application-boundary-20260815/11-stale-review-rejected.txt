@@ -1,0 +1,4 @@
+Error: Context 'forget/stale' changed before it could be saved.                                                                                                                     
+STALE REVIEW · REJECTED · CONTEXT PRESERVED                                                                                                                                         
+DIRECT MEMORIES · 2                                                                                                                                                                 
+FORGET CHECKPOINTS · 0

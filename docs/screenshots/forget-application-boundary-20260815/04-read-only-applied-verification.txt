@@ -1,0 +1,4 @@
+52 180                                                                                                                                                                              
+READ-ONLY FORGET VERIFICATION                                                                                                                                                       
+DIRECT MEMORIES · 0                                                                                                                                                                 
+FORGET CHECKPOINTS · 1

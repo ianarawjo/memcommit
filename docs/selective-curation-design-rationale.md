@@ -119,6 +119,27 @@ and checkpoint behavior. After a successful TTY Apply, the command prints the
 canonical public Source, effect counts, and checkpoint prefix as its durable
 success receipt; this appears only after the authorized save succeeds.
 
+The TTY application surface is ownership-aware. Provider dispositions stage one
+answered treatment for every Source Memory. A local Source therefore applies
+that complete decision-free batch directly and names `mem undo` in its receipt.
+A granted Source is the actual authority mutation target, so it retains exact
+final review when the reviewed batch contains an edit or removal. An all-KEEP
+batch is different: it publishes no Context mutation, bypasses authority review,
+prints an explicit unchanged/no-checkpoint receipt, and creates no artificial
+Undo unit. This differs from Sever, where even granted Source and Criteria
+frames remain unchanged and only the new local Result is published.
+
+The Resolution workbench never mutates the loaded Context. It returns either
+cancellation or the exact sparse reviewed change set. The command then computes
+the required `UPDATE`/`DELETE` permissions, revalidates any Grant through the
+authority-write boundary, applies the changes to the originally loaded direct
+Context, and saves it with that load's optimistic Context digest. A concurrent
+Source write therefore rejects the reviewed Forget before persistence; the
+atomic save removes a provisional checkpoint on write failure, and the success
+receipt is printed only after the checkpoint exists. Cancellation and accepted
+all-KEEP completion remain observably distinct even though neither writes the
+Source.
+
 ## Operation boundaries
 
 The shared curation module does not resolve Context locators, open grants,

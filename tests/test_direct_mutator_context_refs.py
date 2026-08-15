@@ -128,9 +128,8 @@ def test_forget_preserves_unresolved_context_ref(
 ):
     store, name, memories, reference_uid = _dangling_parent()
 
-    def apply_forget(context, _info, _llm):
+    def apply_forget(context, _info, _llm, **_kwargs):
         memory = memories[0]
-        context.remove(memory.uid)
         return [
             RemoveChange(
                 uid=memory.uid,

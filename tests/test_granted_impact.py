@@ -53,7 +53,7 @@ from memcommit.profiles import (
 from memcommit.store import MemoryStore
 from memcommit.summarize_application import SummarizeRequest
 from memcommit.summarize_runtime import execute_summarize
-from memcommit.semantic.changes import RemoveChange, apply_changes
+from memcommit.semantic.changes import RemoveChange
 from memcommit.source_projection.model import SourceAccess
 from memcommit.source_projection.presentation import source_display_text
 
@@ -1038,7 +1038,10 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
         lambda: object(),
     )
 
-    def approve_remove(ctx, _info, _llm):
+    authority_boundaries = []
+
+    def approve_remove(ctx, _info, _llm, **kwargs):
+        authority_boundaries.append(kwargs["mutates_granted_authority"])
         changes = [
             RemoveChange(
                 uid=original.uid,
@@ -1046,7 +1049,6 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
                 reason="Requested",
             )
         ]
-        apply_changes(ctx, changes)
         return changes
 
     monkeypatch.setattr(
@@ -1058,6 +1060,7 @@ def test_granted_forget_rejects_delete_when_only_update_is_granted(
 
     assert result.exit_code == 1
     assert "does not allow DELETE" in result.stderr
+    assert authority_boundaries == [True]
     assert original.uid in authority.load_direct(wiki.name).memories
 
 

@@ -4,6 +4,9 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.application_review_policy import (
+    ownership_aware_application_review,
+)
 from memcommit.commands.command_wait import (
     CommandWaitView,
     build_report_loading_view,
@@ -82,7 +85,9 @@ def _run_resolution_forget(
     ctx: Context,
     info: str,
     llm: object,
-) -> list[ProposedChange]:
+    *,
+    mutates_granted_authority: bool = False,
+) -> list[ProposedChange] | None:
     from memcommit.commands.resolution_workbench_shell import (
         run_resolution_workbench_shell,
     )
@@ -102,7 +107,6 @@ def _run_resolution_forget(
         context_view=_forget_wait_view(ctx, info),
     )
     if not analysis.decisions:
-        typer.echo("Nothing to apply.")
         return []
     review = ForgetReview.create(ctx, info, analysis)
     navigation = ResolutionNavigation()
@@ -127,15 +131,22 @@ def _run_resolution_forget(
                 "Run 'mem forget INSTRUCTION' in a terminal to review the batch."
             ),
             review_and_apply=True,
+            decision_free_behavior=ownership_aware_application_review(
+                mutates_granted_authority=mutates_granted_authority,
+                local_undo_available=True,
+                # An all-KEEP review crosses no Context mutation boundary,
+                # even when the frozen Source was reached through a Grant.
+                publishes_context_mutation=bool(review.changes()),
+            ).decision_free_behavior,
             split_viewer_items=True,
             impact_controller=impact_controller,
         )
         if action.kind == "CLOSE":
-            return []
+            return None
         if action.kind == "ACCEPT":
-            changes = review.changes()
-            apply_changes(ctx, changes)
-            return changes
+            # The workbench returns the exact reviewed application input. The
+            # command owns authority revalidation, CAS, mutation, and receipt.
+            return review.changes()
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise ValueError("Unsupported Forget workbench action.")
         if action.comment.strip():
@@ -190,9 +201,16 @@ def _run_interactive_forget(
     ctx: Context,
     info: str,
     llm: object,
-) -> list[ProposedChange]:
+    *,
+    mutates_granted_authority: bool = False,
+) -> list[ProposedChange] | None:
     if _interactive_terminal():
-        return _run_resolution_forget(ctx, info, llm)
+        return _run_resolution_forget(
+            ctx,
+            info,
+            llm,
+            mutates_granted_authority=mutates_granted_authority,
+        )
     typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
     # The shared wait is intentionally silent outside a TTY, preserving the
     # stable redirected output while keeping one orchestration path.
@@ -217,19 +235,11 @@ def _run_interactive_forget(
         decision = typer.prompt(">", default="", show_default=False).strip()
 
         if decision.lower() in ("y", "yes"):
-            apply_changes(ctx, proposals)
-            removes = sum(1 for c in proposals if isinstance(c, RemoveChange))
-            edits = sum(1 for c in proposals if isinstance(c, EditChange))
-            parts = (
-                ([f"{removes} removed"] if removes else [])
-                + ([f"{edits} edited"] if edits else [])
-            )
-            typer.secho(f"Done: {', '.join(parts)}.", fg=typer.colors.GREEN)
             return proposals
 
         if decision.lower() in ("n", "no"):
             typer.echo("Aborted - no changes made.")
-            return []
+            return None
 
         feedback = decision if not decision.lower().startswith("r") else ""
         if not feedback:
@@ -311,52 +321,83 @@ def cmd(
     try:
         assert info is not None
         provider = connect_codex_chatgpt_provider()
-        applied = _run_interactive_forget(ctx, info, provider)
+        applied = _run_interactive_forget(
+            ctx,
+            info,
+            provider,
+            mutates_granted_authority=access.is_granted,
+        )
     except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    if applied:
-        removes = [c for c in applied if isinstance(c, RemoveChange)]
-        edits = [c for c in applied if isinstance(c, EditChange)]
-        parts = []
-        if removes:
-            parts.append(f'removed "{removes[0].content[:40]}"' if len(removes) == 1 else f"removed {len(removes)}")
-        if edits:
-            parts.append(f'edited "{edits[0].old_content[:40]}"' if len(edits) == 1 else f"edited {len(edits)}")
-        try:
-            with authorized_context_mutation(
-                access,
-                required_permissions=_required_permissions(applied),
-            ):
-                checkpoint = store.save(
-                    ctx,
-                    AutoCheckpoint(
-                        command="forget",
-                        args={
-                            "query": info,
-                            **grant_checkpoint_args(access),
-                        },
-                        description=f'Forgot ({info[:40]}): {", ".join(parts)}',
-                    ),
-                )
-        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
+    if applied is None:
         if _interactive_terminal():
-            effects = []
-            if removes:
-                effects.append(f"{len(removes)} removed")
-            if edits:
-                effects.append(f"{len(edits)} edited")
-            checkpoint_label = (
-                f" · checkpoint [{checkpoint.uid[:8]}]"
-                if checkpoint is not None
-                else ""
+            typer.echo(
+                "Forget cancelled · SOURCE "
+                f"{safe_terminal_text(access.display_name)} · Context unchanged"
             )
-            typer.secho(
-                "Forget applied · SOURCE "
+        return
+
+    if not applied:
+        if _interactive_terminal():
+            typer.echo(
+                "Forget complete · SOURCE "
                 f"{safe_terminal_text(access.display_name)} · "
-                f"{', '.join(effects)}{checkpoint_label}",
-                fg=typer.colors.GREEN,
+                "no changes needed · Context unchanged · no checkpoint"
             )
+        return
+
+    removes = [c for c in applied if isinstance(c, RemoveChange)]
+    edits = [c for c in applied if isinstance(c, EditChange)]
+    parts = []
+    if removes:
+        parts.append(f'removed "{removes[0].content[:40]}"' if len(removes) == 1 else f"removed {len(removes)}")
+    if edits:
+        parts.append(f'edited "{edits[0].old_content[:40]}"' if len(edits) == 1 else f"edited {len(edits)}")
+    try:
+        with authorized_context_mutation(
+            access,
+            required_permissions=_required_permissions(applied),
+        ):
+            apply_changes(ctx, applied)
+            checkpoint = store.save(
+                ctx,
+                AutoCheckpoint(
+                    command="forget",
+                    args={
+                        "query": info,
+                        **grant_checkpoint_args(access),
+                    },
+                    description=f'Forgot ({info[:40]}): {", ".join(parts)}',
+                ),
+            )
+    except (
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    effects = []
+    if removes:
+        effects.append(f"{len(removes)} removed")
+    if edits:
+        effects.append(f"{len(edits)} edited")
+    if _interactive_terminal():
+        checkpoint_label = (
+            f" · checkpoint [{checkpoint.uid[:8]}]"
+            if checkpoint is not None
+            else ""
+        )
+        recovery_label = " · recovery mem undo" if not access.is_granted else ""
+        typer.secho(
+            "Forget applied · SOURCE "
+            f"{safe_terminal_text(access.display_name)} · "
+            f"{', '.join(effects)}{checkpoint_label}{recovery_label}",
+            fg=typer.colors.GREEN,
+        )
+    else:
+        typer.secho(f"Done: {', '.join(effects)}.", fg=typer.colors.GREEN)

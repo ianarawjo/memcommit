@@ -347,6 +347,9 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
 
 def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monkeypatch):
     context = _context()
+    original_contents = {
+        uid: memory.content for uid, memory in context.memories.items()
+    }
     first_uid = next(iter(context.memories))
     source_memory_count = len(context.memories)
     progress_events: list[tuple[object, ...]] = []
@@ -377,6 +380,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
     )
 
     impact_labels = []
+    review_behaviors = []
 
     def choose(view_or_supplier, **kwargs):
         view = view_or_supplier() if callable(view_or_supplier) else view_or_supplier
@@ -384,6 +388,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         assert impact.replaces_results is True
         assert impact.revision == view.revision
         impact_labels.append(impact.entries[0].label)
+        review_behaviors.append(kwargs["decision_free_behavior"])
         action = next(actions)
         if action.kind == "SUBMIT_ITEM":
             candidate_uid = view.items[0].uid
@@ -407,8 +412,11 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
 
     assert first_uid not in {change.uid for change in changes}
     assert any(isinstance(change, RemoveChange) for change in changes)
-    assert first_uid in context.memories
+    assert {
+        uid: memory.content for uid, memory in context.memories.items()
+    } == original_contents
     assert impact_labels == ["TRANSFORM", "KEEP"]
+    assert review_behaviors == ["AUTO_ACCEPT", "AUTO_ACCEPT"]
     assert progress_events == [
         (
             "start",
@@ -418,3 +426,40 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         ),
         ("close",),
     ]
+
+
+def test_granted_forget_requires_review_only_when_it_will_publish_a_change(
+    monkeypatch,
+):
+    observed = []
+
+    def choose(_view, **kwargs):
+        observed.append(kwargs["decision_free_behavior"])
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(
+        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        choose,
+    )
+    monkeypatch.setattr(
+        forget_command,
+        "run_command_wait",
+        lambda _operation, _stage, *, work, **_kwargs: work(object()),
+    )
+
+    changed = forget_command._run_resolution_forget(
+        _context(),
+        "Forget the covered details.",
+        BatchForgetLLM(),
+        mutates_granted_authority=True,
+    )
+    unchanged = forget_command._run_resolution_forget(
+        _context(),
+        "Forget nothing.",
+        BatchForgetProvider(),
+        mutates_granted_authority=True,
+    )
+
+    assert changed is not None and len(changed) == 2
+    assert unchanged == []
+    assert observed == ["FINAL_REVIEW", "AUTO_ACCEPT"]
