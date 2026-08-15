@@ -6,12 +6,17 @@ from collections.abc import Callable, Iterable
 from contextlib import ExitStack
 from dataclasses import dataclass
 import hashlib
+import uuid
 
 from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
+    freeze_granted_context_binding,
     revalidate_granted_context_binding,
+    resolve_context_access,
 )
+from memcommit.comparison import COMPARISON_RULESET_VERSION, ComparisonAnalysis
+from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import (
@@ -20,6 +25,12 @@ from memcommit.granted_comparison_store import (
     recursive_comparison_projection,
 )
 from memcommit.granted_update_application import _remove_checkpoint
+from memcommit.derived_policy import (
+    analysis_retention,
+    authorize_analysis_save,
+    authorize_combination,
+    authorize_derived_transfer,
+)
 from memcommit.meld import (
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MeldCheckpointReceipt,
@@ -65,6 +76,13 @@ from memcommit.meld_session_application import (
     run_meld_session_defer,
     run_meld_session_open,
 )
+from memcommit.meld_start_application import (
+    MeldStartError,
+    MeldStartPort,
+    MeldStartRequest,
+    MeldStartResult,
+    run_meld_start,
+)
 from memcommit.provider_types import ProviderIdentity
 from memcommit.store import (
     ConcurrentContextUpdateError,
@@ -75,6 +93,9 @@ from memcommit.store import (
 )
 from memcommit.study_prewarm.meld_resolution import (
     find_installed_meld_resolution_branch,
+)
+from memcommit.study_prewarm.meld_directional import (
+    find_installed_directional_meld_prewarm,
 )
 
 
@@ -732,6 +753,257 @@ def granted_owner_name(binding, public_name: str) -> str:
             "A directional Meld owner is outside the granted BASELINE namespace."
         )
     return binding.authority_context_name + public_name[len(binding.public_name) :]
+
+
+def _start_comparison(
+    request: MeldStartRequest,
+    *,
+    store: MemoryStore,
+    left: Context,
+    right: Context,
+) -> ComparisonAnalysis | None:
+    analysis = request.comparison
+    if analysis is None:
+        analysis = load_comparison_analysis(
+            left.uid,
+            right.uid,
+            store=store,
+        )
+        if analysis is None:
+            artifact = load_granted_comparison_artifact(store, left.uid, right.uid)
+            analysis = artifact.analysis if artifact is not None else None
+    if analysis is None:
+        if request.mode == "DIRECTIONAL":
+            return None
+        raise MeldStartError(
+            "Symmetric Meld requires an exact saved ordered Compare analysis."
+        )
+    if (
+        not analysis.matches(left, right)
+        or analysis.include_descendants
+        != (request.left_descendants, request.right_descendants)
+        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+    ):
+        raise MeldStartError("The saved ordered Compare analysis is stale.")
+    return analysis
+
+
+@dataclass
+class MemoryStoreMeldStartPort(MeldStartPort):
+    """Authorize and publish a new target-scoped Meld without interface code."""
+
+    store: MemoryStore
+
+    def start(
+        self,
+        request: MeldStartRequest,
+        *,
+        provider_factory,
+    ) -> MeldStartResult:
+        current_name = self.store.current_context_name()
+        left_access = resolve_context_access(
+            self.store,
+            request.left_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        right_access = resolve_context_access(
+            self.store,
+            request.right_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        authorize_combination((left_access, right_access))
+
+        if request.mode == "DIRECTIONAL":
+            authorize_derived_transfer(left_access, right_access)
+            retention = analysis_retention((left_access, right_access))
+            if retention is None:
+                raise MeldStartError(
+                    "The directional Meld cannot retain its reviewed analysis."
+                )
+            authorize_analysis_save(
+                (left_access, right_access),
+                retention=retention,
+            )
+            target_access = right_access
+        else:
+            if request.create_target:
+                self.store.assert_context_creatable(request.target_name)
+                target_access = ContextAccess(
+                    store=self.store,
+                    context_name=request.target_name,
+                    display_name=request.target_name,
+                    attachment_name=None,
+                    permission="READ",
+                )
+            else:
+                target_access = resolve_context_access(
+                    self.store,
+                    request.target_name,
+                    current_name=current_name,
+                    required_permission="READ",
+                )
+                if target_access.is_granted:
+                    raise MeldStartError(
+                        "Symmetric Meld requires a local Result Context."
+                    )
+            authorize_derived_transfer(left_access, target_access)
+            authorize_derived_transfer(right_access, target_access)
+
+        project = request.mode == "SYMMETRIC"
+        left = load_meld_source(
+            left_access,
+            include_descendants=request.left_descendants,
+            project=project,
+        )
+        right = load_meld_source(
+            right_access,
+            include_descendants=request.right_descendants,
+            project=project,
+        )
+
+        if request.mode == "DIRECTIONAL":
+            target = right
+        elif request.create_target:
+            target = Context(uid=str(uuid.uuid4()), name=request.target_name)
+        else:
+            target = self.store.load_direct(request.target_name)
+            if tuple(target.iter_items()):
+                raise MeldStartError("Symmetric Meld Result must remain empty.")
+        if self.store.load_meld_session(target.uid) is not None:
+            raise MeldStartError("The Meld target already owns a saved session.")
+
+        comparison = _start_comparison(
+            request,
+            store=self.store,
+            left=recursive_comparison_projection(left),
+            right=recursive_comparison_projection(right),
+        )
+        if request.mode == "DIRECTIONAL":
+            granted_incoming = (
+                freeze_granted_context_binding(left_access)
+                if left_access.is_granted
+                else None
+            )
+            granted_target = (
+                freeze_granted_context_binding(right_access)
+                if right_access.is_granted
+                else None
+            )
+            session = (
+                MeldSession.create_directional(
+                    left,
+                    right,
+                    incoming_descendants=request.left_descendants,
+                    baseline_descendants=request.right_descendants,
+                    granted_incoming=granted_incoming,
+                    granted_target=granted_target,
+                )
+                if comparison is None
+                else MeldSession.create_directional_from_comparison(
+                    comparison,
+                    left,
+                    right,
+                    granted_incoming=granted_incoming,
+                    granted_target=granted_target,
+                )
+            )
+            session.start_initial_analysis()
+            prepared = find_installed_directional_meld_prewarm(
+                store=self.store,
+                current=session,
+            )
+            if prepared is None:
+                frozen, assessment_port = prepare_meld_assessment(
+                    session,
+                    store=self.store,
+                    expected_session_digest=None,
+                )
+                session = execute_meld_assessment(
+                    frozen,
+                    port=assessment_port,
+                    provider_factory=provider_factory,
+                ).session
+                origin = "PROVIDER"
+            else:
+                session = prepared.session
+                left_live, right_live, target_live = load_bound_meld_contexts(
+                    self.store,
+                    session,
+                )
+                assert_meld_source_bindings(session, left_live, right_live)
+                assert_unapplied_meld_target(session, target_live)
+                if session.granted_target is not None:
+                    assessment = session.current_assessment
+                    assert assessment is not None
+                    with authority_grant_snapshot_lock() as registry:
+                        revalidate_granted_context_binding(
+                            session.granted_target,
+                            registry=registry,
+                        )
+                        validate_owner_aware_grant_permissions(
+                            session,
+                            assessment.proposals,
+                            registry=registry,
+                        )
+                self.store.save_meld_session(
+                    session,
+                    expected_session_digest=None,
+                )
+                origin = prepared.origin
+        else:
+            assert comparison is not None
+            session = MeldSession.create_symmetric_from_comparison(
+                comparison,
+                target,
+            )
+            assert_meld_source_bindings(session, left, right)
+            assert_unapplied_meld_target(session, target)
+            if request.create_target:
+                self.store.create_meld_target_with_session(
+                    target,
+                    session,
+                    AutoCheckpoint(
+                        command="meld",
+                        args={
+                            "left": request.left_name,
+                            "right": request.right_name,
+                            "to": request.target_name,
+                        },
+                        description=(
+                            f"Initialized symmetric Meld result "
+                            f"'{request.target_name}' from "
+                            f"'{request.left_name}' and '{request.right_name}'"
+                        ),
+                    ),
+                )
+            else:
+                self.store.save_meld_session(
+                    session,
+                    expected_session_digest=None,
+                )
+            origin = "SAVED_COMPARISON"
+        return MeldStartResult(
+            session=session,
+            origin=origin,
+            created_target=request.create_target,
+        )
+
+
+def execute_meld_start(
+    request: MeldStartRequest,
+    *,
+    store: MemoryStore,
+    provider_factory,
+) -> MeldStartResult:
+    """Start one complete Meld through the production Store/Grant adapter."""
+
+    return run_meld_start(
+        request,
+        port=MemoryStoreMeldStartPort(store),
+        provider_factory=provider_factory,
+    )
 
 
 @dataclass
@@ -1815,6 +2087,7 @@ __all__ = [
     "MemoryStoreMeldDestinationPort",
     "MemoryStoreMeldPreservationPort",
     "MemoryStoreMeldSessionRepository",
+    "MemoryStoreMeldStartPort",
     "assert_meld_non_target_source_bindings",
     "assert_meld_source_bindings",
     "assert_unapplied_meld_target",
@@ -1824,6 +2097,7 @@ __all__ = [
     "execute_meld_preservation",
     "execute_meld_session_defer",
     "execute_meld_session_open",
+    "execute_meld_start",
     "load_bound_meld_contexts",
     "load_local_meld_source",
     "load_meld_source",

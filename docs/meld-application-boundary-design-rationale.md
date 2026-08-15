@@ -18,6 +18,10 @@ Meld now separates three terminal-independent contracts:
   turns, defer, provider-free preservation, and destination-change requests.
 - `meld_application` owns reviewed Apply routing. `meld_runtime` supplies the
   MemoryStore, Grant, checkpoint, recovery, cache, and provider adapters.
+- `meld_start_application` owns the canonical source/target request and
+  validates the resulting initial review. The runtime repeats source authority,
+  transfer, Compare-basis, empty-target, and session-absence checks before it
+  publishes either a directional review or a symmetric Result session.
 
 The command remains responsible for argument and TUI presentation, progress
 text, exact approval, and rendering. It must not become the semantic or
@@ -45,6 +49,6 @@ branches use a separate operation adapter because their task-description and
 baseline identity authorization is broader than ordinary profile-local
 persistence. A matching immutable shared-bundle branch is replayed through the
 same decoder, then promoted into the participant's hidden profile cache only
-after the live Context and session checks pass. Initial Meld construction and
-public Python/agent facades remain later rollout steps; no public API is
-declared here.
+after the live Context and session checks pass. New-session construction now
+has a terminal-independent runtime, while CLI routing and public Python/agent
+facades remain later rollout steps; no public API is declared here.

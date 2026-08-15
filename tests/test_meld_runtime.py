@@ -11,6 +11,7 @@ import pytest
 import memcommit.meld_assessment_application as meld_assessment_application
 import memcommit.meld_runtime as meld_runtime
 import memcommit.meld_session_application as meld_session_application
+import memcommit.meld_start_application as meld_start_application
 
 
 @pytest.mark.parametrize(
@@ -18,6 +19,7 @@ import memcommit.meld_session_application as meld_session_application
     (
         meld_assessment_application,
         meld_session_application,
+        meld_start_application,
         meld_runtime,
     ),
 )
