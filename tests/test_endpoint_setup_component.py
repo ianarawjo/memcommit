@@ -8,6 +8,7 @@ import pytest
 
 from memcommit.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
+    EndpointSetupMemory,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
@@ -229,3 +230,367 @@ def test_endpoint_setup_validator_receives_both_exact_role_ranges() -> None:
 
     assert returned is None
     assert observed == [(False, True)]
+
+
+def _memory_focus_spec() -> EndpointSetupSpec:
+    return EndpointSetupSpec(
+        title="MEMORY FOCUS OPERATION",
+        subtitle="CHOOSE AN EXACT CONTEXT OR ONE DIRECT MEMORY",
+        modes=(EndpointSetupMode("FOCUS", "A → RESULT"),),
+        initial_mode_uid="FOCUS",
+        roles=(
+            EndpointSetupRole(
+                "A",
+                "A · SOURCE",
+                ("source", "target"),
+                frozenset({"source", "target"}),
+                "source",
+                allow_descendants=True,
+                allow_memory_focus=True,
+                memory_height=8,
+            ),
+        ),
+    )
+
+
+def _memory_focus_loader(
+    _role_uid: str,
+    context_name: str,
+) -> tuple[EndpointSetupMemory, ...]:
+    memories = (
+        EndpointSetupMemory(
+            "source",
+            "11111111-1111-4111-8111-111111111111",
+            "First Source Memory.",
+        ),
+        EndpointSetupMemory(
+            "source",
+            "22222222-2222-4222-8222-222222222222",
+            "Second Source Memory.",
+        ),
+        EndpointSetupMemory(
+            "target",
+            "33333333-3333-4333-8333-333333333333",
+            "Target Memory.",
+        ),
+    )
+    return tuple(
+        memory for memory in memories if memory.context_name == context_name
+    )
+
+
+def test_endpoint_setup_returns_one_exact_memory_focus() -> None:
+    with create_pipe_input() as pipe_input:
+        # Context -> Range -> Memory Focus -> first direct Memory -> Continue.
+        pipe_input.send_text("\t\t\x1b[B\r\t\r")
+        returned = run_endpoint_setup(
+            _memory_focus_spec(),
+            memory_loader=_memory_focus_loader,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue(
+        "A",
+        "source",
+        include_descendants=False,
+        memory_uid="11111111-1111-4111-8111-111111111111",
+    )
+
+
+def test_endpoint_setup_descendant_reach_clears_memory_focus_immediately() -> None:
+    with create_pipe_input() as pipe_input:
+        # Select one Memory, return to Range, choose descendants, then cross the
+        # visibly disabled Memory Focus frame and continue.
+        pipe_input.send_text("\t\t\x1b[B\r\x1b[Z\x1b[C\t\t\r")
+        returned = run_endpoint_setup(
+            _memory_focus_spec(),
+            memory_loader=_memory_focus_loader,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue(
+        "A",
+        "source",
+        include_descendants=True,
+        memory_uid=None,
+    )
+
+
+def test_endpoint_setup_context_choice_clears_memory_focus() -> None:
+    with create_pipe_input() as pipe_input:
+        # Select a Source Memory, return through Range to Context, choose the
+        # other exact Context, then continue with its whole frame.
+        pipe_input.send_text(
+            "\t\t\x1b[B\r\x1b[Z\x1b[Z\x1b[B\r\t\t\t\r"
+        )
+        returned = run_endpoint_setup(
+            _memory_focus_spec(),
+            memory_loader=_memory_focus_loader,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue(
+        "A",
+        "target",
+        include_descendants=False,
+        memory_uid=None,
+    )
+
+
+def test_endpoint_setup_loads_memory_projections_only_for_chosen_contexts() -> None:
+    loaded: list[tuple[str, str]] = []
+
+    def load(role_uid: str, context_name: str):
+        loaded.append((role_uid, context_name))
+        return _memory_focus_loader(role_uid, context_name)
+
+    with create_pipe_input() as pipe_input:
+        # Initial Source is loaded for its visible frame. Moving the Context
+        # cursor does not load Target; explicit selection does.
+        pipe_input.send_text("\x1b[B\rq")
+        returned = run_endpoint_setup(
+            _memory_focus_spec(),
+            memory_loader=load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is None
+    assert loaded == [("A", "source"), ("A", "target")]
+
+
+def test_endpoint_setup_does_not_load_memories_for_initial_descendant_reach() -> None:
+    loaded: list[tuple[str, str]] = []
+    role = _memory_focus_spec().roles[0]
+    spec = EndpointSetupSpec(
+        title="INITIAL SUBTREE",
+        subtitle="MEMORY FOCUS IS DISABLED",
+        modes=(EndpointSetupMode("FOCUS", "A → RESULT"),),
+        initial_mode_uid="FOCUS",
+        roles=(
+            EndpointSetupRole(
+                role.uid,
+                role.label,
+                role.names,
+                role.selectable_names,
+                role.selected_name,
+                allow_descendants=True,
+                include_descendants=True,
+                allow_memory_focus=True,
+            ),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\r")
+        returned = run_endpoint_setup(
+            spec,
+            memory_loader=lambda role_uid, context_name: loaded.append(
+                (role_uid, context_name)
+            )
+            or (),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue(
+        "A",
+        "source",
+        include_descendants=True,
+    )
+    assert loaded == []
+
+
+def test_endpoint_setup_clears_only_the_role_broadened_to_descendants() -> None:
+    source_uid = "11111111-1111-4111-8111-111111111111"
+    target_uid = "33333333-3333-4333-8333-333333333333"
+    spec = EndpointSetupSpec(
+        title="TWO ROLE MEMORY FOCUS",
+        subtitle="KEEP EACH ROLE INDEPENDENT",
+        modes=(EndpointSetupMode("FOCUS", "A → B"),),
+        initial_mode_uid="FOCUS",
+        roles=(
+            EndpointSetupRole(
+                "A",
+                "A · SOURCE",
+                ("source",),
+                frozenset({"source"}),
+                "source",
+                allow_descendants=True,
+                allow_memory_focus=True,
+            ),
+            EndpointSetupRole(
+                "B",
+                "B · TARGET",
+                ("target",),
+                frozenset({"target"}),
+                "target",
+                allow_descendants=True,
+                allow_memory_focus=True,
+            ),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Focus one Memory in each role, then broaden B only. A must remain an
+        # exact focused Memory while B becomes a whole subtree.
+        pipe_input.send_text(
+            "\t\t\x1b[B\r\t\t\t\x1b[B\r\x1b[Z\x1b[C\t\t\r"
+        )
+        returned = run_endpoint_setup(
+            spec,
+            memory_loader=lambda _role_uid, context_name: (
+                EndpointSetupMemory(context_name, source_uid, "Source Memory."),
+            )
+            if context_name == "source"
+            else (
+                EndpointSetupMemory(context_name, target_uid, "Target Memory."),
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A") == EndpointSetupValue(
+        "A",
+        "source",
+        memory_uid=source_uid,
+    )
+    assert returned.value("B") == EndpointSetupValue(
+        "B",
+        "target",
+        include_descendants=True,
+    )
+
+
+def test_endpoint_setup_preserves_explicit_initial_memory_focus() -> None:
+    spec = _memory_focus_spec()
+    role = spec.roles[0]
+    selected_uid = "22222222-2222-4222-8222-222222222222"
+    spec = EndpointSetupSpec(
+        title=spec.title,
+        subtitle=spec.subtitle,
+        modes=spec.modes,
+        initial_mode_uid=spec.initial_mode_uid,
+        roles=(
+            EndpointSetupRole(
+                role.uid,
+                role.label,
+                role.names,
+                role.selectable_names,
+                role.selected_name,
+                allow_descendants=True,
+                allow_memory_focus=True,
+                selected_memory_uid=selected_uid,
+                memory_height=role.memory_height,
+            ),
+        ),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\r")
+        returned = run_endpoint_setup(
+            spec,
+            memory_loader=_memory_focus_loader,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert returned.value("A").memory_uid == selected_uid
+
+
+def test_endpoint_setup_rejects_hidden_or_incompatible_memory_focus() -> None:
+    memory = EndpointSetupMemory("source", "11111111", "Memory.")
+    with pytest.raises(ValueError, match="projection loader"):
+        run_endpoint_setup(
+            _memory_focus_spec(),
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    with pytest.raises(ValueError, match="outside its selected Context"):
+        spec = _memory_focus_spec()
+        role = spec.roles[0]
+        run_endpoint_setup(
+            EndpointSetupSpec(
+                title=spec.title,
+                subtitle=spec.subtitle,
+                modes=spec.modes,
+                initial_mode_uid=spec.initial_mode_uid,
+                roles=(
+                    EndpointSetupRole(
+                        role.uid,
+                        role.label,
+                        role.names,
+                        role.selectable_names,
+                        "target",
+                        allow_descendants=True,
+                        allow_memory_focus=True,
+                        selected_memory_uid=memory.uid,
+                    ),
+                ),
+            ),
+            memory_loader=_memory_focus_loader,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    with pytest.raises(ValueError, match="combine Memory focus"):
+        EndpointSetupRole(
+            "A",
+            "A",
+            ("source",),
+            frozenset({"source"}),
+            "source",
+            allow_descendants=True,
+            include_descendants=True,
+            allow_memory_focus=True,
+            selected_memory_uid=memory.uid,
+        )
+    with pytest.raises(ValueError, match="cannot focus one Memory"):
+        EndpointSetupValue(
+            "A",
+            "source",
+            include_descendants=True,
+            memory_uid=memory.uid,
+        )
+
+
+def test_endpoint_setup_rejects_invalid_memory_loader_projections() -> None:
+    with create_pipe_input() as pipe_input:
+        with pytest.raises(ValueError, match="another Context"):
+            run_endpoint_setup(
+                _memory_focus_spec(),
+                memory_loader=lambda _role_uid, _context_name: (
+                    EndpointSetupMemory("target", "11111111", "Wrong owner."),
+                ),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+    duplicate = EndpointSetupMemory("source", "11111111", "Duplicate.")
+    with create_pipe_input() as pipe_input:
+        with pytest.raises(ValueError, match="duplicate UIDs"):
+            run_endpoint_setup(
+                _memory_focus_spec(),
+                memory_loader=lambda _role_uid, _context_name: (
+                    duplicate,
+                    duplicate,
+                ),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )

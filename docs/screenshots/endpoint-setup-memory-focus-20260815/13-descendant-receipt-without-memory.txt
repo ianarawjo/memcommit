@@ -1,0 +1,9 @@
+
+TYPED SETUP RECEIPT · EndpointSetupDraft(mode_uid='DIRECTIONAL', values=(EndpointSetupValue(role_uid='A', context_name='source', include_descendants=True, memory_uid=None),))
+  A · DESCENDANTS=True · MEMORY=None
+  MEMORY PROJECTION LOADS · [('A', 'source')]
+READ-ONLY SETUP VERIFICATION
+  CONTEXT BYTES UNCHANGED · True
+  CURRENT CONTEXT · target
+  CONTEXT CHECKPOINTS · 0
+  PROVIDER CALLS · 0

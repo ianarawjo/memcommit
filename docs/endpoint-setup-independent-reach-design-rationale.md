@@ -50,27 +50,36 @@ presentation.
 
 ## Memory-focus boundary
 
-Context reach and focused Memory selection remain separate axes.  This change
-does not add a Memory UID to the rebuilt value model and does not migrate
-Compare or Update yet.  When Memory focus is added, changing a role from exact
-to descendants must clear any retained Memory UID before the executable draft
-is constructed; a single Memory cannot remain invisibly selected under a
-subtree range.
+Context reach and focused Memory selection remain separate axes.  The rebuilt
+component now accepts a caller-authorized, lazy direct-Memory projection for
+each role's selected exact Context and returns an optional exact Memory UID in
+the same typed endpoint value.  Changing that role from exact to descendants
+clears its retained UID immediately; a single Memory cannot remain invisibly
+selected under a subtree range.  Changing the selected Context also clears the
+old UID.  Another role's independently selected Memory is unaffected.
+
+This capability does not migrate Compare or Update by itself.  Their adapters
+must still freeze authority before constructing the projection loader and
+translate the completed typed draft into their existing operation request.
 
 ## Verification
 
 Tests exercise all four A/B combinations, an explicitly recursive initial
 role, rejection of hidden descendant state, exact range delivery to an
-operation validator, and unchanged Merge/Audit defaults.  The ordered 180×52
-color PTY trace under
+operation validator, and unchanged Merge/Audit defaults.  A subsequent focused
+suite covers exact Memory selection, Context-change clearing, range clearing,
+role independence, lazy projection loading, and invalid loader output.  The
+ordered 180×52 color PTY traces under
 `docs/screenshots/endpoint-setup-independent-reach-20260815/` records A range
 selection, B remaining exact, the complete To Do projection, the typed
-process-local receipt, read-only Store verification, and cancellation.
+process-local receipt, read-only Store verification, and cancellation; the
+Memory-focus trace is recorded separately under
+`docs/screenshots/endpoint-setup-memory-focus-20260815/`.
 
 ## Remaining work
 
-The rebuilt component still lacks focused direct-Memory selection,
-require-new Context naming, parent location, and mode-dependent active roles.
-The legacy endpoint shell remains authoritative for operations requiring those
-capabilities.  Focused Memory selection is the next required capability before
-Compare or Update can migrate without regression.
+The rebuilt component still lacks require-new Context naming, parent location,
+and mode-dependent active roles.  The legacy endpoint shell remains
+authoritative for operations requiring those capabilities.  Compare or Update
+is the next directional consumer candidate now that independent range and
+focused direct-Memory selection are represented together.

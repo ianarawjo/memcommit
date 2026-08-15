@@ -28,6 +28,29 @@ class EndpointSetupMode:
 
 
 @dataclass(frozen=True)
+class EndpointSetupMemory:
+    """One frozen direct Memory projection offered by an endpoint role."""
+
+    context_name: str
+    uid: str
+    preview: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.context_name, str)
+            or not self.context_name
+            or any(character in self.context_name for character in "\r\n")
+            or not isinstance(self.uid, str)
+            or not self.uid
+            or any(character in self.uid for character in "\r\n")
+            or not isinstance(self.preview, str)
+        ):
+            raise ValueError(
+                "Endpoint setup Memories require stable Context, uid, and preview text."
+            )
+
+
+@dataclass(frozen=True)
 class EndpointSetupRole:
     """One Context endpoint with operation-owned availability and labels."""
 
@@ -42,6 +65,9 @@ class EndpointSetupRole:
     height: int = 6
     allow_descendants: bool = False
     include_descendants: bool = False
+    allow_memory_focus: bool = False
+    selected_memory_uid: str | None = None
+    memory_height: int = 7
 
     def __post_init__(self) -> None:
         if (
@@ -76,6 +102,26 @@ class EndpointSetupRole:
             raise ValueError(
                 "Endpoint role cannot include descendants without a range control."
             )
+        if type(self.allow_memory_focus) is not bool:
+            raise TypeError("Endpoint role Memory-focus state must be boolean.")
+        if self.selected_memory_uid is not None:
+            if (
+                not isinstance(self.selected_memory_uid, str)
+                or not self.selected_memory_uid
+                or any(
+                    character in self.selected_memory_uid
+                    for character in "\r\n"
+                )
+            ):
+                raise ValueError("Endpoint role initial Memory UID is invalid.")
+            if not self.allow_memory_focus:
+                raise ValueError(
+                    "Endpoint role cannot retain Memory focus without a control."
+                )
+            if self.include_descendants:
+                raise ValueError(
+                    "Endpoint role cannot combine Memory focus with descendants."
+                )
         if self.fixed and self.selectable_names != frozenset({self.selected_name}):
             raise ValueError("A fixed endpoint must expose exactly one selected value.")
         if (
@@ -84,6 +130,12 @@ class EndpointSetupRole:
             or self.height < 1
         ):
             raise ValueError("Endpoint role height must be positive.")
+        if (
+            isinstance(self.memory_height, bool)
+            or not isinstance(self.memory_height, int)
+            or self.memory_height < 3
+        ):
+            raise ValueError("Endpoint role Memory height must be at least three.")
 
 
 @dataclass(frozen=True)
@@ -128,6 +180,7 @@ class EndpointSetupValue:
     role_uid: str
     context_name: str
     include_descendants: bool = False
+    memory_uid: str | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -136,8 +189,20 @@ class EndpointSetupValue:
             or not isinstance(self.context_name, str)
             or not self.context_name
             or type(self.include_descendants) is not bool
+            or (
+                self.memory_uid is not None
+                and (
+                    not isinstance(self.memory_uid, str)
+                    or not self.memory_uid
+                    or any(character in self.memory_uid for character in "\r\n")
+                )
+            )
         ):
             raise ValueError("Endpoint setup values require one exact typed range.")
+        if self.memory_uid is not None and self.include_descendants:
+            raise ValueError(
+                "Endpoint setup values cannot focus one Memory across descendants."
+            )
 
 
 @dataclass(frozen=True)

@@ -2,6 +2,7 @@
 
 from memcommit.interfaces.tui.components.endpoint_setup.model import (
     EndpointSetupDraft,
+    EndpointSetupMemory,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
@@ -13,6 +14,7 @@ from memcommit.interfaces.tui.components.endpoint_setup.screen import (
 
 __all__ = [
     "EndpointSetupDraft",
+    "EndpointSetupMemory",
     "EndpointSetupMode",
     "EndpointSetupRole",
     "EndpointSetupSpec",

@@ -10,6 +10,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
+from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
@@ -23,6 +24,10 @@ from memcommit.context_targeting.tui.selector import (
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.endpoint_setup.memory_focus import (
+    EndpointMemoryFocusController,
+    MemoryProjectionLoader,
+)
 from memcommit.interfaces.tui.components.endpoint_setup.model import (
     EndpointSetupDraft,
     EndpointSetupSpec,
@@ -59,12 +64,13 @@ DraftValidator = Callable[[EndpointSetupDraft], str | None]
 def run_endpoint_setup(
     spec: EndpointSetupSpec,
     *,
+    memory_loader: MemoryProjectionLoader | None = None,
     validate_draft: DraftValidator | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> EndpointSetupDraft | None:
-    """Collect an operation shape without opening content or changing state."""
+    """Collect a typed shape through caller-authorized read-only projections."""
 
     if not isinstance(spec, EndpointSetupSpec):
         raise TypeError("Endpoint setup requires an EndpointSetupSpec.")
@@ -104,6 +110,22 @@ def run_endpoint_setup(
         for role in spec.roles
         if role.allow_descendants
     }
+    memory_roles = tuple(role for role in spec.roles if role.allow_memory_focus)
+    if memory_roles and memory_loader is None:
+        raise ValueError("Endpoint Memory focus requires a projection loader.")
+    memory_focuses: dict[str, EndpointMemoryFocusController] = {}
+    if memory_loader is not None:
+        memory_focuses = {
+            role.uid: EndpointMemoryFocusController(
+                role_uid=role.uid,
+                selected_context=lambda uid=role.uid: selectors[
+                    uid
+                ].selection.selected_name,
+                loader=memory_loader,
+                selected_memory_uid=role.selected_memory_uid,
+            )
+            for role in memory_roles
+        }
     bindings = KeyBindings()
     status = {"value": ""}
     role_by_uid = {role.uid: role for role in spec.roles}
@@ -154,6 +176,43 @@ def run_endpoint_setup(
             height=Dimension.exact(3),
         )
 
+    memory_controls: dict[str, FormattedTextControl] = {}
+    memory_frames = {}
+    for role in spec.roles:
+        if not role.allow_memory_focus:
+            continue
+        memory_control: FormattedTextControl
+
+        def render_memory(uid=role.uid):
+            focused = get_app().layout.has_focus(memory_controls[uid])
+            return memory_focuses[uid].render(
+                focused=focused,
+                include_descendants=(
+                    reach_states[uid].include_descendants
+                    if uid in reach_states
+                    else False
+                ),
+            )
+
+        memory_control = FormattedTextControl(
+            render_memory,
+            focusable=True,
+            show_cursor=False,
+        )
+        memory_controls[role.uid] = memory_control
+        memory_frames[role.uid] = build_focused_frame(
+            Window(
+                memory_control,
+                wrap_lines=True,
+                right_margins=[ScrollbarMargin(display_arrows=True)],
+            ),
+            title=f"{safe_terminal_text(role.label)} · MEMORY FOCUS",
+            is_focused=lambda uid=role.uid: get_app().layout.has_focus(
+                memory_controls[uid]
+            ),
+            height=Dimension.exact(role.memory_height),
+        )
+
     def make_draft() -> EndpointSetupDraft:
         selected_mode = mode_state.selected_uid
         if selected_mode is None:
@@ -168,6 +227,11 @@ def run_endpoint_setup(
                         reach_states[role.uid].include_descendants
                         if role.uid in reach_states
                         else False
+                    ),
+                    memory_uid=(
+                        memory_focuses[role.uid].selected_memory_uid
+                        if role.uid in memory_focuses
+                        else None
                     ),
                 )
                 for role in spec.roles
@@ -189,12 +253,21 @@ def run_endpoint_setup(
             )
             if not role_by_uid[value.role_uid].allow_descendants:
                 range_suffix = ""
+            memory_suffix = ""
+            if role_by_uid[value.role_uid].allow_memory_focus:
+                memory_suffix = (
+                    f" · MEMORY {safe_terminal_text(value.memory_uid[:8])}"
+                    if value.memory_uid is not None
+                    else " · WHOLE CONTEXT"
+                )
+                if value.include_descendants:
+                    memory_suffix = ""
             fragments.append(
                 (
                     "class:report-neutral",
                     f"{safe_terminal_text(value.role_uid)} · "
                     f"{safe_terminal_text(value.context_name)}"
-                    f"{range_suffix}\n",
+                    f"{range_suffix}{memory_suffix}\n",
                 )
             )
         fragments.extend(
@@ -243,6 +316,11 @@ def run_endpoint_setup(
             for control in reach_controls.values()
         ):
             return " ←/→ choose this Context only or include descendants · Tab next · Esc cancel"
+        if any(
+            get_app().layout.has_focus(control)
+            for control in memory_controls.values()
+        ):
+            return " ↑/↓ choose whole Context or one direct Memory · Enter select · Tab next · Esc cancel"
         return " ↑/↓ move/cross · ←/→ tree · Enter/Space select · Tab next · Esc cancel"
 
     footer = Window(
@@ -255,6 +333,8 @@ def run_endpoint_setup(
         role_regions.append(TuiRegion(selectors[role.uid].frame))
         if role.uid in reach_frames:
             role_regions.append(TuiRegion(reach_frames[role.uid]))
+        if role.uid in memory_frames:
+            role_regions.append(TuiRegion(memory_frames[role.uid]))
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(mode_frame),
@@ -297,11 +377,45 @@ def run_endpoint_setup(
 
     def choose_role(role_uid: str) -> SurfaceActionResult:
         try:
+            candidate = selectors[role_uid].tree.selected_name
+            if candidate not in role_by_uid[role_uid].selectable_names:
+                raise ValueError("That Context is unavailable for this role.")
+            if role_uid in memory_focuses:
+                memory_focuses[role_uid].prepare_context(candidate)
             selectors[role_uid].choose_cursor()
         except ValueError as error:
             status["value"] = str(error)
         else:
+            if role_uid in memory_focuses:
+                memory_focuses[role_uid].clear()
             status["value"] = ""
+        return "HANDLED"
+
+    def move_memory(role_uid: str, delta: int) -> SurfaceMoveResult:
+        if (
+            role_uid in reach_states
+            and reach_states[role_uid].include_descendants
+        ):
+            return "BOUNDARY"
+        changed = memory_focuses[role_uid].move(delta)
+        status["value"] = ""
+        return "MOVED" if changed else "BOUNDARY"
+
+    def enter_memory(role_uid: str, delta: int) -> None:
+        memory_focuses[role_uid].enter(delta)
+
+    def choose_memory(role_uid: str) -> SurfaceActionResult:
+        if (
+            role_uid in reach_states
+            and reach_states[role_uid].include_descendants
+        ):
+            memory_focuses[role_uid].clear()
+            status["value"] = (
+                "Focused Memory requires THIS CONTEXT ONLY."
+            )
+            return "HANDLED"
+        memory_focuses[role_uid].choose()
+        status["value"] = ""
         return "HANDLED"
 
     def finish(event) -> SurfaceActionResult:
@@ -348,6 +462,20 @@ def run_endpoint_setup(
                     move_vertical=lambda _event, _delta: "BOUNDARY",
                 )
             )
+        if role.uid in memory_controls:
+            surfaces_in_order.append(
+                FocusSurface(
+                    f"MEMORY:{role.uid}",
+                    memory_controls[role.uid],
+                    move_vertical=lambda _event, delta, uid=role.uid: move_memory(
+                        uid, delta
+                    ),
+                    activate=lambda _event, uid=role.uid: choose_memory(uid),
+                    on_vertical_enter=lambda delta, uid=role.uid: enter_memory(
+                        uid, delta
+                    ),
+                )
+            )
     surfaces_in_order.append(
         FocusSurface(
             "CONTINUE",
@@ -389,8 +517,21 @@ def run_endpoint_setup(
     def move_reach(delta: int) -> None:
         uid = focused_reach_role_uid()
         if uid is not None:
+            was_descendants = reach_states[uid].include_descendants
             reach_states[uid].move(delta)
-            status["value"] = ""
+            if (
+                not was_descendants
+                and reach_states[uid].include_descendants
+                and uid in memory_focuses
+                and memory_focuses[uid].clear()
+            ):
+                # A subtree may still contain the Memory, but retaining its UID
+                # would silently narrow the executable draft behind broader UI.
+                status["value"] = (
+                    f"{role_by_uid[uid].label} Memory focus cleared for descendants."
+                )
+            else:
+                status["value"] = ""
 
     @bindings.add("left", filter=reach_focus, eager=True)
     def _reach_left(event) -> None:
@@ -405,6 +546,12 @@ def run_endpoint_setup(
     editable_focus = Condition(
         lambda: any(
             get_app().layout.has_focus(control) for control in editable_controls
+        )
+    )
+    memory_focus = Condition(
+        lambda: any(
+            get_app().layout.has_focus(control)
+            for control in memory_controls.values()
         )
     )
 
@@ -437,6 +584,20 @@ def run_endpoint_setup(
         uid = focused_role_uid()
         if uid is not None:
             choose_role(uid)
+        event.app.invalidate()
+
+    @bindings.add(" ", filter=memory_focus, eager=True)
+    def _choose_memory(event) -> None:
+        uid = next(
+            (
+                role_uid
+                for role_uid, control in memory_controls.items()
+                if get_app().layout.has_focus(control)
+            ),
+            None,
+        )
+        if uid is not None:
+            choose_memory(uid)
         event.app.invalidate()
 
     @bind_case_insensitive_key(bindings, "a", filter=editable_focus)
