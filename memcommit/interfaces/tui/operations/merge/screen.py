@@ -1,26 +1,18 @@
-"""Interactive exact-command review for direct or recursive Merge."""
+"""Frozen-plan review and exact Apply for deterministic Merge."""
 
 from __future__ import annotations
 
 from collections.abc import Callable
 
 from prompt_toolkit.application import Application, get_app
-from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
+from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.context_targeting.tui.reach import (
-    ContextReachState,
-    render_context_reach,
-)
-from memcommit.context_targeting.tui.selector import (
-    ContextSelectorControl,
-    ContextSelectorView,
-)
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.exact_command_review import (
@@ -48,14 +40,20 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
+from memcommit.interfaces.tui.viewers.semantic import (
+    SemanticViewerBlock,
+    SemanticViewerController,
+    SemanticViewerDocument,
+    SemanticViewerSection,
+)
 from memcommit.merge_application import (
+    FrozenMergePlan,
     MergeError,
     MergeReach,
-    MergeRequest,
     MergeResult,
 )
 from memcommit.merge_runtime import merge_summary
+from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 def merge_exact_command_review(
@@ -93,81 +91,160 @@ def merge_exact_command_review(
     )
 
 
-def run_merge_tui(
+def merge_plan_exact_command_review(plan: FrozenMergePlan) -> ExactCommandReview:
+    """Bind the exact command to the already frozen Context plan."""
+
+    if not isinstance(plan, FrozenMergePlan):
+        raise TypeError("Merge plan review requires a FrozenMergePlan.")
+    base = merge_exact_command_review(
+        plan.source_name,
+        plan.target_name,
+        recursive=plan.request.reach is MergeReach.DESCENDANTS,
+    )
+    created = sum(context.target_created for context in plan.contexts)
+    return ExactCommandReview(
+        argv=base.argv,
+        effects=(
+            f"Apply the frozen {plan.request.reach.value} plan to "
+            f"{len(plan.contexts)} Context mapping(s).",
+            f"Create {created} Source-only Target path(s).",
+            f"Add {merge_summary(plan.additions)} and record "
+            f"{len(plan.contexts)} checkpoint(s).",
+            "Revalidate every frozen identity, digest, and subtree membership before writing.",
+            "Publish the complete plan atomically or publish none of it.",
+        ),
+    )
+
+
+def project_merge_plan(plan: FrozenMergePlan) -> SemanticViewerDocument:
+    """Project every frozen Source/Target mapping without parsing CLI text."""
+
+    if not isinstance(plan, FrozenMergePlan):
+        raise TypeError("Merge plan projection requires a FrozenMergePlan.")
+    created = sum(context.target_created for context in plan.contexts)
+    sections: list[SemanticViewerSection] = [
+        SemanticViewerSection(
+            uid="MERGE:PLAN:SUMMARY",
+            kind="SUMMARY",
+            block=SemanticViewerBlock(
+                (
+                    (
+                        "class:title",
+                        f"MERGE PLAN · {safe_terminal_text(plan.source_name)} → {safe_terminal_text(plan.target_name)}\n",
+                    ),
+                    ("class:report-label", "STATUS · FROZEN · NOT APPLIED\n"),
+                    (
+                        "class:viewer-body",
+                        f"RANGE · {plan.request.reach.value}\n"
+                        f"CONTEXTS · {len(plan.contexts)} · CREATE {created}\n"
+                        f"ADDITIONS · {safe_terminal_text(merge_summary(plan.additions))}\n"
+                        f"CHECKPOINTS · {len(plan.contexts)}\n\n",
+                    ),
+                )
+            ),
+        )
+    ]
+    for index, context in enumerate(plan.contexts, start=1):
+        target_state = "WILL CREATE" if context.target_created else "EXISTING"
+        fragments: list[tuple[str, str]] = [
+            (
+                "class:section",
+                f"MAPPING {index}/{len(plan.contexts)} · "
+                f"{safe_terminal_text(context.source_name)} → "
+                f"{safe_terminal_text(context.target_name)}\n",
+            ),
+            (
+                "class:viewer-body",
+                f"TARGET · {target_state}\n"
+                f"ADDITIONS · {safe_terminal_text(merge_summary(context.additions))}\n",
+            ),
+        ]
+        if context.additions:
+            fragments.append(("class:report-label", "ITEMS\n"))
+            for addition in context.additions:
+                style = (
+                    "class:memory-object"
+                    if addition.kind.value == "MEMORY"
+                    else "class:viewer-body"
+                )
+                fragments.append(
+                    (
+                        style,
+                        f"  {addition.kind.value} · "
+                        f"[{safe_terminal_text(addition.uid[:8])}]\n",
+                    )
+                )
+        fragments.append(("", "\n"))
+        sections.append(
+            SemanticViewerSection(
+                uid=f"MERGE:PLAN:CONTEXT:{index}",
+                kind="CONTEXT_PLAN",
+                row_index=index - 1,
+                block=SemanticViewerBlock(tuple(fragments), anchor="both"),
+            )
+        )
+    return SemanticViewerDocument(tuple(sections))
+
+
+def run_merge_plan_review(
+    plan: FrozenMergePlan,
     *,
-    setup: MergeTuiSetup,
-    execute: Callable[[MergeRequest], MergeResult],
+    apply_plan: Callable[[FrozenMergePlan], MergeResult],
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> MergeResult | None:
-    """Select Source/reach and execute only the exact reviewed Merge."""
+    """Review one complete frozen plan and apply only that exact plan."""
 
+    if not isinstance(plan, FrozenMergePlan):
+        raise TypeError("Interactive Merge review requires a FrozenMergePlan.")
     if require_tty:
         require_interactive_terminal(
-            "Interactive Merge",
+            "Interactive Merge plan review",
             snapshot_hint="Pass SOURCE with --direct or --recursive outside a terminal.",
         )
-    if not isinstance(setup, MergeTuiSetup):
-        raise TypeError("Merge TUI requires a MergeTuiSetup.")
 
-    selector = ContextSelectorControl(
-        ContextSelectorView(
-            names=setup.names,
-            selected=(setup.selected_source,),
-            mode="SINGLE",
-            label="SOURCE · ALL READABLE CONTEXTS · * CURRENT TARGET",
-            current_context=setup.current_context,
-            selectable_names=setup.selectable_names,
-            annotations=setup.annotations,
-        ),
-        height=min(12, max(4, len(setup.names))),
-    )
-    reach = ContextReachState.create(
-        include_descendants=setup.initial_recursive,
-    )
+    document = project_merge_plan(plan)
+    controller = SemanticViewerController(SessionWorkbenchNavigation())
     bindings = KeyBindings()
     result: MergeResult | None = None
     status = {"value": ""}
     last_error: dict[str, Exception | None] = {"value": None}
 
-    range_control: FormattedTextControl
-    range_control = FormattedTextControl(
-        lambda: render_context_reach(
-            reach,
-            focused=get_app().layout.has_focus(range_control),
-            title="RANGE",
+    viewer_control = FormattedTextControl(
+        lambda: controller.render(
+            document,
+            viewer_focused=get_app().layout.has_focus(viewer_control),
         ),
         focusable=True,
         show_cursor=False,
     )
-    range_frame = build_focused_frame(
-        Window(range_control, wrap_lines=False),
-        title="DESCENDANTS",
-        is_focused=lambda: get_app().layout.has_focus(range_control),
-        height=Dimension.exact(3),
+    viewer_frame = build_focused_frame(
+        Window(
+            viewer_control,
+            wrap_lines=True,
+            right_margins=[ScrollbarMargin(display_arrows=True)],
+        ),
+        title="FROZEN PLAN · COMPLETE CONTEXT MAPPINGS",
+        is_focused=lambda: get_app().layout.has_focus(viewer_control),
+        height=Dimension(min=18, weight=1),
     )
-
-    def selected_review() -> ExactCommandReview:
-        return merge_exact_command_review(
-            selector.selection.selected_name,
-            setup.target_context,
-            recursive=reach.include_descendants,
-        )
 
     def render_todo() -> list[tuple[str, str]]:
         focused = get_app().layout.has_focus(todo_control)
-        style = focused_control_style(focused=focused)
         cursor = [("[SetCursorPosition]", "")] if focused else []
         if result is None:
             return [
                 (
                     "class:report-neutral",
-                    render_exact_command_review(selected_review()),
+                    render_exact_command_review(merge_plan_exact_command_review(plan)),
                 ),
                 ("", "\n\n"),
                 *cursor,
-                (style, "[ PRESS ENTER TO APPLY THE EXACT MERGE ]"),
+                (
+                    focused_control_style(focused=focused),
+                    "[ PRESS ENTER TO APPLY THE FROZEN MERGE PLAN ]",
+                ),
             ]
         created = sum(context.target_created for context in result.contexts)
         return [
@@ -182,7 +259,10 @@ def run_merge_tui(
                 f"CHECKPOINTS · {len(result.checkpoint_uids)}\n\n",
             ),
             *cursor,
-            (style, "[ PRESS ENTER TO CLOSE ]"),
+            (
+                focused_control_style(focused=focused),
+                "[ PRESS ENTER TO CLOSE ]",
+            ),
         ]
 
     todo_control = FormattedTextControl(
@@ -192,14 +272,14 @@ def run_merge_tui(
     )
     todo_frame = build_focused_frame(
         Window(todo_control, wrap_lines=True),
-        title="TO DO · EXACT COMMAND",
+        title="TO DO · EXACT FROZEN PLAN",
         is_focused=lambda: get_app().layout.has_focus(todo_control),
-        height=Dimension(min=15, weight=1),
+        height=Dimension(min=15, max=18),
     )
     header = Window(
         FormattedTextControl(
-            " MEM MERGE · SOURCE → CURRENT TARGET\n"
-            " DETERMINISTIC UID UNION · DIRECT OR PATH-ALIGNED DESCENDANTS"
+            " MEM MERGE · REVIEW FROZEN PLAN\n"
+            " DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY"
         ),
         height=Dimension.exact(2),
         dont_extend_height=True,
@@ -210,14 +290,9 @@ def run_merge_tui(
             return " " + safe_terminal_text(status["value"])
         if result is not None:
             return " Enter/Esc/Q close · durable receipt shown above"
-        if get_app().layout.has_focus(range_control):
-            return " ←/→ direct or descendants · ↓ Source · Tab next · Esc cancel"
-        if get_app().layout.has_focus(selector.control):
-            return (
-                " ↑/↓ move/cross · ←/→ tree · Enter/Space select · "
-                "Tab exact review · Esc cancel"
-            )
-        return " Enter apply exact command · ↑ Source · Tab range · Esc cancel"
+        if get_app().layout.has_focus(viewer_control):
+            return " ↑/↓ mapping · Home/End · Tab exact plan · Esc cancel"
+        return " Enter apply frozen plan · ↑ Viewer · Tab Viewer · Esc cancel"
 
     footer = Window(
         FormattedTextControl(render_footer),
@@ -226,13 +301,12 @@ def run_merge_tui(
     )
     root = build_tui_frame(
         TuiRegion(header),
-        TuiRegion(range_frame),
-        TuiRegion(selector.frame),
+        TuiRegion(viewer_frame),
         TuiRegion(todo_frame),
         TuiRegion(footer),
     )
     app: Application[MergeResult | None] = Application(
-        layout=Layout(root, focused_element=selector.control),
+        layout=Layout(root, focused_element=viewer_control),
         key_bindings=bindings,
         full_screen=True,
         erase_when_done=True,
@@ -242,42 +316,18 @@ def run_merge_tui(
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
 
-    def move_selector(_event, delta: int) -> SurfaceMoveResult:
-        before = selector.tree.selected_name
-        selector.move(delta)
-        return "MOVED" if selector.tree.selected_name != before else "BOUNDARY"
-
-    def enter_selector(delta: int) -> None:
-        rows = selector.tree.visible_rows()
-        selector.tree.selected_name = rows[0 if delta > 0 else -1].name
-
-    def choose_source(_event) -> SurfaceActionResult:
-        if result is not None:
-            return "IGNORED"
-        try:
-            selector.choose_cursor()
-        except ValueError as error:
-            status["value"] = str(error)
-        else:
-            status["value"] = ""
-            last_error["value"] = None
-        return "HANDLED"
+    def move_viewer(_event, delta: int) -> SurfaceMoveResult:
+        before = controller.current(document)
+        after = controller.move(document, delta)
+        return "MOVED" if after != before else "BOUNDARY"
 
     def submit(event) -> SurfaceActionResult:
         nonlocal result
         if result is not None:
             event.app.exit(result=result)
             return "HANDLED"
-        request = MergeRequest(
-            source_locator=selector.selection.selected_name,
-            reach=(
-                MergeReach.DESCENDANTS
-                if reach.include_descendants
-                else MergeReach.DIRECT
-            ),
-        )
         try:
-            completed = execute(request)
+            completed = apply_plan(plan)
             if not isinstance(completed, MergeResult):
                 raise TypeError("Merge application returned an invalid result.")
         except (OSError, RuntimeError, TypeError, ValueError) as error:
@@ -291,26 +341,12 @@ def run_merge_tui(
         event.app.invalidate()
         return "HANDLED"
 
-    surfaces: SurfaceFocusController
-
-    def advance_range(event) -> SurfaceActionResult:
-        surfaces.focus_relative(event.app, 1, wrap=False)
-        return "HANDLED"
-
     surfaces = SurfaceFocusController(
         (
             FocusSurface(
-                "RANGE",
-                range_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=advance_range,
-            ),
-            FocusSurface(
-                "SOURCE",
-                selector.control,
-                move_vertical=move_selector,
-                activate=choose_source,
-                on_vertical_enter=enter_selector,
+                "VIEWER",
+                viewer_control,
+                move_vertical=move_viewer,
             ),
             FocusSurface(
                 "TO_DO",
@@ -322,39 +358,17 @@ def run_merge_tui(
     )
     bind_surface_navigation(bindings, surfaces)
 
-    @bindings.add("left", filter=has_focus(range_control), eager=True)
-    def _range_left(event) -> None:
-        reach.move(-1)
-        status["value"] = ""
-        last_error["value"] = None
-        event.app.invalidate()
+    @bindings.add("home", eager=True)
+    def _home(event) -> None:
+        if event.app.layout.has_focus(viewer_control):
+            controller.home(document)
+            event.app.invalidate()
 
-    @bindings.add("right", filter=has_focus(range_control), eager=True)
-    def _range_right(event) -> None:
-        reach.move(1)
-        status["value"] = ""
-        last_error["value"] = None
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(selector.control), eager=True)
-    def _collapse(event) -> None:
-        selector.collapse()
-        event.app.invalidate()
-
-    @bindings.add("right", filter=has_focus(selector.control), eager=True)
-    def _expand(event) -> None:
-        selector.expand()
-        event.app.invalidate()
-
-    @bindings.add(" ", filter=has_focus(selector.control), eager=True)
-    def _choose(event) -> None:
-        choose_source(event)
-        event.app.invalidate()
-
-    @bind_case_insensitive_key(bindings, "a", filter=has_focus(selector.control))
-    def _toggle_expand_all(event) -> None:
-        selector.toggle_expand_all()
-        event.app.invalidate()
+    @bindings.add("end", eager=True)
+    def _end(event) -> None:
+        if event.app.layout.has_focus(viewer_control):
+            controller.end(document)
+            event.app.invalidate()
 
     def close(event) -> None:
         event.app.exit(result=result)

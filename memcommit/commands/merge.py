@@ -9,12 +9,14 @@ from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.merge import (
     build_merge_tui_setup,
-    run_merge_tui,
+    choose_merge_setup,
+    run_merge_plan_review,
 )
 from memcommit.merge_application import (
     MergeError,
     MergeReach,
     MergeRequest,
+    prepare_merge,
     run_merge,
 )
 from memcommit.merge_runtime import MemoryStoreMergePort
@@ -81,9 +83,18 @@ def cmd(
                 port,
                 initial_recursive=recursive,
             )
-            result = run_merge_tui(
-                setup=setup,
-                execute=lambda request: run_merge(request, port=port),
+            request = choose_merge_setup(setup)
+            if request is None:
+                typer.echo("Merge cancelled — no changes made.")
+                return
+            plan = prepare_merge(request, port=port)
+            result = run_merge_plan_review(
+                plan,
+                apply_plan=lambda frozen: run_merge(
+                    request,
+                    port=port,
+                    frozen_plan=frozen,
+                ),
             )
             if result is None:
                 typer.echo("Merge cancelled — no changes made.")

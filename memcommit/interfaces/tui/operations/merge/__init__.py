@@ -6,7 +6,9 @@ from memcommit.interfaces.tui.operations.merge.adapter import (
 from memcommit.interfaces.tui.operations.merge.model import MergeTuiSetup
 from memcommit.interfaces.tui.operations.merge.screen import (
     merge_exact_command_review,
-    run_merge_tui,
+    merge_plan_exact_command_review,
+    project_merge_plan,
+    run_merge_plan_review,
 )
 from memcommit.interfaces.tui.operations.merge.setup import (
     choose_merge_setup,
@@ -19,5 +21,7 @@ __all__ = [
     "choose_merge_setup",
     "merge_exact_command_review",
     "merge_endpoint_setup_spec",
-    "run_merge_tui",
+    "merge_plan_exact_command_review",
+    "project_merge_plan",
+    "run_merge_plan_review",
 ]

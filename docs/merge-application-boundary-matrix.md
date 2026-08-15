@@ -5,8 +5,9 @@
 The historical direct Merge contract, its terminal-independent typed
 Application/Runtime boundary, and the path-aligned recursive runtime are
 verified. The public CLI exposes explicit `--direct` and `--recursive` reach,
-while bare `mem merge` opens a readable Source picker and the same reach
-control in a TTY. Both adapters invoke the same typed application boundary.
+while bare `mem merge` opens a role-based Source/current-Target setup and then
+a separate frozen-plan review in a TTY. Both adapters invoke the same typed
+application boundary.
 
 ## Motivating distinction
 
@@ -46,7 +47,8 @@ application boundary.
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
 | `render_merge_plain` | Plain CLI adapter | Preserve the historical direct success sentence and explicitly report recursive Context/checkpoint totals. |
-| Merge TUI setup and screen | Interactive adapter | Freeze a readable Source catalog and current Target, select exact/descendant reach, and expose one exact-command review without owning persistence. |
+| Merge endpoint setup | Interactive adapter | Select a readable Source and one coupled direct/recursive shape while keeping the command-start current Target explicit and fixed. Returns only a typed request. |
+| Merge frozen-plan review | Interactive adapter | Project every prepared Source/Target mapping and UID-new addition, then apply only the exact frozen plan after explicit approval. |
 | `commands.merge.cmd` | Typer composition boundary | Parse argv or route a bare TTY invocation, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
 
 `MergeReach.DESCENDANTS` uses the same typed request and result. Its result
@@ -97,18 +99,23 @@ The internal `execute_merge()` callable verifies local matching,
 Source-only creation, Target-only preservation, complete-relative-path
 alignment, granted recursive Source projection, membership freshness, and
 exception rollback. `mem merge SOURCE --recursive` exposes that behavior
-non-interactively. Bare `mem merge` starts with Source focused, keeps Source
-and reach as independent shared controls, shows the exact command and effects,
-and mutates only after Enter on that review. Outside a TTY, omitting Source
-fails with a stable instruction instead of attempting a full-screen UI.
+non-interactively. Bare `mem merge` starts with Source focused, exposes direct
+and recursive as coupled operation shapes, and keeps the command-start Target
+visible as a fixed B endpoint. Continuing from setup does not mutate state:
+`prepare_merge()` first freezes the complete plan, and a second screen shows
+every Context mapping, creation decision, addition identity, and checkpoint
+count. Only Enter on that exact frozen-plan review invokes `run_merge()` with
+the same plan. Outside a TTY, omitting Source fails with a stable instruction
+instead of attempting a full-screen UI.
 
 ## Interface verification
 
 The focused automated gate covers the unchanged direct sentence and result,
 recursive CLI path creation, conflicting reach flags, non-TTY routing,
-readable Source selection, reach traversal, exact-command projection,
-cancellation, authority, freshness, rollback, checkpoints, and the deliberate
-Undo exclusion. The ordered real-terminal evidence is recorded under
+readable Source selection, coupled reach traversal, setup-only continuation,
+complete frozen-plan projection, exact-plan application, cancellation,
+authority, freshness, rollback, checkpoints, and the deliberate Undo
+exclusion. The ordered real-terminal evidence is recorded under
 `docs/screenshots/mem-merge-recursive-tui-20260814/` at 180×52 with color ANSI
 verified. It demonstrates typed Help, direct root-only mutation, recursive
 Source-only path creation, Target-only descendant preservation, durable

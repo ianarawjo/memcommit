@@ -18,9 +18,12 @@ from memcommit.interfaces.tui.operations.merge import (
     choose_merge_setup,
     merge_exact_command_review,
     merge_endpoint_setup_spec,
-    run_merge_tui,
+    merge_plan_exact_command_review,
+    project_merge_plan,
+    run_merge_plan_review,
 )
 from memcommit.merge_application import (
+    FrozenMergePlan,
     MergeAddition,
     MergeContextResult,
     MergeError,
@@ -28,6 +31,8 @@ from memcommit.merge_application import (
     MergeReach,
     MergeRequest,
     MergeResult,
+    prepare_merge,
+    run_merge,
 )
 from memcommit.merge_runtime import MemoryStoreMergePort
 from memcommit.store import MemoryStore
@@ -71,79 +76,145 @@ def _result(request: MergeRequest) -> MergeResult:
     )
 
 
-def test_tui_direct_merge_executes_only_from_exact_review() -> None:
-    requests: list[MergeRequest] = []
-    with create_pipe_input() as pipe_input:
-        # Source owns first focus. Tab reaches the exact command; one Enter
-        # applies it and a second closes the durable success receipt.
-        pipe_input.send_text("\t\r\r")
-        returned = run_merge_tui(
-            setup=_setup(),
-            execute=lambda request: requests.append(request) or _result(request),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+def _plan(request: MergeRequest | None = None) -> FrozenMergePlan:
+    request = request or MergeRequest(
+        source_locator="source",
+        target_locator="target",
+        reach=MergeReach.DIRECT,
+    )
+    result = _result(request)
+    return FrozenMergePlan(
+        request=request,
+        source_name=result.source_name,
+        source_uid=result.source_uid,
+        source_digest="source-digest",
+        target_name=result.target_name,
+        target_uid=result.target_uid,
+        target_digest="target-digest",
+        additions=result.additions,
+        contexts=result.contexts,
+        cross_profile_memory_only=False,
+        token=object(),
+    )
 
-    assert returned == _result(requests[0])
-    assert requests == [MergeRequest(source_locator="source", reach=MergeReach.DIRECT)]
 
+def test_frozen_plan_projection_exposes_complete_mapping_before_apply() -> None:
+    document = project_merge_plan(_plan())
+    rendered = "".join(
+        text for _style, text in document.render(focused_uid="MERGE:PLAN:SUMMARY")
+    )
 
-def test_tui_recursive_range_reaches_the_same_typed_application() -> None:
-    requests: list[MergeRequest] = []
-    with create_pipe_input() as pipe_input:
-        # Shift-Tab reaches Range above Source, Right selects descendants,
-        # then two Tabs reach the exact command.
-        pipe_input.send_text("\x1b[Z\x1b[C\t\t\r\r")
-        returned = run_merge_tui(
-            setup=_setup(),
-            execute=lambda request: requests.append(request) or _result(request),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert returned is not None
-    assert requests == [
-        MergeRequest(source_locator="source", reach=MergeReach.DESCENDANTS)
+    assert [section.kind for section in document.sections] == [
+        "SUMMARY",
+        "CONTEXT_PLAN",
     ]
+    assert "STATUS · FROZEN · NOT APPLIED" in rendered
+    assert "source → target" in rendered
+    assert "TARGET · EXISTING" in rendered
+    assert "MEMORY · [memory-u]" in rendered
 
 
-def test_tui_escape_cancels_without_calling_the_application() -> None:
-    requests: list[MergeRequest] = []
+def test_plan_review_applies_only_the_exact_frozen_plan() -> None:
+    plan = _plan()
+    applied: list[FrozenMergePlan] = []
+    with create_pipe_input() as pipe_input:
+        # Viewer owns first focus. Tab reaches the exact frozen-plan action;
+        # one Enter applies and a second closes the durable receipt.
+        pipe_input.send_text("\t\r\r")
+        returned = run_merge_plan_review(
+            plan,
+            apply_plan=lambda frozen: applied.append(frozen) or _result(frozen.request),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned == _result(plan.request)
+    assert applied == [plan]
+
+
+def test_plan_review_cancel_does_not_apply() -> None:
+    plan = _plan()
+    applied: list[FrozenMergePlan] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("q")
-        returned = run_merge_tui(
-            setup=_setup(),
-            execute=lambda request: requests.append(request) or _result(request),
+        returned = run_merge_plan_review(
+            plan,
+            apply_plan=lambda frozen: applied.append(frozen) or _result(frozen.request),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
     assert returned is None
-    assert requests == []
+    assert applied == []
 
 
-def test_tui_application_failure_stays_open_and_returns_no_receipt() -> None:
-    requests: list[MergeRequest] = []
+def test_store_backed_frozen_plan_is_read_only_until_review_apply(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("source")
+    addition = ops.add(source, "planned only")
+    store.create_context(source)
+    target = ops.init("target")
+    store.create_context(target)
+    store.set_current(target.name)
+    port = MemoryStoreMergePort.capture(store)
+    request = MergeRequest(
+        source_locator="source",
+        target_locator="target",
+        reach=MergeReach.DIRECT,
+    )
+    plan = prepare_merge(request, port=port)
 
-    def fail(request: MergeRequest) -> MergeResult:
-        requests.append(request)
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        returned = run_merge_plan_review(
+            plan,
+            apply_plan=lambda frozen: run_merge(
+                request,
+                port=port,
+                frozen_plan=frozen,
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is None
+    assert addition.uid not in store.load_direct("target").memories
+    assert store.list_checkpoints("target") == []
+
+
+def test_frozen_plan_exact_review_names_actual_counts() -> None:
+    review = merge_plan_exact_command_review(_plan())
+
+    assert review.argv == ("mem", "merge", "source", "--direct")
+    assert any("1 Context mapping" in effect for effect in review.effects)
+    assert any("1 checkpoint" in effect for effect in review.effects)
+
+
+def test_plan_review_failure_stays_visible_then_exits_without_receipt() -> None:
+    plan = _plan()
+    applied: list[FrozenMergePlan] = []
+
+    def fail(frozen: FrozenMergePlan) -> MergeResult:
+        applied.append(frozen)
         raise RuntimeError("injected Merge failure")
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\rq")
         with pytest.raises(MergeError, match="injected Merge failure"):
-            run_merge_tui(
-                setup=_setup(),
-                execute=fail,
+            run_merge_plan_review(
+                plan,
+                apply_plan=fail,
                 app_input=pipe_input,
                 app_output=DummyOutput(),
                 require_tty=False,
             )
 
-    assert requests == [MergeRequest(source_locator="source", reach=MergeReach.DIRECT)]
+    assert applied == [plan]
 
 
 def test_exact_review_names_recursive_path_and_frozen_target() -> None:
