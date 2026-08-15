@@ -14,6 +14,7 @@ from memcommit.authority.access import (
 from memcommit.commands.context_picker import context_memory_rows
 from memcommit.commands.meld_target_picker import eligible_meld_targets
 from memcommit.context_targeting.readable_catalog import (
+    ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
 from memcommit.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
@@ -48,6 +49,52 @@ def choose_meld_setup(
 ) -> MeldSetupReceipt | None:
     """Freeze readable authority, then collect one shared Meld setup."""
 
+    setup, catalog = _freeze_meld_tui_setup(store)
+
+    def load_memories(role_uid: str, context_name: str):
+        if role_uid not in {"A", "B"}:
+            raise ValueError("Meld Memory projection received an unknown role.")
+        return tuple(
+            EndpointSetupMemory(context_name, row.selector, row.content)
+            for row in context_memory_rows(catalog.load(context_name))
+            if row.selector is not None
+        )
+
+    selected = choose_meld_endpoint_setup(
+        setup,
+        memory_loader=load_memories,
+        new_name_validator=store.assert_context_creatable,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if selected is None:
+        return None
+    return MeldSetupReceipt(
+        mode=selected.mode,
+        left_name=selected.left_name,
+        right_name=selected.right_name,
+        target_name=selected.target_name,
+        create_target=selected.create_target,
+        left_descendants=selected.left_descendants,
+        right_descendants=selected.right_descendants,
+        left_memory_uid=selected.left_memory_uid,
+        right_memory_uid=selected.right_memory_uid,
+    )
+
+
+def build_meld_tui_setup(store: MemoryStore) -> MeldTuiSetup:
+    """Return Meld's frozen public setup values without opening a terminal."""
+
+    setup, _catalog = _freeze_meld_tui_setup(store)
+    return setup
+
+
+def _freeze_meld_tui_setup(
+    store: MemoryStore,
+) -> tuple[MeldTuiSetup, ReadableContextCatalog]:
+    """Freeze one command-local readable catalog and its typed TUI projection."""
+
     local_names = tuple(store.list_context_names())
     if not local_names:
         raise ValueError("Starting Meld requires an ordinary local Context.")
@@ -78,16 +125,7 @@ def choose_meld_setup(
         eligible_meld_targets(store, source_names=("", ""))
     )
 
-    def load_memories(role_uid: str, context_name: str):
-        if role_uid not in {"A", "B"}:
-            raise ValueError("Meld Memory projection received an unknown role.")
-        return tuple(
-            EndpointSetupMemory(context_name, row.selector, row.content)
-            for row in context_memory_rows(catalog.load(context_name))
-            if row.selector is not None
-        )
-
-    selected = choose_meld_endpoint_setup(
+    return (
         MeldTuiSetup(
             names=names,
             left_name=left_name,
@@ -96,22 +134,5 @@ def choose_meld_setup(
             current_context=current_name,
             annotations=annotations,
         ),
-        memory_loader=load_memories,
-        new_name_validator=store.assert_context_creatable,
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-    if selected is None:
-        return None
-    return MeldSetupReceipt(
-        mode=selected.mode,
-        left_name=selected.left_name,
-        right_name=selected.right_name,
-        target_name=selected.target_name,
-        create_target=selected.create_target,
-        left_descendants=selected.left_descendants,
-        right_descendants=selected.right_descendants,
-        left_memory_uid=selected.left_memory_uid,
-        right_memory_uid=selected.right_memory_uid,
+        catalog,
     )

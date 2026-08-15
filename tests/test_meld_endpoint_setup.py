@@ -128,6 +128,10 @@ def test_meld_command_setup_preserves_existing_empty_target(isolated_store) -> N
         store.create_context(context)
     store.set_current(left.name)
 
+    frozen = meld_setup_command.build_meld_tui_setup(store)
+    assert frozen.names == (left.name, right.name, empty.name)
+    assert frozen.eligible_target_names == frozenset({empty.name})
+
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t" * 5 + "\r\t\t\r")
         receipt = meld_setup_command.choose_meld_setup(
