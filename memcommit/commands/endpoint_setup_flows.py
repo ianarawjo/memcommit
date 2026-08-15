@@ -50,6 +50,8 @@ class UpdateSetupReceipt:
 
 @dataclass(frozen=True)
 class MeldSetupReceipt:
+    """Compatibility receipt; new Meld code imports commands.meld_setup."""
+
     mode: str
     left_name: str
     right_name: str
@@ -57,6 +59,8 @@ class MeldSetupReceipt:
     create_target: bool = False
     left_descendants: bool = False
     right_descendants: bool = False
+    left_memory_uid: str | None = None
+    right_memory_uid: str | None = None
 
 
 def _readable_endpoint_catalog(
