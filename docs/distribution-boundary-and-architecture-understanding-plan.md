@@ -14,7 +14,7 @@ test, installed-artifact check, or operation trace. A row marked `VERIFIED`
 means its stated completion gate passed, not merely that implementation code
 exists.
 
-Last reviewed: 2026-08-14.
+Last reviewed: 2026-08-15.
 
 | Workstream | Current state | Evidence now recorded | Next gate |
 | --- | --- | --- | --- |
@@ -32,6 +32,7 @@ Last reviewed: 2026-08-14.
 | Ordinary Query application slice | `VERIFIED` | `query-answer-application-boundary-matrix.md` records the typed question/result, readable-corpus Store adapter, authority/source freeze before provider construction, whole-frame preflight, one structured completion, host-owned citations, provider-free empty and over-budget failures, no terminal output, and Source preservation across 105 Query-related tests. | Keep its public export and agent adapter separate from the now-independent granted Query contract. |
 | Granted Query application slice | `VERIFIED` | `granted-query-read-publication-design-rationale.md` records typed catalog/answer reads, provider-before-concealed-Source ordering, post-provider route and Source revalidation, a zero-write unpublished-turn plan, and a separate `SESSION_LOG`/Source/CAS publication port. | Keep its publication plan internal until the public API lifecycle and typed errors are versioned. |
 | QueryContextRef application slice | `VERIFIED` | `query-reference-application-boundary-matrix.md` records a typed local query-only request/result, provider-before-concealed-Source ordering, exact UID/name/language loading, one provider turn, and zero durable effects. | Relocate Query's CLI and workbench adapters without changing selector routing or the three independent execution contracts. |
+| Query vertical operation package | `VERIFIED` | `query-operation-package-design-rationale.md` records all three Query application/runtime pairs under `memcommit.operations.query`, direct internal imports, object-identical top-level compatibility exports, and focused structure plus behavior tests. | Move the CLI and TUI adapters behind their interface owners without merging the three execution contracts or versioning the compatibility exports prematurely. |
 | Current Context orientation slice | `VERIFIED` | `mem-pwd-design-rationale.md` records a terminal-independent typed result, Store adapter, one-line CLI presenter, missing-state behavior, and local/virtual-pointer tests. It deliberately loads no Context and creates no Store. | Reuse the application result for a future Python or agent adapter only after that public contract is versioned; this micro-slice does not replace the next cache/effect slice. |
 | Atomize application slice | `DEFERRED` | Atomize is a measured Study operation and is intentionally excluded from the first structural extraction. | Resume only after its current experiment is frozen and its CLI, TUI, cache, receipt, session, and Apply behavior are characterized. |
 | Update application slice | `NOT STARTED` | Trace scope and ordering are planned. | Begin after a safer second slice or an independently recorded blocker justifies changing the order. |
@@ -137,23 +138,17 @@ memcommit/
     memory.py
     authority.py
     cache_policy.py
-    operations/
-      atomize.py
-      update.py
-      meld.py
-  application/
+  operations/
+    query/
+      ordinary_application.py
+      ordinary_runtime.py
+      granted_application.py
+      granted_runtime.py
+      reference_application.py
+      reference_runtime.py
     atomize/
-      models.py
-      service.py
     update/
     meld/
-    config_model.py
-    ports/
-      context_repository.py
-      session_store.py
-      receipt_store.py
-      cache_store.py
-      semantic_provider.py
   infrastructure/
     persistence/
     providers/

@@ -5,11 +5,13 @@ Last verified: 2026-08-14.
 ## Decision
 
 Ordinary Query's read-only answer is an application use case, not a CLI or TUI
-method. `memcommit.query_application` owns the exact request, frozen-source
-contract, provider-ordering invariant, typed response, and reference-document
-assembly. `memcommit.query_runtime` adapts `MemoryStore` and a frozen readable
-Context catalog to that use case. Console and workbench code only resolve
-controls, select a provider factory, project progress, and present the result.
+method. `memcommit.operations.query.ordinary_application` owns the exact
+request, frozen-source contract, provider-ordering invariant, typed response,
+and reference-document assembly.
+`memcommit.operations.query.ordinary_runtime` adapts `MemoryStore` and a frozen
+readable Context catalog to that use case. Console and workbench code only
+resolve controls, select a provider factory, project progress, and present the
+result.
 
 This slice deliberately excludes authority QUERY routes, legacy
 `QueryContextRef`, saved transcript inspection, and `SESSION_LOG` persistence.

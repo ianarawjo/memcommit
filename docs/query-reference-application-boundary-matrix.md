@@ -19,12 +19,12 @@ operation.
 
 ## Decision
 
-`memcommit.query_reference_application` owns the typed request, frozen Source,
-provider/source ports, exact response, stage observer, and use-case ordering.
-`memcommit.query_reference_runtime` adapts `MemoryStore.load_query_source` to
-that contract. The command resolves the `QueryContextRef`, constructs the
-request, projects stages into the existing progress display, renders safe
-errors, and prints the returned answer.
+`memcommit.operations.query.reference_application` owns the typed request,
+frozen Source, provider/source ports, exact response, stage observer, and
+use-case ordering. `memcommit.operations.query.reference_runtime` adapts
+`MemoryStore.load_query_source` to that contract. The command resolves the
+`QueryContextRef`, constructs the request, projects stages into the existing
+progress display, renders safe errors, and prints the returned answer.
 
 ```text
 CLI selector resolution

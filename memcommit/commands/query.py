@@ -13,11 +13,11 @@ from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.granted_query_application import (
+from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
 )
-from memcommit.granted_query_runtime import (
+from memcommit.operations.query.granted_runtime import (
     execute_granted_query_request,
     freeze_granted_query_targets,
 )
@@ -45,10 +45,10 @@ from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
-from memcommit.query_application import OrdinaryQueryRequest
-from memcommit.query_reference_application import QueryReferenceRequest
-from memcommit.query_reference_runtime import execute_query_reference
-from memcommit.query_runtime import execute_ordinary_query
+from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
+from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
+from memcommit.operations.query.reference_application import QueryReferenceRequest
+from memcommit.operations.query.reference_runtime import execute_query_reference
 from memcommit.query_sessions import (
     AuthorityQueryCatalogEntry,
     QuerySessionError,

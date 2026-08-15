@@ -31,7 +31,7 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.granted_query_application import (
+from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
@@ -74,7 +74,7 @@ from memcommit.find_answer_references import (
     FindAnswerReferenceDocument,
     render_numbered_find_answer_reference,
 )
-from memcommit.query_application import (
+from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )

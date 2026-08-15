@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.query_reference_application import (
+from memcommit.operations.query.reference_application import (
     FrozenQueryReferenceSource,
     QueryReferenceRequest,
     QueryReferenceResponse,
     run_query_reference,
 )
-from memcommit.query_reference_runtime import execute_query_reference
+from memcommit.operations.query.reference_runtime import execute_query_reference
 from memcommit.store import MemoryStore
 
 
@@ -201,8 +201,12 @@ def test_query_reference_modules_have_no_interface_or_concrete_provider_dependen
                 values.append(node.module)
         return tuple(values)
 
-    application_imports = imports(root / "memcommit/query_reference_application.py")
-    runtime_imports = imports(root / "memcommit/query_reference_runtime.py")
+    application_imports = imports(
+        root / "memcommit/operations/query/reference_application.py"
+    )
+    runtime_imports = imports(
+        root / "memcommit/operations/query/reference_runtime.py"
+    )
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
 
     assert not any(name.startswith(forbidden) for name in application_imports)
@@ -217,6 +221,6 @@ def test_query_command_uses_reference_application_without_legacy_executor():
         Path(__file__).parents[1] / "memcommit/commands/query.py"
     ).read_text(encoding="utf-8")
 
-    assert "from memcommit.query_reference_application import" in command
-    assert "from memcommit.query_reference_runtime import" in command
+    assert "from memcommit.operations.query.reference_application import" in command
+    assert "from memcommit.operations.query.reference_runtime import" in command
     assert "def _query_legacy(" not in command

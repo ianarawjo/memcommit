@@ -67,16 +67,17 @@ remain compatible.
 ## Shared execution boundary
 
 Ordinary Query now crosses the terminal-independent
-`query_application.py` request, frozen-source, provider-ordering, and response
-boundary. `query_runtime.py` supplies the `MemoryStore` and readable-catalog
-adapter. Granted Query separately crosses
-`granted_query_application.py`, whose answer/catalog read returns an optional
-still-unpublished session-turn plan, and `granted_query_runtime.py`, whose
-publication adapter independently revalidates `SESSION_LOG`, Source freshness,
-and the session CAS. The local `QueryContextRef` route crosses
-`query_reference_application.py` and `query_reference_runtime.py`; its provider
-factory is deliberately invoked before the runtime may open concealed Source
-content. CLI and TTY call the applicable runtimes directly, while
+`operations/query/ordinary_application.py` request, frozen-source,
+provider-ordering, and response boundary. `ordinary_runtime.py` supplies the
+`MemoryStore` and readable-catalog adapter. Granted Query separately crosses
+`granted_application.py`, whose answer/catalog read returns an optional
+still-unpublished session-turn plan, and `granted_runtime.py`, whose publication
+adapter independently revalidates `SESSION_LOG`, Source freshness, and the
+session CAS. The local `QueryContextRef` route crosses
+`reference_application.py` and `reference_runtime.py`; its provider factory is
+deliberately invoked before the runtime may open concealed Source content. CLI
+and TTY import the operation package directly, while the former top-level
+module paths remain implementation-free compatibility exports and
 `commands/query_execution.py` retains implementation-free compatibility
 facades:
 

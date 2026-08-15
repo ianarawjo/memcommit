@@ -19,9 +19,9 @@ answer must never be treated as continuing `SESSION_LOG` authority.
 
 ## Decision
 
-`memcommit.granted_query_application` owns terminal-independent request,
+`memcommit.operations.query.granted_application` owns terminal-independent request,
 response, unpublished-turn, publication-receipt, port, and orchestration
-contracts. `memcommit.granted_query_runtime` owns the `MemoryStore`, authority,
+contracts. `memcommit.operations.query.granted_runtime` owns the `MemoryStore`, authority,
 Source-loading, federation, session-store, lock, and CAS adapters.
 
 The read use case returns `GrantedQueryReadOutcome`. A session request includes

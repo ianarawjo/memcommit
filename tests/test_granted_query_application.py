@@ -12,7 +12,7 @@ import pytest
 import memcommit.ops as ops
 from memcommit.context import Memory
 from memcommit.commands.query_execution import run_granted_query_request
-from memcommit.granted_query_application import (
+from memcommit.operations.query.granted_application import (
     GrantedQueryReadOutcome,
     GrantedQueryRequest,
     GrantedQueryResponse,
@@ -23,7 +23,7 @@ from memcommit.granted_query_application import (
     publish_granted_query_session,
     run_granted_query_read,
 )
-from memcommit.granted_query_runtime import (
+from memcommit.operations.query.granted_runtime import (
     execute_granted_query_read,
     execute_granted_query_session_publication,
 )
@@ -350,8 +350,10 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
                 values.append(node.module)
         return tuple(values)
 
-    application_imports = imports(root / "memcommit/granted_query_application.py")
-    runtime_imports = imports(root / "memcommit/granted_query_runtime.py")
+    application_imports = imports(
+        root / "memcommit/operations/query/granted_application.py"
+    )
+    runtime_imports = imports(root / "memcommit/operations/query/granted_runtime.py")
     forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
 
     assert not any(name.startswith(forbidden) for name in application_imports)
@@ -368,6 +370,6 @@ def test_production_adapters_import_granted_query_from_new_owners():
         encoding="utf-8"
     )
 
-    assert "from memcommit.granted_query_application import (" in command
-    assert "from memcommit.granted_query_runtime import (" in command
-    assert "from memcommit.granted_query_application import (" in workbench
+    assert "from memcommit.operations.query.granted_application import (" in command
+    assert "from memcommit.operations.query.granted_runtime import (" in command
+    assert "from memcommit.operations.query.granted_application import (" in workbench

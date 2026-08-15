@@ -5,21 +5,21 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from memcommit.commands.readable_context_catalog import ReadableContextCatalog
-from memcommit.granted_query_application import (
+from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.granted_query_runtime import (
+from memcommit.operations.query.granted_runtime import (
     CatalogLoader,
     execute_granted_query_request,
     freeze_granted_query_targets,
 )
-from memcommit.query_application import (
+from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
-from memcommit.query_runtime import execute_ordinary_query
+from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.query_sessions import load_authority_query_catalog
 from memcommit.store import MemoryStore
 
