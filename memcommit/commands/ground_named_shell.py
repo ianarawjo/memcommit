@@ -1,7 +1,6 @@
 """Persistent Goal–Rules–Memories TUI for one already named Ground."""
 from __future__ import annotations
 
-import asyncio
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
@@ -39,6 +38,9 @@ from memcommit.interfaces.tui.components.in_frame_input import (
 )
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
+)
+from memcommit.interfaces.tui.components.background_turn import (
+    BackgroundExecutorTurn,
 )
 from memcommit.interfaces.tui.components.exact_command_review import (
     bind_exact_command_approval,
@@ -959,6 +961,10 @@ def run_named_ground_shell(
     review_view = {"value": "COMMAND"}
     error_message = {"value": ""}
     status_message = {"value": ""}
+    fit_turn: BackgroundExecutorTurn[FitReport] = BackgroundExecutorTurn()
+    deferred_exit_status: dict[
+        str, Literal["CLOSED", "BACK_TO_PICKER"]
+    ] = {"value": "CLOSED"}
     last_submission = {"value": ""}
     inline_target: dict[
         str, Literal["GOAL", "RULE", "MEMORY"] | None
@@ -1244,6 +1250,17 @@ def run_named_ground_shell(
             return (
                 " Enter · review edit/comment    Ctrl-J · newline    "
                 "Tab/Shift-Tab · field    Esc · collapse"
+            )
+        if fit_turn.busy:
+            activity = "." * ((fit_turn.frame % 3) + 1)
+            close_state = (
+                "CLOSE REQUESTED · waiting for receipt boundary"
+                if fit_turn.close_requested
+                else "Esc/Q closes after the receipt boundary"
+            )
+            return (
+                f" FIT RUNNING{activity} · Ground and Contexts unchanged · "
+                + close_state
             )
         if status_message["value"]:
             return f" {status_message['value']}"
@@ -2338,44 +2355,69 @@ def run_named_ground_shell(
             event.app.invalidate()
             return
 
-        async def execute_fit() -> None:
-            try:
-                refresh_current(announce=True)
-                status_message["value"] = "FIT RUNNING · Ground and Contexts unchanged"
-                sync_memories_pane(align_selection=True)
-                application.invalidate()
-                # Fit is a background application-service call. Keeping the
-                # prompt-toolkit application mounted makes the read-only
-                # running boundary visible; unlike picker handoff, no nested
-                # terminal UI needs temporary terminal ownership.
-                report = await asyncio.to_thread(
-                    run_fit,
-                    current["value"],
-                )
-                if not isinstance(report, FitReport):
-                    raise ValueError("Ground Fit runner returned an invalid report.")
-                if lookup_fit is None:
-                    fit_receipt["value"] = GroundFitReceipt(
-                        report=report,
-                        current=True,
-                    )
-                else:
-                    fit_receipt["value"] = lookup_fit(current["value"])
-                status_message["value"] = (
-                    f"FIT COMPLETE · {len(report.judgments)} Cases · "
-                    f"{report.issue_count} issue(s) · receipt {report.uid[:8]}"
-                )
-                mark_pane_updates("MEMORIES")
-                sync_memories_pane(align_selection=True)
-            except Exception as error:
-                status_message["value"] = (
-                    "FIT FAILED · NOTHING APPLIED · "
-                    f"{type(error).__name__}: {safe_terminal_text(str(error))}"
-                )
-            application.layout.focus(cases_pane.text_area)
-            application.invalidate()
+        try:
+            refresh_current(announce=True)
+        except Exception as error:
+            status_message["value"] = (
+                "FIT FAILED · NOTHING APPLIED · "
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+            )
+            event.app.invalidate()
+            return
 
-        event.app.create_background_task(execute_fit())
+        frozen_session = current["value"]
+
+        def on_success(report: FitReport) -> None:
+            if not isinstance(report, FitReport):
+                raise ValueError("Ground Fit runner returned an invalid report.")
+            if lookup_fit is None:
+                fit_receipt["value"] = GroundFitReceipt(
+                    report=report,
+                    current=True,
+                )
+            else:
+                fit_receipt["value"] = lookup_fit(current["value"])
+            status_message["value"] = (
+                f"FIT COMPLETE · {len(report.judgments)} Cases · "
+                f"{report.issue_count} issue(s) · receipt {report.uid[:8]}"
+            )
+            mark_pane_updates("MEMORIES")
+            sync_memories_pane(align_selection=True)
+
+        def on_error(error: Exception) -> None:
+            status_message["value"] = (
+                "FIT FAILED · NOTHING APPLIED · "
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+            )
+
+        def on_idle() -> None:
+            application.layout.focus(cases_pane.text_area)
+
+        def on_close() -> None:
+            application.exit(
+                result=NamedGroundShellResult(
+                    status=deferred_exit_status["value"],
+                    session=current["value"],
+                    applied_argvs=tuple(applied_argvs),
+                    submitted_turns=tuple(all_submitted_turns),
+                )
+            )
+
+        status_message["value"] = "FIT RUNNING · Ground and Contexts unchanged"
+        sync_memories_pane(align_selection=True)
+        started = fit_turn.start(
+            event.app,
+            work=lambda: run_fit(frozen_session),
+            on_success=on_success,
+            on_error=on_error,
+            on_idle=on_idle,
+            on_close=on_close,
+        )
+        if not started:
+            status_message["value"] = (
+                "FIT ALREADY RUNNING · wait for the current receipt boundary"
+            )
+        event.app.invalidate()
 
     @bindings.add("down", filter=memory_table_focus, eager=True)
     def _next_memory_table_row(_event) -> None:
@@ -2850,6 +2892,13 @@ def run_named_ground_shell(
         *,
         status: Literal["CLOSED", "BACK_TO_PICKER"],
     ) -> None:
+        deferred_exit_status["value"] = status
+        if fit_turn.request_close():
+            status_message["value"] = (
+                "FIT RUNNING · close requested after the receipt boundary"
+            )
+            event.app.invalidate()
+            return
         event.app.exit(
             result=NamedGroundShellResult(
                 status=status,

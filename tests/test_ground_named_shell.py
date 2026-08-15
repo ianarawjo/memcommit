@@ -1081,6 +1081,51 @@ def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> N
     assert "FIT FIT" in panes["MEMORIES"].text_area.text
 
 
+def test_named_ground_fit_ignores_duplicate_run_while_receipt_is_pending() -> None:
+    session = session_with_rule_and_case()
+    receipt = fit_receipt_for(session)
+    started = threading.Event()
+    release = threading.Event()
+    completed = threading.Event()
+    calls: list[int] = []
+
+    def run_fit(active):
+        calls.append(active.revision)
+        started.set()
+        assert release.wait(timeout=2)
+        completed.set()
+        return receipt.report
+
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            pipe_input.send_text("\t\t\t\tf")
+            assert started.wait(timeout=2)
+            # The second F cannot start another executor turn. Q requests a
+            # close, which remains deferred until the first receipt returns.
+            pipe_input.send_text("fq")
+            time.sleep(0.05)
+            release.set()
+
+        feeder = threading.Thread(target=drive)
+        feeder.start()
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            run_fit=run_fit,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        # A prompt-toolkit close must not abandon the non-cancellable executor
+        # or return before its typed receipt has crossed the callback boundary.
+        assert completed.is_set()
+        feeder.join(timeout=2)
+
+    assert result.status == "CLOSED"
+    assert calls == [session.revision]
+
+
 def test_named_ground_memory_table_exposes_fields_as_cells():
     rendered = ground_named_shell_module.render_named_ground_memories_pane(
         session_with_two_cases(),
