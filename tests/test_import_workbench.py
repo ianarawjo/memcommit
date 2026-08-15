@@ -90,13 +90,13 @@ def test_context_reach_dialog_uses_shared_exact_subtree_control():
     assert selected is True
 
 
-def test_exact_command_review_requires_dedicated_apply_key():
+def test_exact_command_review_uses_enter_and_retains_a_alias():
     review = ExactCommandReview(
         argv=("mem", "import", "context", "source"),
         effects=("Create one Context.",),
     )
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\x1b")
+        pipe_input.send_text("\r")
         approved = approve_exact_command(
             review,
             title="TEST REVIEW",
@@ -106,7 +106,7 @@ def test_exact_command_review_requires_dedicated_apply_key():
         )
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("A")
-        explicitly_approved = approve_exact_command(
+        legacy_approved = approve_exact_command(
             review,
             title="TEST REVIEW",
             app_input=pipe_input,
@@ -114,8 +114,19 @@ def test_exact_command_review_requires_dedicated_apply_key():
             require_tty=False,
         )
 
-    assert approved is False
-    assert explicitly_approved is True
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        cancelled = approve_exact_command(
+            review,
+            title="TEST REVIEW",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert approved is True
+    assert legacy_approved is True
+    assert cancelled is False
 
 
 def test_flagless_import_requires_tty_outside_interactive_setup(isolated_store):

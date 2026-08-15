@@ -1,0 +1,52 @@
+ MEM IMPORT · MEMORY · FINAL APPROVAL                                                                                                                                               
+ Nothing has been applied. Enter applies only the command below.                                                                                                                    
+┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                       ^│
+│  mem import memory 20000000-0000-4000-8000-000000000002 --from-profile source-profile --context source/root/child --into destination                                             │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Destination Context: destination                                                                                                                                                │
+│  Memory: append one exact source Memory                                                                                                                                          │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel

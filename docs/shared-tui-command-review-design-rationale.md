@@ -48,6 +48,16 @@ the exact same identity check in legacy command shells and newer TUI
 workbenches.  Otherwise two structurally equal receipts can be rejected solely
 because they came through different interfaces.
 
+The focused final-review action uses `Enter` as its canonical approval key.
+The shared interaction helper binds that gesture and retains case-insensitive
+`A` only as a compatibility alias for already published shells.  Ground keeps
+`Enter` narrower than that legacy alias: it approves only while the visible
+Chat receipt owns focus, so inspecting another pane and pressing `Enter` cannot
+run the frozen command.  The helper does not own application semantics.  Each
+operation still validates its typed plan, defines the approval callback, and
+decides whether the reviewed argv is executed or only documents an equivalent
+typed mutation.
+
 The shared message composer does not bind keys or interpret text. Blank and
 named Ground mount its buffer inside the active semantic pane; meld retains
 the standalone bordered form. Their adapters still decide when it receives
@@ -175,7 +185,8 @@ Each approval applies exactly one normal CLI argv through
 `python -m memcommit.cli`; it never invokes a shell and never writes Ground
 JSON directly. After success, the controller reloads the named Ground and
 updates all affected component panes. Proposal and semantic acceptance are
-deliberately different commands. Pressing `A` on a Rule proposal permits
+deliberately different commands. Pressing `Enter` on a focused reviewed Rule
+proposal permits
 recording a `PROPOSED` Rule; it does not mean the Rule is accepted.
 
 The reviewed argv contains an opaque `--if-ground-version` token that freezes

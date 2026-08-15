@@ -164,7 +164,7 @@ def test_blank_goal_inline_direct_edit_is_preserved_in_creation_proposal():
 
     with create_pipe_input() as pipe_input:
         # MESSAGE -> GOAL -> expanded EDIT. The creation command still waits
-        # for A after the provider supplies only a portable Ground name.
+        # for Enter after the provider supplies only a portable Ground name.
         pipe_input.send_text(f"\te{exact_goal}\ra")
         result = run_ground_shell(
             interpret=interpret,
@@ -1626,7 +1626,7 @@ def test_approval_applies_the_frozen_proposal_exactly_once():
         return "Grounding session created."
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Review the Task 1 report.\ra")
+        pipe_input.send_text("Review the Task 1 report.\r\r")
         result = run_ground_shell(
             interpret=proposal,
             apply=apply,
@@ -1658,6 +1658,22 @@ def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
 
     assert result.status == "APPLIED"
     assert applied == [result.proposal]
+
+
+def test_enter_does_not_approve_from_another_ground_pane():
+    with create_pipe_input() as pipe_input:
+        # Approval starts on Chat. Tab moves to Goal, where Enter is read-only;
+        # Q then cancels the still-pending review.
+        pipe_input.send_text("Review the Task 1 report.\r\t\rq")
+        result = run_ground_shell(
+            interpret=proposal,
+            apply=lambda _value: pytest.fail("must not apply away from Chat"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
 
 
 def test_tab_cycles_five_read_only_components_without_submitting():
@@ -1789,7 +1805,7 @@ def test_suggested_new_context_can_be_edited_without_entering_creation_argv(
     exact_name = "test/ground/ticker-rule-examples"
     with create_pipe_input() as pipe_input:
         # NEW? is focused. N opens its prefilled exact editor; Ctrl-A and
-        # Ctrl-K replace the suggestion. A still approves only Ground create.
+        # Ctrl-K replace the suggestion. Enter still approves only Ground create.
         pipe_input.send_text(f"n\x01\x0b{exact_name}\ra")
         result = run_ground_shell(
             interpret=proposal_with_new_context,
@@ -1861,7 +1877,7 @@ def test_suggested_new_context_can_be_ignored_before_ground_approval():
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        # NEW?, ADD, then the explicit no-Context path. A remains separate.
+        # NEW?, ADD, then the explicit no-Context path. Approval remains separate.
         pipe_input.send_text("\x1b[B\x1b[Bfa")
         result = run_ground_shell(
             interpret=proposal_with_new_context,
@@ -2515,7 +2531,7 @@ def test_failed_apply_is_not_retried_by_repeated_approval():
         raise RuntimeError("CLI failed")
 
     with create_pipe_input() as pipe_input:
-        # The second A is inert after an execution attempt; Q then closes.
+        # The second approval alias is inert after an execution attempt; Q then closes.
         pipe_input.send_text("Draft a Goal.\raaq")
         result = run_ground_shell(
             interpret=proposal,
@@ -2549,7 +2565,7 @@ def test_failed_direct_goal_apply_discards_inline_draft_before_refine():
         raise RuntimeError("CLI result is unknown")
 
     with create_pipe_input() as pipe_input:
-        # After A reaches the apply boundary, E must not reconstruct the same
+        # After approval reaches the apply boundary, E must not reconstruct the same
         # direct proposal. Escape closes from ordinary input without another
         # provider or apply call.
         pipe_input.send_text(f"\te{exact_goal}\rae\x1b")

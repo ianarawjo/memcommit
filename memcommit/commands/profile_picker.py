@@ -26,6 +26,9 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )
+from memcommit.interfaces.tui.components.exact_command_review import (
+    bind_exact_command_approval,
+)
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 
@@ -507,8 +510,7 @@ def choose_profile(
         status["text"] = ""
         event.app.invalidate()
 
-    @bindings.add("enter", filter=review_mode, eager=True)
-    @bind_case_insensitive_key(bindings, "a", filter=review_mode, eager=True)
+    @bind_exact_command_approval(bindings, filter=review_mode, eager=True)
     def _apply_reviewed_removal(event) -> None:
         action = pending["action"]
         assert isinstance(action, ProfilePickerAction)

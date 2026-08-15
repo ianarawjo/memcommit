@@ -447,7 +447,7 @@ suspend the receipt before editing, but no writable field coexists with exact
 approval. `Enter` remains the ordinary Context-focused conversation action
 whenever input mode permits one.
 
-The subsequent `A` still approves exactly
+The subsequent `Enter` still approves exactly
 `mem ground NAME --goal GOAL`; its effect receipt says Context selections are
 local only and Contexts remain unchanged. An ignored provider `NEW?` is labeled
 `unaccepted`, while only an editor-accepted name is called a local Context
@@ -529,8 +529,9 @@ implement the same structured boundary.
 
 On a proposal, the TUI shows the locally rendered command and lists every
 effect: one Ground is created, its Goal is set, and Rules, Ground Memories,
-Contexts, Context Memories, and checkpoints are unchanged. Only the
-dedicated `A` action approves that exact frozen proposal. `E` returns it for
+Contexts, Context Memories, and checkpoints are unchanged. `Enter` on the
+focused Chat receipt approves that exact frozen proposal; `A` remains a
+compatibility alias throughout the modal review. `E` returns it for
 refinement, while `Q`, Escape, Ctrl-C, provider failure, malformed output, or
 name collision leave state unchanged. The approved argv is dispatched through
 the ordinary `memcommit.cli` entry point as an argument vector, never through
@@ -625,7 +626,7 @@ the blank, unnamed screen, the host validates the directly edited Goal, asks
 the provider for a portable name, and rejects the entire response if the
 returned Goal differs from the edit. In a named Ground, the host locally
 reduces the exact edit to one version-guarded proposal and still waits for
-`A`. Returning such a proposal for refinement reopens the same direct-edit
+`Enter`. Returning such a proposal for refinement reopens the same direct-edit
 and agent-comment fields; it must not paste their host-framed payload into the
 ordinary Message composer, because doing so would downgrade exact user
 wording into provider-authored dialogue. This restoration applies before an
@@ -738,7 +739,8 @@ provider batch or reloaded Ground changes row count. They are never sent to a
 provider, persisted in Ground JSON, included in a digest or exact command, or
 treated as approval. During exact approval the same grid navigation remains
 available because command/effects arrows are active only when Chat is
-focused; `A` still applies the unchanged frozen receipt.
+focused. `Enter` applies only while that reviewed Chat receipt is focused;
+the compatibility `A` alias may still apply from another read-only Ground pane.
 
 ### First-turn Rule and Memory previews
 
@@ -819,10 +821,10 @@ never pass ordinary Context-name validation. Its footer therefore sends
 rather than advertising an impossible name input.
 
 `ADD NEW CONTEXT` remains visible after discovery even when the catalog is
-empty and the provider returns no `NEW?`. Immediate `A` approval remains valid
+empty and the provider returns no `NEW?`. Immediate `Enter` approval remains valid
 in that case; moving to Contexts and pressing `N` explicitly suspends the
 approval layer before the editor opens, then restores the unchanged Ground
-receipt for a fresh `A` only after the local name passes validation. When
+receipt for a fresh `Enter` only after the local name passes validation. When
 there is no existing candidate, the picker also renders
 `CONTINUE WITHOUT CONTEXT PLAN · Review Ground only`. This keeps a provider
 `NEW?` optional rather than turning an unaccepted suggestion into a creation
@@ -855,8 +857,9 @@ The batch appears below saved Rules as `DRAFTS · NOT SAVED`. `Up` and `Down`
 select drafts while the Rules pane has focus. A non-Rule or non-`READY` draft
 cannot produce a command and instead remains a clarification cue. Pressing
 `R` on one `READY` Rule reduces only that selected draft, locally, to the
-normal version-guarded `--propose-rule` receipt. `A` is still required to run
-that one command. The saved item is only `PROPOSED`; a later
+normal version-guarded `--propose-rule` receipt. `Enter` is required to run
+that one command, while `A` remains its
+compatibility alias. The saved item is only `PROPOSED`; a later
 `REVIEW_ITEM/ACCEPT` action and a second approval are required before it
 becomes accepted authority. Remaining drafts survive that applied command
 inside the open TUI, but every status changes visibly to `STALE`; none can
@@ -1428,7 +1431,8 @@ screen's snapshot, then rechecks the chosen Ground's UID, revision, and digest
 through the existing-only reopen path. This makes newly created sessions and
 the latest saved revisions visible without introducing an active-Ground
 pointer. It also means an unapproved proposal is abandoned when navigating
-away; only `A` can cross the exact-command boundary. The same navigation is
+away; only explicit Enter approval (or its `A` compatibility alias) can cross
+the exact-command boundary. The same navigation is
 available from the unsaved blank Ground so entering New never traps the user
 in a screen that must be killed and restarted.
 

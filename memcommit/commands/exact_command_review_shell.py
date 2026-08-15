@@ -21,6 +21,9 @@ from memcommit.commands.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )
+from memcommit.interfaces.tui.components.exact_command_review import (
+    bind_exact_command_approval,
+)
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
@@ -42,7 +45,7 @@ def approve_exact_command(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> bool:
-    """Approve only the frozen argv shown on screen with the dedicated A key."""
+    """Approve only the frozen argv shown on screen with Enter."""
 
     if not isinstance(review, ExactCommandReview):
         raise TypeError("Exact-command approval requires a review receipt.")
@@ -75,7 +78,7 @@ def approve_exact_command(
     def _page_up(event) -> None:
         scroll_wrapped_page(event, direction=-1)
 
-    @bind_case_insensitive_key(bindings, "a", eager=True)
+    @bind_exact_command_approval(bindings, eager=True)
     def _approve(event) -> None:
         event.app.exit(result=True)
 
@@ -91,7 +94,7 @@ def approve_exact_command(
                 ("class:report-label", " " + safe_terminal_text(title) + "\n"),
                 (
                     "class:report-neutral",
-                    " Nothing has been imported. A applies only the command below.",
+                    " Nothing has been applied. Enter applies only the command below.",
                 ),
             ]
         ),
@@ -99,7 +102,9 @@ def approve_exact_command(
         dont_extend_height=True,
     )
     footer = Window(
-        FormattedTextControl(" ↑/↓ scroll · A apply exact command · Esc/Q cancel"),
+        FormattedTextControl(
+            " ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel"
+        ),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )

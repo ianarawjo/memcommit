@@ -1,0 +1,2 @@
+BLANK APPLY RECEIPT · blank command applied                                                                                                                                         
+READ-ONLY VERIFICATION · APPLIED 1 · GROUND task-1-report-coverage

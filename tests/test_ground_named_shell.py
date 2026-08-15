@@ -1409,7 +1409,7 @@ def test_two_separate_approvals_apply_two_commands_and_refresh_state():
         )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("first rule\rasecond rule\ra\x03")
+        pipe_input.send_text("first rule\r\rsecond rule\r\r\x03")
         result = run_named_ground_shell(
             session,
             interpret=interpret,
@@ -1452,6 +1452,26 @@ def test_named_approval_is_modal_and_tab_cannot_detach_exact_apply():
 
     assert len(applied) == 1
     assert result.applied_argvs == tuple(applied)
+
+
+def test_named_enter_does_not_approve_from_another_ground_pane():
+    session = create_ground_session("fixture-ground")
+
+    with create_pipe_input() as pipe_input:
+        # Approval starts on Chat. Tab moves to Goal, where Enter is read-only;
+        # Q then cancels the still-pending review.
+        pipe_input.send_text("one rule\r\t\rq")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda current, text, _source: proposal(current, text),
+            apply=lambda *_args: pytest.fail("must not apply away from Chat"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CLOSED"
+    assert result.applied_argvs == ()
 
 
 def test_modal_scrolled_dialogue_allows_tab_round_trip_before_same_approval(
@@ -1637,7 +1657,7 @@ def test_named_focused_comment_key_is_disabled_during_approval():
 
     with create_pipe_input() as pipe_input:
         # The first Enter opens exact approval on CHAT. C must not open a
-        # comment editor or start a second provider turn; A applies the same
+        # comment editor or start a second provider turn; the A alias applies the same
         # frozen receipt once.
         pipe_input.send_text("Propose one Rule.\rca\x03")
         result = run_named_ground_shell(

@@ -53,6 +53,9 @@ from memcommit.interfaces.tui.components.in_frame_input import (
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
+from memcommit.interfaces.tui.components.exact_command_review import (
+    bind_exact_command_approval,
+)
 from memcommit.commands.tui_primitives import anchored_fragments
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
@@ -778,7 +781,7 @@ def _anchored_conversation_fragments(
     ``FormattedTextControl`` uses ``[SetCursorPosition]`` as its viewport
     anchor. Approval anchors the end of the exact command so its wrapped text
     remains visible when it fits, rather than anchoring the end of a
-    potentially long transcript and hiding the command before ``A`` applies.
+    potentially long transcript and hiding the command before Enter applies.
     """
     return anchored_fragments(
         blocks,
@@ -1413,7 +1416,7 @@ def run_ground_shell(
         Window(
             FormattedTextControl(
                 "CHAT: ←/↑ cmd · →/↓ fx\n"
-                "A approve · E refine · B/Q"
+                "Enter apply · A also · E/B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1495,7 +1498,7 @@ def run_ground_shell(
             return f" {status_message['value']}"
         if memories_focused and memory_drafts["value"]:
             tail = (
-                "A · exact approval"
+                "Enter · exact approval"
                 if active_mode == "APPROVAL"
                 else "Enter · talk here"
             )
@@ -1551,10 +1554,10 @@ def run_ground_shell(
             ):
                 return (
                     " CONTEXTS: N · add a local NOT CREATED name    "
-                    "A approve · B Grounds · Q quit"
+                    "Enter approve · B Grounds · Q quit"
                 )
             return (
-                " No command runs without A · exact approval    "
+                " No command runs without Enter · exact approval    "
                 "B · Grounds    Q · quit"
             )
         if active_mode == "APPLY_ERROR":
@@ -2225,7 +2228,7 @@ def run_ground_shell(
             sync_input_host()
             status_message["value"] = (
                 f"{summary} · NOT BOUND/NOT CREATED. "
-                "The unchanged Ground command is ready for a fresh A."
+                "The unchanged Ground command is ready for a fresh Enter."
             )
             sync_panes(dialogue_anchor="end")
             focus_conversation()
@@ -2238,7 +2241,7 @@ def run_ground_shell(
             sync_input_host()
             status_message["value"] = (
                 f"{summary} · NOT BOUND/NOT CREATED. "
-                "A approves only the Ground name and Goal."
+                "Enter approves only the Ground name and Goal."
             )
             focus_conversation()
         else:
@@ -2787,7 +2790,7 @@ def run_ground_shell(
     )
     def _reopen_context_selection(event) -> None:
         # Reopening changes only process-local checkmarks. The frozen Ground
-        # creation argv remains pending and cannot run until a later A.
+        # creation argv remains pending and cannot run until a later Enter.
         context_selection_finished["value"] = False
         mode["value"] = "CONTEXT_SELECTION"
         sync_input_host()
@@ -2902,7 +2905,12 @@ def run_ground_shell(
         )
         event.app.invalidate()
 
-    @bindings.add("a", filter=approval_mode, eager=True)
+    @bind_exact_command_approval(
+        bindings,
+        filter=approval_dialogue_focus,
+        legacy_a_filter=approval_mode,
+        eager=True,
+    )
     def _approve(event) -> None:
         if mode["value"] != "APPROVAL" or pending["value"] is None:
             return

@@ -1,0 +1,2 @@
+NAMED APPLY RECEIPT · named command applied                                                                                                                                         
+READ-ONLY VERIFICATION · APPLIED 1 · GROUND REV 1

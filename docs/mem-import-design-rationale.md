@@ -71,9 +71,11 @@ control, then composes the shared Save Location parent browser with direct
 exact-name input. Memory setup selects one directly owned Memory in the source
 tree and one existing ordinary destination Context in the active Profile. A
 Profile import edits one fresh exact Profile name. Every branch ends at an
-`ExactCommandReview`; only the dedicated `A` key approves the frozen argv.
-Enter on the review is deliberately inert so ordinary forward navigation
-cannot also authorize a write.
+`ExactCommandReview`. The completed review uses the repository-wide
+final-action contract:
+`Enter` approves, while `A` remains a compatibility alias. Because the
+standalone review contains no other focusable action, Enter cannot be confused
+with setup navigation; Escape or Q still cancels without applying the plan.
 
 Interactive browsing holds no store or registry lock while waiting for input.
 Immediately before review, Context and Memory setup creates a typed import plan

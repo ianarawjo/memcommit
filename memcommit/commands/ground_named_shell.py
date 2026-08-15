@@ -40,6 +40,9 @@ from memcommit.interfaces.tui.components.in_frame_input import (
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
+from memcommit.interfaces.tui.components.exact_command_review import (
+    bind_exact_command_approval,
+)
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
@@ -1187,7 +1190,7 @@ def run_named_ground_shell(
         Window(
             FormattedTextControl(
                 "CHAT: ←/↑ cmd · →/↓ fx\n"
-                "A approve · E refine · B/Q"
+                "Enter apply · A also · E/B/Q"
             ),
             wrap_lines=True,
         ),
@@ -1253,7 +1256,7 @@ def run_named_ground_shell(
             tail = (
                 "Enter · talk here    E · edit selected"
                 if active_mode == "INPUT"
-                else "A · exact approval"
+                else "Enter · exact approval"
             )
             if memory_view["value"] == "TABLE":
                 return (
@@ -1307,7 +1310,7 @@ def run_named_ground_shell(
         if active_mode == "APPROVAL":
             return (
                 " One approval applies one exact command · "
-                "B returns to Grounds · Q quits without A"
+                "B returns to Grounds · Q quits without approval"
             )
         if active_mode == "APPLY_ERROR":
             return " An unconfirmed command is never retried automatically"
@@ -2031,7 +2034,7 @@ def run_named_ground_shell(
         conversation.append(
             "DIRECT WORDING FROZEN\n"
             "  The edited text was not rewritten by the provider.\n"
-            "  It remains NOT SAVED until the exact command receives A."
+            "  It remains NOT SAVED until the exact command receives Enter."
         )
         suspended_message["value"] = ""
         pending_inline_edit["value"] = (
@@ -2525,7 +2528,7 @@ def run_named_ground_shell(
                         "  One READY Rule was reduced to the exact command "
                         "shown below."
                     ),
-                    "  It is still NOT SAVED until A approves it.",
+                    "  It is still NOT SAVED until Enter approves it.",
                 ]
             )
         )
@@ -2657,7 +2660,12 @@ def run_named_ground_shell(
         event.app.current_buffer.insert_text("\n")
         event.app.invalidate()
 
-    @bindings.add("a", filter=approval_mode, eager=True)
+    @bind_exact_command_approval(
+        bindings,
+        filter=approval_dialogue_focus,
+        legacy_a_filter=approval_mode,
+        eager=True,
+    )
     def _approve(event) -> None:
         proposal = pending["value"]
         if mode["value"] != "APPROVAL" or proposal is None:
