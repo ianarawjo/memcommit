@@ -1,0 +1,19 @@
+Added 2 Memories to 'alpha'.                                                                                                                                                        
+  [2e132295] First exact Memory.                                                                                                                                                    
+Second physical line.                                                                                                                                                               
+  [8778491d] Second Memory line 01                                                                                                                                                  
+line 02                                                                                                                                                                             
+line 03                                                                                                                                                                             
+line 04                                                                                                                                                                             
+line 05                                                                                                                                                                             
+line 06                                                                                                                                                                             
+line 07                                                                                                                                                                             
+line 08                                                                                                                                                                             
+line 09                                                                                                                                                                             
+line 10                                                                                                                                                                             
+line 11                                                                                                                                                                             
+line 12                                                                                                                                                                             
+Checkpoint [40d355d1].                                                                                                                                                              
+DURABLE VERIFICATION · ALPHA MEMORIES 2 · TARGET MEMORIES 0 · ADD CHECKPOINTS 1                                                                                                     
+MEMORY 1 'First exact Memory.\nSecond physical line.'                                                                                                                               
+MEMORY 2 'Second Memory line 01\nline 02\nline 03\nline 04\nline 05\nline 06\nline 07\nline 08\nline 09\nline 10\nline 11\nline 12'

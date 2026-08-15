@@ -29,13 +29,15 @@ from memcommit.commands.ground_shell import (
     GROUND_GOAL_FRAME_HEIGHT,
 )
 from memcommit.commands.session_help import bind_session_help
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
-    build_framed_multiline_input,
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
+)
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text

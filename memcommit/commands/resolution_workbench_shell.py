@@ -30,8 +30,10 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
     boxed_lines,
-    build_framed_multiline_input,
     navigable_tree_row_prefix,
+)
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text

@@ -9,22 +9,17 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import count
-from typing import Callable, Literal
+from typing import Callable
 
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.layout import (
     AnyDimension,
-    FormattedTextControl,
-    HSplit,
-    Window,
 )
-from prompt_toolkit.layout.containers import AnyContainer
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.frame import build_focused_frame
-from memcommit.interfaces.tui.components.scrollable_pane import ScrollableTextPane
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     pad_terminal_text,
@@ -33,11 +28,6 @@ from memcommit.interfaces.tui.core.text_layout import (
     wrap_terminal_text,
 )
 
-
-InlineEditSubmissionKind = Literal["NOOP", "DIRECT", "COMMENT", "BOTH"]
-
-INLINE_DIRECT_EDIT_TITLE = "EDIT (DIRECTLY)"
-INLINE_AGENT_COMMENT_TITLE = "COMMENT (FOR THE AGENT)"
 
 _BUFFER_SERIAL = count(1)
 
@@ -206,217 +196,6 @@ class ExactNameFieldControl:
 
     def validate_candidate(self) -> str:
         return self.input_control.validate_candidate()
-
-
-@dataclass(frozen=True)
-class FramedMultilineInput:
-    """A bordered writable input region with an independently named buffer."""
-
-    frame: Frame
-    text_area: TextArea
-
-    @property
-    def container(self) -> Frame:
-        """Return the presentation container used in a layout."""
-        return self.frame
-
-
-@dataclass(frozen=True)
-class InFrameInputSection:
-    """One labeled field embedded below a pane's read surface.
-
-    ``allow_read_only`` is reserved for visibly locked direct-edit fields; a
-    normal conversational composer must remain writable.
-    """
-
-    title: str
-    text_area: TextArea
-    height: AnyDimension = None
-    allow_read_only: bool = False
-
-
-@dataclass(frozen=True)
-class _PaneBaseLayout:
-    body: AnyContainer
-    height: AnyDimension
-
-
-class InFrameInputManager:
-    """Move writable fields among read panes without nesting another Frame.
-
-    One manager owns one set of live pane containers. Attaching a field first
-    restores the previous host, because prompt-toolkit must not see the same
-    writable ``TextArea`` through two live layout branches at once. This lets
-    operation shells reuse a single Message buffer while keeping each
-    conversation visually inside the semantic pane it currently concerns.
-    """
-
-    def __init__(self, *panes: ScrollableTextPane) -> None:
-        if not panes:
-            raise ValueError("at least one pane is required")
-        if len({id(pane) for pane in panes}) != len(panes):
-            raise ValueError("panes must be distinct")
-        self._panes = {id(pane): pane for pane in panes}
-        self._base = {
-            id(pane): _PaneBaseLayout(
-                body=pane.frame.body,
-                height=pane.frame.container.height,
-            )
-            for pane in panes
-        }
-        self._active_pane: ScrollableTextPane | None = None
-        self._active_sections: tuple[InFrameInputSection, ...] = ()
-
-    @property
-    def active_pane(self) -> ScrollableTextPane | None:
-        """Return the pane currently hosting writable fields, if any."""
-        return self._active_pane
-
-    @property
-    def active_sections(self) -> tuple[InFrameInputSection, ...]:
-        """Return the currently embedded fields in display order."""
-        return self._active_sections
-
-    def show(
-        self,
-        pane: ScrollableTextPane,
-        *sections: InFrameInputSection,
-        height: AnyDimension = None,
-    ) -> None:
-        """Show zero or more labeled inputs inside ``pane``'s outer Frame.
-
-        Passing no sections is equivalent to :meth:`clear`. ``height``
-        temporarily replaces the pane's outer height and is restored exactly
-        when the inputs move or close.
-        """
-        if id(pane) not in self._panes:
-            raise ValueError("pane is not registered with this manager")
-        if not sections:
-            self.clear()
-            return
-
-        text_areas = [section.text_area for section in sections]
-        if len({id(text_area) for text_area in text_areas}) != len(text_areas):
-            raise ValueError("input TextAreas must be distinct")
-        if any(
-            section.text_area.buffer.read_only() and not section.allow_read_only
-            for section in sections
-        ):
-            raise ValueError("embedded input TextAreas must be writable")
-        if pane.text_area in text_areas:
-            raise ValueError("a pane's read TextArea cannot be its input")
-
-        self.clear()
-        children: list[AnyContainer] = [pane.text_area]
-        for section in sections:
-            children.extend(
-                [
-                    Window(
-                        FormattedTextControl(display_escape_text(section.title)),
-                        height=1,
-                        char="─",
-                        style="class:embedded-input.separator",
-                    ),
-                    HSplit(
-                        [section.text_area],
-                        height=section.height,
-                    ),
-                ]
-            )
-        pane.frame.body = HSplit(children)
-        if height is not None:
-            pane.frame.container.height = height
-        self._active_pane = pane
-        self._active_sections = tuple(sections)
-
-    def clear(self) -> None:
-        """Detach all inputs and restore the active pane's original layout."""
-        pane = self._active_pane
-        if pane is None:
-            return
-        base = self._base[id(pane)]
-        pane.frame.body = base.body
-        pane.frame.container.height = base.height
-        self._active_pane = None
-        self._active_sections = ()
-
-
-def build_framed_multiline_input(
-    title: str,
-    *,
-    text: str = "",
-    prompt: str = "> ",
-    buffer_name: str | None = None,
-    height: AnyDimension = None,
-    scrollbar: bool = True,
-    style: str = "",
-    frame_style: str = "",
-) -> FramedMultilineInput:
-    """Build a writable multiline input that reads as one bounded component."""
-    text_area = TextArea(
-        text=text,
-        multiline=True,
-        focusable=True,
-        focus_on_click=True,
-        wrap_lines=True,
-        read_only=False,
-        scrollbar=scrollbar,
-        prompt=prompt,
-        style=style,
-        name=buffer_name or _next_buffer_name("input"),
-    )
-    frame = Frame(
-        text_area,
-        title=display_escape_text(title),
-        style=frame_style,
-        height=(height if height is not None else Dimension(min=5, preferred=6, max=9)),
-    )
-    return FramedMultilineInput(frame=frame, text_area=text_area)
-
-
-def build_inline_direct_edit_input(
-    *,
-    text: str = "",
-    buffer_name: str | None = None,
-    height: AnyDimension = None,
-) -> FramedMultilineInput:
-    """Build the exact-text half of a pane-local edit/comment exchange.
-
-    The companion comment field is the operation's existing Message composer,
-    temporarily moved next to this field and retitled. Reusing that composer
-    keeps the interaction visually conversational without adding enough rows
-    to hide another workbench pane on a 24-row terminal.
-    """
-    return build_framed_multiline_input(
-        INLINE_DIRECT_EDIT_TITLE,
-        text=text,
-        prompt="> ",
-        buffer_name=buffer_name,
-        height=(height if height is not None else Dimension(min=3, preferred=3, max=4)),
-    )
-
-
-def classify_inline_edit_submission(
-    *,
-    original: str,
-    edited: str,
-    comment: str,
-) -> InlineEditSubmissionKind:
-    """Classify one pane-local exchange without inferring user intent.
-
-    The prefilled edit buffer is not itself a direct edit. Only a byte-level
-    change to that field counts; this prevents a comment-only turn from
-    accidentally freezing a redundant mutation command.
-    """
-    direct = edited != original
-    agent_comment = bool(comment.strip())
-    if direct and agent_comment:
-        return "BOTH"
-    if direct:
-        return "DIRECT"
-    if agent_comment:
-        return "COMMENT"
-    return "NOOP"
 
 
 def boxed_lines(title: str, body: str, *, width: int = 72) -> list[str]:

@@ -1,41 +1,106 @@
-import hashlib
+"""Typer adapter for adding one or more exact Memories."""
+
+from __future__ import annotations
+
+import json
 from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
+from memcommit.add_application import (
+    AddError,
+    AddRequest,
+    AddSource,
+    prepare_add_target,
+    run_add,
+)
+from memcommit.add_runtime import MemoryStoreAddTargetPort
 from memcommit.commands.batch_input import parse_add_lines, read_text_input
 from memcommit.authority.access import (
-    authorized_context_mutation,
-    grant_checkpoint_args,
+    context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.commands.paste_input import PasteCancelled, capture_paste
-from memcommit.context import AutoCheckpoint
+from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.interfaces.cli.add import render_add_plain
+from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _source_record(
+def _prepare_add_tui_setup(
+    store: MemoryStore,
     *,
-    kind: str,
-    raw_text: str,
-    parser: str,
-) -> dict[str, str]:
-    """Retain exact normal-Context intake without changing Memory records."""
-    return {
-        "kind": kind,
-        "parser": parser,
-        "sha256": hashlib.sha256(raw_text.encode("utf-8")).hexdigest(),
-        "raw_text": raw_text,
+    current_name: str | None,
+    requested_context: str | None,
+) -> AddTuiSetup:
+    """Freeze visible Context rows and their CREATE availability."""
+
+    local_names = tuple(store.list_context_names())
+    granted = freeze_granted_context_navigation(store)
+    names = set(local_names) | set(granted.names)
+    selectable = set(local_names)
+    annotations = {
+        name: value
+        for name, value in granted.annotations.items()
+        if name not in local_names
     }
+
+    for name in granted.names:
+        if name in local_names:
+            continue
+        try:
+            access = resolve_context_access(
+                store,
+                name,
+                current_name=current_name,
+                required_permission="CREATE",
+            )
+        except (FileNotFoundError, OSError, ProfileError, RuntimeError, ValueError):
+            continue
+        selectable.add(access.display_name)
+
+    selected: str | None = None
+    if requested_context is not None:
+        access = resolve_context_access(
+            store,
+            requested_context,
+            current_name=current_name,
+            required_permission="CREATE",
+        )
+        selected = access.display_name
+        names.add(selected)
+        selectable.add(selected)
+        if access.is_granted:
+            annotations[selected] = context_access_display_facts(access)
+    elif current_name in selectable:
+        selected = current_name
+    elif selectable:
+        selected = sorted(selectable, key=str.casefold)[0]
+
+    if selected is None:
+        raise ValueError(
+            "Interactive Add requires a local or CREATE-granted target Context."
+        )
+    return AddTuiSetup(
+        names=tuple(sorted(names, key=str.casefold)),
+        selectable_names=frozenset(selectable),
+        selected_context=selected,
+        current_context=current_name,
+        annotations=tuple(
+            (name, annotations[name])
+            for name in sorted(annotations, key=str.casefold)
+            if name in names
+        ),
+    )
 
 
 def cmd(
     info: Annotated[
         Optional[str],
-        typer.Argument(help="Information to store (quote multi-word strings)"),
+        typer.Argument(help="One Memory to store (quote multi-word text)"),
     ] = None,
     input_source: Annotated[
         Optional[str],
@@ -50,213 +115,156 @@ def cmd(
         typer.Option(
             "--paste",
             help=(
-                "Capture pasted text without echoing it, then add each "
-                "non-empty line"
+                "Capture pasted text without echoing it, then add each non-empty line"
             ),
         ),
     ] = False,
+    memories: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--memory",
+            "-m",
+            help="Add one exact Memory; repeat the option to add a batch",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
             "--context",
             "-c",
-            help="Local Context or granted view to receive the new Memories",
+            help="Local Context or CREATE-granted view to receive the Memories",
         ),
     ] = None,
 ) -> None:
+    explicit_memories = tuple(memories or ())
     source_count = sum(
-        (info is not None, input_source is not None, paste)
+        (
+            info is not None,
+            input_source is not None,
+            paste,
+            bool(explicit_memories),
+        )
     )
-    if source_count != 1:
+    if source_count > 1 or (source_count == 0 and not is_interactive_terminal()):
         typer.secho(
-            "Error: provide exactly one of INFO, --input, or --paste.",
+            "Error: provide exactly one of INFO, --input, or --paste, or use "
+            "repeatable --memory.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
 
-    active_store = MemoryStore()
+    # Capture global navigation once before file, stdin, paste, or confirmation
+    # can yield control. Relative target meaning stays stable for this command.
+    store = MemoryStore()
+    current_name = store.current_context_name()
+    port = MemoryStoreAddTargetPort(store, current_name=current_name)
+
     try:
-        access = resolve_context_access(
-            active_store,
-            context_name,
-            current_name=active_store.current_context_name(),
-            required_permission="CREATE",
+        if source_count == 0:
+            setup = _prepare_add_tui_setup(
+                store,
+                current_name=current_name,
+                requested_context=context_name,
+            )
+            tui_result = run_add_tui(
+                setup=setup,
+                execute=lambda request: run_add(request, target_port=port),
+            )
+            if tui_result is None:
+                typer.echo("Add cancelled — no changes made.")
+                return
+            render_add_plain(tui_result, mode="TUI_DRAFTS")
+            return
+        if info is not None:
+            request = AddRequest(
+                context_locator=context_name,
+                contents=(info,),
+                source=AddSource(
+                    mode="SINGLE",
+                    kind="argument",
+                    raw_text=info,
+                    parser="single-memory-v1",
+                ),
+            )
+        elif explicit_memories:
+            request = AddRequest(
+                context_locator=context_name,
+                contents=explicit_memories,
+                source=AddSource(
+                    mode="EXPLICIT_BATCH",
+                    kind="arguments",
+                    raw_text=json.dumps(
+                        explicit_memories,
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                    ),
+                    parser="explicit-memory-arguments-v1",
+                ),
+            )
+        elif paste:
+            frozen_target = prepare_add_target(
+                context_name,
+                target_port=port,
+            )
+            try:
+                raw_text = capture_paste()
+            except PasteCancelled:
+                typer.echo("Aborted — no changes made.")
+                return
+            contents = tuple(parse_add_lines(raw_text))
+            count = len(contents)
+            noun = "line" if count == 1 else "lines"
+            typer.secho(f"[{count} {noun} pasted]", dim=True)
+            if not typer.confirm(
+                f"Add {count} {'Memory' if count == 1 else 'Memories'} "
+                f"to '{frozen_target.context_name}'?",
+                default=False,
+            ):
+                typer.echo("Aborted — no changes made.")
+                return
+            request = AddRequest(
+                context_locator=context_name,
+                contents=contents,
+                source=AddSource(
+                    mode="PASTE",
+                    kind="interactive-paste",
+                    raw_text=raw_text,
+                    parser="stripped-nonempty-physical-lines-v1",
+                ),
+            )
+        else:
+            assert input_source is not None
+            raw_text = read_text_input(input_source)
+            request = AddRequest(
+                context_locator=context_name,
+                contents=tuple(parse_add_lines(raw_text)),
+                source=AddSource(
+                    mode="LINES",
+                    kind="stdin" if input_source == "-" else "utf-8-file",
+                    raw_text=raw_text,
+                    parser="stripped-nonempty-physical-lines-v1",
+                    input_name=input_source,
+                ),
+            )
+
+        result = run_add(
+            request,
+            target_port=port,
+            frozen_target=(frozen_target if paste else None),
         )
-        store = access.store
-        ctx = store.load_direct(access.context_name)
     except (
+        AddError,
+        ConcurrentContextUpdateError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,
         ProfileError,
         RuntimeError,
+        TypeError,
         ValueError,
     ) as error:
-        typer.secho(str(error), fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-    context_name = ctx.name
-    context_uid = ctx.uid
-
-    if info is not None:
-        mem = ops.add(ctx, info)
-        try:
-            with authorized_context_mutation(access):
-                store.save(ctx, AutoCheckpoint(
-                    command="add",
-                    args={
-                        "content": info,
-                        "memory_uids": [mem.uid],
-                        "source": _source_record(
-                            kind="argument",
-                            raw_text=info,
-                            parser="single-memory-v1",
-                        ),
-                        **grant_checkpoint_args(access),
-                    },
-                    description=f'Added: "{info[:80]}"',
-                ))
-        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-        typer.secho(f"Added [{mem.uid[:8]}] {info}", fg=typer.colors.GREEN)
-        return
-
-    if paste:
-        try:
-            pasted_text = capture_paste()
-        except PasteCancelled:
-            typer.echo("Aborted — no changes made.")
-            return
-        except ValueError as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-
-        try:
-            contents = parse_add_lines(pasted_text)
-        except ValueError as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-
-        count = len(contents)
-        noun = "line" if count == 1 else "lines"
-        typer.secho(f"[{count} {noun} pasted]", dim=True)
-        if not typer.confirm(
-            f"Add {count} {'Memory' if count == 1 else 'Memories'} "
-            f"to '{context_name}'?",
-            default=False,
-        ):
-            typer.echo("Aborted — no changes made.")
-            return
-
-        # Capture and confirmation can take arbitrarily long. Reload immediately
-        # before mutation so updates saved by another process are not overwritten
-        # by the Context snapshot that was current when paste mode started.
-        try:
-            ctx = store.load_direct(context_name)
-        except (OSError, ValueError) as error:
-            typer.secho(
-                f"Error: could not reload context '{context_name}': {error}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if ctx.uid != context_uid:
-            typer.secho(
-                f"Error: context '{context_name}' was replaced while "
-                "paste mode was open; no changes were made.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-
-        memories = ops.add_many(ctx, contents)
-        try:
-            with authorized_context_mutation(access):
-                store.save(
-                    ctx,
-                    AutoCheckpoint(
-                        command="add",
-                        args={
-                            "mode": "paste",
-                            "count": len(memories),
-                            "contents": [
-                                memory.content for memory in memories
-                            ],
-                            "memory_uids": [
-                                memory.uid for memory in memories
-                            ],
-                            "source": _source_record(
-                                kind="interactive-paste",
-                                raw_text=pasted_text,
-                                parser="stripped-nonempty-physical-lines-v1",
-                            ),
-                            **grant_checkpoint_args(access),
-                        },
-                        description=(
-                            "Added "
-                            f"{len(memories)} memories from interactive paste"
-                        ),
-                    ),
-                )
-        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-        # Paste mode intentionally reports only a count. The captured payload
-        # should not be copied into terminal scrollback after confirmation.
-        typer.secho(
-            f"Added {len(memories)} "
-            f"{'Memory' if len(memories) == 1 else 'Memories'} "
-            f"to '{context_name}'.",
-            fg=typer.colors.GREEN,
-            bold=True,
-        )
-        return
-
-    assert input_source is not None
-    try:
-        raw_text = read_text_input(input_source)
-        contents = parse_add_lines(raw_text)
-    except ValueError as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    memories = ops.add_many(ctx, contents)
-    try:
-        with authorized_context_mutation(access):
-            store.save(
-                ctx,
-                AutoCheckpoint(
-                    command="add",
-                    args={
-                        "input": input_source,
-                        "mode": "lines",
-                        "count": len(memories),
-                        "contents": [memory.content for memory in memories],
-                        "memory_uids": [
-                            memory.uid for memory in memories
-                        ],
-                        "source": _source_record(
-                            kind="stdin" if input_source == "-" else "utf-8-file",
-                            raw_text=raw_text,
-                            parser="stripped-nonempty-physical-lines-v1",
-                        ),
-                        **grant_checkpoint_args(access),
-                    },
-                    description=(
-                        f"Added {len(memories)} memories from "
-                        f"{'stdin' if input_source == '-' else repr(input_source)}"
-                    ),
-                ),
-            )
-    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-
-    typer.secho(
-        f"Added {len(memories)} memories to '{ctx.name}':",
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
-    for memory in memories:
-        typer.echo(f"  [{memory.uid[:8]}] {memory.content}")
+    render_add_plain(result, mode=request.source.mode)

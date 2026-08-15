@@ -95,6 +95,55 @@ def test_moved_component_symbols_no_longer_live_in_tui_primitives() -> None:
         "move_wrapped_read_cursor",
         "scroll_wrapped_page",
         "set_scrollable_pane_text",
+        "FramedMultilineInput",
+        "InFrameInputManager",
+        "InFrameInputSection",
+        "build_framed_multiline_input",
+        "build_inline_direct_edit_input",
     }
 
     assert definitions.isdisjoint(moved)
+
+
+def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> None:
+    moved = {
+        "FramedMultilineInput",
+        "InFrameInputManager",
+        "InFrameInputSection",
+        "build_framed_multiline_input",
+        "build_inline_direct_edit_input",
+        "classify_inline_edit_submission",
+    }
+    offenders: list[tuple[str, str]] = []
+    for path in PACKAGE.rglob("*.py"):
+        tree = ast.parse(path.read_text())
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ImportFrom):
+                continue
+            if node.module != "memcommit.commands.tui_primitives":
+                continue
+            offenders.extend(
+                (str(path.relative_to(ROOT)), alias.name)
+                for alias in node.names
+                if alias.name in moved
+            )
+
+    assert offenders == []
+
+
+def test_add_tui_delegates_common_interaction_mechanics() -> None:
+    path = PACKAGE / "interfaces" / "tui" / "operations" / "add" / "screen.py"
+    source = path.read_text()
+    imports = set(_imports(path))
+
+    assert {
+        "memcommit.context_targeting.tui.selector",
+        "memcommit.interfaces.tui.components.focus",
+        "memcommit.interfaces.tui.components.frame",
+        "memcommit.interfaces.tui.components.in_frame_input",
+        "memcommit.interfaces.tui.components.multiline_input",
+        "memcommit.interfaces.tui.components.scrollable_pane",
+    } <= imports
+    assert ".vertical_scroll" not in source
+    assert "ScrollbarMargin" not in source
+    assert "TextArea(" not in source

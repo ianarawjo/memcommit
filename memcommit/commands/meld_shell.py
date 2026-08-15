@@ -13,7 +13,9 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 
-from memcommit.commands.tui_primitives import build_framed_multiline_input
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
+)
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.frame import (

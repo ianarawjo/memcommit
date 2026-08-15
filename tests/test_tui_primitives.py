@@ -21,14 +21,18 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
     ExactNameInputControl,
+    anchored_fragments,
+)
+from memcommit.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,
     INLINE_AGENT_COMMENT_TITLE,
     INLINE_DIRECT_EDIT_TITLE,
-    anchored_fragments,
-    build_framed_multiline_input,
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
+)
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
 )
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -177,18 +181,16 @@ def test_shared_navigation_accelerator_accelerates_only_after_hold_cadence():
 def test_shared_navigation_accelerator_never_accelerates_rapid_taps():
     accelerator = NavigationAccelerator()
 
-    assert [accelerator.step(1, now=index * 0.08) for index in range(20)] == [
-        1
-    ] * 20
+    assert [accelerator.step(1, now=index * 0.08) for index in range(20)] == [1] * 20
 
 
 def test_shared_navigation_accelerator_resets_on_interrupted_repeat_bursts():
     accelerator = NavigationAccelerator()
     interrupted_times = (0.0, 0.35, 0.43, 0.51, 0.82, 0.90, 0.98, 1.35)
 
-    assert [accelerator.step(1, now=now) for now in interrupted_times] == [
-        1
-    ] * len(interrupted_times)
+    assert [accelerator.step(1, now=now) for now in interrupted_times] == [1] * len(
+        interrupted_times
+    )
 
 
 def test_shared_navigation_accelerator_visits_every_row_at_five_times_rate():
@@ -268,14 +270,10 @@ def _render_pane_top_row(
                     )
                     application.exit()
                     return
-            application.exit(
-                exception=AssertionError("pane was not rendered")
-            )
+            application.exit(exception=AssertionError("pane was not rendered"))
 
         application.run(
-            pre_run=lambda: application.create_background_task(
-                capture_after_render()
-            )
+            pre_run=lambda: application.create_background_task(capture_after_render())
         )
 
     return captured[0]
@@ -332,9 +330,7 @@ def test_shared_viewport_anchor_can_follow_the_end_of_active_block():
         anchor_at_end=True,
     )
     content = FormattedTextControl(fragments).create_content(80, 10)
-    line = "".join(
-        text for _style, text in content.get_line(content.cursor_position.y)
-    )
+    line = "".join(text for _style, text in content.get_line(content.cursor_position.y))
 
     assert line == "  exact argv"
     assert content.cursor_position.x == len("  exact argv")
@@ -450,9 +446,7 @@ def test_focus_style_highlights_only_frame_chrome_and_keeps_base_style():
             values.append(border_chars(child))
         return "".join(values)
 
-    assert pane.frame.container.style() == (
-        "class:frame class:custom-frame"
-    )
+    assert pane.frame.container.style() == ("class:frame class:custom-frame")
     assert set(border_chars(pane.frame.container)) == set("┌─|┐│└┘")
     assert pane.container is not pane.frame
     focused["value"] = True
@@ -674,20 +668,14 @@ def test_in_frame_input_moves_one_shared_composer_between_live_panes():
 
     manager.show(goal, section, height=9)
     goal_embedded_body = goal.frame.body
-    assert (
-        goal_embedded_body.children[2].children[0]
-        is composer.text_area.window
-    )
+    assert goal_embedded_body.children[2].children[0] is composer.text_area.window
 
     manager.show(rules, section, height=11)
 
     assert goal.frame.body is goal_body
     assert goal.frame.container.height is goal_height
     assert rules.frame.body is not rules_body
-    assert (
-        rules.frame.body.children[2].children[0]
-        is composer.text_area.window
-    )
+    assert rules.frame.body.children[2].children[0] is composer.text_area.window
     assert rules.frame.container.height == 11
     assert manager.active_pane is rules
 
@@ -746,33 +734,42 @@ def test_inline_edit_uses_exact_labels_and_distinguishes_comment_from_change():
     assert "OPTIONAL" not in editor.frame.title.upper()
     height = editor.frame.__pt_container__().height
     assert (height.min, height.preferred, height.max) == (3, 3, 4)
-    assert classify_inline_edit_submission(
-        original="Goal",
-        edited="Goal",
-        comment="",
-    ) == "NOOP"
-    assert classify_inline_edit_submission(
-        original="Goal",
-        edited="Revised Goal",
-        comment="",
-    ) == "DIRECT"
-    assert classify_inline_edit_submission(
-        original="Goal",
-        edited="Goal",
-        comment="Explain this",
-    ) == "COMMENT"
-    assert classify_inline_edit_submission(
-        original="Goal",
-        edited="Revised Goal",
-        comment="This is why",
-    ) == "BOTH"
+    assert (
+        classify_inline_edit_submission(
+            original="Goal",
+            edited="Goal",
+            comment="",
+        )
+        == "NOOP"
+    )
+    assert (
+        classify_inline_edit_submission(
+            original="Goal",
+            edited="Revised Goal",
+            comment="",
+        )
+        == "DIRECT"
+    )
+    assert (
+        classify_inline_edit_submission(
+            original="Goal",
+            edited="Goal",
+            comment="Explain this",
+        )
+        == "COMMENT"
+    )
+    assert (
+        classify_inline_edit_submission(
+            original="Goal",
+            edited="Revised Goal",
+            comment="This is why",
+        )
+        == "BOTH"
+    )
 
 
 def test_shared_terminal_sanitizer_preserves_layout_but_neutralizes_control():
-    assert (
-        safe_terminal_text("a\nb\tc\x1b[31m\u202e")
-        == "a\nb\tc�[31m�"
-    )
+    assert safe_terminal_text("a\nb\tc\x1b[31m\u202e") == "a\nb\tc�[31m�"
 
 
 def test_exact_command_receipt_escapes_layout_and_bidi_spoofing():
@@ -784,9 +781,7 @@ def test_exact_command_receipt_escapes_layout_and_bidi_spoofing():
             "--propose-rule",
             "line 1\nEFFECTS · ONE COMMAND\t\u202ereversed\\tail",
         ),
-        effects=(
-            "Rules: ADD\nPROPOSED COMMAND · NOT RUN\t\u2066hidden",
-        ),
+        effects=("Rules: ADD\nPROPOSED COMMAND · NOT RUN\t\u2066hidden",),
     )
 
     rendered = render_exact_command_review(review)
