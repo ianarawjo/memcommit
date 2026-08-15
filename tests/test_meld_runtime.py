@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -37,3 +38,43 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
         or name.startswith("prompt_toolkit")
         or name.startswith("memcommit.commands")
     ) == ()
+
+
+def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
+    completion = "saved complete Meld response"
+    branch = SimpleNamespace(completion=completion)
+    store = SimpleNamespace(load_meld_resolution_branch=lambda key: None)
+    session = SimpleNamespace(
+        current_turn=SimpleNamespace(sequence=1, scope="ALL")
+    )
+    monkeypatch.setattr(
+        meld_runtime,
+        "meld_turn_request_digest",
+        lambda value: "0" * 64,
+    )
+    monkeypatch.setattr(
+        meld_runtime,
+        "configured_meld_cache_identity",
+        lambda: {
+            "provider": "codex-chatgpt",
+            "model": "current-recommended",
+            "reasoning_effort": None,
+        },
+    )
+    monkeypatch.setattr(
+        meld_runtime,
+        "meld_resolution_cache_key",
+        lambda request, provider: "1" * 64,
+    )
+    monkeypatch.setattr(
+        meld_runtime,
+        "find_installed_meld_resolution_branch",
+        lambda **kwargs: branch,
+    )
+
+    frozen = meld_runtime.MemoryStoreMeldAssessmentPort(store).freeze(
+        session,
+        expected_session_digest="version-1",
+    )
+
+    assert frozen.cached_completion == completion

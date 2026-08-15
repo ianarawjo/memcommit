@@ -40,8 +40,11 @@ branch file uses first-writer-wins publication and rejects symlink storage.
 ## Compatibility and limitations
 
 The CLI and TUI keep their existing actions, order, progress surface, rendered
-reports, session schema, checkpoints, and Grant behavior. This step adds only
-profile-local branch reuse. Study-installed hidden branch lookup is a separate
-adapter because its task/fixture authorization is broader than ordinary
-profile-local persistence. Initial Meld construction and public Python/agent
-facades also remain later rollout steps; no public API is declared here.
+reports, session schema, checkpoints, and Grant behavior. Study-installed
+branches use a separate operation adapter because their task-description and
+baseline identity authorization is broader than ordinary profile-local
+persistence. A matching immutable shared-bundle branch is replayed through the
+same decoder, then promoted into the participant's hidden profile cache only
+after the live Context and session checks pass. Initial Meld construction and
+public Python/agent facades remain later rollout steps; no public API is
+declared here.
