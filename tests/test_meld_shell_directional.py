@@ -1,7 +1,7 @@
 """Focused rendering tests for directional and symmetric Meld shell chrome."""
 from types import SimpleNamespace
 
-import memcommit.commands.meld_shell as meld_shell
+import memcommit.interfaces.tui.operations.meld.screen as meld_shell
 
 
 def _text(session, *, expanded=False) -> str:

@@ -71,7 +71,7 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.commands.meld_shell import run_meld_shell
+from memcommit.interfaces.tui.operations.meld.screen import run_meld_shell
 from memcommit.commands.meld_sessions import (
     MeldSessionCatalogEntry,
     MeldSessionCatalogError,

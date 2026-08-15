@@ -76,5 +76,9 @@ at each step.
   only typed values through `interfaces.tui.operations.meld.setup`, and enters
   the existing application boundary with the same receipt fields. The legacy
   `endpoint_setup_flows` module no longer owns Meld setup behavior.
-- Saved-session presentation relocation and ordered PTY evidence remain the
-  next steps; neither changes provider, cache, receipt, or Apply semantics.
+- The saved-session workbench now lives in
+  `interfaces.tui.operations.meld.screen`. `commands.meld` enters that adapter
+  directly, while `commands.meld_shell` is an import-only compatibility facade.
+  The relocation preserves the current Resolution Workbench projection and
+  does not move provider, cache, receipt, or Apply semantics into presentation.
+- Ordered PTY evidence remains the next step.
