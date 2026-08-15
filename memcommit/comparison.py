@@ -15,6 +15,10 @@ from datetime import datetime, timezone
 from typing import Iterable, Literal
 
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.memory_focus import (
+    MemoryFocusError,
+    resolve_memory_focus,
+)
 from memcommit.store import context_record_digest
 from memcommit.understanding import (
     UnderstandingSummary,
@@ -239,6 +243,7 @@ class ComparisonFrame:
     context_digest: str
     side: ComparisonSide
     memories: tuple[ComparisonMemory, ...]
+    context_evidence: tuple[ComparisonMemory, ...] = ()
 
     @classmethod
     def from_context(
@@ -281,8 +286,41 @@ class ComparisonFrame:
             }
         )
 
+    @classmethod
+    def focused_from_context(
+        cls,
+        context: Context,
+        *,
+        side: ComparisonSide,
+        memory_selector: str | None,
+    ) -> tuple["ComparisonFrame", tuple[ComparisonMemory, ...]]:
+        """Build one actionable frame plus non-actionable Context evidence."""
+
+        complete = cls.from_context(context, side=side)
+        try:
+            focus = resolve_memory_focus(
+                complete.memories,
+                memory_selector,
+                label=f"{side} Memory",
+            )
+        except MemoryFocusError as error:
+            raise ComparisonError(str(error)) from error
+        if focus.selected_uid is None:
+            return complete, ()
+        actionable = focus.actionable
+        frame = cls.from_dict(
+            {
+                **complete.to_dict(),
+                "memories": [memory.to_dict() for memory in actionable],
+                "context_evidence": [
+                    memory.to_dict() for memory in focus.context_only
+                ],
+            }
+        )
+        return frame, frame.context_evidence
+
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "uid": self.uid,
             "context_uid": self.context_uid,
             "context_name": self.context_name,
@@ -290,19 +328,27 @@ class ComparisonFrame:
             "side": self.side,
             "memories": [memory.to_dict() for memory in self.memories],
         }
+        if self.context_evidence:
+            result["context_evidence"] = [
+                memory.to_dict() for memory in self.context_evidence
+            ]
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "ComparisonFrame":
+        keys = {
+            "uid",
+            "context_uid",
+            "context_name",
+            "context_digest",
+            "side",
+            "memories",
+        }
+        if isinstance(value, dict) and "context_evidence" in value:
+            keys.add("context_evidence")
         data = _exact_dict(
             value,
-            {
-                "uid",
-                "context_uid",
-                "context_name",
-                "context_digest",
-                "side",
-                "memories",
-            },
+            keys,
             "comparison frame",
         )
         memories = tuple(
@@ -312,11 +358,24 @@ class ComparisonFrame:
                 "comparison frame Memories",
             )
         )
+        context_evidence = tuple(
+            ComparisonMemory.from_dict(item)
+            for item in _array(
+                data.get("context_evidence", []),
+                "comparison Context evidence",
+            )
+        )
+        all_memories = (*memories, *context_evidence)
         if (
             not memories
-            or len({memory.uid for memory in memories}) != len(memories)
-            or [memory.position for memory in memories]
-            != list(range(len(memories)))
+            or len({memory.uid for memory in all_memories}) != len(all_memories)
+            or sorted(memory.position for memory in all_memories)
+            != list(range(len(all_memories)))
+            or (
+                not context_evidence
+                and [memory.position for memory in memories]
+                != list(range(len(memories)))
+            )
         ):
             raise ComparisonError(
                 "Invalid comparison frame Memory order."
@@ -342,12 +401,13 @@ class ComparisonFrame:
                 "comparison frame side",
             ),
             memories=memories,
+            context_evidence=context_evidence,
         )
         snapshot = Context(
             uid=result.context_uid,
             name=result.context_name,
         )
-        for memory in result.memories:
+        for memory in sorted(all_memories, key=lambda item: item.position):
             snapshot.add(
                 Memory(
                     uid=memory.uid,
@@ -619,6 +679,10 @@ class ComparisonInput:
     ruleset_version: str
     frames: tuple[ComparisonFrame, ComparisonFrame]
     include_descendants: tuple[bool, bool] = (False, False)
+    context_evidence: tuple[
+        tuple[ComparisonMemory, ...],
+        tuple[ComparisonMemory, ...],
+    ] = ((), ())
 
     @classmethod
     def from_contexts(
@@ -628,6 +692,8 @@ class ComparisonInput:
         *,
         reference_descendants: bool = False,
         compared_descendants: bool = False,
+        reference_memory_selector: str | None = None,
+        compared_memory_selector: str | None = None,
     ) -> "ComparisonInput":
         if (
             reference.uid == compared.uid
@@ -636,24 +702,29 @@ class ComparisonInput:
             raise ComparisonError(
                 "Compare requires two distinct Contexts."
             )
+        reference_frame, reference_evidence = ComparisonFrame.focused_from_context(
+            reference,
+            side="REFERENCE",
+            memory_selector=reference_memory_selector,
+        )
+        compared_frame, compared_evidence = ComparisonFrame.focused_from_context(
+            compared,
+            side="COMPARED",
+            memory_selector=compared_memory_selector,
+        )
         result = cls(
             uid=str(uuid.uuid4()),
             created_at=datetime.now(timezone.utc).isoformat(),
             ruleset_version=COMPARISON_RULESET_VERSION,
             frames=(
-                ComparisonFrame.from_context(
-                    reference,
-                    side="REFERENCE",
-                ),
-                ComparisonFrame.from_context(
-                    compared,
-                    side="COMPARED",
-                ),
+                reference_frame,
+                compared_frame,
             ),
             include_descendants=(
                 reference_descendants,
                 compared_descendants,
             ),
+            context_evidence=(reference_evidence, compared_evidence),
         )
         result.validate()
         return result
@@ -685,8 +756,71 @@ class ComparisonInput:
                 "Compare requires ordered distinct REFERENCE and COMPARED "
                 "frames."
             )
+        if (
+            len(self.context_evidence) != 2
+            or any(
+                len({memory.uid for memory in evidence}) != len(evidence)
+                for evidence in self.context_evidence
+            )
+            or any(
+                {memory.uid for memory in frame.memories}
+                & {memory.uid for memory in evidence}
+                for frame, evidence in zip(
+                    self.frames,
+                    self.context_evidence,
+                    strict=True,
+                )
+            )
+        ):
+            raise ComparisonError("Invalid comparison Context evidence.")
 
 
+def comparison_analysis_matches_input(
+    analysis: "ComparisonAnalysis",
+    comparison_input: ComparisonInput,
+) -> bool:
+    """Return whether a saved result has the exact requested actionable scope."""
+
+    return (
+        analysis.include_descendants == comparison_input.include_descendants
+        and all(
+            (
+                saved.context_uid,
+                saved.context_name,
+                saved.context_digest,
+                saved.side,
+                tuple(
+                    (
+                        memory.uid,
+                        memory.content,
+                        memory.position,
+                        memory.content_digest,
+                    )
+                    for memory in saved.memories
+                ),
+            )
+            == (
+                requested.context_uid,
+                requested.context_name,
+                requested.context_digest,
+                requested.side,
+                tuple(
+                    (
+                        memory.uid,
+                        memory.content,
+                        memory.position,
+                        memory.content_digest,
+                    )
+                    for memory in requested.memories
+                ),
+            )
+            for saved, requested in zip(
+                analysis.frames,
+                comparison_input.frames,
+                strict=True,
+            )
+        )
+    )
 @dataclass(frozen=True)
 class ComparisonAnalysis:
     uid: str

@@ -193,14 +193,26 @@ def _provider_view(
                     "content_sha256": memory.content_digest,
                 }
             )
-        frame_payloads.append(
-            {
-                "frame_id": frame_id,
-                "display_side": frame.side,
-                "authority": "PEER",
-                "memories": memories,
-            }
-        )
+        frame_payload: dict[str, object] = {
+            "frame_id": frame_id,
+            "display_side": frame.side,
+            "authority": "PEER",
+            "memories": memories,
+        }
+        context_evidence = comparison_input.context_evidence[frame_index - 1]
+        if context_evidence:
+            # Context aliases never enter memory_by_id or the output schema,
+            # so they cannot become visible relation members.
+            frame_payload["context_evidence"] = [
+                {
+                    "context_id": f"c{frame_index}_{index:06d}",
+                    "position": memory.position,
+                    "content": memory.content,
+                    "content_sha256": memory.content_digest,
+                }
+                for index, memory in enumerate(context_evidence, start=1)
+            ]
+        frame_payloads.append(frame_payload)
 
     return _ProviderView(
         memory_by_id=memory_by_id,
@@ -377,11 +389,24 @@ def _prompt(payload: dict[str, object]) -> str:
             f"{COMPARISON_INPUT_CHAR_LIMIT} characters. Input is never "
             "truncated or split into hidden calls."
         )
+    focused_context = (
+        "Some frames contain context_evidence. Use those neighboring Memories "
+        "only to interpret, disambiguate, and scope the actionable memories "
+        "array from the same frame. Context evidence is not a comparison item: "
+        "never assign it to a relation, cite its context_id, summarize it as a "
+        "one-sided result, or let it become an issue or later proposal.\n"
+        if any(
+            isinstance(frame, dict) and frame.get("context_evidence")
+            for frame in payload.get("frames", [])
+        )
+        else ""
+    )
     return (
         "Perform one complete targetless semantic comparison of two PEER "
         "Context frames. They have equal authority. REFERENCE is only the "
         "layout and navigation anchor; do not make it win because it is first.\n"
-        "Return one exhaustive primary relation ledger. In source_assignments, "
+        + focused_context
+        + "Return one exhaustive primary relation ledger. In source_assignments, "
         "return exactly one row for every supplied source Memory and assign it "
         "to exactly one returned relation_key. Relation objects describe the "
         "group and must not repeat member-ID arrays. Relations may be 1:1, "
@@ -854,6 +879,9 @@ def analyze_comparison(
         )
     view = _provider_view(comparison_input)
     source_count = len(view.memory_by_id)
+    context_count = sum(
+        len(evidence) for evidence in comparison_input.context_evidence
+    )
     source_memory_ids = tuple(view.memory_by_id)
     left_count = len(comparison_input.frames[0].memories)
     right_count = len(comparison_input.frames[1].memories)
@@ -861,7 +889,7 @@ def analyze_comparison(
         COMPARISON_EXECUTION_POLICY,
         json_budget(
             view.payload,
-            item_count=source_count,
+            item_count=source_count + context_count,
             output_schema=comparison_output_schema(source_memory_ids),
             expected_output_items=source_count,
             relation_edges=left_count * right_count,

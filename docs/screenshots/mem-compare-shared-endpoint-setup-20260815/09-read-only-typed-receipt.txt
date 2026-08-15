@@ -1,0 +1,12 @@
+
+COMPARE SETUP RECEIPT · CompareSetupReceipt(reference_name='reference', compared_name='peer', reference_descendants=False, compared_descendants=True, reference_memory_uid='59d62bad
+-5f02-4bd3-81f5-8ee7cbc59775', compared_memory_uid=None)
+  A · DESCENDANTS=False · MEMORY=59d62bad-5f02-4bd3-81f5-8ee7cbc59775
+  B · DESCENDANTS=True · MEMORY=None
+  EXPECTED A MEMORY · 59d62bad-5f02-4bd3-81f5-8ee7cbc59775 · MATCH=True
+  DIRECT MEMORY PROJECTIONS · ['reference', 'peer']
+READ-ONLY SETUP VERIFICATION
+  CONTEXT BYTES UNCHANGED · True
+  CURRENT CONTEXT · reference
+  CONTEXT CHECKPOINTS · 0
+  PROVIDER CALLS · 0

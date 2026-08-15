@@ -46,15 +46,24 @@ from memcommit.commands.command_wait import (
     build_report_loading_view,
     run_command_wait,
 )
-from memcommit.commands.endpoint_setup_flows import choose_compare_setup
+from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.commands.session_picker import SessionNewReceipt
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
+)
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.interfaces.understanding import understanding_lines
+from memcommit.interfaces.understanding import (
+    understanding_lines,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -672,27 +681,88 @@ def cmd(
             help="Enter the interactive Compare session launcher",
         ),
     ] = False,
-    reference_descendants: Annotated[
+    direct: Annotated[
         bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Compare only the selected REFERENCE and PEER roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include readable descendants under both comparison roots",
+        ),
+    ] = False,
+    reference_descendants: Annotated[
+        Optional[bool],
         typer.Option(
             "--reference-descendants/--reference-only",
             help="Include all readable descendants under REFERENCE A",
         ),
-    ] = False,
+    ] = None,
     compared_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--compared-descendants/--compared-only",
             help="Include all readable descendants under PEER B",
         ),
-    ] = False,
+    ] = None,
+    reference_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--reference-memory",
+            metavar="UID/PREFIX",
+            help=(
+                "Compare one REFERENCE Memory; its neighbors remain "
+                "non-actionable context"
+            ),
+        ),
+    ] = None,
+    compared_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--compared-memory",
+            metavar="UID/PREFIX",
+            help=(
+                "Compare one PEER Memory; its neighbors remain non-actionable context"
+            ),
+        ),
+    ] = None,
 ) -> None:
     """Compare two equal-authority Contexts, defaulting A to current."""
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or reference_descendants is not None
+        or compared_descendants is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        reference_descendants, compared_descendants = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(reference_descendants, compared_descendants),
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Compare error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if sessions and (
         from_ is not None
         or to is not None
-        or reference_descendants
-        or compared_descendants
+        or scope_flags_supplied
+        or reference_memory is not None
+        or compared_memory is not None
     ):
         typer.secho(
             "Compare error: use either --sessions or --to/explicit endpoints, not both.",
@@ -710,6 +780,31 @@ def cmd(
     if to is None and (reference_descendants or compared_descendants):
         typer.secho(
             "Compare error: descendant scope flags require an explicit --to Context.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if to is None and (
+        reference_memory is not None or compared_memory is not None
+    ):
+        typer.secho(
+            "Compare error: Memory scope flags require an explicit --to Context.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if reference_memory is not None and reference_descendants:
+        typer.secho(
+            "Compare error: --reference-memory cannot be combined with "
+            "--reference-descendants.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if compared_memory is not None and compared_descendants:
+        typer.secho(
+            "Compare error: --compared-memory cannot be combined with "
+            "--compared-descendants.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -733,15 +828,20 @@ def cmd(
                 if setup is None:
                     typer.echo("New Compare cancelled; no analysis was opened.")
                     return
-                cmd(
-                    from_=setup.reference_name,
-                    to=setup.compared_name,
-                    refresh=refresh,
-                    ledger=ledger,
-                    snapshot=snapshot,
-                    reference_descendants=setup.reference_descendants,
-                    compared_descendants=setup.compared_descendants,
-                )
+                start_kwargs = {
+                    "from_": setup.reference_name,
+                    "to": setup.compared_name,
+                    "refresh": refresh,
+                    "ledger": ledger,
+                    "snapshot": snapshot,
+                    "reference_descendants": setup.reference_descendants,
+                    "compared_descendants": setup.compared_descendants,
+                }
+                if setup.reference_memory_uid is not None:
+                    start_kwargs["reference_memory"] = setup.reference_memory_uid
+                if setup.compared_memory_uid is not None:
+                    start_kwargs["compared_memory"] = setup.compared_memory_uid
+                cmd(**start_kwargs)
                 return
             _resume_selected_comparison(
                 store=store,
@@ -861,14 +961,25 @@ def cmd(
                 reference_descendants,
                 compared_descendants,
             ),
+            memory_selectors=(reference_memory, compared_memory),
             refresh=refresh,
             analyze=analyze_input,
-            equivalent=equivalent,
-            project=lambda comparison_input: project_declared_compare_analysis(
-                store=store,
-                comparison_input=comparison_input,
-                current_name=current_name,
-                registry_snapshot=profile_registry,
+            equivalent=(
+                equivalent
+                if reference_memory is None and compared_memory is None
+                else None
+            ),
+            project=(
+                (
+                    lambda comparison_input: project_declared_compare_analysis(
+                        store=store,
+                        comparison_input=comparison_input,
+                        current_name=current_name,
+                        registry_snapshot=profile_registry,
+                    )
+                )
+                if reference_memory is None and compared_memory is None
+                else None
             ),
         )
         if (

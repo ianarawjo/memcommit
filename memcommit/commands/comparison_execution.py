@@ -11,6 +11,7 @@ from memcommit.comparison import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
+    comparison_analysis_matches_input,
 )
 from memcommit.comparison_store import (
     ConcurrentComparisonUpdateError,
@@ -25,7 +26,9 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import (
@@ -177,6 +180,7 @@ def ensure_comparison_analysis(
     compared: Context,
     current_name: str | None,
     include_descendants: tuple[bool, bool] = (False, False),
+    memory_selectors: tuple[str | None, str | None] = (None, None),
     refresh: bool = False,
     require_durable: bool = False,
     analyze: Callable[[ComparisonInput], ComparisonAnalysis],
@@ -200,6 +204,14 @@ def ensure_comparison_analysis(
         freeze_granted_context_binding(access) if access.is_granted else None
         for access in accesses
     )
+    comparison_input = ComparisonInput.from_contexts(
+        reference,
+        compared,
+        reference_descendants=include_descendants[0],
+        compared_descendants=include_descendants[1],
+        reference_memory_selector=memory_selectors[0],
+        compared_memory_selector=memory_selectors[1],
+    )
     granted_artifact = (
         load_granted_comparison_artifact(store, reference.uid, compared.uid)
         if granted
@@ -219,7 +231,7 @@ def ensure_comparison_analysis(
         )
     if (
         existing is not None
-        and existing.include_descendants == include_descendants
+        and comparison_analysis_matches_input(existing, comparison_input)
         and existing.matches(reference, compared)
         and existing.ruleset_version == COMPARISON_RULESET_VERSION
         and not refresh
@@ -244,12 +256,6 @@ def ensure_comparison_analysis(
     if retention is not None:
         authorize_analysis_save(accesses, retention=retention)
 
-    comparison_input = ComparisonInput.from_contexts(
-        reference,
-        compared,
-        reference_descendants=include_descendants[0],
-        compared_descendants=include_descendants[1],
-    )
     equivalent_analysis = (
         equivalent(comparison_input)
         if equivalent is not None and not refresh
@@ -257,7 +263,10 @@ def ensure_comparison_analysis(
     )
     if equivalent_analysis is not None and (
         equivalent_analysis.ruleset_version != COMPARISON_RULESET_VERSION
-        or equivalent_analysis.include_descendants != include_descendants
+        or not comparison_analysis_matches_input(
+            equivalent_analysis,
+            comparison_input,
+        )
         or not equivalent_analysis.matches(reference, compared)
     ):
         raise ComparisonError(
@@ -277,7 +286,10 @@ def ensure_comparison_analysis(
     if projected is not None:
         if (
             projected.ruleset_version != COMPARISON_RULESET_VERSION
-            or projected.include_descendants != include_descendants
+            or not comparison_analysis_matches_input(
+                projected,
+                comparison_input,
+            )
             or not projected.matches(reference, compared)
         ):
             raise ComparisonError(
@@ -329,6 +341,10 @@ def ensure_comparison_analysis(
             origin="PROJECTED",
         )
     analysis = equivalent_analysis or analyze(comparison_input)
+    if not comparison_analysis_matches_input(analysis, comparison_input):
+        raise ComparisonError(
+            "Compare analysis does not match the requested Memory scope."
+        )
     analysis_origin = (
         "EQUIVALENT_SCOPE_PREWARM"
         if equivalent_analysis is not None

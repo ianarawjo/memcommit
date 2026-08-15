@@ -31,6 +31,7 @@ from memcommit.comparison_store import (
     save_comparison_analysis,
 )
 from memcommit.commands.compare import render_comparison
+from memcommit.commands.compare_setup import CompareSetupReceipt
 from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     comparison_session_entries,
@@ -41,6 +42,49 @@ from memcommit.query_provider import CodexChatGPTProvider
 
 
 runner = CliRunner()
+
+
+def test_compare_launcher_passes_exact_setup_memories_to_command(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        compare_command,
+        "choose_comparison_session",
+        lambda _store, *, ledger: SessionNewReceipt(
+            kind="compare",
+            argv=("mem", "compare"),
+        ),
+    )
+    monkeypatch.setattr(
+        compare_command,
+        "choose_compare_setup",
+        lambda _store: CompareSetupReceipt(
+            "focused/reference",
+            "focused/peer",
+            reference_memory_uid="reference-memory",
+            compared_memory_uid="peer-memory",
+        ),
+    )
+    calls = []
+    monkeypatch.setattr(compare_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    result = runner.invoke(app, ["compare", "--sessions"])
+
+    assert result.exit_code == 0, result.output
+    assert calls == [
+        {
+            "from_": "focused/reference",
+            "to": "focused/peer",
+            "refresh": False,
+            "ledger": False,
+            "snapshot": False,
+            "reference_descendants": False,
+            "compared_descendants": False,
+            "reference_memory": "reference-memory",
+            "compared_memory": "peer-memory",
+        }
+    ]
 
 
 def test_compare_codex_provider_uses_whole_ledger_timeout():
@@ -269,6 +313,42 @@ def _patch_provider(monkeypatch, provider) -> None:
     )
 
 
+def test_focused_compare_relates_only_selected_memories_and_keeps_neighbors_context_only():
+    reference = ops.init("focused/reference")
+    reference_neighbor = ops.add(reference, "Reference background policy.")
+    reference_focus = ops.add(reference, "The lobby closes at five.")
+    compared = ops.init("focused/compared")
+    compared_focus = ops.add(compared, "The lobby shuts at 5 p.m.")
+    compared_neighbor = ops.add(compared, "Compared background policy.")
+    comparison_input = ComparisonInput.from_contexts(
+        reference,
+        compared,
+        reference_memory_selector=reference_focus.uid[:8],
+        compared_memory_selector=compared_focus.uid[:8],
+    )
+    provider = ExhaustiveCompareProvider()
+
+    analysis = analyze_comparison(comparison_input, provider)
+    payload = provider.payloads[0]
+
+    assert [memory.uid for memory in analysis.frames[0].memories] == [
+        reference_focus.uid
+    ]
+    assert [memory.uid for memory in analysis.frames[1].memories] == [
+        compared_focus.uid
+    ]
+    assert payload["frames"][0]["context_evidence"][0]["content"] == (
+        reference_neighbor.content
+    )
+    assert payload["frames"][1]["context_evidence"][0]["content"] == (
+        compared_neighbor.content
+    )
+    assert "context_id" not in json.dumps(provider.schemas[0])
+    assert {
+        member.memory_uid for member in analysis.relations[0].members
+    } == {reference_focus.uid, compared_focus.uid}
+
+
 def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     isolated_store,
     monkeypatch,
@@ -415,8 +495,7 @@ def test_compare_descendant_flags_freeze_lexical_child_memories(
             "compare",
             "--to",
             compared.name,
-            "--reference-descendants",
-            "--compared-descendants",
+            "-r",
             "--snapshot",
         ],
     )
