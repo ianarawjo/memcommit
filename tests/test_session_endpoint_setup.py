@@ -355,9 +355,9 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     store.create_context(ops.init("meld-setup/b"))
 
     with create_pipe_input() as pipe_input:
-        # Directional mode exposes independent A and B reach controls but no
-        # C surface. Four Tabs reach B's control; the final Tab reaches Apply.
-        pipe_input.send_text("\x1b[C\t\t\t\t\r\t\r")
+        # Directional mode exposes independent A and B reach/Memory controls
+        # but no C surface. Broaden only B, then continue to the action.
+        pipe_input.send_text("\x1b[C" + "\t" * 5 + "\x1b[C\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
