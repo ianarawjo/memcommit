@@ -1,0 +1,11 @@
+MEM GROUND · EXAMPLE 19 ADDED                                                                                                                                                       
+GROUND · REVISION 24 · PREVIOUS FIT STALE                                                                                                                                           
+ONE EXAMPLE ADDITION · ONE DURABLE REVISION                                                                                                                                         
+                                                                                                                                                                                    
+› c19 [PROPOSED · FIT / INCLUDE · FIT NOT RUN]                                                                                                                                      
+Applying the synthetic ticker Rules to "Axiom AI Technologies Inc." produces "AAT".                                                                                                 
+NOTES · Reviewed synthetic mapping imported from the ticker fixture.                                                                                                                
+DETAILS                                                                                                                                                                             
+EXACT PROJECTION · Axiom AI Technologies Inc. → AAT                                                                                                                                 
+                                                                                                                                                                                    
+R · RUN FIT WITH AXIOM BOUNDARY

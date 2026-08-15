@@ -1,0 +1,8 @@
+MEM GROUND · RULES REFINED · EXAMPLE 20 ADDED                                                                                                                                       
+GROUND · REVISION 27 · PREVIOUS FIT STALE                                                                                                                                           
+R2 · When a normalized company name has two or more meaningful words, form the base ticker from exactly one leading alphanumeric character per meaningful word; a multi-letter abbre
+viation such as ‘AI’ contributes only its first character, while a number-bearing word preserves its leading numeric character.                                                     
+R3 · When the normalized company name is a single word, form the base ticker from exactly its first three alphabetic characters in uppercase.                                       
+E20 · The 5th Avenue Retail Group LLC → 5ARG                                                                                                                                        
+                                                                                                                                                                                    
+R · RUN FINAL FIT

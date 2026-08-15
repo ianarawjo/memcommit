@@ -1,0 +1,27 @@
+MEM FIT · FINAL 20 EXAMPLES                                                                                                                                                         
+STATUS · READ-ONLY · CURRENT · GROUND REVISION 27                                                                                                                                   
+RECEIPT · 9bccf2aa-2066-4b1c-9593-a7c99f47d761 · DIGEST 707c9f4ea158ac6d                                                                                                            
+PROVIDER · gpt-5.6-sol · REASONING NONE                                                                                                                                             
+                                                                                                                                                                                    
+COUNTS · FIT 20 · CONTRADICTS 0 · UNDERDETERMINED 0 · NOT_APPLICABLE 0                                                                                                              
+E1 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc." produces "NSE".                                                                              
+E2 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC" produces "BRH".                                                                             
+E3 · FIT             · Applying the synthetic ticker Rules to "Cedar Valley Technologies Corporation" produces "CVT".                                                               
+E4 · FIT             · Applying the synthetic ticker Rules to "Aurora Robotics Ltd." produces "AR".                                                                                 
+E5 · FIT             · Applying the synthetic ticker Rules to "Harbor Point Foods PLC" produces "HPF".                                                                              
+E6 · FIT             · Applying the synthetic ticker Rules to "The Meridian Group Inc." produces "MG".                                                                              
+E7 · FIT             · Applying the synthetic ticker Rules to "Lumen Labs LLC" produces "LL".                                                                                       
+E8 · FIT             · Applying the synthetic ticker Rules to "Quanta Systems & Services Inc." produces "QSS".                                                                      
+E9 · FIT             · Applying the synthetic ticker Rules to "Atlas 7 Networks Corp." produces "A7N".                                                                              
+E10 · FIT             · Applying the synthetic ticker Rules to "3 Rivers Logistics LLC" produces "3RL".                                                                             
+E11 · FIT             · Applying the synthetic ticker Rules to "Redwood Inc." produces "RED".                                                                                       
+E12 · FIT             · Applying the synthetic ticker Rules to "Meridian Corporation" produces "MER".                                                                               
+E13 · FIT             · Applying the synthetic ticker Rules to "Solstice Ltd." produces "SOL".                                                                                      
+E14 · FIT             · Applying the synthetic ticker Rules to "International Business Fabricators Inc." produces "IBF".                                                            
+E15 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".                                                                  
+E16 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class A" produces "NSE.A".                                                                  
+E17 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC, Preferred" produces "BRH.P".                                                               
+E18 · FIT             · Applying the synthetic ticker Rules to "Acme & Sons Ltd." produces "AS".                                                                                    
+E19 · FIT             · Applying the synthetic ticker Rules to "Axiom AI Technologies Inc." produces "AAT".                                                                         
+E20 · FIT             · Applying the synthetic ticker Rules to "The 5th Avenue Retail Group LLC" produces "5ARG".                                                                   
+V · VERIFY REVISION AND RECEIPT INVARIANTS

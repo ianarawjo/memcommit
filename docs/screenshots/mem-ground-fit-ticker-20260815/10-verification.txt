@@ -1,0 +1,15 @@
+MEM GROUND + FIT · VERIFICATION                                                                                                                                                     
+GROUND SCHEMA · V3                                                                                                                                                                  
+FINAL REVISION · 27                                                                                                                                                                 
+DURABLE RULES · 5                                                                                                                                                                   
+DURABLE EXAMPLES · 20                                                                                                                                                               
+REVISION LEDGER ENTRIES · 28                                                                                                                                                        
+EACH EXAMPLE HAS DISTINCT ADD REVISION · True                                                                                                                                       
+FIRST RECEIPT STALE AFTER E19 · True                                                                                                                                                
+SECOND RECEIPT STALE AFTER REVISIONS · True                                                                                                                                         
+FINAL RECEIPT CURRENT · True                                                                                                                                                        
+FINAL RECEIPT GROUND REVISION · 27                                                                                                                                                  
+CONTEXTS MUTATED BY FIT · NONE                                                                                                                                                      
+TEMPORARY STORE · REMOVED AFTER CAPTURE                                                                                                                                             
+EVIDENCE · docs/screenshots/mem-ground-fit-ticker-20260815/actual-run.json                                                                                                          
+READY VERIFICATION

@@ -1,0 +1,152 @@
+[2J[H[1;38;2;138;173;244mMEM GROUND · INCREMENTAL TICKER FIT[0m
+GROUND · ticker-fit-incremental · SCHEMA V3 · REVISION 23
+RULES · 5 REVIEWED DISTILL PROPOSALS · ADDED ONE REVISION AT A TIME
+EXAMPLES · 18/20 · ADDED ONE REVISION AT A TIME
+MODEL · gpt-5.6-sol · REASONING NONE
+
+[38;2;202;211;245mE01 · North Star Energy Inc. → NSE[0m
+[38;2;202;211;245mE02 · Blue River Holdings LLC → BRH[0m
+[38;2;202;211;245mE03 · Cedar Valley Technologies Corporation → CVT[0m
+[38;2;202;211;245mE04 · Aurora Robotics Ltd. → AR[0m
+[38;2;202;211;245mE05 · Harbor Point Foods PLC → HPF[0m
+[38;2;202;211;245mE06 · The Meridian Group Inc. → MG[0m
+[38;2;202;211;245mE07 · Lumen Labs LLC → LL[0m
+[38;2;202;211;245mE08 · Quanta Systems & Services Inc. → QSS[0m
+[38;2;202;211;245mE09 · Atlas 7 Networks Corp. → A7N[0m
+[38;2;202;211;245mE10 · 3 Rivers Logistics LLC → 3RL[0m
+[38;2;202;211;245mE11 · Redwood Inc. → RED[0m
+[38;2;202;211;245mE12 · Meridian Corporation → MER[0m
+[38;2;202;211;245mE13 · Solstice Ltd. → SOL[0m
+[38;2;202;211;245mE14 · International Business Fabricators Inc. → IBF[0m
+[38;2;202;211;245mE15 · North Star Energy Inc., Class B → NSE.B[0m
+[38;2;202;211;245mE16 · North Star Energy Inc., Class A → NSE.A[0m
+[38;2;202;211;245mE17 · Blue River Holdings LLC, Preferred → BRH.P[0m
+[38;2;202;211;245mE18 · Acme & Sons Ltd. → AS[0m
+
+R · RUN FIRST FIT
+r
+[2J[H[1;38;2;138;173;244mMEM FIT · PROVIDER TURN 1[0m
+GROUND · REVISION 23 · RULES 5 · EXAMPLES 18
+STATE · RUNNING · NO RECEIPT PUBLISHED
+[2J[H[1;38;2;138;173;244mMEM FIT · FIRST 18 EXAMPLES[0m
+STATUS · READ-ONLY · CURRENT · GROUND REVISION 23
+RECEIPT · 2bbe7788-9dd1-4f34-903f-17eef099a3fa · DIGEST 108c8cb85c57df8c
+PROVIDER · gpt-5.6-sol · REASONING NONE
+
+COUNTS · FIT 15 · CONTRADICTS 0 · UNDERDETERMINED 3 · NOT_APPLICABLE 0
+[38;2;202;211;245mE1 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc." produces "NSE".[0m
+[38;2;202;211;245mE2 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC" produces "BRH".[0m
+[38;2;202;211;245mE3 · FIT             · Applying the synthetic ticker Rules to "Cedar Valley Technologies Corporation" produces "CVT".[0m
+[38;2;202;211;245mE4 · FIT             · Applying the synthetic ticker Rules to "Aurora Robotics Ltd." produces "AR".[0m
+[38;2;202;211;245mE5 · FIT             · Applying the synthetic ticker Rules to "Harbor Point Foods PLC" produces "HPF".[0m
+[38;2;202;211;245mE6 · FIT             · Applying the synthetic ticker Rules to "The Meridian Group Inc." produces "MG".[0m
+[38;2;202;211;245mE7 · FIT             · Applying the synthetic ticker Rules to "Lumen Labs LLC" produces "LL".[0m
+[38;2;202;211;245mE8 · FIT             · Applying the synthetic ticker Rules to "Quanta Systems & Services Inc." produces "QSS".[0m
+[38;2;202;211;245mE9 · FIT             · Applying the synthetic ticker Rules to "Atlas 7 Networks Corp." produces "A7N".[0m
+[38;2;202;211;245mE10 · FIT             · Applying the synthetic ticker Rules to "3 Rivers Logistics LLC" produces "3RL".[0m
+[38;2;202;211;245mE11 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Redwood Inc." produces "RED".[0m
+[38;2;202;211;245mE12 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Meridian Corporation" produces "MER".[0m
+[38;2;202;211;245mE13 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Solstice Ltd." produces "SOL".[0m
+[38;2;202;211;245mE14 · FIT             · Applying the synthetic ticker Rules to "International Business Fabricators Inc." produces "IBF".[0m
+[38;2;202;211;245mE15 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".[0m
+[38;2;202;211;245mE16 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class A" produces "NSE.A".[0m
+[38;2;202;211;245mE17 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC, Preferred" produces "BRH.P".[0m
+[38;2;202;211;245mE18 · FIT             · Applying the synthetic ticker Rules to "Acme & Sons Ltd." produces "AS".[0m
+N · ADD EXAMPLE 19
+n
+[2J[H[1;38;2;138;173;244mMEM GROUND · EXAMPLE 19 ADDED[0m
+GROUND · REVISION 24 · PREVIOUS FIT STALE
+ONE EXAMPLE ADDITION · ONE DURABLE REVISION
+
+› c19 [PROPOSED · FIT / INCLUDE · FIT NOT RUN]
+Applying the synthetic ticker Rules to "Axiom AI Technologies Inc." produces "AAT".
+NOTES · Reviewed synthetic mapping imported from the ticker fixture.
+DETAILS
+EXACT PROJECTION · Axiom AI Technologies Inc. → AAT
+
+R · RUN FIT WITH AXIOM BOUNDARY
+r
+[2J[H[1;38;2;138;173;244mMEM FIT · PROVIDER TURN 2[0m
+GROUND · REVISION 24 · RULES 5 · EXAMPLES 19
+STATE · RUNNING · NO RECEIPT PUBLISHED
+[2J[H[1;38;2;138;173;244mMEM FIT · AXIOM BOUNDARY[0m
+STATUS · READ-ONLY · CURRENT · GROUND REVISION 24
+RECEIPT · 686638e8-c87a-47ad-838e-d35762133f2b · DIGEST c3f985165262351b
+PROVIDER · gpt-5.6-sol · REASONING NONE
+
+COUNTS · FIT 16 · CONTRADICTS 0 · UNDERDETERMINED 3 · NOT_APPLICABLE 0
+[38;2;202;211;245mE1 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc." produces "NSE".[0m
+[38;2;202;211;245mE2 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC" produces "BRH".[0m
+[38;2;202;211;245mE3 · FIT             · Applying the synthetic ticker Rules to "Cedar Valley Technologies Corporation" produces "CVT".[0m
+[38;2;202;211;245mE4 · FIT             · Applying the synthetic ticker Rules to "Aurora Robotics Ltd." produces "AR".[0m
+[38;2;202;211;245mE5 · FIT             · Applying the synthetic ticker Rules to "Harbor Point Foods PLC" produces "HPF".[0m
+[38;2;202;211;245mE6 · FIT             · Applying the synthetic ticker Rules to "The Meridian Group Inc." produces "MG".[0m
+[38;2;202;211;245mE7 · FIT             · Applying the synthetic ticker Rules to "Lumen Labs LLC" produces "LL".[0m
+[38;2;202;211;245mE8 · FIT             · Applying the synthetic ticker Rules to "Quanta Systems & Services Inc." produces "QSS".[0m
+[38;2;202;211;245mE9 · FIT             · Applying the synthetic ticker Rules to "Atlas 7 Networks Corp." produces "A7N".[0m
+[38;2;202;211;245mE10 · FIT             · Applying the synthetic ticker Rules to "3 Rivers Logistics LLC" produces "3RL".[0m
+[38;2;202;211;245mE11 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Redwood Inc." produces "RED".[0m
+[38;2;202;211;245mE12 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Meridian Corporation" produces "MER".[0m
+[38;2;202;211;245mE13 · UNDERDETERMINED · Applying the synthetic ticker Rules to "Solstice Ltd." produces "SOL".[0m
+[38;2;202;211;245mE14 · FIT             · Applying the synthetic ticker Rules to "International Business Fabricators Inc." produces "IBF".[0m
+[38;2;202;211;245mE15 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".[0m
+[38;2;202;211;245mE16 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class A" produces "NSE.A".[0m
+[38;2;202;211;245mE17 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC, Preferred" produces "BRH.P".[0m
+[38;2;202;211;245mE18 · FIT             · Applying the synthetic ticker Rules to "Acme & Sons Ltd." produces "AS".[0m
+[38;2;202;211;245mE19 · FIT             · Applying the synthetic ticker Rules to "Axiom AI Technologies Inc." produces "AAT".[0m
+N · REFINE TWO RULES AND ADD EXAMPLE 20
+n
+[2J[H[1;38;2;138;173;244mMEM GROUND · RULES REFINED · EXAMPLE 20 ADDED[0m
+GROUND · REVISION 27 · PREVIOUS FIT STALE
+R2 · When a normalized company name has two or more meaningful words, form the base ticker from exactly one leading alphanumeric character per meaningful word; a multi-letter abbreviation such as ‘AI’ contributes only its first character, while a number-bearing word preserves its leading numeric character.
+R3 · When the normalized company name is a single word, form the base ticker from exactly its first three alphabetic characters in uppercase.
+[38;2;202;211;245mE20 · The 5th Avenue Retail Group LLC → 5ARG[0m
+
+R · RUN FINAL FIT
+r
+[2J[H[1;38;2;138;173;244mMEM FIT · PROVIDER TURN 3[0m
+GROUND · REVISION 27 · RULES 5 · EXAMPLES 20
+STATE · RUNNING · NO RECEIPT PUBLISHED
+[2J[H[1;38;2;138;173;244mMEM FIT · FINAL 20 EXAMPLES[0m
+STATUS · READ-ONLY · CURRENT · GROUND REVISION 27
+RECEIPT · 9bccf2aa-2066-4b1c-9593-a7c99f47d761 · DIGEST 707c9f4ea158ac6d
+PROVIDER · gpt-5.6-sol · REASONING NONE
+
+COUNTS · FIT 20 · CONTRADICTS 0 · UNDERDETERMINED 0 · NOT_APPLICABLE 0
+[38;2;202;211;245mE1 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc." produces "NSE".[0m
+[38;2;202;211;245mE2 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC" produces "BRH".[0m
+[38;2;202;211;245mE3 · FIT             · Applying the synthetic ticker Rules to "Cedar Valley Technologies Corporation" produces "CVT".[0m
+[38;2;202;211;245mE4 · FIT             · Applying the synthetic ticker Rules to "Aurora Robotics Ltd." produces "AR".[0m
+[38;2;202;211;245mE5 · FIT             · Applying the synthetic ticker Rules to "Harbor Point Foods PLC" produces "HPF".[0m
+[38;2;202;211;245mE6 · FIT             · Applying the synthetic ticker Rules to "The Meridian Group Inc." produces "MG".[0m
+[38;2;202;211;245mE7 · FIT             · Applying the synthetic ticker Rules to "Lumen Labs LLC" produces "LL".[0m
+[38;2;202;211;245mE8 · FIT             · Applying the synthetic ticker Rules to "Quanta Systems & Services Inc." produces "QSS".[0m
+[38;2;202;211;245mE9 · FIT             · Applying the synthetic ticker Rules to "Atlas 7 Networks Corp." produces "A7N".[0m
+[38;2;202;211;245mE10 · FIT             · Applying the synthetic ticker Rules to "3 Rivers Logistics LLC" produces "3RL".[0m
+[38;2;202;211;245mE11 · FIT             · Applying the synthetic ticker Rules to "Redwood Inc." produces "RED".[0m
+[38;2;202;211;245mE12 · FIT             · Applying the synthetic ticker Rules to "Meridian Corporation" produces "MER".[0m
+[38;2;202;211;245mE13 · FIT             · Applying the synthetic ticker Rules to "Solstice Ltd." produces "SOL".[0m
+[38;2;202;211;245mE14 · FIT             · Applying the synthetic ticker Rules to "International Business Fabricators Inc." produces "IBF".[0m
+[38;2;202;211;245mE15 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class B" produces "NSE.B".[0m
+[38;2;202;211;245mE16 · FIT             · Applying the synthetic ticker Rules to "North Star Energy Inc., Class A" produces "NSE.A".[0m
+[38;2;202;211;245mE17 · FIT             · Applying the synthetic ticker Rules to "Blue River Holdings LLC, Preferred" produces "BRH.P".[0m
+[38;2;202;211;245mE18 · FIT             · Applying the synthetic ticker Rules to "Acme & Sons Ltd." produces "AS".[0m
+[38;2;202;211;245mE19 · FIT             · Applying the synthetic ticker Rules to "Axiom AI Technologies Inc." produces "AAT".[0m
+[38;2;202;211;245mE20 · FIT             · Applying the synthetic ticker Rules to "The 5th Avenue Retail Group LLC" produces "5ARG".[0m
+V · VERIFY REVISION AND RECEIPT INVARIANTS
+v
+[2J[H[1;38;2;138;173;244mMEM GROUND + FIT · VERIFICATION[0m
+GROUND SCHEMA · V3
+FINAL REVISION · 27
+DURABLE RULES · 5
+DURABLE EXAMPLES · 20
+REVISION LEDGER ENTRIES · 28
+EACH EXAMPLE HAS DISTINCT ADD REVISION · True
+FIRST RECEIPT STALE AFTER E19 · True
+SECOND RECEIPT STALE AFTER REVISIONS · True
+FINAL RECEIPT CURRENT · True
+FINAL RECEIPT GROUND REVISION · 27
+CONTEXTS MUTATED BY FIT · NONE
+TEMPORARY STORE · REMOVED AFTER CAPTURE
+EVIDENCE · docs/screenshots/mem-ground-fit-ticker-20260815/actual-run.json
+READY VERIFICATION

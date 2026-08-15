@@ -1,0 +1,30 @@
+[2J[H[1;38;2;138;173;244mMEM GROUND · INCREMENTAL TICKER FIT[0m
+GROUND · ticker-fit-incremental · SCHEMA V3 · REVISION 23
+RULES · 5 REVIEWED DISTILL PROPOSALS · ADDED ONE REVISION AT A TIME
+EXAMPLES · 18/20 · ADDED ONE REVISION AT A TIME
+MODEL · gpt-5.6-sol · REASONING NONE
+
+[38;2;202;211;245mE01 · North Star Energy Inc. → NSE[0m
+[38;2;202;211;245mE02 · Blue River Holdings LLC → BRH[0m
+[38;2;202;211;245mE03 · Cedar Valley Technologies Corporation → CVT[0m
+[38;2;202;211;245mE04 · Aurora Robotics Ltd. → AR[0m
+[38;2;202;211;245mE05 · Harbor Point Foods PLC → HPF[0m
+[38;2;202;211;245mE06 · The Meridian Group Inc. → MG[0m
+[38;2;202;211;245mE07 · Lumen Labs LLC → LL[0m
+[38;2;202;211;245mE08 · Quanta Systems & Services Inc. → QSS[0m
+[38;2;202;211;245mE09 · Atlas 7 Networks Corp. → A7N[0m
+[38;2;202;211;245mE10 · 3 Rivers Logistics LLC → 3RL[0m
+[38;2;202;211;245mE11 · Redwood Inc. → RED[0m
+[38;2;202;211;245mE12 · Meridian Corporation → MER[0m
+[38;2;202;211;245mE13 · Solstice Ltd. → SOL[0m
+[38;2;202;211;245mE14 · International Business Fabricators Inc. → IBF[0m
+[38;2;202;211;245mE15 · North Star Energy Inc., Class B → NSE.B[0m
+[38;2;202;211;245mE16 · North Star Energy Inc., Class A → NSE.A[0m
+[38;2;202;211;245mE17 · Blue River Holdings LLC, Preferred → BRH.P[0m
+[38;2;202;211;245mE18 · Acme & Sons Ltd. → AS[0m
+
+R · RUN FIRST FIT
+r
+[2J[H[1;38;2;138;173;244mMEM FIT · PROVIDER TURN 1[0m
+GROUND · REVISION 23 · RULES 5 · EXAMPLES 18
+STATE · RUNNING · NO RECEIPT PUBLISHED

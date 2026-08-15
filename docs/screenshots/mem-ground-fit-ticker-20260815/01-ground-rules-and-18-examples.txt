@@ -1,0 +1,26 @@
+MEM GROUND · INCREMENTAL TICKER FIT                                                                                                                                                 
+GROUND · ticker-fit-incremental · SCHEMA V3 · REVISION 23                                                                                                                           
+RULES · 5 REVIEWED DISTILL PROPOSALS · ADDED ONE REVISION AT A TIME                                                                                                                 
+EXAMPLES · 18/20 · ADDED ONE REVISION AT A TIME                                                                                                                                     
+MODEL · gpt-5.6-sol · REASONING NONE                                                                                                                                                
+                                                                                                                                                                                    
+E01 · North Star Energy Inc. → NSE                                                                                                                                                  
+E02 · Blue River Holdings LLC → BRH                                                                                                                                                 
+E03 · Cedar Valley Technologies Corporation → CVT                                                                                                                                   
+E04 · Aurora Robotics Ltd. → AR                                                                                                                                                     
+E05 · Harbor Point Foods PLC → HPF                                                                                                                                                  
+E06 · The Meridian Group Inc. → MG                                                                                                                                                  
+E07 · Lumen Labs LLC → LL                                                                                                                                                           
+E08 · Quanta Systems & Services Inc. → QSS                                                                                                                                          
+E09 · Atlas 7 Networks Corp. → A7N                                                                                                                                                  
+E10 · 3 Rivers Logistics LLC → 3RL                                                                                                                                                  
+E11 · Redwood Inc. → RED                                                                                                                                                            
+E12 · Meridian Corporation → MER                                                                                                                                                    
+E13 · Solstice Ltd. → SOL                                                                                                                                                           
+E14 · International Business Fabricators Inc. → IBF                                                                                                                                 
+E15 · North Star Energy Inc., Class B → NSE.B                                                                                                                                       
+E16 · North Star Energy Inc., Class A → NSE.A                                                                                                                                       
+E17 · Blue River Holdings LLC, Preferred → BRH.P                                                                                                                                    
+E18 · Acme & Sons Ltd. → AS                                                                                                                                                         
+                                                                                                                                                                                    
+R · RUN FIRST FIT
