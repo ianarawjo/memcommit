@@ -95,8 +95,10 @@ outside the READable Context corpus.
 
 The callable remains internal, while `MemCommitClient.query_reference`
 projects it through the versioned public result/error surface recorded in
-`query-public-python-api-design-rationale.md`; no agent schema is shipped. The
-CLI still owns overloaded selector routing. Query's workbench now lives under
+`query-public-python-api-design-rationale.md`. The tagged agent schema maps
+explicit reference metadata to that public method without importing this
+runtime. The CLI still owns overloaded selector routing. Query's workbench now
+lives under
 `interfaces.tui.operations.query`, and its plain selector/result projections
 live under `interfaces.cli.query`; neither interface changes this route's
 provider-before-Source contract.

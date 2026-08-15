@@ -10,7 +10,7 @@ readable catalog, choose a provider connector, classify command-era
 exceptions, and decide whether a granted session publication was part of the
 call. That was reusable implementation, not yet a stable library contract.
 
-The public boundary must let CLI, future agent adapters, and Python callers use
+The public boundary must let CLI, agent adapters, and Python callers use
 the same operation meaning without exposing command routing or freezing
 internal dataclasses as a permanent ABI.
 
@@ -29,9 +29,10 @@ client.query_reference(reference, question)
 There is no overloaded public `query()` router in this version. The CLI's
 positional grammar has historical ambiguity between an ordinary question, a
 public granted route, and a legacy reference. Reproducing that ambiguity in a
-library would make errors and authority less predictable. A future agent
-adapter may map a versioned tagged schema to these three methods without
-reimplementing their policies.
+library would make errors and authority less predictable. The agent adapter
+maps a versioned tagged schema to these three methods without reimplementing
+their policies, as recorded in
+`query-agent-adapter-design-rationale.md`.
 
 ## Store and lifecycle ownership
 
@@ -152,6 +153,7 @@ Focused tests prove:
   imports the same root/API objects from an isolated virtual environment.
 
 This change does not expose Find, Add, Sever, or Summarize, add async or
-cancellation semantics, ship an agent skill/tool schema, make granted reads
+cancellation semantics, provide an MCP/network tool host, make granted reads
 portable across non-active Profiles, or promise internal request dataclasses as
-public API. Those remain separate gates.
+public API. The separate agent adapter is a thin versioned projection over this
+facade rather than another application implementation.

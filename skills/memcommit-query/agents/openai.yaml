@@ -1,0 +1,4 @@
+interface:
+  display_name: "MemCommit Query"
+  short_description: "Run explicit, authority-safe MemCommit queries"
+  default_prompt: "Use $memcommit-query to answer this request through the appropriate explicit MemCommit Query route."

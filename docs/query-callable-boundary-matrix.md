@@ -31,6 +31,8 @@ owning modules and inherit that module's boundary unless named below.
 | `api.client:MemCommitClient.query_ordinary` | public Python facade | question + exact Context operands/scope -> `OrdinaryQueryResult` | authorized Store reads and optional provider call | one current snapshot; explicit roots are local-only; no durable write; internal response is projected to stable typed citations | public API tests and root package exports | `VERIFIED` |
 | `api.client:MemCommitClient.query_granted` | public Python facade | public route/question/session intent -> `GrantedQueryResult` | active-Profile authority reads, provider call, optional session CAS | successful session call includes separate publication; publication failure returns no partial success; concealed content/token never exposed | public API authority/session tests | `VERIFIED` |
 | `api.client:MemCommitClient.query_reference` | public Python facade | `QueryContextRef` + question -> `ReferenceQueryResult` | provider authentication, exact concealed Source read, one query | provider is constructed before Source open; no durable write | public API ordering and preservation tests | `VERIFIED` |
+| `interfaces.agent.query:QueryAgentAdapter.invoke` | agent/tool adapter | versioned tagged JSON object -> JSON-safe success/error object | only effects of the one injected public-client method | no route guessing; granted publication success is inherited; internal tokens and sensitive failure detail never cross the adapter | agent adapter mapping, redaction, and architecture tests | `VERIFIED` |
+| `interfaces.agent.query:query_agent_tool_schema` | agent/tool schema projection | none -> fresh version-1 function schema | none | three explicit strict routes; schema grants no authority and contains no Source data | schema coverage and freshness tests | `VERIFIED` |
 | `interfaces.cli.query:split_query_memory_selector` | CLI adapter | selector -> view and optional opaque handle | none | exact syntax only; performs no route lookup or Source open | Query command; CLI adapter tests | `VERIFIED` |
 | `interfaces.cli.query:render_ordinary_query_response` | CLI adapter | typed response -> terminal output | stdout | terminal-safe projection only | Query command; CLI adapter tests | `VERIFIED` |
 | `interfaces.cli.query:render_granted_query_response` | CLI adapter | typed catalog/answer -> terminal output | stdout | catalog shows only opaque handles/placeholders; no concealed content recovery | Query command; CLI adapter tests | `VERIFIED` |
@@ -46,21 +48,23 @@ owning modules and inherit that module's boundary unless named below.
 
 | Operation family | Entry points | Application request/result | Provider boundary | Durable writes | Interface verification | State |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ordinary Context Query | Python API, CLI one-shot, Query TUI | public `OrdinaryQueryResult`; internal `OrdinaryQueryRequest` / `OrdinaryQueryResponse` | authority/source freeze and whole-frame preflight before one completion | none | typed public citations, CLI renderer, typed TUI Answer/Reference document, application and architecture tests | `VERIFIED` |
-| Authority-granted Query | Python API, CLI catalog/answer/session, Query TUI | public `GrantedQueryResult`; internal request/read outcome/publication receipt | provider authentication before concealed Source; post-call Grant/Source revalidation | only explicit `SESSION_LOG` CAS publication | public high-level publication result, opaque presenters, TUI, authority/session tests | `VERIFIED` |
-| Local `QueryContextRef` | Python API, CLI one-shot | public `ReferenceQueryResult`; internal `QueryReferenceRequest` / `QueryReferenceResponse` | provider authentication before exact concealed Source open | none | public and CLI safe projections plus ordering tests | `VERIFIED` |
+| Ordinary Context Query | agent tool, Python API, CLI one-shot, Query TUI | versioned JSON and public `OrdinaryQueryResult`; internal request/response | authority/source freeze and whole-frame preflight before one completion | none | agent JSON, typed public citations, CLI renderer, typed TUI Answer/Reference document, application and architecture tests | `VERIFIED` |
+| Authority-granted Query | agent tool, Python API, CLI catalog/answer/session, Query TUI | versioned JSON and public `GrantedQueryResult`; internal request/read outcome/publication receipt | provider authentication before concealed Source; post-call Grant/Source revalidation | only explicit `SESSION_LOG` CAS publication | agent high-level receipt/error, public result, opaque presenters, TUI, authority/session tests | `VERIFIED` |
+| Local `QueryContextRef` | agent tool, Python API, CLI one-shot | versioned reference metadata and public `ReferenceQueryResult`; internal request/response | provider authentication before exact concealed Source open | none | agent/public/CLI safe projections plus ordering tests | `VERIFIED` |
 
 ## Deliberate remaining boundary
 
-The first versioned Python facade is now bounded by
+The first versioned Python facade and agent adapter are now bounded by
 `query-public-python-api-design-rationale.md`: one frozen Store root and
 provider config, three explicit Query methods, public result/error projection,
 and high-level granted-session completion over an internally separate
-publication. The agent tool schema, asynchronous cancellation, and an
-overloaded convenience router remain deliberately unshipped. Granted Query is
-also intentionally restricted to a client whose frozen Profile is still the
-active Profile; changing that requires authority infrastructure that no longer
-depends on one process-global registry lock.
+publication. `query-agent-adapter-design-rationale.md` adds one versioned tagged
+JSON mapping without route inference. A concrete MCP/network host, streaming,
+asynchronous cancellation, and an overloaded convenience router remain
+deliberately unshipped. Granted Query is also intentionally restricted to a
+client whose frozen Profile is still the active Profile; changing that requires
+authority infrastructure that no longer depends on one process-global registry
+lock.
 
 The two command-local helpers remain composition functions rather than policy.
 Moving them into the CLI presenter would be incorrect; moving them into a

@@ -21,7 +21,7 @@ Before this extraction, the command mixed four concerns in one file:
 
 The application/runtime packages and full-screen TUI can already run without
 Typer, but the plain output contract was still command-owned. That made it hard
-to review whether a future Python or agent adapter reused semantic execution or
+to review whether a Python or agent adapter reused semantic execution or
 accidentally copied console behavior along with it.
 
 ## Boundary and invariants
@@ -61,7 +61,7 @@ direction.
 
 Returning one preformatted string from the application layer was also rejected.
 Catalogs, answers, and transcripts are different typed outcomes, and retaining
-those types lets the TUI, CLI, Python, and future agent adapters project them
+those types lets the TUI, CLI, Python, and agent adapters project them
 without parsing terminal text.
 
 ## Remaining boundary
@@ -71,6 +71,6 @@ large because the public `mem query` syntax overloads ordinary questions,
 opaque query views, legacy references, sessions, and the no-argument TUI route.
 A later bootstrap/router extraction may turn that route choice into a typed
 request, but it must preserve the existing authority checks, provider timing,
-session CAS boundary, and error/exit behavior. The public Python facade now
-uses three explicit methods rather than copying this overloaded grammar; an
-agent adapter remains separate.
+session CAS boundary, and error/exit behavior. The public Python facade and
+tagged agent adapter use three explicit routes rather than copying this
+overloaded grammar; neither changes CLI route ownership.
