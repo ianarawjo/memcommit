@@ -60,6 +60,23 @@ shared blue focused-control background; leaving Answer retains the blue
 selection without bold focus. This structure comes from the citation renderer
 and is never reconstructed by parsing `References` out of finished text.
 
+While `ANSWER` owns focus, lowercase `y` copies exactly that typed focus unit:
+the answer body at stop zero or the complete numbered metadata-and-excerpt
+block for the active Reference. Uppercase `Y` copies the complete typed answer
+document in body-then-References order. A granted answer, granted catalog, or
+saved transcript has no finer typed stop, so `y` copies that displayed document
+and `Y` produces the same complete document. Clipboard projection runs before
+terminal wrapping and escapes terminal controls through the same display
+boundary, so pasted text has neither viewport line breaks nor ANSI styling.
+
+These keys are bound only on the read-only Answer Surface. Both characters
+remain ordinary text in `QUESTION`, `SESSION NAME`, and every other writable
+field. A successful `COPIED` receipt or a nonfatal `COPY FAILED` receipt is
+shown in the footer; neither closes the workbench nor changes answer focus.
+The action writes only the operating-system plain-text clipboard. It does not
+create the private structured clipboard stage used by mutation-oriented
+commands, save a transcript, or grant authority over any cited Source.
+
 Outside a TTY, a selector remains required because there is no interactive
 surface in which to supply a question or Source. All existing explicit forms
 remain compatible.
@@ -144,3 +161,19 @@ The first workbench edits language through the existing CLI option rather than
 adding another free-form field. Legacy `QueryContextRef` selectors and exact
 `#HANDLE` authoring remain explicit CLI routes, while a query-only catalog
 displayed in the workbench shows the handles needed for that explicit route.
+Command-C was not selected as the semantic binding because terminal emulators
+normally consume the Command modifier for their own selection copy and do not
+portably forward it to prompt-toolkit. Ctrl-C therefore retains close semantics,
+and `y`/`Y` provide a terminal-native focused-versus-complete distinction.
+
+## Interface ownership
+
+The workbench implementation now lives under
+`interfaces/tui/operations/query/` as separate model, typed projection adapter,
+and prompt-toolkit screen modules. The command imports that owner directly;
+`commands/query_workbench.py` is an implementation-free compatibility export.
+Shared activity, background-turn, horizontal-choice, and plain-text clipboard
+mechanics are likewise interface-owned. Session Help remains command-composed
+and is injected into the screen because its inventory depends on the Typer root
+command rather than Query semantics. The detailed dependency decision and
+verification are recorded in `query-tui-interface-design-rationale.md`.

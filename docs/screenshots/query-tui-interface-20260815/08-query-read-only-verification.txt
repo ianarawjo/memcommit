@@ -1,0 +1,17 @@
+QUERY CLOSED · NO SESSION SAVE · NO SOURCE MUTATION                                                                                                                                 
+QUERY CLIPBOARD WRITES 3                                                                                                                                                            
+WRITE 1 · PHYSICAL LINES 1 · UTF-8 BYTES 148                                                                                                                                        
+  1: The Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]                           
+WRITE 2 · PHYSICAL LINES 2 · UTF-8 BYTES 102                                                                                                                                        
+  1: [1] m1 · memory · 2db26309 · Context: task-1/description                                                                                                                       
+  2:   The Main Building is under construction.                                                                                                                                     
+WRITE 3 · PHYSICAL LINES 8 · UTF-8 BYTES 409                                                                                                                                        
+  1: The Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]                           
+  2:                                                                                                                                                                                
+  3: References                                                                                                                                                                     
+  4: [1] m1 · memory · 2db26309 · Context: task-1/description                                                                                                                       
+  5:   The Main Building is under construction.                                                                                                                                     
+  6:                                                                                                                                                                                
+  7: [2] m2 · memory · 5ab81742 · Context: task-1/participant/construction-updates                                                                                                  
+  8:   Visitor parking moves to the east garage during construction.                                                                                                                
+BODY/REFERENCE/DOCUMENT DISTINCT · YES

@@ -1,6 +1,7 @@
 """Interactive Query question, source, scope, and answer contracts."""
 
 import threading
+import time
 from types import SimpleNamespace
 
 import pytest
@@ -9,7 +10,6 @@ from prompt_toolkit.output import DummyOutput
 import typer
 
 import memcommit.commands.query as query_command
-import memcommit.commands.query_workbench as query_workbench_module
 from memcommit.commands.query_execution import (
     GrantedQueryRequest,
     GrantedQueryResponse,
@@ -17,9 +17,10 @@ from memcommit.commands.query_execution import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
-from memcommit.commands.query_workbench import (
+from memcommit.interfaces.tui.operations.query import (
     QueryAnswerFocus,
     SavedQueryTranscript,
+    project_query_answer_clipboard,
     query_answer_stop_count,
     render_query_answer_fragments,
     render_saved_query_transcript,
@@ -120,15 +121,13 @@ def test_query_question_keeps_h_and_uppercase_h_as_text():
     assert requests[0].question == "hH question"
 
 
-def test_query_binds_help_only_after_leaving_the_question(monkeypatch):
+def test_query_binds_help_only_after_leaving_the_question():
     help_opened = threading.Event()
 
     def bind_help(bindings, *, filter, **_kwargs):
         @bindings.add("h", filter=filter, eager=True)
         def open_help(_event) -> None:
             help_opened.set()
-
-    monkeypatch.setattr(query_workbench_module, "bind_session_help", bind_help)
 
     with create_pipe_input() as pipe_input:
         def drive() -> None:
@@ -150,6 +149,7 @@ def test_query_binds_help_only_after_leaving_the_question(monkeypatch):
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
+            help_binder=bind_help,
         )
         driver.join(timeout=3)
 
@@ -283,6 +283,133 @@ def test_query_answer_focus_moves_by_reference_and_uses_shared_blue_surface():
     assert focus.stop_index == 0
     focus.enter(response, -1)
     assert focus.stop_index == 2
+
+
+def test_query_answer_clipboard_projects_body_reference_and_complete_document():
+    request = OrdinaryQueryRequest("What changed?", ("task",))
+    document = build_find_answer_reference_document(
+        (
+            FindAnswerEvidence(
+                "m1",
+                "task/a",
+                "memory",
+                "11111111-memory",
+                "First supporting Memory.",
+            ),
+        ),
+        (
+            FindAnswerSentence("First claim.", ("m1",)),
+            FindAnswerSentence("Second claim."),
+            FindAnswerSentence("Third claim."),
+        ),
+    )
+    response = OrdinaryQueryResponse(request, document.text, True, document)
+    focus = QueryAnswerFocus()
+
+    body = project_query_answer_clipboard(response, focus=focus)
+    assert body.text == document.body
+    assert body.scope == "FOCUSED"
+    assert body.label == "answer body"
+
+    focus.move(response, 1)
+    reference = project_query_answer_clipboard(response, focus=focus)
+    assert reference.text.startswith(
+        "[1] m1 · memory · 11111111 · Context: task/a"
+    )
+    assert "First supporting Memory." in reference.text
+    assert reference.label == "Reference 1"
+
+    complete = project_query_answer_clipboard(
+        response,
+        focus=focus,
+        whole_document=True,
+    )
+    assert complete.text == document.text
+    assert complete.scope == "DOCUMENT"
+    assert complete.label == "complete answer · 1 Reference"
+
+
+def test_query_answer_y_and_uppercase_y_copy_focused_then_complete_document():
+    copied: list[str] = []
+    response_ready = threading.Event()
+    request = OrdinaryQueryRequest("What changed?", ("task",))
+    document = build_find_answer_reference_document(
+        (
+            FindAnswerEvidence(
+                "m1",
+                "task",
+                "memory",
+                "11111111-memory",
+                "Supporting Memory.",
+            ),
+        ),
+        (
+            FindAnswerSentence("First claim.", ("m1",)),
+            FindAnswerSentence("Second claim."),
+            FindAnswerSentence("Third claim."),
+        ),
+    )
+
+    def ordinary(submitted: OrdinaryQueryRequest) -> OrdinaryQueryResponse:
+        assert submitted.question == request.question
+        response_ready.set()
+        return OrdinaryQueryResponse(submitted, document.text, True, document)
+
+    with create_pipe_input() as pipe_input:
+
+        def drive() -> None:
+            pipe_input.send_text("What changed?\r")
+            assert response_ready.wait(3)
+            time.sleep(0.1)
+            pipe_input.send_text("y\x1b[ByY\x03")
+
+        driver = threading.Thread(target=drive, daemon=True)
+        driver.start()
+        result = run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(),
+            run_ordinary=ordinary,
+            run_granted=lambda _request: (_ for _ in ()).throw(AssertionError()),
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        driver.join(timeout=3)
+
+    assert result.status == "CLOSED"
+    assert not driver.is_alive()
+    assert copied[0] == document.body
+    assert copied[1].startswith(
+        "[1] m1 · memory · 11111111 · Context: task"
+    )
+    assert copied[2] == document.text
+
+
+def test_query_question_keeps_lower_and_upper_y_as_text():
+    requests: list[OrdinaryQueryRequest] = []
+
+    def ordinary(request: OrdinaryQueryRequest) -> OrdinaryQueryResponse:
+        requests.append(request)
+        return OrdinaryQueryResponse(request, "Answer.", True)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yY question\r\x03")
+        run_query_workbench(
+            ("task",),
+            current_context="task",
+            initial_context="task",
+            query_targets=(),
+            run_ordinary=ordinary,
+            run_granted=lambda _request: (_ for _ in ()).throw(AssertionError()),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests[0].question == "yY question"
 
 
 def test_query_workbench_switches_to_a_typed_query_only_view():

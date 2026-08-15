@@ -25,10 +25,11 @@ from memcommit.commands.find_query_provider_policy import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )
-from memcommit.commands.query_workbench import (
+from memcommit.interfaces.tui.operations.query import (
     SavedQueryTranscript,
     run_query_workbench,
 )
+from memcommit.commands.session_help import bind_session_help
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
@@ -176,6 +177,7 @@ def _open_query_workbench(
         saved_transcripts=saved_transcripts,
         initial_language=language,
         initial_session_name=session_name,
+        help_binder=bind_session_help,
     )
 
 

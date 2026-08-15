@@ -252,7 +252,9 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
 def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
     command = (root / "memcommit/commands/query.py").read_text()
-    workbench = (root / "memcommit/commands/query_workbench.py").read_text()
+    workbench_model = (
+        root / "memcommit/interfaces/tui/operations/query/model.py"
+    ).read_text()
 
     assert (
         "from memcommit.operations.query.ordinary_application import "
@@ -262,4 +264,7 @@ def test_production_adapters_import_ordinary_query_from_new_owner():
         "from memcommit.operations.query.ordinary_runtime import "
         "execute_ordinary_query" in command
     )
-    assert "from memcommit.operations.query.ordinary_application import (" in workbench
+    assert (
+        "from memcommit.operations.query.ordinary_application import ("
+        in workbench_model
+    )

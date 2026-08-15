@@ -366,10 +366,13 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
 def test_production_adapters_import_granted_query_from_new_owners():
     root = Path(__file__).parents[1]
     command = (root / "memcommit/commands/query.py").read_text(encoding="utf-8")
-    workbench = (root / "memcommit/commands/query_workbench.py").read_text(
-        encoding="utf-8"
-    )
+    workbench_model = (
+        root / "memcommit/interfaces/tui/operations/query/model.py"
+    ).read_text(encoding="utf-8")
 
     assert "from memcommit.operations.query.granted_application import (" in command
     assert "from memcommit.operations.query.granted_runtime import (" in command
-    assert "from memcommit.operations.query.granted_application import (" in workbench
+    assert (
+        "from memcommit.operations.query.granted_application import ("
+        in workbench_model
+    )

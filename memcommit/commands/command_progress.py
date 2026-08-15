@@ -15,17 +15,17 @@ import time
 from types import TracebackType
 from typing import TextIO, TypeVar
 
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.interfaces.tui.core.activity import (
+    BUSY_FRAMES as BUSY_FRAMES,
+    BUSY_INTERVAL_SECONDS,
+    busy_suffix,
+)
 
 
-BUSY_FRAMES = (".", "..", "…")
-BUSY_INTERVAL_SECONDS = 0.35
 ProviderT = TypeVar("ProviderT")
-
-
-def busy_suffix(frame_index: int) -> str:
-    """Return the shared deterministic dot-animation frame."""
-    return BUSY_FRAMES[frame_index % len(BUSY_FRAMES)]
 
 
 def render_progress_line(

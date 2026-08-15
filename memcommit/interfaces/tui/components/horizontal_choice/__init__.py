@@ -1,6 +1,6 @@
-"""Compatibility exports for the interface-owned horizontal choice."""
+"""Horizontal fixed-choice component."""
 
-from memcommit.interfaces.tui.components.horizontal_choice import (
+from memcommit.interfaces.tui.components.horizontal_choice.component import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
