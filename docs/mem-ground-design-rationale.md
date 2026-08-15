@@ -690,15 +690,30 @@ stored shape was silently migrated. Embedded newlines are folded to `↵` in
 List only, without rewriting stored text, and terminal wrapping is disabled so
 one Memory never expands merely because it is selected or long.
 
-`USE` projects the stored Fit-participation disposition as `[x]` for
+`USE` projects the stored semantic-participation disposition as `[x]` for
 `INCLUDE`, `[ ]` for `EXCLUDE`, or `[?]` for `UNRESOLVED`. `FIT` independently
 projects the latest Fit receipt as `·`, `✓`, `!`, or `◷`. The legacy
 `FIT`/`BOUNDARY`/`CONTRAST` authoring role remains in stored JSON and exact
 commands for compatibility, but it is not shown in the list: the role does not
 control executable Fit membership and its name `FIT` was repeatedly mistaken
 for the computed result. Non-default review state such as `[ACCEPTED]` remains
-visible beside the Example. The checkbox-shaped USE mark is a projection of a
-reviewed durable value in this slice, not an unreviewed process-local toggle.
+visible beside the Example. `Space` on a selected active Example proposes the
+opposite binary state (`INCLUDE` or `EXCLUDE`). It does not mutate the row
+immediately: the workbench displays one revision-guarded exact
+`mem ground --set-example-use ... --use ...` command, and only explicit exact
+approval updates the durable item and records a linked Decision. A prior
+`UNRESOLVED` value moves to `INCLUDE` when the person explicitly toggles it;
+returning to unresolved remains a semantic review action rather than a third
+checkbox cycle.
+
+Both Fit and Ground Distill freeze only active `INCLUDE` Examples. Changing
+USE therefore makes an earlier Fit receipt stale and changes the next Ground
+Distill provider payload; `EXCLUDE` and `UNRESOLVED` Example text is removed
+locally before provider connection. Rejected or deferred Examples cannot be
+toggled and never enter either active semantic input. A historical Ground with
+no Example records retains the former whole-`WORKING_CANDIDATES` Distill path
+for compatibility. Once at least one Example exists, USE is authoritative and
+an all-off set fails locally rather than falling back to the bound Context.
 `CLOSED` is not an item state; it is only the named-Ground shell's return value
 after the TUI closes. Ground-local Notes, linked Rules, source references,
 targets, exact projections, and the full Fit judgment remain available through
@@ -740,7 +755,8 @@ duplicate comparison surface has no independent job.
 `Escape` or `Backspace` returns to the same selected row. The detail exposes
 review status, USE, FIT, authoritative proposition where present, exact input
 and expected projections, Notes, linked Rules, source references, target
-Contexts, and the latest full Fit judgment. `C` remains the explicit path to a
+Contexts, and the latest full Fit judgment. `Space` stages the selected row's
+USE toggle through exact command review. `C` remains the explicit path to a
 conversation anchored to the selected Memory, while `E` edits that row through
 the existing exact-review path. `V` has no MEMORIES binding.
 

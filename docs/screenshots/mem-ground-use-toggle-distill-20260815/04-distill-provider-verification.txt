@@ -1,0 +1,9 @@
+GROUND CLOSED · DURABLE AND PROVIDER-INPUT VERIFICATION                                                                                                                             
+  SHELL RESULT · CLOSED                                                                                                                                                             
+  GROUND REVISION · 3 -> 4                                                                                                                                                          
+  SAVED USE · c1=INCLUDE · c2=EXCLUDE                                                                                                                                               
+  DISTILL SOURCE KIND · GROUND_EXAMPLES                                                                                                                                             
+  PROVIDER EXAMPLES · 1                                                                                                                                                             
+  PROVIDER CONTENT · Applying the ticker Rules to "Apple Inc." produces "AAPL".                                                                                                     
+  EXCLUDED GOOGLE TEXT PRESENT · False                                                                                                                                              
+  DISTILLED RULES · 1

@@ -2145,6 +2145,78 @@ def review_ground_item(
     return GroundSession.from_dict(reviewed.to_dict())
 
 
+def set_ground_example_use(
+    session: GroundSession,
+    item_uid: str,
+    *,
+    use: str,
+    current_contexts: Iterable[Context],
+) -> GroundSession:
+    """Set whether one active Example participates in semantic evaluation.
+
+    USE is a durable semantic-input decision, not a presentation preference.
+    Keep it on the same revisioned/CAS-protected Ground boundary as review so
+    Fit and Ground Distill can freeze one unambiguous Example set.
+    """
+
+    contexts = tuple(current_contexts)
+    if not ground_matches_workbench(session, contexts):
+        raise GroundError(
+            "Grounding workbench is stale. Create a new named Ground, or "
+            "explicitly replace and rebind this one before changing Example USE."
+        )
+    use = _string(use, "Ground Example USE", limit=20).upper()
+    if use not in {"INCLUDE", "EXCLUDE"}:
+        raise GroundError("Ground Example USE must be INCLUDE or EXCLUDE.")
+    selector = _string(item_uid, "Ground Example selector", limit=100)
+    candidates = [
+        item
+        for item in session.items
+        if item.kind == "CASE" and item.uid.startswith(selector)
+    ]
+    if len(candidates) != 1:
+        raise GroundError("Ground Example USE target is missing or ambiguous.")
+    target = candidates[0]
+    if target.status not in {"PROPOSED", "ACCEPTED"}:
+        raise GroundError(
+            "Only a PROPOSED or ACCEPTED Ground Example can change USE."
+        )
+    if target.disposition == use:
+        raise GroundError("Ground Example USE is already set to that value.")
+
+    iteration = session.revision + 1
+    replacement = replace(
+        target,
+        disposition=use,
+        origin="JOINT",
+        iteration=iteration,
+    )
+    decision = GroundItem(
+        uid=str(uuid.uuid4()),
+        kind="DECISION",
+        content=f"SET EXAMPLE USE {use}",
+        expected=use,
+        rationale=(
+            "The user explicitly changed whether this Example participates "
+            "in Fit and Ground Distill."
+        ),
+        status="RESOLVED",
+        origin="USER",
+        iteration=iteration,
+        related_uids=(target.uid,),
+    )
+    result = replace(
+        session,
+        revision=iteration,
+        items=tuple(
+            replacement if item.uid == target.uid else item
+            for item in session.items
+        )
+        + (decision,),
+    )
+    return GroundSession.from_dict(result.to_dict())
+
+
 def resolve_ground_requirement(
     session: GroundSession,
     requirement_selector: str,

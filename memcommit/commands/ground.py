@@ -52,6 +52,7 @@ from memcommit.ground import (
     propose_ground_rule,
     resolve_ground_requirement,
     review_ground_item,
+    set_ground_example_use,
     revise_ground_goal,
     revise_ground_requirement,
     select_ground_candidate,
@@ -1015,6 +1016,66 @@ def _ground_direct_edit_proposal(
     return _ground_action_proposal(session, action)
 
 
+def _ground_example_use_proposal(
+    session: GroundSession,
+    selector: str,
+) -> GroundCommandProposal:
+    """Freeze one binary USE change without invoking the provider."""
+
+    if not is_bound_ground_schema(session.schema_version):
+        raise GroundError("Bind this Ground before changing Example USE.")
+    contexts = _load_bound_contexts(MemoryStore(create=False), session)
+    if stale_ground_frames(session, contexts):
+        raise GroundError(
+            "Grounding workbench is stale. Refresh or replace its explicit "
+            "binding before changing Example USE."
+        )
+    item_uid = _resolve_ground_alias(session, selector, kind="CASE")
+    item = next(candidate for candidate in session.items if candidate.uid == item_uid)
+    if item.status not in {"PROPOSED", "ACCEPTED"}:
+        raise GroundError(
+            f"Memory {selector} is {item.status}; only a PROPOSED or ACCEPTED "
+            "Example can change USE."
+        )
+    next_use = "EXCLUDE" if item.disposition == "INCLUDE" else "INCLUDE"
+    argv = _with_ground_version_guard(
+        session,
+        (
+            "mem",
+            "ground",
+            session.contract_name,
+            "--set-example-use",
+            item.uid,
+            "--use",
+            next_use,
+        ),
+    )
+    return GroundCommandProposal(
+        kind="SET_EXAMPLE_USE",
+        understanding=(
+            f"Memory {selector} will be {'used' if next_use == 'INCLUDE' else 'excluded'} "
+            "by future Fit and Ground Distill runs."
+        ),
+        question=f"Approve setting Memory {selector} USE to {next_use}?",
+        review=ExactCommandReview(
+            argv=argv,
+            effects=(
+                (
+                    "Precondition: apply only to the reviewed Ground at "
+                    f"revision {session.revision}"
+                ),
+                f"Memory {selector} USE: {item.disposition} -> {next_use}",
+                "Future Fit and Ground Distill input: REFREEZE",
+                "Existing Fit receipts: retained but stale",
+                "Rules, Contexts, and Context Memories: unchanged",
+            ),
+        ),
+        expected_ground_uid=session.uid,
+        expected_revision=session.revision,
+        expected_state_digest=_ground_digest(session),
+    )
+
+
 _MEMORY_SELECTOR_TOKEN = re.compile(
     r"(?<![0-9A-Za-z])[0-9A-Fa-f][0-9A-Fa-f-]{3,35}(?![0-9A-Za-z])"
 )
@@ -1288,6 +1349,7 @@ def _run_existing_ground_shell(
         apply=_apply_named_ground_proposal,
         prepare_rule_draft=_ground_rule_draft_proposal,
         prepare_direct_edit=_ground_direct_edit_proposal,
+        prepare_use_toggle=_ground_example_use_proposal,
         retarget_proposal=_ground_retarget_proposal,
         reload_session=reload_session,
         run_fit=run_fit,
@@ -2175,6 +2237,20 @@ def cmd(
             help="INCLUDE, EXCLUDE, or UNRESOLVED",
         ),
     ] = None,
+    set_example_use: Annotated[
+        Optional[str],
+        typer.Option(
+            "--set-example-use",
+            help="Existing Ground Example uid/prefix whose USE should change",
+        ),
+    ] = None,
+    use: Annotated[
+        Optional[str],
+        typer.Option(
+            "--use",
+            help="INCLUDE or EXCLUDE; requires --set-example-use",
+        ),
+    ] = None,
     rule_provenance: Annotated[
         Optional[str],
         typer.Option(
@@ -2336,6 +2412,9 @@ def cmd(
             change_reason,
         )
     )
+    example_use_requested = any(
+        value is not None for value in (set_example_use, use)
+    )
     action_count = sum(
         (
             bind_requested,
@@ -2343,6 +2422,7 @@ def cmd(
             proposal_requested,
             decision_requested,
             requirement_requested,
+            example_use_requested,
             upgrade_propositions,
         )
     )
@@ -2571,8 +2651,8 @@ def cmd(
             )
         if action_count > 1:
             raise GroundError(
-                "Bind, select, propose, decide, and revise-target are "
-                "separate grounding actions."
+                "Bind, select, propose, decide, change Example USE, and "
+                "revise-target are separate grounding actions."
             )
         if (
             focus_target is not None
@@ -2927,6 +3007,21 @@ def cmd(
             )
             save_ground(session)
             action_label = action.casefold()
+        elif example_use_requested:
+            if set_example_use is None or use is None:
+                raise GroundError(
+                    "Changing Example USE requires both --set-example-use "
+                    "and --use."
+                )
+            contexts = _load_bound_contexts(store, session)
+            session = set_ground_example_use(
+                session,
+                set_example_use,
+                use=use,
+                current_contexts=contexts,
+            )
+            save_ground(session)
+            action_label = "updated Example USE"
         elif requirement_requested:
             if change_reason is None:
                 raise GroundError(

@@ -167,6 +167,15 @@ class NamedGroundDirectEditPreparer(Protocol):
         """Freeze one exact pane-local replacement as one reviewed command."""
 
 
+class NamedGroundUseTogglePreparer(Protocol):
+    def __call__(
+        self,
+        session: GroundSession,
+        selector: str,
+    ) -> GroundCommandProposal:
+        """Freeze one selected Example's next USE value as a reviewed command."""
+
+
 @dataclass(frozen=True)
 class NamedGroundShellResult:
     status: Literal["CLOSED", "BACK_TO_PICKER"]
@@ -852,6 +861,21 @@ def _proposal_item_effects(
                 )
             )
         return tuple(details)
+    if proposal.kind == "SET_EXAMPLE_USE":
+        selector = _option_value(argv, "--set-example-use")
+        use = _option_value(argv, "--use")
+        aliases = _item_aliases_by_uid(session)
+        item = next(
+            (candidate for candidate in session.items if candidate.uid == selector),
+            None,
+        )
+        alias = aliases.get(selector, selector[:8])
+        before = item.disposition if item is not None else "UNKNOWN"
+        return (
+            f"Selected Memory: {alias}",
+            f"USE: {before} -> {use}",
+            "Future Fit and Ground Distill runs freeze this new participation set.",
+        )
     if proposal.kind == "REVIEW_ITEM":
         return _review_item_effects(session, proposal)
     return ()
@@ -933,6 +957,7 @@ def run_named_ground_shell(
     apply: NamedGroundApplier,
     prepare_rule_draft: NamedGroundDraftPreparer | None = None,
     prepare_direct_edit: NamedGroundDirectEditPreparer | None = None,
+    prepare_use_toggle: NamedGroundUseTogglePreparer | None = None,
     retarget_proposal: NamedGroundProposalRetargeter | None = None,
     reload_session: NamedGroundReloader | None = None,
     run_fit: NamedGroundFitRunner | None = None,
@@ -1274,12 +1299,15 @@ def run_named_ground_shell(
             if memory_detail_open["value"]:
                 return (
                     " MEMORY DETAIL: Esc/Backspace · list    "
-                    f"F · run Fit    P · placement    C · comment    {tail}    "
+                    f"Space · toggle USE    F · run Fit    P · placement    "
+                    f"C · comment    {tail}    "
                     "B · Grounds    Q · quit"
                 )
             return (
-                " MEMORIES: ↑/↓ Example · Enter · details    F · run Fit    "
-                f"P · placement    C · comment    {tail}    B · Grounds    Q · quit"
+                " MEMORIES: ↑/↓ Example · Space · toggle USE    "
+                "Enter · details    F · run Fit    "
+                f"P · placement    C · comment    {tail}    "
+                "B · Grounds    Q · quit"
             )
         if active_mode == "INPUT" and application.layout.has_focus(
             rules_pane.text_area
@@ -2319,6 +2347,53 @@ def run_named_ground_shell(
     def _open_memory_detail(_event) -> None:
         open_memory_detail()
 
+    @bindings.add(" ", filter=saved_memory_focus, eager=True)
+    def _toggle_memory_use(event) -> None:
+        selected = selected_saved_item(
+            "CASE",
+            selected_memory_index["value"],
+        )
+        if selected is None:
+            return
+        if prepare_use_toggle is None:
+            status_message["value"] = (
+                "This Ground adapter cannot change Example USE."
+            )
+            event.app.invalidate()
+            return
+        try:
+            refresh_current(announce=True)
+            selected = selected_saved_item(
+                "CASE",
+                selected_memory_index["value"],
+            )
+            if selected is None:
+                raise ValueError("The selected Ground Memory no longer exists.")
+            alias, item = selected
+            proposal = prepare_use_toggle(current["value"], alias)
+        except Exception as error:
+            status_message["value"] = (
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+            )
+            event.app.invalidate()
+            return
+        conversation.append(
+            "USE TOGGLE · "
+            f"{safe_terminal_text(alias)}\n"
+            f"  {_memory_use_checkbox(item.disposition)} "
+            f"{safe_terminal_text(item.disposition)} remains saved until "
+            "the exact command is approved."
+        )
+        pending["value"] = proposal
+        pending_inline_edit["value"] = None
+        review_view["value"] = "COMMAND"
+        mode["value"] = "APPROVAL"
+        status_message["value"] = ""
+        sync_input_host()
+        sync_panes(dialogue_anchor="end")
+        focus_conversation()
+        event.app.invalidate()
+
     @bindings.add(
         "f",
         filter=normal_input_mode & memory_pane_focus,
@@ -2732,6 +2807,11 @@ def run_named_ground_shell(
             event.app.invalidate()
             return
         current["value"] = updated
+        if lookup_fit is not None:
+            # A USE change (and any other Ground revision) invalidates the
+            # semantic input digest. Retain the receipt as history, but reload
+            # its current/stale projection before repainting FIT.
+            fit_receipt["value"] = lookup_fit(updated)
         placement_options = current_placement_options()
         placement_default = next(
             (
@@ -2788,7 +2868,15 @@ def run_named_ground_shell(
             draft_queue_stale["value"] = False
             draft_source_submission["value"] = ""
             last_submission["value"] = ""
+        applied_kind = proposal.kind
         focus_input(restore=False)
+        if applied_kind == "SET_EXAMPLE_USE":
+            status_message["value"] = (
+                "Example USE updated · future Fit and Distill inputs changed"
+            )
+            sync_memories_pane(align_selection=True)
+            application.layout.focus(cases_pane.text_area)
+            application.invalidate()
         if draft_queue["value"]:
             status_message["value"] = (
                 "Ground changed; remaining drafts are NOT SAVED and require "

@@ -1147,6 +1147,78 @@ def test_ground_memory_use_column_projects_each_persisted_disposition() -> None:
     assert "[?] c3" in rendered
 
 
+def test_named_ground_space_reviews_and_applies_selected_use_toggle(
+    monkeypatch,
+) -> None:
+    session = session_with_rule_and_case()
+    panes = {}
+    prepared = []
+    applied = []
+    original_builder = ground_named_shell_module.build_scrollable_text_pane
+
+    def capture_pane(title, *args, **kwargs):
+        pane = original_builder(title, *args, **kwargs)
+        panes[title] = pane
+        return pane
+
+    def prepare(active, selector):
+        prepared.append((active.revision, selector))
+        item = active.items_of_kind("CASE")[0]
+        return GroundCommandProposal(
+            kind="SET_EXAMPLE_USE",
+            understanding="The selected Example will no longer participate.",
+            question="Approve setting USE to EXCLUDE?",
+            review=ExactCommandReview(
+                argv=(
+                    "mem",
+                    "ground",
+                    active.contract_name,
+                    "--set-example-use",
+                    item.uid,
+                    "--use",
+                    "EXCLUDE",
+                ),
+                effects=("Memory c1 USE: INCLUDE -> EXCLUDE",),
+            ),
+            expected_ground_uid=active.uid,
+            expected_revision=active.revision,
+            expected_state_digest="test-digest",
+        )
+
+    def apply(active, frozen):
+        applied.append(frozen.review.argv)
+        rule, item = active.items
+        updated = replace(
+            active,
+            revision=active.revision + 1,
+            items=(rule, replace(item, disposition="EXCLUDE")),
+        )
+        return updated, "Example USE updated."
+
+    monkeypatch.setattr(
+        ground_named_shell_module,
+        "build_scrollable_text_pane",
+        capture_pane,
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\t aq")
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            apply=apply,
+            prepare_use_toggle=prepare,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert prepared == [(session.revision, "c1")]
+    assert len(applied) == 1
+    assert result.session.items_of_kind("CASE")[0].disposition == "EXCLUDE"
+    assert result.applied_argvs == tuple(applied)
+    assert "[ ] c1" in panes["MEMORIES"].text_area.text
+
+
 def test_ground_memory_list_scans_four_tickers_as_four_rows() -> None:
     original = session_with_rule_and_case()
     rule, memory = original.items
