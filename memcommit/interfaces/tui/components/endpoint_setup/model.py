@@ -14,6 +14,10 @@ class EndpointSetupMode:
     uid: str
     label: str
     description: str = ""
+    active_role_uids: tuple[str, ...] = ()
+    role_labels: tuple[tuple[str, str], ...] = ()
+    descendant_role_uids: frozenset[str] | None = None
+    memory_focus_role_uids: frozenset[str] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -25,6 +29,45 @@ class EndpointSetupMode:
             or not isinstance(self.description, str)
         ):
             raise ValueError("Endpoint setup modes require stable text identity.")
+        if (
+            len(set(self.active_role_uids)) != len(self.active_role_uids)
+            or any(
+                not isinstance(role_uid, str)
+                or not role_uid
+                or any(character in role_uid for character in "\r\n")
+                for role_uid in self.active_role_uids
+            )
+        ):
+            raise ValueError("Endpoint setup mode roles require stable identity.")
+        labels = dict(self.role_labels)
+        if (
+            len(labels) != len(self.role_labels)
+            or any(
+                not isinstance(role_uid, str)
+                or not role_uid
+                or not isinstance(label, str)
+                or not label
+                or any(character in role_uid + label for character in "\r\n")
+                for role_uid, label in self.role_labels
+            )
+        ):
+            raise ValueError("Endpoint setup mode role labels are invalid.")
+        for role_uids, label in (
+            (self.descendant_role_uids, "descendant"),
+            (self.memory_focus_role_uids, "Memory-focus"),
+        ):
+            if role_uids is not None and (
+                not isinstance(role_uids, frozenset)
+                or any(
+                    not isinstance(role_uid, str)
+                    or not role_uid
+                    or any(character in role_uid for character in "\r\n")
+                    for role_uid in role_uids
+                )
+            ):
+                raise ValueError(
+                    f"Endpoint setup mode {label} roles are invalid."
+                )
 
 
 @dataclass(frozen=True)
@@ -68,6 +111,10 @@ class EndpointSetupRole:
     allow_memory_focus: bool = False
     selected_memory_uid: str | None = None
     memory_height: int = 7
+    allow_new: bool = False
+    new_label: str = "CREATE NEW CONTEXT"
+    initial_new_name: str = ""
+    prefer_new: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -84,9 +131,14 @@ class EndpointSetupRole:
             or any(not isinstance(name, str) or not name for name in self.names)
         ):
             raise ValueError("Endpoint setup roles require a distinct Context catalog.")
-        if not self.selectable_names or not self.selectable_names <= set(self.names):
+        if (
+            (not self.selectable_names and not self.allow_new)
+            or not self.selectable_names <= set(self.names)
+        ):
             raise ValueError("Endpoint role availability is outside its catalog.")
-        if self.selected_name not in self.selectable_names:
+        if self.selected_name not in self.names or (
+            self.selectable_names and self.selected_name not in self.selectable_names
+        ):
             raise ValueError("Endpoint role initial selection is unavailable.")
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
@@ -104,6 +156,20 @@ class EndpointSetupRole:
             )
         if type(self.allow_memory_focus) is not bool:
             raise TypeError("Endpoint role Memory-focus state must be boolean.")
+        if type(self.allow_new) is not bool or type(self.prefer_new) is not bool:
+            raise TypeError("Endpoint role new-Context state must be boolean.")
+        if (
+            not isinstance(self.new_label, str)
+            or not self.new_label
+            or any(character in self.new_label for character in "\r\n")
+            or not isinstance(self.initial_new_name, str)
+            or any(character in self.initial_new_name for character in "\r\n")
+        ):
+            raise ValueError("Endpoint role new-Context labels are invalid.")
+        if (self.initial_new_name or self.prefer_new) and not self.allow_new:
+            raise ValueError(
+                "Endpoint role cannot prefer or initialize an unavailable new name."
+            )
         if self.selected_memory_uid is not None:
             if (
                 not isinstance(self.selected_memory_uid, str)
@@ -171,6 +237,83 @@ class EndpointSetupSpec:
             raise ValueError("Endpoint setup requires distinct endpoint roles.")
         if all(role.fixed for role in self.roles):
             raise ValueError("Endpoint setup requires one editable endpoint role.")
+        role_by_uid = {role.uid: role for role in self.roles}
+        for mode in self.modes:
+            active = (
+                frozenset(mode.active_role_uids)
+                if mode.active_role_uids
+                else frozenset(role_by_uid)
+            )
+            labels = dict(mode.role_labels)
+            if (
+                not active
+                or not active <= set(role_by_uid)
+                or not set(labels) <= active
+            ):
+                raise ValueError("Endpoint setup mode references an unknown role.")
+            descendants = (
+                mode.descendant_role_uids
+                if mode.descendant_role_uids is not None
+                else frozenset(
+                    uid for uid in active if role_by_uid[uid].allow_descendants
+                )
+            )
+            memory_focus = (
+                mode.memory_focus_role_uids
+                if mode.memory_focus_role_uids is not None
+                else frozenset(
+                    uid for uid in active if role_by_uid[uid].allow_memory_focus
+                )
+            )
+            if (
+                not descendants <= active
+                or any(not role_by_uid[uid].allow_descendants for uid in descendants)
+            ):
+                raise ValueError(
+                    "Endpoint setup mode enables unavailable descendant reach."
+                )
+            if (
+                not memory_focus <= active
+                or any(
+                    not role_by_uid[uid].allow_memory_focus for uid in memory_focus
+                )
+            ):
+                raise ValueError(
+                    "Endpoint setup mode enables unavailable Memory focus."
+                )
+
+    def mode(self, uid: str) -> EndpointSetupMode:
+        try:
+            return next(mode for mode in self.modes if mode.uid == uid)
+        except StopIteration as error:
+            raise KeyError(uid) from error
+
+    def active_role_uids(self, mode_uid: str) -> tuple[str, ...]:
+        mode = self.mode(mode_uid)
+        return mode.active_role_uids or tuple(role.uid for role in self.roles)
+
+    def role_label(self, mode_uid: str, role_uid: str) -> str:
+        labels = dict(self.mode(mode_uid).role_labels)
+        return labels.get(
+            role_uid,
+            next(role.label for role in self.roles if role.uid == role_uid),
+        )
+
+    def role_allows_descendants(self, mode_uid: str, role_uid: str) -> bool:
+        mode = self.mode(mode_uid)
+        if mode.descendant_role_uids is not None:
+            return role_uid in mode.descendant_role_uids
+        return role_uid in self.active_role_uids(mode_uid) and next(
+            role.allow_descendants for role in self.roles if role.uid == role_uid
+        )
+
+    def role_allows_memory_focus(self, mode_uid: str, role_uid: str) -> bool:
+        mode = self.mode(mode_uid)
+        if mode.memory_focus_role_uids is not None:
+            return role_uid in mode.memory_focus_role_uids
+        return role_uid in self.active_role_uids(mode_uid) and next(
+            role.allow_memory_focus for role in self.roles if role.uid == role_uid
+        )
 
 
 @dataclass(frozen=True)
@@ -181,6 +324,7 @@ class EndpointSetupValue:
     context_name: str
     include_descendants: bool = False
     memory_uid: str | None = None
+    create: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -189,6 +333,7 @@ class EndpointSetupValue:
             or not isinstance(self.context_name, str)
             or not self.context_name
             or type(self.include_descendants) is not bool
+            or type(self.create) is not bool
             or (
                 self.memory_uid is not None
                 and (
@@ -202,6 +347,10 @@ class EndpointSetupValue:
         if self.memory_uid is not None and self.include_descendants:
             raise ValueError(
                 "Endpoint setup values cannot focus one Memory across descendants."
+            )
+        if self.create and (self.include_descendants or self.memory_uid is not None):
+            raise ValueError(
+                "A new endpoint cannot retain descendant or Memory focus state."
             )
 
 

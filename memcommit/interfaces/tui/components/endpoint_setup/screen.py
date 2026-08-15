@@ -9,7 +9,13 @@ from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
+from prompt_toolkit.layout import (
+    ConditionalContainer,
+    Dimension,
+    FormattedTextControl,
+    Layout,
+    Window,
+)
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
@@ -54,8 +60,13 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
+from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
+)
 from memcommit.selection import FlatSelectionState, SelectionOption
 from memcommit.selection.tui import render_vertical_choice_rows
+from memcommit.store import validate_context_name
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]
@@ -89,20 +100,41 @@ def run_endpoint_setup(
         selected_uid=spec.initial_mode_uid,
         allow_empty=False,
     )
-    selectors = {
-        role.uid: ContextSelectorControl(
+    def selected_mode_uid() -> str:
+        selected = mode_state.selected_uid
+        if selected is None:
+            raise ValueError("Choose one operation shape.")
+        return selected
+
+    def role_is_active(role_uid: str) -> bool:
+        return role_uid in spec.active_role_uids(selected_mode_uid())
+
+    def role_allows_descendants(role_uid: str) -> bool:
+        return spec.role_allows_descendants(selected_mode_uid(), role_uid)
+
+    def role_allows_memory_focus(role_uid: str) -> bool:
+        return spec.role_allows_memory_focus(selected_mode_uid(), role_uid)
+
+    selectors: dict[str, ContextSelectorControl] = {}
+    for role in spec.roles:
+        if not role.selectable_names:
+            continue
+        selector = ContextSelectorControl(
             ContextSelectorView(
                 names=role.names,
                 selected=(role.selected_name,),
-                label=(f"{role.label} · FROZEN" if role.fixed else role.label),
+                label=role.label,
                 current_context=role.current_context,
                 selectable_names=role.selectable_names,
                 annotations=role.annotations,
             ),
             height=role.height,
         )
-        for role in spec.roles
-    }
+        selector.frame.title = lambda uid=role.uid: safe_terminal_text(
+            spec.role_label(selected_mode_uid(), uid)
+            + (" · FROZEN" if role_by_uid[uid].fixed else "")
+        )
+        selectors[role.uid] = selector
     reach_states = {
         role.uid: ContextReachState.create(
             include_descendants=role.include_descendants
@@ -129,6 +161,35 @@ def run_endpoint_setup(
     bindings = KeyBindings()
     status = {"value": ""}
     role_by_uid = {role.uid: role for role in spec.roles}
+    create_new = {role.uid: role.prefer_new for role in spec.roles if role.allow_new}
+    confirmed_new_names = {
+        role.uid: role.initial_new_name.strip()
+        for role in spec.roles
+        if role.allow_new
+    }
+    new_name_fields: dict[str, ExactNameFieldControl] = {}
+    for role in spec.roles:
+        if not role.allow_new:
+            continue
+
+        def validate_new_name(candidate: str, *, names=role.names) -> None:
+            validate_context_name(candidate)
+            if candidate in names:
+                raise ValueError(
+                    "That Context already exists; choose its available tree row."
+                )
+
+        new_name_fields[role.uid] = ExactNameFieldControl.create(
+            ExactNameFieldView(
+                value=role.initial_new_name,
+                label=role.new_label,
+                state="NOT CREATED",
+                detail="Enter confirms this exact process-local Result Context name.",
+                validate=validate_new_name,
+                value_label="Context name",
+            ),
+            input_name=f"endpoint-{role.uid.casefold()}-new-name",
+        )
 
     mode_control = FormattedTextControl(
         lambda: render_vertical_choice_rows(
@@ -169,7 +230,10 @@ def run_endpoint_setup(
         reach_controls[role.uid] = control
         reach_frames[role.uid] = build_focused_frame(
             Window(control, height=Dimension.exact(1), dont_extend_height=True),
-            title=f"{safe_terminal_text(role.label)} · RANGE",
+            title=lambda uid=role.uid: (
+                f"{safe_terminal_text(spec.role_label(selected_mode_uid(), uid))}"
+                " · RANGE"
+            ),
             is_focused=lambda uid=role.uid: get_app().layout.has_focus(
                 reach_controls[uid]
             ),
@@ -206,7 +270,10 @@ def run_endpoint_setup(
                 wrap_lines=True,
                 right_margins=[ScrollbarMargin(display_arrows=True)],
             ),
-            title=f"{safe_terminal_text(role.label)} · MEMORY FOCUS",
+            title=lambda uid=role.uid: (
+                f"{safe_terminal_text(spec.role_label(selected_mode_uid(), uid))}"
+                " · MEMORY FOCUS"
+            ),
             is_focused=lambda uid=role.uid: get_app().layout.has_focus(
                 memory_controls[uid]
             ),
@@ -217,57 +284,94 @@ def run_endpoint_setup(
         selected_mode = mode_state.selected_uid
         if selected_mode is None:
             raise ValueError("Choose one operation shape.")
+        active_role_uids = spec.active_role_uids(selected_mode)
+
+        def make_value(role_uid: str) -> EndpointSetupValue:
+            role = role_by_uid[role_uid]
+            if role.allow_new and create_new[role_uid]:
+                candidate = new_name_fields[role_uid].text.strip()
+                if not candidate or confirmed_new_names[role_uid] != candidate:
+                    raise ValueError(
+                        f"Confirm {role.new_label} with Enter before continuing."
+                    )
+                candidate = new_name_fields[role_uid].validate_candidate()
+                return EndpointSetupValue(
+                    role_uid,
+                    candidate,
+                    create=True,
+                )
+            if role_uid not in selectors:
+                raise ValueError(f"{role.new_label} requires a new exact name.")
+            return EndpointSetupValue(
+                role_uid,
+                selectors[role_uid].selection.selected_name,
+                include_descendants=(
+                    reach_states[role_uid].include_descendants
+                    if role_uid in reach_states
+                    and role_allows_descendants(role_uid)
+                    else False
+                ),
+                memory_uid=(
+                    memory_focuses[role_uid].selected_memory_uid
+                    if role_uid in memory_focuses
+                    and role_allows_memory_focus(role_uid)
+                    else None
+                ),
+            )
+
         return EndpointSetupDraft(
             mode_uid=selected_mode,
-            values=tuple(
-                EndpointSetupValue(
-                    role.uid,
-                    selectors[role.uid].selection.selected_name,
-                    include_descendants=(
-                        reach_states[role.uid].include_descendants
-                        if role.uid in reach_states
-                        else False
-                    ),
-                    memory_uid=(
-                        memory_focuses[role.uid].selected_memory_uid
-                        if role.uid in memory_focuses
-                        else None
-                    ),
-                )
-                for role in spec.roles
-            ),
+            values=tuple(make_value(role_uid) for role_uid in active_role_uids),
         )
 
     def render_action() -> list[tuple[str, str]]:
-        draft = make_draft()
+        mode_uid = selected_mode_uid()
         focused = get_app().layout.has_focus(action_control)
         fragments: list[tuple[str, str]] = [
             ("class:report-label", "SETUP · NOT RUN\n"),
-            ("class:report-neutral", f"MODE · {safe_terminal_text(draft.mode_uid)}\n"),
+            ("class:report-neutral", f"MODE · {safe_terminal_text(mode_uid)}\n"),
         ]
-        for value in draft.values:
+        for role_uid in spec.active_role_uids(mode_uid):
+            role = role_by_uid[role_uid]
+            is_new = role.allow_new and create_new[role_uid]
+            context_name = (
+                new_name_fields[role_uid].text.strip() or "(ENTER EXACT NAME)"
+                if is_new
+                else selectors[role_uid].selection.selected_name
+            )
+            include_descendants = (
+                reach_states[role_uid].include_descendants
+                if role_uid in reach_states and role_allows_descendants(role_uid)
+                else False
+            )
+            memory_uid = (
+                memory_focuses[role_uid].selected_memory_uid
+                if role_uid in memory_focuses and role_allows_memory_focus(role_uid)
+                else None
+            )
             range_suffix = (
                 " · INCLUDE DESCENDANTS"
-                if value.include_descendants
+                if include_descendants
                 else " · THIS CONTEXT ONLY"
             )
-            if not role_by_uid[value.role_uid].allow_descendants:
+            if not role_allows_descendants(role_uid):
                 range_suffix = ""
             memory_suffix = ""
-            if role_by_uid[value.role_uid].allow_memory_focus:
+            if role_allows_memory_focus(role_uid):
                 memory_suffix = (
-                    f" · MEMORY {safe_terminal_text(value.memory_uid[:8])}"
-                    if value.memory_uid is not None
+                    f" · MEMORY {safe_terminal_text(memory_uid[:8])}"
+                    if memory_uid is not None
                     else " · WHOLE CONTEXT"
                 )
-                if value.include_descendants:
+                if include_descendants:
                     memory_suffix = ""
             fragments.append(
                 (
                     "class:report-neutral",
-                    f"{safe_terminal_text(value.role_uid)} · "
-                    f"{safe_terminal_text(value.context_name)}"
-                    f"{range_suffix}{memory_suffix}\n",
+                    f"{safe_terminal_text(role_uid)} · "
+                    f"{safe_terminal_text(context_name)}"
+                    f"{range_suffix}{memory_suffix}"
+                    f"{' · NEW · NOT CREATED' if is_new else ''}\n",
                 )
             )
         fragments.extend(
@@ -301,7 +405,9 @@ def run_endpoint_setup(
         dont_extend_height=True,
     )
 
-    editable_roles = tuple(role for role in spec.roles if not role.fixed)
+    editable_roles = tuple(
+        role for role in spec.roles if not role.fixed and role.uid in selectors
+    )
     editable_controls = tuple(selectors[role.uid].control for role in editable_roles)
 
     def render_footer() -> str:
@@ -321,6 +427,11 @@ def run_endpoint_setup(
             for control in memory_controls.values()
         ):
             return " ↑/↓ choose whole Context or one direct Memory · Enter select · Tab next · Esc cancel"
+        if any(
+            get_app().layout.has_focus(field.input)
+            for field in new_name_fields.values()
+        ):
+            return " Type one exact new Context name · Enter confirm · Tab next · Esc cancel"
         return " ↑/↓ move/cross · ←/→ tree · Enter/Space select · Tab next · Esc cancel"
 
     footer = Window(
@@ -330,11 +441,52 @@ def run_endpoint_setup(
     )
     role_regions: list[TuiRegion] = []
     for role in spec.roles:
-        role_regions.append(TuiRegion(selectors[role.uid].frame))
+        if role.uid in selectors:
+            role_regions.append(
+                TuiRegion(
+                    ConditionalContainer(
+                        selectors[role.uid].frame,
+                        filter=Condition(
+                            lambda uid=role.uid: role_is_active(uid)
+                        ),
+                    )
+                )
+            )
         if role.uid in reach_frames:
-            role_regions.append(TuiRegion(reach_frames[role.uid]))
+            role_regions.append(
+                TuiRegion(
+                    ConditionalContainer(
+                        reach_frames[role.uid],
+                        filter=Condition(
+                            lambda uid=role.uid: role_is_active(uid)
+                            and role_allows_descendants(uid)
+                        ),
+                    )
+                )
+            )
         if role.uid in memory_frames:
-            role_regions.append(TuiRegion(memory_frames[role.uid]))
+            role_regions.append(
+                TuiRegion(
+                    ConditionalContainer(
+                        memory_frames[role.uid],
+                        filter=Condition(
+                            lambda uid=role.uid: role_is_active(uid)
+                            and role_allows_memory_focus(uid)
+                        ),
+                    )
+                )
+            )
+        if role.uid in new_name_fields:
+            role_regions.append(
+                TuiRegion(
+                    ConditionalContainer(
+                        new_name_fields[role.uid].frame,
+                        filter=Condition(
+                            lambda uid=role.uid: role_is_active(uid)
+                        ),
+                    )
+                )
+            )
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(mode_frame),
@@ -342,7 +494,22 @@ def run_endpoint_setup(
         TuiRegion(action_frame),
         TuiRegion(footer),
     )
-    initial_focus = editable_controls[0] if editable_controls else mode_control
+    preferred_new_control = next(
+        (
+            new_name_fields[role.uid].input
+            for role in spec.roles
+            if role.allow_new
+            and role.prefer_new
+            and role_is_active(role.uid)
+        ),
+        None,
+    )
+    initial_focus = (
+        mode_control
+        if len(spec.modes) > 1
+        else preferred_new_control
+        or (editable_controls[0] if editable_controls else mode_control)
+    )
     app: Application[EndpointSetupDraft | None] = Application(
         layout=Layout(root, focused_element=initial_focus),
         key_bindings=bindings,
@@ -357,11 +524,17 @@ def run_endpoint_setup(
     def move_mode(_event, delta: int) -> SurfaceMoveResult:
         changed = mode_state.move(delta)
         mode_state.set_selected(mode_state.cursor_uid)
+        for uid, memory_focus in memory_focuses.items():
+            if not role_allows_memory_focus(uid):
+                memory_focus.clear()
         status["value"] = ""
         return "MOVED" if changed else "BOUNDARY"
 
     def choose_mode(_event) -> SurfaceActionResult:
         mode_state.select_cursor(toggle=False)
+        for uid, memory_focus in memory_focuses.items():
+            if not role_allows_memory_focus(uid):
+                memory_focus.clear()
         status["value"] = ""
         return "HANDLED"
 
@@ -386,9 +559,29 @@ def run_endpoint_setup(
         except ValueError as error:
             status["value"] = str(error)
         else:
+            if role_uid in create_new:
+                create_new[role_uid] = False
             if role_uid in memory_focuses:
                 memory_focuses[role_uid].clear()
             status["value"] = ""
+        return "HANDLED"
+
+    def confirm_new_name(event, role_uid: str) -> SurfaceActionResult:
+        try:
+            candidate = new_name_fields[role_uid].validate_candidate()
+        except ValueError as error:
+            status["value"] = str(error)
+            return "HANDLED"
+        confirmed_new_names[role_uid] = candidate
+        create_new[role_uid] = True
+        if role_uid in memory_focuses:
+            memory_focuses[role_uid].clear()
+        if role_uid in reach_states:
+            reach_states[role_uid] = ContextReachState.create(
+                include_descendants=False
+            )
+        status["value"] = f"{candidate} confirmed as NEW · NOT CREATED."
+        surfaces.focus_relative(event.app, 1, wrap=False)
         return "HANDLED"
 
     def move_memory(role_uid: str, delta: int) -> SurfaceMoveResult:
@@ -430,61 +623,75 @@ def run_endpoint_setup(
         event.app.exit(result=draft)
         return "HANDLED"
 
-    surfaces_in_order = [
-        FocusSurface(
-            "MODE",
-            mode_control,
-            move_vertical=move_mode,
-            activate=choose_mode,
-        )
-    ]
     editable_role_uids = {role.uid for role in editable_roles}
-    for role in spec.roles:
-        if role.uid in editable_role_uids:
-            surfaces_in_order.append(
-                FocusSurface(
-                    f"ROLE:{role.uid}",
-                    selectors[role.uid].control,
-                    move_vertical=lambda _event, delta, uid=role.uid: move_role(
-                        uid, delta
-                    ),
-                    activate=lambda _event, uid=role.uid: choose_role(uid),
-                    on_vertical_enter=lambda delta, uid=role.uid: enter_role(
-                        uid, delta
-                    ),
-                )
+
+    def visible_surfaces() -> tuple[FocusSurface, ...]:
+        values: list[FocusSurface] = [
+            FocusSurface(
+                "MODE",
+                mode_control,
+                move_vertical=move_mode,
+                activate=choose_mode,
             )
-        if role.uid in reach_controls:
-            surfaces_in_order.append(
-                FocusSurface(
-                    f"RANGE:{role.uid}",
-                    reach_controls[role.uid],
-                    move_vertical=lambda _event, _delta: "BOUNDARY",
+        ]
+        for role_uid in spec.active_role_uids(selected_mode_uid()):
+            if role_uid in editable_role_uids:
+                values.append(
+                    FocusSurface(
+                        f"ROLE:{role_uid}",
+                        selectors[role_uid].control,
+                        move_vertical=lambda _event, delta, uid=role_uid: move_role(
+                            uid, delta
+                        ),
+                        activate=lambda _event, uid=role_uid: choose_role(uid),
+                        on_vertical_enter=lambda delta, uid=role_uid: enter_role(
+                            uid, delta
+                        ),
+                    )
                 )
-            )
-        if role.uid in memory_controls:
-            surfaces_in_order.append(
-                FocusSurface(
-                    f"MEMORY:{role.uid}",
-                    memory_controls[role.uid],
-                    move_vertical=lambda _event, delta, uid=role.uid: move_memory(
-                        uid, delta
-                    ),
-                    activate=lambda _event, uid=role.uid: choose_memory(uid),
-                    on_vertical_enter=lambda delta, uid=role.uid: enter_memory(
-                        uid, delta
-                    ),
+            if role_uid in reach_controls and role_allows_descendants(role_uid):
+                values.append(
+                    FocusSurface(
+                        f"RANGE:{role_uid}",
+                        reach_controls[role_uid],
+                        move_vertical=lambda _event, _delta: "BOUNDARY",
+                    )
                 )
+            if role_uid in memory_controls and role_allows_memory_focus(role_uid):
+                values.append(
+                    FocusSurface(
+                        f"MEMORY:{role_uid}",
+                        memory_controls[role_uid],
+                        move_vertical=lambda _event, delta, uid=role_uid: move_memory(
+                            uid, delta
+                        ),
+                        activate=lambda _event, uid=role_uid: choose_memory(uid),
+                        on_vertical_enter=lambda delta, uid=role_uid: enter_memory(
+                            uid, delta
+                        ),
+                    )
+                )
+            if role_uid in new_name_fields:
+                values.append(
+                    FocusSurface(
+                        f"NEW:{role_uid}",
+                        new_name_fields[role_uid].input,
+                        activate=lambda event, uid=role_uid: confirm_new_name(
+                            event, uid
+                        ),
+                    )
+                )
+        values.append(
+            FocusSurface(
+                "CONTINUE",
+                action_control,
+                move_vertical=lambda _event, _delta: "BOUNDARY",
+                activate=finish,
             )
-    surfaces_in_order.append(
-        FocusSurface(
-            "CONTINUE",
-            action_control,
-            move_vertical=lambda _event, _delta: "BOUNDARY",
-            activate=finish,
         )
-    )
-    surfaces = SurfaceFocusController(tuple(surfaces_in_order))
+        return tuple(values)
+
+    surfaces = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surfaces)
 
     @bindings.add("left", filter=has_focus(mode_control), eager=True)
@@ -554,6 +761,12 @@ def run_endpoint_setup(
             for control in memory_controls.values()
         )
     )
+    new_input_focus = Condition(
+        lambda: any(
+            get_app().layout.has_focus(field.input)
+            for field in new_name_fields.values()
+        )
+    )
 
     def focused_role_uid() -> str | None:
         return next(
@@ -611,13 +824,13 @@ def run_endpoint_setup(
         event.app.exit(result=None)
 
     @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
+    @bindings.add("backspace", filter=~new_input_focus, eager=True)
     def _back(event) -> None:
         dispatch_tui_back(event, close=close)
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)
-    @bind_case_insensitive_key(bindings, "q", eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=~new_input_focus, eager=True)
     def _close(event) -> None:
         close(event)
 
