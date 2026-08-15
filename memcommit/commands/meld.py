@@ -2460,17 +2460,25 @@ def _accept(
     """Hand one explicitly accepted Meld to its existing Apply dispatcher."""
 
     from memcommit.application_flow import run_application_flow
+    from memcommit.meld_application import MeldApplyRequest
     from memcommit.meld_application_flow import MeldApplicationFlowPort
+    from memcommit.meld_runtime import execute_meld_apply
+
+    def apply_reviewed(reviewed: MeldSession, expected: str) -> tuple[bool, str, int]:
+        receipt = execute_meld_apply(
+            MeldApplyRequest(
+                session=reviewed,
+                expected_session_digest=expected,
+            ),
+            store=store,
+        ).receipt
+        return receipt.recovered, receipt.checkpoint_uid, receipt.result_count
 
     flow = run_application_flow(
         session,
         port=MeldApplicationFlowPort(
             expected_session_digest=expected_session_digest,
-            applier=lambda reviewed, expected: _apply_accepted_meld(
-                store=store,
-                session=reviewed,
-                expected_session_digest=expected,
-            ),
+            applier=apply_reviewed,
         ),
     )
     if flow.applied is None:  # Final acceptance cannot cancel inside the port.
