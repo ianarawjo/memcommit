@@ -4,10 +4,8 @@ from __future__ import annotations
 
 import shlex
 
+from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.exact_command_review.model import (
-    ExactCommandReview,
-)
 
 
 def format_exact_command(review: ExactCommandReview) -> str:

@@ -38,6 +38,16 @@ The neutral layer contains:
 5. deterministic rendering of injectively display-escaped arguments with
    `shlex.join`.
 
+`ExactCommandReview` is owned by the interface-neutral
+`memcommit.exact_command_review` module.  The terminal component owns only its
+rendering.  The former `memcommit.commands.exact_command_review` module and the
+component's former `model` module are compatibility imports of that same class,
+not parallel implementations.  This placement matters even though the value is
+small: a review constructed by an application or operation adapter must pass
+the exact same identity check in legacy command shells and newer TUI
+workbenches.  Otherwise two structurally equal receipts can be rejected solely
+because they came through different interfaces.
+
 The shared message composer does not bind keys or interpret text. Blank and
 named Ground mount its buffer inside the active semantic pane; meld retains
 the standalone bordered form. Their adapters still decide when it receives
@@ -321,6 +331,10 @@ not a return to one dominant transcript.
 
 ## Current limitations
 
+- Existing consumers may still import either compatibility path.  They already
+  receive the one neutral value type, so this is a dependency-cleanup concern
+  rather than a behavioral split.  New internal code should import the neutral
+  owner directly; terminal rendering should import the TUI component.
 - Provider calls are synchronous inside the prompt-toolkit handler, so a slow
   semantic turn can temporarily stop repainting. A reusable progress state
   should later move provider work into an outer controller or async task.
