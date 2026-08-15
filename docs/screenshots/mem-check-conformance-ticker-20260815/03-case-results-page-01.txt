@@ -1,0 +1,48 @@
+CASE CONFORMANCE · TICKER RULE REPLAY · PAGE 1/3                                                                                                                                    
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER                                                                                                                                      
+OVERVIEW · Applied the linked rules to all cases.                                                                                                                                   
+                                                                                                                                                                                    
+c1 · PASS                                                                                                                                                                           
+  INPUT · North Star Energy Inc.                                                                                                                                                    
+  PREDICTED · NSE                                                                                                                                                                   
+  EXPECTED · NSE                                                                                                                                                                    
+  WHY · Initials of North, Star, and Energy.                                                                                                                                        
+                                                                                                                                                                                    
+c2 · PASS                                                                                                                                                                           
+  INPUT · Blue River Holdings LLC                                                                                                                                                   
+  PREDICTED · BRH                                                                                                                                                                   
+  EXPECTED · BRH                                                                                                                                                                    
+  WHY · Initials of Blue, River, and Holdings.                                                                                                                                      
+                                                                                                                                                                                    
+c3 · PASS                                                                                                                                                                           
+  INPUT · Cedar Valley Technologies Corporation                                                                                                                                     
+  PREDICTED · CVT                                                                                                                                                                   
+  EXPECTED · CVT                                                                                                                                                                    
+  WHY · Initials of Cedar, Valley, and Technologies.                                                                                                                                
+                                                                                                                                                                                    
+c4 · PASS                                                                                                                                                                           
+  INPUT · Aurora Robotics Ltd.                                                                                                                                                      
+  PREDICTED · AR                                                                                                                                                                    
+  EXPECTED · AR                                                                                                                                                                     
+  WHY · Initials of Aurora and Robotics.                                                                                                                                            
+                                                                                                                                                                                    
+c5 · PASS                                                                                                                                                                           
+  INPUT · Harbor Point Foods PLC                                                                                                                                                    
+  PREDICTED · HPF                                                                                                                                                                   
+  EXPECTED · HPF                                                                                                                                                                    
+  WHY · Initials of Harbor, Point, and Foods.                                                                                                                                       
+                                                                                                                                                                                    
+c6 · PASS                                                                                                                                                                           
+  INPUT · The Meridian Group Inc.                                                                                                                                                   
+  PREDICTED · MG                                                                                                                                                                    
+  EXPECTED · MG                                                                                                                                                                     
+  WHY · The leading article and legal suffix are removed; initials come from Meridian and Group.                                                                                    
+                                                                                                                                                                                    
+c7 · PASS                                                                                                                                                                           
+  INPUT · Lumen Labs LLC                                                                                                                                                            
+  PREDICTED · LL                                                                                                                                                                    
+  EXPECTED · LL                                                                                                                                                                     
+  WHY · Initials of Lumen and Labs.                                                                                                                                                 
+                                                                                                                                                                                    
+N · NEXT                                                                                                                                                                            
+READY CASE PAGE 1/3

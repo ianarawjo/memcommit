@@ -967,7 +967,7 @@ def test_ground_memory_without_notes_keeps_the_three_line_card_shape():
     assert rendered.count("\n") == 2
 
 
-def test_saved_case_era_provenance_is_presented_with_memory_vocabulary():
+def test_saved_directional_provenance_is_presented_as_neutral_distillation():
     session = session_with_rule_and_case()
     rule, memory = session.items
     rendered = render_named_ground_rules_pane(
@@ -980,7 +980,7 @@ def test_saved_case_era_provenance_is_presented_with_memory_vocabulary():
         )
     )
 
-    assert "INDUCED_FROM_MEMORIES" in rendered
+    assert "DISTILLED" in rendered
     assert "INDUCED_FROM_CASES" not in rendered
 
 

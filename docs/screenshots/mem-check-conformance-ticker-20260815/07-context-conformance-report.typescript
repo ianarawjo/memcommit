@@ -1,0 +1,218 @@
+[2J[H[1;38;2;138;173;244mMEM CHECK-CONFORMANCE · TICKER ROUND-TRIP[0m
+PROVIDER · gpt-5.6-sol · REASONING NONE
+GROUND · ticker-rules · 5 ACTIVE RULES · 20 INCLUDE MEMORIES
+EXPECTED OUTPUTS · FROZEN LOCALLY · WITHHELD FROM PROVIDER
+
+[38;2;202;211;245mr1 · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.[0m
+[38;2;202;211;245mr2 · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.[0m
+[38;2;202;211;245mr3 · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.[0m
+[38;2;202;211;245mr4 · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.[0m
+[38;2;202;211;245mr5 · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification.[0m
+
+[38;2;202;211;245mc01 · North Star Energy Inc. → NSE[0m
+[38;2;202;211;245mc02 · Blue River Holdings LLC → BRH[0m
+[38;2;202;211;245mc03 · Cedar Valley Technologies Corporation → CVT[0m
+[38;2;202;211;245mc04 · Aurora Robotics Ltd. → AR[0m
+[38;2;202;211;245mc05 · Harbor Point Foods PLC → HPF[0m
+[38;2;202;211;245mc06 · The Meridian Group Inc. → MG[0m
+[38;2;202;211;245mc07 · Lumen Labs LLC → LL[0m
+[38;2;202;211;245mc08 · Quanta Systems & Services Inc. → QSS[0m
+[38;2;202;211;245mc09 · Atlas 7 Networks Corp. → A7N[0m
+[38;2;202;211;245mc10 · 3 Rivers Logistics LLC → 3RL[0m
+[38;2;202;211;245mc11 · Redwood Inc. → RED[0m
+[38;2;202;211;245mc12 · Meridian Corporation → MER[0m
+[38;2;202;211;245mc13 · Solstice Ltd. → SOL[0m
+[38;2;202;211;245mc14 · International Business Fabricators Inc. → IBF[0m
+[38;2;202;211;245mc15 · North Star Energy Inc., Class B → NSE.B[0m
+[38;2;202;211;245mc16 · North Star Energy Inc., Class A → NSE.A[0m
+[38;2;202;211;245mc17 · Blue River Holdings LLC, Preferred → BRH.P[0m
+[38;2;202;211;245mc18 · Acme & Sons Ltd. → AS[0m
+[38;2;202;211;245mc19 · Axiom AI Technologies Inc. → AAT[0m
+[38;2;202;211;245mc20 · The 5th Avenue Retail Group LLC → 5ARG[0m
+
+R · RUN CASE CONFORMANCE
+r
+[2J[H[1;38;2;138;173;244mCHECK CONFORMANCE · CASE · PROVIDER TURN[0m
+MODEL · gpt-5.6-sol · REASONING NONE
+INPUT · 5 RULES + 20 CASE INPUTS
+EXPECTED OUTPUTS · WITHHELD
+STATE · RUNNING · NO REPORT PUBLISHED
+[2J[H[1;38;2;138;173;244mCASE CONFORMANCE · TICKER RULE REPLAY · PAGE 1/3[0m
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER
+OVERVIEW · Applied the linked rules to all cases.
+
+[1;38;2;138;173;244mc1 · PASS[0m
+[38;2;202;211;245m  INPUT · North Star Energy Inc.[0m
+  PREDICTED · NSE
+  EXPECTED · NSE
+  WHY · Initials of North, Star, and Energy.
+
+[1;38;2;138;173;244mc2 · PASS[0m
+[38;2;202;211;245m  INPUT · Blue River Holdings LLC[0m
+  PREDICTED · BRH
+  EXPECTED · BRH
+  WHY · Initials of Blue, River, and Holdings.
+
+[1;38;2;138;173;244mc3 · PASS[0m
+[38;2;202;211;245m  INPUT · Cedar Valley Technologies Corporation[0m
+  PREDICTED · CVT
+  EXPECTED · CVT
+  WHY · Initials of Cedar, Valley, and Technologies.
+
+[1;38;2;138;173;244mc4 · PASS[0m
+[38;2;202;211;245m  INPUT · Aurora Robotics Ltd.[0m
+  PREDICTED · AR
+  EXPECTED · AR
+  WHY · Initials of Aurora and Robotics.
+
+[1;38;2;138;173;244mc5 · PASS[0m
+[38;2;202;211;245m  INPUT · Harbor Point Foods PLC[0m
+  PREDICTED · HPF
+  EXPECTED · HPF
+  WHY · Initials of Harbor, Point, and Foods.
+
+[1;38;2;138;173;244mc6 · PASS[0m
+[38;2;202;211;245m  INPUT · The Meridian Group Inc.[0m
+  PREDICTED · MG
+  EXPECTED · MG
+  WHY · The leading article and legal suffix are removed; initials come from Meridian and Group.
+
+[1;38;2;138;173;244mc7 · PASS[0m
+[38;2;202;211;245m  INPUT · Lumen Labs LLC[0m
+  PREDICTED · LL
+  EXPECTED · LL
+  WHY · Initials of Lumen and Labs.
+
+N · NEXT
+READY CASE PAGE 1/3
+n
+[2J[H[1;38;2;138;173;244mCASE CONFORMANCE · TICKER RULE REPLAY · PAGE 2/3[0m
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER
+OVERVIEW · Applied the linked rules to all cases.
+
+[1;38;2;138;173;244mc8 · PASS[0m
+[38;2;202;211;245m  INPUT · Quanta Systems & Services Inc.[0m
+  PREDICTED · QSS
+  EXPECTED · QSS
+  WHY · The connector is ignored; initials come from Quanta, Systems, and Services.
+
+[1;38;2;138;173;244mc9 · PASS[0m
+[38;2;202;211;245m  INPUT · Atlas 7 Networks Corp.[0m
+  PREDICTED · A7N
+  EXPECTED · A7N
+  WHY · Initials of Atlas and Networks with the meaningful numeric token preserved.
+
+[1;38;2;138;173;244mc10 · PASS[0m
+[38;2;202;211;245m  INPUT · 3 Rivers Logistics LLC[0m
+  PREDICTED · 3RL
+  EXPECTED · 3RL
+  WHY · The numeric component is preserved alongside the initials of Rivers and Logistics.
+
+[1;38;2;138;173;244mc11 · AMBIGUOUS[0m
+[38;2;202;211;245m  INPUT · Redwood Inc.[0m
+  PREDICTED · (none)
+  EXPECTED · RED
+  WHY · The rules require a concise three-letter mnemonic for the single word Redwood but do not uniquely specify its letters.
+
+[1;38;2;138;173;244mc12 · AMBIGUOUS[0m
+[38;2;202;211;245m  INPUT · Meridian Corporation[0m
+  PREDICTED · (none)
+  EXPECTED · MER
+  WHY · After removing the legal suffix, Meridian is a single word, and its required three-letter mnemonic is not uniquely specified.
+
+[1;38;2;138;173;244mc13 · AMBIGUOUS[0m
+[38;2;202;211;245m  INPUT · Solstice Ltd.[0m
+  PREDICTED · (none)
+  EXPECTED · SOL
+  WHY · After removing the legal suffix, Solstice is a single word, and its required three-letter mnemonic is not uniquely specified.
+
+[1;38;2;138;173;244mc14 · PASS[0m
+[38;2;202;211;245m  INPUT · International Business Fabricators Inc.[0m
+  PREDICTED · IBF
+  EXPECTED · IBF
+  WHY · Initials of International, Business, and Fabricators.
+
+N · NEXT
+READY CASE PAGE 2/3
+n
+[2J[H[1;38;2;138;173;244mCASE CONFORMANCE · TICKER RULE REPLAY · PAGE 3/3[0m
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER
+OVERVIEW · Applied the linked rules to all cases.
+
+[1;38;2;138;173;244mc15 · PASS[0m
+[38;2;202;211;245m  INPUT · North Star Energy Inc., Class B[0m
+  PREDICTED · NSE.B
+  EXPECTED · NSE.B
+  WHY · The base ticker NSE receives the Class B suffix.
+
+[1;38;2;138;173;244mc16 · PASS[0m
+[38;2;202;211;245m  INPUT · North Star Energy Inc., Class A[0m
+  PREDICTED · NSE.A
+  EXPECTED · NSE.A
+  WHY · The base ticker NSE receives the Class A suffix.
+
+[1;38;2;138;173;244mc17 · PASS[0m
+[38;2;202;211;245m  INPUT · Blue River Holdings LLC, Preferred[0m
+  PREDICTED · BRH.P
+  EXPECTED · BRH.P
+  WHY · The base ticker BRH receives the Preferred suffix.
+
+[1;38;2;138;173;244mc18 · PASS[0m
+[38;2;202;211;245m  INPUT · Acme & Sons Ltd.[0m
+  PREDICTED · AS
+  EXPECTED · AS
+  WHY · The connector is ignored; initials come from Acme and Sons.
+
+[1;38;2;138;173;244mc19 · FAIL[0m
+[38;2;202;211;245m  INPUT · Axiom AI Technologies Inc.[0m
+  PREDICTED · AAIT
+  EXPECTED · AAT
+  WHY · Axiom contributes A, AI is preserved as one component, and Technologies contributes T.
+
+[1;38;2;138;173;244mc20 · PASS[0m
+[38;2;202;211;245m  INPUT · The 5th Avenue Retail Group LLC[0m
+  PREDICTED · 5ARG
+  EXPECTED · 5ARG
+  WHY · The leading article is removed; the meaningful numeric token and initials of Avenue, Retail, and Group are used.
+
+C · RUN CONTEXT CONFORMANCE
+READY CASE PAGE 3/3
+c
+[2J[H[1;38;2;138;173;244mCHECK CONFORMANCE · CONTEXT · PROVIDER TURN[0m
+MODEL · gpt-5.6-sol · REASONING NONE
+TARGET · ticker/example-mappings · 20 MEMORIES
+RULES · ticker/distilled-rules · 5 MEMORIES
+STATE · RUNNING · NO REPORT PUBLISHED
+[2J[H[1;38;2;138;173;244mCONTEXT CONFORMANCE · EXAMPLE CONTEXT AGAINST DISTILLED RULES[0m
+TARGET · ticker/example-mappings · 20 DIRECT MEMORIES
+RULES · ticker/distilled-rules · 5 DIRECT MEMORIES
+OVERVIEW · The example mappings consistently follow all five rules. The generated symbols are presented as mappings without any claim that they are official, unique, or exchange-valid.
+
+[1;38;2;138;173;244mr1 · CONFORMS[0m
+[38;2;202;211;245m  RULE · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.[0m
+  EVIDENCE · 20 Memories
+  WHY · Across the mappings, leading articles and legal-form suffixes are excluded, connectors do not contribute characters, and meaningful numeric tokens are preserved.
+
+[1;38;2;138;173;244mr2 · CONFORMS[0m
+[38;2;202;211;245m  RULE · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.[0m
+  EVIDENCE · 17 Memories
+  WHY · Every normalized multiword name uses the initial of each meaningful word, including numeric initials, while “AI” is preserved as the single component A in AAT.
+
+[1;38;2;138;173;244mr3 · CONFORMS[0m
+[38;2;202;211;245m  RULE · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.[0m
+  EVIDENCE · 3 Memories
+  WHY · Each normalized single-word company name is assigned a concise three-letter mnemonic: RED, MER, and SOL.
+
+[1;38;2;138;173;244mr4 · CONFORMS[0m
+[38;2;202;211;245m  RULE · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.[0m
+  EVIDENCE · 3 Memories
+  WHY · The share-class mappings retain the ordinary base tickers and append the corresponding .B, .A, and .P suffixes.
+
+[1;38;2;138;173;244mr5 · CONFORMS[0m
+[38;2;202;211;245m  RULE · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification.[0m
+  EVIDENCE · 0 Memories
+  WHY · The context presents generated name-to-symbol mnemonic mappings and makes no representation that any symbol is official, unique, or exchange-valid.
+
+OUTSIDE · 0 Memories
+V · VERIFY READ-ONLY CONTRACT
+READY CONTEXT REPORT

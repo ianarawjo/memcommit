@@ -33,8 +33,12 @@ from memcommit.commands.resolution_workbench_shell import (
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context import Context
+from memcommit.conformance import ConformanceError, check_context_conformance
+from memcommit.conformance_runtime import freeze_context_conformance
 from memcommit.derived_policy import authorize_analysis_save
 from memcommit.findings import FindingsError, FindingsProvider
 from memcommit.profile_config import ProfileConfigError
@@ -45,6 +49,7 @@ from memcommit.quality_audit import (
     QualityAuditSession,
     quality_audit_record_digest,
     quality_audit_resolution_view,
+    create_quality_audit,
     run_quality_audit,
 )
 from memcommit.quality_audit_store import QualityAuditStore
@@ -63,36 +68,49 @@ _AUDIT_WAIT_LABELS: tuple[tuple[QualityAuditKind, str], ...] = (
     ("ambiguities", "AMBIGUITIES"),
     ("conflicts", "CONFLICTS"),
 )
+_CONFORMANCE_WAIT_LABEL = ("conformance", "CONFORMANCE")
 
 
 class _AuditWaitState:
-    """Project three independent provider turns into one cumulative screen."""
+    """Project the independent Audit turns into one cumulative screen."""
 
-    def __init__(self, *, context_name: str, memory_count: int) -> None:
+    def __init__(
+        self,
+        *,
+        context_name: str,
+        memory_count: int,
+        include_conformance: bool = False,
+    ) -> None:
         self.context_name = context_name
         self.memory_count = memory_count
+        self._labels = (
+            (*_AUDIT_WAIT_LABELS, _CONFORMANCE_WAIT_LABEL)
+            if include_conformance
+            else _AUDIT_WAIT_LABELS
+        )
+        self._include_conformance = include_conformance
         self._current_step = 0
         self._completed_steps = 0
         self._lock = threading.Lock()
 
-    def begin(self, kind: QualityAuditKind, step: int, total: int) -> None:
-        if total != len(_AUDIT_WAIT_LABELS) or not 1 <= step <= total:
+    def begin(self, kind: str, step: int, total: int) -> None:
+        if total != len(self._labels) or not 1 <= step <= total:
             raise QualityAuditError("Invalid Audit progress boundary.")
-        expected_kind = _AUDIT_WAIT_LABELS[step - 1][0]
+        expected_kind = self._labels[step - 1][0]
         if kind != expected_kind:
             raise QualityAuditError(
-                "Audit progress did not preserve Duplicate, Ambiguity, Conflict order."
+                "Audit progress did not preserve its displayed check order."
             )
         with self._lock:
             # A later row proves only that the preceding finder returned a
             # complete validated report. Its content remains unpublished until
-            # the final three-check snapshot exists.
+            # the final complete snapshot exists.
             self._completed_steps = step - 1
             self._current_step = step
 
     def complete(self) -> None:
         with self._lock:
-            self._completed_steps = len(_AUDIT_WAIT_LABELS)
+            self._completed_steps = len(self._labels)
             self._current_step = 0
 
     def render(self, frame_index: int) -> StyleAndTextTuples:
@@ -100,7 +118,14 @@ class _AuditWaitState:
             current_step = self._current_step
             completed_steps = self._completed_steps
         fragments: StyleAndTextTuples = [
-            ("class:loading-label", "MEM AUDIT · THREE QUALITY FINDERS\n"),
+            (
+                "class:loading-label",
+                (
+                    "MEM AUDIT · THREE QUALITY FINDERS + RULE CONFORMANCE\n"
+                    if self._include_conformance
+                    else "MEM AUDIT · THREE QUALITY FINDERS\n"
+                ),
+            ),
             ("class:loading-status", "RESULT PENDING · SOURCE UNCHANGED\n\n"),
             ("class:report-label", "FROZEN SOURCE\n"),
             (
@@ -110,7 +135,7 @@ class _AuditWaitState:
             ),
             ("class:viewer-section", "CHECKS · SAME FROZEN DIRECT SOURCE\n"),
         ]
-        for step, (_kind, label) in enumerate(_AUDIT_WAIT_LABELS, start=1):
+        for step, (_kind, label) in enumerate(self._labels, start=1):
             fragments.append(
                 ("class:report-neutral", f"{step}. {label:<12} · ")
             )
@@ -130,7 +155,7 @@ class _AuditWaitState:
                 ("", "\n"),
                 (
                     "class:report-neutral",
-                    "Each finder runs independently in this displayed order. "
+                    "Each check runs independently in this displayed order. "
                     "No partial Audit is saved.\n",
                 ),
                 (
@@ -143,7 +168,9 @@ class _AuditWaitState:
 
     def view(self) -> CommandWaitView:
         return CommandWaitView(
-            title="AUDIT CHECKS · 1 → 2 → 3",
+            title="AUDIT CHECKS · " + " → ".join(
+                str(step) for step in range(1, len(self._labels) + 1)
+            ),
             text=self.render(0),
             frame_renderer=self.render,
         )
@@ -153,6 +180,7 @@ def _run_quality_audit_checks(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
     *,
+    conformance_rules: Context | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     interactive: bool | None = None,
@@ -165,11 +193,13 @@ def _run_quality_audit_checks(
     wait_state = _AuditWaitState(
         context_name=ctx.name,
         memory_count=len(ctx.memories),
+        include_conformance=conformance_rules is not None,
     )
+    total_checks = 4 if conformance_rules is not None else 3
 
     def work(progress: CommandWaitProgress) -> QualityAuditSession:
-        def update_progress(kind: QualityAuditKind, step: int, total: int) -> None:
-            wait_state.begin(kind, step, total)
+        def update_progress(kind: QualityAuditKind, step: int, _total: int) -> None:
+            wait_state.begin(kind, step, total_checks)
             progress.update(f"finding {kind}", step=step)
 
         session = run_quality_audit(
@@ -177,13 +207,31 @@ def _run_quality_audit_checks(
             provider_factory,
             on_check=update_progress,
         )
+        if conformance_rules is not None:
+            wait_state.begin("conformance", 4, total_checks)
+            progress.update("checking conformance", step=4)
+            frozen = freeze_context_conformance(ctx, conformance_rules)
+            report = check_context_conformance(
+                source_label=frozen.target_name,
+                rules_label=frozen.rules_name,
+                rules=frozen.rules,
+                subjects=frozen.subjects,
+                provider=provider_factory(),
+            )
+            session = create_quality_audit(
+                ctx,
+                session.checks,
+                conformance=report,
+                uid=session.uid,
+                created_at=session.created_at,
+            )
         wait_state.complete()
         return session
 
     return run_command_wait(
         "AUDIT",
         "finding duplicates",
-        total=len(_AUDIT_WAIT_LABELS),
+        total=total_checks,
         work=work,
         app_input=app_input,
         app_output=app_output,
@@ -304,6 +352,16 @@ def cmd(
             help="Exact readable Context to audit (flagless TTY opens setup)",
         ),
     ] = None,
+    against: Annotated[
+        Optional[str],
+        typer.Option(
+            "--against",
+            help=(
+                "Optional local Rules Context; adds the shared Conformance "
+                "check to this Audit"
+            ),
+        ),
+    ] = None,
     snapshot: Annotated[
         bool,
         typer.Option(
@@ -312,11 +370,19 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Run all three quality finders, save their exact snapshot, and review it."""
+    """Run quality checks and optional Rule Conformance, then save one Audit."""
 
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
+        rules_ctx: Context | None = None
+        if against is not None:
+            rules_name = context_snapshot.resolve(against)
+            if not store.context_exists(rules_name):
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Rules Context."
+                )
+            rules_ctx = store.load_direct(rules_name)
         if context_name is None and _interactive_terminal() and not snapshot:
             selected = _interactive_source(
                 store,
@@ -325,7 +391,11 @@ def cmd(
             if selected is None:
                 typer.echo("Audit cancelled.")
                 return
-            _access, ctx = selected
+            selected_access, ctx = selected
+            if rules_ctx is not None and selected_access.is_granted:
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Target Context."
+                )
         else:
             canonical_name = (
                 None if context_name is None else context_snapshot.resolve(context_name)
@@ -342,18 +412,28 @@ def cmd(
                 if access.is_granted
                 else store.load_direct(access.context_name)
             )
+            if rules_ctx is not None and access.is_granted:
+                raise ConformanceError(
+                    "Audit Conformance currently requires a local Target Context."
+                )
 
+        if rules_ctx is not None:
+            # Fail structural Conformance setup before opening any of the four
+            # provider turns; a bad Rules frame must not waste a partial Audit.
+            freeze_context_conformance(ctx, rules_ctx)
         session = _run_quality_audit_checks(
             ctx,
             connect_codex_chatgpt_provider,
+            conformance_rules=rules_ctx,
         )
 
-        # Publish the complete three-check snapshot before terminal control.
+        # Publish the complete three- or four-check snapshot before terminal control.
         # A PTY disconnect can lose only an unsaved composer draft, never the
         # provider result the person is about to review.
         QualityAuditStore(store).save(session, expected_digest=None)
     except (
         ConcurrentContextUpdateError,
+        ConformanceError,
         FileNotFoundError,
         FindingsError,
         OSError,

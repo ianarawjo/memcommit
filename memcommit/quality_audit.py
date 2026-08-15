@@ -1,9 +1,10 @@
-"""Durable three-check Memory quality Audit snapshots and review projection.
+"""Durable Memory quality Audit snapshots and review projection.
 
 Audit is an orchestration boundary, not a fourth semantic judge.  It freezes
 one direct Context frame, runs the existing Duplicate, Ambiguity, and Conflict
-finders independently, and retains their typed reports in one immutable
-snapshot.  Only the reviewer response ledger may change after creation.
+finders independently, and may retain one separately typed Conformance check
+against an explicit Rules Context. Only the reviewer response ledger may
+change after creation.
 """
 
 from __future__ import annotations
@@ -16,6 +17,10 @@ from datetime import datetime, timezone
 from typing import Callable, Literal
 
 from memcommit.context import Context, Memory
+from memcommit.conformance import (
+    CONFORMANCE_RULESET_VERSION,
+    ConformanceReport,
+)
 from memcommit.findings import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -32,6 +37,7 @@ from memcommit.findings import (
 from memcommit.provider_types import CompletionRun, ProviderIdentity
 from memcommit.quality_find_workbench import (
     QualityFindResponse,
+    QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_resolution_view,
 )
@@ -45,7 +51,8 @@ from memcommit.resolution_workbench import (
 from memcommit.review import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 
-QUALITY_AUDIT_SCHEMA_VERSION = 1
+QUALITY_AUDIT_SCHEMA_VERSION = 2
+QUALITY_AUDIT_LEGACY_SCHEMA_VERSION = 1
 QUALITY_AUDIT_KINDS = ("duplicates", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
     "duplicates": QUALITY_RULESET_VERSIONS["find_duplicates"],
@@ -547,6 +554,7 @@ class QualityAuditSession:
     created_at: str
     source: QualityAuditSource
     checks: tuple[QualityAuditCheck, ...]
+    conformance: ConformanceReport | None = None
     responses: dict[str, QualityFindResponse] = field(default_factory=dict)
 
     @property
@@ -573,6 +581,11 @@ class QualityAuditSession:
             "created_at": self.created_at,
             "source": self.source.to_dict(),
             "checks": [check.to_dict() for check in self.checks],
+            "conformance": (
+                self.conformance.to_dict()
+                if self.conformance is not None
+                else None
+            ),
         }
 
     @property
@@ -594,12 +607,30 @@ class QualityAuditSession:
 
     @classmethod
     def from_dict(cls, value: object) -> "QualityAuditSession":
-        data = _exact_dict(
-            value,
-            {"schema_version", "uid", "created_at", "source", "checks", "responses"},
-            "Audit session",
-        )
-        if data["schema_version"] != QUALITY_AUDIT_SCHEMA_VERSION:
+        if not isinstance(value, dict):
+            raise QualityAuditError("Invalid Audit session.")
+        schema_version = value.get("schema_version")
+        if schema_version == QUALITY_AUDIT_LEGACY_SCHEMA_VERSION:
+            data = _exact_dict(
+                value,
+                {
+                    "schema_version", "uid", "created_at", "source", "checks",
+                    "responses",
+                },
+                "legacy Audit session",
+            )
+            raw_conformance = None
+        elif schema_version == QUALITY_AUDIT_SCHEMA_VERSION:
+            data = _exact_dict(
+                value,
+                {
+                    "schema_version", "uid", "created_at", "source", "checks",
+                    "conformance", "responses",
+                },
+                "Audit session",
+            )
+            raw_conformance = data["conformance"]
+        else:
             raise QualityAuditError("Unsupported Audit session schema version.")
         source = QualityAuditSource.from_dict(data["source"])
         source_by_uid = {
@@ -626,6 +657,33 @@ class QualityAuditSession:
             if check.provenance.operation != f"find_{check.kind}":
                 raise QualityAuditError(
                     "Audit check provenance does not match its finder."
+                )
+        conformance = (
+            None
+            if raw_conformance is None
+            else ConformanceReport.from_dict(raw_conformance)
+        )
+        if conformance is not None:
+            if (
+                conformance.mode != "CONTEXT"
+                or conformance.ruleset_version != CONFORMANCE_RULESET_VERSION
+                or conformance.source_label != source.context_name
+                or conformance.provider_identity is None
+            ):
+                raise QualityAuditError(
+                    "Audit Conformance does not match its frozen Source or provider."
+                )
+            conformance_subjects = {
+                item.uid: item.content for item in conformance.subjects
+            }
+            source_subjects = {
+                item.uid: item.content for item in source.memories
+            }
+            if conformance_subjects != source_subjects or any(
+                item.expected is not None for item in conformance.subjects
+            ):
+                raise QualityAuditError(
+                    "Audit Conformance does not cover the exact frozen Source."
                 )
         conflict_report = checks[2].report
         assert isinstance(conflict_report, ConflictReport)
@@ -667,6 +725,7 @@ class QualityAuditSession:
             created_at=_string(data["created_at"], "Audit creation time", limit=100),
             source=source,
             checks=checks,
+            conformance=conformance,
             responses=responses,
         )
         try:
@@ -732,10 +791,11 @@ def create_quality_audit(
     ctx: Context,
     checks: tuple[QualityAuditCheck, ...],
     *,
+    conformance: ConformanceReport | None = None,
     uid: str | None = None,
     created_at: str | None = None,
 ) -> QualityAuditSession:
-    """Create and fully validate one completed three-check Audit snapshot."""
+    """Create and fully validate one completed Audit snapshot."""
 
     source = QualityAuditSource.from_context(ctx)
     session = QualityAuditSession(
@@ -744,6 +804,7 @@ def create_quality_audit(
         or datetime.now(timezone.utc).isoformat(timespec="seconds"),
         source=source,
         checks=checks,
+        conformance=conformance,
     )
     return QualityAuditSession.from_dict(session.to_dict())
 
@@ -795,18 +856,17 @@ def quality_audit_record_digest(session: QualityAuditSession) -> str:
 def quality_audit_resolution_view(
     session: QualityAuditSession,
 ) -> ResolutionWorkbenchView:
-    """Compose three typed finder reports into one saved Resolution report."""
+    """Compose typed finder and optional Conformance reports into one view."""
 
     ctx = session.source.context()
+    source_frame = QualityFindSourceFrame.create((ctx,))
     items = []
     counts: dict[str, int] = {}
     for check in session.checks:
         sub_session = QualityFindWorkbenchSession(
             uid=session.uid,
             kind=check.kind,
-            context_uid=session.source.context_uid,
-            context_name=session.source.context_name,
-            context_digest=session.source.context_digest,
+            source=source_frame,
             report=check.report,
             responses=session.responses,
         )
@@ -815,25 +875,48 @@ def quality_audit_resolution_view(
         counts[check.kind] = len(projected.items)
 
     total = len(items)
-    checks_text = "\n".join(
+    check_lines = [
         (
             f"{kind.upper()} · COMPLETE · {counts[kind]} "
             f"{'finding' if counts[kind] == 1 else 'findings'}"
         )
         for kind in QUALITY_AUDIT_KINDS
-    )
-    provenance_text = "\n".join(
+    ]
+    provenance_lines = [
         f"{check.kind.upper()} · {check.ruleset_version} · {check.provenance.display_name()}"
         for check in session.checks
-    )
-    sections = (
+    ]
+    conformance = session.conformance
+    check_total = 3
+    if conformance is not None:
+        check_total = 4
+        check_lines.append(
+            "CONFORMANCE · COMPLETE · "
+            f"{len(conformance.context_judgments)} Rules · "
+            f"{conformance.issue_count} issues"
+        )
+        identity = conformance.provider_identity
+        assert identity is not None
+        provenance_lines.append(
+            "CONFORMANCE · "
+            f"{conformance.ruleset_version} · {identity.display_name()}"
+        )
+    checks_text = "\n".join(check_lines)
+    provenance_text = "\n".join(provenance_lines)
+    sections_list = [
         ResolutionOverviewSection(
             "summary",
             "AUDIT SUMMARY",
             (
-                "All three quality finders completed over the same frozen direct "
+                "All quality finders completed over the same frozen direct "
                 f"Context frame. Reported {total} total "
                 f"{'finding' if total == 1 else 'findings'}."
+                + (
+                    " Conformance evaluated the same Source against "
+                    f"{len(conformance.rules)} frozen Rules."
+                    if conformance is not None
+                    else ""
+                )
             ),
         ),
         ResolutionOverviewSection("checks", "CHECKS", checks_text),
@@ -855,28 +938,52 @@ def quality_audit_resolution_view(
                 "not alter the snapshot, Context, or Memories."
             ),
         ),
-    )
+    ]
+    if conformance is not None:
+        rule_by_uid = {rule.uid: rule for rule in conformance.rules}
+        sections_list.insert(
+            3,
+            ResolutionOverviewSection(
+                "conformance",
+                "CONFORMANCE",
+                "\n".join(
+                    f"{rule_by_uid[item.rule_uid].alias} · {item.status} · {item.reason}"
+                    for item in conformance.context_judgments
+                ),
+            ),
+        )
+    sections = tuple(sections_list)
+    metrics = [
+        ResolutionMetric("SOURCE MEMORIES", str(len(session.source.memories))),
+        ResolutionMetric("DUPLICATES", str(counts["duplicates"])),
+        ResolutionMetric("AMBIGUITIES", str(counts["ambiguities"])),
+        ResolutionMetric("CONFLICTS", str(counts["conflicts"])),
+    ]
+    if conformance is not None:
+        metrics.append(
+            ResolutionMetric("CONFORMANCE ISSUES", str(conformance.issue_count))
+        )
     return ResolutionWorkbenchView(
         operation="AUDIT",
         artifact_uid=session.uid,
         revision=session.snapshot_digest,
         title="MEM AUDIT",
         route=session.source.context_name,
-        status=f"SAVED · 3/3 CHECKS · {session.answered_count}/{total} ANSWERED",
-        metrics=(
-            ResolutionMetric("SOURCE MEMORIES", str(len(session.source.memories))),
-            ResolutionMetric("DUPLICATES", str(counts["duplicates"])),
-            ResolutionMetric("AMBIGUITIES", str(counts["ambiguities"])),
-            ResolutionMetric("CONFLICTS", str(counts["conflicts"])),
-        ),
+        status=f"SAVED · {check_total}/{check_total} CHECKS · {session.answered_count}/{total} ANSWERED",
+        metrics=tuple(metrics),
         context_locations=(
             ResolutionContextLocation("FROZEN SOURCE", session.source.context_name),
         ),
         overview=resolution_overview_text(sections),
         overview_sections=sections,
-        list_label="AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS",
+        list_label=(
+            "AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS"
+            + (" · CONFORMANCE IN OVERVIEW" if conformance is not None else "")
+        ),
         items=tuple(items),
-        empty_message="All three checks completed with no actionable findings.",
+        empty_message=(
+            f"All {check_total} checks completed with no actionable quality findings."
+        ),
         results_label="EXACT RESULTS",
         results=(),
         capabilities=(frozenset({"SUBMIT_ITEM"}) if items else frozenset()),

@@ -1,0 +1,5 @@
+MEM DISTILL · PROVIDER TURN                                                                                                                                                         
+MODEL · gpt-5.6-sol                                                                                                                                                                 
+REASONING · NONE                                                                                                                                                                    
+EXECUTION · WHOLE FRAME ONLY · 20/20 CASES IN ONE BOUNDED TURN                                                                                                                      
+STATE · RUNNING · NO RESULT PUBLISHED

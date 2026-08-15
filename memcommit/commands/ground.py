@@ -31,7 +31,9 @@ from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.context import Context, Memory
 from memcommit.ground import (
     GROUND_SCHEMA_VERSION,
@@ -1314,8 +1316,8 @@ def _count_items(session: GroundSession, kind: str) -> int:
 
 def _display_ground_compatibility_token(value: str) -> str:
     """Translate persisted Case-era tokens only for user-facing output."""
-    if value == "INDUCED_FROM_CASES":
-        return "INDUCED_FROM_MEMORIES"
+    if value in {"DISTILLED_FROM_GOAL", "INDUCED_FROM_CASES"}:
+        return "DISTILLED"
     for action in ("ACCEPT", "DEFER", "REJECT", "REFINE"):
         if value == f"{action} CASE":
             return f"{action} MEMORY"
@@ -1370,10 +1372,10 @@ def _render_contract_layers(
     rules = [item for item in session.items if item.kind == "RULE"]
     cases = [item for item in session.items if item.kind == "CASE"]
     decisions = [item for item in session.items if item.kind == "DECISION"]
-    lines = ["2 · RULES · DISTILLED / INDUCED"]
+    lines = ["2 · RULES · STATED / DISTILLED / REVISED"]
     if not rules:
         lines.append(
-            "  (none yet; distill from the Goal or induct from Ground Memories)"
+            "  (none yet; state directly or distill from Goal and Ground Memories)"
         )
     for item in rules:
         provenance = _display_ground_compatibility_token(
@@ -2052,9 +2054,9 @@ def cmd(
         typer.Option(
             "--rule-provenance",
             help=(
-                "USER_STATED, DISTILLED_FROM_GOAL, "
-                "or legacy INDUCED_FROM_CASES (displayed as "
-                "INDUCED_FROM_MEMORIES); review creates JOINTLY_REVISED"
+                "USER_STATED or DISTILLED; legacy DISTILLED_FROM_GOAL and "
+                "INDUCED_FROM_CASES remain readable; review creates "
+                "JOINTLY_REVISED"
             ),
         ),
     ] = None,
@@ -2600,7 +2602,7 @@ def cmd(
                     rationale=rationale,
                     current_contexts=contexts,
                     rule_provenance=(
-                        rule_provenance or "DISTILLED_FROM_GOAL"
+                        rule_provenance or "DISTILLED"
                     ).upper(),
                     target_context_names=tuple(propose_rule_target or ()),
                 )
@@ -2676,7 +2678,7 @@ def cmd(
                         case_role=(case_role or "FIT").upper(),
                         disposition=case_disposition,
                         rule_provenance=(
-                            rule_provenance or "INDUCED_FROM_CASES"
+                            rule_provenance or "DISTILLED"
                         ).upper(),
                     )
                 else:

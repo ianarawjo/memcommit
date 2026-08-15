@@ -1,0 +1,15 @@
+MEM DISTILL · TICKER EVALUATION VERIFICATION                                                                                                                                        
+PROVIDER · CODEX CHATGPT · gpt-5.6-sol · REASONING NONE                                                                                                                             
+SOURCE · test/ground/ticker-rule-examples                                                                                                                                           
+SOURCE CASES · 20                                                                                                                                                                   
+DISTILLED RULES · 5                                                                                                                                                                 
+EXPLICITLY OUTSIDE · 0                                                                                                                                                              
+EVIDENCE ACCOUNTING · 20/20 · COMPLETE True                                                                                                                                         
+SOURCE BYTE-LOGICAL RECORD UNCHANGED · True                                                                                                                                         
+TEMPORARY RESULT · test/ground/ticker-rule-output                                                                                                                                   
+RESULT MEMORIES · 5                                                                                                                                                                 
+RESULT EXACTLY MATCHES REVIEWED RULES · True                                                                                                                                        
+CHECKPOINT · f5f8c37e-b986-4a96-9426-2df5a4bf2e88                                                                                                                                   
+DURABLE USER PROFILE MUTATION · NONE (TEMPORARY STORE REMOVED)                                                                                                                      
+EVIDENCE · docs/screenshots/mem-distill-ticker-20260815/actual-run.json                                                                                                             
+READY VERIFICATION

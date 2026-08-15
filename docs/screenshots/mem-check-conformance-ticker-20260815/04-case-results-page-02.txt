@@ -1,0 +1,48 @@
+CASE CONFORMANCE · TICKER RULE REPLAY · PAGE 2/3                                                                                                                                    
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER                                                                                                                                      
+OVERVIEW · Applied the linked rules to all cases.                                                                                                                                   
+                                                                                                                                                                                    
+c8 · PASS                                                                                                                                                                           
+  INPUT · Quanta Systems & Services Inc.                                                                                                                                            
+  PREDICTED · QSS                                                                                                                                                                   
+  EXPECTED · QSS                                                                                                                                                                    
+  WHY · The connector is ignored; initials come from Quanta, Systems, and Services.                                                                                                 
+                                                                                                                                                                                    
+c9 · PASS                                                                                                                                                                           
+  INPUT · Atlas 7 Networks Corp.                                                                                                                                                    
+  PREDICTED · A7N                                                                                                                                                                   
+  EXPECTED · A7N                                                                                                                                                                    
+  WHY · Initials of Atlas and Networks with the meaningful numeric token preserved.                                                                                                 
+                                                                                                                                                                                    
+c10 · PASS                                                                                                                                                                          
+  INPUT · 3 Rivers Logistics LLC                                                                                                                                                    
+  PREDICTED · 3RL                                                                                                                                                                   
+  EXPECTED · 3RL                                                                                                                                                                    
+  WHY · The numeric component is preserved alongside the initials of Rivers and Logistics.                                                                                          
+                                                                                                                                                                                    
+c11 · AMBIGUOUS                                                                                                                                                                     
+  INPUT · Redwood Inc.                                                                                                                                                              
+  PREDICTED · (none)                                                                                                                                                                
+  EXPECTED · RED                                                                                                                                                                    
+  WHY · The rules require a concise three-letter mnemonic for the single word Redwood but do not uniquely specify its letters.                                                      
+                                                                                                                                                                                    
+c12 · AMBIGUOUS                                                                                                                                                                     
+  INPUT · Meridian Corporation                                                                                                                                                      
+  PREDICTED · (none)                                                                                                                                                                
+  EXPECTED · MER                                                                                                                                                                    
+  WHY · After removing the legal suffix, Meridian is a single word, and its required three-letter mnemonic is not uniquely specified.                                               
+                                                                                                                                                                                    
+c13 · AMBIGUOUS                                                                                                                                                                     
+  INPUT · Solstice Ltd.                                                                                                                                                             
+  PREDICTED · (none)                                                                                                                                                                
+  EXPECTED · SOL                                                                                                                                                                    
+  WHY · After removing the legal suffix, Solstice is a single word, and its required three-letter mnemonic is not uniquely specified.                                               
+                                                                                                                                                                                    
+c14 · PASS                                                                                                                                                                          
+  INPUT · International Business Fabricators Inc.                                                                                                                                   
+  PREDICTED · IBF                                                                                                                                                                   
+  EXPECTED · IBF                                                                                                                                                                    
+  WHY · Initials of International, Business, and Fabricators.                                                                                                                       
+                                                                                                                                                                                    
+N · NEXT                                                                                                                                                                            
+READY CASE PAGE 2/3

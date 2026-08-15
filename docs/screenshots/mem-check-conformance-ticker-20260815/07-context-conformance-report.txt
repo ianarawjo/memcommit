@@ -1,0 +1,37 @@
+CONTEXT CONFORMANCE · EXAMPLE CONTEXT AGAINST DISTILLED RULES                                                                                                                       
+TARGET · ticker/example-mappings · 20 DIRECT MEMORIES                                                                                                                               
+RULES · ticker/distilled-rules · 5 DIRECT MEMORIES                                                                                                                                  
+OVERVIEW · The example mappings consistently follow all five rules. The generated symbols are presented as mappings without any claim that they are official, unique, or exchange-va
+lid.                                                                                                                                                                                
+                                                                                                                                                                                    
+r1 · CONFORMS                                                                                                                                                                       
+  RULE · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and igno
+re connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.                                                                                     
+  EVIDENCE · 20 Memories                                                                                                                                                            
+  WHY · Across the mappings, leading articles and legal-form suffixes are excluded, connectors do not contribute characters, and meaningful numeric tokens are preserved.           
+                                                                                                                                                                                    
+r2 · CONFORMS                                                                                                                                                                       
+  RULE · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for
+ a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.                                                                               
+  EVIDENCE · 17 Memories                                                                                                                                                            
+  WHY · Every normalized multiword name uses the initial of each meaningful word, including numeric initials, while “AI” is preserved as the single component A in AAT.             
+                                                                                                                                                                                    
+r3 · CONFORMS                                                                                                                                                                       
+  RULE · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.                  
+  EVIDENCE · 3 Memories                                                                                                                                                             
+  WHY · Each normalized single-word company name is assigned a concise three-letter mnemonic: RED, MER, and SOL.                                                                    
+                                                                                                                                                                                    
+r4 · CONFORMS                                                                                                                                                                       
+  RULE · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.      
+  EVIDENCE · 3 Memories                                                                                                                                                             
+  WHY · The share-class mappings retain the ordinary base tickers and append the corresponding .B, .A, and .P suffixes.                                                             
+                                                                                                                                                                                    
+r5 · CONFORMS                                                                                                                                                                       
+  RULE · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verifi
+cation.                                                                                                                                                                             
+  EVIDENCE · 0 Memories                                                                                                                                                             
+  WHY · The context presents generated name-to-symbol mnemonic mappings and makes no representation that any symbol is official, unique, or exchange-valid.                         
+                                                                                                                                                                                    
+OUTSIDE · 0 Memories                                                                                                                                                                
+V · VERIFY READ-ONLY CONTRACT                                                                                                                                                       
+READY CONTEXT REPORT

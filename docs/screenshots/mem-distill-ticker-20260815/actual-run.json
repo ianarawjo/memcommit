@@ -1,0 +1,141 @@
+{
+  "evaluation": "ticker-example Distill",
+  "provider": {
+    "name": "codex_chatgpt",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "none"
+  },
+  "source": {
+    "context": "test/ground/ticker-rule-examples",
+    "scope": "DIRECT",
+    "cases": [
+      "North Star Energy Inc. → NSE",
+      "Blue River Holdings LLC → BRH",
+      "Cedar Valley Technologies Corporation → CVT",
+      "Aurora Robotics Ltd. → AR",
+      "Harbor Point Foods PLC → HPF",
+      "The Meridian Group Inc. → MG",
+      "Lumen Labs LLC → LL",
+      "Quanta Systems & Services Inc. → QSS",
+      "Atlas 7 Networks Corp. → A7N",
+      "3 Rivers Logistics LLC → 3RL",
+      "Redwood Inc. → RED",
+      "Meridian Corporation → MER",
+      "Solstice Ltd. → SOL",
+      "International Business Fabricators Inc. → IBF",
+      "North Star Energy Inc., Class B → NSE.B",
+      "North Star Energy Inc., Class A → NSE.A",
+      "Blue River Holdings LLC, Preferred → BRH.P",
+      "Acme & Sons Ltd. → AS",
+      "Axiom AI Technologies Inc. → AAT",
+      "The 5th Avenue Retail Group LLC → 5ARG"
+    ],
+    "unchanged": true
+  },
+  "goal": "Derive reusable, deterministic rules for generating concise synthetic ticker symbols from company names and share-class details. Treat every mapping as a design example, not an official market ticker, and state important boundaries or exceptions.",
+  "analysis": {
+    "uid": "78efe6ea-5e16-437f-b457-7692d6b103dc",
+    "digest": "04dd2d69d286ef40b06485b2adc0294e9c9add7c92256557507a485f305f0de2",
+    "overview": "The examples support a compact deterministic scheme: normalize the company name, select a mnemonic base by word count, and append share-class or preferred suffixes when present. These are synthetic design rules only, not claims about official market tickers.",
+    "rules": [
+      {
+        "content": "When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.",
+        "goal_support": true,
+        "support": [
+          "m000001",
+          "m000002",
+          "m000003",
+          "m000004",
+          "m000005",
+          "m000006",
+          "m000008",
+          "m000009",
+          "m000010",
+          "m000018",
+          "m000020"
+        ],
+        "boundary": [],
+        "rationale": "Examples omit leading “The,” legal forms, and “&,” while retaining 7, 3, and 5th as meaningful numeric elements."
+      },
+      {
+        "content": "When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.",
+        "goal_support": true,
+        "support": [
+          "m000001",
+          "m000002",
+          "m000003",
+          "m000004",
+          "m000005",
+          "m000006",
+          "m000007",
+          "m000008",
+          "m000009",
+          "m000010",
+          "m000014",
+          "m000018",
+          "m000019",
+          "m000020"
+        ],
+        "boundary": [
+          "m000011",
+          "m000012",
+          "m000013"
+        ],
+        "rationale": "The multiword examples consistently use word initials, including numeric-leading names and the preserved AI abbreviation."
+      },
+      {
+        "content": "When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.",
+        "goal_support": true,
+        "support": [
+          "m000011",
+          "m000012",
+          "m000013"
+        ],
+        "boundary": [
+          "m000001",
+          "m000002",
+          "m000003",
+          "m000004",
+          "m000005",
+          "m000006",
+          "m000007",
+          "m000008",
+          "m000009",
+          "m000010",
+          "m000014",
+          "m000018",
+          "m000019",
+          "m000020"
+        ],
+        "rationale": "The single-word examples use RED, MER, and SOL, showing a distinct three-letter mnemonic convention; the examples do not establish a unique algorithm for every possible word."
+      },
+      {
+        "content": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.",
+        "goal_support": true,
+        "support": [
+          "m000015",
+          "m000016",
+          "m000017"
+        ],
+        "boundary": [
+          "m000001",
+          "m000002"
+        ],
+        "rationale": "North Star Energy retains NSE for Classes A and B, and Blue River Holdings retains BRH for Preferred, with only the suffix changing."
+      },
+      {
+        "content": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification.",
+        "goal_support": true,
+        "support": [],
+        "boundary": [],
+        "rationale": "The supplied goal explicitly defines every mapping as a design example rather than an official market ticker, and the examples provide no evidence of uniqueness or exchange validity."
+      }
+    ],
+    "outside": []
+  },
+  "temporary_apply": {
+    "result_context": "test/ground/ticker-rule-output",
+    "rule_memory_count": 5,
+    "checkpoint_uid": "f5f8c37e-b986-4a96-9426-2df5a4bf2e88"
+  }
+}

@@ -1,0 +1,42 @@
+CASE CONFORMANCE · TICKER RULE REPLAY · PAGE 3/3                                                                                                                                    
+EXPECTED OUTPUTS WERE NOT SENT TO THE PROVIDER                                                                                                                                      
+OVERVIEW · Applied the linked rules to all cases.                                                                                                                                   
+                                                                                                                                                                                    
+c15 · PASS                                                                                                                                                                          
+  INPUT · North Star Energy Inc., Class B                                                                                                                                           
+  PREDICTED · NSE.B                                                                                                                                                                 
+  EXPECTED · NSE.B                                                                                                                                                                  
+  WHY · The base ticker NSE receives the Class B suffix.                                                                                                                            
+                                                                                                                                                                                    
+c16 · PASS                                                                                                                                                                          
+  INPUT · North Star Energy Inc., Class A                                                                                                                                           
+  PREDICTED · NSE.A                                                                                                                                                                 
+  EXPECTED · NSE.A                                                                                                                                                                  
+  WHY · The base ticker NSE receives the Class A suffix.                                                                                                                            
+                                                                                                                                                                                    
+c17 · PASS                                                                                                                                                                          
+  INPUT · Blue River Holdings LLC, Preferred                                                                                                                                        
+  PREDICTED · BRH.P                                                                                                                                                                 
+  EXPECTED · BRH.P                                                                                                                                                                  
+  WHY · The base ticker BRH receives the Preferred suffix.                                                                                                                          
+                                                                                                                                                                                    
+c18 · PASS                                                                                                                                                                          
+  INPUT · Acme & Sons Ltd.                                                                                                                                                          
+  PREDICTED · AS                                                                                                                                                                    
+  EXPECTED · AS                                                                                                                                                                     
+  WHY · The connector is ignored; initials come from Acme and Sons.                                                                                                                 
+                                                                                                                                                                                    
+c19 · FAIL                                                                                                                                                                          
+  INPUT · Axiom AI Technologies Inc.                                                                                                                                                
+  PREDICTED · AAIT                                                                                                                                                                  
+  EXPECTED · AAT                                                                                                                                                                    
+  WHY · Axiom contributes A, AI is preserved as one component, and Technologies contributes T.                                                                                      
+                                                                                                                                                                                    
+c20 · PASS                                                                                                                                                                          
+  INPUT · The 5th Avenue Retail Group LLC                                                                                                                                           
+  PREDICTED · 5ARG                                                                                                                                                                  
+  EXPECTED · 5ARG                                                                                                                                                                   
+  WHY · The leading article is removed; the meaningful numeric token and initials of Avenue, Retail, and Group are used.                                                            
+                                                                                                                                                                                    
+C · RUN CONTEXT CONFORMANCE                                                                                                                                                         
+READY CASE PAGE 3/3

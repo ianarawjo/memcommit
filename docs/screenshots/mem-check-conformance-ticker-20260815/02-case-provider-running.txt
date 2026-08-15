@@ -1,0 +1,5 @@
+CHECK CONFORMANCE · CASE · PROVIDER TURN                                                                                                                                            
+MODEL · gpt-5.6-sol · REASONING NONE                                                                                                                                                
+INPUT · 5 RULES + 20 CASE INPUTS                                                                                                                                                    
+EXPECTED OUTPUTS · WITHHELD                                                                                                                                                         
+STATE · RUNNING · NO REPORT PUBLISHED

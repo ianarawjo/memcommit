@@ -1,0 +1,52 @@
+ MEM AUDIT · 4/4 · CHECKING CONFORMANCE .. · 1s                                                                                                                                     
+┌─────────────────────────────────────────────────────────────────────────| AUDIT CHECKS · 1 → 2 → 3 → 4 |─────────────────────────────────────────────────────────────────────────┐
+│MEM AUDIT · THREE QUALITY FINDERS + RULE CONFORMANCE                                                                                                                             ^│
+│RESULT PENDING · SOURCE UNCHANGED                                                                                                                                                 │
+│                                                                                                                                                                                  │
+│FROZEN SOURCE                                                                                                                                                                     │
+│ticker/examples · 2 direct Memories                                                                                                                                               │
+│                                                                                                                                                                                  │
+│CHECKS · SAME FROZEN DIRECT SOURCE                                                                                                                                                │
+│1. DUPLICATES   · COMPLETE                                                                                                                                                        │
+│2. AMBIGUITIES  · COMPLETE                                                                                                                                                        │
+│3. CONFLICTS    · COMPLETE                                                                                                                                                        │
+│4. CONFORMANCE  · RUNNING ..                                                                                                                                                      │
+│                                                                                                                                                                                  │
+│Each check runs independently in this displayed order. No partial Audit is saved.                                                                                                 │
+│H or ? opens Help while the active finder continues.                                                                                                                              │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c Contexts · R/r report · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                                                 

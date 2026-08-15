@@ -1,0 +1,52 @@
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION                                                                                                                                                              
+ MEM AUDIT                                                                                                                                                                          
+ ticker/examples                                                                                                                                                                    
+ SAVED · 4/4 CHECKS · 0/0 ANSWERED · 2 SOURCE MEMORIES · 0 DUPLICATES · 0 AMBIGUITIES · 0 CONFLICTS · 0 CONFORMANCE ISSUES                                                          
+                                                                                                                                                                                    
+ WHAT MEM UNDERSTOOD                                                                                                                                                                
+ AUDIT SUMMARY                                                                                                                                                                      
+ All quality finders completed over the same frozen direct Context frame. Reported 0 total findings. Conformance evaluated the same Source against 1 frozen Rules.                  
+                                                                                                                                                                                    
+ CHECKS                                                                                                                                                                             
+ DUPLICATES · COMPLETE · 0 findings                                                                                                                                                 
+AMBIGUITIES · COMPLETE · 0 findings                                                                                                                                                 
+CONFLICTS · COMPLETE · 0 findings                                                                                                                                                   
+CONFORMANCE · COMPLETE · 1 Rules · 0 issues                                                                                                                                         
+                                                                                                                                                                                    
+ FROZEN SOURCE                                                                                                                                                                      
+ ticker/examples · 2 direct Memories. Descendants and embedded Contexts were not analyzed.                                                                                          
+                                                                                                                                                                                    
+ CONFORMANCE                                                                                                                                                                        
+ r1 · CONFORMS · Each output uses the initials of its input name.                                                                                                                   
+                                                                                                                                                                                    
+ PROVENANCE                                                                                                                                                                         
+ DUPLICATES · duplicates-v1-draft · capture:deterministic-audit-conformance                                                                                                         
+AMBIGUITIES · ambiguity-v1-draft · capture:deterministic-audit-conformance                                                                                                          
+CONFLICTS · conflict-v1-draft · capture:deterministic-audit-conformance                                                                                                             
+CONFORMANCE · conformance-v1 · capture:deterministic-audit-conformance                                                                                                              
+                                                                                                                                                                                    
+ BOUNDARY                                                                                                                                                                           
+ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Review responses do not alter the snapshot, Context, or Memories.      
+                                                                                                                                                                                    
+ AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS · CONFORMANCE IN OVERVIEW                                                                                                    
+  All 4 checks completed with no actionable quality findings.                                                                                                                       
+SOURCE AND RULES UNCHANGED · YES                                                                                                                                                    
+CHECKPOINTS CREATED · NO                                                                                                                                                            
+SAVED AUDIT UID · 2ee35383-efd3-4d66-9dec-f8a45ac79233                                                                                                                              
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

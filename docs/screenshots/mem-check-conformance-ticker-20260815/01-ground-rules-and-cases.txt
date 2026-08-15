@@ -1,0 +1,36 @@
+MEM CHECK-CONFORMANCE · TICKER ROUND-TRIP                                                                                                                                           
+PROVIDER · gpt-5.6-sol · REASONING NONE                                                                                                                                             
+GROUND · ticker-rules · 5 ACTIVE RULES · 20 INCLUDE MEMORIES                                                                                                                        
+EXPECTED OUTPUTS · FROZEN LOCALLY · WITHHELD FROM PROVIDER                                                                                                                          
+                                                                                                                                                                                    
+r1 · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore c
+onnectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.                                                                                         
+r2 · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a n
+umber-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.                                                                                   
+r3 · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.                      
+r4 · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.          
+r5 · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verificati
+on.                                                                                                                                                                                 
+                                                                                                                                                                                    
+c01 · North Star Energy Inc. → NSE                                                                                                                                                  
+c02 · Blue River Holdings LLC → BRH                                                                                                                                                 
+c03 · Cedar Valley Technologies Corporation → CVT                                                                                                                                   
+c04 · Aurora Robotics Ltd. → AR                                                                                                                                                     
+c05 · Harbor Point Foods PLC → HPF                                                                                                                                                  
+c06 · The Meridian Group Inc. → MG                                                                                                                                                  
+c07 · Lumen Labs LLC → LL                                                                                                                                                           
+c08 · Quanta Systems & Services Inc. → QSS                                                                                                                                          
+c09 · Atlas 7 Networks Corp. → A7N                                                                                                                                                  
+c10 · 3 Rivers Logistics LLC → 3RL                                                                                                                                                  
+c11 · Redwood Inc. → RED                                                                                                                                                            
+c12 · Meridian Corporation → MER                                                                                                                                                    
+c13 · Solstice Ltd. → SOL                                                                                                                                                           
+c14 · International Business Fabricators Inc. → IBF                                                                                                                                 
+c15 · North Star Energy Inc., Class B → NSE.B                                                                                                                                       
+c16 · North Star Energy Inc., Class A → NSE.A                                                                                                                                       
+c17 · Blue River Holdings LLC, Preferred → BRH.P                                                                                                                                    
+c18 · Acme & Sons Ltd. → AS                                                                                                                                                         
+c19 · Axiom AI Technologies Inc. → AAT                                                                                                                                              
+c20 · The 5th Avenue Retail Group LLC → 5ARG                                                                                                                                        
+                                                                                                                                                                                    
+R · RUN CASE CONFORMANCE

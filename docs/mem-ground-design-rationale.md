@@ -1025,6 +1025,58 @@ show a concrete mismatch or candidate
 → request explicit approval before canonicalization or mutation
 ```
 
+Ground is consequently the iterative work of refining **both** the Rules and
+their concrete Examples. Both layers contain propositions, but at different
+levels of abstraction:
+
+- a **Rule** is a definition, generalized proposition, norm, policy, or
+  reusable judgment principle;
+- an **Example** is a concrete proposition: an observation, instance,
+  input--output application, test case, allowed or prohibited outcome, or
+  another actual case that can support, contradict, or bound a Rule.
+
+Each layer should include visible examples in its explanation:
+
+```text
+RULES
+Legal-form suffixes do not contribute ticker characters.
+Clear daytime skies are generally observed as blue.
+Private identifiers must not be disclosed externally.
+
+EXAMPLES
+Apple Inc. -> AAPL or APLE.
+On 2026-08-15 in Toronto, the observed sky was blue.
+The employee number in this document must be removed from external output.
+```
+
+An Example's primary display is one proposition on one line. Opening it may
+show its complete scope, stance, related Rules, evidence, provenance, and
+rationale. Input/output fields, equality, set membership, or semantic
+acceptance criteria are later evaluators or structured projections of the
+proposition; they are not the top-level Ground ontology.
+
+An observation proposition is still an Example. If one accepted Example says
+that the sky was blue on one day and another says it was yellow on a different
+day, the generalized Rule "the sky is always blue" has met a counterexample.
+The person may reject bad evidence, narrow or replace the Rule, add missing
+scope, or leave the relation unresolved. The system must not invent an
+explanation such as sunset or atmospheric conditions without supporting
+evidence.
+
+The Rules are not privileged over the Examples. In the ticker case, a Rule
+that says to preserve `AI` predicts `AAIT`, while the reviewed Example states
+that applying the Rules to Axiom AI Technologies produces `AAT`; if that
+Example expresses the intended policy, the Rule is wrong and must be revised.
+The Example must not be silently changed merely to make the Rule pass.
+
+A concrete proposition may permit one outcome, several outcomes, or describe
+an observation without any output at all. Multiple acceptable outcomes can be
+written directly in the proposition, such as `Apple Inc. -> AAPL or APLE`.
+That is not permission for a model to widen the proposition after seeing a
+failure: revising the proposition remains a reviewed Ground decision. The
+current schema's required `content` plus singleton `expected` output cannot
+yet represent this full proposition model honestly.
+
 Follow-ups must be consequential. A generic request for more detail is not
 enough; the interface should say which judgment or proposed action cannot be
 settled without the answer. The user may choose a suggested reading, enter a
@@ -1103,7 +1155,8 @@ hierarchy is:
 | Concept | Responsibility |
 | --- | --- |
 | `ground` | Persist and validate Goal–Rules–Memories judgments through deterministic actions used by the conversational orchestrator. |
-| coverage check | Judge whether the current Rules and accepted Ground Memories already explain a candidate. This is a stage, not a new public `fit` command. |
+| `fit` (planned) | Judge how the current generalized Rule propositions relate to the concrete Example propositions: support, contradiction, boundary, non-applicability, or underdetermination. |
+| coverage check | Derive whether the reviewed Example set adequately covers the Ground's target requirements; this remains distinct from semantic fit. |
 | `induct` | Propose a reusable Rule, exception, narrowing, or broadening from reviewed Ground Memories. |
 | Memory curation | Find, enter, or retain fit, boundary, and contrast Ground Memories. It is initially an internal grounding action rather than a public command. |
 | regression check | Show whether a proposed Rule or Ground Memory decision changes previously accepted judgments. |
@@ -1111,11 +1164,35 @@ hierarchy is:
 | `dream` | Perform background discovery or consolidation; it may enqueue a grounding candidate but cannot approve it. |
 | `review` | Provide a reusable interaction surface for an already defined finding adapter; it is not the semantic grounding process. |
 
-The earlier `fit` notes use `YES / MAY / NO` for whether Memories fit together
-inside a Context. Reusing the public name for Memory-to-Rule coverage would make
-those polarities ambiguous. Grounding documentation may use the ordinary
-phrase "fit the current rule," but the first CLI should call that stage a
-coverage check.
+The earlier `fit` notes used `YES / MAY / NO` for whether Memories coexist
+inside an ordinary Context, so this document originally rejected a public
+Ground `fit` and called Rule-to-Memory coverage a coverage check. The
+proposition model changes the boundary: `fit` now names a read-only relation
+judgment between generalized Rule propositions and concrete Example
+propositions, while coverage remains a separate completeness measure. This is
+a revised design direction, not current implementation. The existing
+`--fit-rule` option only attaches a proposed Ground Memory to an existing Rule;
+it does not calculate semantic fit.
+
+Fit does not add a fifth peer layer to the Ground workbench. The established
+`GOAL / CONTEXTS / RULES / CASES` structure remains intact (the version-2 UI
+still labels the final pane `MEMORIES`). A Fit run freezes one Ground revision
+and projects its latest judgment onto each Case row, for example:
+
+```text
+c1 · SUPPORTS · Apple Inc. -> AAPL or APLE
+c2 · CONTRADICTS r2 · Axiom AI Technologies -> AAT
+c3 · UNDERDETERMINED · On 2026-08-16 the observed sky was yellow
+```
+
+Opening the Case shows the cited Rules, reason, evidence, and revision-bearing
+Fit receipt. A compact aggregate may appear in the Cases heading or status,
+but no independent Fit pane should duplicate the Case list. `RUN FIT` belongs
+in the operation-owned next action for Cases and calls the shared application
+service directly; the TUI must not shell out to the CLI adapter. Fit is
+read-only. Refining a Rule, revising or rejecting a Case, adding evidence, or
+deferring a relation remains a separately reviewed Ground command, after which
+the new Ground revision requires a new Fit run.
 
 ## Why the name is `ground`
 
@@ -1368,9 +1445,10 @@ data-model distinction, not merely a proposed screen layout.
 The **upper region is the editable Ground**, expressed in three layers:
 
 1. `GOAL`: the top-level result the fixture and operation should achieve;
-2. `RULES — DISTILLED / INDUCED`: generalizations distilled
-   top-down from the Goal, induced bottom-up from Ground Memories, stated by
-   the user, or jointly revised; and
+2. `RULES — STATED / DISTILLED / REVISED`: generalizations stated by the
+   user, distilled from any combination of the Goal and Ground Memories, or
+   jointly revised. Distillation is not restricted to a top-down or bottom-up
+   direction; and
 3. `MEMORIES — FIT / BOUNDARY / CONTRAST`: proposed or reviewed examples that
    fit or challenge the current Rules. Only explicitly accepted Ground
    Memories are golden regression anchors.
@@ -1477,6 +1555,11 @@ Ground Memory** is the user-approved form of a concrete judgment: its evidence
 trace, target slot, expected target content or disposition, and rationale have
 all been reviewed. Golden Ground Memories may be tagged as fit, boundary, or
 contrast evidence, but the tag does not replace explicit approval.
+
+Here, "golden" means a reviewed regression contract, not necessarily one
+golden string. When plural expectations are implemented, a golden Ground
+Memory may approve several outputs or an explicit acceptance criterion while
+retaining the same provenance and review boundary.
 
 The implemented deterministic slice supports the following recorded actions:
 

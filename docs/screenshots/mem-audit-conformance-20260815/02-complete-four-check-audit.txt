@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   FROZEN SOURCE · ticker/examples                                                                                                                                                ┃
+┃ SAVED · 4/4 CHECKS · 0/0 ANSWERED · 2 SOURCE MEMORIES · 0 DUPLICATES · 0 AMBIGUITIES · 0 CONFLICTS · 0 CONFORMANCE ISSUES                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ AUDIT SUMMARY                                                                                                                                                                    ┃
+┃ All quality finders completed over the same frozen direct Context frame. Reported 0 total findings. Conformance evaluated the same Source against 1 frozen Rules.                ┃
+┃                                                                                                                                                                                  ┃
+┃ CHECKS                                                                                                                                                                           ┃
+┃ DUPLICATES · COMPLETE · 0 findings                                                                                                                                               ┃
+┃AMBIGUITIES · COMPLETE · 0 findings                                                                                                                                               ┃
+┃CONFLICTS · COMPLETE · 0 findings                                                                                                                                                 ┃
+┃CONFORMANCE · COMPLETE · 1 Rules · 0 issues                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ FROZEN SOURCE                                                                                                                                                                    ┃
+┃ ticker/examples · 2 direct Memories. Descendants and embedded Contexts were not analyzed.                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ CONFORMANCE                                                                                                                                                                      ┃
+┃ r1 · CONFORMS · Each output uses the initials of its input name.                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ DUPLICATES · duplicates-v1-draft · capture:deterministic-audit-conformance                                                                                                       ┃
+┃AMBIGUITIES · ambiguity-v1-draft · capture:deterministic-audit-conformance                                                                                                        ┃
+┃CONFLICTS · conflict-v1-draft · capture:deterministic-audit-conformance                                                                                                           ┃
+┃CONFORMANCE · conformance-v1 · capture:deterministic-audit-conformance                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

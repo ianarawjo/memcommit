@@ -1,0 +1,5 @@
+CHECK CONFORMANCE · CONTEXT · PROVIDER TURN                                                                                                                                         
+MODEL · gpt-5.6-sol · REASONING NONE                                                                                                                                                
+TARGET · ticker/example-mappings · 20 MEMORIES                                                                                                                                      
+RULES · ticker/distilled-rules · 5 MEMORIES                                                                                                                                         
+STATE · RUNNING · NO REPORT PUBLISHED

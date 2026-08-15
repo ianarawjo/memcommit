@@ -1,0 +1,46 @@
+MEM DISTILL · REVIEWED TICKER RULES                                                                                                                                                 
+STATUS · REVIEW ONLY · SOURCE UNCHANGED · PAGE 1/1                                                                                                                                  
+PROVIDER · gpt-5.6-sol · REASONING NONE                                                                                                                                             
+PROPOSED RULES · 5 FROM 20 CASES                                                                                                                                                    
+                                                                                                                                                                                    
+WHAT MEM UNDERSTOOD                                                                                                                                                                 
+The examples support a compact deterministic scheme: normalize the company name, select a mnemonic base by word count, and append share-class or preferred suffixes when present. Th
+ese are synthetic design rules only, not claims about official market tickers.                                                                                                      
+                                                                                                                                                                                    
+RULE 01 · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ign
+ore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.                                                                                    
+  SUPPORT · m000001, m000002, m000003, m000004, m000005, m000006, m000008, m000009, m000010, m000018, m000020                                                                       
+  BOUNDARY · none                                                                                                                                                                   
+  GOAL · YES                                                                                                                                                                        
+  WHY · Examples omit leading “The,” legal forms, and “&,” while retaining 7, 3, and 5th as meaningful numeric elements.                                                            
+                                                                                                                                                                                    
+RULE 02 · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character fo
+r a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.                                                                              
+  SUPPORT · m000001, m000002, m000003, m000004, m000005, m000006, m000007, m000008, m000009, m000010, m000014, m000018, m000019, m000020                                            
+  BOUNDARY · m000011, m000012, m000013                                                                                                                                              
+  GOAL · YES                                                                                                                                                                        
+  WHY · The multiword examples consistently use word initials, including numeric-leading names and the preserved AI abbreviation.                                                   
+                                                                                                                                                                                    
+RULE 03 · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.                 
+  SUPPORT · m000011, m000012, m000013                                                                                                                                               
+  BOUNDARY · m000001, m000002, m000003, m000004, m000005, m000006, m000007, m000008, m000009, m000010, m000014, m000018, m000019, m000020                                           
+  GOAL · YES                                                                                                                                                                        
+  WHY · The single-word examples use RED, MER, and SOL, showing a distinct three-letter mnemonic convention; the examples do not establish a unique algorithm for every possible wor
+d.                                                                                                                                                                                  
+                                                                                                                                                                                    
+RULE 04 · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.     
+  SUPPORT · m000015, m000016, m000017                                                                                                                                               
+  BOUNDARY · m000001, m000002                                                                                                                                                       
+  GOAL · YES                                                                                                                                                                        
+  WHY · North Star Energy retains NSE for Classes A and B, and Blue River Holdings retains BRH for Preferred, with only the suffix changing.                                        
+                                                                                                                                                                                    
+RULE 05 · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verif
+ication.                                                                                                                                                                            
+  SUPPORT · none                                                                                                                                                                    
+  BOUNDARY · none                                                                                                                                                                   
+  GOAL · YES                                                                                                                                                                        
+  WHY · The supplied goal explicitly defines every mapping as a design example rather than an official market ticker, and the examples provide no evidence of uniqueness or exchange
+ validity.                                                                                                                                                                          
+                                                                                                                                                                                    
+N · VERIFY AND APPLY TO TEMPORARY RESULT                                                                                                                                            
+READY RULE PAGE 1/1

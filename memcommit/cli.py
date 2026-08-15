@@ -10,11 +10,13 @@ from memcommit.commands import (
     atomize,
     branch,
     checkpoint,
+    check_conformance,
     chunk,
     compare,
     contexts,
     delete,
     diff,
+    distill,
     edit,
     find,
     find_ambiguities,
@@ -192,6 +194,14 @@ app.command(
     "atomize",
     help=operation_summary("atomize"),
 )(atomize.cmd)
+app.command(
+    "distill",
+    help=operation_summary("distill"),
+)(distill.cmd)
+app.command(
+    "check-conformance",
+    help=operation_summary("check-conformance"),
+)(check_conformance.cmd)
 app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),

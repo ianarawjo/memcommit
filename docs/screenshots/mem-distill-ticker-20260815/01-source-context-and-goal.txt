@@ -1,0 +1,31 @@
+MEM DISTILL · TICKER EXAMPLE EVALUATION                                                                                                                                             
+MODEL · gpt-5.6-sol · REASONING NONE · ISOLATED TEMPORARY STORE                                                                                                                     
+SOURCE · test/ground/ticker-rule-examples · DIRECT · 20 SYNTHETIC CASES                                                                                                             
+SOURCE STATUS · LOCAL · READ-ONLY DURING ANALYSIS                                                                                                                                   
+                                                                                                                                                                                    
+01. North Star Energy Inc. → NSE                                                                                                                                                    
+02. Blue River Holdings LLC → BRH                                                                                                                                                   
+03. Cedar Valley Technologies Corporation → CVT                                                                                                                                     
+04. Aurora Robotics Ltd. → AR                                                                                                                                                       
+05. Harbor Point Foods PLC → HPF                                                                                                                                                    
+06. The Meridian Group Inc. → MG                                                                                                                                                    
+07. Lumen Labs LLC → LL                                                                                                                                                             
+08. Quanta Systems & Services Inc. → QSS                                                                                                                                            
+09. Atlas 7 Networks Corp. → A7N                                                                                                                                                    
+10. 3 Rivers Logistics LLC → 3RL                                                                                                                                                    
+11. Redwood Inc. → RED                                                                                                                                                              
+12. Meridian Corporation → MER                                                                                                                                                      
+13. Solstice Ltd. → SOL                                                                                                                                                             
+14. International Business Fabricators Inc. → IBF                                                                                                                                   
+15. North Star Energy Inc., Class B → NSE.B                                                                                                                                         
+16. North Star Energy Inc., Class A → NSE.A                                                                                                                                         
+17. Blue River Holdings LLC, Preferred → BRH.P                                                                                                                                      
+18. Acme & Sons Ltd. → AS                                                                                                                                                           
+19. Axiom AI Technologies Inc. → AAT                                                                                                                                                
+20. The 5th Avenue Retail Group LLC → 5ARG                                                                                                                                          
+                                                                                                                                                                                    
+GOAL                                                                                                                                                                                
+Derive reusable, deterministic rules for generating concise synthetic ticker symbols from company names and share-class details. Treat every mapping as a design example, not an off
+icial market ticker, and state important boundaries or exceptions.                                                                                                                  
+                                                                                                                                                                                    
+R · RUN ACTUAL DISTILL

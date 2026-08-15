@@ -44,6 +44,7 @@ GroundDisposition = Literal["INCLUDE", "EXCLUDE", "UNRESOLVED"]
 GroundTargetStatus = Literal["EMPTY", "PARTIAL", "COVERED", "BLOCKED"]
 GroundRuleProvenance = Literal[
     "USER_STATED",
+    "DISTILLED",
     "DISTILLED_FROM_GOAL",
     "INDUCED_FROM_CASES",
     "JOINTLY_REVISED",
@@ -72,6 +73,7 @@ _LEGACY_CASE_ROLE = {"REPRESENTATIVE": "FIT"}
 _DISPOSITIONS = {"INCLUDE", "EXCLUDE", "UNRESOLVED"}
 _RULE_PROVENANCE = {
     "USER_STATED",
+    "DISTILLED",
     "DISTILLED_FROM_GOAL",
     "INDUCED_FROM_CASES",
     "JOINTLY_REVISED",
@@ -1491,7 +1493,7 @@ def propose_ground_rule(
     rule: str,
     rationale: str,
     current_contexts: Iterable[Context],
-    rule_provenance: GroundRuleProvenance = "DISTILLED_FROM_GOAL",
+    rule_provenance: GroundRuleProvenance = "DISTILLED",
     target_context_names: tuple[str, ...] = (),
 ) -> GroundSession:
     """Propose one reusable Rule without manufacturing a Ground Memory."""
@@ -1503,8 +1505,8 @@ def propose_ground_rule(
         or rule_provenance == "JOINTLY_REVISED"
     ):
         raise GroundError(
-            "A new rule must be USER_STATED, DISTILLED_FROM_GOAL, or "
-            "legacy INDUCED_FROM_CASES (the persisted token for Memories); "
+            "A new rule must be USER_STATED or DISTILLED; legacy "
+            "DISTILLED_FROM_GOAL and INDUCED_FROM_CASES remain readable; "
             "JOINTLY_REVISED is created by review."
         )
     target_frame_by_name = {
@@ -1693,7 +1695,7 @@ def propose_ground_round(
     current_contexts: Iterable[Context],
     case_role: GroundCaseRole = "FIT",
     disposition: GroundDisposition = "INCLUDE",
-    rule_provenance: GroundRuleProvenance = "INDUCED_FROM_CASES",
+    rule_provenance: GroundRuleProvenance = "DISTILLED",
 ) -> GroundSession:
     """Record one related Rule/Memory proposal as a single revision."""
     contexts = _proposal_contexts(session, current_contexts)

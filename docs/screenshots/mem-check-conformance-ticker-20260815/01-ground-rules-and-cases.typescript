@@ -1,0 +1,33 @@
+[2J[H[1;38;2;138;173;244mMEM CHECK-CONFORMANCE · TICKER ROUND-TRIP[0m
+PROVIDER · gpt-5.6-sol · REASONING NONE
+GROUND · ticker-rules · 5 ACTIVE RULES · 20 INCLUDE MEMORIES
+EXPECTED OUTPUTS · FROZEN LOCALLY · WITHHELD FROM PROVIDER
+
+[38;2;202;211;245mr1 · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.[0m
+[38;2;202;211;245mr2 · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.[0m
+[38;2;202;211;245mr3 · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.[0m
+[38;2;202;211;245mr4 · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.[0m
+[38;2;202;211;245mr5 · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification.[0m
+
+[38;2;202;211;245mc01 · North Star Energy Inc. → NSE[0m
+[38;2;202;211;245mc02 · Blue River Holdings LLC → BRH[0m
+[38;2;202;211;245mc03 · Cedar Valley Technologies Corporation → CVT[0m
+[38;2;202;211;245mc04 · Aurora Robotics Ltd. → AR[0m
+[38;2;202;211;245mc05 · Harbor Point Foods PLC → HPF[0m
+[38;2;202;211;245mc06 · The Meridian Group Inc. → MG[0m
+[38;2;202;211;245mc07 · Lumen Labs LLC → LL[0m
+[38;2;202;211;245mc08 · Quanta Systems & Services Inc. → QSS[0m
+[38;2;202;211;245mc09 · Atlas 7 Networks Corp. → A7N[0m
+[38;2;202;211;245mc10 · 3 Rivers Logistics LLC → 3RL[0m
+[38;2;202;211;245mc11 · Redwood Inc. → RED[0m
+[38;2;202;211;245mc12 · Meridian Corporation → MER[0m
+[38;2;202;211;245mc13 · Solstice Ltd. → SOL[0m
+[38;2;202;211;245mc14 · International Business Fabricators Inc. → IBF[0m
+[38;2;202;211;245mc15 · North Star Energy Inc., Class B → NSE.B[0m
+[38;2;202;211;245mc16 · North Star Energy Inc., Class A → NSE.A[0m
+[38;2;202;211;245mc17 · Blue River Holdings LLC, Preferred → BRH.P[0m
+[38;2;202;211;245mc18 · Acme & Sons Ltd. → AS[0m
+[38;2;202;211;245mc19 · Axiom AI Technologies Inc. → AAT[0m
+[38;2;202;211;245mc20 · The 5th Avenue Retail Group LLC → 5ARG[0m
+
+R · RUN CASE CONFORMANCE

@@ -1,0 +1,12 @@
+CHECK CONFORMANCE · TICKER VERIFICATION                                                                                                                                             
+CASE JUDGMENTS · 20/20 · {'PASS': 16, 'AMBIGUOUS': 3, 'FAIL': 1}                                                                                                                    
+CASE ISSUES · 4                                                                                                                                                                     
+CONTEXT RULE JUDGMENTS · 5/5 · {'CONFORMS': 5}                                                                                                                                      
+CONTEXT ISSUES · 0                                                                                                                                                                  
+GROUND UNCHANGED · True                                                                                                                                                             
+EXAMPLE CONTEXT UNCHANGED · True                                                                                                                                                    
+RULES CONTEXT UNCHANGED · True                                                                                                                                                      
+CHECKPOINTS CREATED · 0                                                                                                                                                             
+DURABLE USER PROFILE MUTATION · NONE (TEMPORARY STORE REMOVED)                                                                                                                      
+EVIDENCE · docs/screenshots/mem-check-conformance-ticker-20260815/actual-run.json                                                                                                   
+READY VERIFICATION

@@ -47,27 +47,50 @@ mem find-conflicts --context NAME
 
 In a TTY, invoking one of the commands without flags opens a shared setup
 surface instead of immediately analyzing the global current Context. The
-screen contains exactly two top-to-bottom controls:
+screen contains three top-to-bottom controls:
 
-1. `SOURCE`, the common single-selection Context namespace tree over one
-   frozen `ALL READABLE CONTEXTS` catalog; and
-2. `TO DO`, the exact `RUN FIND ...` action for the checked Context.
+1. `TARGETS`, the common `PROFILE` plus readable Context namespace tree;
+2. `SCOPE`, with `SINGLE TARGET` versus `MULTIPLE TARGETS` and `THIS CONTEXT
+   ONLY` versus `INCLUDE DESCENDANTS`; and
+3. `TO DO`, the exact `RUN FIND ...` action for the visible checked set.
 
-The current Context is initially checked and marked for orientation. Moving
-the tree cursor does not change the checked value; Enter or Space on a row
-makes that exact readable Context the sole Source. Enter on `TO DO` freezes one
-`QualityFindSetupReceipt` and exits setup. Cancellation creates no provider
+Setup starts in `MULTIPLE TARGETS` and `THIS CONTEXT ONLY`, with the current
+Context checked and marked for orientation. This keeps one-Context execution a
+fast path while making comparison breadth explicit. Moving the cursor does not
+change checked values. Enter or Space toggles one row; under descendant reach
+it checks or clears the row's complete lexical subtree. The common range state
+permits an empty multiple selection while editing, but `TO DO` rejects it
+rather than inventing a fallback. `PROFILE` expands only to the frozen readable
+catalog and never becomes a storage locator or persisted preference.
+
+`SINGLE` versus `MULTIPLE` controls selected-root cardinality independently
+from lexical reach. One selected root plus `INCLUDE DESCENDANTS` can therefore
+produce several effective Contexts. Execution freezes the exact visible
+checked set; it does not repeat a hidden descendant expansion that could
+re-include an independently unchecked row. Cancellation creates no provider
 connection, finding artifact, Context write, or checkpoint.
 
 The finder kind is fixed by the command and therefore is not another setup
-choice. All three operations inspect direct Memories only, so the screen also
-does not expose descendant or embedded-Context reach controls. Adding either
-would change the semantic frame rather than merely configure presentation.
+choice. Embedded Context edges remain excluded: descendant reach follows the
+public lexical namespace only. The explicit `--context NAME` forms retain
+their original exact, direct, one-Context behavior.
 
-After setup, the existing one-shot finder runs against the frozen exact
-Context and its validated report is projected into the common Resolution
-Session presentation. The complete report starts focused, followed by the
-finding Items list and To Do. Opening an item uses the shared
+After setup, every effective Context is loaded directly through the same
+frozen readable catalog. Its directly owned Memories are copied into one
+temporary aggregate analysis Context in visible Context order and direct
+Memory order. The finder makes one provider turn over that complete aggregate
+frame: Duplicate and Conflict can therefore report cross-Context relations,
+while Ambiguity interprets each Memory using the same combined local frame.
+The provider payload records the original public Context name beside every
+candidate, and the local workbench preserves that owner for each evidence
+source. The temporary aggregate is process-local, has a deterministic frame
+identity, and is never saved or exposed as a new Context.
+
+The validated report is projected into the common Resolution Session
+presentation. Its Scope section records Context count, direct-Memory count,
+target mode, and lexical reach; every selected Context is listed as a source
+location. The complete report starts focused, followed by the finding Items
+list and To Do. Opening an item uses the shared
 `VIEWER → RESPONSES → ITEMS → TO DO` topology. Ambiguity keeps its proposed
 reading choices, Conflict keeps its exact pair and question, and Duplicate
 adds an operation-owned review disposition for one emitted evidence link.
@@ -84,9 +107,21 @@ creating a finder-specific full-screen grammar: common Context targeting owns
 setup selection, while the common Resolution Session owns finding inspection
 and response mechanics. The receipt between them is the semantic boundary;
 the setup UI never calls a finder merely because a cursor moved or a Context
-was checked.
+was checked. When more than one effective Context crosses authority domains,
+the operation applies the normal `DERIVE`/`COMBINE` Grant boundary before
+loading content or connecting the provider. Local Contexts need no additional
+Grant authority.
 
 ## Durable three-finder Audit
+
+The three quality finders remain the unconditional Audit base. Audit schema
+version 2 may additionally retain one typed Context Conformance report when an
+explicit Rules Context is supplied with `--against`. Conformance is not a
+fourth quality finder: it has a Rule-versus-Target frame, its own exhaustive
+coverage contract, and no fabricated quality-review items. The standalone
+`mem check-conformance` adapter and Audit call the same core. Legacy schema
+version 1 records remain readable as exact three-check snapshots. See
+`docs/mem-check-conformance-design-rationale.md`.
 
 `mem audit` is the user-facing orchestration operation for running Duplicate,
 Ambiguity, and Conflict analysis together. It is not a fourth semantic finder
@@ -184,11 +219,11 @@ The judgments and their public evidence deliberately have different arities:
 
 | Command | Discovery input and result unit | Primary labels |
 |---|---|---|
-| `find-duplicates` | whole direct Context; positive evidence links identify unordered Memory pairs | emitted: `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
-| `find-ambiguities` | one Memory interpreted inside its Context | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
+| `find-duplicates` | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
 | `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
 
-Consequently, a Context with `n` direct Memories has `n` unary ambiguity
+Consequently, a selected frame with `n` direct Memories has `n` unary ambiguity
 targets and admits up to `n(n-1)/2` possible binary relations. That
 cardinality does not prescribe the execution strategy. `find-conflicts`
 currently names every unordered pair as an explicit target.
@@ -232,25 +267,29 @@ that a pair is duplicate.
 
 ## Local interpretation boundary
 
-Version 1 analyzes only Memories directly owned by the selected Context. The
-whole set of those direct Memories forms the local interpretation frame for
-each quality judgment. This implements the project assumption that
-conflict and ambiguity are judged under ordinary reading of the knowledge
-actually present in the selected Context, rather than against every imaginable
-outside premise.
+The quality frame contains only directly owned Memories from the exact frozen
+set of effective readable Contexts. The whole combined set forms the local
+interpretation frame for each judgment. This implements the project assumption
+that conflict and ambiguity are judged under ordinary reading of the knowledge
+the person explicitly placed in scope, rather than against every imaginable
+outside premise. Context membership remains evidence: it is transmitted as
+candidate ownership and retained in each result source rather than flattened
+away semantically.
 
-The initial implementation does not recursively analyze embedded Contexts,
+The implementation does not recursively traverse embedded Context edges,
 dereference `memory_ref` values, or open query-only sources. A reference is a
-view of a Memory owned elsewhere, not a second candidate. Recursive analysis
-is deferred until traversal has a canonical logical identity, cycle handling,
-owner-aware results, and an explicit disclosure policy.
+view of a Memory owned elsewhere, not a second candidate. Lexical descendants
+are ordinary independently loaded Contexts and are included only when the
+visible range control selects them. Embedded traversal remains deferred until
+it has a canonical logical identity, cycle handling, owner-aware results, and
+an explicit disclosure policy.
 
 ## One-shot Context execution
 
 When semantic targets exist, each finder makes exactly one semantic-provider
-call for the selected direct Context; an empty semantic candidate set returns
-locally without opening a provider session. The operations use different
-target contracts:
+call for the complete aggregate direct-Memory frame; an empty semantic
+candidate set returns locally without opening a provider session. The
+operations use different target contracts:
 
 - ambiguity sends every direct Memory once as a unary target;
 - conflict sends every direct Memory plus every canonical unordered pair as an
@@ -280,7 +319,7 @@ This choice favors an inspectable research contract:
   statements;
 - duplicate supplies every mechanically distinct representative once without
   repeating it in a quadratic pair table;
-- all judgments use the same local Context frame;
+- all judgments use the same complete selected Context frame;
 - one invocation cannot combine silently different provider calls or partial
   prompt contexts;
 - duplicate discovery does not depend on an undocumented retrieval heuristic.
@@ -316,7 +355,8 @@ MCP or internal-network provider later.
 
 All three commands:
 
-- accept the current Context or an explicitly selected Context;
+- accept one explicit Context outside a TTY or a frozen Context range in the
+  flagless terminal setup;
 - validate model-returned opaque IDs against locally generated candidate IDs;
 - return the affected UID or UID pair, its label, and a concise rationale;
 - include an ordinary reading or a smallest useful clarifying question where
@@ -410,8 +450,8 @@ rather than silently rewriting the meaning of an existing label.
 Version 1 does not:
 
 - prove that no duplicate, ambiguity, or conflict exists outside the selected
-  direct Context;
-- infer a globally correct interpretation from facts absent from that Context;
+  direct-Memory frame;
+- infer a globally correct interpretation from facts absent from that frame;
 - scale past the declared one-shot payload; conflict additionally retains its
   explicit pair boundary;
 - turn duplicate evidence into mutation-ready survivor groups, resolve

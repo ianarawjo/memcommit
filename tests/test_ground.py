@@ -2282,7 +2282,7 @@ def test_one_proposed_ground_round_persists_revision_without_applying_contexts(
         (raw, derived, *targets),
     )
     assert "2 · RULES" in round_snapshot
-    assert "[PROPOSED · INDUCED_FROM_MEMORIES]" in round_snapshot
+    assert "[PROPOSED · DISTILLED]" in round_snapshot
     assert "INDUCED_FROM_CASES" not in round_snapshot
     assert "3 · MEMORIES · FIT / BOUNDARY / CONTRAST" in round_snapshot
     assert "[PROPOSED · FIT · INCLUDE]" in round_snapshot

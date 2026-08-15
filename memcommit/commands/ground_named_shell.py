@@ -39,23 +39,29 @@ from memcommit.interfaces.tui.components.in_frame_input import (
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+    dispatch_tui_back,
 )
 from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     equal_pane_height,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.tui.core.keybindings import (
-    bind_case_insensitive_key,
-    dispatch_tui_back,
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
 )
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
@@ -223,8 +229,8 @@ def _alias_range(
 
 def _display_ground_compatibility_token(value: str) -> str:
     """Translate persisted Case-era tokens only at the presentation boundary."""
-    if value == "INDUCED_FROM_CASES":
-        return "INDUCED_FROM_MEMORIES"
+    if value in {"DISTILLED_FROM_GOAL", "INDUCED_FROM_CASES"}:
+        return "DISTILLED"
     return value
 
 

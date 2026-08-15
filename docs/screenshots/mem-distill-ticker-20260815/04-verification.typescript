@@ -1,0 +1,92 @@
+[2J[H[1;38;2;138;173;244mMEM DISTILL · TICKER EXAMPLE EVALUATION[0m
+MODEL · gpt-5.6-sol · REASONING NONE · ISOLATED TEMPORARY STORE
+SOURCE · test/ground/ticker-rule-examples · DIRECT · 20 SYNTHETIC CASES
+SOURCE STATUS · LOCAL · READ-ONLY DURING ANALYSIS
+
+[38;2;202;211;245m01. North Star Energy Inc. → NSE[0m
+[38;2;202;211;245m02. Blue River Holdings LLC → BRH[0m
+[38;2;202;211;245m03. Cedar Valley Technologies Corporation → CVT[0m
+[38;2;202;211;245m04. Aurora Robotics Ltd. → AR[0m
+[38;2;202;211;245m05. Harbor Point Foods PLC → HPF[0m
+[38;2;202;211;245m06. The Meridian Group Inc. → MG[0m
+[38;2;202;211;245m07. Lumen Labs LLC → LL[0m
+[38;2;202;211;245m08. Quanta Systems & Services Inc. → QSS[0m
+[38;2;202;211;245m09. Atlas 7 Networks Corp. → A7N[0m
+[38;2;202;211;245m10. 3 Rivers Logistics LLC → 3RL[0m
+[38;2;202;211;245m11. Redwood Inc. → RED[0m
+[38;2;202;211;245m12. Meridian Corporation → MER[0m
+[38;2;202;211;245m13. Solstice Ltd. → SOL[0m
+[38;2;202;211;245m14. International Business Fabricators Inc. → IBF[0m
+[38;2;202;211;245m15. North Star Energy Inc., Class B → NSE.B[0m
+[38;2;202;211;245m16. North Star Energy Inc., Class A → NSE.A[0m
+[38;2;202;211;245m17. Blue River Holdings LLC, Preferred → BRH.P[0m
+[38;2;202;211;245m18. Acme & Sons Ltd. → AS[0m
+[38;2;202;211;245m19. Axiom AI Technologies Inc. → AAT[0m
+[38;2;202;211;245m20. The 5th Avenue Retail Group LLC → 5ARG[0m
+
+GOAL
+Derive reusable, deterministic rules for generating concise synthetic ticker symbols from company names and share-class details. Treat every mapping as a design example, not an official market ticker, and state important boundaries or exceptions.
+
+R · RUN ACTUAL DISTILL
+r
+[2J[H[1;38;2;138;173;244mMEM DISTILL · PROVIDER TURN[0m
+MODEL · gpt-5.6-sol
+REASONING · NONE
+EXECUTION · WHOLE FRAME ONLY · 20/20 CASES IN ONE BOUNDED TURN
+STATE · RUNNING · NO RESULT PUBLISHED
+[2J[H[1;38;2;138;173;244mMEM DISTILL · REVIEWED TICKER RULES[0m
+STATUS · REVIEW ONLY · SOURCE UNCHANGED · PAGE 1/1
+PROVIDER · gpt-5.6-sol · REASONING NONE
+PROPOSED RULES · 5 FROM 20 CASES
+
+WHAT MEM UNDERSTOOD
+The examples support a compact deterministic scheme: normalize the company name, select a mnemonic base by word count, and append share-class or preferred suffixes when present. These are synthetic design rules only, not claims about official market tickers.
+
+[1;38;2;138;173;244mRULE 01 · When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens.[0m
+[38;2;202;211;245m  SUPPORT · m000001, m000002, m000003, m000004, m000005, m000006, m000008, m000009, m000010, m000018, m000020[0m
+[38;2;202;211;245m  BOUNDARY · none[0m
+  GOAL · YES
+  WHY · Examples omit leading “The,” legal forms, and “&,” while retaining 7, 3, and 5th as meaningful numeric elements.
+
+[1;38;2;138;173;244mRULE 02 · When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component.[0m
+[38;2;202;211;245m  SUPPORT · m000001, m000002, m000003, m000004, m000005, m000006, m000007, m000008, m000009, m000010, m000014, m000018, m000019, m000020[0m
+[38;2;202;211;245m  BOUNDARY · m000011, m000012, m000013[0m
+  GOAL · YES
+  WHY · The multiword examples consistently use word initials, including numeric-leading names and the preserved AI abbreviation.
+
+[1;38;2;138;173;244mRULE 03 · When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule.[0m
+[38;2;202;211;245m  SUPPORT · m000011, m000012, m000013[0m
+[38;2;202;211;245m  BOUNDARY · m000001, m000002, m000003, m000004, m000005, m000006, m000007, m000008, m000009, m000010, m000014, m000018, m000019, m000020[0m
+  GOAL · YES
+  WHY · The single-word examples use RED, MER, and SOL, showing a distinct three-letter mnemonic convention; the examples do not establish a unique algorithm for every possible word.
+
+[1;38;2;138;173;244mRULE 04 · When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred.[0m
+[38;2;202;211;245m  SUPPORT · m000015, m000016, m000017[0m
+[38;2;202;211;245m  BOUNDARY · m000001, m000002[0m
+  GOAL · YES
+  WHY · North Star Energy retains NSE for Classes A and B, and Blue River Holdings retains BRH for Preferred, with only the suffix changing.
+
+[1;38;2;138;173;244mRULE 05 · Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification.[0m
+[38;2;202;211;245m  SUPPORT · none[0m
+[38;2;202;211;245m  BOUNDARY · none[0m
+  GOAL · YES
+  WHY · The supplied goal explicitly defines every mapping as a design example rather than an official market ticker, and the examples provide no evidence of uniqueness or exchange validity.
+
+N · VERIFY AND APPLY TO TEMPORARY RESULT
+READY RULE PAGE 1/1
+n
+[2J[H[1;38;2;138;173;244mMEM DISTILL · TICKER EVALUATION VERIFICATION[0m
+PROVIDER · CODEX CHATGPT · gpt-5.6-sol · REASONING NONE
+SOURCE · test/ground/ticker-rule-examples
+SOURCE CASES · 20
+DISTILLED RULES · 5
+EXPLICITLY OUTSIDE · 0
+EVIDENCE ACCOUNTING · 20/20 · COMPLETE True
+SOURCE BYTE-LOGICAL RECORD UNCHANGED · True
+TEMPORARY RESULT · test/ground/ticker-rule-output
+RESULT MEMORIES · 5
+RESULT EXACTLY MATCHES REVIEWED RULES · True
+CHECKPOINT · f5f8c37e-b986-4a96-9426-2df5a4bf2e88
+DURABLE USER PROFILE MUTATION · NONE (TEMPORARY STORE REMOVED)
+EVIDENCE · docs/screenshots/mem-distill-ticker-20260815/actual-run.json
+READY VERIFICATION

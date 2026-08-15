@@ -31,18 +31,24 @@ def audit_session_entries(
     entries: list[SessionPickerEntry] = []
     for session in sessions.list():
         counts = {check.kind: len(check.report.findings) for check in session.checks}
+        check_total = 4 if session.conformance is not None else 3
+        conformance_suffix = (
+            f" · CONF {session.conformance.issue_count}"
+            if session.conformance is not None
+            else ""
+        )
         entries.append(
             SessionPickerEntry(
                 kind="audit",
                 key=session.uid,
                 title=session.source.context_name,
                 status=(
-                    f"3/3 CHECKS · {session.answered_count}/"
+                    f"{check_total}/{check_total} CHECKS · {session.answered_count}/"
                     f"{session.finding_count} ANSWERED"
                 ),
                 subtitle=(
                     f"DUP {counts['duplicates']} · AMB {counts['ambiguities']} · "
-                    f"CONFLICT {counts['conflicts']}"
+                    f"CONFLICT {counts['conflicts']}{conformance_suffix}"
                 ),
                 group=session.source.context_name,
                 sort_timestamp=_timestamp(session, sessions),
@@ -52,7 +58,11 @@ def audit_session_entries(
                         f"Created {session.created_at}",
                         f"Frozen Source {session.source.context_name}",
                         f"Direct Memories {len(session.source.memories)}",
-                        "Duplicate, Ambiguity, and Conflict checks: COMPLETE",
+                        (
+                            "Duplicate, Ambiguity, Conflict"
+                            + (", and Conformance" if session.conformance is not None else "")
+                            + " checks: COMPLETE"
+                        ),
                         "Source: UNCHANGED BY AUDIT",
                     )
                 ),

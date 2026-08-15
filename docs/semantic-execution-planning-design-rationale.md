@@ -49,6 +49,14 @@ adapters. It owns only operation-neutral mechanics:
 Operations still own candidate construction, authority, disclosure, provider
 prompts and schemas, semantic reconciliation, durable state, and application.
 
+The shared coverage layer also supplies the narrow provider-I/O contract used
+by relation operations: an exact-count source-assignment array, a frozen alias
+enum, and a decoder that proves every alias appears once. Compare and Meld use
+that contract to assign each Source Memory to one semantic relation, then
+reconstruct their operation-specific PEER or directional relation shapes
+locally. This is output coverage inside one bounded call, not staged execution
+or evidence that relation judgments are semantically complete.
+
 ## Budget contract
 
 `BudgetVector` records independent axes:
@@ -177,6 +185,17 @@ return one decision per Source Memory because neighboring Source Memories may
 affect a decision. A Forget review turn also budgets its complete retained
 dialogue and fails before the provider rather than treating follow-up history
 as exempt.
+
+## Whole-frame Conformance
+
+Case and Context Conformance both declare `WHOLE_FRAME_ONLY`. Case Conformance
+must expose every input to the same frozen Rule set while withholding expected
+outputs, then return exactly one prediction or unresolved disposition per case.
+Context Conformance must judge every Rule against the complete target frame and
+account for every target Memory as cited evidence or explicitly outside. Hidden
+batching would require operation-owned reconciliation for cross-case Rule
+interpretation and Context-wide mixed evidence; neither operation currently
+claims such a reconciler.
 
 ## Migration scope
 

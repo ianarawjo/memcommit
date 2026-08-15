@@ -1,0 +1,1008 @@
+{
+  "provider": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "none"
+  },
+  "case_conformance": {
+    "schema_version": 1,
+    "ruleset_version": "conformance-v1",
+    "uid": "40a4907f-5f41-4bd1-aa45-318360185b8d",
+    "mode": "CASE",
+    "source_label": "GROUND · ticker-rules",
+    "rules_label": "GROUND RULES · ticker-rules",
+    "rules": [
+      {
+        "uid": "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+        "alias": "r1",
+        "content": "When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens."
+      },
+      {
+        "uid": "00ba8302-de13-479a-baec-315a436fda82",
+        "alias": "r2",
+        "content": "When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component."
+      },
+      {
+        "uid": "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+        "alias": "r3",
+        "content": "When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule."
+      },
+      {
+        "uid": "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+        "alias": "r4",
+        "content": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred."
+      },
+      {
+        "uid": "c4d33da4-e8d9-4866-8364-a9cacd5afdb8",
+        "alias": "r5",
+        "content": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification."
+      }
+    ],
+    "subjects": [
+      {
+        "uid": "9a98ccf9-0e67-452b-a318-7c87d8bfb475",
+        "alias": "c1",
+        "content": "North Star Energy Inc.",
+        "expected": "NSE",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "914af486-2cb0-40bb-94c9-1b1e82c0f547",
+        "alias": "c2",
+        "content": "Blue River Holdings LLC",
+        "expected": "BRH",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "08181b89-89a9-4fb9-a2ad-70159822fef6",
+        "alias": "c3",
+        "content": "Cedar Valley Technologies Corporation",
+        "expected": "CVT",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "5f5fac5b-067b-44d7-b911-61a129072722",
+        "alias": "c4",
+        "content": "Aurora Robotics Ltd.",
+        "expected": "AR",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "bbd4b562-b206-4097-ae2a-686dfb5fc1fb",
+        "alias": "c5",
+        "content": "Harbor Point Foods PLC",
+        "expected": "HPF",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "cfcc5255-6d19-4236-8838-bd64f246bbca",
+        "alias": "c6",
+        "content": "The Meridian Group Inc.",
+        "expected": "MG",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "b8f89f77-d9cd-46bd-87bf-c2637d66cd8a",
+        "alias": "c7",
+        "content": "Lumen Labs LLC",
+        "expected": "LL",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "bbad0535-3cbc-4640-9dd6-9f18c99d733e",
+        "alias": "c8",
+        "content": "Quanta Systems & Services Inc.",
+        "expected": "QSS",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "102b71b4-1274-4987-9974-6e519bc861a8",
+        "alias": "c9",
+        "content": "Atlas 7 Networks Corp.",
+        "expected": "A7N",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "52e89b03-b4fe-4cce-857a-6509e8f11063",
+        "alias": "c10",
+        "content": "3 Rivers Logistics LLC",
+        "expected": "3RL",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "28a436a1-c220-42d7-9a74-8601add85028",
+        "alias": "c11",
+        "content": "Redwood Inc.",
+        "expected": "RED",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "edbf1214-f66a-4044-a2cd-f55ff66aebb6",
+        "alias": "c12",
+        "content": "Meridian Corporation",
+        "expected": "MER",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "358cc042-4e92-4ac7-a87e-9a0167394360",
+        "alias": "c13",
+        "content": "Solstice Ltd.",
+        "expected": "SOL",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "b26ac9b2-2da7-452d-9679-71f04f247b9b",
+        "alias": "c14",
+        "content": "International Business Fabricators Inc.",
+        "expected": "IBF",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "d10c2cc8-3df7-4223-ab28-67f32711c8ac",
+        "alias": "c15",
+        "content": "North Star Energy Inc., Class B",
+        "expected": "NSE.B",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "fa4c491d-4832-4910-a9fa-0aec47c2ebd6",
+        "alias": "c16",
+        "content": "North Star Energy Inc., Class A",
+        "expected": "NSE.A",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "932e2f15-be42-47ec-9800-c044da06020a",
+        "alias": "c17",
+        "content": "Blue River Holdings LLC, Preferred",
+        "expected": "BRH.P",
+        "role": "BOUNDARY",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "ffd65898-2887-4d5e-aba8-9d8df99d2ff8",
+        "alias": "c18",
+        "content": "Acme & Sons Ltd.",
+        "expected": "AS",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "40b38b06-4b5c-48d1-aeed-216540edca21",
+        "alias": "c19",
+        "content": "Axiom AI Technologies Inc.",
+        "expected": "AAT",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "uid": "33c8abe4-0062-41f4-97fe-a31494647ea5",
+        "alias": "c20",
+        "content": "The 5th Avenue Retail Group LLC",
+        "expected": "5ARG",
+        "role": "FIT",
+        "linked_rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      }
+    ],
+    "overview": "Applied the linked rules to all cases.",
+    "case_judgments": [
+      {
+        "subject_uid": "9a98ccf9-0e67-452b-a318-7c87d8bfb475",
+        "status": "PASS",
+        "predicted": "NSE",
+        "reason": "Initials of North, Star, and Energy.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "914af486-2cb0-40bb-94c9-1b1e82c0f547",
+        "status": "PASS",
+        "predicted": "BRH",
+        "reason": "Initials of Blue, River, and Holdings.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "08181b89-89a9-4fb9-a2ad-70159822fef6",
+        "status": "PASS",
+        "predicted": "CVT",
+        "reason": "Initials of Cedar, Valley, and Technologies.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "5f5fac5b-067b-44d7-b911-61a129072722",
+        "status": "PASS",
+        "predicted": "AR",
+        "reason": "Initials of Aurora and Robotics.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "bbd4b562-b206-4097-ae2a-686dfb5fc1fb",
+        "status": "PASS",
+        "predicted": "HPF",
+        "reason": "Initials of Harbor, Point, and Foods.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "cfcc5255-6d19-4236-8838-bd64f246bbca",
+        "status": "PASS",
+        "predicted": "MG",
+        "reason": "The leading article and legal suffix are removed; initials come from Meridian and Group.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "b8f89f77-d9cd-46bd-87bf-c2637d66cd8a",
+        "status": "PASS",
+        "predicted": "LL",
+        "reason": "Initials of Lumen and Labs.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "bbad0535-3cbc-4640-9dd6-9f18c99d733e",
+        "status": "PASS",
+        "predicted": "QSS",
+        "reason": "The connector is ignored; initials come from Quanta, Systems, and Services.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "102b71b4-1274-4987-9974-6e519bc861a8",
+        "status": "PASS",
+        "predicted": "A7N",
+        "reason": "Initials of Atlas and Networks with the meaningful numeric token preserved.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "52e89b03-b4fe-4cce-857a-6509e8f11063",
+        "status": "PASS",
+        "predicted": "3RL",
+        "reason": "The numeric component is preserved alongside the initials of Rivers and Logistics.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "28a436a1-c220-42d7-9a74-8601add85028",
+        "status": "AMBIGUOUS",
+        "predicted": "",
+        "reason": "The rules require a concise three-letter mnemonic for the single word Redwood but do not uniquely specify its letters.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "edbf1214-f66a-4044-a2cd-f55ff66aebb6",
+        "status": "AMBIGUOUS",
+        "predicted": "",
+        "reason": "After removing the legal suffix, Meridian is a single word, and its required three-letter mnemonic is not uniquely specified.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "358cc042-4e92-4ac7-a87e-9a0167394360",
+        "status": "AMBIGUOUS",
+        "predicted": "",
+        "reason": "After removing the legal suffix, Solstice is a single word, and its required three-letter mnemonic is not uniquely specified.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "b26ac9b2-2da7-452d-9679-71f04f247b9b",
+        "status": "PASS",
+        "predicted": "IBF",
+        "reason": "Initials of International, Business, and Fabricators.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "d10c2cc8-3df7-4223-ab28-67f32711c8ac",
+        "status": "PASS",
+        "predicted": "NSE.B",
+        "reason": "The base ticker NSE receives the Class B suffix.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "fa4c491d-4832-4910-a9fa-0aec47c2ebd6",
+        "status": "PASS",
+        "predicted": "NSE.A",
+        "reason": "The base ticker NSE receives the Class A suffix.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "932e2f15-be42-47ec-9800-c044da06020a",
+        "status": "PASS",
+        "predicted": "BRH.P",
+        "reason": "The base ticker BRH receives the Preferred suffix.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "ffd65898-2887-4d5e-aba8-9d8df99d2ff8",
+        "status": "PASS",
+        "predicted": "AS",
+        "reason": "The connector is ignored; initials come from Acme and Sons.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "40b38b06-4b5c-48d1-aeed-216540edca21",
+        "status": "FAIL",
+        "predicted": "AAIT",
+        "reason": "Axiom contributes A, AI is preserved as one component, and Technologies contributes T.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      },
+      {
+        "subject_uid": "33c8abe4-0062-41f4-97fe-a31494647ea5",
+        "status": "PASS",
+        "predicted": "5ARG",
+        "reason": "The leading article is removed; the meaningful numeric token and initials of Avenue, Retail, and Group are used.",
+        "rule_uids": [
+          "7ba8c626-81a0-4678-bf5d-d25eb628c5d2",
+          "00ba8302-de13-479a-baec-315a436fda82",
+          "df2a131f-bf1c-49be-b55e-ebd5d566368b",
+          "012b3a6a-8c4e-48a4-a50f-64253d2444ef",
+          "c4d33da4-e8d9-4866-8364-a9cacd5afdb8"
+        ]
+      }
+    ],
+    "context_judgments": [],
+    "outside_subject_uids": [],
+    "provider_identity": {
+      "provider": "codex_chatgpt",
+      "model": "gpt-5.6-sol",
+      "model_digest": null,
+      "runtime": "codex-cli",
+      "endpoint": null,
+      "reasoning_effort": "none"
+    }
+  },
+  "context_conformance": {
+    "schema_version": 1,
+    "ruleset_version": "conformance-v1",
+    "uid": "ae230ec3-198d-4df5-8d3e-03b37c2b13f2",
+    "mode": "CONTEXT",
+    "source_label": "ticker/example-mappings",
+    "rules_label": "ticker/distilled-rules",
+    "rules": [
+      {
+        "uid": "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+        "alias": "r1",
+        "content": "When generating a synthetic ticker, first remove a leading article such as “The,” discard legal-form suffixes such as Inc., LLC, Ltd., PLC, Corp., or Corporation, and ignore connectors such as “&” when selecting ticker characters; preserve meaningful numeric tokens."
+      },
+      {
+        "uid": "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+        "alias": "r2",
+        "content": "When the normalized company name has two or more meaningful words, form the base ticker from the initial character of each meaningful word, using the numeric character for a number-bearing word; preserve a meaningful abbreviation such as “AI” as a single ticker component."
+      },
+      {
+        "uid": "feda9729-b43d-4565-98f3-8b90711477d2",
+        "alias": "r3",
+        "content": "When the normalized company name is a single word, derive a concise three-letter mnemonic from that word rather than applying the multiword-initial rule."
+      },
+      {
+        "uid": "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+        "alias": "r4",
+        "content": "When share-class details are present, keep the ordinary company base ticker and append a dot suffix: “.A” or “.B” for the corresponding class and “.P” for Preferred."
+      },
+      {
+        "uid": "a9457f72-6155-4322-a692-91edaa142b61",
+        "alias": "r5",
+        "content": "Treat every generated symbol under these rules as a synthetic mnemonic; do not represent it as an official, unique, or exchange-valid market ticker without separate verification."
+      }
+    ],
+    "subjects": [
+      {
+        "uid": "e467664c-8145-4db5-981f-210a96934a09",
+        "alias": "m000001",
+        "content": "North Star Energy Inc. → NSE",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "0ee540cd-8dc4-414e-ab98-cae8e6cb1058",
+        "alias": "m000002",
+        "content": "Blue River Holdings LLC → BRH",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "e1fa9ec4-19c3-4d2b-97c9-e470cc418dab",
+        "alias": "m000003",
+        "content": "Cedar Valley Technologies Corporation → CVT",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "d86ca208-dc56-4131-abb5-1eb6f13bbe1e",
+        "alias": "m000004",
+        "content": "Aurora Robotics Ltd. → AR",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "ac0cf8fa-c997-43d5-a7d3-374e6bb187a6",
+        "alias": "m000005",
+        "content": "Harbor Point Foods PLC → HPF",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "71d3278e-9000-4951-bcb5-bf1b1d5d5c32",
+        "alias": "m000006",
+        "content": "The Meridian Group Inc. → MG",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "c328b510-9648-4790-a5e7-a873445726e5",
+        "alias": "m000007",
+        "content": "Lumen Labs LLC → LL",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "e88a2d01-35ea-4049-84b1-104eafac52d1",
+        "alias": "m000008",
+        "content": "Quanta Systems & Services Inc. → QSS",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "a0d0b842-3290-4182-a3da-a1a56294b4ee",
+        "alias": "m000009",
+        "content": "Atlas 7 Networks Corp. → A7N",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "ebc3432e-9ea3-4f7b-a0ed-58fdaebcdd79",
+        "alias": "m000010",
+        "content": "3 Rivers Logistics LLC → 3RL",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "d18ad577-c81d-4d5b-910f-01c91c4cf06c",
+        "alias": "m000011",
+        "content": "Redwood Inc. → RED",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "ee9d5913-18bc-4efd-846b-43298d6c8637",
+        "alias": "m000012",
+        "content": "Meridian Corporation → MER",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "9bad4321-62ae-45d9-ba61-6bba610d2692",
+        "alias": "m000013",
+        "content": "Solstice Ltd. → SOL",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "fe608d22-f6e0-4ddc-9975-2d7b0e668f8e",
+        "alias": "m000014",
+        "content": "International Business Fabricators Inc. → IBF",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "5fe4af95-57a6-404a-8990-3ed05d6014d1",
+        "alias": "m000015",
+        "content": "North Star Energy Inc., Class B → NSE.B",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "fe8c78ad-f290-4bb0-b156-22672447d07e",
+        "alias": "m000016",
+        "content": "North Star Energy Inc., Class A → NSE.A",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "ba682895-dd40-4699-8cad-2b6b08617973",
+        "alias": "m000017",
+        "content": "Blue River Holdings LLC, Preferred → BRH.P",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "749870fb-8d31-4323-9a37-d4c0ddaf739f",
+        "alias": "m000018",
+        "content": "Acme & Sons Ltd. → AS",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "99d3069f-c854-4b2a-91f9-b5abfa57ce30",
+        "alias": "m000019",
+        "content": "Axiom AI Technologies Inc. → AAT",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      },
+      {
+        "uid": "088bda22-61b7-4f26-ba10-856e703f6611",
+        "alias": "m000020",
+        "content": "The 5th Avenue Retail Group LLC → 5ARG",
+        "expected": null,
+        "role": null,
+        "linked_rule_uids": [
+          "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+          "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+          "feda9729-b43d-4565-98f3-8b90711477d2",
+          "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+          "a9457f72-6155-4322-a692-91edaa142b61"
+        ]
+      }
+    ],
+    "overview": "The example mappings consistently follow all five rules. The generated symbols are presented as mappings without any claim that they are official, unique, or exchange-valid.",
+    "case_judgments": [],
+    "context_judgments": [
+      {
+        "rule_uid": "0ecb2d81-5c8a-4ea7-ae33-eb38fbcc552e",
+        "status": "CONFORMS",
+        "evidence_subject_uids": [
+          "e467664c-8145-4db5-981f-210a96934a09",
+          "0ee540cd-8dc4-414e-ab98-cae8e6cb1058",
+          "e1fa9ec4-19c3-4d2b-97c9-e470cc418dab",
+          "d86ca208-dc56-4131-abb5-1eb6f13bbe1e",
+          "ac0cf8fa-c997-43d5-a7d3-374e6bb187a6",
+          "71d3278e-9000-4951-bcb5-bf1b1d5d5c32",
+          "c328b510-9648-4790-a5e7-a873445726e5",
+          "e88a2d01-35ea-4049-84b1-104eafac52d1",
+          "a0d0b842-3290-4182-a3da-a1a56294b4ee",
+          "ebc3432e-9ea3-4f7b-a0ed-58fdaebcdd79",
+          "d18ad577-c81d-4d5b-910f-01c91c4cf06c",
+          "ee9d5913-18bc-4efd-846b-43298d6c8637",
+          "9bad4321-62ae-45d9-ba61-6bba610d2692",
+          "fe608d22-f6e0-4ddc-9975-2d7b0e668f8e",
+          "5fe4af95-57a6-404a-8990-3ed05d6014d1",
+          "fe8c78ad-f290-4bb0-b156-22672447d07e",
+          "ba682895-dd40-4699-8cad-2b6b08617973",
+          "749870fb-8d31-4323-9a37-d4c0ddaf739f",
+          "99d3069f-c854-4b2a-91f9-b5abfa57ce30",
+          "088bda22-61b7-4f26-ba10-856e703f6611"
+        ],
+        "reason": "Across the mappings, leading articles and legal-form suffixes are excluded, connectors do not contribute characters, and meaningful numeric tokens are preserved."
+      },
+      {
+        "rule_uid": "ecd5a4ab-4039-44c2-9411-8bb0c575e886",
+        "status": "CONFORMS",
+        "evidence_subject_uids": [
+          "e467664c-8145-4db5-981f-210a96934a09",
+          "0ee540cd-8dc4-414e-ab98-cae8e6cb1058",
+          "e1fa9ec4-19c3-4d2b-97c9-e470cc418dab",
+          "d86ca208-dc56-4131-abb5-1eb6f13bbe1e",
+          "ac0cf8fa-c997-43d5-a7d3-374e6bb187a6",
+          "71d3278e-9000-4951-bcb5-bf1b1d5d5c32",
+          "c328b510-9648-4790-a5e7-a873445726e5",
+          "e88a2d01-35ea-4049-84b1-104eafac52d1",
+          "a0d0b842-3290-4182-a3da-a1a56294b4ee",
+          "ebc3432e-9ea3-4f7b-a0ed-58fdaebcdd79",
+          "fe608d22-f6e0-4ddc-9975-2d7b0e668f8e",
+          "5fe4af95-57a6-404a-8990-3ed05d6014d1",
+          "fe8c78ad-f290-4bb0-b156-22672447d07e",
+          "ba682895-dd40-4699-8cad-2b6b08617973",
+          "749870fb-8d31-4323-9a37-d4c0ddaf739f",
+          "99d3069f-c854-4b2a-91f9-b5abfa57ce30",
+          "088bda22-61b7-4f26-ba10-856e703f6611"
+        ],
+        "reason": "Every normalized multiword name uses the initial of each meaningful word, including numeric initials, while “AI” is preserved as the single component A in AAT."
+      },
+      {
+        "rule_uid": "feda9729-b43d-4565-98f3-8b90711477d2",
+        "status": "CONFORMS",
+        "evidence_subject_uids": [
+          "d18ad577-c81d-4d5b-910f-01c91c4cf06c",
+          "ee9d5913-18bc-4efd-846b-43298d6c8637",
+          "9bad4321-62ae-45d9-ba61-6bba610d2692"
+        ],
+        "reason": "Each normalized single-word company name is assigned a concise three-letter mnemonic: RED, MER, and SOL."
+      },
+      {
+        "rule_uid": "fa8f3b8c-f510-420b-9008-98c4b930f04e",
+        "status": "CONFORMS",
+        "evidence_subject_uids": [
+          "5fe4af95-57a6-404a-8990-3ed05d6014d1",
+          "fe8c78ad-f290-4bb0-b156-22672447d07e",
+          "ba682895-dd40-4699-8cad-2b6b08617973"
+        ],
+        "reason": "The share-class mappings retain the ordinary base tickers and append the corresponding .B, .A, and .P suffixes."
+      },
+      {
+        "rule_uid": "a9457f72-6155-4322-a692-91edaa142b61",
+        "status": "CONFORMS",
+        "evidence_subject_uids": [],
+        "reason": "The context presents generated name-to-symbol mnemonic mappings and makes no representation that any symbol is official, unique, or exchange-valid."
+      }
+    ],
+    "outside_subject_uids": [],
+    "provider_identity": {
+      "provider": "codex_chatgpt",
+      "model": "gpt-5.6-sol",
+      "model_digest": null,
+      "runtime": "codex-cli",
+      "endpoint": null,
+      "reasoning_effort": "none"
+    }
+  },
+  "verification": {
+    "ground_unchanged": true,
+    "example_context_unchanged": true,
+    "rules_context_unchanged": true
+  }
+}
