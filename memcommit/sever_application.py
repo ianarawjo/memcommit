@@ -177,8 +177,14 @@ SeverProgressObserver = Callable[[SeverAnalysisProgress], None]
 class SeverOutputPort(Protocol):
     """Materialize one reviewed session through a require-new output boundary."""
 
+    def recover_materialization(self, session: SeverSession) -> SeverSession | None:
+        """Recover an exact pre-existing Result whose receipt was not saved."""
+
     def materialize(self, session: SeverSession) -> SeverSession:
         """Return the same review advanced to its durable APPLIED state."""
+
+    def rollback_materialization(self, applied: SeverSession) -> None:
+        """Remove only the exact output created for an uncommitted receipt."""
 
 
 class SeverSessionRepository(Protocol):
@@ -304,6 +310,16 @@ def run_sever_apply(
         return SeverApplyResult(session=session, created=False)
 
     applied = output_port.materialize(session)
+    _validate_applied_session(session, applied)
+    return SeverApplyResult(session=applied, created=True)
+
+
+def _validate_applied_session(
+    session: SeverSession,
+    applied: SeverSession,
+) -> None:
+    """Reject a materialization receipt outside its exact reviewed session."""
+
     if (
         applied.state != "APPLIED"
         or applied.application is None
@@ -318,7 +334,6 @@ def run_sever_apply(
         raise SeverApplicationError(
             "Sever Apply returned a receipt outside the reviewed session."
         )
-    return SeverApplyResult(session=applied, created=True)
 
 
 def _validated_snapshot(
@@ -359,33 +374,69 @@ class SeverSessionApplicationFlowPort:
         self,
         reviewed: SeverSessionSnapshot,
     ) -> SeverPersistedApplyResult:
-        """Run Sever's existing require-new creation and session CAS."""
+        """Create the Result and commit its session receipt as one outcome."""
 
         current = self.repository.load(reviewed.session.uid)
         if current != reviewed:
             raise SeverApplicationError(
                 "The Sever session changed before Apply. Reopen the review."
             )
-        applied = run_sever_apply(
-            SeverApplyRequest(session=current.session),
-            output_port=self.output_port,
-        )
-        if not applied.created:
+        if current.session.state == "APPLIED":
             return SeverPersistedApplyResult(
                 snapshot=current,
                 created=False,
             )
-        # Result creation remains intentionally before the session CAS save.
-        # This preserves the documented crash boundary and Undo/Redo receipt
-        # contract; recovery is a separate Store-level design problem.
-        snapshot = _validated_snapshot(
-            self.repository.replace(
-                applied.session,
-                expected_version=current.version_token,
-            ),
-            expected_session=applied.session,
+        recovered = self.output_port.recover_materialization(current.session)
+        if recovered is None:
+            applied = run_sever_apply(
+                SeverApplyRequest(session=current.session),
+                output_port=self.output_port,
+            )
+        else:
+            _validate_applied_session(current.session, recovered)
+            applied = SeverApplyResult(session=recovered, created=False)
+        try:
+            snapshot = _validated_snapshot(
+                self.repository.replace(
+                    applied.session,
+                    expected_version=current.version_token,
+                ),
+                expected_session=applied.session,
+            )
+        except Exception as error:
+            # A replace implementation may report an error after its durable
+            # rename. Re-read before compensating so a committed receipt never
+            # loses the Result it names.
+            try:
+                observed = self.repository.load(current.session.uid)
+            except Exception as observation_error:
+                raise SeverApplicationError(
+                    "Sever Result creation succeeded, but receipt persistence "
+                    "failed and its durable state could not be verified."
+                ) from observation_error
+            if observed.session == applied.session:
+                return SeverPersistedApplyResult(
+                    snapshot=observed,
+                    created=applied.created,
+                )
+            if observed != current:
+                raise SeverApplicationError(
+                    "Sever Result creation succeeded, but the session changed "
+                    "before its receipt could be committed."
+                ) from error
+            if applied.created:
+                try:
+                    self.output_port.rollback_materialization(applied.session)
+                except Exception as rollback_error:
+                    raise SeverApplicationError(
+                        "Sever receipt persistence failed and the exact new Result "
+                        "could not be rolled back."
+                    ) from rollback_error
+            raise
+        return SeverPersistedApplyResult(
+            snapshot=snapshot,
+            created=applied.created,
         )
-        return SeverPersistedApplyResult(snapshot=snapshot, created=True)
 
 
 def run_sever_session_start(

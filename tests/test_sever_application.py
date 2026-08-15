@@ -183,6 +183,10 @@ class _DestinationPort:
 class _OutputPort:
     def __init__(self):
         self.materialized: list[SeverSession] = []
+        self.rolled_back: list[SeverSession] = []
+
+    def recover_materialization(self, review: SeverSession) -> SeverSession | None:
+        return None
 
     def materialize(self, review: SeverSession) -> SeverSession:
         self.materialized.append(review)
@@ -193,6 +197,9 @@ class _OutputPort:
                 result_memory_uids=("99999999-9999-4999-8999-999999999999",),
             )
         )
+
+    def rollback_materialization(self, applied: SeverSession) -> None:
+        self.rolled_back.append(applied)
 
 
 class _Provider:
@@ -499,6 +506,74 @@ def test_saved_session_lifecycle_rejects_stale_and_invalid_review_requests():
     assert stale_output.materialized == [first.session]
 
 
+def test_saved_session_apply_rolls_back_output_when_session_cas_fails():
+    review = _review(_inputs())
+    repository = _SessionRepository()
+    started = run_sever_session_start(
+        SeverAnalysisResult(session=review, origin="PROVIDER"),
+        repository=repository,
+    )
+    output = _OutputPort()
+
+    class FailingReplaceRepository(_SessionRepository):
+        def replace(
+            self,
+            session: SeverSession,
+            *,
+            expected_version: str,
+        ) -> SeverSessionSnapshot:
+            raise RuntimeError("session receipt write failed")
+
+    failing = FailingReplaceRepository()
+    failing.current = repository.current
+
+    with pytest.raises(RuntimeError, match="session receipt write failed"):
+        run_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            repository=failing,
+            output_port=output,
+        )
+
+    assert output.materialized == [review]
+    assert len(output.rolled_back) == 1
+    assert output.rolled_back[0].state == "APPLIED"
+    assert failing.current == started.snapshot
+
+
+def test_saved_session_apply_recovers_receipt_committed_before_reported_error():
+    review = _review(_inputs())
+    repository = _SessionRepository()
+    started = run_sever_session_start(
+        SeverAnalysisResult(session=review, origin="PROVIDER"),
+        repository=repository,
+    )
+    output = _OutputPort()
+
+    class CommitThenFailRepository(_SessionRepository):
+        def replace(
+            self,
+            session: SeverSession,
+            *,
+            expected_version: str,
+        ) -> SeverSessionSnapshot:
+            super().replace(session, expected_version=expected_version)
+            raise RuntimeError("late persistence report")
+
+    committing = CommitThenFailRepository()
+    committing.current = repository.current
+
+    applied = run_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=started.snapshot),
+        repository=committing,
+        output_port=output,
+    )
+
+    assert applied.created is True
+    assert applied.snapshot.session.state == "APPLIED"
+    assert output.rolled_back == []
+    assert committing.current == applied.snapshot
+
+
 def test_sever_application_has_no_command_typer_or_tui_imports():
     source = Path(sever_application.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -675,6 +750,197 @@ def test_real_store_saved_lifecycle_persists_cas_and_source_invariants(
     captured = capsys.readouterr()
     assert captured.out == ""
     assert captured.err == ""
+
+
+@pytest.mark.parametrize("changed_input", ("source", "criteria"))
+def test_real_store_apply_rejects_changed_local_inputs_before_output_creation(
+    isolated_store,
+    changed_input,
+):
+    store = MemoryStore()
+    source = ops.init("freshness/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("freshness/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="freshness/result",
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+    changed = store.load_direct(
+        source.name if changed_input == "source" else criteria.name
+    )
+    ops.add(changed, f"Changed {changed_input} after review.")
+    store.save(changed)
+
+    with pytest.raises(
+        ConcurrentContextUpdateError,
+        match="changed before the result could be saved",
+    ):
+        execute_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            store=store,
+        )
+
+    assert not store.context_exists("freshness/result")
+    assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
+
+
+def test_real_store_apply_rolls_back_result_when_session_receipt_save_fails(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("rollback/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("rollback/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="rollback/result",
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+
+    def fail_replace(self, session, *, expected_version):
+        raise RuntimeError("session receipt write failed")
+
+    monkeypatch.setattr(
+        sever_runtime.MemoryStoreSeverSessionRepository,
+        "replace",
+        fail_replace,
+    )
+
+    with pytest.raises(RuntimeError, match="session receipt write failed"):
+        execute_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            store=store,
+        )
+
+    assert not store.context_exists("rollback/result")
+    assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
+
+
+def test_real_store_recovers_exact_result_left_before_session_receipt(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("recovery/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("recovery/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="recovery/result",
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+    orphaned = execute_sever_apply(
+        SeverApplyRequest(started.snapshot.session),
+        store=store,
+    )
+    orphaned_application = orphaned.session.application
+    assert orphaned_application is not None
+
+    recovered = execute_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=started.snapshot),
+        store=store,
+    )
+
+    assert recovered.created is False
+    assert recovered.snapshot.session.state == "APPLIED"
+    assert recovered.snapshot.session.application == orphaned_application
+    assert store.load_direct("recovery/result").uid == (
+        orphaned_application.output_context_uid
+    )
+
+
+def test_real_store_all_keep_review_still_creates_result_and_checkpoint(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("all-keep/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("all-keep/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="all-keep/result",
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+
+    applied = execute_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=started.snapshot),
+        store=store,
+    )
+
+    assert applied.created is True
+    result = store.load_direct("all-keep/result")
+    assert [memory.content for memory in result.iter_items()] == [
+        "Needs step-free access."
+    ]
+    [checkpoint] = store.list_checkpoints("all-keep/result")
+    assert checkpoint["command"] == "sever"
+
+
+def test_real_store_apply_name_race_leaves_review_and_existing_owner_unchanged(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("collision/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("collision/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="collision/result",
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+    owner = ops.init("collision/result")
+    ops.add(owner, "Concurrent owner.")
+    store.create_context(owner)
+
+    with pytest.raises(FileExistsError, match="already exists"):
+        execute_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            store=store,
+        )
+
+    assert store.load_direct(owner.name).to_dict() == owner.to_dict()
+    assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
 
 
 def test_runtime_retains_projected_cache_origin_and_skips_provider(

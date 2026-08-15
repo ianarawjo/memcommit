@@ -12,6 +12,7 @@ from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
+    revalidate_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.command_attempts import annotate_sever_attempt
@@ -24,6 +25,8 @@ from memcommit.derived_policy import (
     authorize_derived_transfer,
 )
 from memcommit.query_provider import QueryProviderError, QueryProviderTimeoutError
+from memcommit.profile_config import ProfileRegistry
+from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.sever import (
     SeverApplication,
     SeverContextBinding,
@@ -60,6 +63,7 @@ from memcommit.sever_provider import SeverProviderError
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore, context_record_digest, validate_context_name
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
+from memcommit.update import GrantedUpdateTarget
 
 
 SeverProgressCallback = SeverProgressObserver
@@ -117,11 +121,14 @@ def capture_sever_binding(
     access: ContextAccess,
     *,
     include_descendants: bool,
+    registry: ProfileRegistry | None = None,
 ) -> SeverContextBinding:
     """Freeze one authorized ordinary-Memory frame for analysis and later CAS."""
 
     read_store: MemoryStore | GrantedReadStore = (
-        GrantedReadStore(access) if access.is_granted else access.store
+        GrantedReadStore(access, registry=registry)
+        if access.is_granted
+        else access.store
     )
     root_name = access.display_name if access.is_granted else access.context_name
     load_direct = read_store.load_direct
@@ -403,8 +410,13 @@ class MemoryStoreSeverOutputPort:
 
     store: MemoryStore
 
-    def materialize(self, session: SeverSession) -> SeverSession:
-        output = Context(uid=str(uuid.uuid4()), name=session.output_name)
+    @staticmethod
+    def _result_context(
+        session: SeverSession,
+        *,
+        output_uid: str,
+    ) -> tuple[Context, tuple[str, ...], list[dict[str, str]]]:
+        output = Context(uid=output_uid, name=session.output_name)
         result_uids: list[str] = []
         sources: list[dict[str, str]] = []
         for candidate, source, content in session.results():
@@ -419,6 +431,141 @@ class MemoryStoreSeverOutputPort:
                     "selection": candidate.selection,
                 }
             )
+        return output, tuple(result_uids), sources
+
+    @staticmethod
+    def _checkpoint_args(
+        session: SeverSession,
+        output: Context,
+        sources: list[dict[str, str]],
+    ) -> dict[str, object]:
+        return {
+            "context_creation": {
+                "version": 1,
+                "context_uid": output.uid,
+                "context_name": output.name,
+            },
+            "sever": {
+                "session_uid": session.uid,
+                "session_digest": sever_record_digest(session),
+                "source": session.source.root_name,
+                "source_scope": (
+                    "INCLUDE_DESCENDANTS"
+                    if session.source.include_descendants
+                    else "THIS_CONTEXT_ONLY"
+                ),
+                "criteria": session.criteria.root_name,
+                "criteria_scope": (
+                    "INCLUDE_DESCENDANTS"
+                    if session.criteria.include_descendants
+                    else "THIS_CONTEXT_ONLY"
+                ),
+                "output": session.output_name,
+                "results": sources,
+            },
+        }
+
+    def recover_materialization(self, session: SeverSession) -> SeverSession | None:
+        """Adopt only an untouched Result produced by this exact review.
+
+        A process can stop after the atomic Context/checkpoint creation but
+        before the private session CAS. The exact checkpoint is sufficient to
+        restore that missing receipt; an unrelated occupant remains an ordinary
+        require-new name collision.
+        """
+
+        if not self.store.context_exists(session.output_name):
+            return None
+        current = self.store.load_direct(session.output_name)
+        expected, result_uids, sources = self._result_context(
+            session,
+            output_uid=current.uid,
+        )
+        if context_record_digest(current) != context_record_digest(expected):
+            return None
+        checkpoints = self.store.list_checkpoints(session.output_name)
+        if len(checkpoints) != 1:
+            return None
+        checkpoint = checkpoints[0]
+        if (
+            checkpoint.get("command") != "sever"
+            or checkpoint.get("args")
+            != self._checkpoint_args(session, expected, sources)
+            or not isinstance(checkpoint.get("uid"), str)
+        ):
+            return None
+        return session.with_application(
+            SeverApplication(
+                output_context_uid=current.uid,
+                checkpoint_uid=checkpoint["uid"],
+                result_memory_uids=result_uids,
+            )
+        )
+
+    def materialize(self, session: SeverSession) -> SeverSession:
+        granted_bindings = tuple(
+            (label, binding)
+            for label, binding in (
+                ("Source", session.source),
+                ("Criteria", session.criteria),
+            )
+            if binding.granted is not None
+        )
+        if not granted_bindings:
+            return self._materialize_frozen(session)
+
+        # Freeze the grant registry across both validation passes and output
+        # creation. The second pass makes the Result's commit point observe
+        # the exact authority content captured by the reviewed session.
+        with authority_grant_snapshot_lock() as registry:
+            for label, binding in granted_bindings:
+                self._revalidate_granted_binding(label, binding, registry)
+            applied = self._materialize_frozen(session)
+            try:
+                for label, binding in granted_bindings:
+                    self._revalidate_granted_binding(label, binding, registry)
+            except Exception:
+                self.rollback_materialization(applied)
+                raise
+            return applied
+
+    def _revalidate_granted_binding(
+        self,
+        label: str,
+        binding: SeverContextBinding,
+        registry: ProfileRegistry,
+    ) -> None:
+        if binding.granted is None:
+            raise SeverApplicationError(
+                f"The Sever {label} is not a granted input."
+            )
+        frozen = GrantedUpdateTarget.from_dict(binding.granted)
+        try:
+            access = revalidate_granted_context_binding(
+                frozen,
+                required_permission="READ",
+                registry=registry,
+                active_store=self.store,
+            )
+            current = capture_sever_binding(
+                access,
+                include_descendants=binding.include_descendants,
+                registry=registry,
+            )
+        except (FileNotFoundError, ProfileError, ValueError) as error:
+            raise SeverApplicationError(
+                f"The granted Sever {label} is no longer authorized for Apply."
+            ) from error
+        if current != binding:
+            raise SeverApplicationError(
+                f"The granted Sever {label} changed after review. Re-run Sever."
+            )
+
+    def _materialize_frozen(self, session: SeverSession) -> SeverSession:
+        output, result_uids, sources = self._result_context(
+            session,
+            output_uid=str(uuid.uuid4()),
+        )
 
         local_bindings: list[tuple[str, str, str]] = []
         for binding in (session.source, session.criteria):
@@ -427,31 +574,7 @@ class MemoryStoreSeverOutputPort:
         deduplicated = tuple(dict.fromkeys(local_bindings))
         auto_checkpoint = AutoCheckpoint(
             command="sever",
-            args={
-                "context_creation": {
-                    "version": 1,
-                    "context_uid": output.uid,
-                    "context_name": output.name,
-                },
-                "sever": {
-                    "session_uid": session.uid,
-                    "session_digest": sever_record_digest(session),
-                    "source": session.source.root_name,
-                    "source_scope": (
-                        "INCLUDE_DESCENDANTS"
-                        if session.source.include_descendants
-                        else "THIS_CONTEXT_ONLY"
-                    ),
-                    "criteria": session.criteria.root_name,
-                    "criteria_scope": (
-                        "INCLUDE_DESCENDANTS"
-                        if session.criteria.include_descendants
-                        else "THIS_CONTEXT_ONLY"
-                    ),
-                    "output": session.output_name,
-                    "results": sources,
-                },
-            },
+            args=self._checkpoint_args(session, output, sources),
             description=(
                 f"Created local Sever result '{session.output_name}' from "
                 f"'{session.source.root_name}' under '{session.criteria.root_name}'; "
@@ -476,9 +599,59 @@ class MemoryStoreSeverOutputPort:
             SeverApplication(
                 output_context_uid=output.uid,
                 checkpoint_uid=checkpoint.uid,
-                result_memory_uids=tuple(result_uids),
+                result_memory_uids=result_uids,
             )
         )
+
+    def rollback_materialization(self, applied: SeverSession) -> None:
+        """Remove only the untouched Result named by an uncommitted receipt."""
+
+        application = applied.application
+        if applied.state != "APPLIED" or application is None:
+            raise SeverApplicationError(
+                "Only an applied Sever receipt can roll back its Result."
+            )
+        expected = Context(
+            uid=application.output_context_uid,
+            name=applied.output_name,
+        )
+        expected_uids: list[str] = []
+        for _candidate, source, content in applied.results():
+            uid = _result_uid(applied.uid, source.uid, content)
+            expected.add(Memory(uid=uid, content=content))
+            expected_uids.append(uid)
+        if tuple(expected_uids) != application.result_memory_uids:
+            raise SeverApplicationError(
+                "The Sever receipt does not identify its exact Result Memories."
+            )
+        expected_digest = context_record_digest(expected)
+
+        # This is compensation for an outcome that never committed, not a
+        # user-visible deletion. Hold the same Store boundaries as creation
+        # and intentionally avoid publishing a lifecycle event.
+        with self.store._command_write_lock():  # noqa: SLF001
+            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
+                with self.store._context_write_lock(applied.output_name):  # noqa: SLF001
+                    with self.store.profile_write_guard():
+                        current = self.store.load_direct(applied.output_name)
+                        if (
+                            current.uid != application.output_context_uid
+                            or context_record_digest(current) != expected_digest
+                        ):
+                            raise SeverApplicationError(
+                                "The new Sever Result changed before rollback."
+                            )
+                        checkpoints = self.store.list_checkpoints(applied.output_name)
+                        if (
+                            len(checkpoints) != 1
+                            or checkpoints[0].get("uid")
+                            != application.checkpoint_uid
+                        ):
+                            raise SeverApplicationError(
+                                "The new Sever Result checkpoint changed before "
+                                "rollback."
+                            )
+                        self.store._delete_locked(applied.output_name)  # noqa: SLF001
 
 
 def execute_sever_apply(

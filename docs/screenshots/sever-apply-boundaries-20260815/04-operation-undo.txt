@@ -1,0 +1,4 @@
+52 180                                                                                                                                                                              
+Undid command: mem sever --source sever/source --criteria sever/criteria --save-as sever/result --source-only --criteria-only --accept · Affected Contexts: 1 · Affected Memories: 1
+ · - 1 removed                                                                                                                                                                      
+UNDO VERIFICATION · RESULT False

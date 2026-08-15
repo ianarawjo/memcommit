@@ -1,0 +1,17 @@
+52 180                                                                                                                                                                              
+SEVER · APPLIED · SOURCE UNCHANGED                                                                                                                                                  
+SOURCE · sever/source · INCLUDE DESCENDANTS · 1 Memories                                                                                                                            
+CRITERIA · sever/criteria · INCLUDE DESCENDANTS                                                                                                                                     
+OUTPUT · sever/recovered · CREATED LOCALLY                                                                                                                                          
+                                                                                                                                                                                    
+The reviewed Result keeps the access requirement.                                                                                                                                   
+                                                                                                                                                                                    
+CANDIDATES                                                                                                                                                                          
+  1. [0f0b6549] KEEP_AS_WRITTEN                                                                                                                                                     
+     SOURCE · Needs step-free access.                                                                                                                                               
+     RESULT · Needs step-free access.                                                                                                                                               
+     WHY · The criterion permits this requirement.                                                                                                                                  
+                                                                                                                                                                                    
+The Source Context is unchanged.                                                                                                                                                    
+RECOVERY · mem undo                                                                                                                                                                 
+INTERRUPTED APPLY RECOVERY · CREATED THIS TURN False · SAME RESULT UID True

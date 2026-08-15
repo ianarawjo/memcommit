@@ -93,19 +93,32 @@ therefore already the exact reviewed `SeverSessionSnapshot`. The Sever
 adapter's `review()` is intentionally an identity handoff rather than a second
 UI or review loop.
 
-Its operation-owned `apply()` retains the previous order exactly:
+Its operation-owned `apply()` keeps Result creation before the private receipt:
 
 ```text
 load and compare the accepted session snapshot
-  → create the require-new Result Context
+  → recover an exact Result left by an interrupted prior Apply, or
+    create the require-new Result Context
   → CAS-save the APPLIED Sever session and receipt
 ```
 
-The Result creation remains before the session CAS save. Moving that boundary
-would change the documented crash and recovery behavior, so the shared flow
-does not attempt to make the two writes generically atomic. An already APPLIED
-snapshot also retains its existing idempotent `created=False` result without
-materializing the output again.
+The two stores still cannot share one filesystem transaction, so the Sever port
+owns operation-specific compensation and recovery. A synchronous session-CAS
+failure re-reads the session: a receipt that actually committed is returned as
+success, an unchanged REVIEWING session causes deletion of only the exact
+untouched Result and checkpoint created by this attempt, and an indeterminate
+or concurrently changed state fails closed without deleting anything. After a
+process interruption, a later Apply adopts an existing Result only when its
+Context digest and sole Sever checkpoint exactly match the accepted session;
+an unrelated occupant remains a require-new name collision. An already APPLIED
+snapshot remains idempotent with `created=False`.
+
+Local Source and Criteria snapshots are checked under the local output-creation
+lock. Granted inputs additionally revalidate the frozen Profile, Grant UID,
+revision, permissions, public/resource mapping, and complete projected frame
+immediately before and after Result creation while the grant registry is
+frozen. A change during that boundary rolls the exact new Result back before
+any session receipt is published.
 
 ## Meld adapter
 
@@ -144,7 +157,7 @@ inside the existing operation dispatcher.
 - Undo and Redo continue to consume Update checkpoint receipts; the shared
   flow neither implements nor weakens recovery.
 - Sever keeps its Source unchanged, require-new output rule, result checkpoint,
-  saved-session CAS, and existing recovery boundary.
+  saved-session CAS, exact compensation, and interrupted-Apply recovery.
 - Meld keeps all four application transactions distinct, including its
   granted-source lock recursion and owner-aware rollback boundaries.
 - No visible TUI state or keyboard path changes in these extractions, so the
@@ -161,9 +174,11 @@ application, no-op, stale CAS, multi-owner rollback, checkpoints, idempotence,
 Undo, and Redo.
 
 The Sever application tests exercise the second connected path across saved
-review revisions, destination changes, stale session rejection, exact output
-materialization, idempotence, source preservation, checkpoints, Undo, and
-Redo. Meld adapter and command tests exercise the third connected path across
+review revisions, destination changes, local and granted input freshness,
+Grant revision and revocation, name races, all-KEEP materialization, exact
+output compensation, interrupted-Apply recovery, late-success detection,
+idempotence, Source preservation, checkpoints, Undo, and Redo. Meld adapter
+and command tests exercise the third connected path across
 symmetric and directional modes, local and granted ownership, multi-owner
 rollback, stale inputs and targets, crash recovery, idempotent acceptance,
 checkpoints, Undo, and Redo.

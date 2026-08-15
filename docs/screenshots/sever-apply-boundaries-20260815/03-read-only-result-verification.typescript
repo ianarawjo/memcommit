@@ -1,0 +1,17 @@
+52 180
+SEVER · APPLIED · SOURCE UNCHANGED
+SOURCE · sever/source · THIS CONTEXT ONLY · 1 Memories
+CRITERIA · sever/criteria · THIS CONTEXT ONLY
+OUTPUT · sever/result · CREATED LOCALLY
+
+The reviewed Result keeps the access requirement.
+
+CANDIDATES
+  1. [5f47f8e5] KEEP_AS_WRITTEN
+     SOURCE · Needs step-free access.
+     RESULT · Needs step-free access.
+     WHY · The criterion permits this requirement.
+
+The Source Context is unchanged.
+RECOVERY · mem undo
+READ-ONLY RESULT · MEMORIES 1 · CHECKPOINTS 1

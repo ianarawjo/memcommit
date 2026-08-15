@@ -202,11 +202,29 @@ the same workbench; it neither reruns the provider nor creates a Context.
 Existing names and invalid ordinary Context identifiers fail before the session
 changes. Review-only surfaces omit this control.
 
-Apply revalidates local contributing Contexts under the output creation lock,
-creates one require-new ordinary Context, and records a `sever` checkpoint with
-the session, Source, Criteria, Result, and source-to-result mapping. Forgotten
-content and rationale remain only in the Sever session. The Source record and
-its Memories are never mutated.
+Apply revalidates local contributing Contexts under the output creation lock.
+For a granted Source or Criteria it also revalidates the frozen Profile and
+Grant identity, revision, permissions, public/resource mapping, and complete
+projected frame immediately before and after output creation while the Grant
+registry is frozen. It then creates one require-new ordinary Context and records
+a `sever` checkpoint with the session, Source, Criteria, Result, and
+source-to-result mapping. A stale or revoked granted input, including a change
+during creation, leaves no partial Result. Forgotten content and rationale
+remain only in the Sever session. The Source record and its Memories are never
+mutated. An all-KEEP disposition is still a real Sever result and
+therefore creates the reviewed Result Context and checkpoint; it is not treated
+as a no-op on Source.
+
+Result Context creation and the private APPLIED session receipt are two atomic
+file operations rather than one shared transaction. A synchronous receipt-save
+failure re-reads the session before compensating. If the receipt actually
+committed, Apply reports success; if the session is still the exact REVIEWING
+snapshot, Sever deletes only the untouched Result and sole checkpoint created
+by that attempt. It refuses compensation when either durable side changed.
+After a process interruption in the gap, retrying Apply recovers the receipt
+only when the existing Result digest and its sole Sever checkpoint exactly
+match the accepted session. An unrelated Context at the output name remains a
+normal require-new collision.
 
 Command Undo removes that exact Result Context and returns the saved session to
 `REVIEWING`. Because the ordinary Context must be absent while still supporting
@@ -230,8 +248,9 @@ removed. It cannot create the Result Context.
   endpoint, preview, approval, digest, and delivery checks.
 - `mem trace` and `mem rationale` do not yet render a dedicated Sever lineage
   view.
-- A crash after Result creation but before saving the application receipt can
-  leave an inspectable Result Context; automatic receipt recovery remains
-  future work.
+- A machine failure can still interrupt filesystem durability below the
+  atomic Context/checkpoint or session-file primitives. Sever recovers the
+  complete known gap between those primitives, but it does not provide a
+  cross-filesystem journal for damaged or only partially durable files.
 - Sever Undo/Redo has exception rollback across Context and session writes, but
   a process or machine crash between its file moves is not journal-recovered.

@@ -2,7 +2,8 @@
 
 ## Status
 
-`VERIFIED` for the internal application boundary, reviewed 2026-08-14.
+`VERIFIED` for the internal application and APPLY-01 boundary, reviewed
+2026-08-15.
 
 Sever is the second operation slice used to test the target application
 architecture after Summarize. Its semantic analysis, private saved-session
@@ -48,8 +49,9 @@ SeverSessionSnapshot(session, opaque CAS token)
         |
         v
 run_sever_session_apply
-  | require-new output + checkpoint
+  | exact interrupted-Apply recovery, or require-new output + checkpoint
   | APPLIED-session CAS save
+  | exact compensation if that save fails
         |
         v
 SeverPersistedApplyResult
@@ -67,9 +69,10 @@ SeverPersistedApplyResult
 | Session lifecycle | `SeverSessionRepository`, `SeverSessionSnapshot` | `MemoryStoreSeverSessionRepository` | launchers and `--resume` open a snapshot; interfaces never calculate a record digest | Create, load, and replace share one opaque optimistic-CAS contract |
 | Review revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer review; custom content is valid only for `CUSTOM` |
 | Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | an existing or invalid output cannot alter the review, and changing a name does not rerun analysis |
-| Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; only that exact snapshot crosses materialization, then its APPLIED revision is CAS-saved |
-| Apply result | `SeverPersistedApplyResult` | require-new Context, checkpoint, and APPLIED-session replacement | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply |
-| Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates neither a second Context nor a second session revision |
+| Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; local frames and granted identity/revision/content are fresh at the Result commit point |
+| Apply result | `SeverPersistedApplyResult` | require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
+| Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a Result whose digest and sole Sever checkpoint match the accepted session is adopted; an unrelated occupant remains a collision |
+| Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates neither a second Context nor a second session revision; recovered prior creation reports `created=False` |
 | Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `sever_application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
 
 ## Dependency direction
@@ -102,13 +105,21 @@ imports the runtime owner directly rather than reaching through the command.
   create or open. The repository is the only layer that interprets that token
   as the current record digest.
 - Apply reloads the durable snapshot before output creation. A stale REVIEWING
-  or stale APPLIED snapshot fails before materialization; the final CAS still
-  catches a race that occurs during the existing Context-creation crash window.
+  or stale APPLIED snapshot fails before materialization; the final CAS catches
+  a race that occurs after Result creation.
 - Apply creates a new local ordinary Context and checkpoint. It never updates,
   deletes, or checkpoints the Source.
 - Local contributing Context digests remain the Store materializer's CAS set.
-  Fully granted retained inputs have no local source path to lock and preserve
-  the pre-existing granted-input behavior.
+  Granted inputs revalidate the exact frozen Profile, Grant, permissions,
+  public/resource mapping, and projected frame before and after creation while
+  the registry is frozen. A stale/revoked Grant or changed authority Context
+  fails without a partial Result.
+- An all-KEEP review is not a Source no-op: it creates the reviewed derived
+  Result and checkpoint while leaving Source byte-for-byte unchanged.
+- If session receipt persistence raises, the adapter re-reads it before acting.
+  A late committed receipt is success; an unchanged REVIEWING session triggers
+  deletion of only the exact untouched Result and sole checkpoint; an
+  indeterminate or concurrently changed state fails closed without deletion.
 - Existing Sever session schema, candidate UIDs, deterministic Result Memory
   UIDs, checkpoint payload, Undo/Redo contract, CLI text, TUI topology, and
   saved-session compatibility are unchanged.
@@ -133,10 +144,19 @@ The focused boundary and compatibility run currently covers:
   Apply idempotence without terminal output;
 - existing CLI, TUI setup, authority, exact Study prewarm, review, Apply,
   Undo/Redo, and application-report behavior.
+- local Source and Criteria freshness, Apply-time output-name races, all-KEEP
+  materialization, synchronous session-save compensation, and late-success
+  detection;
+- granted Source and Criteria success, authority-content changes, Grant
+  revision and revocation, plus a change injected between the two Apply checks;
+- exact interrupted-Apply recovery without a second Result identity.
 
-The focused lifecycle and compatibility run passed 53 tests. No visible TUI flow changed, so the existing
-ordered Sever captures remain the applicable presentation evidence; this
-structural extraction does not claim a new TUI design.
+The focused lifecycle, review-policy, restoration, local/granted boundary, and
+compatibility run passed 90 tests. The ordered 180×52 true-color replay under
+`docs/screenshots/sever-apply-boundaries-20260815/` records analysis pending,
+the all-KEEP application receipt, read-only verification, Undo, Redo,
+synchronous compensation, and interrupted-Apply recovery. The work changes no
+TUI topology or key contract.
 
 An expanded 368-test run across Sever, authority, command attempts/wait,
 Context scope, Impact/session/restoration, Study installation, write
@@ -144,9 +164,9 @@ protection, and Context-operand consumers passed in full.
 
 ## Remaining boundaries and non-goals
 
-1. Result creation and the subsequent APPLIED-session save retain the existing
-   crash window documented in `mem-sever-design-rationale.md`. This extraction
-   does not claim transactionality or receipt recovery.
+1. The complete known Result-created/session-REVIEWING gap is recoverable, but
+   the prototype still has no cross-filesystem journal for storage damage below
+   either atomic file primitive.
 2. This boundary preserves `EXACT`, `EQUIVALENT_SCOPE`, and `PROJECTED` cache
    origins but does not decide when projection is safe. The Study prewarm
    adapter remains authoritative for that separate cache contract.
@@ -160,3 +180,24 @@ protection, and Context-operand consumers passed in full.
    evidence, not a versioned public Python facade. Store-root ownership,
    configured-provider bootstrap, error taxonomy, and compatibility policy must
    be decided before public export.
+
+## APPLY-01 case matrix
+
+| Case | Expected effect | Verification |
+| --- | --- | --- |
+| Local Source and Criteria current | New Result + one checkpoint; Source unchanged | real Store and PTY receipt |
+| Granted Source current | Same local Result behavior; no authority mutation | real Grant fixture |
+| Granted Criteria current | Same local Result behavior; no authority mutation | real Grant fixture |
+| All candidates KEEP | New derived Result + checkpoint, not no-op | real Store and PTY receipt |
+| Local Source or Criteria changes after review | Fail before Result | parameterized CAS tests |
+| Granted authority content changes after review | Fail before Result | Source/Criteria role tests |
+| Grant revised or revoked | Fail before Result | control-plane tests |
+| Granted content changes during Result creation | Exact Result compensated; session REVIEWING | injected between-check test |
+| Output name claimed after review | Existing owner untouched; session REVIEWING | require-new race test |
+| Session receipt save fails before commit | Exact new Result/checkpoint compensated | pure port + real Store + PTY |
+| Session receipt commits then reports failure | Re-read as success; no compensation | pure port test |
+| Process stops after exact Result/checkpoint | Retry adopts same UID and saves receipt | real Store + PTY recovery |
+| Existing output is not the exact interrupted Result | Normal name collision; never adopted | require-new collision test |
+| Already APPLIED retry | No new Context, checkpoint, or revision | persisted idempotence test |
+| Close/cancel before Accept | REVIEWING session retained; no Result | workbench CLOSE test |
+| Undo then Redo | Whole Result and matching receipt removed/restored as one unit | command tests + PTY |
