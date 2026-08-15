@@ -2,21 +2,22 @@
 
 ## Status
 
-`CHARACTERIZED`, not `VERIFIED`, for `APPLY-01` and `EFFECT-01`, reviewed
-2026-08-15.
+`VERIFIED` for local in-place structural Apply; `CHARACTERIZED` for the
+remaining analysis and save-as lifecycle, reviewed 2026-08-15.
 
-This note is the preparation gate before Atomize is moved behind an
-interface-independent application boundary. It records the current structural
-Atomize behavior, the operation-owned differences that must survive, and the
-known failure/recovery gaps that the extraction must close. It does not change
-Atomize semantics, provider prompts, Study fixtures, saved schemas, or TUI
-navigation.
+This note records the first Atomize application slice. The local in-place path
+now crosses a typed, interface-independent snapshot and application boundary.
+It preserves Atomize semantics, provider prompts, Study fixtures, saved
+schemas, and ordinary TUI navigation while closing its terminal-receipt,
+late-success, interrupted-Apply, and review-revision races. Analysis creation
+and the require-new save-as route remain later slices.
 
 ## Current execution junction
 
-Atomize already separates its semantic records, strict provider decoder,
-mutable workbench model, and presentation. The complete lifecycle still joins
-inside `memcommit.commands.atomize`:
+Atomize already separated its semantic records, strict provider decoder,
+mutable workbench model, and presentation. In-place Apply now has a distinct
+application/runtime junction while analysis and save-as still compose in the
+command:
 
 ```text
 CLI flags or TUI action
@@ -29,24 +30,32 @@ load local Context + latest analysis/workbench
         +-- review responses --> optional complete reanalysis
         |
         v
-command-owned freshness and safety checks
+command-owned semantic/review gates
         |
-        +-- in place --> mutate Context + one atomize checkpoint
+        +-- in place --> AtomizeSessionSnapshot
+        |                + exact analysis/workbench revision
+        |                + recover or create one atomize checkpoint
+        |                + CAS-save terminal receipt
+        |                + compensate an uncommitted exact checkpoint
         |
         `-- save-as  --> create source copy + init checkpoint
                         + atomize checkpoint + current switch
         |
         v
-save Source-owned terminal workbench receipt
+typed Apply result or retained save-as state
         |
         v
 render command receipt
 ```
 
-The final workbench-receipt write is outside the Context/checkpoint write. A
-Python or agent caller therefore cannot execute the complete operation without
-calling command-owned policy, and an exception between those writes can leave
-the durable effect and the terminal session state disagreeing.
+`memcommit.atomize_application` owns the in-place lifecycle and imports no
+terminal adapter or Store. `memcommit.atomize_runtime` owns the Store session
+repository, strict graph preflight, checkpoint reconstruction, materialization,
+and compensation. The Context/checkpoint and workbench receipt remain separate
+atomic files, but the application result treats them as one synchronous
+outcome: it re-reads late success, compensates an uncommitted new checkpoint,
+and recovers an exact previously interrupted checkpoint without replaying the
+transformation.
 
 ## Operation-owned decisions to preserve
 
@@ -98,20 +107,21 @@ the durable effect and the terminal session state disagreeing.
 | Destination occupied or raced | unrelated Context is never overwritten | save-as collision/race tests | require-new publication remains authoritative |
 | Save-as succeeds | Source unchanged; destination gets init baseline, atomize checkpoint, analysis copy, then conditional current switch | save-as lineage test | return one typed complete-effect receipt |
 | Save-as fails after publication | published destination is retained for manual inspection | published-failure and switch-failure tests | result must explicitly distinguish retained partial publication from success |
-| Terminal receipt write fails before commit | Context/checkpoint currently remain while workbench stays nonterminal | strict xfail boundary test | compensate exact effect or recover it atomically before returning failure |
-| Terminal receipt commits then reports failure | durable success currently returns a command error | strict xfail boundary test | re-read exact receipt and report success |
-| Retry after checkpoint but before terminal receipt | retry reports already applied but does not repair workbench | strict xfail boundary test | adopt only the exact matching checkpoint and persist the missing receipt |
+| Terminal receipt write fails before commit | exact new checkpoint is removed and the exact pre-Apply Context record is restored | compensation boundary test | verified for synchronous local failure |
+| Terminal receipt commits then reports failure | exact terminal workbench is re-read and reported as success | late-success boundary test | verified under the session lock and application re-read |
+| Retry after checkpoint but before terminal receipt | exact trace/audit/checkpoint is adopted, receipt is repaired, and no duplicate checkpoint is created | interrupted recovery test | verified even after later Context edits because recovery never overwrites current content |
+| Workbench changes after Context save | exact new Context/checkpoint effect is compensated; the newer review remains nonterminal | injected CAS-race test | verified against the complete opaque workbench revision |
 
 ## EFFECT-01 case matrix
 
 | Route | Durable writes | Current Undo/Redo unit | Required decision |
 | --- | --- | --- | --- |
 | Analysis-only | latest analysis and optional workbench | not a Context history effect | application session lifecycle only |
-| In-place structural Apply | one Context replacement, one Atomize checkpoint, optional terminal workbench receipt | one `mem undo` / `mem redo` restores the whole Context snapshot; session remains terminal | close receipt compensation and interrupted recovery |
+| In-place structural Apply | one Context replacement, one Atomize checkpoint, optional terminal workbench receipt | one `mem undo` / `mem redo` restores the whole Context snapshot; session remains terminal | verified, including receipt compensation and interrupted recovery |
 | All-preserved in-place Apply | same checkpoint/receipt with unchanged Memory ledger | Undo/Redo records history although Memory content is unchanged | preserve as explicit completion, not collapse to Update semantics |
 | Save-as structural Apply | new Context, init checkpoint, copied analysis, Atomize checkpoint, current-pointer CAS, Source terminal receipt | one Undo reverses only the Atomize checkpoint to the created baseline; it does not remove the new Context | either define a compound operation unit or document this as an intentional two-checkpoint exception before verification |
 | Save-as failure after publication | inspectable new Context in its last durable phase; Source unchanged | manual inspection/recovery; no complete success receipt | add a typed partial-publication result and exact retry/adoption rules |
-| Structural Apply receipt failure | Context effect may exist without terminal workbench state | checkpoint prevents duplicate mutation but does not repair the session | exact compensation, late-success detection, and recovery are required |
+| Structural Apply receipt failure | synchronous pre-commit failure exposes no Context effect; a prior exact checkpoint is recoverable without replay | checkpoint/receipt pair remains one application outcome | verified for local in-place Apply |
 | Grounding proposal Apply | separate edit/add transaction and grounding receipt/history | already has exact checkpoint recovery and mixed-write rollback tests | do not merge its schema with structural Atomize; reuse only the application/recovery mechanics |
 
 ## Hidden prewarm and visible-session boundary
@@ -129,84 +139,88 @@ application API should receive a typed analysis origin such as `PREPARED` or
 `LIVE`; it must not make hidden installation files part of the public session
 repository or allow a cache hit to bypass Apply freshness and authority checks.
 
-## Target extraction boundary
+## Implemented and remaining extraction boundary
 
-The first implementation should preserve the current domain records and add a
-thin typed lifecycle around them:
+The in-place slice preserves the current domain records and adds this typed
+lifecycle:
 
 ```text
-AtomizeAnalysisRequest
-        -> run_atomize_analysis
-        -> AtomizeAnalysisResult(analysis, origin)
-
 AtomizeSessionSnapshot(analysis, workbench, opaque revision)
-        -> revise destination / responses
-        -> refreshed AtomizeSessionSnapshot
-
-AtomizePersistedApplyRequest(snapshot, route)
+        -> AtomizePersistedApplyRequest
         -> run_atomize_session_apply
-        -> APPLIED | RETAINED_PARTIAL AtomizeApplyReceipt
+        -> AtomizePersistedApplyResult
+             + exact checkpoint/result
+             + terminal snapshot when a workbench exists
+             + created/recovered disposition
 ```
 
 Suggested ownership:
 
-- `memcommit.atomize_application`: typed requests/results, lifecycle ordering,
-  idempotence, and port protocols; no Typer, prompt-toolkit, Store paths, or
-  Study fixture imports.
+- `memcommit.atomize_application`: implemented typed requests/results,
+  lifecycle ordering, idempotence, audit projection, and port protocols; no
+  Typer, prompt-toolkit, Store paths, or Study fixture imports.
 - `memcommit.atomize_runtime`: local Context capture, strict graph preflight,
-  hidden prepared lookup, provider construction, session repository, Context
-  materialization, compensation, and interrupted-Apply recovery.
+  session repository, Context materialization, compensation, and
+  interrupted-Apply recovery. Analysis/prewarm/provider construction has not
+  moved here yet.
 - `memcommit.commands.atomize`: CLI/TUI composition, progress and receipts,
-  mapping final workbench actions to the typed use cases.
+  mapping final workbench actions to the typed in-place use case; save-as
+  remains command-owned.
 - existing `memcommit.atomize`, `atomize_workbench`, and grounding modules:
   semantic/domain records and their operation-specific validation; schemas are
   not merged merely because lifecycle mechanics become common.
 
-The opaque session revision must bind at least the immutable analysis UID, the
-complete workbench record (including response state and Output plan), and its
-application receipt. The command currently compares identity at several
-points but has no one token spanning approval through terminal publication.
+The opaque session revision binds the immutable analysis record and complete
+workbench record, including response state, Output plan, and any application
+receipt. Every ordinary analysis/workbench writer shares one Context-scoped
+session lock; the repository rechecks the token before terminal publication.
 
 ## Ordered implementation gates
 
-1. Add pure request/result/port types and prove that the application module has
-   no command, Typer, prompt-toolkit, or filesystem dependency.
-2. Move open/create/reuse behind an analysis application use case while
+1. **Done:** add pure request/result/port types and prove that the application
+   and runtime modules have no command, Typer, or prompt-toolkit dependency.
+2. **Done:** wrap the saved analysis/workbench pair in an opaque repository
+   snapshot without exposing record digests to CLI or TUI adapters.
+3. **Done:** route local in-place Apply through that snapshot; close
+   compensation, late-success, interrupted-recovery, later-edit, and
+   workbench-race cases.
+4. Move open/create/reuse behind an analysis application use case while
    retaining exact hidden-prewarm and provider-free resume behavior.
-3. Wrap the saved analysis/workbench pair in an opaque repository snapshot;
-   do not expose record digests to CLI or TUI adapters.
-4. Route in-place Apply through that snapshot and close the three strict-xfail
-   receipt/recovery cases before calling the slice verified.
-5. Characterize workbench changes racing final approval and require exact CAS
-   before and after Context publication.
-6. Give save-as an explicit typed partial-publication result and choose its
+5. Give save-as an explicit typed partial-publication result and choose its
    Undo model without deleting a possibly observed Context by name.
-7. Rewire CLI and shared Resolution actions to the typed use cases, then remove
-   duplicated command-owned policy.
-8. Run existing Atomize, authority/write-protection, history/restoration,
-   Study-prewarm, and shared Resolution suites plus an ordered 180×52 PTY path
-   covering entry, review/as-is, final action, receipt, verification, Undo,
-   Redo, receipt failure, and recovery.
+6. Move the remaining shared Resolution/save-as actions to typed use cases,
+   then remove duplicated command-owned policy.
+7. Decide whether the save-as init + atomize sequence becomes one compound
+   Undo unit or remains an explicitly documented two-checkpoint exception.
 
 ## Current verification evidence
 
-The existing Atomize-focused collection contains 174 tests. On the current
-worktree, 173 pass and one pre-existing grounding screen-capture comparison
-fails because its expected wording no longer matches the shared renderer. The
-new structural boundary file adds one passing no-change case and three strict
-expected failures for the unimplemented receipt/recovery guarantees.
+The current Atomize-focused run passes 180 tests with one pre-existing
+grounding screen-capture comparison deselected because its expected wording no
+longer matches the shared renderer. The structural boundary file now passes
+seven cases: recorded all-preserved completion, receipt compensation,
+late-success detection, interrupted recovery, later-edit preservation,
+workbench-race compensation, and dependency direction. A second integrated run
+passes 202 command, Context safety, history/restoration, write-protection, and
+Study-installation tests.
 
 The existing screenshot sets cover Study hidden-session initialization, exact
 prewarm entry, split review, final approval/application, output verification,
 accumulated editing, Memory selection, and Undo history. They are useful
-behavioral evidence but do not prove the three missing failure/recovery cases;
-new PTY captures belong with the implementation that closes those cases.
+behavioral evidence. The focused
+[180×52 in-place Apply replay](screenshots/atomize-apply-boundaries-20260815/README.md)
+adds eight ordered true-color captures for review, normal application,
+read-only verification, receipt compensation, late success, interrupted
+checkpoint recovery, recovery verification, and workbench-CAS compensation;
+an ordinary success screenshot alone is not treated as proof of those
+boundaries.
 
-## Non-goals of this preparation
+## Non-goals of this slice
 
 - no provider-prompt or Atomize classification change;
 - no migration of the in-progress exact-Memory selection work;
 - no change to `APPLY`, `APPLY AS IS`, or ownership-aware presentation policy;
 - no deletion or cleanup of a published save-as destination;
+- no change yet to save-as partial-publication or Undo semantics;
 - no unification of structural Atomize and grounding-proposal schemas;
 - no claim that Atomize is a stable public Python API yet.

@@ -1,24 +1,28 @@
 """Characterize Atomize's structural Apply boundary before extraction.
 
-These tests intentionally exercise the current command-owned junction.  The
-passing case freezes an operation-owned no-op decision.  Strict xfails state
-the receipt/recovery contract that the future application slice must satisfy;
-they must be removed, not silently converted into compatibility behavior,
-when that slice is implemented.
+These tests exercise the typed application/runtime junction together with its
+command adapter. They freeze Atomize's operation-owned no-op decision and the
+receipt compensation, late-success, interrupted recovery, and CAS boundaries.
 """
 
 from __future__ import annotations
 
+import ast
 import json
+from pathlib import Path
 
-import pytest
 import typer
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+from memcommit.atomize_application import atomize_application_audit
+from memcommit.atomize_runtime import (
+    MemoryStoreAtomizeOutputPort,
+    capture_atomize_session_snapshot,
+)
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize import cmd as atomize_command
-from memcommit.context import Memory
+from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore
 
 
@@ -128,13 +132,6 @@ def test_all_atomic_apply_records_a_deliberate_no_change_checkpoint(
     assert store.list_checkpoints(context.name) == history
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Atomize structural Apply does not yet compensate its Context "
-        "checkpoint when the terminal workbench receipt cannot be saved."
-    ),
-)
 def test_receipt_save_failure_publishes_no_partial_structural_apply(
     isolated_store,
     monkeypatch,
@@ -143,7 +140,7 @@ def test_receipt_save_failure_publishes_no_partial_structural_apply(
     context, _memory, opened = _open_all_atomic_session(store)
     context_before = store._context_file(context.name).read_bytes()
     history_before = store.list_checkpoints(context.name)
-    original_save = MemoryStore.save_atomize_workbench
+    original_save = MemoryStore._save_atomize_workbench_locked
 
     def reject_terminal_receipt(self, session):
         if session.application is not None:
@@ -152,7 +149,7 @@ def test_receipt_save_failure_publishes_no_partial_structural_apply(
 
     monkeypatch.setattr(
         MemoryStore,
-        "save_atomize_workbench",
+        "_save_atomize_workbench_locked",
         reject_terminal_receipt,
     )
 
@@ -162,27 +159,20 @@ def test_receipt_save_failure_publishes_no_partial_structural_apply(
     )
 
     assert failed.exit_code == 1
-    assert "injected terminal receipt failure" in failed.output
+    assert "injected terminal receipt failure" in failed.stderr
     assert store._context_file(context.name).read_bytes() == context_before
     assert store.list_checkpoints(context.name) == history_before
     retained = store.load_atomize_workbench(opened.analysis)
     assert retained is not None and retained.application is None
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Atomize structural Apply does not yet re-read a terminal workbench "
-        "receipt after an atomic save commits and then reports failure."
-    ),
-)
 def test_late_committed_terminal_receipt_is_reported_as_success(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     context, _memory, opened = _open_all_atomic_session(store)
-    original_save = MemoryStore.save_atomize_workbench
+    original_save = MemoryStore._save_atomize_workbench_locked
 
     def commit_then_report_failure(self, session):
         result = original_save(self, session)
@@ -192,7 +182,7 @@ def test_late_committed_terminal_receipt_is_reported_as_success(
 
     monkeypatch.setattr(
         MemoryStore,
-        "save_atomize_workbench",
+        "_save_atomize_workbench_locked",
         commit_then_report_failure,
     )
 
@@ -207,39 +197,25 @@ def test_late_committed_terminal_receipt_is_reported_as_success(
     assert len(store.list_checkpoints(context.name)) == 1
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Atomize recognizes an existing checkpoint as applied but does not "
-        "yet recover the missing Source-owned terminal workbench receipt."
-    ),
-)
 def test_retry_recovers_terminal_receipt_from_exact_atomize_checkpoint(
     isolated_store,
-    monkeypatch,
 ):
     store = MemoryStore()
     context, _memory, opened = _open_all_atomic_session(store)
-    original_save = MemoryStore.save_atomize_workbench
-
-    def reject_terminal_receipt(self, session):
-        if session.application is not None:
-            raise OSError("injected interrupted Apply")
-        return original_save(self, session)
-
-    with monkeypatch.context() as patch:
-        patch.setattr(
-            MemoryStore,
-            "save_atomize_workbench",
-            reject_terminal_receipt,
-        )
-        failed = runner.invoke(
-            app,
-            ["atomize", "--context", context.name, "--save"],
-        )
-    assert failed.exit_code == 1
+    snapshot = capture_atomize_session_snapshot(
+        store=store,
+        analysis=opened.analysis,
+        expected_workbench=opened.workbench,
+    )
+    materialized = MemoryStoreAtomizeOutputPort(store).materialize(
+        snapshot,
+        atomize_application_audit(snapshot.analysis, snapshot.workbench),
+    )
+    assert materialized.created
     history = store.list_checkpoints(context.name)
     assert len(history) == 1 and history[0]["command"] == "atomize"
+    interrupted = store.load_atomize_workbench(opened.analysis)
+    assert interrupted is not None and interrupted.application is None
 
     retried = runner.invoke(
         app,
@@ -247,7 +223,116 @@ def test_retry_recovers_terminal_receipt_from_exact_atomize_checkpoint(
     )
 
     assert retried.exit_code == 0, retried.output
+    assert "Recovered the exact prior checkpoint" in retried.output
     terminal = store.load_atomize_workbench(opened.analysis)
     assert terminal is not None and terminal.application is not None
     assert terminal.application.checkpoint_uid == history[0]["uid"]
     assert store.list_checkpoints(context.name) == history
+
+
+def test_receipt_recovery_does_not_overwrite_later_context_edits(
+    isolated_store,
+):
+    store = MemoryStore()
+    context, _memory, opened = _open_all_atomic_session(store)
+    snapshot = capture_atomize_session_snapshot(
+        store=store,
+        analysis=opened.analysis,
+        expected_workbench=opened.workbench,
+    )
+    materialized = MemoryStoreAtomizeOutputPort(store).materialize(
+        snapshot,
+        atomize_application_audit(snapshot.analysis, snapshot.workbench),
+    )
+    assert materialized.created
+
+    changed = store.load_for_update(context.name)
+    ops.add(changed, "Security remains on site after five.")
+    store.save(
+        changed,
+        AutoCheckpoint(
+            command="add",
+            args={"content": "Security remains on site after five."},
+            description="Added a later fact",
+        ),
+    )
+    context_before_recovery = store._context_file(context.name).read_bytes()
+    history_before_recovery = store.list_checkpoints(context.name)
+
+    recovered = runner.invoke(
+        app,
+        ["atomize", "--context", context.name, "--save"],
+    )
+
+    assert recovered.exit_code == 0, recovered.output
+    assert "Recovered the exact prior checkpoint" in recovered.output
+    assert store._context_file(context.name).read_bytes() == context_before_recovery
+    assert store.list_checkpoints(context.name) == history_before_recovery
+    terminal = store.load_atomize_workbench(opened.analysis)
+    assert terminal is not None and terminal.application is not None
+    assert terminal.application.checkpoint_uid == materialized.checkpoint_uid
+
+
+def test_workbench_race_after_context_save_compensates_the_exact_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _memory, opened = _open_all_atomic_session(store)
+    context_before = store._context_file(context.name).read_bytes()
+    history_before = store.list_checkpoints(context.name)
+    original_save = MemoryStore._save_command_locked
+
+    def save_then_revise_workbench(self, *args, **kwargs):
+        checkpoint = original_save(self, *args, **kwargs)
+        auto_checkpoint = args[1] if len(args) > 1 else None
+        if auto_checkpoint is not None and auto_checkpoint.command == "atomize":
+            latest_analysis = self.load_atomize_analysis(context.uid)
+            assert latest_analysis is not None
+            latest = self.load_atomize_workbench(latest_analysis)
+            assert latest is not None
+            latest.toggle_sort()
+            self.save_atomize_workbench(latest)
+        return checkpoint
+
+    monkeypatch.setattr(
+        MemoryStore,
+        "_save_command_locked",
+        save_then_revise_workbench,
+    )
+
+    raced = runner.invoke(
+        app,
+        ["atomize", "--context", context.name, "--save"],
+    )
+
+    assert raced.exit_code == 1
+    assert "session changed" in raced.stderr
+    assert "rolled back" in raced.stderr
+    assert store._context_file(context.name).read_bytes() == context_before
+    assert store.list_checkpoints(context.name) == history_before
+    revised = store.load_atomize_workbench(opened.analysis)
+    assert revised is not None
+    assert revised.application is None
+    assert revised.sort_mode != opened.workbench.sort_mode
+
+
+def test_atomize_application_and_runtime_do_not_import_terminal_adapters():
+    root = Path(__file__).resolve().parents[1]
+    forbidden = ("typer", "prompt_toolkit", "memcommit.commands")
+    for relative in (
+        "memcommit/atomize_application.py",
+        "memcommit/atomize_runtime.py",
+    ):
+        tree = ast.parse((root / relative).read_text(encoding="utf-8"))
+        imports = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imports.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module is not None:
+                imports.append(node.module)
+        assert not [
+            name
+            for name in imports
+            if any(name == item or name.startswith(f"{item}.") for item in forbidden)
+        ]

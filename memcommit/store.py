@@ -1297,6 +1297,42 @@ class MemoryStore:
             raise
 
     @contextmanager
+    def _atomize_session_write_lock(
+        self,
+        context_uid: str,
+    ) -> Iterator[None]:
+        """Serialize one Context's analysis/workbench CAS lifecycle."""
+
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid Atomize session Context uid.") from error
+        if canonical != context_uid:
+            raise ValueError("Invalid Atomize session Context uid.")
+        lock_dir = self.store_dir / "atomize-session-write-locks"
+        if lock_dir.is_symlink():
+            raise ValueError("Refusing to use an Atomize session lock symlink.")
+        lock_dir.mkdir(parents=True, exist_ok=True)
+        lock_path = lock_dir / f"{canonical}.lock"
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
     def _context_write_locks(
         self,
         names: Iterable[str],
@@ -2442,30 +2478,32 @@ class MemoryStore:
 
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
-        path = self._atomize_analysis_path(session.context_uid)
-        if self.atomize_analyses_dir.exists() and (
-            not self.atomize_analyses_dir.is_dir()
-            or self.atomize_analyses_dir.is_symlink()
-        ):
-            raise ValueError("Atomize analysis storage is invalid.")
-        self.atomize_analyses_dir.mkdir(parents=True, exist_ok=True)
-        if path.exists() and (not path.is_file() or path.is_symlink()):
-            raise ValueError("Atomize analysis storage is invalid.")
-        data = session.to_dict()
-        try:
-            AtomizeAnalysisSession.from_dict(data)
-        except AtomizeImpactError as error:
-            raise ValueError("Atomize analysis is invalid.") from error
-        _write_json_atomic(path, data)
+        with self._atomize_session_write_lock(session.context_uid):
+            path = self._atomize_analysis_path(session.context_uid)
+            if self.atomize_analyses_dir.exists() and (
+                not self.atomize_analyses_dir.is_dir()
+                or self.atomize_analyses_dir.is_symlink()
+            ):
+                raise ValueError("Atomize analysis storage is invalid.")
+            self.atomize_analyses_dir.mkdir(parents=True, exist_ok=True)
+            if path.exists() and (not path.is_file() or path.is_symlink()):
+                raise ValueError("Atomize analysis storage is invalid.")
+            data = session.to_dict()
+            try:
+                AtomizeAnalysisSession.from_dict(data)
+            except AtomizeImpactError as error:
+                raise ValueError("Atomize analysis is invalid.") from error
+            _write_json_atomic(path, data)
 
     @_profile_write_guarded
     def delete_atomize_analysis(self, context_uid: str) -> None:
         """Remove one derived analysis artifact during failed save-as cleanup."""
-        path = self._atomize_analysis_path(context_uid)
-        if path.exists():
-            if not path.is_file() or path.is_symlink():
-                raise ValueError("Atomize analysis storage is invalid.")
-            path.unlink()
+        with self._atomize_session_write_lock(context_uid):
+            path = self._atomize_analysis_path(context_uid)
+            if path.exists():
+                if not path.is_file() or path.is_symlink():
+                    raise ValueError("Atomize analysis storage is invalid.")
+                path.unlink()
 
     # --- Context-bound atomize workbenches ---
 
@@ -2530,12 +2568,22 @@ class MemoryStore:
     @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
+        from memcommit.atomize_workbench import AtomizeWorkbenchSession
+
+        if not isinstance(session, AtomizeWorkbenchSession):
+            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        with self._atomize_session_write_lock(session.context_uid):
+            self._save_atomize_workbench_locked(session)
+
+    def _save_atomize_workbench_locked(self, session) -> None:
+        """Persist one workbench while its Context-scoped CAS lock is held."""
         from memcommit.atomize_workbench import (
             AtomizeWorkbenchError,
             AtomizeWorkbenchSession,
             atomize_workbench_issue_projection,
         )
 
+        self._assert_profile_write_allowed()
         if not isinstance(session, AtomizeWorkbenchSession):
             raise TypeError("Expected an AtomizeWorkbenchSession.")
         path = self._atomize_workbench_path(session.context_uid)
@@ -2569,11 +2617,12 @@ class MemoryStore:
     @_profile_write_guarded
     def delete_atomize_workbench(self, context_uid: str) -> None:
         """Remove derived UI state during failed save-as cleanup."""
-        path = self._atomize_workbench_path(context_uid)
-        if path.exists():
-            if not path.is_file() or path.is_symlink():
-                raise ValueError("Atomize workbench storage is invalid.")
-            path.unlink()
+        with self._atomize_session_write_lock(context_uid):
+            path = self._atomize_workbench_path(context_uid)
+            if path.exists():
+                if not path.is_file() or path.is_symlink():
+                    raise ValueError("Atomize workbench storage is invalid.")
+                path.unlink()
 
     # --- Conversational atomize grounding sessions ---
 

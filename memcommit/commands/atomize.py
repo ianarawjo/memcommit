@@ -15,6 +15,14 @@ from memcommit.atomize import (
     apply_atomize_analysis,
     atomize_analysis_matches_context,
 )
+from memcommit.atomize_application import (
+    AtomizePersistedApplyRequest,
+    atomize_application_audit,
+)
+from memcommit.atomize_runtime import (
+    capture_atomize_session_snapshot,
+    execute_atomize_session_apply,
+)
 from memcommit.atomize_workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
@@ -49,7 +57,7 @@ from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
 from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
-from memcommit.context import AutoCheckpoint, Memory, MemoryRef
+from memcommit.context import AutoCheckpoint, Memory
 from memcommit.review import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
@@ -70,13 +78,6 @@ from memcommit.resolution_workbench import ResolutionWorkbenchAction
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
-
-
-_UNRESOLVED_AT_APPLY_KINDS = {
-    "AMBIGUITY",
-    "CONFLICT",
-    "ATOMIZE_UNCERTAINTY",
-}
 
 
 def _incorporable_workbench_response_count(
@@ -100,41 +101,9 @@ def _atomize_application_audit(
     analysis: AtomizeAnalysisSession,
     workbench,
 ) -> dict[str, object]:
-    """Freeze unresolved-at-apply state without treating silence as a choice."""
+    """Compatibility projection for save-as while in-place uses typed state."""
 
-    responses = {} if workbench is None else workbench.responses
-    unresolved = []
-    for finding in project_atomize_workbench_findings(analysis):
-        if finding.kind not in _UNRESOLVED_AT_APPLY_KINDS:
-            continue
-        response = responses.get(finding.uid)
-        unresolved.append(
-            {
-                "issue_uid": finding.uid,
-                "kind": finding.kind,
-                "source_uids": list(finding.source_uids),
-                "classification": finding.classification,
-                "reason": finding.reason,
-                "response_state": (
-                    "ANSWERED_RETAINED"
-                    if response is not None and response.answered
-                    else "OPEN"
-                ),
-            }
-        )
-    return {
-        "application_mode": "AS_IS" if unresolved else "REVIEWED",
-        "unresolved_at_apply_count": len(unresolved),
-        "unresolved_at_apply": unresolved,
-        # The digest proves which response state was visible at approval while
-        # keeping unapplied free-form response text out of checkpoint metadata.
-        "application_workbench_uid": (workbench.uid if workbench is not None else None),
-        "application_workbench_response_digest": (
-            atomize_workbench_response_digest(workbench)
-            if workbench is not None
-            else None
-        ),
-    }
+    return atomize_application_audit(analysis, workbench).checkpoint_fields()
 
 
 def _record_atomize_workbench_application(
@@ -178,31 +147,6 @@ def _record_atomize_workbench_application(
     store.save_atomize_workbench(latest)
 
 
-def _inbound_split_references(
-    store: MemoryStore,
-    session: AtomizeAnalysisSession,
-) -> list[tuple[str, MemoryRef]]:
-    split_uids = {
-        item.memory_uid for item in session.items if item.classification == "COMPOSITE"
-    }
-    if not split_uids:
-        return []
-    inbound: list[tuple[str, MemoryRef]] = []
-    # A destructive split needs proof that every ordinary owner was examined.
-    # Human navigation catalogs intentionally omit malformed records, so this
-    # safety scan uses the strict direct graph instead.
-    for context in store.load_direct_context_graph_strict():
-        context_name = context.name
-        for item in context.iter_items():
-            if (
-                isinstance(item, MemoryRef)
-                and item.target_context_uid == session.context_uid
-                and item.target_memory_uid in split_uids
-            ):
-                inbound.append((context_name, item))
-    return inbound
-
-
 def _render_apply_result(
     *,
     session: AtomizeAnalysisSession,
@@ -210,6 +154,7 @@ def _render_apply_result(
     result,
     created: bool,
     unresolved_at_apply_count: int,
+    recovered_application: bool = False,
 ) -> None:
     action = "Created and atomized" if created else "Applied atomize analysis to"
     typer.secho(
@@ -236,6 +181,11 @@ def _render_apply_result(
         typer.echo(
             f"  [{item.source_uid[:8]}] -> "
             + ", ".join(f"[{uid[:8]}]" for uid in item.result_uids)
+        )
+    if recovered_application:
+        typer.secho(
+            "  Recovered the exact prior checkpoint; no duplicate was created",
+            fg=typer.colors.YELLOW,
         )
     if created:
         typer.echo(
@@ -1112,19 +1062,29 @@ def cmd(
         already_applied = atomize_workbench_was_applied(
             store, session
         ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
-        if save and already_applied:
+        workbench = store.load_atomize_workbench(session)
+        recovering_missing_receipt = (
+            save
+            and save_as is None
+            and already_applied
+            and workbench is not None
+            and workbench.application is None
+        )
+        if save and already_applied and not recovering_missing_receipt:
             typer.secho(
                 f"Atomize analysis [{session.uid[:8]}] is already applied; "
                 "no new checkpoint was created.",
                 fg=typer.colors.YELLOW,
             )
             return
-        if not atomize_analysis_matches_context(session, direct_ctx):
+        if (
+            not recovering_missing_receipt
+            and not atomize_analysis_matches_context(session, direct_ctx)
+        ):
             raise AtomizeImpactError(
                 "Saved atomize analysis is stale. "
                 "Run 'mem impact atomize --refresh' before saving."
             )
-        workbench = store.load_atomize_workbench(session)
         planned_output = (
             workbench.output_context_name if workbench is not None else name
         )
@@ -1224,6 +1184,7 @@ def cmd(
             save_as = reviewed_destination
 
         application_audit = _atomize_application_audit(session, workbench)
+        recovered_application = False
         if save_as is not None:
             applied_session, result = _apply_to_new_context(
                 store=store,
@@ -1235,54 +1196,28 @@ def cmd(
             )
             applied_name = save_as
             created = True
-        else:
-            inbound = _inbound_split_references(store, session)
-            if inbound:
-                locations = ", ".join(
-                    f"{owner}#{reference.uid[:8]}" for owner, reference in inbound
-                )
-                raise AtomizeImpactError(
-                    "Cannot split a Memory with inbound memory references in "
-                    f"version 1: {locations}."
-                )
-
-            # Saving a load_direct Context would omit embedded Context pointers.
-            ctx = store.load_for_update(name)
-            result = apply_atomize_analysis(ctx, session)
-            store.save(
-                ctx,
-                AutoCheckpoint(
-                    command="atomize",
-                    args={
-                        "analysis_uid": session.uid,
-                        "ruleset_version": session.ruleset_version,
-                        "source_review_uid": session.source_review_uid,
-                        "source_review_digest": session.source_review_digest,
-                        "declared_frame_count": len(session.declared_frames),
-                        "split_count": result.split_count,
-                        "child_count": result.child_count,
-                        "preserved_count": result.preserved_count,
-                        **application_audit,
-                        "trace": result.trace_metadata(),
-                    },
-                    description=(
-                        f"Applied atomize [{session.uid[:8]}]: "
-                        f"{result.split_count} splits -> {result.child_count} "
-                        f"children; {result.preserved_count} preserved; "
-                        f"{application_audit['unresolved_at_apply_count']} "
-                        "unresolved at apply"
-                    ),
-                ),
+            _record_atomize_workbench_application(
+                store=store,
+                analysis=session,
+                workbench=workbench,
+                output_context_name=applied_name,
             )
+        else:
+            snapshot = capture_atomize_session_snapshot(
+                store=store,
+                analysis=session,
+                expected_workbench=workbench,
+            )
+            applied = execute_atomize_session_apply(
+                AtomizePersistedApplyRequest(snapshot=snapshot),
+                store=store,
+            )
+            result = applied.materialization.result
             applied_session = session
-            applied_name = ctx.name
+            applied_name = applied.materialization.context_name
             created = False
-        _record_atomize_workbench_application(
-            store=store,
-            analysis=session,
-            workbench=workbench,
-            output_context_name=applied_name,
-        )
+            recovered_application = applied.recovered
+            application_audit = applied.audit.checkpoint_fields()
     except (
         FileNotFoundError,
         OSError,
@@ -1303,4 +1238,5 @@ def cmd(
         result=result,
         created=created,
         unresolved_at_apply_count=int(application_audit["unresolved_at_apply_count"]),
+        recovered_application=recovered_application,
     )

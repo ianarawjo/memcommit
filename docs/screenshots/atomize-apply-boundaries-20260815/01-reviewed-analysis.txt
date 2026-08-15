@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM ATOMIZE                                                                                                                                                                     ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · atomize/apply-boundary                                                                                                                                                ┃
+┃   OUTPUT · atomize/apply-boundary · IN PLACE                                                                                                                                     ┃
+┃ READY_TO_APPLY_AS_IS · 1 SOURCE MEMORIES · 1 PROJECTED MEMORIES · 2 FINDINGS · 0 ANSWERED                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The note states one closing-time instruction.                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ CHANGED                                                                                                                                                                          ┃
+┃ The original Memory remains intact.                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ UNRESOLVED                                                                                                                                                                       ┃
+┃ The applicable day remains unresolved.                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 2                                                                                                                                                          ┃
+┃ AMBIGUITY 1 · The library entrance closes at five.                                                                                                                               ┃
+┃ [HIGH] The day scope is omitted.                                                                                                                                                 ┃
+┃ QUESTION · Does the closing time apply every day or on weekdays?                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ ATOMIZE UNCERTAINTY 2 · The library entrance closes at five.                                                                                                                     ┃
+┃ [HIGH] The statement does not identify the applicable day.                                                                                                                       ┃
+┃ QUESTION · Which local reading or scope should govern this source?                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Atomize report                                                                                                                                         ^│
+│  AMBIGUITY      The library entrance closes at five.                                                                                                                             │
+│  ATOMIZE UNCERTAINTY The library entrance closes at five.                                                                                                                        │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 2 optional reviews remain open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close S sort  H Help  Q close

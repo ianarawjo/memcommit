@@ -1,0 +1,7 @@
+52 180
+[32m[1mApplied atomize analysis to 'atomize/apply-boundary' from analysis [f5b22aba].[0m
+  0 splits -> 0 children
+  1 Memories preserved in place
+[33m  Applied as is with 2 unresolved findings recorded[0m
+One Context checkpoint created. The saved analysis remains linked.
+DURABLE APPLY · CHECKPOINTS 1 · RECEIPT True
