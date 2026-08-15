@@ -15,6 +15,8 @@ from memcommit.atomize import (
     apply_atomize_analysis,
     atomize_analysis_matches_context,
 )
+from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
+from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
 from memcommit.atomize_application import (
     AtomizePersistedApplyRequest,
     atomize_application_audit,
@@ -30,7 +32,6 @@ from memcommit.atomize_workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize_workbench_shell import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
@@ -65,10 +66,7 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore, context_record_digest
-from memcommit.study_prewarm.atomize import (
-    find_declared_atomize_prewarm,
-    is_installed_atomize_prewarm,
-)
+from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -295,15 +293,18 @@ def _materialize_reviewed_workbench(
         "incorporating saved responses",
         connect_codex_chatgpt_provider,
     ) as provider_factory:
-        return open_or_create_atomize_workbench(
+        return execute_atomize_analysis_open(
+            AtomizeAnalysisOpenRequest(
+                context=context,
+                refresh=True,
+                declared_frames=declared_frames,
+                declared_frame_origins=declared_frame_origins,
+                source_review_uid=source_review_uid,
+                source_review_digest=source_review_digest,
+                allow_prepared=False,
+            ),
             store=store,
-            ctx=context,
             provider_factory=provider_factory,
-            refresh=True,
-            declared_frames=declared_frames,
-            declared_frame_origins=declared_frame_origins,
-            source_review_uid=source_review_uid,
-            source_review_digest=source_review_digest,
             validate_before_save=validate_before_save,
         )
 
@@ -913,37 +914,19 @@ def cmd(
                     bold=True,
                 )
                 return
-            atomize_prewarm = (
-                find_declared_atomize_prewarm(
-                    store=store,
-                    context=direct_ctx,
-                )
-                if session is None
-                else None
-            )
-            effective_output_name = (
-                output_name
-                or (
-                    atomize_prewarm.output_context_name
-                    if atomize_prewarm is not None
-                    else None
-                )
-            )
             with progressing_provider_factory(
                 "ATOMIZE",
                 "analyzing memory structure",
                 connect_codex_chatgpt_provider,
             ) as provider_factory:
-                opened = open_or_create_atomize_workbench(
-                    store=store,
-                    ctx=direct_ctx,
-                    provider_factory=provider_factory,
-                    output_context_name=effective_output_name,
-                    prepared_analysis=(
-                        atomize_prewarm.analysis
-                        if atomize_prewarm is not None
-                        else None
+                opened = execute_atomize_analysis_open(
+                    AtomizeAnalysisOpenRequest(
+                        context=direct_ctx,
+                        output_context_name=output_name,
+                        allow_prepared=session is None,
                     ),
+                    store=store,
+                    provider_factory=provider_factory,
                 )
             session = opened.analysis
             planned_output = opened.workbench.output_context_name or name

@@ -2,32 +2,39 @@
 
 ## Status
 
-`VERIFIED` for local in-place structural Apply; `CHARACTERIZED` for the
-remaining analysis and save-as lifecycle, reviewed 2026-08-15.
+`VERIFIED` for analysis open/create/reuse and local in-place structural Apply;
+`CHARACTERIZED` for the remaining save-as lifecycle, reviewed 2026-08-15.
 
-This note records the first Atomize application slice. The local in-place path
-now crosses a typed, interface-independent snapshot and application boundary.
-It preserves Atomize semantics, provider prompts, Study fixtures, saved
-schemas, and ordinary TUI navigation while closing its terminal-receipt,
-late-success, interrupted-Apply, and review-revision races. Analysis creation
-and the require-new save-as route remain later slices.
+This note records the first two Atomize application slices. Analysis
+open/create/reuse and local in-place Apply now cross typed,
+interface-independent boundaries. They preserve Atomize semantics, provider
+prompts, Study fixtures, saved schemas, and ordinary TUI navigation while
+making saved reuse, hidden-prewarm materialization, provider creation, and
+structural application independently callable. The require-new save-as route
+remains a later slice.
 
 ## Current execution junction
 
 Atomize already separated its semantic records, strict provider decoder,
-mutable workbench model, and presentation. In-place Apply now has a distinct
-application/runtime junction while analysis and save-as still compose in the
-command:
+mutable workbench model, and presentation. Analysis open and in-place Apply
+now have distinct application/runtime junctions while save-as still composes
+in the command:
 
 ```text
 CLI flags or TUI action
         |
         v
-load local Context + latest analysis/workbench
+load exact local Context
         |
-        +-- first use --> hidden Study lookup or provider analysis
+        v
+AtomizeAnalysisOpenRequest
         |
-        +-- review responses --> optional complete reanalysis
+        +-- exact current saved pair --> SAVED
+        +-- allowed hidden Study hit --> EXACT_PREWARM
+        `-- otherwise --> lazy provider construction --> PROVIDER
+        |
+        v
+durable analysis/workbench pair + typed origin
         |
         v
 command-owned semantic/review gates
@@ -56,6 +63,13 @@ atomic files, but the application result treats them as one synchronous
 outcome: it re-reads late success, compensates an uncommitted new checkpoint,
 and recovers an exact previously interrupted checkpoint without replaying the
 transformation.
+
+`memcommit.atomize_analysis_application` owns the open request/result, origin
+contract, and result validation without importing Store, commands, Typer, or
+prompt-toolkit. `memcommit.atomize_analysis_runtime` owns saved-pair lookup,
+hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
+pair publication, and the existing synchronous restoration path. The legacy
+`atomize_workflow` module is now a compatibility facade over that boundary.
 
 ## Operation-owned decisions to preserve
 
@@ -134,10 +148,14 @@ workbench. A mismatch, stale Source, configuration mismatch, or failed
 workbench publication must not expose a partial visible session or connect a
 provider under the guise of a hit.
 
-This cache boundary is adjacent to Apply but independent from it. The future
-application API should receive a typed analysis origin such as `PREPARED` or
-`LIVE`; it must not make hidden installation files part of the public session
-repository or allow a cache hit to bypass Apply freshness and authority checks.
+This cache boundary is adjacent to Apply but independent from it. The
+application API returns the typed origin `SAVED`, `EXACT_PREWARM`, or
+`PROVIDER`. `allow_prepared` is an operation-owned request policy: Impact
+refresh/review prohibit hidden reuse, while ordinary first use may allow it.
+The runtime, not the command, looks up the artifact only after the exact
+Context has been loaded and before constructing a provider. Hidden installation
+files remain outside the public session repository, and a cache hit does not
+bypass later Apply freshness or authority checks.
 
 ## Implemented and remaining extraction boundary
 
@@ -161,8 +179,11 @@ Suggested ownership:
   Typer, prompt-toolkit, Store paths, or Study fixture imports.
 - `memcommit.atomize_runtime`: local Context capture, strict graph preflight,
   session repository, Context materialization, compensation, and
-  interrupted-Apply recovery. Analysis/prewarm/provider construction has not
-  moved here yet.
+  interrupted-Apply recovery.
+- `memcommit.atomize_analysis_application`: implemented typed analysis-open
+  request/result, exact origin validation, and terminal-independent port.
+- `memcommit.atomize_analysis_runtime`: saved-pair and hidden-prewarm lookup,
+  lazy provider analysis, freshness recheck, and pair publication/restoration.
 - `memcommit.commands.atomize`: CLI/TUI composition, progress and receipts,
   mapping final workbench actions to the typed in-place use case; save-as
   remains command-owned.
@@ -184,8 +205,8 @@ session lock; the repository rechecks the token before terminal publication.
 3. **Done:** route local in-place Apply through that snapshot; close
    compensation, late-success, interrupted-recovery, later-edit, and
    workbench-race cases.
-4. Move open/create/reuse behind an analysis application use case while
-   retaining exact hidden-prewarm and provider-free resume behavior.
+4. **Done:** move open/create/reuse behind an analysis application use case
+   while retaining exact hidden-prewarm and provider-free resume behavior.
 5. Give save-as an explicit typed partial-publication result and choose its
    Undo model without deleting a possibly observed Context by name.
 6. Move the remaining shared Resolution/save-as actions to typed use cases,
@@ -195,10 +216,14 @@ session lock; the repository rechecks the token before terminal publication.
 
 ## Current verification evidence
 
-The current Atomize-focused run passes 180 tests with one pre-existing
+The current Atomize-focused run passes 186 tests with one pre-existing
 grounding screen-capture comparison deselected because its expected wording no
-longer matches the shared renderer. The structural boundary file now passes
-seven cases: recorded all-preserved completion, receipt compensation,
+longer matches the shared renderer. The new six-case analysis-boundary file
+directly covers provider creation, provider-free saved resume, exact
+hidden-prewarm materialization, prepared-reuse policy, stale rejection,
+refresh, and module dependency direction; the existing refresh rollback test
+continues to prove analysis/workbench pair restoration. The structural boundary
+file passes seven cases: recorded all-preserved completion, receipt compensation,
 late-success detection, interrupted recovery, later-edit preservation,
 workbench-race compensation, and dependency direction. A second integrated run
 passes 202 command, Context safety, history/restoration, write-protection, and
@@ -214,6 +239,12 @@ read-only verification, receipt compensation, late success, interrupted
 checkpoint recovery, recovery verification, and workbench-CAS compensation;
 an ordinary success screenshot alone is not treated as proof of those
 boundaries.
+
+The focused
+[180×52 analysis-open replay](screenshots/atomize-analysis-open-boundary-20260815/README.md)
+adds eleven ordered true-color captures for provider progress and publication,
+provider-free saved resume, exact hidden-prewarm first materialization,
+explicit refresh, stale rejection, and analysis/workbench pair restoration.
 
 ## Non-goals of this slice
 

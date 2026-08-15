@@ -14,7 +14,11 @@ from memcommit.atomize import (
     AtomizeImpactError,
     atomize_analysis_matches_context,
 )
-from memcommit.atomize_workflow import open_or_create_atomize_workbench
+from memcommit.atomize_analysis_application import (
+    AtomizeAnalysisApplicationError,
+    AtomizeAnalysisOpenRequest,
+)
+from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
 from memcommit.atomize_workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
@@ -63,7 +67,6 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_prewarm.atomize import find_declared_atomize_prewarm
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.update import UpdateError, plan_update, session_matches
 from memcommit.update_endpoints import resolve_update_endpoints
@@ -701,40 +704,29 @@ def _atomize_impact(
                     "running; no preview was saved."
                 )
 
-        atomize_prewarm = (
-            find_declared_atomize_prewarm(store=store, context=ctx)
-            if not refresh and not with_review
-            else None
-        )
         with progressing_provider_factory(
             "IMPACT ATOMIZE",
             "analyzing memory structure",
             connect_codex_chatgpt_provider,
         ) as provider_factory:
-            opened = open_or_create_atomize_workbench(
+            opened = execute_atomize_analysis_open(
+                AtomizeAnalysisOpenRequest(
+                    context=ctx,
+                    refresh=refresh or with_review,
+                    declared_frames=declared_frames,
+                    declared_frame_origins=declared_frame_origins,
+                    source_review_uid=source_review_uid,
+                    source_review_digest=source_review_digest,
+                    allow_prepared=not refresh and not with_review,
+                ),
                 store=store,
-                ctx=ctx,
                 provider_factory=provider_factory,
-                refresh=refresh or with_review,
-                declared_frames=declared_frames,
-                declared_frame_origins=declared_frame_origins,
-                source_review_uid=source_review_uid,
-                source_review_digest=source_review_digest,
                 validate_before_save=validate_review_before_save,
-                output_context_name=(
-                    atomize_prewarm.output_context_name
-                    if atomize_prewarm is not None
-                    else None
-                ),
-                prepared_analysis=(
-                    atomize_prewarm.analysis
-                    if atomize_prewarm is not None
-                    else None
-                ),
             )
         analysis = opened.analysis
         workbench = opened.workbench
     except (
+        AtomizeAnalysisApplicationError,
         AtomizeImpactError,
         AtomizeWorkbenchError,
         OSError,

@@ -1,0 +1,2 @@
+Exact prewarm materialized [d562f6ab] on first use; the provider was not called.                                                                                                    
+PREPARED MATERIALIZATION · EXIT 0 · SAME ANALYSIS True · OUTPUT atomize/prepared-output
