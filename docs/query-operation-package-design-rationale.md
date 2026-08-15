@@ -57,9 +57,11 @@ span multiple distant trees and is harder to review operation by operation.
 - Application modules still do not import terminal, command, Store, or concrete
   provider implementations; Store integration remains runtime-owned.
 - Internal adapters do not route through the top-level compatibility exports.
-- CLI and TUI files are intentionally not relocated in this commit. Their move
-  to `interfaces/cli/query.py` and `interfaces/tui/operations/query/` is a later
-  interface-only slice after this package boundary proves stable.
+- CLI and TUI files were intentionally not relocated in the package commit.
+  That follow-up is now complete: `query-cli-interface-design-rationale.md` and
+  `query-tui-interface-design-rationale.md` record the sibling adapters, while
+  `query-callable-boundary-matrix.md` classifies the remaining command-owned
+  composition functions.
 - Shared Query infrastructure such as provider policy, session storage, and
   answer/reference helpers stays shared until its ownership is evaluated; this
   change does not move files merely because their names contain `query`.

@@ -90,7 +90,7 @@ def _run_child() -> None:
         ORDINARY_QUERY_MODEL,
         ORDINARY_QUERY_REASONING_EFFORT,
     )
-    from memcommit.commands.query_execution import OrdinaryQueryResponse
+    from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
     from memcommit.interfaces.tui.operations.query import run_query_workbench
     from memcommit.ordinary_query_answer import (
         build_ordinary_query_reference_document,

@@ -10,10 +10,12 @@ from prompt_toolkit.output import DummyOutput
 import typer
 
 import memcommit.commands.query as query_command
-from memcommit.commands.query_execution import (
+from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
+)
+from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )

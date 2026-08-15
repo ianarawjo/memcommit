@@ -94,9 +94,10 @@ ordinary Query was rejected because concealed Query Sources are deliberately
 outside the READable Context corpus.
 
 The callable is internal, not yet a versioned public Python or agent API. The
-CLI still owns overloaded selector routing, and the Query TUI still lives in
-`commands/query_workbench.py`; moving those interface files is the next
-structural step after every Query execution route is terminal-independent.
+CLI still owns overloaded selector routing. Query's workbench now lives under
+`interfaces.tui.operations.query`, and its plain selector/result projections
+live under `interfaces.cli.query`; neither interface changes this route's
+provider-before-Source contract.
 
 ## Verification
 

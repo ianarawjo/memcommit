@@ -94,9 +94,9 @@ session CAS. The local `QueryContextRef` route crosses
 `reference_application.py` and `reference_runtime.py`; its provider factory is
 deliberately invoked before the runtime may open concealed Source content. CLI
 and TTY import the operation package directly, while the former top-level
-module paths remain implementation-free compatibility exports and
-`commands/query_execution.py` retains implementation-free compatibility
-facades:
+module paths remain implementation-free compatibility exports. The former
+`commands/query_execution.py` progress facade was removed after production,
+tests, and capture tools moved to the direct operation runtime:
 
 - `OrdinaryQueryRequest` freezes question, exact public Context names,
   descendant policy, and embed policy. It has no top-k evidence limit.

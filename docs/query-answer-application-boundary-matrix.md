@@ -72,10 +72,10 @@ The extraction preserves the existing ordinary Query contract:
 - grounded and no-answer strings retain their prior formatting;
 - the same whole-frame prompt, schema, decoder, artifact compaction, citation
   numbering, and Reference document are used;
-- the compatibility `run_ordinary_query_request` entry point retains its old
-  argument order and two progress callbacks; and
-- the CLI and TUI call the new runtime directly, so the compatibility facade is
-  not another implementation.
+- the CLI, TUI, tests, and capture tools call the operation runtime directly;
+  and
+- the Typer composition root retains the same two visible progress labels
+  while the application observer exposes typed stages.
 
 No visible TUI state, focus topology, key binding, output wording, provider
 policy, or scope default is changed by this slice. Concurrent scope-preset and

@@ -8,10 +8,10 @@ import pytest
 
 import memcommit.ops as ops
 from memcommit.authority.access import resolve_context_access
-from memcommit.commands.query_execution import (
+from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
-    run_ordinary_query_request,
 )
+from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.commands.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
@@ -196,7 +196,7 @@ def test_query_execution_sends_every_frozen_candidate_in_one_provider_call(
         required_permission="READ",
     )
     catalog = freeze_readable_context_catalog(store, access)
-    stages: list[tuple[str, int]] = []
+    stages: list[str] = []
 
     class InspectingProvider:
         def __init__(self):
@@ -233,12 +233,12 @@ def test_query_execution_sends_every_frozen_candidate_in_one_provider_call(
         follow_embeds=False,
     )
 
-    response = run_ordinary_query_request(
-        store,
-        catalog,
+    response = execute_ordinary_query(
         request,
-        connect_provider=lambda: provider,
-        on_stage=lambda label, step: stages.append((label, step)),
+        store=store,
+        catalog=catalog,
+        provider_factory=lambda: provider,
+        observer=stages.append,
     )
 
     assert provider.calls == 1
@@ -246,6 +246,7 @@ def test_query_execution_sends_every_frozen_candidate_in_one_provider_call(
     assert response.reference_document is not None
     assert len(response.reference_document.references) == 3
     assert stages == [
-        ("connecting provider", 1),
-        ("answering from complete frozen corpus", 2),
+        "INPUTS_FROZEN",
+        "CONNECTING_PROVIDER",
+        "ANSWERING",
     ]

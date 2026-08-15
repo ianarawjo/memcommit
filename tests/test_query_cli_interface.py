@@ -128,6 +128,11 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
     assert "_interactive_terminal" not in local_functions
     assert "_split_query_memory_selector" not in local_functions
     assert "_render_query_catalog" not in local_functions
+    assert local_functions == {
+        "_open_query_workbench",
+        "_query_ordinary_context",
+        "cmd",
+    }
 
 
 def test_query_cli_adapter_has_no_store_provider_or_command_dependency():

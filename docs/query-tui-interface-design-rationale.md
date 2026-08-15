@@ -56,8 +56,8 @@ the production command to import the interface owner, and prove compatibility
 exports are object-identical and implementation-free. Query workbench and
 shared-component regressions cover the same direct calls through the new path.
 
-The ordered `docs/screenshots/query-find-clipboard-20260813/` 180×52 PTY trace
-was regenerated through the new Query screen. It records entry, question input,
+The ordered `docs/screenshots/query-tui-interface-20260815/` 180×52 PTY trace
+was generated through the new Query screen. It records entry, question input,
 answer-body and Reference focus, focused and complete copy, adapter failure,
 close, and read-only verification. The path move itself introduces no new
 visible state.

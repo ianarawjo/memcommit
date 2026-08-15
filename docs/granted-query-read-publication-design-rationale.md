@@ -63,11 +63,12 @@ public target + question/session intent
                          CAS append exactly one turn
 ```
 
-The CLI and TUI call the Store-backed runtime directly. The old
-`commands.query_execution.run_granted_query_request` remains a compatibility
-composition that executes the read and, only when the outcome contains a
-publication plan, explicitly invokes publication. It contains no granted
-Query implementation.
+The CLI and TUI call the Store-backed runtime directly. The Store-backed
+`execute_granted_query_request` compatibility composition executes the read
+and, only when the outcome contains a publication plan, explicitly invokes the
+separate publication use case. The former command-owned execution/progress
+facade has been retired; the Typer composition root alone maps typed stages to
+its visible progress labels.
 
 ## Responsibility matrix
 

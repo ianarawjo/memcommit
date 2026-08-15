@@ -11,7 +11,6 @@ import pytest
 
 import memcommit.ops as ops
 from memcommit.context import Memory
-from memcommit.commands.query_execution import run_granted_query_request
 from memcommit.operations.query.granted_application import (
     GrantedQueryReadOutcome,
     GrantedQueryRequest,
@@ -25,6 +24,7 @@ from memcommit.operations.query.granted_application import (
 )
 from memcommit.operations.query.granted_runtime import (
     execute_granted_query_read,
+    execute_granted_query_request,
     execute_granted_query_session_publication,
 )
 from memcommit.profile_config import (
@@ -252,7 +252,7 @@ def test_store_read_returns_publication_plan_without_creating_session_storage(
     assert json.loads(records[0].read_text(encoding="utf-8"))["revision"] == 1
 
 
-def test_compatibility_entry_point_preserves_progress_and_publishes(
+def test_store_runtime_reports_typed_stages_and_publishes_requested_turn(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -262,20 +262,23 @@ def test_compatibility_entry_point_preserves_progress_and_publishes(
         tmp_path,
         monkeypatch,
     )
-    stages: list[tuple[str, int]] = []
+    stages: list[str] = []
 
-    response = run_granted_query_request(
-        task_store,
+    response = execute_granted_query_request(
         request,
-        connect_provider=_Provider,
-        on_stage=lambda label, step: stages.append((label, step)),
+        store=task_store,
+        provider_factory=_Provider,
+        observer=stages.append,
     )
 
     assert response.answer == "After 18:00."
     assert stages == [
-        ("connecting provider", 1),
-        ("preparing authorized sources", 2),
-        ("answering query", 3),
+        "AUTHORITY_FROZEN",
+        "CONNECTING_PROVIDER",
+        "PREPARING_SOURCES",
+        "ANSWERING",
+        "REVALIDATING",
+        "PUBLISHING_SESSION",
     ]
     assert len(list((isolated_store / "query-sessions").glob("*.json"))) == 1
 

@@ -100,3 +100,25 @@ def test_internal_query_adapters_bypass_root_compatibility_modules():
                         violations.append((path.relative_to(root), alias.name))
 
     assert violations == []
+
+
+def test_command_owned_query_execution_facade_is_retired():
+    root = Path(__file__).parents[1] / "memcommit"
+
+    assert not (root / "commands" / "query_execution.py").exists()
+    violations: list[Path] = []
+    for path in root.rglob("*.py"):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.ImportFrom)
+                and node.module == "memcommit.commands.query_execution"
+            ):
+                violations.append(path.relative_to(root))
+            elif isinstance(node, ast.Import) and any(
+                alias.name == "memcommit.commands.query_execution"
+                for alias in node.names
+            ):
+                violations.append(path.relative_to(root))
+
+    assert violations == []
