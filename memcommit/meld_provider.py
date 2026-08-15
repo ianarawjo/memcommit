@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import uuid
 from dataclasses import dataclass, replace
@@ -48,6 +49,10 @@ MELD_OPTION_LIMIT = 5
 # Meld's durable schema. Changing the compact fields or their meaning must make
 # an older prepared assessment miss instead of silently reusing it.
 MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION = "directional-compare-decisions-v2"
+# Exact hidden resolution branches bind to the complete provider-facing
+# request. Bump this when decoder validation changes its semantic meaning
+# without changing the prompt or schema themselves.
+MELD_RESOLUTION_REQUEST_CONTRACT_VERSION = "complete-ledger-resolution-v1"
 
 MELD_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="meld_contexts",
@@ -99,6 +104,14 @@ class _ProviderView:
     prior_issue_by_id: dict[str, str]
     prior_proposal_by_id: dict[str, str]
     payload: dict[str, object]
+
+
+@dataclass(frozen=True)
+class _MeldTurnRequest:
+    view: _ProviderView
+    prompt: str
+    output_schema: dict[str, object]
+    directional_comparison: bool
 
 
 def _strict_json_object(
@@ -1774,11 +1787,8 @@ def _expand_directional_comparison_response(
     )
 
 
-def assess_meld_turn(
-    session: MeldSession,
-    provider: MeldProvider,
-) -> MeldAssessment:
-    """Run exactly one bounded semantic call for the current pending turn."""
+def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
+    """Freeze the complete provider request without opening a connection."""
     if not isinstance(session, MeldSession):
         raise MeldProviderError("Expected a MeldSession.")
     view = _provider_view(session)
@@ -1821,8 +1831,9 @@ def assess_meld_turn(
             f"({axes}). Input is never truncated; staged block reconciliation "
             "is not yet enabled for this complete ledger."
         )
-    response = provider.complete(
-        _prompt(
+    return _MeldTurnRequest(
+        view=view,
+        prompt=_prompt(
             view.payload,
             directional_preservation=(
                 session.mode == "DIRECTIONAL"
@@ -1830,13 +1841,52 @@ def assess_meld_turn(
                 >= MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
             ),
         ),
-        operation="meld_contexts",
         output_schema=output_schema,
+        directional_comparison=directional_comparison,
     )
-    if directional_comparison:
-        response = _expand_directional_comparison_response(response, view=view)
-    assessment = _parse_assessment(response, session=session, view=view)
-    if directional_comparison:
+
+
+def meld_turn_request_digest(session: MeldSession) -> str:
+    """Hash one exact bounded request before any provider connection."""
+    request = _meld_turn_request(session)
+    material = {
+        "contract_version": MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,
+        "operation": "meld_contexts",
+        "prompt": request.prompt,
+        "output_schema": request.output_schema,
+    }
+    encoded = json.dumps(
+        material,
+        ensure_ascii=False,
+        allow_nan=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def assess_meld_turn(
+    session: MeldSession,
+    provider: MeldProvider,
+) -> MeldAssessment:
+    """Run exactly one bounded semantic call for the current pending turn."""
+    request = _meld_turn_request(session)
+    response = provider.complete(
+        request.prompt,
+        operation="meld_contexts",
+        output_schema=request.output_schema,
+    )
+    if request.directional_comparison:
+        response = _expand_directional_comparison_response(
+            response,
+            view=request.view,
+        )
+    assessment = _parse_assessment(
+        response,
+        session=session,
+        view=request.view,
+    )
+    if request.directional_comparison:
         # The wire format separates relation members into left/right alias
         # arrays and separates paired/one-sided records. Decoding therefore
         # canonicalizes side grouping and can lose the typed basis's original

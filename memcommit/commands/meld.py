@@ -61,7 +61,6 @@ from memcommit.meld import (
     MeldError,
     MeldFrame,
     MeldIssue,
-    MeldRepairableAssessmentError,
     MeldSession,
     materialize_preservation_assessment,
     meld_accounting,
@@ -69,8 +68,6 @@ from memcommit.meld import (
 )
 from memcommit.meld_provider import (
     MeldProviderError,
-    assess_meld_turn,
-    repair_meld_assessment,
 )
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.core.text_layout import (
@@ -1206,44 +1203,44 @@ def _assess_and_save(
     provider_factory,
     expected_session_digest: str | None,
 ) -> MeldSession:
-    # This boundary is shared by initial analysis and every ISSUE/ALL follow-up.
-    # Keep response incorporation on the same visible wait surface: Task 2
-    # showed that a long second provider turn otherwise looks like a frozen
-    # review even though the indivisible semantic call is still running.
-    def assess(progress):
-        provider = _connect_meld_provider(provider_factory)
-        progress.update("analyzing meld turn", step=2)
-        assessment = assess_meld_turn(session, provider)
-        try:
-            candidate = MeldSession.from_dict(session.to_dict())
-            current = candidate.current_turn
-            assert current is not None
-            candidate.record_assessment(current.uid, assessment)
-        except MeldRepairableAssessmentError as validation_error:
-            # A decoded provider response may violate a cross-record invariant
-            # that JSON Schema cannot express. Repair it once in the same
-            # frozen turn; the validation error is not user evidence and no
-            # partial proposal is published or applied.
-            progress.update("repairing invalid meld turn", step=2)
-            try:
-                assessment = repair_meld_assessment(
-                    session,
-                    assessment,
-                    str(validation_error),
-                    provider,
-                )
-                candidate = MeldSession.from_dict(session.to_dict())
-                current = candidate.current_turn
-                assert current is not None
-                candidate.record_assessment(current.uid, assessment)
-            except MeldError as repair_error:
-                raise MeldError(
-                    "Meld validation repair failed after the initial response "
-                    f"was rejected ({validation_error}): {repair_error}"
-                ) from repair_error
-        return candidate, assessment
+    from memcommit.meld_runtime import (
+        execute_meld_assessment,
+        prepare_meld_assessment,
+    )
 
-    session, assessment = run_command_wait(
+    frozen, assessment_port = prepare_meld_assessment(
+        session,
+        store=store,
+        expected_session_digest=expected_session_digest,
+    )
+
+    def connected_provider():
+        return _connect_meld_provider(provider_factory)
+
+    if frozen.cached_completion is not None:
+        return execute_meld_assessment(
+            frozen,
+            port=assessment_port,
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("A cached Meld assessment connected a provider.")
+            ),
+        ).session
+
+    def assess(progress):
+        def observe(stage: str) -> None:
+            if stage == "ANALYZING":
+                progress.update("analyzing meld turn", step=2)
+            elif stage == "REPAIRING":
+                progress.update("repairing invalid meld turn", step=2)
+
+        return execute_meld_assessment(
+            frozen,
+            port=assessment_port,
+            provider_factory=connected_provider,
+            observer=observe,
+        ).session
+
+    return run_command_wait(
         "MELD",
         "connecting provider",
         total=2,
@@ -1251,42 +1248,6 @@ def _assess_and_save(
         return_view=_meld_wait_view(session),
         context_view=_meld_wait_context_view(session),
     )
-    # Provider latency creates a real race window. Rebind every source and the
-    # target after the final call before persisting a claim about them.
-    left, right, target = _load_bound_contexts(store, session)
-    _assert_source_bindings(session, left, right)
-    _assert_unapplied_target(session, target)
-    if session.granted_target is not None:
-        if session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION:
-            with authority_grant_snapshot_lock() as registry:
-                revalidate_granted_context_binding(
-                    session.granted_target,
-                    registry=registry,
-                )
-                _validate_owner_aware_grant_permissions(
-                    session,
-                    assessment.proposals,
-                    registry=registry,
-                )
-        else:
-            required = {
-                "UPDATE" if proposal.operation == "EDIT" else "CREATE"
-                for proposal in assessment.proposals
-            }
-            missing = sorted(required - set(session.granted_target.permissions))
-            if missing:
-                raise ProfileError(
-                    "The BASELINE Grant does not authorize "
-                    + " + ".join(missing)
-                    + " required by the proposed Meld changes."
-                )
-    store.save_meld_session(
-        session,
-        expected_session_digest=expected_session_digest,
-    )
-    return session
-
-
 def _materialize_preservation_and_save(
     *,
     store: MemoryStore,
@@ -2496,6 +2457,18 @@ def _run_interactive(
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
     from memcommit.commands.resolution_workbench_shell import ResolutionDestination
+    from memcommit.meld_runtime import (
+        execute_meld_destination_change,
+        execute_meld_preservation,
+        execute_meld_session_defer,
+    )
+    from memcommit.meld_session_application import (
+        MeldDestinationRequest,
+        MeldSessionSnapshot,
+        MeldTurnRequest,
+        prepare_meld_preservation_turn,
+        prepare_meld_turn,
+    )
 
     if analysis_origin is None and session.comparison_seed is not None:
         from memcommit.study_prewarm.compare import (
@@ -2545,6 +2518,7 @@ def _run_interactive(
         if action is None:
             break
         expected = meld_canonical_digest(session.to_dict())
+        snapshot = MeldSessionSnapshot(session=session, version_token=expected)
         if action.kind == "CHANGE_DESTINATION":
             if destination is None or action.destination is None:
                 raise MeldCommandError(
@@ -2552,24 +2526,16 @@ def _run_interactive(
                 )
             validate_destination(action.destination)
             if action.destination != session.target.context_name:
-                plan = store.plan_context_rename(
-                    session.target.context_name,
-                    action.destination,
-                )
-                store.rename_contexts(plan)
-                relocated = store.load_meld_session(session.target.context_uid)
-                if relocated is None or relocated.uid != session.uid:
-                    raise MeldCommandError(
-                        "The relocated Meld session could not be reloaded."
-                    )
-                session = relocated
+                session = execute_meld_destination_change(
+                    MeldDestinationRequest(
+                        snapshot=snapshot,
+                        destination_name=action.destination,
+                    ),
+                    store=store,
+                ).session
             continue
         if action.kind == "DEFER_ALL":
-            session.keep_review_only()
-            store.save_meld_session(
-                session,
-                expected_session_digest=expected,
-            )
+            session = execute_meld_session_defer(snapshot, store=store).session
             break
         if action.kind == "ACCEPT":
             if not allow_apply:
@@ -2581,22 +2547,25 @@ def _run_interactive(
             )
             break
         if action.kind == "PRESERVE_ALL":
-            session.start_turn(
-                _preserve_all_guidance(session),
-                scope="REMAINING",
+            pending = prepare_meld_preservation_turn(
+                snapshot,
+                guidance=_preserve_all_guidance(session),
             )
+            session = pending.session
             if (
                 session.mode == "SYMMETRIC"
                 and session.schema_version >= MELD_SCHEMA_VERSION
             ):
-                session = _materialize_preservation_and_save(
-                    store=store,
-                    session=session,
-                    expected_session_digest=expected,
-                )
+                session = execute_meld_preservation(pending, store=store).session
                 continue
         elif action.kind == "COMMENT_ALL":
-            session.start_turn(action.comment, scope="ALL")
+            session = prepare_meld_turn(
+                MeldTurnRequest(
+                    snapshot=snapshot,
+                    comment=action.comment,
+                    scope="ALL",
+                )
+            ).session
         elif action.kind == "COMMENT_ISSUE":
             assessment = session.current_assessment
             assert assessment is not None and action.issue_uid is not None
@@ -2609,11 +2578,14 @@ def _run_interactive(
                 parts.append(f"Choose this reading: {option.text}")
             if action.comment:
                 parts.append(action.comment)
-            session.start_turn(
-                "\n\n".join(parts),
-                scope="ISSUE",
-                issue_uids=(issue.uid,),
-            )
+            session = prepare_meld_turn(
+                MeldTurnRequest(
+                    snapshot=snapshot,
+                    comment="\n\n".join(parts),
+                    scope="ISSUE",
+                    issue_uids=(issue.uid,),
+                )
+            ).session
         else:
             raise MeldCommandError(
                 f"Unsupported interactive meld action '{action.kind}'."
@@ -3748,6 +3720,21 @@ def cmd(
                 "--restart to replace it."
             )
         expected_session_digest = meld_canonical_digest(session.to_dict())
+        from memcommit.meld_runtime import (
+            execute_meld_preservation,
+            execute_meld_session_defer,
+        )
+        from memcommit.meld_session_application import (
+            MeldSessionSnapshot,
+            MeldTurnRequest,
+            prepare_meld_preservation_turn,
+            prepare_meld_turn,
+        )
+
+        session_snapshot = MeldSessionSnapshot(
+            session=session,
+            version_token=expected_session_digest,
+        )
         left_ctx, right_ctx, target = _load_bound_contexts(store, session)
         _assert_non_target_source_bindings(session, left_ctx, right_ctx)
         if session.state != "APPLIED" and not accept:
@@ -3780,11 +3767,10 @@ def cmd(
             return
 
         if defer_all:
-            session.keep_review_only()
-            store.save_meld_session(
-                session,
-                expected_session_digest=expected_session_digest,
-            )
+            session = execute_meld_session_defer(
+                session_snapshot,
+                store=store,
+            ).session
             typer.echo(render_meld_session(session))
             typer.secho(
                 "Deferred this meld without changing the target.",
@@ -3793,19 +3779,16 @@ def cmd(
             return
 
         if preserve_all:
-            session.start_turn(
-                _preserve_all_guidance(session),
-                scope="REMAINING",
+            pending = prepare_meld_preservation_turn(
+                session_snapshot,
+                guidance=_preserve_all_guidance(session),
             )
+            session = pending.session
             if (
                 session.mode == "SYMMETRIC"
                 and session.schema_version >= MELD_SCHEMA_VERSION
             ):
-                session = _materialize_preservation_and_save(
-                    store=store,
-                    session=session,
-                    expected_session_digest=expected_session_digest,
-                )
+                session = execute_meld_preservation(pending, store=store).session
             else:
                 session = _assess_and_save(
                     store=store,
@@ -3847,15 +3830,18 @@ def cmd(
                 raise MeldCommandError(
                     "--revises-turn is valid only with --revision correct or retract."
                 )
-            session.start_turn(
-                turn_comment,
-                scope=("ISSUE" if selected_issue is not None else "ALL"),
-                issue_uids=(
-                    (selected_issue.uid,) if selected_issue is not None else ()
-                ),
-                revision=revision_value,  # type: ignore[arg-type]
-                revises_turn_uids=revises,
-            )
+            session = prepare_meld_turn(
+                MeldTurnRequest(
+                    snapshot=session_snapshot,
+                    comment=turn_comment,
+                    scope=("ISSUE" if selected_issue is not None else "ALL"),
+                    issue_uids=(
+                        (selected_issue.uid,) if selected_issue is not None else ()
+                    ),
+                    revision=revision_value,  # type: ignore[arg-type]
+                    revises_turn_uids=revises,
+                )
+            ).session
             session = _assess_and_save(
                 store=store,
                 session=session,

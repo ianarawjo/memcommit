@@ -5,11 +5,23 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
+import pytest
+
+import memcommit.meld_assessment_application as meld_assessment_application
 import memcommit.meld_runtime as meld_runtime
+import memcommit.meld_session_application as meld_session_application
 
 
-def test_meld_runtime_has_no_terminal_or_command_dependencies():
-    source = Path(meld_runtime.__file__).read_text(encoding="utf-8")
+@pytest.mark.parametrize(
+    "module",
+    (
+        meld_assessment_application,
+        meld_session_application,
+        meld_runtime,
+    ),
+)
+def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module):
+    source = Path(module.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
     imported: list[str] = []
     for node in ast.walk(tree):

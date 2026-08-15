@@ -981,6 +981,11 @@ class MemoryStore:
         return self.store_dir / "meld-sessions"
 
     @property
+    def meld_resolution_branches_dir(self) -> Path:
+        """Profile-local exact semantic outcomes for Meld follow-up turns."""
+        return self.store_dir / "meld-resolution-branches"
+
+    @property
     def write_protection_registry(self) -> WriteProtectionRegistry:
         """Return the persistent registry scoped to this exact Profile store."""
         return WriteProtectionRegistry(self.store_dir)
@@ -1362,6 +1367,30 @@ class MemoryStore:
         lock_path = self.store_dir / "update-session-write.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link update lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
+    def _meld_resolution_branch_write_lock(self) -> Iterator[None]:
+        """Serialize first-writer-wins publication for exact Meld branches."""
+        lock_path = self.store_dir / "meld-resolution-branch-write.lock"
+        if lock_path.is_symlink():
+            raise ValueError("Refusing to use a symbolic-link Meld branch lock.")
         flags = os.O_RDWR | os.O_CREAT
         if hasattr(os, "O_NOFOLLOW"):
             flags |= os.O_NOFOLLOW
@@ -2085,6 +2114,90 @@ class MemoryStore:
                 )
 
     # --- Context-to-Context meld sessions ---
+
+    def _meld_resolution_branch_path(self, key: str) -> Path:
+        if (
+            not isinstance(key, str)
+            or len(key) != 64
+            or any(character not in "0123456789abcdef" for character in key)
+        ):
+            raise ValueError("Invalid Meld resolution branch key.")
+        directory = self.meld_resolution_branches_dir
+        if directory.is_symlink():
+            raise ValueError(
+                "Meld resolution branch storage cannot be a symbolic link."
+            )
+        if directory.exists() and not directory.is_dir():
+            raise ValueError("Meld resolution branch storage is invalid.")
+        return directory / f"{key}.json"
+
+    def load_meld_resolution_branch(self, key: str):
+        """Return one exact validated follow-up branch, if it is saved."""
+        from memcommit.meld_resolution_cache import (
+            MeldResolutionBranch,
+            MeldResolutionCacheError,
+        )
+
+        path = self._meld_resolution_branch_path(key)
+        if not path.exists():
+            return None
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Meld resolution branch storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as file:
+                data = json.load(
+                    file,
+                    object_pairs_hook=_reject_duplicate_json_keys,
+                )
+            branch = MeldResolutionBranch.from_dict(data)
+        except (
+            json.JSONDecodeError,
+            MeldResolutionCacheError,
+            ValueError,
+        ) as error:
+            raise ValueError("Saved Meld resolution branch is invalid.") from error
+        if branch.key != key:
+            raise ValueError(
+                "Saved Meld resolution branch does not match its storage key."
+            )
+        return branch
+
+    def save_meld_resolution_branch(self, branch) -> None:
+        """Publish one immutable exact branch without replacing a peer result."""
+        from memcommit.meld_resolution_cache import (
+            MeldResolutionBranch,
+            MeldResolutionCacheError,
+        )
+
+        if not isinstance(branch, MeldResolutionBranch):
+            raise TypeError("Expected a MeldResolutionBranch.")
+        try:
+            restored = MeldResolutionBranch.from_dict(branch.to_dict())
+        except MeldResolutionCacheError as error:
+            raise ValueError("Meld resolution branch is invalid.") from error
+        path = self._meld_resolution_branch_path(restored.key)
+        with self._meld_resolution_branch_write_lock():
+            with self.profile_write_guard():
+                directory = self.meld_resolution_branches_dir
+                if directory.exists() and (
+                    not directory.is_dir() or directory.is_symlink()
+                ):
+                    raise ValueError("Meld resolution branch storage is invalid.")
+                directory.mkdir(parents=True, exist_ok=True)
+                if path.exists():
+                    existing = self.load_meld_resolution_branch(restored.key)
+                    assert existing is not None
+                    if existing.to_dict() != restored.to_dict():
+                        # One exact semantic request has one durable cached
+                        # outcome. A concurrent stochastic result must not
+                        # silently replace the branch another session reused.
+                        raise ValueError(
+                            "A different Meld resolution branch already uses "
+                            "this exact request key."
+                        )
+                    return
+                _write_json_atomic(path, restored.to_dict())
+
 
     def _meld_session_path(self, target_context_uid: str) -> Path:
         try:
