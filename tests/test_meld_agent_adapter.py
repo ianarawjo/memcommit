@@ -20,6 +20,7 @@ def client(tmp_path):
 def _session():
     return MeldSessionResult(
         session_uid="session-1",
+        version="saved-version",
         mode="DIRECTIONAL",
         state="AWAITING_REPLY",
         left_context="incoming",
@@ -55,6 +56,30 @@ def test_start_action_calls_public_facade_and_returns_json(client, monkeypatch):
     assert result["result"]["session"]["session_uid"] == "session-1"
     assert calls[0][0] == ()
     assert calls[0][1]["mode"] == "directional"
+
+
+def test_restart_action_requires_and_forwards_the_saved_version(client, monkeypatch):
+    calls = []
+    monkeypatch.setattr(
+        client,
+        "restart_meld",
+        lambda *args, **kwargs: (calls.append((args, kwargs)) or _session()),
+    )
+
+    result = MeldAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "restart",
+            "left_context": "incoming",
+            "right_context": "baseline",
+            "target_context": "baseline",
+            "expected_version": "saved-version",
+        }
+    )
+
+    assert result["ok"] is True
+    assert result["result"]["session"]["version"] == "saved-version"
+    assert calls[0][1]["expected_version"] == "saved-version"
 
 
 def test_action_rejects_fields_owned_by_another_kind(client):

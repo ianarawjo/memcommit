@@ -69,6 +69,7 @@ from memcommit.meld_provider import (
     MeldProviderError,
 )
 from memcommit.meld_start_application import MeldStartRequest
+from memcommit.meld_restart_application import MeldRestartRequest
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
@@ -3479,83 +3480,41 @@ def cmd(
 
         if restart:
             prior_digest = meld_canonical_digest(session.to_dict())
-            if requested_mode == "SYMMETRIC":
-                # Restart is defined by the newly supplied ordered pair, not
-                # by the old session's frames. Reusing the bound frames here
-                # would silently turn RIGHT LEFT into the prior LEFT RIGHT
-                # Compare basis and defeat the exact-order review contract.
-                restart_left_access = _resolve_meld_source(
-                    store,
-                    left_name,
-                    current_name=current_name,
-                )
-                restart_right_access = _resolve_meld_source(
-                    store,
-                    right_name,
-                    current_name=current_name,
-                )
-                authorize_combination((restart_left_access, restart_right_access))
-                restart_target_access = ContextAccess(
-                    store=store,
-                    context_name=target.name,
-                    display_name=target.name,
-                    attachment_name=None,
-                    permission="READ",
-                )
-                authorize_derived_transfer(
-                    restart_left_access,
-                    restart_target_access,
-                )
-                authorize_derived_transfer(
-                    restart_right_access,
-                    restart_target_access,
-                )
-                left_ctx = _load_meld_source(
-                    restart_left_access,
-                    include_descendants=left_descendants,
-                )
-                right_ctx = _load_meld_source(
-                    restart_right_access,
-                    include_descendants=right_descendants,
-                )
-            else:
-                left_ctx = (
-                    _load_meld_source(
-                        left_access,
-                        include_descendants=left_descendants,
-                        project=False,
-                    )
-                    if left_access is not None
-                    else _load_local_meld_source(
-                        store,
-                        left_name,
-                        include_descendants=left_descendants,
-                        project=False,
-                    )
-                )
-                right_ctx = (
-                    _load_meld_source(
-                        right_access,
-                        include_descendants=right_descendants,
-                        project=False,
-                    )
-                    if right_access is not None
-                    else _load_local_meld_source(
-                        store,
-                        right_name,
-                        include_descendants=right_descendants,
-                        project=False,
-                    )
-                )
+            # Restart is defined by the newly supplied ordered pair, not by
+            # the old session's frames. The CLI loads a provisional frame only
+            # for prerequisite and wait-surface decisions; runtime owns the
+            # authoritative revalidation and exact-version replacement.
+            restart_left_access = _resolve_meld_source(
+                store,
+                left_name,
+                current_name=current_name,
+            )
+            restart_right_access = _resolve_meld_source(
+                store,
+                right_name,
+                current_name=current_name,
+            )
+            left_ctx = _load_meld_source(
+                restart_left_access,
+                include_descendants=left_descendants,
+                project=requested_mode == "SYMMETRIC",
+            )
+            right_ctx = _load_meld_source(
+                restart_right_access,
+                include_descendants=right_descendants,
+                project=requested_mode == "SYMMETRIC",
+            )
+            comparison = None
+            prewarm = None
             if requested_mode == "DIRECTIONAL":
                 granted_incoming = (
-                    freeze_granted_context_binding(left_access)
-                    if left_access is not None and left_access.is_granted
+                    freeze_granted_context_binding(restart_left_access)
+                    if restart_left_access.is_granted
                     else None
                 )
                 granted_target = (
-                    freeze_granted_context_binding(right_access)
-                    if right_access is not None and right_access.is_granted
+                    freeze_granted_context_binding(restart_right_access)
+                    if restart_right_access.is_granted
                     else None
                 )
                 comparison = _load_directional_comparison(
@@ -3589,11 +3548,14 @@ def cmd(
                     )
                 )
                 replacement.start_initial_analysis()
-                session = _assess_and_save(
+                from memcommit.study_prewarm.meld_directional import (
+                    find_installed_directional_meld_prewarm,
+                )
+
+                prewarm = find_installed_directional_meld_prewarm(
                     store=store,
-                    session=replacement,
-                    provider_factory=connect_codex_chatgpt_provider,
-                    expected_session_digest=prior_digest,
+                    current=replacement,
+                    registry_snapshot=load_profile_registry(),
                 )
             else:
                 comparison = _ensure_symmetric_comparison(
@@ -3609,26 +3571,59 @@ def cmd(
                         right_descendants,
                     ),
                 )
-                replacement = MeldSession.create_symmetric_from_comparison(
-                    comparison,
-                    target,
+            from memcommit.meld_runtime import execute_meld_restart
+
+            restart_request = MeldRestartRequest(
+                mode=requested_mode,
+                left_name=left_name,
+                right_name=right_name,
+                target_name=target_name,
+                expected_version=prior_digest,
+                left_descendants=left_descendants,
+                right_descendants=right_descendants,
+                comparison=comparison,
+            )
+            if requested_mode == "DIRECTIONAL" and prewarm is None:
+
+                def restart_meld(progress):
+                    def connected_provider():
+                        provider = _connect_meld_provider(
+                            connect_codex_chatgpt_provider
+                        )
+                        progress.update("analyzing meld turn", step=2)
+                        return provider
+
+                    return execute_meld_restart(
+                        restart_request,
+                        store=store,
+                        provider_factory=connected_provider,
+                    )
+
+                restarted = run_command_wait(
+                    "MELD",
+                    "connecting provider",
+                    total=2,
+                    work=restart_meld,
+                    return_view=_meld_wait_view(replacement),
+                    context_view=_meld_wait_context_view(replacement),
                 )
-                _assert_source_bindings(
-                    replacement,
-                    left_ctx,
-                    right_ctx,
+            else:
+                restarted = execute_meld_restart(
+                    restart_request,
+                    store=store,
+                    provider_factory=lambda: (_ for _ in ()).throw(
+                        AssertionError("A prepared Meld restart connected a provider.")
+                    ),
                 )
-                _assert_unapplied_target(replacement, target)
-                store.save_meld_session(
-                    replacement,
-                    expected_session_digest=prior_digest,
-                )
-                session = replacement
+            session = restarted.session
             if sys.stdin.isatty() and sys.stdout.isatty():
                 session = _run_interactive(
                     store=store,
                     session=session,
                     provider_factory=connect_codex_chatgpt_provider,
+                    analysis_origin=(
+                        restarted.origin if restarted.origin != "PROVIDER" else None
+                    ),
                 )
             typer.echo(render_meld_session(session))
             return

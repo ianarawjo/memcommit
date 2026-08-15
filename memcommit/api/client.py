@@ -68,13 +68,18 @@ from memcommit.infrastructure.providers.find_query import (
     connect_ordinary_query_provider,
     connect_query_route_provider,
 )
-from memcommit.meld import MELD_SCHEMA_VERSION, MeldError as CoreMeldError
+from memcommit.meld import (
+    MELD_SCHEMA_VERSION,
+    MeldError as CoreMeldError,
+    meld_canonical_digest,
+)
 from memcommit.meld_application import MeldApplyRequest
 from memcommit.meld_provider import MeldProviderError
 from memcommit.meld_runtime import (
     execute_meld_apply,
     execute_meld_assessment,
     execute_meld_preservation,
+    execute_meld_restart,
     execute_meld_session_defer,
     execute_meld_session_open,
     execute_meld_start,
@@ -87,6 +92,7 @@ from memcommit.meld_session_application import (
     prepare_meld_turn,
 )
 from memcommit.meld_start_application import MeldStartError, MeldStartRequest
+from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
 from memcommit.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
@@ -253,6 +259,7 @@ class MemCommitClient:
         application = session.application
         return MeldSessionResult(
             session_uid=session.uid,
+            version=meld_canonical_digest(session.to_dict()),
             mode=session.mode,
             state=session.state,
             left_context=session.frames[0].context_name,
@@ -391,6 +398,84 @@ class MemCommitClient:
         except OSError as error:
             _raise(MeldStorageError, error)
         except (CoreMeldError, MeldStartError, RuntimeError, TypeError, ValueError) as error:
+            _raise(MeldExecutionError, error)
+        return self._project_meld(result.session, origin=result.origin)
+
+    def restart_meld(
+        self,
+        left_context: str,
+        right_context: str,
+        target_context: str,
+        *,
+        expected_version: str,
+        mode: str = "directional",
+        left_descendants: bool = False,
+        right_descendants: bool = False,
+    ) -> MeldSessionResult:
+        """Replace one exact saved Meld review without deleting its target."""
+
+        try:
+            if mode not in {"directional", "symmetric"}:
+                raise ValueError("mode must be directional or symmetric.")
+            if any(
+                not isinstance(value, str) or not value.strip()
+                for value in (
+                    left_context,
+                    right_context,
+                    target_context,
+                    expected_version,
+                )
+            ):
+                raise ValueError(
+                    "Meld restart names and expected_version must be nonblank text."
+                )
+            if not isinstance(left_descendants, bool) or not isinstance(
+                right_descendants,
+                bool,
+            ):
+                raise TypeError("Meld scope controls must be booleans.")
+            current_name = self._current_context_name()
+            left = resolve_context_locator(left_context, current=current_name)
+            right = resolve_context_locator(right_context, current=current_name)
+            target = resolve_context_locator(target_context, current=current_name)
+            if mode == "directional" and target != right:
+                raise ValueError("Directional target must be the BASELINE.")
+            request = MeldRestartRequest(
+                mode=mode.upper(),  # type: ignore[arg-type]
+                left_name=left,
+                right_name=right,
+                target_name=target,
+                expected_version=expected_version,
+                left_descendants=left_descendants,
+                right_descendants=right_descendants,
+            )
+        except (TypeError, ValueError, CoreMeldError, MeldRestartError) as error:
+            _raise(MeldInputError, error)
+        try:
+            result = execute_meld_restart(
+                request,
+                store=self._store,
+                provider_factory=self._safe_semantic_provider,
+            )
+        except MeldProviderFailure:
+            raise
+        except MeldProviderError as error:
+            _raise(MeldProviderFailure, error)
+        except FileNotFoundError as error:
+            _raise(MeldContextError, error)
+        except ProfileError as error:
+            _raise(MeldAuthorityError, error)
+        except ConcurrentContextUpdateError as error:
+            _raise(MeldConflictError, error)
+        except OSError as error:
+            _raise(MeldStorageError, error)
+        except (
+            CoreMeldError,
+            MeldRestartError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
             _raise(MeldExecutionError, error)
         return self._project_meld(result.session, origin=result.origin)
 

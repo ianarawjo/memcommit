@@ -37,7 +37,7 @@ def _review_session():
         issues=(issue,),
         proposals=(proposal,),
     )
-    return SimpleNamespace(
+    session = SimpleNamespace(
         uid="session-1",
         mode="DIRECTIONAL",
         frames=(
@@ -50,6 +50,8 @@ def _review_session():
         current_assessment=assessment,
         application=None,
     )
+    session.to_dict = lambda: {"uid": session.uid, "state": session.state}
+    return session
 
 
 def test_start_meld_projects_runtime_session_without_terminal_state(
@@ -78,6 +80,33 @@ def test_start_meld_projects_runtime_session_without_terminal_state(
     assert result.session_uid == "session-1"
     assert result.origin == "PROVIDER"
     assert result.issues[0].options[0].label == "Keep both"
+    assert calls[0][0].mode == "DIRECTIONAL"
+
+
+def test_restart_meld_forwards_the_reviewed_version(monkeypatch, tmp_path):
+    session = _review_session()
+    calls = []
+
+    def execute(request, **kwargs):
+        calls.append((request, kwargs))
+        return SimpleNamespace(session=session, origin="EXACT_PREWARM")
+
+    monkeypatch.setattr(client_module, "execute_meld_restart", execute)
+    client = MemCommitClient(
+        root=tmp_path / "store",
+        create=True,
+        semantic_provider_factory=lambda: object(),
+    )
+
+    result = client.restart_meld(
+        "incoming",
+        "baseline",
+        "baseline",
+        expected_version="saved-version",
+    )
+
+    assert result.origin == "EXACT_PREWARM"
+    assert calls[0][0].expected_version == "saved-version"
     assert calls[0][0].mode == "DIRECTIONAL"
 
 

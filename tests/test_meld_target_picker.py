@@ -6,6 +6,7 @@ import json
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 
 import memcommit.ops as ops
 from memcommit.commands.meld import start_reviewed_symmetric_meld
@@ -14,12 +15,16 @@ from memcommit.commands.meld_target_picker import (
     eligible_meld_targets,
 )
 from memcommit.store import MemoryStore
+from memcommit.store import ConcurrentContextUpdateError
 from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )
 from memcommit.comparison_store import save_comparison_analysis
+from memcommit.meld import meld_canonical_digest
+from memcommit.meld_restart_application import MeldRestartRequest
+from memcommit.meld_runtime import execute_meld_restart
 
 
 class _ComparisonProvider:
@@ -163,3 +168,51 @@ def test_compare_handoff_creates_target_and_target_bound_meld_session(
     assert saved.comparison_seed is not None
     assert saved.comparison_seed.analysis.uid == analysis.uid
     assert tuple(target.iter_items()) == ()
+
+
+def test_symmetric_restart_replaces_only_the_reviewed_saved_version(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right = _sources(store)
+    target = ops.init("task-2/result-empty")
+    store.save(target)
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        _ComparisonProvider(),
+    )
+    save_comparison_analysis(store, analysis, expected_analysis_uid=None)
+    original = start_reviewed_symmetric_meld(
+        store=store,
+        analysis=analysis,
+        target_name=target.name,
+        create_target=False,
+    )
+    version = meld_canonical_digest(original.to_dict())
+    request = MeldRestartRequest(
+        mode="SYMMETRIC",
+        left_name=left.name,
+        right_name=right.name,
+        target_name=target.name,
+        expected_version=version,
+        comparison=analysis,
+    )
+
+    restarted = execute_meld_restart(
+        request,
+        store=store,
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("Symmetric restart connected a provider.")
+        ),
+    ).session
+
+    assert restarted.uid != original.uid
+    assert store.load_meld_session(target.uid).uid == restarted.uid
+    assert store.load_direct(target.name).uid == target.uid
+
+    with pytest.raises(ConcurrentContextUpdateError, match="changed"):
+        execute_meld_restart(
+            request,
+            store=store,
+            provider_factory=lambda: object(),
+        )

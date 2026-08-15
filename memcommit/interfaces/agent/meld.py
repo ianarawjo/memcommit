@@ -30,7 +30,15 @@ from memcommit.interfaces.agent.contract import (
 
 MELD_AGENT_CONTRACT_VERSION = 1
 MELD_AGENT_TOOL_NAME = "memcommit_meld"
-MeldAgentKind = Literal["start", "open", "comment", "preserve", "defer", "apply"]
+MeldAgentKind = Literal[
+    "start",
+    "restart",
+    "open",
+    "comment",
+    "preserve",
+    "defer",
+    "apply",
+]
 
 
 def _boolean(value: object, *, field: str) -> bool:
@@ -50,9 +58,17 @@ def _base(value: Mapping[str, object]) -> MeldAgentKind:
             f"version must be exactly {MELD_AGENT_CONTRACT_VERSION}."
         )
     kind = value.get("kind")
-    if kind not in {"start", "open", "comment", "preserve", "defer", "apply"}:
+    if kind not in {
+        "start",
+        "restart",
+        "open",
+        "comment",
+        "preserve",
+        "defer",
+        "apply",
+    }:
         raise AgentRequestError(
-            "kind must be one of: start, open, comment, preserve, defer, apply."
+            "kind must be one of: start, restart, open, comment, preserve, defer, apply."
         )
     return kind  # type: ignore[return-value]
 
@@ -130,6 +146,46 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
                 for item in raw_revises
             ),
         }
+    if kind == "restart":
+        exact_fields(
+            value,
+            required={
+                "version",
+                "kind",
+                "left_context",
+                "right_context",
+                "target_context",
+                "expected_version",
+            },
+            optional=frozenset(
+                {"mode", "left_descendants", "right_descendants"}
+            ),
+            label="Meld restart request",
+        )
+        return kind, {
+            "left_context": text_value(value["left_context"], field="left_context"),
+            "right_context": text_value(
+                value["right_context"],
+                field="right_context",
+            ),
+            "target_context": text_value(
+                value["target_context"],
+                field="target_context",
+            ),
+            "expected_version": text_value(
+                value["expected_version"],
+                field="expected_version",
+            ),
+            "mode": text_value(value.get("mode", "directional"), field="mode"),
+            "left_descendants": _boolean(
+                value.get("left_descendants", False),
+                field="left_descendants",
+            ),
+            "right_descendants": _boolean(
+                value.get("right_descendants", False),
+                field="right_descendants",
+            ),
+        }
     exact_fields(
         value,
         required={"version", "kind", "target_context"},
@@ -146,6 +202,7 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
 def _session_result(result: MeldSessionResult) -> JsonObject:
     return {
         "session_uid": result.session_uid,
+        "version": result.version,
         "mode": result.mode,
         "state": result.state,
         "left_context": result.left_context,
@@ -206,6 +263,7 @@ class MeldAgentAdapter:
         kind: MeldAgentKind | None = None
         if isinstance(payload, Mapping) and payload.get("kind") in {
             "start",
+            "restart",
             "open",
             "comment",
             "preserve",
@@ -283,7 +341,7 @@ def meld_agent_tool_schema() -> JsonObject:
     """Return one strict union schema for versioned Meld actions."""
 
     text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
-    kinds = ["start", "open", "comment", "preserve", "defer", "apply"]
+    kinds = ["start", "restart", "open", "comment", "preserve", "defer", "apply"]
     return {
         "name": MELD_AGENT_TOOL_NAME,
         "description": (
@@ -300,6 +358,7 @@ def meld_agent_tool_schema() -> JsonObject:
                 "left_context": text,
                 "right_context": text,
                 "target_context": {"type": ["string", "null"], "minLength": 1},
+                "expected_version": text,
                 "mode": {"type": "string", "enum": ["directional", "symmetric"]},
                 "create_target": {"type": "boolean"},
                 "left_descendants": {"type": "boolean"},

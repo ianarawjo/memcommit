@@ -22,6 +22,10 @@ Meld now separates three terminal-independent contracts:
   validates the resulting initial review. The runtime repeats source authority,
   transfer, Compare-basis, empty-target, and session-absence checks before it
   publishes either a directional review or a symmetric Result session.
+- `meld_restart_application` owns replacement of an existing target-bound
+  review under an opaque expected version. Start and restart share the same
+  authorization, Compare, cache, and construction runtime, but restart must
+  observe the old session before provider construction and replace it by CAS.
 
 The command remains responsible for argument and TUI presentation, progress
 text, exact approval, and rendering. Both direct CLI setup and the
@@ -62,5 +66,7 @@ now maps a strict versioned JSON action union to that facade and returns bounded
 errors without exposing provider responses or host paths. CLI routing remains
 visually compatible while no longer owning new-session persistence. Restart is
 an explicit replacement of an existing target-bound session and remains a
-separate CAS operation; it must not be implemented as a new start that first
-deletes or hides the durable prior review.
+separate CAS operation exposed by the CLI, Python facade, and agent adapter; it
+is not implemented as a new start that first deletes or hides the durable prior
+review. The public immutable session projection includes its opaque version so
+nonterminal callers can make the same reviewed replacement decision.

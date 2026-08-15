@@ -35,6 +35,7 @@ class MeldProposalResult:
 @dataclass(frozen=True)
 class MeldSessionResult:
     session_uid: str
+    version: str
     mode: Literal["SYMMETRIC", "DIRECTIONAL"]
     state: str
     left_context: str
