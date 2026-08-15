@@ -1225,6 +1225,19 @@ switch that row back to legacy replay semantics. Fit fails locally before
 provider connection when there is no active Rule: pre-Rule Examples are valid
 Ground material, but there is not yet a Rule relation to judge.
 
+`FIT` requires the linked Rules as written to determine an Example's exact
+claim. The evaluator must not repair a missing conversion step with a plausible
+convention. For example, saying only that a single-word name receives a
+"concise three-letter mnemonic" does not determine whether `Redwood` becomes
+`RED`, `RWD`, or another mnemonic. An exact `RED` proposition is therefore
+`UNDERDETERMINED` until the Rule specifies the selection algorithm. This
+boundary was added after the first real proposition-Fit run silently supplied
+such an algorithm and returned three false `FIT` judgments. In contrast, the
+combined ticker Rules already say to take one initial per meaningful word and
+treat `AI` as one meaningful component, so `Axiom AI Technologies -> AAT` is
+determined by those Rules; clarifying that wording improves readability but is
+not a repair for a failed Example.
+
 Every report freezes the Ground UID, name, semantic revision, record digest,
 Rules, and Examples and requires exactly one judgment per Example. The core is
 whole-frame-only because neighboring Rules may jointly determine a result and

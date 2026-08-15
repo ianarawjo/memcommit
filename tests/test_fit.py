@@ -125,6 +125,8 @@ def test_proposition_fit_accounts_for_observation_counterexample() -> None:
     assert report.judgments[0].status == "CONTRADICTS"
     assert provider.operation == "fit_ground_propositions"
     assert "Do not invent a cause" in provider.prompt
+    assert "return UNDERDETERMINED rather than supplying" in provider.prompt
+    assert "which characters it contributes" in provider.prompt
 
 
 def test_fit_rejects_mixed_projection_and_incomplete_coverage() -> None:
