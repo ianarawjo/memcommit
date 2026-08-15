@@ -34,6 +34,8 @@ from memcommit.ground_turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
 )
+from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
+from memcommit.fit_store import GroundFitReceipt
 
 
 class SizedDummyOutput(DummyOutput):
@@ -122,6 +124,47 @@ def session_with_rule_and_case():
         revision=2,
         items=(rule, case),
     )
+
+
+def fit_receipt_for(
+    session,
+    *,
+    status="FIT",
+    current=True,
+) -> GroundFitReceipt:
+    rule = session.items_of_kind("RULE")[0]
+    case = session.items_of_kind("CASE")[0]
+    fit_rule = FitRule(rule.uid, "r1", rule.content)
+    example = FitExample(
+        case.uid,
+        "e1",
+        f"{case.content} -> {case.expected}",
+        "EXACT_OUTPUT",
+        (rule.uid,),
+        input_text=case.content,
+        expected_output=case.expected,
+    )
+    report = FitReport(
+        uid="55555555-5555-4555-8555-555555555555",
+        ground_uid=session.uid,
+        ground_name=session.contract_name,
+        ground_revision=session.revision,
+        ground_digest="a" * 64,
+        rules=(fit_rule,),
+        examples=(example,),
+        judgments=(
+            FitJudgment(
+                example_uid=case.uid,
+                status=status,
+                rule_uids=(rule.uid,),
+                reason="The Rule reproduces the reviewed expected result.",
+                observed=case.expected if status == "FIT" else "different",
+            ),
+        ),
+        overview="The fitted Example is exhaustively accounted for.",
+        created_at="2026-08-15T12:00:00Z",
+    )
+    return GroundFitReceipt(report=report, current=current)
 
 
 def session_with_two_cases():
@@ -931,6 +974,78 @@ def test_ground_memory_renders_as_multiline_case_with_non_output_notes():
     assert rendered.count("\n") == 2
     assert "EXPECTED" not in rendered
     assert "WHY" not in rendered
+
+
+def test_ground_memory_projects_current_and_stale_fit_receipts() -> None:
+    session = session_with_rule_and_case()
+    current = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        selected_memory_index=0,
+        fit_receipt=fit_receipt_for(session),
+    )
+    stale = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        selected_memory_index=0,
+        fit_receipt=fit_receipt_for(session, current=False),
+    )
+
+    assert "c1 [PROPOSED · FIT / INCLUDE · FIT FIT]" in current
+    assert "FIT RECEIPT · CURRENT · 55555555" in current
+    assert "FIT RULES · r1" in current
+    assert "FIT WHY · The Rule reproduces" in current
+    assert "FIT STALE · FIT" in stale
+    assert "FIT RECEIPT · STALE · 55555555" in stale
+
+
+def test_named_ground_runs_fit_from_cases_without_shelling_out(monkeypatch) -> None:
+    session = session_with_rule_and_case()
+    receipt = fit_receipt_for(session)
+    latest = {"value": None}
+    ran = []
+    completed = threading.Event()
+    panes = {}
+    original_builder = ground_named_shell_module.build_scrollable_text_pane
+
+    def capture_pane(title, *args, **kwargs):
+        pane = original_builder(title, *args, **kwargs)
+        panes[title] = pane
+        return pane
+
+    def run_fit(active):
+        ran.append(active.revision)
+        latest["value"] = receipt
+        completed.set()
+        return receipt.report
+
+    monkeypatch.setattr(
+        ground_named_shell_module,
+        "build_scrollable_text_pane",
+        capture_pane,
+    )
+    with create_pipe_input() as pipe_input:
+        def drive() -> None:
+            pipe_input.send_text("\t\t\t\tf")
+            assert completed.wait(timeout=2)
+            time.sleep(0.05)
+            pipe_input.send_text("q")
+
+        feeder = threading.Thread(target=drive)
+        feeder.start()
+        result = run_named_ground_shell(
+            session,
+            interpret=lambda *_args: pytest.fail("must not interpret"),
+            apply=lambda *_args: pytest.fail("must not apply"),
+            run_fit=run_fit,
+            lookup_fit=lambda _active: latest["value"],
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "CLOSED"
+    assert ran == [session.revision]
+    assert "FIT FIT" in panes["MEMORIES"].text_area.text
 
 
 def test_named_ground_memory_table_exposes_fields_as_cells():

@@ -1200,9 +1200,23 @@ can still be reopened read-only for audit. Only a report whose Ground identity,
 revision, and digest all match is `CURRENT`. The receipt changes no Context,
 Ground, checkpoint, or current-Context pointer.
 
-The Cases-pane projection remains the next adapter step. It must consume the
-same receipt store and freshness predicate rather than copying Fit status into
-the Ground item schema.
+The Cases-pane projection consumes the same receipt store and freshness
+predicate rather than copying Fit status into the Ground item schema.
+
+That adapter is now implemented in the version-2 named-Ground workbench. The
+existing `MEMORIES` pane title remains a serialized/UI compatibility label for
+this step, while its footer and interaction vocabulary say Cases. `F` on that
+pane calls the Fit application service directly in a background worker; it
+does not invoke `mem fit` as a subprocess. The mounted TUI visibly reports
+`FIT RUNNING`, then reloads the immutable receipt through `FitStore`.
+
+Each fitted card and table row projects the receipt status. The selected card
+also shows whether the receipt is `CURRENT` or `STALE`, the exact receipt
+prefix, cited Rule aliases, and the judgment reason. Cases omitted by the
+executable version-2 adapter remain `NOT RUN`. A Ground refresh also refreshes
+the receipt projection, so a concurrent or later Rule/Case change cannot leave
+the old result visually current. The status lives only in the receipt; it is
+never copied into `GroundItem` or counted as Ground agreement.
 
 Fit does not add a fifth peer layer to the Ground workbench. The established
 `GOAL / CONTEXTS / RULES / CASES` structure remains intact (the version-2 UI

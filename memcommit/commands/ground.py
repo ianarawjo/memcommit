@@ -77,6 +77,8 @@ from memcommit.ground_turn_dialogue import (
     ground_turn_aliases,
     interpret_ground_turn,
 )
+from memcommit.fit_runtime import execute_and_save_ground_fit
+from memcommit.fit_store import FitStore
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.store import (
     ConcurrentGroundUpdateError,
@@ -1226,6 +1228,16 @@ def _run_existing_ground_shell(
             )
         return refreshed
 
+    def run_fit(active: GroundSession):
+        return execute_and_save_ground_fit(
+            store=MemoryStore(create=False),
+            ground_name=active.contract_name,
+            provider_factory=connect_codex_chatgpt_provider,
+        )
+
+    def lookup_fit(active: GroundSession):
+        return FitStore(MemoryStore(create=False)).latest_for_ground(active)
+
     result = run_named_ground_shell(
         session,
         interpret=_interpret_named_ground_turn,
@@ -1234,6 +1246,8 @@ def _run_existing_ground_shell(
         prepare_direct_edit=_ground_direct_edit_proposal,
         retarget_proposal=_ground_retarget_proposal,
         reload_session=reload_session,
+        run_fit=run_fit,
+        lookup_fit=lookup_fit,
         initial_receipt=initial_receipt,
         context_hints=context_hints,
         new_context_hint=new_context_hint,

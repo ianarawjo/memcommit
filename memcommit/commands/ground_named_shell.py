@@ -1,6 +1,7 @@
 """Persistent Goal–Rules–Memories TUI for one already named Ground."""
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
@@ -79,6 +80,8 @@ from memcommit.ground import (
     GroundItem,
     GroundSession,
 )
+from memcommit.fit import FitJudgment, FitReport
+from memcommit.fit_store import GroundFitReceipt
 from memcommit.ground_turn_dialogue import (
     GroundTurnDraft,
     GroundTurnDraftBatch,
@@ -96,6 +99,7 @@ _NAMED_MEMORY_TABLE_COLUMNS = (
     TuiTableColumn("rules", "RULES", 14),
     TuiTableColumn("sources", "SOURCES", 10),
     TuiTableColumn("targets", "TARGETS", 10),
+    TuiTableColumn("fit", "FIT", 18),
 )
 
 
@@ -135,6 +139,16 @@ class NamedGroundApplier(Protocol):
 class NamedGroundReloader(Protocol):
     def __call__(self, contract_name: str) -> GroundSession:
         """Reload one required named Ground from durable storage."""
+
+
+class NamedGroundFitRunner(Protocol):
+    def __call__(self, session: GroundSession) -> FitReport:
+        """Run Fit through the application service, never by shelling out."""
+
+
+class NamedGroundFitLookup(Protocol):
+    def __call__(self, session: GroundSession) -> GroundFitReceipt | None:
+        """Return the latest immutable Fit receipt for this Ground identity."""
 
 
 class NamedGroundDraftPreparer(Protocol):
@@ -469,6 +483,7 @@ def render_named_ground_memories_pane(
     view: Literal["LIST", "TABLE"] = "LIST",
     selected_memory_column: int = 0,
     placement_hint: str = "",
+    fit_receipt: GroundFitReceipt | None = None,
 ) -> str:
     """Render reviewed Ground Memories as cards or a navigable table."""
     if view == "TABLE":
@@ -476,6 +491,7 @@ def render_named_ground_memories_pane(
             session,
             selected_memory_index=selected_memory_index or 0,
             selected_memory_column=selected_memory_column,
+            fit_receipt=fit_receipt,
         ).text
     if view != "LIST":
         raise ValueError("Memory view must be LIST or TABLE.")
@@ -483,6 +499,7 @@ def render_named_ground_memories_pane(
     if not cases:
         return "(none yet)"
     aliases = _item_aliases_by_uid(session)
+    fit_by_example = _fit_judgments_by_example(fit_receipt)
     blocks: list[str] = []
     for index, (alias, item) in enumerate(cases):
         classification = " / ".join(
@@ -494,6 +511,9 @@ def render_named_ground_memories_pane(
         heading_labels = [item.status]
         if classification:
             heading_labels.append(safe_terminal_text(classification))
+        if fit_receipt is not None:
+            fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
+            heading_labels.append("FIT " + fit_label)
         heading = f"{marker}{alias} [{' · '.join(heading_labels)}]"
         # A Ground Memory is the durable case used to teach or check a Rule.
         # Keep its list card compact: only the right side of the arrow is
@@ -536,6 +556,21 @@ def render_named_ground_memories_pane(
                 )
             if details:
                 lines.extend(["DETAILS", *details])
+            judgment = fit_by_example.get(item.uid)
+            if judgment is not None and fit_receipt is not None:
+                rule_alias = {
+                    rule.uid: rule.alias for rule in fit_receipt.report.rules
+                }
+                lines.extend(
+                    [
+                        "FIT RECEIPT · "
+                        + ("CURRENT" if fit_receipt.current else "STALE")
+                        + f" · {fit_receipt.report.uid[:8]}",
+                        "FIT RULES · "
+                        + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
+                        "FIT WHY · " + safe_terminal_text(judgment.reason),
+                    ]
+                )
         blocks.append("\n".join(lines))
     if placement_hint:
         blocks.append(
@@ -549,8 +584,10 @@ def _render_named_ground_memory_table(
     *,
     selected_memory_index: int,
     selected_memory_column: int,
+    fit_receipt: GroundFitReceipt | None = None,
 ) -> RenderedTuiTable:
     aliases = _item_aliases_by_uid(session)
+    fit_by_example = _fit_judgments_by_example(fit_receipt)
     rows: list[TuiTableRow] = []
     for alias, item in _aliased_items(session, "CASE"):
         linked_rules = [
@@ -576,6 +613,7 @@ def _render_named_ground_memory_table(
                         if item.target_context_uids
                         else "—"
                     ),
+                    _fit_label(item.uid, fit_receipt, fit_by_example),
                 ),
             )
         )
@@ -591,6 +629,29 @@ def _render_named_ground_memory_table(
 def render_named_ground_cases_pane(session: GroundSession) -> str:
     """Compatibility alias for the former user-facing Cases renderer."""
     return render_named_ground_memories_pane(session)
+
+
+def _fit_judgments_by_example(
+    receipt: GroundFitReceipt | None,
+) -> dict[str, FitJudgment]:
+    if receipt is None:
+        return {}
+    return {
+        judgment.example_uid: judgment
+        for judgment in receipt.report.judgments
+    }
+
+
+def _fit_label(
+    example_uid: str,
+    receipt: GroundFitReceipt | None,
+    judgments: dict[str, FitJudgment],
+) -> str:
+    judgment = judgments.get(example_uid)
+    if judgment is None:
+        return "NOT RUN"
+    status = judgment.status
+    return status if receipt is not None and receipt.current else f"STALE · {status}"
 
 
 def _option_values(argv: tuple[str, ...], option: str) -> tuple[str, ...]:
@@ -843,6 +904,8 @@ def run_named_ground_shell(
     prepare_direct_edit: NamedGroundDirectEditPreparer | None = None,
     retarget_proposal: NamedGroundProposalRetargeter | None = None,
     reload_session: NamedGroundReloader | None = None,
+    run_fit: NamedGroundFitRunner | None = None,
+    lookup_fit: NamedGroundFitLookup | None = None,
     initial_receipt: str = "",
     context_hints: tuple[str, ...] = (),
     new_context_hint: str | None = None,
@@ -862,6 +925,9 @@ def run_named_ground_shell(
         )
 
     current = {"value": session}
+    fit_receipt: dict[str, GroundFitReceipt | None] = {
+        "value": lookup_fit(session) if lookup_fit is not None else None
+    }
     pending: dict[str, GroundCommandProposal | None] = {"value": None}
     draft_queue: dict[str, tuple[GroundTurnDraft, ...]] = {"value": ()}
     draft_index = {"value": 0}
@@ -1031,6 +1097,7 @@ def run_named_ground_shell(
             session,
             selected_memory_index=0,
             placement_hint=placement_choice["MEMORIES"],
+            fit_receipt=fit_receipt["value"],
         ),
         buffer_name="ground-named-cases",
         height=pane_height,
@@ -1172,12 +1239,12 @@ def run_named_ground_shell(
             )
             if memory_view["value"] == "TABLE":
                 return (
-                    " MEMORIES · TABLE: ↑/↓ row · ←/→ column · "
-                    f"V · list    P · placement    C · comment    {tail}    "
+                    " CASES · TABLE: ↑/↓ row · ←/→ column · "
+                    f"V · list    F · run Fit    P · placement    C · comment    {tail}    "
                     "B · Grounds    Q · quit"
                 )
             return (
-                " MEMORIES · LIST: ↑/↓ Memory · V · table    "
+                " CASES · LIST: ↑/↓ Case · V · table    F · run Fit    "
                 f"P · placement    C · comment    {tail}    B · Grounds    Q · quit"
             )
         if active_mode == "INPUT" and application.layout.has_focus(
@@ -1400,6 +1467,7 @@ def run_named_ground_shell(
                 current["value"],
                 selected_memory_index=row,
                 selected_memory_column=column,
+                fit_receipt=fit_receipt["value"],
             )
             memory_table_render["value"] = rendered
             table_text = rendered.text
@@ -1419,6 +1487,7 @@ def run_named_ground_shell(
             current["value"],
             selected_memory_index=row,
             placement_hint=placement_choice["MEMORIES"],
+            fit_receipt=fit_receipt["value"],
         )
         cases_pane.set_text(rendered_text, anchor="preserve")
         if align_selection and cases:
@@ -1505,6 +1574,8 @@ def run_named_ground_shell(
             return False
         mark_pane_updates(*changed_pane_layers(previous, refreshed))
         current["value"] = refreshed
+        if lookup_fit is not None:
+            fit_receipt["value"] = lookup_fit(refreshed)
         selected_rule_index["value"] = min(
             selected_rule_index["value"],
             max(0, len(_aliased_items(refreshed, "RULE")) - 1),
@@ -2234,6 +2305,56 @@ def run_named_ground_shell(
     @bindings.add("v", filter=memory_pane_focus, eager=True)
     def _toggle_memory_view(_event) -> None:
         toggle_memory_view()
+
+    @bindings.add(
+        "f",
+        filter=normal_input_mode & memory_pane_focus,
+        eager=True,
+    )
+    def _run_fit_from_cases(event) -> None:
+        if run_fit is None:
+            status_message["value"] = "Fit is unavailable in this Ground adapter."
+            event.app.invalidate()
+            return
+
+        async def execute_fit() -> None:
+            try:
+                refresh_current(announce=True)
+                status_message["value"] = "FIT RUNNING · Ground and Contexts unchanged"
+                sync_memories_pane(align_selection=True)
+                application.invalidate()
+                # Fit is a background application-service call. Keeping the
+                # prompt-toolkit application mounted makes the read-only
+                # running boundary visible; unlike picker handoff, no nested
+                # terminal UI needs temporary terminal ownership.
+                report = await asyncio.to_thread(
+                    run_fit,
+                    current["value"],
+                )
+                if not isinstance(report, FitReport):
+                    raise ValueError("Ground Fit runner returned an invalid report.")
+                if lookup_fit is None:
+                    fit_receipt["value"] = GroundFitReceipt(
+                        report=report,
+                        current=True,
+                    )
+                else:
+                    fit_receipt["value"] = lookup_fit(current["value"])
+                status_message["value"] = (
+                    f"FIT COMPLETE · {len(report.judgments)} Cases · "
+                    f"{report.issue_count} issue(s) · receipt {report.uid[:8]}"
+                )
+                mark_pane_updates("MEMORIES")
+                sync_memories_pane(align_selection=True)
+            except Exception as error:
+                status_message["value"] = (
+                    "FIT FAILED · NOTHING APPLIED · "
+                    f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+                )
+            application.layout.focus(cases_pane.text_area)
+            application.invalidate()
+
+        event.app.create_background_task(execute_fit())
 
     @bindings.add("down", filter=memory_table_focus, eager=True)
     def _next_memory_table_row(_event) -> None:
