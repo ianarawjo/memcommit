@@ -69,6 +69,38 @@ class QueryStorageError(QueryError):
     """Query could not safely read or publish local durable state."""
 
 
+class MeldError(MemCommitError):
+    """Base class for public Meld failures."""
+
+
+class MeldInputError(MeldError):
+    """The caller supplied an invalid Meld request."""
+
+
+class MeldContextError(MeldError):
+    """A requested Meld source or target is unavailable."""
+
+
+class MeldAuthorityError(MeldError):
+    """The active Profile or Grant does not authorize this Meld."""
+
+
+class MeldProviderFailure(MeldError):
+    """The semantic provider could not complete a required Meld turn."""
+
+
+class MeldConflictError(MeldError):
+    """A bound Meld Context or saved session changed concurrently."""
+
+
+class MeldStorageError(MeldError):
+    """Meld could not safely read or publish local durable state."""
+
+
+class MeldExecutionError(MeldError):
+    """An authorized Meld failed before a complete result was published."""
+
+
 __all__ = [
     "AddAuthorityError",
     "AddConflictError",
@@ -78,6 +110,14 @@ __all__ = [
     "AddInputError",
     "AddStorageError",
     "MemCommitError",
+    "MeldAuthorityError",
+    "MeldConflictError",
+    "MeldContextError",
+    "MeldError",
+    "MeldExecutionError",
+    "MeldInputError",
+    "MeldProviderFailure",
+    "MeldStorageError",
     "QueryAuthorityError",
     "QueryConfigurationError",
     "QueryContextError",

@@ -50,5 +50,7 @@ baseline identity authorization is broader than ordinary profile-local
 persistence. A matching immutable shared-bundle branch is replayed through the
 same decoder, then promoted into the participant's hidden profile cache only
 after the live Context and session checks pass. New-session construction now
-has a terminal-independent runtime, while CLI routing and public Python/agent
-facades remain later rollout steps; no public API is declared here.
+has a terminal-independent runtime. `MemCommitClient` projects immutable Meld
+review values and exposes start, open, comment, preserve, defer, and exact
+Apply without importing terminal code. CLI routing and the versioned agent
+adapter remain later rollout steps.
