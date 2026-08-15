@@ -8,7 +8,7 @@ from memcommit.authority.access import (
     ContextAccess,
     resolve_context_access,
 )
-from memcommit.commands.readable_context_catalog import (
+from memcommit.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
