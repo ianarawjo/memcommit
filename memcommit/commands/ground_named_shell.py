@@ -493,7 +493,7 @@ def render_named_ground_memories_pane(
     placement_hint: str = "",
     fit_receipt: GroundFitReceipt | None = None,
 ) -> str:
-    """Render reviewed Ground Memories as cards or a navigable table."""
+    """Render reviewed Ground Memories as compact rows or a detailed table."""
     if view == "TABLE":
         return _render_named_ground_memory_table(
             session,
@@ -506,9 +506,8 @@ def render_named_ground_memories_pane(
     cases = _aliased_items(session, "CASE")
     if not cases:
         return "(none yet)"
-    aliases = _item_aliases_by_uid(session)
     fit_by_example = _fit_judgments_by_example(fit_receipt)
-    blocks: list[str] = []
+    rows: list[str] = []
     for index, (alias, item) in enumerate(cases):
         classification = " / ".join(
             value
@@ -520,69 +519,32 @@ def render_named_ground_memories_pane(
         if classification:
             heading_labels.append(safe_terminal_text(classification))
         fit_label = _fit_label(item.uid, fit_receipt, fit_by_example)
-        heading = (
+        prefix = (
             f"{marker}{alias} {fit_label} "
             f"[{' · '.join(heading_labels)}]"
         )
-        # A Ground Memory is the durable case used to teach or check a Rule.
-        # Keep its list card compact: only the right side of the arrow is
-        # candidate material for a later Context operation, while NOTES stay
-        # Ground-local. Folding newlines is presentation-only and preserves
-        # the exact stored source and output text.
-        notes = (
-            _case_card_value(item.rationale)
-            if item.rationale
-            else "(none)"
-        )
+        # LIST is the scanning surface: one durable Ground Memory must consume
+        # one physical terminal row. TABLE remains the explicit path to Notes,
+        # links, source/target counts, and other review metadata.
         if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
-            lines = [heading, _case_card_value(item.proposition)]
+            value = _case_card_value(item.proposition)
         else:
             expected = (
                 _case_card_value(item.expected)
                 if item.expected
                 else "(no output)"
             )
-            lines = [
-                heading,
-                f"{_case_card_value(item.content)} → {expected}",
-            ]
-        lines.append(f"NOTES · {notes}")
-        linked = [
-            aliases[uid]
-            for uid in item.related_uids
-            if uid in aliases and aliases[uid].startswith("r")
-        ]
-        if index == selected_memory_index:
-            details: list[str] = []
-            if linked:
-                details.append("LINKED RULES · " + ", ".join(linked))
-            if item.source_refs:
-                details.append(
-                    "SOURCES · "
-                    f"{len(item.source_refs)} bound Context Memory "
-                    "reference(s)"
-                )
-            if item.target_context_uids:
-                details.append(
-                    "TARGETS · " + ", ".join(_ground_item_target_names(session, item))
-                )
-            if (
-                session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-                and item.expected
-            ):
-                details.append(
-                    "EXACT PROJECTION · "
-                    f"{_case_card_value(item.content)} → "
-                    f"{_case_card_value(item.expected)}"
-                )
-            if details:
-                lines.extend(["DETAILS", *details])
-        blocks.append("\n".join(lines))
+            value = f"{_case_card_value(item.content)} → {expected}"
+        rows.append(f"{prefix} · {value}")
     if placement_hint:
-        blocks.append(
-            "PLACEMENT · DIRECT SELECTION\n" + safe_terminal_text(placement_hint)
+        rows.extend(
+            (
+                "",
+                "PLACEMENT · DIRECT SELECTION",
+                safe_terminal_text(placement_hint),
+            )
         )
-    return "\n\n".join(blocks)
+    return "\n".join(rows)
 
 
 def _render_named_ground_memory_table(
@@ -1120,9 +1082,9 @@ def run_named_ground_shell(
         height=pane_height,
         notification=lambda: pane_notifications["MEMORIES"],
     )
-    cases_pane.text_area.window.wrap_lines = Condition(
-        lambda: memory_view["value"] == "LIST"
-    )
+    # Both LIST and TABLE preserve one physical row per Memory. LIST is a
+    # compact scanner; V opens the detailed cell-oriented TABLE.
+    cases_pane.text_area.window.wrap_lines = Condition(lambda: False)
     cases_pane.text_area.control.input_processors.append(
         SelectedTableCellProcessor(
             lambda: (

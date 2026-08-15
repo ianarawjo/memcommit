@@ -22,9 +22,9 @@ python docs/screenshots/mem-fit-shared-viewer-20260815/capture.py
 | 05 | `05-whole-result-copy` | `Y` | complete compact Viewer projection copied; focus remains on the Example | none |
 | 06 | `06-current-issue-focused` | `mem fit ticker-fit --tui`, then `Down` | `!` plus the issue classification and one reason; no overview or receipt chrome | one Fit receipt only |
 | 07 | `07-stale-receipt-reopen` | `mem fit ticker-fit --receipt <uid> --tui` | `◷` replaces prior pass/fail marks after a separately saved Rule revision | no write while reopening |
-| 08 | `08-ground-cases-entry` | named Ground entry, then `Tab` ×4 | `·` marks the Ground Memory before any Fit receipt | none |
+| 08 | `08-ground-cases-entry` | named Ground entry, then `Tab` ×4 | one non-wrapping Memory row carries the `·` mark before any Fit receipt | none |
 | 09 | `09-ground-fit-running` | `F` | shared background turn is active; Ground and Contexts remain unchanged | none yet |
-| 10 | `10-ground-fit-current` | provider completion | `✓` appears on the same Ground Memory row; no result screen or Fit detail block opens | one Fit receipt only |
+| 10 | `10-ground-fit-current` | provider completion | `✓` replaces `·` on the same one-line Memory row; no row expansion, result screen, or Fit detail block opens | one Fit receipt only |
 | 11 | `11-ground-fit-verification` | `Q` | one call, one receipt, current freshness, unchanged Ground content | none |
 | 12 | `12-duplicate-run-close-deferred` | separate Ground run: `F`, then `F`, then `Q` | duplicate run is rejected and close visibly waits for the receipt boundary | none yet |
 | 13 | `13-deferred-close-verification` | provider completion | deferred close completed after one call and one receipt | one Fit receipt only |

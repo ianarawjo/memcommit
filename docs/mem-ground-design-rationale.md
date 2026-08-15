@@ -670,24 +670,22 @@ disposition, target Contexts, rationale, and expected result. It is not a
 second ordinary Memory inserted into a Context merely by appearing here.
 
 Semantically, each Ground Memory is a **Case** even though the enclosing layer
-keeps the Memory vocabulary. The interactive list presents every Case as one
-compact three-line card:
+keeps the Memory vocabulary. The interactive list is a scanning surface and
+presents every Case as one non-wrapping physical row:
 
 ```text
-c1 [PROPOSED · FIT / INCLUDE]
-North Star Energy Inc. → NSE
-NOTES · Ignore the legal suffix and use the remaining initials.
+c1 ✓ [PROPOSED · FIT / INCLUDE] · North Star Energy Inc. → NSE
 ```
 
 This is a presentation contract, not a stored-schema migration: `content`,
 `expected`, and `rationale` remain the serialized field names. The arrow's
-left and right sides display input and output; the third row always makes the
-Ground-local note slot visible, using `(none)` when it is empty. Embedded
-newlines are folded to `↵` in this list only, without rewriting stored text.
-The selected Case may expand read-only `DETAILS` for linked Rules, source
-references, and targets; unselected Cases remain three-line cards. A later
-`fill` or other materialization operation may propose the arrow's right side
-as ordinary Context content, but it must not copy `NOTES`. One independently
+left and right sides display input and output. Embedded newlines are folded to
+`↵` in this list only, without rewriting stored text, and terminal wrapping is
+disabled so one Memory never expands merely because it is selected or long.
+Ground-local Notes, linked Rules, source references, targets, and other fields
+remain available through the detailed `V` table instead of expanding the List.
+A later `fill` or other materialization operation may propose the arrow's right
+side as ordinary Context content, but it must not copy Notes. One independently
 reviewable example is one Ground Memory, so a nine-cell evaluation matrix
 normally contains nine Cases rather than one aggregate Memory. Multiline input
 or output remains one Case when its lines jointly describe one example.
@@ -713,11 +711,10 @@ display-only rename.
 ### List and table views for Ground Memories
 
 Ground Memories support two equivalent read-only presentations inside the
-same focusable pane. `LIST` remains the default and preserves the compact
-one-line blank-draft previews and three-line saved-Memory cards used by the
-existing review and editing flow. `TABLE` exposes the same records as cells so
-several examples can be compared by field without parsing repeated tags or
-card headings. Pressing `V` while MEMORIES is focused switches in either
+same focusable pane. `LIST` remains the default and preserves exactly one
+physical row per saved Memory. `TABLE` exposes the same records as cells so
+several examples can be compared by field and so omitted List metadata remains
+inspectable. Pressing `V` while MEMORIES is focused switches in either
 direction; it is deliberately scoped to that pane so typing `v` in Message is
 still ordinary text.
 
@@ -730,8 +727,9 @@ and target counts. `Up`/`Down` clamp at the first and last Memory;
 reverse-bold, its full folded value appears beneath the grid, and the buffer
 cursor follows it so a non-wrapping table scrolls horizontally on narrower
 terminals. `Tab` still leaves the whole Memories pane, `Enter` opens a
-conversation anchored to the selected row, `E` directly edits that saved
-row's expected output, and the default List continues to wrap normally.
+conversation anchored to the selected row, and `E` directly edits that saved
+row's expected output. Neither view wraps a Memory into additional physical
+rows.
 
 This is presentation state, not Ground state. View mode and cell coordinates
 are process-local, reset to List when a shell starts, and are clamped when a

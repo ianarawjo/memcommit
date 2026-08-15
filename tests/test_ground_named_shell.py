@@ -938,7 +938,8 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
         "The east elevator remains in service. → "
         "Publish the continued elevator service."
     ) in cases
-    assert "NOTES · The source directly supports" in cases
+    assert len(cases.splitlines()) == 2
+    assert "NOTES" not in cases
     assert "LINKED RULES" not in cases
 
     selected = ground_named_shell_module.render_named_ground_memories_pane(
@@ -946,10 +947,11 @@ def test_named_ground_components_render_all_items_without_summary_truncation():
         selected_memory_index=1,
     )
     assert "› c2 · [PROPOSED · FIT / INCLUDE]" in selected
-    assert "DETAILS\nLINKED RULES · r2" in selected
+    assert len(selected.splitlines()) == 2
+    assert "DETAILS" not in selected
 
 
-def test_ground_memory_renders_as_multiline_case_with_non_output_notes():
+def test_ground_memory_folds_multiline_content_into_one_row():
     original = session_with_rule_and_case()
     rule, memory = original.items
     ticker_case = replace(
@@ -966,13 +968,9 @@ def test_ground_memory_renders_as_multiline_case_with_non_output_notes():
     )
 
     assert "c1 · [PROPOSED · FIT / INCLUDE]" in rendered
-    assert (
-        "North Star Energy Inc. ↵ Class B → NSE.B\n"
-        "NOTES · Ignore the legal suffix and append .B for the share "
-        "class."
-        in rendered
-    )
-    assert rendered.count("\n") == 2
+    assert "North Star Energy Inc. ↵ Class B → NSE.B" in rendered
+    assert "Ignore the legal suffix" not in rendered
+    assert "\n" not in rendered
     assert "EXPECTED" not in rendered
     assert "WHY" not in rendered
 
@@ -996,17 +994,9 @@ def test_native_example_card_leads_with_one_line_proposition() -> None:
     )
 
     rendered = render_named_ground_cases_pane(session)
-    selected = ground_named_shell_module.render_named_ground_memories_pane(
-        session,
-        selected_memory_index=0,
-    )
-
     assert "On August 15 the observed sky was yellow." in rendered
     assert "optional exact input → optional exact output" not in rendered
-    assert (
-        "EXACT PROJECTION · optional exact input → optional exact output"
-        in selected
-    )
+    assert "\n" not in rendered
 
 
 def test_ground_memory_projects_compact_fit_marks() -> None:
@@ -1159,15 +1149,15 @@ def test_named_ground_memory_table_exposes_fields_as_cells():
     assert "Publishthecontinuedelevatorservice." in "".join(rendered.split())
 
 
-def test_ground_memory_without_notes_keeps_the_three_line_card_shape():
+def test_ground_memory_without_notes_remains_one_row():
     original = session_with_rule_and_case()
     rule, memory = original.items
     rendered = render_named_ground_cases_pane(
         replace(original, items=(rule, replace(memory, rationale="")))
     )
 
-    assert "NOTES · (none)" in rendered
-    assert rendered.count("\n") == 2
+    assert "NOTES" not in rendered
+    assert "\n" not in rendered
 
 
 def test_saved_directional_provenance_is_presented_as_neutral_distillation():
@@ -1599,11 +1589,12 @@ def test_named_approval_down_arrow_stays_in_focused_memories(monkeypatch):
         "build_scrollable_text_pane",
         capturing_builder,
     )
-    session = session_with_rule_and_case()
+    session = session_with_two_cases()
 
     with create_pipe_input() as pipe_input:
         # The submitted turn enters APPROVAL on CHAT. Four Tabs reach
-        # MEMORIES; Down must remain local to that focused read viewport.
+        # MEMORIES; Down selects its second compact row without changing the
+        # pending approval or moving into Chat.
         pipe_input.send_text("Propose another Rule.\r\t\t\t\t\x1b[B\x1b")
         result = run_named_ground_shell(
             session,
@@ -1761,7 +1752,7 @@ def test_named_memory_table_toggles_back_to_selected_list_card(monkeypatch):
     memories = panes["MEMORIES"].text_area
     assert "TABLE ·" not in memories.text
     assert "› c2 · [PROPOSED · FIT / INCLUDE]" in memories.text
-    assert memories.window.wrap_lines()
+    assert not memories.window.wrap_lines()
 
 
 def test_named_approval_table_navigation_keeps_the_exact_receipt(monkeypatch):
