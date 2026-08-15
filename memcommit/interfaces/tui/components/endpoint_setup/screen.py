@@ -13,6 +13,10 @@ from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Windo
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
+from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
+    render_context_reach,
+)
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
@@ -93,8 +97,16 @@ def run_endpoint_setup(
         )
         for role in spec.roles
     }
+    reach_states = {
+        role.uid: ContextReachState.create(
+            include_descendants=role.include_descendants
+        )
+        for role in spec.roles
+        if role.allow_descendants
+    }
     bindings = KeyBindings()
     status = {"value": ""}
+    role_by_uid = {role.uid: role for role in spec.roles}
 
     mode_control = FormattedTextControl(
         lambda: render_vertical_choice_rows(
@@ -113,6 +125,34 @@ def run_endpoint_setup(
         is_focused=lambda: get_app().layout.has_focus(mode_control),
         height=Dimension.exact(mode_height),
     )
+    reach_controls: dict[str, FormattedTextControl] = {}
+    reach_frames = {}
+    for role in spec.roles:
+        if not role.allow_descendants:
+            continue
+        control: FormattedTextControl
+
+        def render_reach(uid=role.uid):
+            return render_context_reach(
+                reach_states[uid],
+                title="",
+                focused=get_app().layout.has_focus(reach_controls[uid]),
+            )
+
+        control = FormattedTextControl(
+            render_reach,
+            focusable=True,
+            show_cursor=False,
+        )
+        reach_controls[role.uid] = control
+        reach_frames[role.uid] = build_focused_frame(
+            Window(control, height=Dimension.exact(1), dont_extend_height=True),
+            title=f"{safe_terminal_text(role.label)} · RANGE",
+            is_focused=lambda uid=role.uid: get_app().layout.has_focus(
+                reach_controls[uid]
+            ),
+            height=Dimension.exact(3),
+        )
 
     def make_draft() -> EndpointSetupDraft:
         selected_mode = mode_state.selected_uid
@@ -124,6 +164,11 @@ def run_endpoint_setup(
                 EndpointSetupValue(
                     role.uid,
                     selectors[role.uid].selection.selected_name,
+                    include_descendants=(
+                        reach_states[role.uid].include_descendants
+                        if role.uid in reach_states
+                        else False
+                    ),
                 )
                 for role in spec.roles
             ),
@@ -136,14 +181,22 @@ def run_endpoint_setup(
             ("class:report-label", "SETUP · NOT RUN\n"),
             ("class:report-neutral", f"MODE · {safe_terminal_text(draft.mode_uid)}\n"),
         ]
-        fragments.extend(
-            (
-                "class:report-neutral",
-                f"{safe_terminal_text(value.role_uid)} · "
-                f"{safe_terminal_text(value.context_name)}\n",
+        for value in draft.values:
+            range_suffix = (
+                " · INCLUDE DESCENDANTS"
+                if value.include_descendants
+                else " · THIS CONTEXT ONLY"
             )
-            for value in draft.values
-        )
+            if not role_by_uid[value.role_uid].allow_descendants:
+                range_suffix = ""
+            fragments.append(
+                (
+                    "class:report-neutral",
+                    f"{safe_terminal_text(value.role_uid)} · "
+                    f"{safe_terminal_text(value.context_name)}"
+                    f"{range_suffix}\n",
+                )
+            )
         fragments.extend(
             [
                 ("", "\n"),
@@ -184,7 +237,12 @@ def run_endpoint_setup(
         if get_app().layout.has_focus(mode_control):
             return " ←/→ or ↑/↓ choose shape · Tab endpoint · Esc cancel"
         if get_app().layout.has_focus(action_control):
-            return " Enter continue to frozen plan review · ↑ endpoint · Esc cancel"
+            return " Enter run selected setup · ↑ endpoint · Esc cancel"
+        if any(
+            get_app().layout.has_focus(control)
+            for control in reach_controls.values()
+        ):
+            return " ←/→ choose this Context only or include descendants · Tab next · Esc cancel"
         return " ↑/↓ move/cross · ←/→ tree · Enter/Space select · Tab next · Esc cancel"
 
     footer = Window(
@@ -192,10 +250,15 @@ def run_endpoint_setup(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
+    role_regions: list[TuiRegion] = []
+    for role in spec.roles:
+        role_regions.append(TuiRegion(selectors[role.uid].frame))
+        if role.uid in reach_frames:
+            role_regions.append(TuiRegion(reach_frames[role.uid]))
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(mode_frame),
-        *(TuiRegion(selectors[role.uid].frame) for role in spec.roles),
+        *role_regions,
         TuiRegion(action_frame),
         TuiRegion(footer),
     )
@@ -253,15 +316,18 @@ def run_endpoint_setup(
         event.app.exit(result=draft)
         return "HANDLED"
 
-    surfaces = SurfaceFocusController(
-        (
-            FocusSurface(
-                "MODE",
-                mode_control,
-                move_vertical=move_mode,
-                activate=choose_mode,
-            ),
-            *(
+    surfaces_in_order = [
+        FocusSurface(
+            "MODE",
+            mode_control,
+            move_vertical=move_mode,
+            activate=choose_mode,
+        )
+    ]
+    editable_role_uids = {role.uid for role in editable_roles}
+    for role in spec.roles:
+        if role.uid in editable_role_uids:
+            surfaces_in_order.append(
                 FocusSurface(
                     f"ROLE:{role.uid}",
                     selectors[role.uid].control,
@@ -273,16 +339,24 @@ def run_endpoint_setup(
                         uid, delta
                     ),
                 )
-                for role in editable_roles
-            ),
-            FocusSurface(
-                "CONTINUE",
-                action_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=finish,
-            ),
+            )
+        if role.uid in reach_controls:
+            surfaces_in_order.append(
+                FocusSurface(
+                    f"RANGE:{role.uid}",
+                    reach_controls[role.uid],
+                    move_vertical=lambda _event, _delta: "BOUNDARY",
+                )
+            )
+    surfaces_in_order.append(
+        FocusSurface(
+            "CONTINUE",
+            action_control,
+            move_vertical=lambda _event, _delta: "BOUNDARY",
+            activate=finish,
         )
     )
+    surfaces = SurfaceFocusController(tuple(surfaces_in_order))
     bind_surface_navigation(bindings, surfaces)
 
     @bindings.add("left", filter=has_focus(mode_control), eager=True)
@@ -293,6 +367,39 @@ def run_endpoint_setup(
     @bindings.add("right", filter=has_focus(mode_control), eager=True)
     def _mode_right(event) -> None:
         move_mode(event, 1)
+        event.app.invalidate()
+
+    reach_focus = Condition(
+        lambda: any(
+            get_app().layout.has_focus(control)
+            for control in reach_controls.values()
+        )
+    )
+
+    def focused_reach_role_uid() -> str | None:
+        return next(
+            (
+                uid
+                for uid, control in reach_controls.items()
+                if get_app().layout.has_focus(control)
+            ),
+            None,
+        )
+
+    def move_reach(delta: int) -> None:
+        uid = focused_reach_role_uid()
+        if uid is not None:
+            reach_states[uid].move(delta)
+            status["value"] = ""
+
+    @bindings.add("left", filter=reach_focus, eager=True)
+    def _reach_left(event) -> None:
+        move_reach(-1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=reach_focus, eager=True)
+    def _reach_right(event) -> None:
+        move_reach(1)
         event.app.invalidate()
 
     editable_focus = Condition(

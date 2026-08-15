@@ -40,6 +40,8 @@ class EndpointSetupRole:
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
     fixed: bool = False
     height: int = 6
+    allow_descendants: bool = False
+    include_descendants: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -65,6 +67,15 @@ class EndpointSetupRole:
             raise ValueError("Endpoint role annotations are outside its catalog.")
         if type(self.fixed) is not bool:
             raise TypeError("Endpoint role fixed state must be a boolean.")
+        if (
+            type(self.allow_descendants) is not bool
+            or type(self.include_descendants) is not bool
+        ):
+            raise TypeError("Endpoint role descendant state must be boolean.")
+        if self.include_descendants and not self.allow_descendants:
+            raise ValueError(
+                "Endpoint role cannot include descendants without a range control."
+            )
         if self.fixed and self.selectable_names != frozenset({self.selected_name}):
             raise ValueError("A fixed endpoint must expose exactly one selected value.")
         if (
@@ -116,6 +127,17 @@ class EndpointSetupValue:
 
     role_uid: str
     context_name: str
+    include_descendants: bool = False
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.role_uid, str)
+            or not self.role_uid
+            or not isinstance(self.context_name, str)
+            or not self.context_name
+            or type(self.include_descendants) is not bool
+        ):
+            raise ValueError("Endpoint setup values require one exact typed range.")
 
 
 @dataclass(frozen=True)
