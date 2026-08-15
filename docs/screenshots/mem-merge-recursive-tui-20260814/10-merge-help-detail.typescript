@@ -1,4 +1,5 @@
-[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
@@ -49,7 +50,7 @@
 [0m│[0;1m ▸ mem summarize         [0mShow what Mem understands from a Context's visible ordinary Memories.                                                                                   [0m│[179C[0;48;5;248m [0m
 [0m│[0;1m ▸ mem trace             [0mTrace one retained Memory through its recorded lineage.                                                                                                 │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[29A[0m[18A[0m│[0;1m ▸ mem checkout   [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    [0m│[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[29A[0m[?25l[18A[0m│[0;1m ▸ mem checkout   [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    [0m│[0m
 [0m│[0;1m ▸ mem init       [0mCreate a named C[Cntext, op[Cionally[Censure i[Cs[Cparents,[Cand[Cswitch[Cto[Cit.[87C[0m│[179C[0;48;5;248m [0m
 [0m│[0;1m ▸ mem branch     [0mCopy a Cont[Cx[C or[Csubtree into a n[Cw[Cbranch and switch to[Cit.[98C[0m│[179C[0;48;5;248m [0m
 [0m│[0;1m ▸ mem import     [0mImport a clean-b[Cs[Cline Profile,[8C tree,[Cor[CMemory[Cby[Cvalue[Cwhile[Cpreserving[Cresource[Cidentity.[58C[0m│[179C[0;48;5;248m [0m

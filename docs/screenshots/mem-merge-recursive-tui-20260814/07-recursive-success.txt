@@ -1,15 +1,37 @@
- MEM MERGE · SOURCE → CURRENT TARGET                                                                                                                                                
- DETERMINISTIC UID UNION · DIRECT OR PATH-ALIGNED DESCENDANTS                                                                                                                       
-┌─────────────────────────────────────────────────────────────────────────────────| DESCENDANTS |──────────────────────────────────────────────────────────────────────────────────┐
-│  RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌──────────────────────────────────────────────────────────────| SOURCE · ALL READABLE CONTEXTS · * CURRENT TARGET |───────────────────────────────────────────────────────────────┐
-│› ✓   ▸ source                                                                                                                                                                   ^│
-│  × * ▸ target  UNAVAILABLE                                                                                                                                                       │
+ MEM MERGE · REVIEW FROZEN PLAN                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY                                                                                                                           
+┌───────────────────────────────────────────────────────────────────| FROZEN PLAN · COMPLETE CONTEXT MAPPINGS |────────────────────────────────────────────────────────────────────┐
+│MERGE PLAN · source → target                                                                                                                                                     ^│
+│STATUS · FROZEN · NOT APPLIED                                                                                                                                                     │
+│RANGE · DESCENDANTS                                                                                                                                                               │
+│CONTEXTS · 2 · CREATE 1                                                                                                                                                           │
+│ADDITIONS · 2 memories                                                                                                                                                            │
+│CHECKPOINTS · 2                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│MAPPING 1/2 · source → target                                                                                                                                                     │
+│TARGET · EXISTING                                                                                                                                                                 │
+│ADDITIONS · 1 memory                                                                                                                                                              │
+│ITEMS                                                                                                                                                                             │
+│  MEMORY · [467e349e]                                                                                                                                                             │
+│                                                                                                                                                                                  │
+│MAPPING 2/2 · source/child → target/child                                                                                                                                         │
+│TARGET · WILL CREATE                                                                                                                                                              │
+│ADDITIONS · 1 memory                                                                                                                                                              │
+│ITEMS                                                                                                                                                                             │
+│  MEMORY · [f129fd4b]                                                                                                                                                             │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT FROZEN PLAN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃STATUS · SUCCESS                                                                                                                                                                  ┃
 ┃SOURCE · source                                                                                                                                                                   ┃
 ┃TARGET · target                                                                                                                                                                   ┃
@@ -19,28 +41,6 @@
 ┃CHECKPOINTS · 2                                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃[ PRESS ENTER TO CLOSE ]                                                                                                                                                          ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

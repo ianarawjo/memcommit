@@ -28,18 +28,36 @@ Apply.
 
 ## Merge migration
 
-Merge will use two coupled modes rather than independent endpoint descendant
+Merge uses two coupled modes rather than independent endpoint descendant
 toggles:
 
 - `DIRECT · A → B` means the exact Source and Target roots;
 - `RECURSIVE · A/** → B/**` means path alignment by one complete relative-path
   rule.
 
-Source A is selected from the frozen readable catalog. Target B is initially
-the command-start current Context and is rendered as a fixed endpoint. The
+Source A is selected from the frozen readable catalog. Target B is the
+command-start current Context and is rendered as a fixed endpoint. The
 setup draft is converted to a typed `MergeRequest`, then `prepare_merge()`
 freezes the actual Context mappings and additions before a separate review can
 offer durable Apply.
+
+The review begins in the shared semantic Viewer and exposes every frozen
+Source/Target mapping, whether its Target exists or will be created, the
+UID-new additions, and the complete checkpoint count. Its To Do frame applies
+only the same opaque frozen plan. Both cancelling setup and cancelling after
+preparation are read-only.
+
+## Verified progress
+
+- `2bc757a7` established the common endpoint component and canonical readable
+  catalog ownership.
+- `28c03208` adapted Merge Source/current-Target setup without changing Store
+  behavior.
+- `38aff15f` split plan preparation from exact Apply and projected the complete
+  frozen plan.
+- Ordered 180×52 PTY evidence covers direct and recursive setup, plan review,
+  successful application, both cancellation boundaries, and a failure before
+  persistence.
 
 ## Dependency boundary
 

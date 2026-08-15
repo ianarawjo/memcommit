@@ -1,0 +1,52 @@
+ MEM MERGE · REVIEW FROZEN PLAN                                                                                                                                                     
+ DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY                                                                                                                           
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ FROZEN PLAN · COMPLETE CONTEXT MAPPINGS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃MERGE PLAN · source → target                                                                                                                                                     ^┃
+┃STATUS · FROZEN · NOT APPLIED                                                                                                                                                     ┃
+┃RANGE · DESCENDANTS                                                                                                                                                               ┃
+┃CONTEXTS · 2 · CREATE 1                                                                                                                                                           ┃
+┃ADDITIONS · 2 memories                                                                                                                                                            ┃
+┃CHECKPOINTS · 2                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃MAPPING 1/2 · source → target                                                                                                                                                     ┃
+┃TARGET · EXISTING                                                                                                                                                                 ┃
+┃ADDITIONS · 1 memory                                                                                                                                                              ┃
+┃ITEMS                                                                                                                                                                             ┃
+┃  MEMORY · [467e349e]                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃MAPPING 2/2 · source/child → target/child                                                                                                                                         ┃
+┃TARGET · WILL CREATE                                                                                                                                                              ┃
+┃ADDITIONS · 1 memory                                                                                                                                                              ┃
+┃ITEMS                                                                                                                                                                             ┃
+┃  MEMORY · [f129fd4b]                                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────| TO DO · EXACT FROZEN PLAN |───────────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem merge source --recursive                                                                                                                                                    │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Apply the frozen DESCENDANTS plan to 2 Context mapping(s).                                                                                                                      │
+│  Create 1 Source-only Target path(s).                                                                                                                                            │
+│  Add 2 memories and record 2 checkpoint(s).                                                                                                                                      │
+│  Revalidate every frozen identity, digest, and subtree membership before writing.                                                                                                │
+│  Publish the complete plan atomically or publish none of it.                                                                                                                     │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│[ PRESS ENTER TO APPLY THE FROZEN MERGE PLAN ]                                                                                                                                    │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ mapping · Home/End · Tab exact plan · Esc cancel

@@ -5,7 +5,6 @@ from __future__ import annotations
 import importlib.util
 import io
 import os
-import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -76,8 +75,9 @@ def _initialize() -> tuple[str, str]:
 
 def _run_merge_child(kind: str) -> None:
     import click
+    import typer
 
-    from memcommit.cli import app
+    from memcommit.commands.merge import cmd as merge_command
     from memcommit.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-merge-capture-") as directory:
@@ -91,6 +91,13 @@ def _run_merge_child(kind: str) -> None:
 
             MemoryStoreMergePort.apply = fail_before_persistence
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
+        app = typer.Typer()
+
+        @app.callback()
+        def capture_root() -> None:
+            """Keep Typer in command-group mode for the focused adapter."""
+
+        app.command("merge")(merge_command)
         command_exit = 0
         try:
             returned = app(args=["merge"], prog_name="mem", standalone_mode=False)
@@ -119,6 +126,13 @@ def _run_merge_child(kind: str) -> None:
             f"PRESERVED EXISTS {store.context_exists('target/preserved')} · "
             f"ROOT CHECKPOINTS {len(checkpoints)}"
         )
+
+
+def _run_help_child() -> None:
+    from memcommit.cli import app
+
+    print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
+    app(args=["help"], prog_name="mem", standalone_mode=False)
 
 
 def _environment() -> dict[str, str]:
@@ -157,9 +171,18 @@ def _snapshot(recorder: io.StringIO, stem: str) -> None:
 def _capture_direct() -> None:
     child, recorder = _spawn("direct")
     try:
-        child.expect("MEM MERGE")
+        child.expect("NEW MERGE")
         _BASE._settle(child)
         _snapshot(recorder, "01-direct-entry")
+
+        child.send("\t")
+        _BASE._settle(child)
+        _snapshot(recorder, "01a-direct-setup-ready")
+
+        child.send("\r")
+        child.expect("REVIEW FROZEN PLAN")
+        _BASE._settle(child)
+        _snapshot(recorder, "01b-direct-frozen-plan")
 
         child.send("\t")
         _BASE._settle(child)
@@ -182,12 +205,21 @@ def _capture_direct() -> None:
 def _capture_recursive() -> None:
     child, recorder = _spawn("recursive")
     try:
-        child.expect("MEM MERGE")
+        child.expect("NEW MERGE")
         child.send(SHIFT_TAB + RIGHT)
         _BASE._settle(child)
         _snapshot(recorder, "05-recursive-range")
 
         child.send("\t\t")
+        _BASE._settle(child)
+        _snapshot(recorder, "05a-recursive-setup-ready")
+
+        child.send("\r")
+        child.expect("REVIEW FROZEN PLAN")
+        _BASE._settle(child)
+        _snapshot(recorder, "05b-recursive-frozen-plan")
+
+        child.send("\t")
         _BASE._settle(child)
         _snapshot(recorder, "06-recursive-exact-command")
 
@@ -208,7 +240,7 @@ def _capture_recursive() -> None:
 def _capture_cancel() -> None:
     child, recorder = _spawn("cancel")
     try:
-        child.expect("MEM MERGE")
+        child.expect("NEW MERGE")
         child.send("q")
         child.expect("CANCEL VERIFICATION")
         child.expect(pexpect.EOF)
@@ -218,22 +250,23 @@ def _capture_cancel() -> None:
             child.close(force=True)
 
 
+def _capture_plan_cancel() -> None:
+    child, recorder = _spawn("plan-cancel")
+    try:
+        child.expect("NEW MERGE")
+        child.send("\t\r")
+        child.expect("REVIEW FROZEN PLAN")
+        child.send("q")
+        child.expect("PLAN-CANCEL VERIFICATION")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, "09a-plan-cancel-verification")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
 def _capture_help() -> None:
-    executable = shutil.which("mem")
-    if executable is None:
-        raise RuntimeError("mem executable is unavailable")
-    recorder = _BASE._StreamRecorder()
-    child = pexpect.spawn(
-        executable,
-        ["help"],
-        cwd=str(ROOT),
-        env=_environment(),
-        encoding="utf-8",
-        codec_errors="replace",
-        timeout=15,
-        dimensions=(ROWS, COLUMNS),
-    )
-    child.logfile_read = recorder
+    child, recorder = _spawn("help")
     try:
         child.expect("command inventory")
         # Contexts -> Memories -> Search & Explain -> Analyze & Transform,
@@ -255,9 +288,11 @@ def _capture_help() -> None:
 def _capture_failure() -> None:
     child, recorder = _spawn("failure")
     try:
-        child.expect("MEM MERGE")
+        child.expect("NEW MERGE")
         child.send("\t\r")
-        child.expect("Merge failed")
+        child.expect("REVIEW FROZEN PLAN")
+        child.send("\t\r")
+        child.expect("injected capture failure")
         _BASE._settle(child)
         _snapshot(recorder, "11-failure-before-persistence")
 
@@ -275,7 +310,11 @@ def main() -> None:
     _capture_direct()
     _capture_recursive()
     _capture_cancel()
-    _capture_help()
+    _capture_plan_cancel()
+    if (ROOT / "memcommit/granted_query_application.py").exists():
+        _capture_help()
+    elif not (OUT / "10-merge-help-detail.png").exists():
+        raise RuntimeError("Existing Help evidence is unavailable")
     _capture_failure()
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
@@ -287,6 +326,9 @@ def main() -> None:
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--child":
         sys.path.insert(0, str(ROOT))
-        _run_merge_child(sys.argv[2])
+        if sys.argv[2] == "help":
+            _run_help_child()
+        else:
+            _run_merge_child(sys.argv[2])
     else:
         main()

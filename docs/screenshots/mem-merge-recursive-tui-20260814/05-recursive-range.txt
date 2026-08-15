@@ -1,30 +1,30 @@
- MEM MERGE · SOURCE → CURRENT TARGET                                                                                                                                                
- DETERMINISTIC UID UNION · DIRECT OR PATH-ALIGNED DESCENDANTS                                                                                                                       
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ DESCENDANTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             ┃
+ NEW MERGE · A → B                                                                                                                                                                  
+ DETERMINISTIC UID UNION · SETUP BEFORE FROZEN PLAN REVIEW                                                                                                                          
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ OPERATION SHAPE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  DIRECT · A → B                                                                                                                                                                  ┃
+┃  Merge the two exact Context roots only.                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃✓ RECURSIVE · A/** → B/**                                                                                                                                                         ┃
+┃  Align lexical descendants by complete relative path.                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-┌──────────────────────────────────────────────────────────────| SOURCE · ALL READABLE CONTEXTS · * CURRENT TARGET |───────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────| A · SOURCE · ALL READABLE CONTEXTS |──────────────────────────────────────────────────────────────────────┐
 │› ✓   ▸ source                                                                                                                                                                   ^│
 │  × * ▸ target  UNAVAILABLE                                                                                                                                                       │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
-│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem merge source --recursive                                                                                                                                                    │
+┌─────────────────────────────────────────────────────────────────────────| B · CURRENT TARGET · FROZEN |──────────────────────────────────────────────────────────────────────────┐
+│› ✓ * · target                                                                                                                                                                   ^│
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────| TO DO · SETUP ONLY |──────────────────────────────────────────────────────────────────────────────┐
+│SETUP · NOT RUN                                                                                                                                                                   │
+│MODE · DESCENDANTS                                                                                                                                                                │
+│A · source                                                                                                                                                                        │
+│B · target                                                                                                                                                                        │
 │                                                                                                                                                                                  │
-│EFFECTS · ONE COMMAND                                                                                                                                                             │
-│  Merge matching lexical descendants by complete relative path into frozen current Target 'target'.                                                                               │
-│  Target subtree 'target' may update existing matching Contexts and create Source-only relative paths.                                                                            │
-│  Add UID-new direct items; keep Target values for existing UIDs.                                                                                                                 │
-│  No semantic reconciliation and no deletion propagation.                                                                                                                         │
-│                                                                                                                                                                                  │
-│Approval applies only to the exact command shown above.                                                                                                                           │
-│                                                                                                                                                                                  │
-│[ PRESS ENTER TO APPLY THE EXACT MERGE ]                                                                                                                                          │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
+│[ CONTINUE TO FROZEN MERGE PLAN ]                                                                                                                                                 │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ←/→ direct or descendants · ↓ Source · Tab next · Esc cancel
+ ←/→ or ↑/↓ choose shape · Tab endpoint · Esc cancel
