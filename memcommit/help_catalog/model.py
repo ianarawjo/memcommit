@@ -33,6 +33,7 @@ class OperationHelp:
     flow: str
     execution: ExecutionKind
     effect: str
+    best_for: str
     range: str | None = None
 
     def __post_init__(self) -> None:
@@ -42,3 +43,5 @@ class OperationHelp:
                 raise ValueError(f"Operation Help {field_name} must be nonblank.")
         if self.range is not None and not self.range.strip():
             raise ValueError("Operation Help range must be nonblank when present.")
+        if not self.best_for.strip():
+            raise ValueError("Operation Help best_for must be nonblank.")

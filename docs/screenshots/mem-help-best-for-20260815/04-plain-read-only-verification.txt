@@ -1,0 +1,3 @@
+52 180                                                                                                                                                                              
+compare           - Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                   
+update            - Update Memories in the Target Context from Memories in the Source Context, asking the user to review and choose when needed.

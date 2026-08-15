@@ -39,6 +39,7 @@ def compose_operation_help(
     ]
     if operation.range is not None:
         rows.append(HelpRow("RANGE", operation.range))
+    rows.append(HelpRow("BEST FOR", operation.best_for))
     return ComposedOperationHelp(
         operation=operation,
         overview=tuple(rows),

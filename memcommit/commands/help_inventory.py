@@ -809,6 +809,85 @@ def _entry_line(
     return f"{label:<{name_width}} - {entry.description}"
 
 
+_HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH = 108
+
+
+def _wrapped_help_text(value: str, *, width: int) -> list[str]:
+    return textwrap.wrap(
+        display_escape_text(value),
+        width=max(1, width),
+        break_long_words=True,
+        break_on_hyphens=False,
+    ) or [""]
+
+
+def _help_command_rows(
+    entry: CommandEntry,
+    *,
+    command_prefix: str,
+    content_width: int,
+) -> list[tuple[str, str]]:
+    """Project summary and use case beside each other when space permits."""
+
+    body_width = max(1, content_width - len(command_prefix))
+    best_for = None if entry.operation_help is None else entry.operation_help.best_for
+    if best_for is None:
+        summary_lines = _wrapped_help_text(entry.description, width=body_width)
+        return [
+            (
+                command_prefix if index == 0 else " " * len(command_prefix),
+                line.ljust(body_width),
+            )
+            for index, line in enumerate(summary_lines)
+        ]
+
+    if body_width >= _HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH:
+        separator = " │ "
+        column_width = content_width - len(separator)
+        left_width = column_width // 2
+        summary_width = max(1, left_width - len(command_prefix))
+        best_for_width = max(1, column_width - left_width)
+        summary_lines = _wrapped_help_text(
+            entry.description,
+            width=summary_width,
+        )
+        best_for_lines = _wrapped_help_text(best_for, width=best_for_width)
+        row_count = max(len(summary_lines), len(best_for_lines))
+        rows: list[tuple[str, str]] = []
+        for row_index in range(row_count):
+            prefix = command_prefix if row_index == 0 else " " * len(command_prefix)
+            summary = summary_lines[row_index] if row_index < len(summary_lines) else ""
+            use_case = best_for_lines[row_index] if row_index < len(best_for_lines) else ""
+            rows.append(
+                (
+                    prefix,
+                    summary.ljust(summary_width)
+                    + separator
+                    + use_case.ljust(best_for_width),
+                )
+            )
+        return rows
+
+    summary_lines = _wrapped_help_text(entry.description, width=body_width)
+    rows = [
+        (
+            command_prefix if index == 0 else " " * len(command_prefix),
+            line.ljust(body_width),
+        )
+        for index, line in enumerate(summary_lines)
+    ]
+    stacked_prefix = "  "
+    best_for_lines = textwrap.wrap(
+        stacked_prefix + display_escape_text(best_for),
+        width=content_width,
+        subsequent_indent=" " * len(stacked_prefix),
+        break_long_words=True,
+        break_on_hyphens=False,
+    ) or [stacked_prefix]
+    rows.extend(("", line.ljust(content_width)) for line in best_for_lines)
+    return rows
+
+
 def _render_plain_inventory(entries: list[CommandEntry]) -> None:
     typer.secho("mem command inventory", bold=True)
     typer.echo()
@@ -861,25 +940,19 @@ def _help_group_fragments(
         command_prefix = (
             f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}}  "
         )
-        description_lines = textwrap.wrap(
-            display_escape_text(entry.description),
-            width=max(1, content_width - len(command_prefix)),
-            break_long_words=True,
-            break_on_hyphens=False,
-        ) or [""]
-        for description_index, line in enumerate(description_lines):
-            prefix = (
-                command_prefix if description_index == 0 else " " * len(command_prefix)
-            )
-            padding = " " * max(0, content_width - len(prefix) - len(line))
+        for prefix, body in _help_command_rows(
+            entry,
+            command_prefix=command_prefix,
+            content_width=content_width,
+        ):
             fragments.append((border_style, vertical))
             if command_focused:
-                fragments.append(("class:selected", f" {prefix}{line}{padding} "))
+                fragments.append(("class:selected", f" {prefix}{body} "))
             else:
                 fragments.extend(
                     [
                         ("class:help-command", f" {prefix}"),
-                        ("", f"{line}{padding} "),
+                        ("", f"{body} "),
                     ]
                 )
             fragments.append((border_style, vertical + "\n"))
@@ -891,6 +964,10 @@ def _help_group_fragments(
                 )
                 detail_label_width = max(len(row.label) for row in composed.overview)
                 for row in composed.overview:
+                    # The use case is already visible in every command row,
+                    # even before expansion; do not duplicate it in the detail.
+                    if row.label == "BEST FOR":
+                        continue
                     prefix = f"  {row.label:<{detail_label_width}} · "
                     lines = textwrap.wrap(
                         display_escape_text(row.value),

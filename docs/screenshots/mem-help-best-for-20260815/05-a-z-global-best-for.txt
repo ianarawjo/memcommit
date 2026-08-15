@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INVENTORY VIEW ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌ A–Z ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ ▸ mem add                Add one or more Memories to the current or explicit Context.  │ Saving new facts, instructions, or source material.                                    │ 
+│ ▸ mem atomize            Split composite Memories for review; --evaluate performs an   │ Separating a composite Memory into independently reviewable requirements.              │ 
+│                          issue-scoped directional meld.                                │                                                                                        │ 
+│ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional   │ Performing a combined quality review before revising a Context.                        │ 
+│                          Rule Conformance, then review one saved report.               │                                                                                        │ 
+│ ▸ mem branch             Copy a Context or subtree into a new branch and switch to it. │ Experimenting without modifying the original Context tree.                             │ 
+│ ▸ mem check-conformance  Check Ground examples or one Context against explicit Rules.  │ Checking a Context or saved Ground against explicit Rules.                             │ 
+│ ▸ mem checkout           Switch Contexts using Git-style syntax; with -b, create and   │ Using a Git-like workflow to switch or create a branch.                                │ 
+│                          switch to a new Context branch.                               │                                                                                        │ 
+│ ▸ mem checkpoint         Save the current Context as a manual recovery point for Diff  │ Creating a recovery point before risky work.                                           │ 
+│                          or Revert.                                                    │                                                                                        │ 
+│ ▸ mem chunk              Preview and split one direct Memory by headers, paragraphs,   │ Mechanically splitting a long Memory at structural boundaries.                         │ 
+│                          or sentences.                                                 │                                                                                        │ 
+│ ▸ mem clear              Remove all direct items from the current or explicit Context  │ Emptying a Context while retaining the Context itself.                                 │ 
+│                          after confirmation.                                           │                                                                                        │ 
+│ ▸ mem compare            Compare Memories in two Contexts and report what they share,  │ Comparing two Contexts as a whole to understand where they align and differ.           │ 
+│                          what differs, and what appears only on one side.              │                                                                                        │ 
+│ ▸ mem config (legacy)    Read and write global configuration.                          │ Inspecting or changing persistent MemCommit settings.                                  │ 
+│ ▸ mem contexts           Browse local Contexts and readable cross-Profile Context      │ Exploring every Context currently available to the Profile.                            │ 
+│                          views without switching.                                      │                                                                                        │ 
+│ ▸ mem delete (remove)    Select a Context or direct item to delete, or name it by      │ Removing a specific Context or item that is no longer needed.                          │ 
+│                          locator, name, or UID.                                        │                                                                                        │ 
+│ ▸ mem diff               Inspect recorded Context or Update changes without applying   │ Verifying exactly what a recorded operation changed.                                   │ 
+│                          them.                                                         │                                                                                        │ 
+│ ▸ mem distill            Derive evidence-bound reusable Rules from a Context,          │ Extracting reusable rules from evidence-rich source material.                          │ 
+│                          optionally guided by a Goal.                                  │                                                                                        │ 
+│ ▸ mem edit               Replace direct Memory content by UID or prefix in the current │ Correcting or revising a known Memory in place.                                        │ 
+│                          or explicit Context.                                          │                                                                                        │ 
+│ ▸ mem embed              Place a Child Context inside a target while retaining its     │ Reusing a Context inside another Context without copying it.                           │ 
+│                          identity and ownership.                                       │                                                                                        │ 
+│ ▸ mem eval               Run and inspect staged semantic evaluation campaigns.         │ Measuring operation behavior against repeatable fixtures.                              │ 
+│ ▸ mem find               Search selected Contexts with explicit lexical-descendant and │ Finding relevant Memories across a selected Context scope.                             │ 
+│                          embedded-Context reach.                                       │                                                                                        │ 
+│ ▸ mem find-ambiguities   Report ambiguous direct Memories in the current or explicit   │ Finding Memories that permit unclear or multiple interpretations.                      │ 
+│                          Context; no Context changes.                                  │                                                                                        │ 
+│ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or      │ Finding mutually incompatible claims or instructions.                                  │ 
+│                          explicit Context; no Context changes.                         │                                                                                        │ 
+│ ▸ mem find-duplicates    Report duplicate direct Memories in the current or explicit   │ Locating semantically redundant Memories before cleanup.                               │ 
+│                          Context; no Context changes.                                  │                                                                                        │ 
+│ ▸ mem fit                Fit every active Ground Example against its active Rules and  │ Re-evaluating active Ground Examples after its Rules or Cases change.                  │ 
+│                          save an immutable receipt.                                    │                                                                                        │ 
+│ ▸ mem forget             Review keep/edit/delete decisions for one instruction, then   │ Removing or transforming material according to a semantic criterion.                   │ 
+│                          apply the accepted batch.                                     │                                                                                        │ 
+│ ▸ mem ground             Create or continue a reviewed Goal-Rules-Memories Ground      │ Building a reviewed evaluation or behavior contract from evidence.                     │ 
+│                          workbench.                                                    │                                                                                        │v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ VIEW: ←/→ choose · ↓ list · Tab list · Q cancel

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from memcommit.help_catalog.best_for import BEST_FOR_BY_OPERATION
 from memcommit.help_catalog.model import ExecutionKind, OperationHelp
 
 
@@ -13,12 +14,19 @@ def _operation(
     effect: str,
     range: str | None = None,
 ) -> OperationHelp:
+    try:
+        best_for = BEST_FOR_BY_OPERATION[name]
+    except KeyError as error:  # pragma: no cover - import-time catalog invariant
+        raise RuntimeError(
+            f"Operation Help BEST FOR is missing for {name!r}."
+        ) from error
     return OperationHelp(
         name=name,
         summary=summary,
         flow=flow,
         execution=execution,
         effect=effect,
+        best_for=best_for,
         range=range,
     )
 
@@ -97,10 +105,11 @@ _OPERATIONS = (
     ),
     _operation(
         "compare",
-        "Compare two equal-authority Contexts without changing either one.",
+        "Compare Memories in two Contexts and report what they share, what "
+        "differs, and what appears only on one side.",
         "Context <-> Context -> comparison report",
         ExecutionKind.SEMANTIC,
-        "No Context content changes",
+        "Read-only; neither Context is treated as authoritative",
         "Each side exact or readable descendants",
     ),
     _operation(
@@ -475,6 +484,14 @@ OPERATION_HELP_BY_NAME = {operation.name: operation for operation in _OPERATIONS
 
 if len(OPERATION_HELP_BY_NAME) != len(_OPERATIONS):  # pragma: no cover
     raise RuntimeError("Operation Help names must be unique.")
+
+if set(BEST_FOR_BY_OPERATION) != set(OPERATION_HELP_BY_NAME):  # pragma: no cover
+    missing = sorted(set(OPERATION_HELP_BY_NAME) - set(BEST_FOR_BY_OPERATION))
+    stale = sorted(set(BEST_FOR_BY_OPERATION) - set(OPERATION_HELP_BY_NAME))
+    raise RuntimeError(
+        "Operation Help BEST FOR coverage mismatch: "
+        f"missing={missing!r}, stale={stale!r}."
+    )
 
 
 def operation_help(name: str) -> OperationHelp:
