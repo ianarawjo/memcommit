@@ -67,8 +67,10 @@ never advertises an automatic retry.
 `skills/memcommit-add/` is checked-in host guidance. It directs an agent to the
 registered tool, preserves exact-batch meaning, requires durable user intent,
 and forbids hidden CLI or filesystem fallback. The skill is not automatically
-installed and is not included in the Python wheel; host registration and skill
-installation remain explicit deployment responsibilities.
+installed and is not included in the Python wheel. The default in-process agent
+registry now binds this adapter and schema to a caller-owned public client;
+external host exposure and skill installation remain explicit deployment
+responsibilities.
 
 ## Verification and non-goals
 
@@ -78,8 +80,8 @@ stable error categories, no mutation retry, error redaction and bounds,
 dependency direction, and the companion skill contract. Query adapter tests
 also run after extraction of the shared envelope mechanics.
 
-This slice does not add an MCP server, network endpoint, Codex plugin, tool
-registry, process transport, authentication layer, idempotency key, dry run,
-status lookup, context creation, or skill installer. A concrete host may
-register the returned schema and invoke the adapter, but must not broaden its
-authority or reinterpret an absent receipt as success.
+This slice does not add an MCP server, network endpoint, Codex plugin, process
+transport, authentication layer, idempotency key, dry run, status lookup,
+context creation, or skill installer. The shared in-process registry can expose
+the returned schema and invoke the adapter, but a transport must not broaden
+its authority or reinterpret an absent receipt as success.

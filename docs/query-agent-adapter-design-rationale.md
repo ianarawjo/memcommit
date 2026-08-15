@@ -89,13 +89,13 @@ The adapter imports the stable public API and the already-durable
 `QueryContextRef` type. It imports no command, operation/runtime module,
 infrastructure connector, Store implementation, Typer, or prompt-toolkit code.
 The embedding host constructs the `MemCommitClient`, chooses its Store/Profile
-and provider configuration, registers the returned schema, and dispatches a
-tool payload to `QueryAgentAdapter.invoke`.
+and provider configuration, then may pass it to the default in-process registry
+that freezes this schema and dispatches a payload to `QueryAgentAdapter.invoke`.
 
-This layer is not an MCP server, network listener, subprocess protocol, or
-automatic plugin registration. Those are deployment adapters that may wrap
-this contract later. Keeping them separate allows an in-process agent host,
-MCP server, or other tool runtime to share the same schema and result behavior.
+Neither layer is an MCP server, network listener, subprocess protocol, or
+automatic plugin registration. Those are deployment adapters that may wrap the
+registry. Keeping them separate allows an in-process agent host, MCP server, or
+other tool runtime to share the same schema and result behavior.
 
 ## Skill boundary
 
@@ -106,7 +106,7 @@ publication failure as no returned answer. The skill does not run the CLI,
 connect to a provider, inspect concealed data, or reproduce the JSON schema.
 Its canonical source lives at `skills/memcommit-query/` and passes the skill
 validator. A wheel does not install it into a user's agent environment;
-plugin/skill installation and concrete tool registration remain a later
+plugin/skill installation and external host exposure remain a later
 distribution boundary.
 
 ## Verification and non-goals
