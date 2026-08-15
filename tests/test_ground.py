@@ -21,6 +21,7 @@ from memcommit.commands.ground import (
 )
 from memcommit.commands.ground_shell import GroundShellResult
 from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundError,
     GroundItem,
     GroundSession,
@@ -39,6 +40,7 @@ from memcommit.ground import (
     revise_ground_goal,
     revise_ground_requirement,
     target_requirement_status,
+    upgrade_ground_to_propositions,
 )
 from memcommit.ground_dialogue import (
     GroundDialogueError,
@@ -99,6 +101,152 @@ TASK_1_TARGET_REQUIREMENTS = tuple(
     )
     for name in TASK_1_TARGET_NAMES
 )
+
+
+def test_explicit_proposition_upgrade_preserves_v2_semantics_and_identity(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "proposition-upgrade",
+            goal="Build source-supported fixture Examples.",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = propose_ground_rule(
+        session,
+        rule="Publish only source-supported facts.",
+        rationale="This is the active generalized Rule.",
+        current_contexts=contexts,
+    )
+    rule = session.items_of_kind("RULE")[0]
+    session = propose_ground_case(
+        session,
+        rule_selector=rule.uid,
+        case=candidate.content,
+        source_context_uid=derived.uid,
+        source_memory_uid=candidate.uid,
+        target_context_names=(targets[0].name,),
+        expected="Publish the reviewed entrance closure.",
+        rationale="This is one concrete reviewed Example.",
+        current_contexts=contexts,
+    )
+    before_digest = ground_session_record_digest(session)
+
+    upgraded = upgrade_ground_to_propositions(session)
+    restored = GroundSession.from_dict(upgraded.to_dict())
+
+    assert upgraded.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+    assert upgraded.uid == session.uid
+    assert upgraded.revision == session.revision
+    assert tuple(item.uid for item in upgraded.items) == tuple(
+        item.uid for item in session.items
+    )
+    assert upgraded.frames == session.frames
+    assert upgraded.requirements == session.requirements
+    example = upgraded.items_of_kind("CASE")[0]
+    assert example.content == candidate.content
+    assert example.expected == "Publish the reviewed entrance closure."
+    assert example.proposition == (
+        f"{candidate.content} -> Publish the reviewed entrance closure."
+    )
+    assert restored == upgraded
+    assert ground_session_record_digest(upgraded) != before_digest
+
+
+def test_proposition_upgrade_is_explicit_and_rejects_empty_example_proposition(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session("invalid-proposition-upgrade"),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = propose_ground_rule(
+        session,
+        rule="Publish supported facts.",
+        rationale="One Rule.",
+        current_contexts=contexts,
+    )
+    session = propose_ground_case(
+        session,
+        rule_selector=session.items_of_kind("RULE")[0].uid,
+        case=candidate.content,
+        source_context_uid=derived.uid,
+        source_memory_uid=candidate.uid,
+        target_context_names=(targets[0].name,),
+        expected="Publish one fact.",
+        rationale="One Example.",
+        current_contexts=contexts,
+    )
+    upgraded = upgrade_ground_to_propositions(session)
+    forged = upgraded.to_dict()
+    forged["items"][1]["proposition"] = ""
+
+    with pytest.raises(GroundError, match="Ground Memory shape"):
+        GroundSession.from_dict(forged)
+    assert upgrade_ground_to_propositions(upgraded) == upgraded
+
+
+def test_cli_explicitly_upgrades_one_saved_ground_to_propositions(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    raw, derived, targets, candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session("cli-proposition-upgrade"),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = propose_ground_rule(
+        session,
+        rule="Publish supported facts.",
+        rationale="One active Rule.",
+        current_contexts=contexts,
+    )
+    session = propose_ground_case(
+        session,
+        rule_selector=session.items_of_kind("RULE")[0].uid,
+        case=candidate.content,
+        source_context_uid=derived.uid,
+        source_memory_uid=candidate.uid,
+        target_context_names=(targets[0].name,),
+        expected="Publish one fact.",
+        rationale="One concrete Example.",
+        current_contexts=contexts,
+    )
+    store.save_ground_session(session)
+
+    result = runner.invoke(
+        app,
+        ["ground", session.contract_name, "--upgrade-propositions"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "upgraded to proposition schema" in result.output
+    loaded = store.load_ground_session(session.contract_name)
+    assert loaded is not None
+    assert loaded.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+    assert loaded.items_of_kind("CASE")[0].proposition.endswith(
+        "-> Publish one fact."
+    )
 
 assert TASK_1_UPSTREAM_NAME not in TASK_1_TARGET_NAMES
 
@@ -3235,7 +3383,7 @@ def test_grounding_case_cannot_reference_raw_evidence(
 def test_invalid_in_memory_schema_version_cannot_be_silently_normalized():
     session = create_ground_session("invalid-version")
 
-    for version in (True, 0, 3):
+    for version in (True, 0, 4):
         with pytest.raises(GroundError, match="schema version"):
             replace(session, schema_version=version).to_dict()
 

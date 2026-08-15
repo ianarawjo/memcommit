@@ -20,6 +20,7 @@ from memcommit.context import Context, Memory
 
 
 GROUND_SCHEMA_VERSION = 2
+GROUND_PROPOSITION_SCHEMA_VERSION = 3
 GROUND_LEGACY_SCHEMA_VERSION = 1
 GROUND_TEXT_LIMIT = 20_000
 GROUND_GOAL_WORD_LIMIT = 40
@@ -100,6 +101,15 @@ DEFAULT_COMPLETION_CRITERION = LEGACY_COMPLETION_MARKER
 
 class GroundError(ValueError):
     """Invalid or unsupported common-grounding state."""
+
+
+def is_bound_ground_schema(schema_version: int) -> bool:
+    """Return whether a Ground has explicit immutable Context frames."""
+
+    return schema_version in {
+        GROUND_SCHEMA_VERSION,
+        GROUND_PROPOSITION_SCHEMA_VERSION,
+    }
 
 
 def validate_ground_contract_name(value: object) -> str:
@@ -549,6 +559,7 @@ class GroundItem:
     case_role: str = ""
     disposition: str = ""
     rule_provenance: str = ""
+    proposition: str = ""
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -569,6 +580,11 @@ class GroundItem:
             "disposition": self.disposition,
             "rule_provenance": self.rule_provenance,
         }
+
+    def to_v3_dict(self) -> dict[str, object]:
+        """Serialize the proposition-authoritative Ground item shape."""
+
+        return {**self.to_dict(), "proposition": self.proposition}
 
     def to_v1_dict(self) -> dict[str, object]:
         """Serialize the exact legacy empty-scaffold item shape."""
@@ -593,24 +609,29 @@ class GroundItem:
     ) -> "GroundItem":
         if schema_version == GROUND_LEGACY_SCHEMA_VERSION:
             return cls._from_v1_dict(value)
+        keys = {
+            "uid",
+            "kind",
+            "content",
+            "expected",
+            "rationale",
+            "status",
+            "origin",
+            "iteration",
+            "related_uids",
+            "source_refs",
+            "target_context_uids",
+            "case_role",
+            "disposition",
+            "rule_provenance",
+        }
+        if schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+            keys.add("proposition")
+        elif schema_version != GROUND_SCHEMA_VERSION:
+            raise GroundError("Unsupported grounding item schema version.")
         data = _exact_dict(
             value,
-            {
-                "uid",
-                "kind",
-                "content",
-                "expected",
-                "rationale",
-                "status",
-                "origin",
-                "iteration",
-                "related_uids",
-                "source_refs",
-                "target_context_uids",
-                "case_role",
-                "disposition",
-                "rule_provenance",
-            },
+            keys,
             "grounding item",
         )
         kind = _string(data["kind"], "grounding item kind", limit=20)
@@ -689,8 +710,17 @@ class GroundItem:
             case_role=case_role,
             disposition=disposition,
             rule_provenance=rule_provenance,
+            proposition=(
+                _string(
+                    data["proposition"],
+                    "grounding Example proposition",
+                    empty=True,
+                )
+                if schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                else ""
+            ),
         )
-        parsed._validate_kind_shape()
+        parsed._validate_kind_shape(schema_version=schema_version)
         return parsed
 
     @classmethod
@@ -746,7 +776,7 @@ class GroundItem:
             related_uids=tuple(related_uids),
         )
 
-    def _validate_kind_shape(self) -> None:
+    def _validate_kind_shape(self, *, schema_version: int) -> None:
         allowed_statuses = {
             "RULE": {"PROPOSED", "ACCEPTED", "REJECTED", "DEFERRED"},
             "CASE": {"PROPOSED", "ACCEPTED", "REJECTED", "DEFERRED"},
@@ -761,21 +791,27 @@ class GroundItem:
                 or self.case_role
                 or self.disposition
                 or self.expected
+                or self.proposition
                 or self.rule_provenance not in _RULE_PROVENANCE
             ):
                 raise GroundError("Invalid grounding rule shape.")
         elif self.kind == "CASE":
-            if (
-                len(self.source_refs) != 1
-                or not self.target_context_uids
-                or self.case_role not in _CASE_ROLES
+            common_invalid = (
+                self.case_role not in _CASE_ROLES
                 or self.disposition not in _DISPOSITIONS
                 or self.rule_provenance
-                or (
-                    self.disposition == "INCLUDE"
-                    and not self.expected.strip()
-                )
-            ):
+            )
+            legacy_invalid = schema_version == GROUND_SCHEMA_VERSION and (
+                len(self.source_refs) != 1
+                or not self.target_context_uids
+                or self.proposition
+                or (self.disposition == "INCLUDE" and not self.expected.strip())
+            )
+            proposition_invalid = (
+                schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                and not self.proposition.strip()
+            )
+            if common_invalid or legacy_invalid or proposition_invalid:
                 raise GroundError("Invalid Ground Memory shape.")
         elif self.kind == "DECISION":
             if (
@@ -788,6 +824,7 @@ class GroundItem:
                 or self.case_role
                 or self.disposition
                 or self.rule_provenance
+                or self.proposition
             ):
                 raise GroundError("Invalid grounding decision shape.")
         elif (
@@ -796,6 +833,7 @@ class GroundItem:
             or self.case_role
             or self.disposition
             or self.rule_provenance
+            or self.proposition
         ):
             raise GroundError("Invalid grounding issue shape.")
 
@@ -826,6 +864,7 @@ class GroundSession:
         if type(self.schema_version) is not int or self.schema_version not in {
             GROUND_LEGACY_SCHEMA_VERSION,
             GROUND_SCHEMA_VERSION,
+            GROUND_PROPOSITION_SCHEMA_VERSION,
         }:
             raise GroundError("Unsupported grounding session schema version.")
         if self.schema_version == GROUND_LEGACY_SCHEMA_VERSION:
@@ -844,7 +883,7 @@ class GroundSession:
                 ],
             }
         return {
-            "schema_version": GROUND_SCHEMA_VERSION,
+            "schema_version": self.schema_version,
             "uid": self.uid,
             "contract_name": self.contract_name,
             "goal": self.goal,
@@ -852,7 +891,14 @@ class GroundSession:
             "scope": list(self.scope),
             "status": self.status,
             "revision": self.revision,
-            "items": [item.to_dict() for item in self.items],
+            "items": [
+                (
+                    item.to_v3_dict()
+                    if self.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                    else item.to_dict()
+                )
+                for item in self.items
+            ],
             "brief": self.brief.to_dict() if self.brief is not None else None,
             "frames": [frame.to_dict() for frame in self.frames],
             "requirements": [
@@ -874,7 +920,10 @@ class GroundSession:
             raise GroundError("Unsupported grounding session schema version.")
         if schema_version == GROUND_LEGACY_SCHEMA_VERSION:
             return cls._from_v1_dict(value)
-        if schema_version != GROUND_SCHEMA_VERSION:
+        if schema_version not in {
+            GROUND_SCHEMA_VERSION,
+            GROUND_PROPOSITION_SCHEMA_VERSION,
+        }:
             raise GroundError("Unsupported grounding session schema version.")
 
         data = _exact_dict(
@@ -927,7 +976,7 @@ class GroundSession:
         parsed_items = tuple(
             GroundItem.from_dict(
                 item,
-                schema_version=GROUND_SCHEMA_VERSION,
+                schema_version=schema_version,
             )
             for item in items
         )
@@ -969,15 +1018,19 @@ class GroundSession:
                     "Grounding Rules may relate only to Ground Memories."
                 )
             if item.kind == "CASE":
-                if (
-                    len(item.related_uids) != 1
-                    or item.related_uids[0] not in item_by_uid
-                    or item_by_uid[item.related_uids[0]].kind != "RULE"
-                    or item.uid
-                    not in item_by_uid[item.related_uids[0]].related_uids
-                ):
+                valid_rule_links = all(
+                    related_uid in item_by_uid
+                    and item_by_uid[related_uid].kind == "RULE"
+                    and item.uid in item_by_uid[related_uid].related_uids
+                    for related_uid in item.related_uids
+                )
+                required_legacy_link = (
+                    schema_version != GROUND_SCHEMA_VERSION
+                    or len(item.related_uids) == 1
+                )
+                if not valid_rule_links or not required_legacy_link:
                     raise GroundError(
-                        "Each Ground Memory must link back to one Rule."
+                        "Ground Memory Rule links must be valid and reciprocal."
                     )
             if item.kind == "RULE" and any(
                 related_uid not in item_by_uid
@@ -1080,11 +1133,11 @@ class GroundSession:
             )
         if status != "OPEN":
             raise GroundError(
-                "Grounding schema version 2 supports only an OPEN workbench."
+                "Bound Ground schemas support only an OPEN workbench."
             )
         if parsed_references != METHOD_REFERENCES:
             raise GroundError(
-                "Grounding schema version 2 has invalid method references."
+                "Bound Ground schema has invalid method references."
             )
         brief = GroundBrief.from_dict(data["brief"])
         cursor_position = _integer(
@@ -1123,7 +1176,7 @@ class GroundSession:
             revision=revision,
             items=parsed_items,
             references=parsed_references,
-            schema_version=GROUND_SCHEMA_VERSION,
+            schema_version=schema_version,
             brief=brief,
             frames=parsed_frames,
             requirements=parsed_requirements,
@@ -1375,12 +1428,48 @@ def _contexts_by_uid(
     return result
 
 
+def upgrade_ground_to_propositions(session: GroundSession) -> GroundSession:
+    """Explicitly migrate one bound v2 Ground to proposition-authoritative v3.
+
+    The migration preserves every durable identity, semantic iteration, link,
+    source reference, target, and exact-output projection.  It changes the
+    record digest, so all earlier Fit receipts become stale even though no
+    semantic revision is invented merely for a storage-shape transition.
+    """
+
+    if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+        return GroundSession.from_dict(session.to_dict())
+    if session.schema_version != GROUND_SCHEMA_VERSION:
+        raise GroundError("Only a bound version-2 Ground can be upgraded.")
+    migrated_items = tuple(
+        (
+            replace(
+                item,
+                proposition=(
+                    f"{item.content} -> {item.expected}"
+                    if item.expected
+                    else item.content
+                ),
+            )
+            if item.kind == "CASE"
+            else item
+        )
+        for item in session.items
+    )
+    upgraded = replace(
+        session,
+        schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+        items=migrated_items,
+    )
+    return GroundSession.from_dict(upgraded.to_dict())
+
+
 def stale_ground_frames(
     session: GroundSession,
     contexts: Iterable[Context],
 ) -> tuple[str, ...]:
     """Return bound frame names that no longer match their exact Context."""
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         return ()
     current = _contexts_by_uid(contexts)
     stale: set[str] = set()
@@ -1411,7 +1500,11 @@ def stale_ground_frames(
             if (
                 memory is None
                 or _sha256_text(memory.content) != source_ref.content_digest
-                or (item.kind == "CASE" and item.content != memory.content)
+                or (
+                    session.schema_version == GROUND_SCHEMA_VERSION
+                    and item.kind == "CASE"
+                    and item.content != memory.content
+                )
             ):
                 stale.add(
                     frame_name_by_uid.get(
@@ -1432,7 +1525,7 @@ def ground_matches_workbench(
 ) -> bool:
     """Return whether all bound frames still match their recorded bytes."""
     return (
-        session.schema_version == GROUND_SCHEMA_VERSION
+        is_bound_ground_schema(session.schema_version)
         and not stale_ground_frames(session, contexts)
     )
 

@@ -15,7 +15,7 @@ from memcommit.conformance import (
     check_context_conformance,
 )
 from memcommit.context import Context, Memory
-from memcommit.ground import GROUND_SCHEMA_VERSION, GroundSession
+from memcommit.ground import GroundSession, is_bound_ground_schema
 from memcommit.store import (
     MemoryStore,
     context_record_digest,
@@ -91,7 +91,7 @@ def freeze_context_conformance(
 def freeze_ground_conformance(session: GroundSession) -> FrozenGroundConformance:
     """Freeze executable Rule/Ground-Memory pairs from one saved Ground."""
 
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         raise ConformanceError("Case Conformance requires a bound Ground workbench.")
     active_rules = tuple(
         item

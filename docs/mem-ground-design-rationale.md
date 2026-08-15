@@ -1073,9 +1073,25 @@ A concrete proposition may permit one outcome, several outcomes, or describe
 an observation without any output at all. Multiple acceptable outcomes can be
 written directly in the proposition, such as `Apple Inc. -> AAPL or APLE`.
 That is not permission for a model to widen the proposition after seeing a
-failure: revising the proposition remains a reviewed Ground decision. The
-current schema's required `content` plus singleton `expected` output cannot
-yet represent this full proposition model honestly.
+failure: revising the proposition remains a reviewed Ground decision.
+
+Ground schema version 3 establishes `proposition` as the authoritative Example
+statement. Versions 1 and 2 remain strictly readable and writable as their
+original shapes; loading never silently upgrades them. The explicit
+`mem ground NAME --upgrade-propositions` action accepts only a bound version-2
+Ground. It preserves Ground and item UIDs, semantic revision, frames,
+requirements, links, source references, target placement, and the legacy exact
+input/output projection. Each migrated Example receives the visible one-line
+`content -> expected` proposition (or `content` when no legacy output exists).
+
+The migration changes the complete Ground record digest but does not invent a
+semantic revision or approval decision for a storage-shape transition. That
+digest change deliberately makes prior Fit receipts stale. Version 3 requires
+every Example to have a nonblank proposition and permits zero or multiple
+reciprocal Rule links at the schema level; version 2 continues to require its
+single reciprocal Rule, one source reference, target placement, and INCLUDE
+expected output. Creating source-free observations and pre-Rule Examples is a
+separate authoring capability, not an implicit consequence of migration.
 
 Follow-ups must be consequential. A generic request for more detail is not
 enough; the interface should say which judgment or proposed action cannot be

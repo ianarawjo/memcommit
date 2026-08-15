@@ -13,11 +13,11 @@ from typing import Callable, Literal, Protocol, TypeAlias, cast
 
 from memcommit.ground import (
     GROUND_GOAL_WORD_LIMIT,
-    GROUND_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
     GroundItem,
     GroundSession,
+    is_bound_ground_schema,
     validate_ground_goal,
 )
 from memcommit.query_provider import QueryProviderError
@@ -271,6 +271,7 @@ def ground_turn_output_schema() -> dict[str, object]:
                 "enum": [
                     "",
                     "USER_STATED",
+                    "DISTILLED",
                     "DISTILLED_FROM_GOAL",
                     "INDUCED_FROM_CASES",
                 ],
@@ -313,6 +314,7 @@ def ground_turn_output_schema() -> dict[str, object]:
                             "enum": [
                                 "",
                                 "USER_STATED",
+                                "DISTILLED",
                                 "DISTILLED_FROM_GOAL",
                                 "INDUCED_FROM_CASES",
                             ],
@@ -408,7 +410,7 @@ def ground_turn_aliases(
                 ],
             }
         )
-    bound = session.schema_version == GROUND_SCHEMA_VERSION
+    bound = is_bound_ground_schema(session.schema_version)
     target_contexts = [
         frame.context_name
         for frame in session.frames
@@ -611,6 +613,7 @@ def _drafts(
         if kind == "RULE":
             if provenance not in {
                 "USER_STATED",
+                "DISTILLED",
                 "DISTILLED_FROM_GOAL",
                 "INDUCED_FROM_CASES",
             }:
@@ -803,6 +806,7 @@ def _parse_turn(
         provenance = value["rule_provenance"]
         if provenance not in {
             "USER_STATED",
+            "DISTILLED",
             "DISTILLED_FROM_GOAL",
             "INDUCED_FROM_CASES",
         }:
@@ -959,6 +963,10 @@ def _build_prompt(
         f"{GROUND_GOAL_WORD_LIMIT} words and a reason. "
         "PROPOSE_RULE requires Rule content, rationale, provenance, and one "
         "or more listed target Context names. "
+        "Use DISTILLED for a model-derived Rule whether Goal, Context, or "
+        "Ground Memories support it; USER_STATED is only for a Rule stated "
+        "by the user. DISTILLED_FROM_GOAL and INDUCED_FROM_CASES are legacy "
+        "input tokens and must not be emitted for a new Rule. "
         "PROPOSE_CASE proposes one Ground Memory and requires a listed Rule "
         "id, a locally supplied source alias from the visible turn, listed "
         "target names, rationale, role, disposition, and expected output for "
@@ -1015,6 +1023,6 @@ def interpret_ground_turn(
         raise GroundTurnError("Ground turn provider failed.") from error
     return _parse_turn(
         raw,
-        bound=session.schema_version == GROUND_SCHEMA_VERSION,
+        bound=is_bound_ground_schema(session.schema_version),
         user_text=source_text,
     )

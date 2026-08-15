@@ -76,9 +76,9 @@ from memcommit.commands.tui_table import (
     render_tui_table,
 )
 from memcommit.ground import (
-    GROUND_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
+    is_bound_ground_schema,
 )
 from memcommit.fit import FitJudgment, FitReport
 from memcommit.fit_store import GroundFitReceipt
@@ -252,7 +252,7 @@ def render_named_ground_top_panel(session: GroundSession) -> str:
     """Render a compact fixed Goal–Rules–Memories state panel."""
     state = (
         "BOUND"
-        if session.schema_version == GROUND_SCHEMA_VERSION
+        if is_bound_ground_schema(session.schema_version)
         else "UNBOUND"
     )
     rules = _aliased_items(session, "RULE")
@@ -301,7 +301,7 @@ def render_named_ground_header(session: GroundSession) -> str:
     """Render the one-line identity/status row above the five work areas."""
     state = (
         "BOUND"
-        if session.schema_version == GROUND_SCHEMA_VERSION
+        if is_bound_ground_schema(session.schema_version)
         else "UNBOUND"
     )
     return (
@@ -322,7 +322,7 @@ def render_named_ground_contexts_pane(
     new_context_hint: str | None = None,
 ) -> str:
     """Render saved frame metadata without reading live Context contents."""
-    if session.schema_version != GROUND_SCHEMA_VERSION or not session.frames:
+    if not is_bound_ground_schema(session.schema_version) or not session.frames:
         if context_hints or new_context_hint:
             hint_lines = [
                 *(
@@ -848,7 +848,7 @@ def render_named_ground_proposal_blocks(
 
 
 def _initial_question(session: GroundSession) -> str:
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         return "\n".join(
             [
                 "OPEN QUESTION · BINDING",
@@ -1902,7 +1902,7 @@ def run_named_ground_shell(
         inline_selector["value"] = selector
         inline_original["value"] = original
         inline_direct_locked["value"] = (
-            current["value"].schema_version != GROUND_SCHEMA_VERSION
+            not is_bound_ground_schema(current["value"].schema_version)
         )
         direct_edit_area.text = original
         direct_edit_area.buffer.cursor_position = len(original)

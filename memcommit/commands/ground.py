@@ -36,7 +36,6 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.context import Context, Memory
 from memcommit.ground import (
-    GROUND_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
     GroundFrame,
@@ -56,6 +55,8 @@ from memcommit.ground import (
     select_ground_candidate,
     stale_ground_frames,
     target_requirement_status,
+    is_bound_ground_schema,
+    upgrade_ground_to_propositions,
     validate_ground_contract_name,
     validate_ground_goal,
 )
@@ -611,7 +612,7 @@ def _ground_action_proposal(
 ) -> GroundCommandProposal:
     store = MemoryStore(create=False)
     kind = action.kind
-    bound = session.schema_version == GROUND_SCHEMA_VERSION
+    bound = is_bound_ground_schema(session.schema_version)
     if (kind == "BIND") == bound:
         raise GroundError(
             "The proposed action does not match the current Ground state."
@@ -769,7 +770,7 @@ def _ground_rule_draft_proposal(
     """Reduce one reviewed unsaved Rule draft through the normal save path."""
     if draft.kind != "RULE" or draft.status != "READY":
         raise GroundError("Only a READY Rule draft can be proposed.")
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         raise GroundError(
             "Bind this Ground to explicit Context frames before proposing "
             "a Rule."
@@ -920,7 +921,7 @@ def _ground_direct_edit_proposal(
     explanation = comment.strip()
     if len(explanation) > GROUND_DIALOGUE_USER_TEXT_LIMIT:
         raise GroundError("A Ground agent comment is too long.")
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         raise GroundError(
             "This saved Ground is still an empty unbound scaffold. Edit its "
             "Goal before creation, or bind it before revising saved items."
@@ -986,7 +987,7 @@ def _redact_ground_source_selectors(
     store: MemoryStore,
 ) -> tuple[str, dict[str, str]]:
     """Replace locally resolvable candidate UID selectors before inference."""
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         return text, {}
     candidate_frame = next(
         frame
@@ -1464,7 +1465,7 @@ def render_ground_snapshot(
     contexts: Iterable[Context] | None = None,
 ) -> str:
     """Render a stable, control-character-safe grounding frame."""
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         lines = _render_unbound_snapshot(session).splitlines()
         lines.extend(["", "METHOD READINGS"])
         for reference in session.references:
@@ -1675,7 +1676,7 @@ def render_ground_focus(
     contexts: Iterable[Context],
 ) -> str:
     """Render one compact, read-only Goal–Rules–Memories target frame."""
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         raise GroundError(
             "Bind the named Ground before focusing one of its targets."
         )
@@ -2138,6 +2139,16 @@ def cmd(
             help="Why the Goal or target requirement should change",
         ),
     ] = None,
+    upgrade_propositions: Annotated[
+        bool,
+        typer.Option(
+            "--upgrade-propositions",
+            help=(
+                "Explicitly migrate a bound version-2 Ground to the "
+                "proposition-authoritative version-3 schema"
+            ),
+        ),
+    ] = False,
     snapshot: Annotated[
         bool,
         typer.Option(
@@ -2215,6 +2226,7 @@ def cmd(
             proposal_requested,
             decision_requested,
             requirement_requested,
+            upgrade_propositions,
         )
     )
 
@@ -2426,7 +2438,7 @@ def cmd(
                 value,
                 replace=replace,
                 verify_bound_frames=(
-                    value.schema_version == GROUND_SCHEMA_VERSION
+                    is_bound_ground_schema(value.schema_version)
                 ),
                 **expected_kwargs,
             )
@@ -2475,7 +2487,7 @@ def cmd(
                 scope=tuple(scope or ()),
             )
         if focus_target is not None:
-            if session.schema_version != GROUND_SCHEMA_VERSION:
+            if not is_bound_ground_schema(session.schema_version):
                 raise GroundError(
                     "--focus-target requires an existing bound Ground or "
                     "an explicit binding in the same command."
@@ -2579,7 +2591,7 @@ def cmd(
             action_label = "selected"
         elif proposal_requested:
             contexts = _load_bound_contexts(store, session)
-            if session.schema_version != GROUND_SCHEMA_VERSION:
+            if not is_bound_ground_schema(session.schema_version):
                 raise GroundError(
                     "Bind the grounding session before proposing Rules or "
                     "Ground Memories."
@@ -2755,6 +2767,10 @@ def cmd(
                 )
             save_ground(session)
             action_label = "revised Ground"
+        elif upgrade_propositions:
+            session = upgrade_ground_to_propositions(session)
+            save_ground(session)
+            action_label = "upgraded to proposition schema"
         elif created:
             save_ground(
                 session,
@@ -2819,7 +2835,7 @@ def cmd(
                     session,
                     tolerate_missing=True,
                 )
-                if session.schema_version == GROUND_SCHEMA_VERSION
+                if is_bound_ground_schema(session.schema_version)
                 else None
             )
         except (FileNotFoundError, GroundError, OSError, TypeError, ValueError) as error:

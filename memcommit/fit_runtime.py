@@ -13,7 +13,7 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.ground import GROUND_SCHEMA_VERSION, GroundSession
+from memcommit.ground import GroundSession, is_bound_ground_schema
 from memcommit.fit_store import FitStore
 from memcommit.store import MemoryStore, ground_session_record_digest
 
@@ -42,7 +42,7 @@ def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
     to the provider.
     """
 
-    if session.schema_version != GROUND_SCHEMA_VERSION:
+    if not is_bound_ground_schema(session.schema_version):
         raise FitError("Fit currently requires a bound Ground workbench.")
     active_rules = tuple(
         item
@@ -76,7 +76,7 @@ def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
             FitExample(
                 uid=item.uid,
                 alias=f"e{index}",
-                statement=f"{item.content} -> {item.expected}",
+                statement=item.proposition or f"{item.content} -> {item.expected}",
                 projection="EXACT_OUTPUT",
                 # Exact output can depend on composed Rules beyond the Rule
                 # that originally motivated this Example.
