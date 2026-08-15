@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FIT · ticker-fit · REVISION 2                                                                                                                                                   ^┃
+┃ STATUS · READ-ONLY · STALE                                                                                                                                                       ┃
+┃ RULES 1 · EXAMPLES 1                                                                                                                                                             ┃
+┃ PROVIDER · UNRECORDED                                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ The active Rule reproduces the reviewed Example.                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ EXAMPLE FIT                                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ e1 · FIT · RULES r1                                                                                                                                                              ┃
+┃ Axiom AI Technologies -> AAT                                                                                                                                                     ┃
+┃ WHY · The reviewed initials Rule produces AAT.                                                                                                                                   ┃
+┃ OBSERVED · AAT                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ TOTALS · FIT 1 · CONTRADICTS 0 · UNDERDETERMINED 0 · NOT_APPLICABLE 0                                                                                                            ┃
+┃ RECEIPT · 6e74ca06-2fb4-4c83-9c97-99fe933548e9 · 413ccd4532f88df40bca44626bb08774bbae562018e3b0a55408f70312605a61                                                                ┃
+┃ GROUND DIGEST · ffc1b2059f389aba6e2c143125ee0148d07614a9be8c4127c792e727bdf694b9                                                                                                 ┃
+┃ STALE · Ground changed after this immutable Fit receipt.                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FIT · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only

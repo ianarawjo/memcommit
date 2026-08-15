@@ -74,3 +74,19 @@ terminal, stable plain rendering, automatic and forced console routing,
 current and stale receipt reopening, typed Viewer projection, focused and
 whole-document copy, duplicate embedded runs, close during a running turn, and
 ordered 180x52 color PTY evidence.
+
+## Verification evidence
+
+Completed 2026-08-15:
+
+- application/runtime and CLI tests preserve new-run and receipt-reopen
+  behavior, stable non-TTY output, `--plain`, and pre-storage `--tui` failure;
+- typed adapter tests cover section identities, current/stale state, status
+  totals, focused Example copy, complete-report copy, and plain-text parity;
+- shared Viewer interaction tests exercise lowercase `y` and uppercase `Y` in
+  a real prompt-toolkit pipe;
+- named-Ground tests prove one executor call during repeated `F` and require a
+  requested close to wait for the receipt callback; and
+- `docs/screenshots/mem-fit-shared-viewer-20260815` retains the ordered
+  `180 × 52` true-color PTY stream, native PNGs, plain canvases, exact inputs,
+  and read-only verification.

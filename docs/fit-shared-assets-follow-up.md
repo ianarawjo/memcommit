@@ -49,3 +49,17 @@ requires a separately characterized migration. Conformance, Audit, Distill,
 Compare, and other compatible reports remain later `TUI-05` candidates; Fit's
 adapter is evidence for the shared mechanics, not a template that determines
 their semantic documents.
+
+## Verification
+
+The selected slice is implemented and verified by focused Fit, semantic
+Viewer, Summarize parity, and named-Ground tests. The ordered true-color PTY
+record is under `docs/screenshots/mem-fit-shared-viewer-20260815` and covers
+provider progress, current and stale standalone reports, focused `y`, complete
+`Y`, embedded Ground execution, duplicate-run exclusion, deferred close, one
+receipt, and unchanged Ground content.
+
+The repository-wide matrix remains `MIGRATING`, because this proves one Fit
+vertical slice rather than completing Conformance, Audit, Distill, Compare, or
+the remaining command-hosted viewers. The legacy Ground table is still a named
+follow-up rather than hidden unfinished work in this slice.
