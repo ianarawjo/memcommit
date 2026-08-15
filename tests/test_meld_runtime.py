@@ -48,6 +48,22 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
     ) == ()
 
 
+def test_meld_command_contains_no_target_or_session_publication_primitive():
+    command_path = Path(meld_runtime.__file__).with_name("commands") / "meld.py"
+    source = command_path.read_text(encoding="utf-8")
+
+    assert all(
+        primitive not in source
+        for primitive in (
+            "save_meld_session(",
+            "save_meld_target(",
+            "create_meld_target_with_session(",
+            "_save_locked(",
+            "_write_json_atomic(",
+        )
+    )
+
+
 def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
     completion = "saved complete Meld response"
     branch = SimpleNamespace(completion=completion)

@@ -36,6 +36,12 @@ needed, but that frame is never persisted; the runtime repeats the cache and
 authority decision before publication. It must not become the semantic or
 persistence authority.
 
+The former command-local Apply transaction, recovery, checkpoint-record, and
+session-publication implementations were removed after their runtime adapters
+were verified. Provenance tests now exercise the runtime-owned checkpoint
+projection directly. A source-level boundary test prevents target or session
+publication primitives from returning to `commands.meld`.
+
 ## Cache invariants
 
 A reusable Meld resolution branch is profile-local, hidden, immutable, and

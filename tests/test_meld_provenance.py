@@ -6,7 +6,7 @@ from collections.abc import Callable
 import pytest
 
 import memcommit.ops as ops
-from memcommit.commands.meld import _meld_checkpoint_record
+from memcommit.meld_runtime import meld_checkpoint_record
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.meld import (
     MeldChangeSet,
@@ -133,7 +133,7 @@ def _applied_directional_meld(
         turns=session.turns,
         proposals=proposals,
     )
-    record = _meld_checkpoint_record(
+    record = meld_checkpoint_record(
         session,
         change_set,
         owner=(baseline.uid, baseline.name),
@@ -277,7 +277,7 @@ def test_directional_zero_change_receipt_accepts_an_unchanged_post_image(
         turns=session.turns,
         proposals=(),
     )
-    record = _meld_checkpoint_record(
+    record = meld_checkpoint_record(
         session,
         change_set,
         owner=(baseline.uid, baseline.name),
