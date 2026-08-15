@@ -53,5 +53,6 @@ The focused distribution check must prove all of the following:
 4. The official MCP client can initialize installed `mem-mcp`, discover Query
    and Add, perform one Add, and verify its single durable checkpoint.
 
-The separate Profile-at-import coupling remains outside this packaging-only
-change and is addressed independently.
+The ordinary archive/wheel/install/MCP check passed without pre-build cleanup.
+The separate Profile-at-import coupling was then addressed independently in
+`store-root-resolution-design-rationale.md`.

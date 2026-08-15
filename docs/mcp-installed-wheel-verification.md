@@ -1,6 +1,6 @@
 # MCP installed-wheel verification
 
-Last verified: 2026-08-15 against source commit `b8cae0bd`.
+Last verified: 2026-08-15 against source commit `7aad0230`.
 
 ## Gate and environment
 
@@ -14,8 +14,8 @@ The successful run used:
 - MemCommit wheel version `0.0.1`;
 - CPython `3.13.5`;
 - official MCP Python SDK `2.0.0`;
-- a new virtual environment, working directory, HOME, and Store under `/tmp`;
-- a wheel built from `git archive b8cae0bd`; and
+- a new virtual environment, working directory, and Store under `/tmp`;
+- a wheel built normally from an unmodified `git archive 7aad0230`; and
 - `tests/installed/mcp_stdio_smoke.py` as the external official client.
 
 The smoke script rejects any MemCommit import whose path is under the source
@@ -44,41 +44,44 @@ it was intentionally excluded because it would require an external semantic
 provider. Query execution remains covered at the public client, agent adapter,
 registry, projection, and in-memory MCP server layers.
 
-## Distribution findings
+The same installed wheel passed twice: once with the person's normal HOME and
+once with a deliberately invalid HOME Profile registry containing unsupported
+`schema_version: 999`. Because the server was started with `--root`, neither
+the client fixture nor the server consulted that unrelated Profile state.
+
+## Resolved distribution findings
 
 Two existing packaging boundaries appeared before the successful run:
 
-1. A wheel built without clearing the archive's tracked `build/` directory
+1. A wheel built with the former tracked `build/` directory
    copied stale `build/lib/memcommit/context.py` instead of the current source
    module. The installed file's SHA-1 matched the stale copy and lacked
-   `GrantedContextLink`, so server import failed. The successful verification
-   moved that derived tree aside only in the temporary build directory. The
-   repository copy was not changed.
+   `GrantedContextLink`, so server import failed. Commit `ee3fcdc7` stopped
+   tracking 164 derived paths and ignored root build products. The final check
+   needed no special removal or relocation before ordinary `uv build`.
 2. With the person's normal HOME, importing the installed package read a newer
    Profile registry before the explicit `--root` was processed and failed its
-   schema-version check. The successful verification used a fresh HOME. This
-   shows that explicit-root startup is not yet fully isolated from process-global
-   Profile configuration at import time.
+   schema-version check. Commit `7aad0230` made import path values lazy and
+   froze Store roots at construction. The final invalid-registry run proves an
+   explicit root now bypasses HOME Profile parsing entirely.
 
-These are not MCP protocol failures, and neither was hidden or repaired inside
-the transport adapter. They remain blockers for calling an ordinary unclean
-repository build an authoritative wheel. The packaging work should remove
-tracked derived build output from artifact selection and defer Profile loading
-until a Profile-backed Store is actually selected.
+These were not MCP protocol failures, and neither was hidden inside the
+transport adapter. They were repaired at their owning packaging and Store
+initialization boundaries. This check establishes the installed MCP slice; it
+does not by itself certify every CLI/TUI operation or native Windows behavior.
 
 ## Reproduction contract
 
-Build from a clean source tree that does not contain stale `build/` output,
-install the local wheel with its extra, and invoke the smoke client from outside
-the checkout:
+Build the committed source tree normally, install the local wheel with its
+extra, and invoke the smoke client from outside the checkout:
 
 ```text
 uv build --wheel --out-dir ARTIFACTS CLEAN_SOURCE
 uv venv VENV
 uv pip install --python VENV/bin/python "ARTIFACT.whl[mcp]"
-HOME=ISOLATED_HOME PATH="VENV/bin:$PATH" VENV/bin/python \
+PATH="VENV/bin:$PATH" VENV/bin/python \
   tests/installed/mcp_stdio_smoke.py \
-  --store ISOLATED_STORE \
+  --store EXPLICIT_STORE \
   --workdir OUTSIDE_CHECKOUT \
   --forbid-origin SOURCE_CHECKOUT
 ```
