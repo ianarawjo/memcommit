@@ -652,7 +652,7 @@ def test_bare_query_routes_to_the_workbench_only_in_a_terminal(
     monkeypatch,
 ):
     observed: list[tuple[object, ...]] = []
-    monkeypatch.setattr(query_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(query_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         query_command,
         "_open_query_workbench",
@@ -682,7 +682,7 @@ def test_bare_query_outside_a_terminal_keeps_an_explicit_input_error(
     monkeypatch,
     capsys,
 ):
-    monkeypatch.setattr(query_command, "_interactive_terminal", lambda: False)
+    monkeypatch.setattr(query_command, "is_interactive_terminal", lambda: False)
 
     with pytest.raises(typer.Exit):
         query_command.cmd(

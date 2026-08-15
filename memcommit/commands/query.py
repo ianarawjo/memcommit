@@ -1,8 +1,6 @@
 """Browse or ask a question of an opaque authority-granted query view."""
 
-import re
-import sys
-from typing import Annotated, Optional, Sequence
+from typing import Annotated, Optional
 
 import typer
 
@@ -36,11 +34,17 @@ from memcommit.commands.readable_context_catalog import (
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
-    safe_terminal_text,
+)
+from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.cli.query import (
+    render_granted_query_response,
+    render_ordinary_query_response,
+    render_query_reference_response,
+    render_query_session,
+    render_query_session_list,
+    split_query_memory_selector,
 )
 from memcommit.context import QueryContextRef
-from memcommit.source_projection.model import SourceForm
-from memcommit.source_projection.presentation import source_object_label
 from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
@@ -51,7 +55,6 @@ from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest
 from memcommit.operations.query.reference_runtime import execute_query_reference
 from memcommit.query_sessions import (
-    AuthorityQueryCatalogEntry,
     QuerySessionError,
     QuerySessionStore,
     load_authority_query_catalog,
@@ -59,9 +62,6 @@ from memcommit.query_sessions import (
 )
 from memcommit.store import MemoryStore
 from memcommit.search import FindError
-
-
-_QUERY_MEMORY_SUFFIX = re.compile(r"(?P<view>.+)#(?P<handle>q-[0-9a-f]{12})\Z")
 
 
 def _query_ordinary_context(
@@ -103,16 +103,7 @@ def _query_ordinary_context(
                 else None
             ),
         )
-    if not response.grounded:
-        label, _, detail = response.answer.partition("\n")
-        typer.secho(display_escape_text(label), bold=True)
-        typer.echo(detail)
-        return
-    typer.echo(safe_terminal_text(response.answer))
-
-
-def _interactive_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stdout.isatty()
+    render_ordinary_query_response(response)
 
 
 def _open_query_workbench(
@@ -178,37 +169,6 @@ def _open_query_workbench(
         initial_language=language,
         initial_session_name=session_name,
         help_binder=bind_session_help,
-    )
-
-
-def _split_query_memory_selector(selector: str) -> tuple[str, str | None]:
-    match = _QUERY_MEMORY_SUFFIX.fullmatch(selector)
-    if match is None:
-        return selector, None
-    return match.group("view"), match.group("handle")
-
-
-def _render_query_catalog(
-    selector: str,
-    catalog: Sequence[AuthorityQueryCatalogEntry],
-) -> None:
-    query_view = source_object_label(SourceForm.QUERY_VIEW, title=True)
-    typer.secho(f"{query_view} Memories: {display_escape_text(selector)}", bold=True)
-    count = len(catalog)
-    typer.echo(f"  {count} queryable Memor{'y' if count == 1 else 'ies'}")
-    typer.echo()
-    for entry in catalog:
-        typer.echo(f"  [{entry.handle}]")
-        for line in entry.placeholder_lines:
-            typer.secho(f"    {line}", dim=True)
-    typer.secho(
-        "\nFlow Circular shapes preserve normalized word lengths and spacing; "
-        "source text is not present.",
-        dim=True,
-    )
-    typer.secho(
-        "Ask one with: mem query '<VIEW>#<HANDLE>' 'QUESTION'",
-        dim=True,
     )
 
 
@@ -305,15 +265,7 @@ def cmd(
         try:
             if sessions:
                 saved = session_store.list_sessions()
-                if not saved:
-                    typer.echo("No saved query sessions.")
-                    return
-                for session in saved:
-                    typer.echo(
-                        f"{session.name} · view={session.binding.requested_name} · "
-                        f"language={session.binding.language} · "
-                        f"{len(session.turns)} turn(s) · revision {session.revision}"
-                    )
+                render_query_session_list(saved)
                 return
             assert show_session_name is not None
             session = session_store.load(show_session_name)
@@ -324,28 +276,11 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        typer.secho(
-            f"Query session: {display_escape_text(session.name)}",
-            bold=True,
-        )
-        typer.echo(
-            "View: "
-            + display_escape_text(session.binding.requested_name)
-            + " · language="
-            + display_escape_text(session.binding.language)
-        )
-        if not session.turns:
-            typer.echo("\n(no turns)")
-            return
-        for index, turn in enumerate(session.turns, start=1):
-            typer.secho(f"\nQ{index}", bold=True)
-            typer.echo(safe_terminal_text(turn.question))
-            typer.secho(f"A{index}", bold=True)
-            typer.echo(safe_terminal_text(turn.answer))
+        render_query_session(session)
         return
 
     if selector is None:
-        if not _interactive_terminal():
+        if not is_interactive_terminal():
             typer.secho(
                 "Query error: SELECTOR is required outside a terminal. In a "
                 "terminal, run 'mem query' to open the interactive Query "
@@ -381,7 +316,7 @@ def cmd(
             )
             raise typer.Exit(1)
         return
-    candidate_route_selector, candidate_memory_handle = _split_query_memory_selector(
+    candidate_route_selector, candidate_memory_handle = split_query_memory_selector(
         selector
     )
     route_selector = selector
@@ -514,7 +449,7 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        typer.echo(safe_terminal_text(response.answer))
+        render_query_reference_response(response)
         return
 
     # Grant routing metadata is public control-plane state. Inspecting it does
@@ -673,10 +608,7 @@ def cmd(
         )
         if progress is not None:
             progress.close()
-        if response.answer is None:
-            _render_query_catalog(route_selector, response.catalog)
-        else:
-            typer.echo(safe_terminal_text(response.answer))
+        render_granted_query_response(response)
     except (
         FileNotFoundError,
         OSError,
