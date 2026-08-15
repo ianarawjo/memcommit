@@ -162,7 +162,16 @@ app.command(
 )(merge.cmd)
 app.command(
     "meld",
-    help=operation_summary("meld"),
+    # Keep the authority term contiguous in Typer's compact help. The longer
+    # option descriptions wrap it across table cells, which made the canonical
+    # directional contract impossible to assert or search as plain text.
+    help=(
+        operation_summary("meld").replace(
+            "authoritative Baseline",
+            "authoritative BASELINE",
+        )
+        + " --from is normalized to INCOMING --into BASELINE."
+    ),
 )(meld.cmd)
 app.command(
     "embed",
