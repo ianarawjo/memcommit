@@ -260,13 +260,15 @@ _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
 _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
     "Before beginning the three study tasks, complete a short practice "
     "exercise to become familiar with how memcommit organizes and presents its "
-    "commands. The informal editing request in `practice/source` combines "
-    "several constraints in a single Memory. Divide it into appropriate "
-    "atomic Memories without adding instructions or changing the intended "
-    "meaning, so that each constraint can be reviewed independently. Open "
-    "`mem help`, inspect the available operations, find the operation designed "
-    "for atomization, and use it to review the proposed atomization and save "
-    "the result as `practice/source-atomized`."
+    "commands. Each newline-separated editing note in `practice/source` is "
+    "stored as its own Memory, preserving the boundaries between the original "
+    "requests. Some notes still combine recurring constraints, rough wording, "
+    "and typos. Divide their underlying constraints into appropriate atomic Memories "
+    "without performing the requested edits, adding instructions, or changing "
+    "the intended meaning, so that each constraint can be reviewed "
+    "independently. Open `mem help`, inspect the available operations, find the "
+    "operation designed for atomization, and use it to atomize the notes and "
+    "save the result as `practice/source-atomized`."
 )
 _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT.replace("memcommit", "MemLab")
@@ -281,13 +283,44 @@ _LEGACY_STUDY_PRACTICE_PROVENANCE_UID = str(
     )
 )
 _STUDY_PRACTICE_SOURCE = "practice/source"
-_STUDY_PRACTICE_SOURCE_CONTENT = (
-    "Please avoid using the expression “rather than” in the text. Do not add "
-    "a forced concluding sentence that uses wording such as “taken together.” "
-    "Do not use em dashes or colons. Keep the refinement close to the original "
-    "text and preserve the original meaning. Limit the changes mainly to "
-    "necessary grammatical corrections. Avoid an overly casual style. Keep "
-    "the writing concise while giving it a minimally formal tone."
+_STUDY_PRACTICE_SOURCE_CONTENTS = (
+    "When I ask “How does this read?”, I really want an opinion, so don't edit "
+    "the draft immediately; first check the sentence order and paragraph "
+    "division.",
+    "If I later ask for polishing, preserve the overall strucutre and "
+    "citation-needed markers, and change only wording that causes a problem.",
+    "When I ask to change one expression, leave almost everything else as it "
+    "is, including technical or project-specific terms that I selected. Um... "
+    "for example, use distribute, not divide, when material is absorbed into "
+    "two parts.",
+    "If a passage is supposed to make four points, keep all four while removing "
+    "parts that are too redundent and stating repeated content only once.",
+    "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% "
+    "from redundant or unnecessary material.",
+    "But don't shorten sentences so aggressively that a claim sounds more "
+    "categorical; keep enough wording to preserve its original strength and "
+    "conditions.",
+    "If the next idea is merely related and does not broaden the scope, don't "
+    "use More "
+    "broadly; use In relation to this or another accurate connector without "
+    "adding a new claim merely to make two paragraphs connect.",
+    "For any titlle about interaction with AI agent memory, keep the exact "
+    "terminology and intended words: use interaction and management and AI "
+    "agent memory rather than agent memory.",
+    "By default, format a document title in sentence case rather than title "
+    "case. An explicitly named style guide may override only that capitalization "
+    "default; always keep for whenever it is part of the intended wording.",
+    "If titles of works use quotation marks in some places and italics in "
+    "others, make them consistently italic throughout the document by default; "
+    "an explicitly named style guide may override only this work-title format.",
+    "When I say that content looks wrong, find accurate information before "
+    "proposing a correction by reading the original paper, book, or guide, not "
+    "only an abstract or a short snippet.",
+    "Before adding or reusing citations and refferences, verify that each source "
+    "exists and supports the exact claim after reviewing the complete source. "
+    "Don't invent quotations or evidence or overstate an author's contribution "
+    "or a paper's status. If I asked only for review, report a verification "
+    "problem first instead of silently rewriting the draft.",
 )
 STUDY_BASELINE_PROFILE_NAME = "study-baseline"
 _STUDY_BASELINE_SOURCE_KIND = "STUDY_BASELINE"
@@ -3337,17 +3370,18 @@ def _study_practice_contexts() -> tuple[Context, ...]:
         ),
         name=_STUDY_PRACTICE_SOURCE,
     )
-    source.add(
-        Memory(
-            uid=str(
-                uuid.uuid5(
-                    uuid.NAMESPACE_URL,
-                    "memcommit:study:practice/source:memory",
-                )
-            ),
-            content=_STUDY_PRACTICE_SOURCE_CONTENT,
+    for index, content in enumerate(_STUDY_PRACTICE_SOURCE_CONTENTS, start=1):
+        source.add(
+            Memory(
+                uid=str(
+                    uuid.uuid5(
+                        uuid.NAMESPACE_URL,
+                        f"memcommit:study:practice/source:memory:{index:02d}",
+                    )
+                ),
+                content=content,
+            )
         )
-    )
     return root, description, source
 
 

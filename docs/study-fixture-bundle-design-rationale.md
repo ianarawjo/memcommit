@@ -84,9 +84,9 @@ The current corpus contains:
 | 3 | 301 | 100 | 75 | 476 |
 | Total | 378 | 700 | 228 | 1,306 |
 
-The editable baseline additionally contains three participant-only rehearsal
+The editable baseline additionally contains 14 participant-only rehearsal
 Memories under `practice/description` and `practice/source`, bringing the
-composed baseline to 1,309 ordinary Memories. They are not part of any Task
+composed baseline to 1,320 ordinary Memories. They are not part of any Task
 corpus or authority package and therefore do not change the reviewed Task
 counts above.
 
@@ -99,9 +99,12 @@ Every `init-study` participant Profile receives two separate local rehearsal
 Contexts. `practice/description` contains an overview Memory and a task Memory.
 The overview introduces memcommit and the
 three Study situations. The task directs the participant to use the grouped
-`mem help` browser to discover the atomization operation, review its proposal,
-and save the result as `practice/source-atomized`. `practice/source` contains
-the one composite Memory to analyze. Separating the instruction from the source
+`mem help` browser to discover the atomization operation and then save the
+result as `practice/source-atomized`. It does not add a separate Impact,
+inspection, or approval step. `practice/source` contains 12 Memories, one for
+each newline-separated editing request from the original writing sessions.
+Some of those requests still contain multiple independently reviewable
+constraints for Atomize to separate. Separating the instruction from the source
 prevents it from becoming Atomize evidence while still requiring the
 participant to learn the help structure rather than receiving an exact
 command.
@@ -124,22 +127,48 @@ In this study, you will use memcommit in three different situations, each involv
 ```
 
 ```text
-Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. The informal editing request in `practice/source` combines several constraints in a single Memory. Divide it into appropriate atomic Memories without adding instructions or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to review the proposed atomization and save the result as `practice/source-atomized`.
+Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos. Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.
 ```
 
-The source Memory is the following English editing request:
+The Source Context contains the following 12 accumulated English editing
+notes. Each blank-line-separated excerpt below is stored as its own Memory, so
+the original writing-session boundaries are data structure rather than prose;
+no connective text was invented to make them sound like one request:
 
 ```text
-Please avoid using the expression “rather than” in the text. Do not add a forced concluding sentence that uses wording such as “taken together.” Do not use em dashes or colons. Keep the refinement close to the original text and preserve the original meaning. Limit the changes mainly to necessary grammatical corrections. Avoid an overly casual style. Keep the writing concise while giving it a minimally formal tone.
+When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.
+
+If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.
+
+When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.
+
+If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.
+
+When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.
+
+But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.
+
+If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.
+
+For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.
+
+By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.
+
+If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.
+
+When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.
+
+Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.
 ```
 
-It deliberately combines several separable constraints about prohibited
-phrasing, prohibited punctuation, fidelity to source meaning, the acceptable
-amount of grammatical refinement, and a minimally formal tone. This is closer
-to the Study's agent-memory and instruction-refinement setting than the former
-historical quotation. Atomize should preserve the informal source wording as
-evidence and separate its requirements; the rehearsal does not ask the model
-to perform the requested rewrite.
+They deliberately retain the hesitant wording, repeated corrections, contextual
+fragments, and misspellings from separately issued requests. The durable
+constraints concern review-before-editing, structural fidelity, redundancy and
+length, claim strength, terminology, transitions, title conventions, factual
+verification, and citation provenance. Atomize should preserve the rough source
+as evidence while proposing independently reviewable policies; the rehearsal
+does not ask the model to perform any of the requested document edits or to
+turn spelling correction into the semantic task.
 
 The earlier fixture used `MemLab` as the participant-facing product name and
 included a third provenance-only description Memory. The current fixture uses
@@ -158,31 +187,45 @@ match. The compatibility check never persists or renders those reconstructed
 variants, and any other instruction difference still fails closed.
 
 A cold production Atomize check used `gpt-5.6-sol` with reasoning `medium`.
-The first English draft used the phrase `preserve its meaning`; the provider
-correctly returned UNCERTAIN because `its` could refer to either the text or
-the context. That draft was rejected rather than making ambiguity part of the
-onboarding exercise. The final source above removes the pronoun while
-preserving the requested meaning. It completed in 22.81 seconds, classified
-the one source Memory as COMPOSITE, reported no quality issue, and proposed
-these eight children:
+Literal excerpts such as “polish this” initially returned `UNCERTAIN` because
+their missing drafts and deictic referents made them incomplete durable
+Memories. The fixture therefore states the same accumulated requests as
+recurring editing policies, while retaining their separate excerpt boundaries,
+rough wording, and typos. A later trial produced 20 children but reached the
+decoder's child limit before covering the final source policies; it too was
+rejected. After the excerpt boundaries became 12 distinct Source Memories, the
+final cold run completed in `115.982` seconds. It classified nine Memories as
+`ATOMIC` and three as `COMPOSITE`, reported no quality issue or unresolved
+item, covered the complete Source, and projected these 17 Output Memories:
 
-1. `Please avoid using the expression “rather than” in the text.`
-2. `Do not add a forced concluding sentence that uses wording such as “taken together.”`
-3. `Do not use em dashes or colons.`
-4. `Keep the refinement close to the original text.`
-5. `Preserve the original meaning.`
-6. `Limit the changes mainly to necessary grammatical corrections.`
-7. `Avoid an overly casual style.`
-8. `Keep the writing concise while giving it a minimally formal tone.`
+1. `When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.`
+2. `If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.`
+3. `When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.`
+4. `When material is absorbed into two parts, use distribute, not divide.`
+5. `If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.`
+6. `When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.`
+7. `But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.`
+8. `If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.`
+9. `For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.`
+10. `By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default.`
+11. `Always keep for whenever it is part of the intended wording.`
+12. `If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.`
+13. `When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.`
+14. `Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source.`
+15. `Don't invent quotations or evidence.`
+16. `Don't overstate an author's contribution or a paper's status.`
+17. `If I asked only for review, report a verification problem first instead of silently rewriting the draft.`
 
 This cold check is the frozen semantic basis for the tutorial prewarm. The
 validated analysis is published separately into the Study semantic registry.
-Each new participant run receives only a hidden validation receipt; the first
-explicit matching command materializes the ordinary Atomize analysis and blank
-workbench. The participant still performs the full Atomize review and explicit
-application workflow, but does not wait for the fixed provider analysis and
-does not begin with a pre-existing visible session. Any change to the Source or
-tutorial instruction invalidates the exact binding.
+Each new participant run receives only a hidden validation receipt. The first
+matching `mem atomize` command materializes the ordinary Atomize analysis and
+follows the ownership-aware decision-free policy: because the proposal has no
+required decision and its Output is local and checkpointed, it applies without
+an Impact, inspection, choice, or approval screen. Optional `REVIEW` findings
+remain part of the retained analysis, but they do not create a required review
+step. The tutorial intentionally contains no ambiguity interaction. Any change
+to the Source or tutorial instruction invalidates the exact binding.
 
 Each Task Profile also owns one participant-facing description Memory directly
 under `description`. Its English body is the previously authored Task

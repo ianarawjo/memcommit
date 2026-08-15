@@ -1,0 +1,25 @@
+52 180                                                                                                                                                                              
+Context: practice/source                                                                                                                                                            
+  Memories 12  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                           
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory f3ef224d] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.         
+  [memory e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.                        
+  [memory 39b21971] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, us
+e distribute, not divide, when material is absorbed into two parts.                                                                                                                 
+  [memory 6fad23ab] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.                 
+  [memory 6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.                                               
+  [memory 7ebe67fb] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.         
+  [memory b976766e] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding 
+a new claim merely to make two paragraphs connect.                                                                                                                                  
+  [memory 44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather 
+than agent memory.                                                                                                                                                                  
+  [memory 1a9d3a74] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; alwa
+ys keep for whenever it is part of the intended wording.                                                                                                                            
+  [memory 94c3ce98] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly nam
+ed style guide may override only this work-title format.                                                                                                                            
+  [memory 96300a95] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract
+ or a short snippet.                                                                                                                                                                
+  [memory 4fe217eb] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't inven
+t quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting th
+e draft.

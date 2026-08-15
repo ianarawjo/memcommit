@@ -381,7 +381,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
     assert "study-baseline: Contexts 141 owned + 0 granted" in result.output
-    assert "Memories 1309 owned + 0 granted" in result.output
+    assert "Memories 1320 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -438,9 +438,9 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     source_memories = [
         item for item in practice_source.iter_items() if isinstance(item, Memory)
     ]
-    assert [item.content for item in source_memories] == [
-        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
-    ]
+    assert [item.content for item in source_memories] == list(
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENTS
+    )
 
     selected = runner.invoke(
         app,
@@ -1162,7 +1162,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
     assert (
-        "Contexts 65 · Memories 456 · current=practice"
+        "Contexts 65 · Memories 467 · current=practice"
         in result.output
     )
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
@@ -1245,9 +1245,9 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     source_memories = [
         item for item in practice_source.iter_items() if isinstance(item, Memory)
     ]
-    assert [item.content for item in source_memories] == [
-        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
-    ]
+    assert [item.content for item in source_memories] == list(
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENTS
+    )
     public_guidance = authority_store.load_direct(
         "task-3/remote/government/healthcare-agent/info-request/"
         "transmission-guidance/public-guidance"
@@ -1303,9 +1303,9 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     source_memories = [
         item for item in source.iter_items() if isinstance(item, Memory)
     ]
-    assert [item.content for item in source_memories] == [
-        profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
-    ]
+    assert [item.content for item in source_memories] == list(
+        profiles_module._STUDY_PRACTICE_SOURCE_CONTENTS
+    )
 
 
 def test_init_study_migrates_legacy_practice_description_without_editing_baseline(
@@ -1381,23 +1381,58 @@ def test_init_study_migrates_legacy_practice_description_without_editing_baselin
 
 def test_study_practice_source_matches_instruction_refinement_topic():
     overview = profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
-    source = profiles_module._STUDY_PRACTICE_SOURCE_CONTENT
+    source_memories = profiles_module._STUDY_PRACTICE_SOURCE_CONTENTS
     task = profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
 
-    assert source == (
-        "Please avoid using the expression “rather than” in the text. Do not "
-        "add a forced concluding sentence that uses wording such as “taken "
-        "together.” Do not use em dashes or colons. Keep the refinement close "
-        "to the original text and preserve the original meaning. Limit the "
-        "changes mainly to necessary grammatical corrections. Avoid an overly "
-        "casual style. Keep the writing concise while giving it a minimally "
-        "formal tone."
+    assert source_memories == (
+        "When I ask “How does this read?”, I really want an opinion, so don't edit "
+        "the draft immediately; first check the sentence order and paragraph "
+        "division.",
+        "If I later ask for polishing, preserve the overall strucutre and "
+        "citation-needed markers, and change only wording that causes a problem.",
+        "When I ask to change one expression, leave almost everything else as it "
+        "is, including technical or project-specific terms that I selected. Um... "
+        "for example, use distribute, not divide, when material is absorbed into "
+        "two parts.",
+        "If a passage is supposed to make four points, keep all four while removing "
+        "parts that are too redundent and stating repeated content only once.",
+        "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% "
+        "from redundant or unnecessary material.",
+        "But don't shorten sentences so aggressively that a claim sounds more "
+        "categorical; keep enough wording to preserve its original strength and "
+        "conditions.",
+        "If the next idea is merely related and does not broaden the scope, don't "
+        "use More "
+        "broadly; use In relation to this or another accurate connector without "
+        "adding a new claim merely to make two paragraphs connect.",
+        "For any titlle about interaction with AI agent memory, keep the exact "
+        "terminology and intended words: use interaction and management and AI "
+        "agent memory rather than agent memory.",
+        "By default, format a document title in sentence case rather than title "
+        "case. An explicitly named style guide may override only that capitalization "
+        "default; always keep for whenever it is part of the intended wording.",
+        "If titles of works use quotation marks in some places and italics in "
+        "others, make them consistently italic throughout the document by default; "
+        "an explicitly named style guide may override only this work-title format.",
+        "When I say that content looks wrong, find accurate information before "
+        "proposing a correction by reading the original paper, book, or guide, not "
+        "only an abstract or a short snippet.",
+        "Before adding or reusing citations and refferences, verify that each source "
+        "exists and supports the exact claim after reviewing the complete source. "
+        "Don't invent quotations or evidence or overstate an author's contribution "
+        "or a paper's status. If I asked only for review, report a verification "
+        "problem first instead of silently rewriting the draft.",
     )
     assert overview.startswith("memcommit is a research prototype")
     assert "MemLab" not in overview
     assert "MemLab" not in task
-    assert "informal editing request" in task
-    assert "without adding instructions or changing the intended meaning" in task
+    assert "Each newline-separated editing note" in task
+    assert "stored as its own Memory" in task
+    assert "rough wording, and typos" in task
+    assert "without performing the requested edits" in task
+    assert "changing the intended meaning" in task
+    assert "use it to atomize the notes" in task
+    assert "preview its Impact" not in task
 
 
 def test_init_study_without_name_generates_unique_timestamped_name(
@@ -1496,7 +1531,7 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
         if "Participant" in line and "profile=pilot-002 " in line
     )
     assert "Contexts 65 owned + 43 granted" in profile_line
-    assert "Memories 456 owned + 625 granted" in profile_line
+    assert "Memories 467 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()

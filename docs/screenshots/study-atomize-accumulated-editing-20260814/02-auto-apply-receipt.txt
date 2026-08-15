@@ -1,0 +1,10 @@
+52 180                                                                                                                                                                              
+Created and atomized 'practice/source-atomized' from analysis [68330f95].                                                                                                           
+  3 splits -> 8 children                                                                                                                                                            
+  9 Memories preserved in place                                                                                                                                                     
+  [39b21971] -> [39762b59], [6a444100]                                                                                                                                              
+  [1a9d3a74] -> [8cde4705], [12212932]                                                                                                                                              
+  [4fe217eb] -> [fa328e7b], [3ef38815], [0e650a3c], [f1a0ebe2]                                                                                                                      
+  Recovery · mem undo                                                                                                                                                               
+Two checkpoints created: the source-based initial state and the atomized state.                                                                                                     
+Switched to 'practice/source-atomized'.

@@ -105,17 +105,19 @@ explicit skip so the ordinary live route remains available. `--refresh`
 continues to be a deliberate live provider call and overwrites the exact slot
 only through Atomize's existing validation and rollback boundary.
 
-The real frozen tutorial run used `gpt-5.6-sol` at reasoning `medium`. Its cold
-CLI path took `23.29` seconds wall-clock and produced eight source-grounded
-children. A fresh participant run installed both the existing Compare seed and
-the new Atomize seed in `1.08` seconds. The identical participant-facing
-Atomize command then rendered in `0.36` seconds including Python startup. Ten
-direct production reopens had a `0.140` ms median (`0.129`–`0.244` ms), kept
-the same analysis UID, and connected the provider zero times. The content-free
-metrics are recorded in
-[`outputs/atomize-prewarm/20260810-tutorial-e2e.json`](../outputs/atomize-prewarm/20260810-tutorial-e2e.json),
-with ordered real-PTY evidence under
-[`docs/screenshots/study-atomize-exact-prewarm-20260810/`](screenshots/study-atomize-exact-prewarm-20260810/).
+The current frozen tutorial run used `gpt-5.6-sol` at reasoning `medium`. Its
+cold provider turn took `115.982` seconds and classified the 12 distinct
+accumulated-editing Source Memories as nine `ATOMIC` and three `COMPOSITE`,
+producing eight source-grounded children and 17 projected Output Memories with
+no quality issue or unresolved item. A fresh
+participant run installs that exact analysis without exposing a pre-existing
+session. The first matching `mem atomize` command materializes and reuses the
+analysis with zero provider calls, then records `DECISION_FREE_AUTO_ACCEPT`
+because no response is required and the local Output is checkpointed. No
+separate Impact, inspection, or approval screen is part of the tutorial flow.
+Ordered `180 × 52` real-PTY evidence, including the 17-Memory Output and
+content-free action log, is under
+[`docs/screenshots/study-atomize-accumulated-editing-20260814/`](screenshots/study-atomize-accumulated-editing-20260814/).
 
 ### Task 1 peer Compare basis
 
@@ -736,7 +738,7 @@ provider work begins.
 
 | Task | Repeated whole-frame operations | Partial cases and live controls |
 | --- | --- | --- |
-| Tutorial | Atomize the frozen practice Source; reopen its exact Impact; exercise fixed Refine examples only as evaluation fixtures | Modified instruction and modified Source are live misses; an excerpt is a separate exact Atomize input, never a parent projection |
+| Tutorial | Atomize the frozen practice Source directly; retain optional review findings without adding an inspection or approval step; exercise fixed Refine examples only as evaluation fixtures | Modified instruction and modified Source are live misses; an excerpt is a separate exact Atomize input, never a parent projection |
 | Task 1 | Compare, Update, symmetric Meld, directional Meld, and Impact on descendant-inclusive `construction-updates` `75` and `campus-wiki` `300` | Three scenario topics such as building access, route/facility changes, and parking/shop effects; reverse Meld direction and one Source or baseline edit are live controls; fixed Refine samples are evaluator-only unless the protocol displays those exact Memories |
 | Task 2 | Compare and symmetric Meld on `advisor1` `150` and `advisor2` `150`, plus Impact for the exact prepared Meld | Three aligned section pairs, including structure, methods/evaluation, and style/expression, plus one asymmetric-size partial; same-advisor comparison and a changed advisor revision are live controls; Update without an editable participant Target is a negative precondition test |
 | Task 3 | Every declared year-pair Compare and symmetric Meld; every declared rule-pair Compare and symmetric Meld; full `personal-memory` `300` to exact Criteria Sever; Impact for exact prepared Sever/Meld proposals | Year-to-month and month-to-month Compare controls; Source-year, Source-month, large-deletion, and Criteria-subtree Sever projections; edited or added Criteria and added personal Memory are misses; Forget utterance families run live only |

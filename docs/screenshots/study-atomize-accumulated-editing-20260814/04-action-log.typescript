@@ -1,0 +1,22 @@
+52 180
+[1mStudy actions · recent first · content-free[0m
+  [00d8bdef/2] 2026-08-15 10:41:37 +0.006s  COMMAND_FINISHED
+      status=COMPLETED
+  [00d8bdef/1] 2026-08-15 10:41:37 +0.000s  COMMAND_STARTED
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [e0cb50ae/4] 2026-08-15 10:41:36 +0.157s  COMMAND_FINISHED
+      status=COMPLETED
+  [e0cb50ae/3] 2026-08-15 10:41:36 +0.151s  TUI_ACTION
+      action=ACCEPT · surface=resolution
+  [e0cb50ae/2] 2026-08-15 10:41:36 +0.151s  DECISION_FREE_AUTO_ACCEPT
+      action=ACCEPT · surface=resolution
+  [e0cb50ae/1] 2026-08-15 10:41:36 +0.000s  COMMAND_STARTED
+      operation=atomize · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [644c1921/2] 2026-08-15 10:41:35 +0.005s  COMMAND_FINISHED
+      status=COMPLETED
+  [644c1921/1] 2026-08-15 10:41:35 +0.000s  COMMAND_STARTED
+      operation=show · stdin_tty=True · stdout_tty=True · terminal_columns=180 · terminal_rows=52
+  [f0a1b4c6/2] 2026-08-15 10:41:35  PROFILE_ENTERED
+      other_profile_name=atomize-line-memory-direct-capture2-20260815 · other_profile_uid=57d6a306-516d-4950-967e-2d212ecdf3b6
+  [f0a1b4c6/1] 2026-08-15 10:41:35  STUDY_CREATED
+      baseline_profile_name=study-baseline · baseline_profile_uid=e2cdbdc7-3db4-4d23-b59e-2a2783545005 · paired_profile_uid=8ccf0d13-ba96-449a-b0f2-5ff7fb23ab2a · role=PARTICIPANT

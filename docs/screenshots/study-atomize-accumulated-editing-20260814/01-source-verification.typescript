@@ -1,0 +1,17 @@
+52 180
+[1mContext: practice/source[0m
+  Memories 12  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory f3ef224d] [2mWhen I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.[0m
+  [memory e50c293a] [2mIf I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.[0m
+  [memory 39b21971] [2mWhen I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.[0m
+  [memory 6fad23ab] [2mIf a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.[0m
+  [memory 6cc4b8a3] [2mWhen the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.[0m
+  [memory 7ebe67fb] [2mBut don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.[0m
+  [memory b976766e] [2mIf the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect.[0m
+  [memory 44de7eff] [2mFor any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.[0m
+  [memory 1a9d3a74] [2mBy default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording.[0m
+  [memory 94c3ce98] [2mIf titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format.[0m
+  [memory 96300a95] [2mWhen I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet.[0m
+  [memory 4fe217eb] [2mBefore adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft.[0m
