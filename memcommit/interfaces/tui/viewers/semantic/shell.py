@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -15,6 +17,12 @@ from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
+)
+from memcommit.interfaces.tui.components.plain_text_clipboard import (
+    ClipboardWriter,
+    PlainTextClipboardReceipt,
+    clipboard_failure_receipt,
+    copy_plain_text,
 )
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
@@ -33,6 +41,10 @@ def run_semantic_viewer(
     document: SemanticViewerDocument,
     *,
     title: str,
+    clipboard_projector: Callable[
+        [str | None, bool], tuple[str, str]
+    ] | None = None,
+    clipboard_writer: ClipboardWriter | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -57,6 +69,7 @@ def run_semantic_viewer(
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
     bindings = KeyBindings()
+    copy_receipt: PlainTextClipboardReceipt | None = None
 
     def move(delta: int, event) -> None:
         controller.move(document, delta)
@@ -95,11 +108,55 @@ def run_semantic_viewer(
         bindings.add(key)(close)
     bind_case_insensitive_key(bindings, "q")(close)
 
+    if clipboard_projector is not None:
+
+        def copy_section(event, *, whole_document: bool) -> None:
+            nonlocal copy_receipt
+            current = controller.current(document)
+            focused_uid = None if current is None else current.uid
+            try:
+                text, label = clipboard_projector(
+                    focused_uid,
+                    whole_document,
+                )
+            except ValueError as error:
+                copy_receipt = clipboard_failure_receipt(error)
+            else:
+                copy_receipt = copy_plain_text(
+                    text,
+                    success_message=label,
+                    writer=clipboard_writer,
+                )
+            event.app.invalidate()
+
+        @bindings.add("y", eager=True)
+        def _copy_focused(event) -> None:
+            copy_section(event, whole_document=False)
+
+        @bindings.add("Y", eager=True)
+        def _copy_complete(event) -> None:
+            copy_section(event, whole_document=True)
+
+    def footer_fragments() -> list[tuple[str, str]]:
+        copy_help = " · y focused · Y all" if clipboard_projector else ""
+        fragments = [
+            (
+                "",
+                f" {title} · ↑/↓ section · PgUp/PgDn page · "
+                f"Home/End{copy_help} · Esc/Backspace/Q close · read-only",
+            )
+        ]
+        if copy_receipt is not None:
+            fragments.extend(
+                [
+                    ("", " · "),
+                    (copy_receipt.style, copy_receipt.message),
+                ]
+            )
+        return fragments
+
     footer = Window(
-        FormattedTextControl(
-            f" {title} · ↑/↓ section · PgUp/PgDn page · "
-            "Home/End · Esc/Backspace/Q close · read-only"
-        ),
+        FormattedTextControl(footer_fragments),
         height=1,
         dont_extend_height=True,
     )

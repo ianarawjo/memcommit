@@ -5,9 +5,13 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeAlias
 
+from memcommit.fit_application import FitRequest, FitResult
+from memcommit.interfaces.cli.fit import render_fit_plain
 from memcommit.interfaces.cli.summarize import render_summarize_plain
 from memcommit.interfaces.console.router import ConsoleRunner
 from memcommit.interfaces.console.terminal import TerminalCapabilities
+from memcommit.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
+from memcommit.interfaces.tui.operations.fit import run_fit_tui
 from memcommit.interfaces.tui.operations.summarize import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
@@ -17,6 +21,29 @@ from memcommit.summarize_application import SummarizeRequest, SummarizeResult
 
 
 SummarizeConsoleResult: TypeAlias = SummarizeResult | SummarizeTuiOutcome
+
+
+def build_fit_console_runner(
+    *,
+    execute: Callable[[FitRequest], FitResult],
+    clipboard_writer: ClipboardWriter,
+    terminal: TerminalCapabilities,
+) -> ConsoleRunner[FitRequest, FitResult]:
+    """Wire Fit's plain and TUI siblings to one typed runtime callable."""
+
+    def run_tui(
+        request: FitRequest,
+        application_execute: Callable[[FitRequest], FitResult],
+    ) -> FitResult:
+        result = application_execute(request)
+        return run_fit_tui(result, clipboard_writer=clipboard_writer)
+
+    return ConsoleRunner(
+        execute=execute,
+        present_plain=render_fit_plain,
+        run_tui=run_tui,
+        terminal=terminal,
+    )
 
 
 def build_summarize_console_runner(

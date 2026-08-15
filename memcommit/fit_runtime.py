@@ -13,6 +13,7 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
+from memcommit.fit_application import FitRequest, FitResult
 from memcommit.ground import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
@@ -158,3 +159,41 @@ def execute_and_save_ground_fit(
     )
     FitStore(store).save(report)
     return report
+
+
+def run_fit_with_store(
+    request: FitRequest,
+    *,
+    store: MemoryStore,
+    provider_factory: FitProviderFactory,
+) -> FitResult:
+    """Execute or reopen Fit behind one interface-independent runtime port."""
+
+    if not isinstance(request, FitRequest):
+        raise TypeError("Fit runtime requires a typed request.")
+    if request.receipt_uid is None:
+        return FitResult(
+            execute_and_save_ground_fit(
+                store=store,
+                ground_name=request.ground_name,
+                provider_factory=provider_factory,
+            ),
+            current=True,
+        )
+
+    fit_store = FitStore(store)
+    report = fit_store.load(request.receipt_uid)
+    if report.ground_name != request.ground_name:
+        raise FitError("The Fit receipt belongs to a different Ground.")
+    session = store.load_ground_session(request.ground_name)
+    if session is None:
+        raise FitError(f"Ground '{request.ground_name}' was not found.")
+    latest = fit_store.latest_for_ground(session)
+    return FitResult(
+        report,
+        current=(
+            latest is not None
+            and latest.report.uid == report.uid
+            and latest.current
+        ),
+    )

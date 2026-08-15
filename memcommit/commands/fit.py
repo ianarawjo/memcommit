@@ -6,11 +6,19 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.bootstrap import build_fit_console_runner
+from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.fit import FitError, FitReport
-from memcommit.fit_runtime import execute_and_save_ground_fit
-from memcommit.fit_store import FitStore
-from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.fit_application import FitRequest, FitResult
+from memcommit.fit_runtime import run_fit_with_store
+from memcommit.interfaces.console import (
+    ConsoleModeError,
+    SystemTerminalCapabilities,
+    resolve_console_mode,
+)
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.fit import fit_result_text
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
@@ -18,50 +26,9 @@ from memcommit.store import MemoryStore
 
 
 def render_fit(report: FitReport, *, current: bool = True) -> str:
-    identity = report.provider_identity
-    example_by_uid = {example.uid: example for example in report.examples}
-    rule_alias = {rule.uid: rule.alias for rule in report.rules}
-    counts = {
-        status: sum(judgment.status == status for judgment in report.judgments)
-        for status in ("FIT", "CONTRADICTS", "UNDERDETERMINED", "NOT_APPLICABLE")
-    }
-    lines = [
-        f"FIT · {safe_terminal_text(report.ground_name)} · REVISION {report.ground_revision}",
-        "STATUS · READ-ONLY · " + ("CURRENT" if current else "STALE"),
-        f"RULES {len(report.rules)} · EXAMPLES {len(report.examples)}",
-        "PROVIDER · "
-        + (identity.display_name() if identity is not None else "UNRECORDED"),
-        "",
-        "WHAT MEM UNDERSTOOD",
-        safe_terminal_text(report.overview),
-        "",
-        "EXAMPLE FIT",
-    ]
-    for judgment in report.judgments:
-        example = example_by_uid[judgment.example_uid]
-        lines.extend(
-            [
-                "",
-                f"{example.alias} · {judgment.status} · RULES "
-                + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
-                f"  {safe_terminal_text(example.statement)}",
-                f"  WHY · {safe_terminal_text(judgment.reason)}",
-            ]
-        )
-        if judgment.observed:
-            lines.append(f"  OBSERVED · {safe_terminal_text(judgment.observed)}")
-    lines.extend(
-        [
-            "",
-            "TOTALS · "
-            + " · ".join(f"{status} {counts[status]}" for status in counts),
-            f"RECEIPT · {report.uid} · {report.digest}",
-            "GROUND DIGEST · " + report.ground_digest,
-        ]
-    )
-    if not current:
-        lines.append("STALE · Ground changed after this immutable Fit receipt.")
-    return "\n".join(lines)
+    """Compatibility projection for callers of the former command renderer."""
+
+    return fit_result_text(FitResult(report, current))
 
 
 def cmd(
@@ -76,37 +43,55 @@ def cmd(
             help="Show one immutable Fit receipt by exact uid instead of running Fit",
         ),
     ] = None,
+    plain: Annotated[
+        bool,
+        typer.Option(
+            "--plain",
+            help="Print the Fit report instead of opening the interactive Viewer",
+        ),
+    ] = False,
+    tui: Annotated[
+        bool,
+        typer.Option(
+            "--tui",
+            help="Require the interactive Fit result Viewer",
+        ),
+    ] = False,
 ) -> None:
     """Fit every active Ground Example to the active Rules without changing Ground."""
 
-    store = MemoryStore(create=False)
     try:
-        fit_store = FitStore(store)
-        if receipt is not None:
-            report = fit_store.load(receipt)
-            if report.ground_name != ground_name:
-                raise FitError("The Fit receipt belongs to a different Ground.")
-            session = store.load_ground_session(ground_name)
-            if session is None:
-                raise FitError(f"Ground '{ground_name}' was not found.")
-            current = fit_store.latest_for_ground(session)
-            is_current = (
-                current is not None
-                and current.report.uid == report.uid
-                and current.current
-            )
-        else:
-            with CommandProgress("FIT", "judging every Ground Example", total=1) as progress:
-                report = execute_and_save_ground_fit(
+        mode = resolve_console_mode(plain=plain, tui=tui)
+
+        def execute(request: FitRequest) -> FitResult:
+            store = MemoryStore(create=False)
+            if request.receipt_uid is not None:
+                return run_fit_with_store(
+                    request,
                     store=store,
-                    ground_name=ground_name,
+                    provider_factory=connect_semantic_provider,
+                )
+            with CommandProgress("FIT", "judging every Ground Example", total=1) as progress:
+                result = run_fit_with_store(
+                    request,
+                    store=store,
                     provider_factory=connect_semantic_provider,
                 )
                 progress.update("receipt saved", step=1)
-            is_current = True
-        typer.echo(render_fit(report, current=is_current))
+            return result
+
+        runner = build_fit_console_runner(
+            execute=execute,
+            clipboard_writer=write_system_clipboard,
+            terminal=SystemTerminalCapabilities(),
+        )
+        runner.run(
+            FitRequest(ground_name=ground_name, receipt_uid=receipt),
+            mode=mode,
+        )
     except (
         FitError,
+        ConsoleModeError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,

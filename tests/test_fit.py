@@ -372,3 +372,34 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
     assert reopened.exit_code == 0, reopened.output
     assert "STATUS · READ-ONLY · CURRENT" in reopened.output
     assert receipt.report.digest in reopened.output
+
+
+def test_mem_fit_plain_flag_preserves_noninteractive_report(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, _contexts = _saved_ground(store)
+    monkeypatch.setattr(
+        fit_command,
+        "connect_semantic_provider",
+        _passing_provider,
+    )
+
+    result = CliRunner().invoke(app, ["fit", session.contract_name, "--plain"])
+
+    assert result.exit_code == 0, result.output
+    assert "FIT · ticker · REVISION" in result.output
+    assert "STATUS · READ-ONLY · CURRENT" in result.output
+
+
+def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:
+    def fail_store(*_args, **_kwargs):
+        raise AssertionError("Fit must validate the TUI route before storage")
+
+    monkeypatch.setattr(fit_command, "MemoryStore", fail_store)
+
+    result = CliRunner().invoke(app, ["fit", "ticker", "--tui"])
+
+    assert result.exit_code == 1
+    assert "Interactive presentation requires a TTY" in result.output
