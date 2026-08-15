@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Literal, overload
+from typing import Literal
 
 from memcommit.api import (
     GrantedQueryResult,
@@ -21,69 +21,21 @@ from memcommit.api import (
     ReferenceQueryResult,
 )
 from memcommit.context import QueryContextRef
+from memcommit.interfaces.agent.contract import (
+    AGENT_ERROR_MESSAGE_LIMIT,
+    AgentRequestError as _AgentRequestError,
+    JsonObject,
+    error_response,
+    exact_fields as _exact_fields,
+    object_value as _object,
+    text_value as _text,
+)
 
 
 QUERY_AGENT_CONTRACT_VERSION = 1
 QUERY_AGENT_TOOL_NAME = "memcommit_query"
-QUERY_AGENT_ERROR_MESSAGE_LIMIT = 1_000
+QUERY_AGENT_ERROR_MESSAGE_LIMIT = AGENT_ERROR_MESSAGE_LIMIT
 QueryAgentKind = Literal["ordinary", "granted", "reference"]
-JsonObject = dict[str, Any]
-
-
-class _AgentRequestError(ValueError):
-    """Invalid machine input that must not reach the public client."""
-
-
-def _object(value: object, *, label: str) -> Mapping[str, object]:
-    if not isinstance(value, Mapping) or any(not isinstance(key, str) for key in value):
-        raise _AgentRequestError(f"{label} must be an object with text keys.")
-    return value
-
-
-def _exact_fields(
-    value: Mapping[str, object],
-    *,
-    required: set[str],
-    optional: frozenset[str] = frozenset(),
-    label: str,
-) -> None:
-    keys = set(value)
-    missing = sorted(required - keys)
-    unknown = sorted(keys - required - optional)
-    if missing:
-        raise _AgentRequestError(
-            f"{label} is missing required fields: {', '.join(missing)}."
-        )
-    if unknown:
-        raise _AgentRequestError(
-            f"{label} contains unknown fields: {', '.join(unknown)}."
-        )
-
-
-@overload
-def _text(
-    value: object,
-    *,
-    field: str,
-    optional: Literal[False] = False,
-) -> str: ...
-
-
-@overload
-def _text(
-    value: object,
-    *,
-    field: str,
-    optional: Literal[True],
-) -> str | None: ...
-
-
-def _text(value: object, *, field: str, optional: bool = False) -> str | None:
-    if optional and value is None:
-        return None
-    if not isinstance(value, str) or not value.strip():
-        raise _AgentRequestError(f"{field} must be nonblank text.")
-    return value
 
 
 def _boolean(value: object, *, field: str) -> bool:
@@ -319,24 +271,13 @@ def _error_result(
     message: str,
     retryable: bool,
 ) -> JsonObject:
-    bounded_message = "".join(
-        character if ord(character) >= 32 and ord(character) != 127 else " "
-        for character in message
-    ).strip()
-    if len(bounded_message) > QUERY_AGENT_ERROR_MESSAGE_LIMIT:
-        bounded_message = (
-            bounded_message[: QUERY_AGENT_ERROR_MESSAGE_LIMIT - 1].rstrip() + "…"
-        )
-    return {
-        "version": QUERY_AGENT_CONTRACT_VERSION,
-        "ok": False,
-        "kind": kind,
-        "error": {
-            "code": code,
-            "message": bounded_message,
-            "retryable": retryable,
-        },
-    }
+    return error_response(
+        version=QUERY_AGENT_CONTRACT_VERSION,
+        kind=kind,
+        code=code,
+        message=message,
+        retryable=retryable,
+    )
 
 
 class QueryAgentAdapter:

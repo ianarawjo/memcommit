@@ -1,0 +1,4 @@
+interface:
+  display_name: "MemCommit Add"
+  short_description: "Add exact Memories through one reviewed checkpoint"
+  default_prompt: "Use $memcommit-add to add these exact Memories to the intended MemCommit Context."

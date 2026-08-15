@@ -81,6 +81,7 @@ active CREATE-granted mutation, explicit-root and non-active-Profile isolation,
 typed conflicts/storage failures, and root-package export identity.
 
 This boundary does not add async cancellation, dry-run planning, caller-chosen
-provenance, idempotency keys, resumable drafts, an agent schema, or an MCP
-host. An agent adapter may project a versioned request onto this exact method;
-it must not use CLI intake modes or reconstruct authority policy.
+provenance, idempotency keys, or resumable drafts. The versioned agent adapter
+projects its strict request onto this exact method; it does not use CLI intake
+modes or reconstruct authority policy. Concrete MCP/network hosting, tool
+registration, and skill installation remain separate deployment work.

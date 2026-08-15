@@ -19,6 +19,8 @@ an interface.
 | `interfaces.tui.operations.add.run_add_tui` | TUI adapter | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
 | `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
+| `interfaces.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
+| `interfaces.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
 
 ## Operation effect summary
 
@@ -27,8 +29,10 @@ an interface.
 | CLI single, explicit batch, file, or paste | none | exact Memories and one Add checkpoint | none before completed Store save |
 | Add TUI | process-local drafts only | exact reviewed drafts and one Add checkpoint | cancel/edit failure publishes nothing |
 | Public Python | none | explicit ordered sequence and one Add checkpoint | typed error; no partial public receipt |
+| Agent tool adapter | none | same public Add and JSON-safe complete receipt | bounded error; every failure is non-retryable |
 
 The public method does not call the CLI and the application does not call the
-public facade. CLI, TUI, Python, and later agent adapters point inward to the
-same application/runtime boundary. A concrete tool host remains a deployment
-owner rather than an Add callable.
+public facade. CLI and TUI point to the application/runtime boundary; the
+Python facade and agent projection point inward without importing either
+terminal adapter. A concrete tool host remains a deployment owner rather than
+an Add callable.
