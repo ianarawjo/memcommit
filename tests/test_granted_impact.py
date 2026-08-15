@@ -13,6 +13,7 @@ from typer.testing import CliRunner
 import memcommit.clipboard as clipboard
 import memcommit.ops as ops
 import memcommit.commands.meld as meld_command
+import memcommit.commands.meld_setup as meld_setup_command
 from memcommit.cli import app
 from memcommit.comparison_provider import COMPARISON_PAYLOAD_MARKER
 from memcommit.comparison_store import comparison_analysis_path
@@ -22,13 +23,12 @@ from memcommit.authority.access import (
     revalidate_granted_context_binding,
 )
 from memcommit.commands.compare_sessions import comparison_session_entries
+from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.endpoint_setup_flows import (
-    MeldSetupReceipt,
-    _meld_source_catalog,
     _readable_endpoint_catalog,
-    choose_compare_setup,
     choose_update_setup,
 )
+from memcommit.commands.meld_setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
@@ -1589,7 +1589,9 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
         tmp_path,
         monkeypatch,
     )
-    source_names, _first, _second, annotations = _meld_source_catalog(active)
+    setup = meld_setup_command.build_meld_tui_setup(active)
+    source_names = setup.names
+    annotations = dict(setup.annotations)
     assert source.name in source_names
     assert wiki.name in source_names
     assert annotations[wiki.name].access is SourceAccess.READ_GRANT
