@@ -22,7 +22,7 @@ new Context with one Sever checkpoint.
 
 1. `01-analysis-pending.png`
    - Command: `mem sever --source sever/source --criteria sever/criteria
-     --save-as sever/result`
+     --save-as sever/result --accept`
    - Preceding input: none
    - Visible state: report skeleton and explicit pending status during the one
      complete Source × Criteria provider turn

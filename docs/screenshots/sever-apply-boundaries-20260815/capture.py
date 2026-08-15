@@ -177,6 +177,7 @@ def _child_apply(store_root: Path) -> None:
                 "sever/criteria",
                 "--save-as",
                 "sever/result",
+                "--accept",
             ],
             prog_name="mem",
             standalone_mode=False,

@@ -7,7 +7,7 @@ OUTPUT · sever/recovered · CREATED LOCALLY
 The reviewed Result keeps the access requirement.                                                                                                                                   
                                                                                                                                                                                     
 CANDIDATES                                                                                                                                                                          
-  1. [0f0b6549] KEEP_AS_WRITTEN                                                                                                                                                     
+  1. [19e46dc2] KEEP_AS_WRITTEN                                                                                                                                                     
      SOURCE · Needs step-free access.                                                                                                                                               
      RESULT · Needs step-free access.                                                                                                                                               
      WHY · The criterion permits this requirement.                                                                                                                                  
