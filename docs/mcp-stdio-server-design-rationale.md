@@ -1,5 +1,7 @@
 # MCP stdio server design rationale
 
+Last verified: 2026-08-15.
+
 ## Motivation
 
 The in-process agent registry already exposes the reviewed Query and Add
@@ -64,8 +66,10 @@ go to stderr and return a nonzero exit code.
   a future incompatible major cannot silently alter the transport contract.
 - HTTP transport, remote authentication, dynamic tool registration, server-side
   protocol retries, and MCP resources or prompts are intentional non-goals.
-- This layer proves the SDK binding in memory. Installed-wheel execution and an
-  actual stdio client session are a separate distribution verification step.
+- This layer does not make the repository's tracked `build/lib` tree
+  authoritative. A standard build can still reuse stale copied modules; the
+  installed-wheel verification must exclude that derived tree until the wider
+  packaging work removes or isolates it.
 
 ## Verification
 
@@ -74,3 +78,8 @@ the server, discover its exact schema, call a successful tool, and observe an
 unknown-tool error. Separate checks prove text/structured parity, the optional
 entry-point metadata, startup validation, and the absence of command, TUI,
 operation, infrastructure, or Store imports from the transport adapter.
+
+The installed-wheel check is recorded separately in
+`mcp-installed-wheel-verification.md`. It uses an isolated environment and the
+real stdio entry point to prove discovery, one durable Add checkpoint, bounded
+unknown-tool failure, and source-checkout independence.
