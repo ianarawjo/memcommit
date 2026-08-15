@@ -12,6 +12,7 @@ import memcommit.ops as ops
 from memcommit.api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
+    MELD_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     AgentToolBinding,
     AgentToolRegistrationError,
@@ -60,12 +61,16 @@ def _binding(
     )
 
 
-def test_default_registry_discovers_fresh_frozen_query_and_add_schemas(tmp_path):
+def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     registry = build_default_agent_tool_registry(
         MemCommitClient(root=tmp_path / "store")
     )
 
-    assert registry.tool_names == (QUERY_AGENT_TOOL_NAME, ADD_AGENT_TOOL_NAME)
+    assert registry.tool_names == (
+        QUERY_AGENT_TOOL_NAME,
+        ADD_AGENT_TOOL_NAME,
+        MELD_AGENT_TOOL_NAME,
+    )
     first = registry.tool_schemas()
     second = registry.tool_schemas()
     assert first is not second

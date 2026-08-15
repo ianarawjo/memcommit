@@ -21,6 +21,13 @@ from memcommit.interfaces.agent.registry import (
     AgentToolRegistry,
     build_default_agent_tool_registry,
 )
+from memcommit.interfaces.agent.meld import (
+    MELD_AGENT_CONTRACT_VERSION,
+    MELD_AGENT_TOOL_NAME,
+    MeldAgentAdapter,
+    MeldAgentKind,
+    meld_agent_tool_schema,
+)
 
 __all__ = [
     "ADD_AGENT_CONTRACT_VERSION",
@@ -31,11 +38,16 @@ __all__ = [
     "AgentToolBinding",
     "AgentToolRegistrationError",
     "AgentToolRegistry",
+    "MELD_AGENT_CONTRACT_VERSION",
+    "MELD_AGENT_TOOL_NAME",
+    "MeldAgentAdapter",
+    "MeldAgentKind",
     "QUERY_AGENT_CONTRACT_VERSION",
     "QUERY_AGENT_ERROR_MESSAGE_LIMIT",
     "QUERY_AGENT_TOOL_NAME",
     "QueryAgentAdapter",
     "add_agent_tool_schema",
     "build_default_agent_tool_registry",
+    "meld_agent_tool_schema",
     "query_agent_tool_schema",
 ]

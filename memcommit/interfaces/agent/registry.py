@@ -19,6 +19,11 @@ from memcommit.interfaces.agent.query import (
     QueryAgentAdapter,
     query_agent_tool_schema,
 )
+from memcommit.interfaces.agent.meld import (
+    MELD_AGENT_TOOL_NAME,
+    MeldAgentAdapter,
+    meld_agent_tool_schema,
+)
 
 
 AGENT_TOOL_REGISTRY_VERSION = 1
@@ -186,6 +191,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
     query = QueryAgentAdapter(client)
     add = AddAgentAdapter(client)
+    meld = MeldAgentAdapter(client)
     return AgentToolRegistry(
         (
             AgentToolBinding(
@@ -197,6 +203,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=ADD_AGENT_TOOL_NAME,
                 schema_factory=add_agent_tool_schema,
                 handler=add.invoke,
+            ),
+            AgentToolBinding(
+                name=MELD_AGENT_TOOL_NAME,
+                schema_factory=meld_agent_tool_schema,
+                handler=meld.invoke,
             ),
         )
     )

@@ -52,5 +52,7 @@ same decoder, then promoted into the participant's hidden profile cache only
 after the live Context and session checks pass. New-session construction now
 has a terminal-independent runtime. `MemCommitClient` projects immutable Meld
 review values and exposes start, open, comment, preserve, defer, and exact
-Apply without importing terminal code. CLI routing and the versioned agent
-adapter remain later rollout steps.
+Apply without importing terminal code. The shipped `memcommit_meld` agent adapter
+now maps a strict versioned JSON action union to that facade and returns bounded
+errors without exposing provider responses or host paths. CLI routing remains
+the final interface migration.
