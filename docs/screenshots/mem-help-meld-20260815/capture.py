@@ -74,6 +74,47 @@ def main() -> None:
 
     _close(child)
 
+    _BASE.COLUMNS = 100
+    _BASE.ROWS = 30
+    compact_child, compact_recorder = _BASE._spawn(executable, interactive=True)
+    _BASE._pump(compact_child, seconds=0.8)
+    # Focus Update so the complete preceding Meld row, including its stacked
+    # use case, remains visible in the short viewport.
+    compact_child.send("\t\t\t" + "\x1b[B" * 7)
+    _BASE._pump(compact_child, seconds=0.8)
+    compact = _BASE._snapshot(compact_recorder, "05-compact-collapsed-meld")
+    assert "30 100" in compact_recorder.getvalue()
+    assert "▸ mem meld" in compact
+    assert "Combine two Contexts and resolve their differences" in compact
+    assert "Combining independently edited Contexts" in compact
+    assert "FORM 1" not in compact
+
+    compact_child.send("\x1b[A\x1b[C")
+    _BASE._pump(compact_child, seconds=0.8)
+    compact_expanded = _BASE._snapshot(
+        compact_recorder,
+        "06-compact-expanded-contract",
+    )
+    assert "▾ mem meld" in compact_expanded
+    assert "PEER A + PEER B -> RESULT; INCOMING -> BASELINE" in compact_expanded
+    assert "Symmetric mode requires a distinct empty Result" in compact_expanded
+    assert "FORM 1" in compact_expanded
+    assert (
+        _BASE.re.search(
+            r"\x1b\[[0-9;]*38;(?:2|5);",
+            compact_recorder.getvalue(),
+        )
+        is not None
+    )
+    assert (
+        _BASE.re.search(
+            r"\x1b\[[0-9;]*48;(?:2|5);",
+            compact_recorder.getvalue(),
+        )
+        is not None
+    )
+    _close(compact_child)
+
 
 if __name__ == "__main__":
     main()

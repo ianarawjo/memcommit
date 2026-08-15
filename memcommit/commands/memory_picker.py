@@ -5,25 +5,19 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal, Mapping, Protocol, runtime_checkable
+from typing import Literal, Protocol, runtime_checkable
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.commands.context_picker import (
-    ContextMemoryBadge,
     ContextMemoryRow,
     ContextMemorySelection,
     choose_context,
 )
 from memcommit.context_targeting.tui.reach import ContextReachState
-from memcommit.interfaces.console.text import (
-    display_escape_text,
-)
-from memcommit.interfaces.tui.core.text_layout import (
-    elide_terminal_text,
-)
-from memcommit.source_projection.presentation import SourceDisplayValue
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.text_layout import elide_terminal_text
 
 
 MemoryPickerOperation = Literal["trace", "rationale"]
@@ -72,18 +66,14 @@ def _change_badge(value: int | None) -> str:
     return f"r{value}"
 
 
-def _memory_badges(item: MemoryPickerItem) -> tuple[ContextMemoryBadge, ...]:
+def _memory_badges(item: MemoryPickerItem) -> tuple[str, ...]:
     """Project compact identity, exceptional lifecycle, and history badges."""
 
     identity = item.uid[:8]
     revision = _change_badge(item.change_count)
     if item.status == "HISTORICAL":
-        return (
-            ContextMemoryBadge("historical", "historical-memory-badge"),
-            ContextMemoryBadge(identity),
-            ContextMemoryBadge(revision),
-        )
-    return (ContextMemoryBadge(identity), ContextMemoryBadge(revision))
+        return ("historical", identity, revision)
+    return (identity, revision)
 
 
 def _render_memory_options(
@@ -101,13 +91,15 @@ def _render_memory_options(
             fragments.append(("[SetCursorPosition]", ""))
         style = "class:selected" if is_selected else ""
         pointer = "›" if is_selected else " "
-        fragments.append((style, f"{pointer} "))
-        for badge in _memory_badges(item):
-            badge_style = (
-                style if is_selected or badge.style is None else f"class:{badge.style}"
+        badges = "".join(
+            f"[{display_escape_text(badge)}]" for badge in _memory_badges(item)
+        )
+        fragments.append(
+            (
+                style,
+                f"{pointer} {badges} {_preview(item.content)}",
             )
-            fragments.append((badge_style, f"[{display_escape_text(badge.text)}]"))
-        fragments.append((style, f" {_preview(item.content)}"))
+        )
         if index < len(options) - 1:
             fragments.append(("", "\n"))
     return fragments
@@ -118,7 +110,6 @@ def _choose_memory_selection(
     *,
     context_name: str,
     operation: MemoryPickerOperation,
-    catalog_context_names: Sequence[str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -130,8 +121,7 @@ def _choose_memory_selection(
         raise ValueError("Memory picker operation must be trace or rationale.")
     if not isinstance(context_name, str) or not context_name:
         raise ValueError("Memory selection requires a Context name.")
-    explicit_catalog = tuple(catalog_context_names or ())
-    if not options and not explicit_catalog:
+    if not options:
         raise ValueError(
             "No current or retained historical direct Memories are available."
         )
@@ -159,7 +149,7 @@ def _choose_memory_selection(
             "Pass a Memory UID explicitly."
         )
 
-    item_catalog_names = tuple(
+    catalog_names = tuple(
         dict.fromkeys(
             name
             for item in options
@@ -169,17 +159,10 @@ def _choose_memory_selection(
     owner_names = tuple(
         dict.fromkeys(getattr(item, "context_name", context_name) for item in options)
     )
-    # A location-first report flow may deliberately open an empty Context.
-    # Keep its frozen structural rows even when no Memory exists anywhere in
-    # that range; candidate absence is presentation state, not permission to
-    # bypass the selector and strand the person in the current Context.
-    names = tuple(dict.fromkeys((*explicit_catalog, *item_catalog_names, *owner_names)))
-    if (
-        any(not isinstance(name, str) or not name for name in names)
-        or context_name not in names
-        or any(owner not in names for owner in owner_names)
-    ):
-        raise ValueError("Memory selection received an invalid Context catalog.")
+    # Rationale can select from a readable subtree whose current/root Context
+    # has no direct Memory. Retain those empty structural rows so initial focus
+    # still means the command's actual current location.
+    names = tuple(dict.fromkeys((*catalog_names, *owner_names)))
     items_by_context = {
         name: tuple(
             item
@@ -195,9 +178,8 @@ def _choose_memory_selection(
             badges = _memory_badges(item)
             rows.append(
                 ContextMemoryRow(
-                    badges[0].text,
+                    badges[0],
                     item.content,
-                    label_style=badges[0].style,
                     selector=item.uid,
                     badges=badges[1:],
                 )
@@ -245,7 +227,6 @@ def choose_memory_report_target(
     *,
     context_name: str,
     operation: MemoryPickerOperation,
-    catalog_context_names: Sequence[str] | None = None,
     initial_include_descendants: bool = False,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -259,7 +240,6 @@ def choose_memory_report_target(
         items,
         context_name=context_name,
         operation=operation,
-        catalog_context_names=catalog_context_names,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
@@ -276,53 +256,11 @@ def choose_memory_report_target(
     )
 
 
-def choose_memory_report_context(
-    names: Sequence[str],
-    *,
-    current: str | None,
-    operation: MemoryPickerOperation,
-    virtual_names: Sequence[str] = (),
-    virtual_annotations: Mapping[str, SourceDisplayValue] | None = None,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> str | None:
-    """Choose a report root before opening its exact/subtree Memory range.
-
-    This is the Memory-report counterpart of Log's location-first browser.
-    Empty Contexts remain ordinary selectable locations so a bare command can
-    leave an empty current Context without changing global current state.
-    """
-
-    selected = choose_context(
-        names,
-        current=current,
-        virtual_names=virtual_names,
-        selectable_virtual_names=frozenset(virtual_names),
-        virtual_annotations=virtual_annotations,
-        title=(
-            f"{operation.upper()} · SELECT A CONTEXT · "
-            + ("PROFILE" if operation == "rationale" else "LOCAL CONTEXTS")
-        ),
-        accept_label="open Memories",
-        initially_expand_selected=True,
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-    if selected is None:
-        return None
-    if not isinstance(selected, str):
-        raise ValueError("Memory report location did not return a Context.")
-    return selected
-
-
 def choose_memory(
     items: Sequence[MemoryPickerItem],
     *,
     context_name: str,
     operation: MemoryPickerOperation,
-    catalog_context_names: Sequence[str] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -333,7 +271,6 @@ def choose_memory(
         items,
         context_name=context_name,
         operation=operation,
-        catalog_context_names=catalog_context_names,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

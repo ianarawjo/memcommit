@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓^
+┃ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance,  ┃ 
+┃                  then review one saved report.                                                  ┃ 
+┃   Performing a combined quality review before revising a Context.                               ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped       ┃ 
+┃                  directional meld.                                                              ┃ 
+┃   Separating a composite Memory into independently reviewable requirements.                     ┃ 
+┃ ▸ mem distill    Derive evidence-bound reusable Rules from a Context, optionally guided by a    ┃ 
+┃                  Goal.                                                                          ┃ 
+┃   Extracting reusable rules from evidence-rich source material.                                 ┃ 
+┃ ▸ mem compare    Compare Memories in two Contexts and report what they share, what differs, and ┃ 
+┃                  what appears only on one side.                                                 ┃ 
+┃   Comparing two Contexts as a whole to understand where they align and differ.                  ┃ 
+┃ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before its       ┃ 
+┃                  reviewed Apply handoff.                                                        ┃ 
+┃   Checking expected consequences before accepting a transformation.                             ┃ 
+┃ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never  ┃ 
+┃                  apply Memories.                                                                ┃ 
+┃   Resolving issues in a saved analysis before a later Apply.                                    ┃ 
+┃ ▸ mem meld       Combine two Contexts and resolve their differences, either into a separate     ┃ 
+┃                  Result or into one authoritative Baseline.                                     ┃ 
+┃   Combining independently edited Contexts into one shared version, or incorporating proposed    ┃ 
+┃   changes into the current baseline.                                                            ┃ 
+┃ ▸ mem update     Update Memories in the Target Context from Memories in the Source Context,     ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

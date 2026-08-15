@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                  directional meld.                                                              ┃^
+┃   Separating a composite Memory into independently reviewable requirements.                     ┃ 
+┃ ▸ mem distill    Derive evidence-bound reusable Rules from a Context, optionally guided by a    ┃ 
+┃                  Goal.                                                                          ┃ 
+┃   Extracting reusable rules from evidence-rich source material.                                 ┃ 
+┃ ▸ mem compare    Compare Memories in two Contexts and report what they share, what differs, and ┃ 
+┃                  what appears only on one side.                                                 ┃ 
+┃   Comparing two Contexts as a whole to understand where they align and differ.                  ┃ 
+┃ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before its       ┃ 
+┃                  reviewed Apply handoff.                                                        ┃ 
+┃   Checking expected consequences before accepting a transformation.                             ┃ 
+┃ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never  ┃ 
+┃                  apply Memories.                                                                ┃ 
+┃   Resolving issues in a saved analysis before a later Apply.                                    ┃ 
+┃ ▾ mem meld       Combine two Contexts and resolve their differences, either into a separate     ┃ 
+┃                  Result or into one authoritative Baseline.                                     ┃ 
+┃   Combining independently edited Contexts into one shared version, or incorporating proposed    ┃ 
+┃   changes into the current baseline.                                                            ┃ 
+┃   FLOW      · PEER A + PEER B -> RESULT; INCOMING -> BASELINE                                   ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Symmetric mode requires a distinct empty Result; directional mode changes only    ┃ 
+┃               the Baseline after reviewed Apply                                                 ┃ 
+┃   RANGE     · Each side exact or readable descendants                                           ┃ 
+┃   FORM 1 · mem meld (enter the interactive Meld session launcher)                               ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f
