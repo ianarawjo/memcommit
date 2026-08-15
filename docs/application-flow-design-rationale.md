@@ -2,14 +2,16 @@
 
 ## Status
 
-`memcommit.application_flow` now owns the minimal operation-neutral phase
-order `PREPARED → REVIEWED/CANCELLED → APPLIED`. Update is the first consumer
-through `memcommit.update_application_flow.UpdateApplicationFlowPort`.
+`memcommit.application_flow` owns the minimal operation-neutral phase order
+`PREPARED → REVIEWED/CANCELLED → APPLIED`. Update consumes it through
+`memcommit.update_application_flow.UpdateApplicationFlowPort`; Sever is the
+second consumer through
+`memcommit.sever_application.SeverSessionApplicationFlowPort`.
 
-This is deliberately a provisional first vertical slice. It does not claim
-that Update, Sever, Meld, Atomize, or Merge share one mutation algorithm or
-receipt schema. A second operation must demonstrate the same phase invariant
-before the contract is treated as complete.
+The second vertical slice establishes that the phase contract can serve both
+target mutation and require-new result creation. It still does not claim that
+Update, Sever, Meld, Atomize, or Merge share one mutation algorithm or receipt
+schema.
 
 ## Motivation
 
@@ -80,6 +82,29 @@ receipt, and differs from the reviewed session only by lifecycle status and
 that receipt. The persistence functions retain their stronger in-transaction
 freshness and receipt validation.
 
+## Sever adapter
+
+Sever has a different review lifecycle. Candidate choices and destination
+changes are persisted as optimistic-CAS session revisions while the workbench
+is open. By the time the person chooses final Apply, the prepared value is
+therefore already the exact reviewed `SeverSessionSnapshot`. The Sever
+adapter's `review()` is intentionally an identity handoff rather than a second
+UI or review loop.
+
+Its operation-owned `apply()` retains the previous order exactly:
+
+```text
+load and compare the accepted session snapshot
+  → create the require-new Result Context
+  → CAS-save the APPLIED Sever session and receipt
+```
+
+The Result creation remains before the session CAS save. Moving that boundary
+would change the documented crash and recovery behavior, so the shared flow
+does not attempt to make the two writes generically atomic. An already APPLIED
+snapshot also retains its existing idempotent `created=False` result without
+materializing the output again.
+
 ## Preserved boundaries
 
 - Provider planning, hidden prewarm lookup, and session staging happen before
@@ -90,19 +115,24 @@ freshness and receipt validation.
   authority checks, CAS, rollback, checkpoint, and receipt implementations.
 - Undo and Redo continue to consume Update checkpoint receipts; the shared
   flow neither implements nor weakens recovery.
-- No visible TUI state or keyboard path changes in this extraction, so the
-  previously captured Update interaction remains the applicable UI evidence.
+- Sever keeps its Source unchanged, require-new output rule, result checkpoint,
+  saved-session CAS, and existing recovery boundary.
+- No visible TUI state or keyboard path changes in either extraction, so the
+  previously captured operation interactions remain the applicable UI
+  evidence.
 
 ## Verification and next consumer
 
 Pure flow tests cover ordering, cancellation, missing values, and Apply
 failure. Update adapter tests cover all ownership routes, revised-session
 handoff, cancellation, invalid lifecycle values, and mismatched receipts. The
-existing Update suite exercises the newly connected path across local and
-granted application, no-op, stale CAS, multi-owner rollback, checkpoints,
-idempotence, Undo, and Redo.
+existing Update suite exercises the connected path across local and granted
+application, no-op, stale CAS, multi-owner rollback, checkpoints, idempotence,
+Undo, and Redo.
 
-Sever is the preferred second consumer because it exercises a meaningfully
-different effect: inputs remain unchanged and Apply creates one require-new
-local Result. Its existing application port and saved-session CAS should be
-adapted without adopting Update's target-edit transaction or receipt schema.
+The Sever application tests exercise the second connected path across saved
+review revisions, destination changes, stale session rejection, exact output
+materialization, idempotence, source preservation, checkpoints, Undo, and
+Redo. The next extraction should test a third semantic shape rather than add
+operation-specific policy to the common module; Meld is a candidate because
+its reviewed result can preserve or replace several source frames.

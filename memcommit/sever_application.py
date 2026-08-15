@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
+from memcommit.application_flow import run_application_flow
 from memcommit.sever import SeverContextBinding, SeverSelection, SeverSession
 from memcommit.sever_provider import analyze_sever
 
@@ -332,6 +333,61 @@ def _validated_snapshot(
     return snapshot
 
 
+@dataclass(frozen=True)
+class SeverSessionApplicationFlowPort:
+    """Adapt an accepted saved Sever review to the shared phase order.
+
+    Sever decisions and destination changes are already durable session
+    revisions before final acceptance. Consequently this adapter's review
+    phase is intentionally an identity handoff: the command owns the visible
+    review loop, while this port preserves the exact accepted CAS snapshot for
+    the existing require-new materialization transaction.
+    """
+
+    repository: SeverSessionRepository
+    output_port: SeverOutputPort
+
+    def review(
+        self,
+        prepared: SeverSessionSnapshot,
+    ) -> SeverSessionSnapshot:
+        """Hand off the exact snapshot accepted by the operation host."""
+
+        return prepared
+
+    def apply(
+        self,
+        reviewed: SeverSessionSnapshot,
+    ) -> SeverPersistedApplyResult:
+        """Run Sever's existing require-new creation and session CAS."""
+
+        current = self.repository.load(reviewed.session.uid)
+        if current != reviewed:
+            raise SeverApplicationError(
+                "The Sever session changed before Apply. Reopen the review."
+            )
+        applied = run_sever_apply(
+            SeverApplyRequest(session=current.session),
+            output_port=self.output_port,
+        )
+        if not applied.created:
+            return SeverPersistedApplyResult(
+                snapshot=current,
+                created=False,
+            )
+        # Result creation remains intentionally before the session CAS save.
+        # This preserves the documented crash boundary and Undo/Redo receipt
+        # contract; recovery is a separate Store-level design problem.
+        snapshot = _validated_snapshot(
+            self.repository.replace(
+                applied.session,
+                expected_version=current.version_token,
+            ),
+            expected_session=applied.session,
+        )
+        return SeverPersistedApplyResult(snapshot=snapshot, created=True)
+
+
 def run_sever_session_start(
     analysis: SeverAnalysisResult,
     *,
@@ -428,28 +484,13 @@ def run_sever_session_apply(
 ) -> SeverPersistedApplyResult:
     """Materialize and CAS-save one reviewed session through one use case."""
 
-    current = repository.load(request.snapshot.session.uid)
-    if current != request.snapshot:
-        raise SeverApplicationError(
-            "The Sever session changed before Apply. Reopen the review."
-        )
-    applied = run_sever_apply(
-        SeverApplyRequest(session=current.session),
-        output_port=output_port,
-    )
-    if not applied.created:
-        return SeverPersistedApplyResult(
-            snapshot=current,
-            created=False,
-        )
-    # Result creation remains intentionally before the session CAS save. This
-    # preserves the documented crash boundary and Undo/Redo receipt contract;
-    # transaction recovery is a separate Store-level design problem.
-    snapshot = _validated_snapshot(
-        repository.replace(
-            applied.session,
-            expected_version=current.version_token,
+    flow = run_application_flow(
+        request.snapshot,
+        port=SeverSessionApplicationFlowPort(
+            repository=repository,
+            output_port=output_port,
         ),
-        expected_session=applied.session,
     )
-    return SeverPersistedApplyResult(snapshot=snapshot, created=True)
+    if flow.applied is None:  # The identity review cannot cancel this use case.
+        raise SeverApplicationError("Accepted Sever Apply was cancelled internally.")
+    return flow.applied
