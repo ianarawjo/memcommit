@@ -54,11 +54,15 @@ def test_composer_keeps_common_meaning_separate_from_cli_forms():
         cli_forms=("mem update", "mem update --from A --to B"),
     )
 
+    assert operation.summary == (
+        "Update Memories in the Target Context from Memories in the Source Context, "
+        "asking the user to review and choose when needed."
+    )
     assert operation.execution is ExecutionKind.SEMANTIC
     assert [(row.label, row.value) for row in composed.overview] == [
         ("FLOW", "Source Context -> Target Context"),
         ("EXECUTION", "SEMANTIC"),
-        ("EFFECT", "Changes local Target only after reviewed Apply"),
+        ("EFFECT", "Changes only the local Target after Apply"),
         ("RANGE", "Each endpoint exact or readable descendants"),
     ]
     assert composed.cli_forms == (
@@ -92,4 +96,4 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
     assert rendered.index("FLOW") < rendered.index("FORM 1")
     assert "Source Context -> Target Context" in rendered
     assert "EXECUTION · SEMANTIC" in rendered
-    assert "Changes local Target only after reviewed Apply" in rendered
+    assert "Changes only the local Target after Apply" in rendered

@@ -461,10 +461,11 @@ _OPERATIONS = (
     ),
     _operation(
         "update",
-        "Review a directional plan and apply it to a local target; no shared publication.",
+        "Update Memories in the Target Context from Memories in the Source Context, "
+        "asking the user to review and choose when needed.",
         "Source Context -> Target Context",
         ExecutionKind.SEMANTIC,
-        "Changes local Target only after reviewed Apply",
+        "Changes only the local Target after Apply",
         "Each endpoint exact or readable descendants",
     ),
 )

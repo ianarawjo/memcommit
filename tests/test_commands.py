@@ -66,8 +66,9 @@ class TestHelp:
         )
         assert any(
             line.startswith("update ")
-            and "local target" in line
-            and "no shared publication" in line
+            and "Target Context" in line
+            and "Source Context" in line
+            and "review and choose when needed" in line
             for line in lines
         )
         list_row = next(line for line in lines if line.startswith("list (ls) "))
