@@ -54,5 +54,5 @@ of SDK, terminal, Store, provider, or operation-runtime imports.
 
 This commit does not install the MCP SDK, create protocol objects, open stdio,
 register a console entrypoint, parse JSON-RPC, or choose Store/Profile/provider
-configuration. The next layer will bind this projection to the stable v1 MCP
-Python SDK and keep that dependency optional.
+configuration. The next layer binds this projection to the stable v2 MCP Python
+SDK while keeping that dependency optional.
