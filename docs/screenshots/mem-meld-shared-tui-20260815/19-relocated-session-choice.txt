@@ -1,0 +1,52 @@
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                                                                                                 ^│
+│ CONFLICT 1/1                                                                                                                                                                     │
+│ Participant compensation policy                                                                                                                                                  │
+│ [REQUIRED] OPEN                                                                                                                                                                  │
+│ REVIEW SET · REQUIRED 1 · OPTIONAL 0                                                                                                                                             │
+│ MEMORY COLLISION · R1                                                                                                                                                            │
+│                                                                                                                                                                                  │
+│ CLASSIFICATION                                                                                                                                                                   │
+│ CONFLICT · UNRESOLVED                                                                                                                                                            │
+│Participant compensation differs.                                                                                                                                                 │
+│                                                                                                                                                                                  │
+│ SOURCE CLAIMS                                                                                                                                                                    │
+│                                                                                                                                                                                  │
+│ CLAIM 1 · FROM capture/advisor-a                                                                                                                                                 │
+│   [26828592] Budget CAD 20–30 per hour, including travel time.                                                                                                                   │
+│                                                                                                                                                                                  │
+│ CLAIM 2 · FROM capture/advisor-b                                                                                                                                                 │
+│   [fb0b729a] Pay in cash, by e-transfer, or by gift card.                                                                                                                        │
+│                                                                                                                                                                                  │
+│ WHY THESE MEMORIES CONFLICT                                                                                                                                                      │
+│ The sources can be retained together only after their scope and allowed methods are settled.                                                                                     │
+│ PROPOSED RESULT                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ RESOLUTION QUESTION                                                                                                                                                             ^┃
+┃ Should the result retain the rate, travel time, and every supported payment method?                                                                                              ┃
+┃ PROPOSED RESOLUTIONS                                                                                                                                                             ┃
+┃ ↑/↓ move through choices and Response · Enter select                                                                                                                             ┃
+┃✓ 1. Keep all supported options                                                                                                                                                   ┃
+┃  Retain the hourly rate, travel-time condition, cash, e-transfer, and an equivalent-value gift card.                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃  2. Preserve scoped alternatives                                                                                                                                                 ┃
+┃  Keep the in-person and online policies as separately scoped rules.                                                                                                             v┃
+┃┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐┃
+┃│›                                                                                                                                                                              ^│┃
+┃│                                                                                                                                                                                │┃
+┃│                                                                                                                                                                               v│┃
+┃└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Compare report                                                                                                                                         ^│
+│› CONFLICT       Participant compensation policy                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Meld action · INCORPORATE RESPONSES is available. Enter to review before anything changes.                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Selected · ✓ Keep all supported options

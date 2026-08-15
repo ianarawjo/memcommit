@@ -1,0 +1,17 @@
+                                                                                                                                                                                    
+MELD SETUP RECEIPT · PROCESS-LOCAL · NOT RUN                                                                                                                                        
+  MODE · symmetric                                                                                                                                                                  
+  A · capture/incoming · DESCENDANTS=False · MEMORY=None                                                                                                                            
+  B · capture/baseline · DESCENDANTS=False · MEMORY=None                                                                                                                            
+  C · capture/new-result · CREATE=True · NOT CREATED                                                                                                                                
+  EXPECTED A MEMORY · 819e65cc-8712-4b93-8fb5-a307b35c5dde · MATCH=False                                                                                                            
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
+v                                                                                                                                                                                   
+                                                                                                                                                                                    
+READ-ONLY SETUP VERIFICATION                                                                                                                                                        
+  CURRENT CONTEXT · capture/incoming                                                                                                                                                
+  SOURCE BYTES UNCHANGED · True                                                                                                                                                     
+  RESULT EXISTS · False                                                                                                                                                             
+  CONTEXT CHECKPOINTS · 0                                                                                                                                                           
+  MELD SESSIONS · 0                                                                                                                                                                 
+  PROVIDER CALLS · 0

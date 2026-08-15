@@ -61,8 +61,10 @@ The migration requires three forms of evidence:
 2. parity and operation tests proving the same Meld requests, reviews, and
    applications survive the import relocation; and
 3. an ordered 180x52 color PTY capture covering setup entry, mode/endpoint
-   transitions, result-name confirmation, review, exact application, receipt,
-   and read-only result inspection.
+   transitions, result-name confirmation, the typed setup receipt, saved-session
+   review, and read-only state inspection. Existing end-to-end captures retain
+   exact Apply and durable Result evidence because application semantics did
+   not move in this change.
 
 The screenshots are behavior evidence, not a second implementation. They must
 record exact keys, terminal size, profile/current Context, and durable mutation
@@ -72,13 +74,20 @@ at each step.
 
 - `1b0e6ae8` extended the shared Endpoint Setup contract and proved symmetric
   and directional drafts independently of Meld orchestration.
-- Meld setup now freezes readable authority in `commands.meld_setup`, projects
+- `8e836b23` and `9a701079` moved Meld setup behind its operation adapter and
+  exposed the frozen setup projection used by Grant-aware regression tests.
+  Meld setup now freezes readable authority in `commands.meld_setup`, projects
   only typed values through `interfaces.tui.operations.meld.setup`, and enters
   the existing application boundary with the same receipt fields. The legacy
   `endpoint_setup_flows` module no longer owns Meld setup behavior.
-- The saved-session workbench now lives in
+- `ba08ecc1` moved the saved-session workbench to
   `interfaces.tui.operations.meld.screen`. `commands.meld` enters that adapter
   directly, while `commands.meld_shell` is an import-only compatibility facade.
   The relocation preserves the current Resolution Workbench projection and
   does not move provider, cache, receipt, or Apply semantics into presentation.
-- Ordered PTY evidence remains the next step.
+- `docs/screenshots/mem-meld-shared-tui-20260815` records 20 ordered 180x52
+  true-color PTY states for both setup shapes and the relocated session screen.
+  The captured setup receipts are process-local, sources and Result remain
+  byte-identical, no checkpoint or Meld session is created, and provider calls
+  remain zero. The migration regression sets pass with 171 component/operation
+  tests, 177 Meld tests, 10 Grant-focused tests, and 27 Study-prewarm tests.
