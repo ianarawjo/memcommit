@@ -46,6 +46,8 @@ from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
 from memcommit.query_application import OrdinaryQueryRequest
+from memcommit.query_reference_application import QueryReferenceRequest
+from memcommit.query_reference_runtime import execute_query_reference
 from memcommit.query_runtime import execute_ordinary_query
 from memcommit.query_sessions import (
     AuthorityQueryCatalogEntry,
@@ -474,7 +476,43 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        _query_legacy(store, item, question, language=language)
+        progress = CommandProgress(
+            "QUERY",
+            "connecting provider",
+            total=2,
+        )
+        try:
+            progress.start()
+            response = execute_query_reference(
+                QueryReferenceRequest(
+                    source_uid=item.target_source_uid,
+                    source_name=item.name,
+                    provider_name=item.provider,
+                    question=question,
+                    language=language,
+                ),
+                store=store,
+                provider_factory=connect_query_provider,
+                observer=lambda stage: (
+                    progress.update("answering query", step=2)
+                    if stage == "ANSWERING"
+                    else None
+                ),
+            )
+            progress.close()
+        except (
+            FileNotFoundError,
+            ValueError,
+            QueryProviderError,
+        ) as error:
+            progress.close()
+            typer.secho(
+                f"Query error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        typer.echo(safe_terminal_text(response.answer))
         return
 
     # Grant routing metadata is public control-plane state. Inspecting it does
@@ -654,55 +692,3 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-
-
-def _query_legacy(
-    store: MemoryStore,
-    item: QueryContextRef,
-    question: str,
-    *,
-    language: str,
-) -> None:
-    """Preserve the original unsaved QueryContextRef provider boundary."""
-
-    # Authenticate the provider before opening the concealed local source.
-    progress = CommandProgress(
-        "QUERY",
-        "connecting provider",
-        total=2,
-    )
-    try:
-        progress.start()
-        provider = connect_query_provider(item.provider)
-    except QueryProviderError as error:
-        progress.close()
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    try:
-        source = store.load_query_source(
-            item.target_source_uid,
-            expected_name=item.name,
-            language=language,
-        )
-        progress.update("answering query", step=2)
-        answer = provider.query(source.name, source.content, question)
-        progress.close()
-    except (
-        FileNotFoundError,
-        ValueError,
-        QueryProviderError,
-    ) as error:
-        progress.close()
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
-    typer.echo(safe_terminal_text(answer))

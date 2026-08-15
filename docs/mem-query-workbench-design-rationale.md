@@ -73,7 +73,10 @@ adapter. Granted Query separately crosses
 `granted_query_application.py`, whose answer/catalog read returns an optional
 still-unpublished session-turn plan, and `granted_query_runtime.py`, whose
 publication adapter independently revalidates `SESSION_LOG`, Source freshness,
-and the session CAS. CLI and TTY call those runtimes directly, while
+and the session CAS. The local `QueryContextRef` route crosses
+`query_reference_application.py` and `query_reference_runtime.py`; its provider
+factory is deliberately invoked before the runtime may open concealed Source
+content. CLI and TTY call the applicable runtimes directly, while
 `commands/query_execution.py` retains implementation-free compatibility
 facades:
 
@@ -85,6 +88,9 @@ facades:
 - `GrantedQueryRequest` freezes a public control-plane grant target, question or
   catalog mode, language, optional opaque Memory handle, session name, and
   federation policy.
+- `QueryReferenceRequest` freezes one local concealed Source UID/name,
+  persisted provider identifier, question, and language without importing
+  terminal or Store types into the application contract.
 
 The CLI continues to resolve its overloaded positional grammar for backward
 compatibility, then constructs one of these typed requests. The workbench never
@@ -96,6 +102,9 @@ concealed-source opening; the read releases an answer only after route and
 Source revalidation. Merely returning its process-local publication plan does
 not write. The optional append is a second use case that rechecks current
 authority and Source identity before the profile-guarded, locked CAS write.
+For a local `QueryContextRef`, provider construction completes before the Store
+adapter opens the exact Source UID/name/language projection; the returned
+answer has no durable effect.
 
 ## Authority and persistence invariants
 
