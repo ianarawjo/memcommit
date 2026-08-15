@@ -5,9 +5,10 @@
 Update's new-session Source/Target selection now uses
 `memcommit.interfaces.tui.components.endpoint_setup` through a narrow adapter
 under `interfaces/tui/operations/update`. Explicit noninteractive operands,
-provider planning, cache lookup, persisted sessions, review, Apply, CAS,
-checkpoints, Undo, and Redo remain owned by the existing Update command and
-application modules.
+provider planning, cache lookup, persisted sessions, and mutation semantics
+remain owned by the existing Update modules. The later review-to-Apply phase
+order is now composed through the operation-neutral application flow while
+Update retains its own CAS, checkpoints, receipt, Undo, and Redo behavior.
 
 ## Motivation
 
@@ -90,8 +91,8 @@ focused identity becomes durable.
 The selected setup design does not move or relax Update's provider decoder,
 complete-plan validation, final review, local/granted-target distinction,
 compare-and-swap session replacement, application checkpoints, or Undo/Redo.
-Those paths are regression-tested through the same command implementation used
-before this migration.
+The later application-flow extraction changes only how the reviewed session
+reaches the existing transaction selected by its mutation owner.
 
 ## Verification and remaining boundary
 

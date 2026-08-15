@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.application_flow import run_application_flow
 from memcommit.commands.command_wait import (
     CommandWaitView,
     build_report_loading_view,
@@ -62,6 +63,7 @@ from memcommit.update import (
     revise_update,
     session_matches,
 )
+from memcommit.update_application_flow import UpdateApplicationFlowPort
 from memcommit.update_endpoints import resolve_update_endpoints
 
 
@@ -330,6 +332,22 @@ def _plan_update_with_wait(
             source_descendants=source_descendants,
             target_descendants=target_descendants,
         ),
+    )
+
+
+def _review_update_for_application_flow(
+    session: UpdateSession,
+    incorporate,
+    analysis_origin: str | None,
+) -> UpdateSession | None:
+    """Normalize the existing review API for the application flow adapter."""
+
+    if analysis_origin is None:
+        return review_update_application(session, incorporate=incorporate)
+    return review_update_application(
+        session,
+        incorporate=incorporate,
+        analysis_origin=analysis_origin,
     )
 
 
@@ -774,46 +792,45 @@ def cmd(
                         update_prewarm_match.prepared_source_name
                     ),
                 )
-        if _interactive_terminal():
+        def incorporate_comments(
+            current: UpdateSession,
+            guidance: str,
+        ) -> UpdateSession:
+            revised = _revise_update_with_wait(
+                current,
+                source,
+                target,
+                guidance,
+            )
+            # The comment turn replaces only the exact staged proposal it
+            # reviewed. A concurrent Update must never be overwritten.
+            store.save_staged_update(revised, expected_current=current)
+            return revised
 
-            def incorporate_comments(
-                current: UpdateSession,
-                guidance: str,
-            ) -> UpdateSession:
-                revised = _revise_update_with_wait(
-                    current,
-                    source,
-                    target,
-                    guidance,
-                )
-                # The comment turn replaces only the exact staged proposal it
-                # reviewed. A concurrent Update must never be overwritten.
-                store.save_staged_update(revised, expected_current=current)
-                return revised
-
-            if update_analysis_origin is None:
-                reviewed = review_update_application(
-                    session,
-                    incorporate=incorporate_comments,
-                )
-            else:
-                reviewed = review_update_application(
-                    session,
-                    incorporate=incorporate_comments,
-                    analysis_origin=update_analysis_origin,
-                )
-            if reviewed is None:
-                current = store.load_staged_update() or session
-                render_plan(current, staged=True)
-                typer.echo("Update remains staged; no target changes were applied.")
-                return
-            session = reviewed
-        if session.granted_target is not None:
-            applied = apply_granted_staged_update(store, session)
-        elif session.granted_source is not None:
-            applied = apply_granted_source_staged_update(store, session)
-        else:
-            applied = store.apply_staged_update(session)
+        application = run_application_flow(
+            session,
+            port=UpdateApplicationFlowPort(
+                interactive=_interactive_terminal(),
+                reviewer=_review_update_for_application_flow,
+                incorporate=incorporate_comments,
+                local_applier=lambda reviewed: store.apply_staged_update(reviewed),
+                granted_source_applier=lambda reviewed: (
+                    apply_granted_source_staged_update(store, reviewed)
+                ),
+                granted_target_applier=lambda reviewed: (
+                    apply_granted_staged_update(store, reviewed)
+                ),
+                analysis_origin=update_analysis_origin,
+            ),
+        )
+        if application.status == "CANCELLED":
+            current = store.load_staged_update() or session
+            render_plan(current, staged=True)
+            typer.echo("Update remains staged; no target changes were applied.")
+            return
+        applied = application.applied
+        if applied is None:
+            raise RuntimeError("Update application produced no durable receipt.")
     except (
         OSError,
         ProfileConfigError,
