@@ -6,12 +6,14 @@
 `PREPARED → REVIEWED/CANCELLED → APPLIED`. Update consumes it through
 `memcommit.update_application_flow.UpdateApplicationFlowPort`; Sever is the
 second consumer through
-`memcommit.sever_application.SeverSessionApplicationFlowPort`.
+`memcommit.sever_application.SeverSessionApplicationFlowPort`; Meld is the
+third consumer through
+`memcommit.meld_application_flow.MeldApplicationFlowPort`.
 
-The second vertical slice establishes that the phase contract can serve both
-target mutation and require-new result creation. It still does not claim that
-Update, Sever, Meld, Atomize, or Merge share one mutation algorithm or receipt
-schema.
+These vertical slices establish that the phase contract can serve target
+mutation, require-new result creation, and multi-owner reconciliation. They
+still do not claim that Update, Sever, Meld, Atomize, or Merge share one
+mutation algorithm or receipt schema.
 
 ## Motivation
 
@@ -105,6 +107,32 @@ does not attempt to make the two writes generically atomic. An already APPLIED
 snapshot also retains its existing idempotent `created=False` result without
 materializing the output again.
 
+## Meld adapter
+
+Meld is the first consumer whose reviewed session is intentionally mutable.
+The workbench persists every provider assessment, issue response, and optional
+destination move before final acceptance. The accepted `MeldSession` must then
+be the same object mutated to `APPLIED`, because existing command and recovery
+callers observe that lifecycle transition after the transaction returns. The
+adapter therefore performs an identity review handoff and does not clone or
+reinterpret the session.
+
+The common flow calls one Meld-owned dispatcher, which retains four distinct
+application transactions:
+
+| Reviewed Meld shape | Existing transaction retained |
+| --- | --- |
+| symmetric or legacy single Target | one Target checkpoint and session receipt |
+| directional owner-aware local subtree | per-owner checkpoints with rollback |
+| directional granted Target | authority-owned checkpoint and participant receipt |
+| granted owner-aware subtree | per-owner authority checkpoints with rollback |
+
+The adapter validates only the returned boundary evidence: the session reached
+`APPLIED`, its application checkpoint matches the returned checkpoint, and its
+recorded result count matches the receipt. Locks, Grant revalidation, source
+freshness, target CAS, rollback, recovery, and checkpoint composition remain
+inside the existing operation dispatcher.
+
 ## Preserved boundaries
 
 - Provider planning, hidden prewarm lookup, and session staging happen before
@@ -117,7 +145,9 @@ materializing the output again.
   flow neither implements nor weakens recovery.
 - Sever keeps its Source unchanged, require-new output rule, result checkpoint,
   saved-session CAS, and existing recovery boundary.
-- No visible TUI state or keyboard path changes in either extraction, so the
+- Meld keeps all four application transactions distinct, including its
+  granted-source lock recursion and owner-aware rollback boundaries.
+- No visible TUI state or keyboard path changes in these extractions, so the
   previously captured operation interactions remain the applicable UI
   evidence.
 
@@ -133,6 +163,12 @@ Undo, and Redo.
 The Sever application tests exercise the second connected path across saved
 review revisions, destination changes, stale session rejection, exact output
 materialization, idempotence, source preservation, checkpoints, Undo, and
-Redo. The next extraction should test a third semantic shape rather than add
-operation-specific policy to the common module; Meld is a candidate because
-its reviewed result can preserve or replace several source frames.
+Redo. Meld adapter and command tests exercise the third connected path across
+symmetric and directional modes, local and granted ownership, multi-owner
+rollback, stale inputs and targets, crash recovery, idempotent acceptance,
+checkpoints, Undo, and Redo.
+
+The next extraction should either move one complete Meld transaction behind a
+terminal-independent storage port, or test another operation's review adapter.
+It should not add operation-specific mutation policy to the common phase
+module.

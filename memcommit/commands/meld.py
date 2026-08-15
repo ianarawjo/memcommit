@@ -2307,7 +2307,7 @@ def _accept_granted_directional(
     return False, checkpoint.uid, len(result_uids)
 
 
-def _accept(
+def _apply_accepted_meld(
     *,
     store: MemoryStore,
     session: MeldSession,
@@ -2332,7 +2332,7 @@ def _accept(
             with source_access.store._context_write_lock(
                 source_access.context_name
             ):
-                return _accept(
+                return _apply_accepted_meld(
                     store=store,
                     session=session,
                     expected_session_digest=expected_session_digest,
@@ -2449,6 +2449,33 @@ def _accept(
         expected_session_digest=expected_session_digest,
     )
     return False, checkpoint.uid, len(result_uids)
+
+
+def _accept(
+    *,
+    store: MemoryStore,
+    session: MeldSession,
+    expected_session_digest: str,
+) -> tuple[bool, str, int]:
+    """Hand one explicitly accepted Meld to its existing Apply dispatcher."""
+
+    from memcommit.application_flow import run_application_flow
+    from memcommit.meld_application_flow import MeldApplicationFlowPort
+
+    flow = run_application_flow(
+        session,
+        port=MeldApplicationFlowPort(
+            expected_session_digest=expected_session_digest,
+            applier=lambda reviewed, expected: _apply_accepted_meld(
+                store=store,
+                session=reviewed,
+                expected_session_digest=expected,
+            ),
+        ),
+    )
+    if flow.applied is None:  # Final acceptance cannot cancel inside the port.
+        raise MeldCommandError("Accepted Meld Apply was cancelled internally.")
+    return flow.applied
 
 
 def _run_interactive(
