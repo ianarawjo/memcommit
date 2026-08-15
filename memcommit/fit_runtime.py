@@ -13,7 +13,12 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.ground import GroundSession, is_bound_ground_schema
+from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
+    GroundItem,
+    GroundSession,
+    is_bound_ground_schema,
+)
 from memcommit.fit_store import FitStore
 from memcommit.store import MemoryStore, ground_session_record_digest
 
@@ -34,12 +39,13 @@ class FrozenGroundFit:
 
 
 def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
-    """Project a version-2 Ground into the first public Fit contract.
+    """Project one immutable Ground revision into the public Fit contract.
 
-    Version 2 stores a concrete input and expected output rather than a native
-    proposition.  The one-line proposition is display metadata; exact replay
-    remains the authoritative evaluator and never exposes the expected value
-    to the provider.
+    Version 2 preserves its exact-output replay contract. Version 3 evaluates
+    each native Example proposition and treats optional I/O, evidence, and
+    placement metadata as non-authoritative projections. An unlinked version-3
+    Example applies to the complete active Rule set; explicit links narrow the
+    judgment to exactly those Rules.
     """
 
     if not is_bound_ground_schema(session.schema_version):
@@ -55,7 +61,11 @@ def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
         if item.kind == "CASE"
         and item.status in {"PROPOSED", "ACCEPTED"}
         and item.disposition == "INCLUDE"
-        and bool(item.expected.strip())
+        and (
+            bool(item.proposition.strip())
+            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+            else bool(item.expected.strip())
+        )
     )
     if not active_rules:
         raise FitError("The Ground contains no active Rules to fit.")
@@ -66,6 +76,23 @@ def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
         for index, item in enumerate(active_rules, 1)
     )
     rule_uids = tuple(rule.uid for rule in rules)
+    active_rule_uids = set(rule_uids)
+
+    def example_rule_uids(item: GroundItem) -> tuple[str, ...]:
+        if session.schema_version != GROUND_PROPOSITION_SCHEMA_VERSION:
+            # Exact output can depend on composed Rules beyond the Rule that
+            # originally motivated this legacy Example.
+            return rule_uids
+        if any(uid not in active_rule_uids for uid in item.related_uids):
+            raise FitError("A Ground Example links a Rule that is not active.")
+        linked = tuple(item.related_uids)
+        if linked:
+            return linked
+        return rule_uids
+
+    proposition_schema = (
+        session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+    )
     return FrozenGroundFit(
         ground_uid=session.uid,
         ground_name=session.contract_name,
@@ -77,12 +104,12 @@ def freeze_ground_fit(session: GroundSession) -> FrozenGroundFit:
                 uid=item.uid,
                 alias=f"e{index}",
                 statement=item.proposition or f"{item.content} -> {item.expected}",
-                projection="EXACT_OUTPUT",
-                # Exact output can depend on composed Rules beyond the Rule
-                # that originally motivated this Example.
-                rule_uids=rule_uids,
-                input_text=item.content,
-                expected_output=item.expected,
+                projection=(
+                    "PROPOSITION" if proposition_schema else "EXACT_OUTPUT"
+                ),
+                rule_uids=example_rule_uids(item),
+                input_text=None if proposition_schema else item.content,
+                expected_output=None if proposition_schema else item.expected,
             )
             for index, item in enumerate(examples, 1)
         ),

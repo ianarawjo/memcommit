@@ -16,14 +16,16 @@ from memcommit.fit import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.fit_runtime import execute_and_save_ground_fit
+from memcommit.fit_runtime import execute_and_save_ground_fit, freeze_ground_fit
 from memcommit.fit_store import FitStore
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
     propose_ground_case,
+    propose_ground_example,
     propose_ground_rule,
+    upgrade_ground_to_propositions,
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
 
@@ -215,6 +217,53 @@ def _passing_provider() -> _Provider:
             ],
         }
     )
+
+
+def test_version_three_fit_uses_native_propositions_and_explicit_rule_scope(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, contexts = _saved_ground(store)
+    session = upgrade_ground_to_propositions(session)
+    session = propose_ground_rule(
+        session,
+        rule="Preserve an explicitly reviewed symbol exception.",
+        rationale="A second active Rule makes scope selection observable.",
+        current_contexts=contexts,
+    )
+    rules = session.items_of_kind("RULE")
+    session = propose_ground_example(
+        session,
+        proposition="On August 15 the sky over Toronto was yellow.",
+        rationale="An outputless observation uses all active Rules by default.",
+        current_contexts=contexts,
+    )
+    session = propose_ground_example(
+        session,
+        proposition="Apple Inc. may be represented by AAPL.",
+        rationale="This Example explicitly exercises only the second Rule.",
+        current_contexts=contexts,
+        rule_selectors=(rules[1].uid,),
+        input_text="Apple Inc.",
+        expected_output="AAPL",
+    )
+
+    frozen = freeze_ground_fit(session)
+
+    assert {example.projection for example in frozen.examples} == {
+        "PROPOSITION"
+    }
+    assert all(
+        example.input_text is None and example.expected_output is None
+        for example in frozen.examples
+    )
+    by_statement = {example.statement: example for example in frozen.examples}
+    assert by_statement[
+        "On August 15 the sky over Toronto was yellow."
+    ].rule_uids == tuple(rule.uid for rule in frozen.rules)
+    assert by_statement[
+        "Apple Inc. may be represented by AAPL."
+    ].rule_uids == (rules[1].uid,)
 
 
 def test_fit_store_publishes_current_receipt_then_reports_stale(

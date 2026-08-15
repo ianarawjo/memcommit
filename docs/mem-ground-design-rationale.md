@@ -1091,7 +1091,25 @@ every Example to have a nonblank proposition and permits zero or multiple
 reciprocal Rule links at the schema level; version 2 continues to require its
 single reciprocal Rule, one source reference, target placement, and INCLUDE
 expected output. Creating source-free observations and pre-Rule Examples is a
-separate authoring capability, not an implicit consequence of migration.
+separate explicit authoring capability, not an implicit consequence of
+migration. `mem ground NAME --propose-example PROPOSITION` adds one such
+Example and advances the Ground by one revision. The command may optionally
+retain evidence (`--example-source`), materialization targets
+(`--example-target`), an exact input/output projection, and zero or more
+explicit Rule links. Those fields are independent: an observation needs none
+of them, and an Example recorded before Rules remains durable without a
+fabricated link. When `--example-rule` is omitted, Fit relates the Example to
+the complete active Rule set frozen at execution time; one or more explicit
+links narrow that relation and are stored reciprocally. This default makes
+pre-Rule observations useful after Rules are distilled while preserving an
+inspectable override for Examples that exercise only part of a composed
+policy.
+
+Version-3 `REFINE` replaces the authoritative proposition and leaves optional
+evidence, projection, placement, and Rule links unchanged. Version-2 REFINE
+continues to replace the legacy expected output. This asymmetry is deliberate:
+silently changing the meaning of old review commands would make their exact
+receipts ambiguous.
 
 Follow-ups must be consequential. A generic request for more detail is not
 enough; the interface should say which judgment or proposed action cannot be
@@ -1190,7 +1208,7 @@ operation-independent Fit core now implements that exhaustive read-only
 judgment. The existing `--fit-rule` option still only attaches a proposed
 Ground Memory to an existing Rule; it does not calculate semantic fit.
 
-The first adapter preserves version-2 Ground records by projecting their
+The adapter preserves version-2 Ground records by projecting their
 `content` plus singleton `expected` fields as one visible proposition while
 keeping exact input/output replay authoritative. Expected output is withheld
 from the provider and compared by the host. Native proposition Examples use
@@ -1199,6 +1217,13 @@ the same report contract but receive one of `FIT`, `CONTRADICTS`,
 projection kinds: migration must make the representation boundary explicit
 rather than producing a report whose rows were judged by hidden, inconsistent
 semantics.
+
+For a version-3 Ground, Fit evaluates every active included Example by its
+authoritative proposition, including observations without an output. Optional
+exact input/output metadata remains visible for inspection but cannot silently
+switch that row back to legacy replay semantics. Fit fails locally before
+provider connection when there is no active Rule: pre-Rule Examples are valid
+Ground material, but there is not yet a Rule relation to judge.
 
 Every report freezes the Ground UID, name, semantic revision, record digest,
 Rules, and Examples and requires exactly one judgment per Example. The core is
@@ -1219,9 +1244,11 @@ Ground, checkpoint, or current-Context pointer.
 The Cases-pane projection consumes the same receipt store and freshness
 predicate rather than copying Fit status into the Ground item schema.
 
-That adapter is now implemented in the version-2 named-Ground workbench. The
-existing `MEMORIES` pane title remains a serialized/UI compatibility label for
-this step, while its footer and interaction vocabulary say Cases. `F` on that
+That adapter is implemented in the bound named-Ground workbench. The existing
+`MEMORIES` pane title remains a serialized/UI compatibility label for this
+step, while its footer and interaction vocabulary say Cases. Version-3 cards
+show the proposition as their one-line primary content; optional source,
+target, exact projection, and Rule scope remain in detail. `F` on that
 pane calls the Fit application service directly in a background worker; it
 does not invoke `mem fit` as a subprocess. The mounted TUI visibly reports
 `FIT RUNNING`, then reloads the immutable receipt through `FitStore`.

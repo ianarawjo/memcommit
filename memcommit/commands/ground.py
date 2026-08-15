@@ -36,6 +36,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.context import Context, Memory
 from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_TEXT_LIMIT,
     GroundError,
     GroundFrame,
@@ -46,6 +47,7 @@ from memcommit.ground import (
     context_frame_digest,
     create_ground_session,
     propose_ground_case,
+    propose_ground_example,
     propose_ground_round,
     propose_ground_rule,
     resolve_ground_requirement,
@@ -1420,7 +1422,6 @@ def _render_contract_layers(
             for uid in item.related_uids
             if any(rule.uid == uid for rule in rules)
         )
-        source = item.source_refs[0]
         lines.extend(
             [
                 (
@@ -1428,14 +1429,32 @@ def _render_contract_layers(
                     f"{item.disposition}] "
                     f"[{item.uid[:8]}]"
                 ),
-                f"    input: {safe_terminal_text(item.content)}",
-                f"    rule: {related_rules or '(none)'}",
                 (
-                    f"    source: [{source.memory_uid[:8]}] in "
-                    f"{safe_terminal_text(frame_name_by_uid.get(source.context_uid, source.context_uid[:8]))} "
-                    f"· sha256:{source.content_digest[:12]}"
+                    "    proposition: "
+                    f"{safe_terminal_text(item.proposition)}"
+                    if session.schema_version
+                    == GROUND_PROPOSITION_SCHEMA_VERSION
+                    else f"    input: {safe_terminal_text(item.content)}"
                 ),
-                f"    target: {safe_terminal_text(targets)}",
+                f"    rule: {related_rules or '(all active Rules)'}",
+            ]
+        )
+        if item.source_refs:
+            source = item.source_refs[0]
+            lines.append(
+                f"    source: [{source.memory_uid[:8]}] in "
+                f"{safe_terminal_text(frame_name_by_uid.get(source.context_uid, source.context_uid[:8]))} "
+                f"· sha256:{source.content_digest[:12]}"
+            )
+        else:
+            lines.append("    source: (not recorded)")
+        lines.extend(
+            [
+                (
+                    f"    target: {safe_terminal_text(targets)}"
+                    if targets
+                    else "    target: (none)"
+                ),
                 (
                     f"    output: {safe_terminal_text(item.expected)}"
                     if item.expected
@@ -2008,6 +2027,57 @@ def cmd(
             help="Working-candidate Memory uid or unambiguous prefix",
         ),
     ] = None,
+    propose_example: Annotated[
+        Optional[str],
+        typer.Option(
+            "--propose-example",
+            help=(
+                "Concrete proposition to retain as a version-3 Example; "
+                "may be recorded before any Rule"
+            ),
+        ),
+    ] = None,
+    example_rule: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--example-rule",
+            help=(
+                "Active Rule uid/prefix explicitly covered by this Example; "
+                "repeatable, or omit to cover all active Rules at Fit time"
+            ),
+        ),
+    ] = None,
+    example_source: Annotated[
+        Optional[str],
+        typer.Option(
+            "--example-source",
+            help=(
+                "Optional working-candidate Memory uid/prefix retained as "
+                "evidence for this Example"
+            ),
+        ),
+    ] = None,
+    example_target: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--example-target",
+            help="Optional materialization target Context; repeatable",
+        ),
+    ] = None,
+    example_input: Annotated[
+        Optional[str],
+        typer.Option(
+            "--example-input",
+            help="Optional exact-input projection; requires --example-expected",
+        ),
+    ] = None,
+    example_expected: Annotated[
+        Optional[str],
+        typer.Option(
+            "--example-expected",
+            help="Optional exact-output projection; requires --example-input",
+        ),
+    ] = None,
     propose_rule: Annotated[
         Optional[str],
         typer.Option(
@@ -2194,6 +2264,12 @@ def cmd(
         value is not None
         for value in (
             propose_source,
+            propose_example,
+            example_rule,
+            example_source,
+            example_target,
+            example_input,
+            example_expected,
             propose_rule,
             propose_rule_target,
             fit_rule,
@@ -2601,23 +2677,104 @@ def cmd(
                     "Grounding workbench is stale. Create a new named "
                     "Ground, or use --replace-ground and bind fresh frames."
                 )
-            if propose_rule is not None and fit_rule is not None:
+            native_example_requested = any(
+                value is not None
+                for value in (
+                    propose_example,
+                    example_rule,
+                    example_source,
+                    example_target,
+                    example_input,
+                    example_expected,
+                )
+            )
+            legacy_proposal_requested = any(
+                value is not None
+                for value in (
+                    propose_source,
+                    propose_rule,
+                    propose_rule_target,
+                    fit_rule,
+                    propose_target,
+                    expected,
+                    rule_provenance,
+                )
+            )
+            if native_example_requested and legacy_proposal_requested:
+                raise GroundError(
+                    "Propose one native Example or one legacy Rule/Ground "
+                    "Memory per command, not both."
+                )
+            if native_example_requested:
+                if propose_example is None:
+                    raise GroundError(
+                        "Native Example options require --propose-example."
+                    )
+                candidate_context_uid: str | None = None
+                source_memory_uid: str | None = None
+                if example_source is not None:
+                    if not example_source.strip():
+                        raise GroundError(
+                            "The Example source selector cannot be blank."
+                        )
+                    candidate_frame = next(
+                        frame
+                        for frame in session.frames
+                        if frame.role == "WORKING_CANDIDATES"
+                    )
+                    candidate_context = next(
+                        context
+                        for context in contexts
+                        if context.uid == candidate_frame.context_uid
+                    )
+                    matches = [
+                        item
+                        for item in candidate_context.iter_items()
+                        if isinstance(item, Memory)
+                        and item.uid.startswith(example_source)
+                    ]
+                    if len(matches) != 1:
+                        raise GroundError(
+                            "The Example source is missing or ambiguous."
+                        )
+                    candidate_context_uid = candidate_context.uid
+                    source_memory_uid = matches[0].uid
+                session = propose_ground_example(
+                    session,
+                    proposition=propose_example,
+                    rationale=rationale or "",
+                    current_contexts=contexts,
+                    rule_selectors=tuple(example_rule or ()),
+                    source_context_uid=candidate_context_uid,
+                    source_memory_uid=source_memory_uid,
+                    target_context_names=tuple(example_target or ()),
+                    input_text=example_input or "",
+                    expected_output=example_expected or "",
+                    case_role=(case_role or "FIT").upper(),
+                    disposition=(disposition or "INCLUDE").upper(),
+                )
+            elif propose_rule is not None and fit_rule is not None:
                 raise GroundError(
                     "Propose a new Rule or fit a Ground Memory to an existing "
                     "Rule, not both."
                 )
-            case_requested = any(
-                value is not None
-                for value in (
-                    propose_source,
-                    fit_rule,
-                    propose_target,
-                    expected,
-                    case_role,
-                    disposition,
+            else:
+                case_requested = any(
+                    value is not None
+                    for value in (
+                        propose_source,
+                        fit_rule,
+                        propose_target,
+                        expected,
+                        case_role,
+                        disposition,
+                    )
                 )
-            )
-            if propose_rule is not None and not case_requested:
+            if (
+                not native_example_requested
+                and propose_rule is not None
+                and not case_requested
+            ):
                 if rationale is None:
                     raise GroundError(
                         "A rule proposal requires --rationale."
@@ -2632,7 +2789,7 @@ def cmd(
                     ).upper(),
                     target_context_names=tuple(propose_rule_target or ()),
                 )
-            else:
+            elif not native_example_requested:
                 case_disposition = (disposition or "INCLUDE").upper()
                 if (
                     propose_source is None

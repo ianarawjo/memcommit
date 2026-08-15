@@ -25,6 +25,7 @@ from memcommit.commands.ground_named_shell import (
     run_named_ground_shell,
 )
 from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_SCHEMA_VERSION,
     GroundFrame,
     GroundItem,
@@ -974,6 +975,38 @@ def test_ground_memory_renders_as_multiline_case_with_non_output_notes():
     assert rendered.count("\n") == 2
     assert "EXPECTED" not in rendered
     assert "WHY" not in rendered
+
+
+def test_native_example_card_leads_with_one_line_proposition() -> None:
+    original = session_with_rule_and_case()
+    rule, legacy_case = original.items
+    example = replace(
+        legacy_case,
+        proposition="On August 15 the observed sky was yellow.",
+        content="optional exact input",
+        expected="optional exact output",
+        source_refs=(),
+        target_context_uids=(),
+        related_uids=(),
+    )
+    session = replace(
+        original,
+        schema_version=GROUND_PROPOSITION_SCHEMA_VERSION,
+        items=(rule, example),
+    )
+
+    rendered = render_named_ground_cases_pane(session)
+    selected = ground_named_shell_module.render_named_ground_memories_pane(
+        session,
+        selected_memory_index=0,
+    )
+
+    assert "On August 15 the observed sky was yellow." in rendered
+    assert "optional exact input → optional exact output" not in rendered
+    assert (
+        "EXACT PROJECTION · optional exact input → optional exact output"
+        in selected
+    )
 
 
 def test_ground_memory_projects_current_and_stale_fit_receipts() -> None:

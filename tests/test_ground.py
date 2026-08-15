@@ -33,6 +33,7 @@ from memcommit.ground import (
     create_ground_session,
     ground_matches_workbench,
     propose_ground_case,
+    propose_ground_example,
     propose_ground_round,
     propose_ground_rule,
     resolve_ground_requirement,
@@ -246,6 +247,123 @@ def test_cli_explicitly_upgrades_one_saved_ground_to_propositions(
     assert loaded.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
     assert loaded.items_of_kind("CASE")[0].proposition.endswith(
         "-> Publish one fact."
+    )
+
+
+def test_native_examples_allow_observations_before_rules_and_multiple_links(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    raw, derived, targets, _candidate = _task_1_workbench(store)
+    contexts = (raw, derived, *targets)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "native-examples",
+            goal="Refine general claims against concrete observations.",
+        ),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = upgrade_ground_to_propositions(session)
+    session = propose_ground_example(
+        session,
+        proposition="On August 15 the sky over Toronto was yellow.",
+        rationale="A concrete observation can precede its general Rule.",
+        current_contexts=contexts,
+    )
+    observation = session.items_of_kind("CASE")[0]
+
+    assert observation.related_uids == ()
+    assert observation.source_refs == ()
+    assert observation.target_context_uids == ()
+    assert observation.expected == ""
+    assert GroundSession.from_dict(session.to_dict()) == session
+
+    session = propose_ground_rule(
+        session,
+        rule="The sky is always blue.",
+        rationale="A universal claim to check against observations.",
+        current_contexts=contexts,
+    )
+    session = propose_ground_rule(
+        session,
+        rule="Observed sky color may vary.",
+        rationale="A competing generalization.",
+        current_contexts=contexts,
+    )
+    rules = session.items_of_kind("RULE")
+    session = propose_ground_example(
+        session,
+        proposition="On August 16 the sky over Toronto was blue.",
+        rationale="This observation bears on both active generalizations.",
+        current_contexts=contexts,
+        rule_selectors=(rules[0].uid, rules[1].uid),
+    )
+    linked = session.items_of_kind("CASE")[1]
+
+    assert linked.related_uids == (rules[0].uid, rules[1].uid)
+    assert all(linked.uid in rule.related_uids for rule in session.items_of_kind("RULE"))
+
+    refined = review_ground_item(
+        session,
+        observation.uid,
+        action="REFINE",
+        response="On August 15 the observed sky over Toronto was amber.",
+        current_contexts=contexts,
+    )
+    refined_observation = refined.items_of_kind("CASE")[0]
+    assert refined_observation.proposition.endswith("was amber.")
+    assert refined_observation.expected == ""
+
+
+def test_cli_adds_native_examples_one_revision_at_a_time(isolated_store) -> None:
+    store = MemoryStore()
+    raw, derived, targets, _candidate = _task_1_workbench(store)
+    session = bind_ground_workbench(
+        create_ground_session("native-example-cli"),
+        description=TASK_1_DESCRIPTION,
+        raw_context=raw,
+        derived_context=derived,
+        target_contexts=targets,
+        target_requirements=TASK_1_TARGET_REQUIREMENTS,
+    )
+    session = upgrade_ground_to_propositions(session)
+    store.save_ground_session(session)
+
+    first = runner.invoke(
+        app,
+        [
+            "ground",
+            session.contract_name,
+            "--propose-example",
+            "Apple Inc. may be represented by AAPL.",
+        ],
+    )
+    after_first = store.load_ground_session(session.contract_name)
+    second = runner.invoke(
+        app,
+        [
+            "ground",
+            session.contract_name,
+            "--propose-example",
+            "Axiom AI Technologies may be represented by AAT.",
+        ],
+    )
+    after_second = store.load_ground_session(session.contract_name)
+
+    assert first.exit_code == 0, first.output
+    assert second.exit_code == 0, second.output
+    assert after_first is not None and after_second is not None
+    assert after_first.revision == session.revision + 1
+    assert after_second.revision == session.revision + 2
+    assert tuple(
+        item.proposition for item in after_second.items_of_kind("CASE")
+    ) == (
+        "Apple Inc. may be represented by AAPL.",
+        "Axiom AI Technologies may be represented by AAT.",
     )
 
 assert TASK_1_UPSTREAM_NAME not in TASK_1_TARGET_NAMES

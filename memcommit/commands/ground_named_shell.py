@@ -76,6 +76,7 @@ from memcommit.commands.tui_table import (
     render_tui_table,
 )
 from memcommit.ground import (
+    GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
     GroundSession,
     is_bound_ground_schema,
@@ -520,21 +521,24 @@ def render_named_ground_memories_pane(
         # candidate material for a later Context operation, while NOTES stay
         # Ground-local. Folding newlines is presentation-only and preserves
         # the exact stored source and output text.
-        expected = (
-            _case_card_value(item.expected)
-            if item.expected
-            else "(no output)"
-        )
         notes = (
             _case_card_value(item.rationale)
             if item.rationale
             else "(none)"
         )
-        lines = [
-            heading,
-            f"{_case_card_value(item.content)} → {expected}",
-            f"NOTES · {notes}",
-        ]
+        if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+            lines = [heading, _case_card_value(item.proposition)]
+        else:
+            expected = (
+                _case_card_value(item.expected)
+                if item.expected
+                else "(no output)"
+            )
+            lines = [
+                heading,
+                f"{_case_card_value(item.content)} → {expected}",
+            ]
+        lines.append(f"NOTES · {notes}")
         linked = [
             aliases[uid]
             for uid in item.related_uids
@@ -553,6 +557,15 @@ def render_named_ground_memories_pane(
             if item.target_context_uids:
                 details.append(
                     "TARGETS · " + ", ".join(_ground_item_target_names(session, item))
+                )
+            if (
+                session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
+                and item.expected
+            ):
+                details.append(
+                    "EXACT PROJECTION · "
+                    f"{_case_card_value(item.content)} → "
+                    f"{_case_card_value(item.expected)}"
                 )
             if details:
                 lines.extend(["DETAILS", *details])
@@ -603,7 +616,12 @@ def _render_named_ground_memory_table(
                     item.status,
                     item.case_role or "—",
                     item.disposition or "—",
-                    item.content,
+                    (
+                        item.proposition
+                        if session.schema_version
+                        == GROUND_PROPOSITION_SCHEMA_VERSION
+                        else item.content
+                    ),
                     item.expected or "(no output)",
                     item.rationale or "(none)",
                     ", ".join(linked_rules) or "—",

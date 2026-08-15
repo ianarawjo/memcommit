@@ -1753,6 +1753,142 @@ def propose_ground_case(
     return GroundSession.from_dict(result.to_dict())
 
 
+def propose_ground_example(
+    session: GroundSession,
+    *,
+    proposition: str,
+    rationale: str,
+    current_contexts: Iterable[Context],
+    rule_selectors: tuple[str, ...] = (),
+    source_context_uid: str | None = None,
+    source_memory_uid: str | None = None,
+    target_context_names: tuple[str, ...] = (),
+    input_text: str = "",
+    expected_output: str = "",
+    case_role: GroundCaseRole = "FIT",
+    disposition: GroundDisposition = "INCLUDE",
+    origin: GroundOrigin = "USER",
+) -> GroundSession:
+    """Propose one native concrete proposition in a version-3 Ground.
+
+    Evidence, materialization targets, exact-output projection, and Rule links
+    are independent optional metadata.  A pre-Rule observation therefore
+    remains durable without fabricating a Rule or source Memory.
+    """
+
+    contexts = _proposal_contexts(session, current_contexts)
+    if session.schema_version != GROUND_PROPOSITION_SCHEMA_VERSION:
+        raise GroundError(
+            "Native Examples require an explicit proposition-schema upgrade."
+        )
+    proposition = _string(proposition, "Ground Example proposition")
+    rationale = _string(rationale, "Ground Example rationale", empty=True)
+    input_text = _string(
+        input_text,
+        "Ground Example exact input",
+        empty=True,
+    )
+    expected_output = _string(
+        expected_output,
+        "Ground Example expected output",
+        empty=True,
+    )
+    if bool(input_text) != bool(expected_output):
+        raise GroundError(
+            "An exact-output Example requires both input and expected output."
+        )
+    if (
+        case_role not in _CASE_ROLES
+        or disposition not in _DISPOSITIONS
+        or origin not in _ORIGINS
+    ):
+        raise GroundError("Invalid native Ground Example classification.")
+    if len(set(rule_selectors)) != len(rule_selectors):
+        raise GroundError("A Ground Example Rule was supplied more than once.")
+    rules = tuple(_find_rule(session, selector) for selector in rule_selectors)
+    if len({rule.uid for rule in rules}) != len(rules):
+        raise GroundError("Ground Example Rule selectors are not unique.")
+    if any(rule.status in {"REJECTED", "DEFERRED"} for rule in rules):
+        raise GroundError("A Ground Example cannot link an inactive Rule.")
+
+    if (source_context_uid is None) != (source_memory_uid is None):
+        raise GroundError(
+            "Ground Example source Context and Memory must be supplied together."
+        )
+    source_refs: tuple[GroundSourceRef, ...] = ()
+    if source_context_uid is not None and source_memory_uid is not None:
+        source_frame = next(
+            (
+                frame
+                for frame in session.frames
+                if frame.context_uid == source_context_uid
+                and frame.role == "WORKING_CANDIDATES"
+            ),
+            None,
+        )
+        contexts_by_uid = _contexts_by_uid(contexts)
+        if source_frame is None or source_context_uid not in contexts_by_uid:
+            raise GroundError(
+                "Ground Example evidence must use the bound candidate Context."
+            )
+        memory = _find_memory(
+            contexts_by_uid[source_context_uid],
+            source_memory_uid,
+        )
+        source_refs = (
+            GroundSourceRef(
+                context_uid=source_context_uid,
+                memory_uid=memory.uid,
+                content_digest=_sha256_text(memory.content),
+            ),
+        )
+
+    target_frame_by_name = {
+        frame.context_name: frame
+        for frame in session.frames
+        if frame.role in _TARGET_FRAME_ROLES
+    }
+    if len(set(target_context_names)) != len(target_context_names) or any(
+        name not in target_frame_by_name for name in target_context_names
+    ):
+        raise GroundError("Ground Example names an invalid target Context.")
+
+    iteration = session.revision + 1
+    example_uid = str(uuid.uuid4())
+    example = GroundItem(
+        uid=example_uid,
+        kind="CASE",
+        content=input_text or proposition,
+        expected=expected_output,
+        proposition=proposition,
+        rationale=rationale,
+        status="PROPOSED",
+        origin=origin,
+        iteration=iteration,
+        related_uids=tuple(rule.uid for rule in rules),
+        source_refs=source_refs,
+        target_context_uids=tuple(
+            target_frame_by_name[name].context_uid
+            for name in target_context_names
+        ),
+        case_role=case_role,
+        disposition=disposition,
+    )
+    rule_uids = {rule.uid for rule in rules}
+    linked_items = tuple(
+        replace(item, related_uids=(*item.related_uids, example_uid))
+        if item.uid in rule_uids
+        else item
+        for item in session.items
+    )
+    result = replace(
+        session,
+        revision=iteration,
+        items=(*linked_items, example),
+    )
+    return GroundSession.from_dict(result.to_dict())
+
+
 def select_ground_candidate(
     session: GroundSession,
     position: int,
@@ -1953,6 +2089,14 @@ def review_ground_item(
             iteration=iteration,
             rule_provenance="JOINTLY_REVISED",
         )
+    elif session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION:
+        replacement = replace(
+            target,
+            proposition=_string(response, "refined Ground Example proposition"),
+            status="PROPOSED",
+            origin="JOINT",
+            iteration=iteration,
+        )
     else:
         replacement = replace(
             target,
@@ -1972,7 +2116,16 @@ def review_ground_item(
             if action != "REFINE"
             else (
                 "The user refined and reopened the judgment. Previous value: "
-                + (target.content if target.kind == "RULE" else target.expected)
+                + (
+                    target.content
+                    if target.kind == "RULE"
+                    else (
+                        target.proposition
+                        if session.schema_version
+                        == GROUND_PROPOSITION_SCHEMA_VERSION
+                        else target.expected
+                    )
+                )
             )
         ),
         status="RESOLVED",
