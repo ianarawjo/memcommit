@@ -743,7 +743,7 @@ def test_equivalent_compare_rejects_nontransparent_task1_scopes(
     assert match is None
 
 
-def test_task3_child_scope_supplies_durable_symmetric_meld_basis(
+def test_unprepared_task3_child_scope_runs_live_symmetric_compare(
     tmp_path,
     monkeypatch,
 ):
@@ -810,12 +810,17 @@ def test_task3_child_scope_supplies_durable_symmetric_meld_basis(
         "load_profile_registry",
         lambda: registry,
     )
+    analyzer_calls = 0
+
+    def analyze(comparison_input, **_kwargs):
+        nonlocal analyzer_calls
+        analyzer_calls += 1
+        return _live_distinct_analysis(comparison_input)
+
     monkeypatch.setattr(
         meld_command,
         "_analyze_symmetric_comparison_basis",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("Task 3 child Symmetric Meld called the analyzer")
-        ),
+        analyze,
     )
 
     analysis = meld_command._ensure_symmetric_comparison(
@@ -829,6 +834,7 @@ def test_task3_child_scope_supplies_durable_symmetric_meld_basis(
         include_descendants=(True, True),
     )
 
+    assert analyzer_calls == 1
     assert [frame.context_name for frame in analysis.frames] == [child.name, peer.name]
     assert load_comparison_analysis(child.uid, peer.uid) is not None
-    assert installed_compare_prewarm_origin(store, analysis) == "PROJECTED_PREWARM"
+    assert installed_compare_prewarm_origin(store, analysis) is None

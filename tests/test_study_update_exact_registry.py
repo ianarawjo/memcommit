@@ -186,9 +186,10 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
             "impact",
             "--from",
             "task-1/participant/construction-updates",
-            "--to",
-            "task-1/campus-wiki",
-        ],
+                "--to",
+                "task-1/campus-wiki",
+                "--recursive",
+            ],
     )
 
     assert result.exit_code == 0, result.output

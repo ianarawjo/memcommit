@@ -4,16 +4,24 @@
 
 This note defines a study-design registry for moving known long semantic work
 out of participant-facing time. It is a cache-hit eligibility list, never an
-operation allowlist. The implemented production slices now install the
-declared Compare, Tutorial Atomize, Task 1 Update, Task 1 Directional Meld, and
-Task 3 Sever artifacts when `init-study` creates a run. Every operation adapter
-now classifies its provider-visible ordered evidence as `EQUAL`, `SUBSET`, or
-unsafe. Equal evidence is rebound regardless of locator depth or descendant
-flag; unchanged subsets are visibly projected under operation-specific
-coverage, support, ownership, and application validation. Symmetric Meld can
-durably consume a projected Compare prerequisite, while ordinary Compare keeps
-its standalone projection as an unsaved preview. The registry itself never
-runs a provider, and additions, edits, cross-task inputs, ambiguous origins,
+operation allowlist. `init-study` now pins one content-addressed immutable
+baseline bundle instead of copying its semantic artifacts into every
+participant Store. Operation state is materialized only in the participant
+Profile that invokes it. The ownership and invalidation boundary is specified
+in [`study-shared-prewarm-bundle-design-rationale.md`](study-shared-prewarm-bundle-design-rationale.md).
+Task 3 Sever accepts only an exact ordinary whole Source × whole Criteria
+artifact. Update and Directional Meld classify provider-visible ordered
+evidence as `EQUAL`, `SUBSET`, or unsafe; those operation-owned subset rules do
+not broaden Sever. Equal evidence is rebound under each operation's exact
+binding rules, while supported Update and Directional Meld subsets are visibly
+projected under their own coverage, ownership, and application validation.
+Ordinary Compare and its symmetric Meld prerequisite now require a separately
+executed exact artifact for every declared named pair; the former Compare
+projection is retained only as historical rollout evidence. Standalone
+Summarize likewise accepts only the exact frozen direct or recursive frame that
+was actually summarized; it never projects a parent result or composes child
+results. Empty frames remain deterministic and have no artifact. The registry
+never runs a provider, and additions, edits, cross-task inputs, ambiguous origins,
 or unsupported transformations retain the ordinary live path.
 
 ## Implemented first slice and measured boundary
@@ -21,8 +29,9 @@ or unsupported transformations retain the ordinary live path.
 `memcommit.study_prewarm` now gives the editable Study baseline one strict,
 versioned, task-local registry. `memcommit.eval.study_compare_registry`
 publishes an already retained exact `ComparisonAnalysis` into that fixture
-without a provider call. A new `init-study` copies only this declared fixture,
-validates its artifact digest, task, task-description digest, Context and
+without a provider call. A new `init-study` publishes this declared fixture
+once into shared content-addressed storage, writes a small digest reference,
+and validates its artifact digest, task, task-description digest, Context and
 Memory revisions, descendant scopes, Compare ruleset, provider contract,
 model, and reasoning setting, then installs it through Compare's production
 authorization and CAS boundary.
@@ -50,19 +59,18 @@ may be prepared concurrently because they do not split one semantic frame.
 the Profile and operation locks. That serialized work is local host work and
 does not add a participant-facing provider wait.
 
-Subset projection is enabled as a visibly labeled, ephemeral Study preview by
-an explicit latency-first study decision. Projecting the actual retained Task
+The following projection measurements are superseded rollout history, not
+current participant behavior. Projecting the actual retained Task
 2 analysis to `75:150` took a median `0.234` ms with exact
 `225/225` coverage, but agreement with one fresh partial result was only
 `27.1%` by source relation kind, `7.1%` by exact group and kind, and `0.166`
 pairwise F1. A different retained baseline previously produced `0.784`
 pairwise F1, while two full stochastic runs also differed substantially. This
-variance is accepted for the qualitative prototype, but it is not hidden:
+variance showed why the result cannot stand in for the requested Compare:
 projection is rendered as `PROJECTED · NOT SAVED · PREVIEW`, does not enter the
-saved Compare session catalogue, and is never described as an exact or freshly
-interpreted result. A Meld setup may separately validate and durably install
-the same projection as its explicit Compare prerequisite; that operation-owned
-path preserves the projected origin and runs Meld's complete coverage checks.
+saved Compare session catalogue, and was never described as exact or freshly
+interpreted. Current ordinary Compare and symmetric Meld paths do not call
+this projection route.
 
 The production resolver permits only two current Contexts that descend from
 opposite sides of one declared same-task parent artifact. Every requested
@@ -82,7 +90,8 @@ The implemented production transfer order after the Atomize slice was:
 3. verify that symmetric Meld opens provider-free from the installed exact
    Compare basis while keeping participant-authored responses live;
 4. add Task 1 directional Meld as a separate exact assessment contract; and
-5. add Task 3 Sever as an exact whole-Source plus whole-Criteria contract.
+5. model Task 3 Sever as exact direct-Context cells composed from child to
+   parent at cache lookup time.
 
 ### Tutorial Atomize exact prewarm
 
@@ -144,9 +153,11 @@ larger than input count. Content-free evidence is stored in
 
 There is no independent production Refine operator in the current repository,
 so it is not an implementation target yet. Update, symmetric and Directional
-Meld, and Sever now have operation-owned subset adapters; Atomize remains exact
+Meld now has operation-owned subset adapters; Atomize remains exact
 because its current operand is one direct Context, not a recursive selectable
-scope, so there is no nonempty proper scope subset to project.
+scope, so there is no nonempty proper scope subset to project. Sever is
+deliberately exact: it neither deletes rows from a parent result nor composes
+independent child judgments into one whole-frame report.
 
 ### Task 1 directional Update basis
 
@@ -195,8 +206,12 @@ Memories in `0.46` seconds, and remained unapplied until the separate exact
 `--accept`. Apply completed in `0.52` seconds and materialized exactly `375`
 Memories in the new result Context. This is a conservative quality control: it
 proves provider-free, lossless transfer and application mechanics, not that
-preservation-only is the preferred semantic merge. Any participant comment,
-choice, or synthesis request remains a live Meld turn.
+preservation-only is the preferred semantic merge. Individual issue choices
+are provider-free local branches bound to the initial assessment. The actual
+complete choice vector or synthesis policy remains one aggregate Meld turn on
+its first occurrence. A researcher-reviewed exact final reconciliation may be
+declared in a separate `MELD_RESOLUTION` bundle; it remains hidden until the
+participant submits that exact complete action.
 
 ### Task 2 symmetric Meld transfer
 
@@ -209,6 +224,9 @@ Memories from `300` inputs because exact equivalent claims were coalesced while
 distinct source claims retained provenance. The five required conflicts remain
 visible in the ordinary participant-guided route; preserve-all is again a
 mechanical coverage control rather than a substitute for those choices.
+Declared Task 2 resolution bundles can prewarm reviewed broad/narrow/strongest
+strategies or individual conflict options without enumerating their Cartesian
+product. Every other first-seen choice populates only that run's lazy cache.
 
 ### Task 3 year-pair Compare bases
 
@@ -299,7 +317,7 @@ The proof run installed all ten declared artifacts in `2.03` seconds. Its exact
 comments, reversed direction, changed inputs, and undeclared routes remain
 live.
 
-### Evidence-based scope equivalence and subset projection
+### Evidence-based scope equivalence and operation-owned subset projection
 
 The original fallback recognized only one empty ancestor chain. That still
 missed harmless flag changes, arbitrary additional wrappers, empty siblings,
@@ -315,16 +333,16 @@ also does not matter when it materializes the same ledger. Owner identity,
 Memory identity, content, ordering, direction, task description, provider
 contract, model, reasoning, authority, and schema remain checked.
 
-`PROJECTED_PREWARM` requires the current ledger to be a deletion-only ordered
-subset of the prepared basis. Compare repairs relation shape and coverage.
-Update retains only actions whose Source references, Target owner, and any
+`PROJECTED_PREWARM` remains an operation-owned Update or Directional Meld
+policy only. It requires the current ledger to be a deletion-only ordered
+subset of the prepared basis. Update retains only actions whose Source references, Target owner, and any
 edited or removed Target Memory survive. Directional Meld retains its Compare
 partition; an exact `ADD/PRESERVE` whose old owner was excluded is reparented
 to the explicitly selected narrower baseline root, while edits and synthesized
-results cannot be reparented. Sever retains one decision per surviving Source;
-if a decision's cited Criteria were removed, it becomes `KEEP_AS_WRITTEN`
-instead of pretending the absent rule still applies. Each result passes the
-operation's ordinary completeness, authority, save, CAS, and apply validators.
+results cannot be reparented. Each result passes the operation's ordinary
+completeness, authority, save, CAS, and apply validators. Sever is excluded
+from this parent-to-child rule. Compare and symmetric Meld also no longer use
+it; every declared pair needs an actually executed exact Compare artifact.
 
 Additions, edits, reversed direction, unrelated copied identities, ambiguous
 origins, stale installation receipts, configuration drift, and `--refresh`
@@ -333,39 +351,23 @@ operand, and Forget has no declared Study cache. Earlier ordered 180×52 PTY
 evidence for the first equal-root rollout remains under
 [`docs/screenshots/study-equivalent-scope-prewarm-20260812/`](screenshots/study-equivalent-scope-prewarm-20260812/).
 
-### Task 3 exact Sever basis
+### Task 3 exact whole-frame Sever
 
-Task 3 Sever now prepares the exact descendant-inclusive
-`local/personal-memory` Source (`300` Memories) under the exact
-`local/guardrails` Criteria (`75` Memories). The retained Sol-medium turn took
-`192.178` provider seconds and returned complete coverage with `300 FORGET`
-recommendations. The artifact key binds the two full frame digests, Task 3
-description, fixed output name, schema and prompt/decoder contract, provider,
-model, and reasoning setting.
+Sever's prewarm unit is the ordinary request itself: one complete frozen Source
+frame and one complete frozen Criteria frame sent together in one provider
+turn. Lookup requires an exact binding, scope flags, output name, task
+description, configuration, and evidence match. A parent result is never
+projected to a child, and independently executed child cells are never composed
+into a parent judgment.
 
-`init-study` validates this artifact under Sever's ordinary combination,
-derived-transfer, analysis-retention, and require-new-output boundaries, then
-stores only a hidden installation receipt. It deliberately does not add a
-researcher-prepared review to the participant's saved-session picker. When the
-exact public command is issued, the semantic decisions are rebound to the
-current run and cloned under a fresh session and candidate UID set. The public
-report discloses `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`.
-
-A prior fresh run installed the first nine declared semantic artifacts in
-`1.74` seconds; the ten-artifact Directional Meld proof above supersedes that
-count while retaining the earlier timing as rollout history.
-The actual `300:75` Sever command rendered in `0.43` seconds, with no provider
-events in the Study action ledger. Twenty direct exact lookups had a `7.598 ms`
-median and `8.179 ms` maximum. Applying the all-forget recommendation created
-the required new empty local Context in `0.39` seconds, preserved the Source's
-exact `300`-Memory frame digest, and public Undo and Redo removed and restored
-the same zero-Memory result.
-
-The exact route remains labeled `EXACT PREWARM`. Equal aliases and unchanged
-Source/Criteria subsets use fresh review and candidate UIDs and disclose
-`PROJECTED PREWARM`. Source or Criteria additions and edits,
-task-description changes, output-name changes, provider-contract changes,
-model changes, and reasoning changes still miss.
+The existing descendant-inclusive `300 × 75` Sol-medium artifact took
+`192.178` provider seconds and returned `300 FORGET` recommendations. It is a
+valid exact cache row only for that same whole request. The former
+`1 equal + 1,407 projected` audit is retained as rejected rollout history; it
+does not establish coverage for any smaller or differently scoped request.
+When the protocol declares more than one Sever request, each distinct
+whole-frame request must be executed normally before its exact row can be
+published. Evidence-identical aliases may deduplicate by their exact binding.
 
 ### 2026-08-12 exhaustive current-graph audit
 
@@ -375,11 +377,11 @@ four descendant-flag combinations: `224/224` hits (`6` equal and `218`
 projected), including `134` valid zero-action projections. Task 1 Directional
 Meld covered `182/182` combinations admitted by its nonempty-frame contract;
 the remaining `42` products fail locally because Meld cannot construct an
-empty Source frame. Task 3 Sever covered `1,408/1,408` nonempty-Source
-combinations from `34` Source locators × `11` Criteria locators × four flag
-combinations (`1` equal and `1,407` projected); `88` empty-Source combinations
-are outside Sever's operation domain. No executable audited request fell
-through to live inference.
+empty Source frame. The earlier Task 3 Sever audit reported `1,408/1,408` hits
+by projecting one whole-parent artifact over `34` Source locators × `11`
+Criteria locators × four flag combinations. That result measured the
+now-rejected parent-to-child rule, not bottom-up cell coverage, and is not
+current evidence.
 
 ## Relationship to the earlier FIT idea
 
@@ -427,10 +429,10 @@ that question is qualitative data collection rather than a gate on the action.
 
 | Operation | Prewarm unit | Reuse or projection | Live path | Boundary |
 | --- | --- | --- | --- | --- |
-| Compare | Exact ordered pair, descendant-scope pair, task description, ruleset, model, and reasoning setting | Equal evidence rebinds; unchanged opposite-side subsets project; Meld may durably install a validated projected prerequisite | Additions, edits, same-side, cross-task, ambiguous, and refreshed requests run complete two-frame calls | Projection is labeled and is not a fresh semantic judgment |
-| Meld | Exact Compare basis plus direction, destination, source revisions, and any already-fixed study instruction | Equal frames rebind; subsets project relations and complete preservation actions; narrower Directional targets may reparent exact preservation ADDs | A new response, reverse direction, edit-dependent missing owner, or changed evidence requires a new semantic turn | Compare relations alone do not authorize target content; Meld coverage and ownership remain authoritative |
+| Compare | Exact ordered pair, descendant-scope pair, task description, ruleset, model, and reasoning setting | Rebind only byte-identical complete evidence; each declared named pair has its own ordinary Compare result | A missing exact pair, additions, edits, same-side, cross-task, ambiguous, and refreshed requests run complete two-frame calls | `WHAT MEM UNDERSTOOD` comes from the provider turn for that exact pair |
+| Meld | Exact Compare basis plus direction, destination, source revisions, and any already-fixed study instruction | Symmetric Meld requires an exact Compare pair; Directional Meld retains its separate action-ledger policy | A new response, reverse direction, edit-dependent missing owner, or changed evidence requires a new semantic turn | Compare relations alone do not authorize target content; Meld coverage and ownership remain authoritative |
 | Update | Exact ordered Source and Target frames plus operation criteria and revisions | Equal evidence rebinds; unchanged subsets retain only fully supported owner-routed actions, including valid zero-action results | Additions, edits, changed direction, task description, or configuration run live | Update uses its own action ledger, never symmetric Compare identity |
-| Sever | Exact whole Source frame and exact Criteria frame | Equal evidence rebinds; subsets retain exhaustive decisions and conservatively keep content when cited support was removed | Additions, edits, changed output, task description, or configuration require a whole-frame call | Source remains unchanged and the result is require-new derived material |
+| Sever | One exact ordinary request over the complete frozen Source frame and complete frozen Criteria frame | Rebind only the same exact whole request; no parent projection or child composition | Any scope, evidence, output, task description, or configuration change requires one ordinary whole-frame call | Source remains unchanged and the reviewed result is require-new derived material |
 | Forget | No participant-path prewarm in the current study | None | Every instruction uses the complete live whole-frame path | Per-Memory calls are not equivalent to interpreting the Context together, and a bounded selector cache would bias which user-grounded requests appear fast |
 | Atomize or Impact | Exact Source revision and operation contract | Exact unchanged result can be reopened | Changed Source or instruction runs live | Cached analysis does not itself authorize mutation |
 | Refine | Exact Memory or bounded frame, instruction, and revision | Exact unchanged proposal can be reopened | New wording instructions normally run live | Meaning preservation and authority must be revalidated |
@@ -446,7 +448,7 @@ own quality, completeness, authority, and application decision.
 | Route | Policy | Reason |
 | --- | --- | --- |
 | `task-2/advisor1` versus `task-2/advisor2`, both descendant-inclusive | `EXACT_PREWARM` | The complete `150:150` comparison is a meaningful user action and has taken far longer than 30 seconds |
-| Any `advisor1/...` view versus any `advisor2/...` view whose Memories are unchanged subsets of the exact parent sides | `PARENT_PROJECTED` | Host filtering is immediate and complete by coverage; the accepted semantic-loss tradeoff is disclosed as `PROJECTED · NOT SAVED · PREVIEW` |
+| Any declared `advisor1/...` view versus declared `advisor2/...` view | `EXACT_PREWARM` after its own ordinary Compare preparation; otherwise `LIVE` | A parent projection cannot truthfully supply the requested pair's understanding report |
 | Two sibling views below the same advisor | `LIVE`, or a separately enumerated exact prewarm row when the scenario makes it likely | The opposite-side parent artifact contains no judgment between two Memories that occupied the same side |
 | A cross-task pair | `LIVE`, not task-cache reuse | The study cache is task-local and cross-task semantics were not jointly precomputed |
 | Any parent or descendant view after a Memory addition or edit | `LIVE` | The current revision is no longer the frame interpreted by the exact parent artifact |
@@ -475,8 +477,8 @@ The current recommended draft is:
 | Atomize | ☑ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Refine | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Forget | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Sever | ☐ | ☐ | ☐ | ☐ | ☐ | ☑ | ☐ |
-| Impact | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☐ |
+| Sever | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Impact | ☑ | ☑ | ☑ | ☑ | ☑ | ☐ | ☐ |
 
 `☑` means that one or more exact bases for that Task and operation are prepared
 and disclosed. Impact is keyed to the exact prepared operation proposal rather
@@ -485,11 +487,20 @@ participant-path input for prewarming; it does not mean the operation is
 unavailable or technically uncacheable.
 
 The matrix does not repeat projection mechanics. Every checked cell has an
-exact canonical basis; equal and subset requests may reuse it only through the
-declared operation adapter. Additions, edits, instruction changes, cross-task
-inputs, or other unsafe evidence changes run the complete requested operation
-live. Compare, Update, symmetric Meld, Directional Meld, Sever, and Impact
-retain separate artifact and output contracts.
+exact canonical basis; equal and supported subset requests may reuse it only
+through the declared operation adapter. Additions, edits, instruction changes,
+cross-task inputs, or other unsafe evidence changes run the complete requested
+operation live. Sever becomes checked only after each protocol-declared exact
+whole-frame request is generated. Compare, Update, symmetric Meld, Directional Meld, Sever,
+and Impact retain separate artifact and output contracts.
+
+The exact Compare matrix was materially generated on 2026-08-13, not merely
+enumerated. Its resumable manifest contains 718 rows (`56` Task 1, `289` Task
+2, `373` Task 3). Sixteen concurrent production `analyze_comparison` workers
+completed all rows with zero final failures; 713 artifacts were newly
+published and 5 evidence-identical existing rows were reused. The checked
+summary is
+[`outputs/study-compare-exact-matrix/20260813-exact-718/summary.json`](../outputs/study-compare-exact-matrix/20260813-exact-718/summary.json).
 
 The two Meld rows are intentionally distinct cache families. Symmetric
 `A + B → C` treats A and B as equal-authority read-only peers and materializes
@@ -508,7 +519,7 @@ The checked cells expand to the following initial basis list:
 | Task 2 peer | Compare, symmetric Meld | Descendant-inclusive `advisor1` `150` and `advisor2` `150`; symmetric Meld also records its exact new result destination and pre-response state |
 | Task 3 year↔year | Compare, symmetric Meld | Every exact year pair declared before the study, such as `2024` and `2025`; a combined or newly edited year Context is a different key |
 | Task 3 rule↔rule | Compare, symmetric Meld | The exact two ordinary Criteria frames selected for equal consideration; the pair must be frozen before the study |
-| Task 3 rule→memory | Sever | Descendant-inclusive `local/personal-memory` `300` plus the exact ordinary Criteria Context used by the study |
+| Task 3 rule→memory | Sever | The protocol's complete descendant-inclusive personal-memory × guardrails request, executed once as an ordinary whole-frame Sever turn; any narrower or changed request is a different exact key |
 | Prepared proposal in every checked Task column | Impact | The exact Atomize, Update, Meld, or Sever proposal digest and the unchanged Source/Target revisions used to produce its before-apply report |
 
 Directional Meld has one canonical Task 1 basis and may project only equal or
@@ -620,7 +631,7 @@ The executable registry should eventually record:
 - task-description, prompt, ruleset, model, and reasoning versions;
 - expected input count and the rationale for prewarming;
 - artifact key, completion status, and offline provider time; and
-- foreground policy: `EXACT_PREWARM`, `PARENT_PROJECTED`, `LIVE`, or
+- foreground policy: `EXACT_PREWARM`, operation-owned `PROJECTED`, `LIVE`, or
   `STALE_REFRESHING`.
 
 It must also record whether preparation completed successfully and whether the
@@ -647,7 +658,8 @@ is useful. The study therefore keeps two related but different registries:
 - the **evaluation corpus** contains every operation-and-task case selected for
   repeated quality testing, including live-only and negative cases; and
 - the **participant prewarm registry** contains only the frozen, scenario-valid
-  exact artifacts and projection routes declared before the first participant.
+  exact artifacts and operation-owned non-Compare projection routes declared
+  before the first participant.
 
 This is not a blind Cartesian product of every verb and every Context. A case
 must first satisfy the operation's type, authority, direction, and target
@@ -696,7 +708,7 @@ projection:
 | Update | Project only actions whose complete Source support, writable owner, and edited or removed Target survive; deletion-only subsets that leave no supported action are valid zero-action results |
 | Symmetric Meld | Project the validated Compare prerequisite, preserve its projected origin, and let the ordinary Meld adapter rebuild and validate complete relation and Memory coverage |
 | Directional Meld | Keep direction and owner routing fixed; retain an action only when all of its Source support and any baseline Memory survive, while an exact preservation ADD may be reparented to a surviving selected Target owner |
-| Sever | Project both Source and Criteria subsets; when a removed Criterion supported a surviving candidate, conservatively replace that candidate with exact `KEEP_AS_WRITTEN` rather than applying an absent rule |
+| Sever | Cache only an actually executed ordinary whole Source × whole Criteria request; do not project downward or compose child cells upward |
 | Atomize | Treat a changed or excerpted Memory as a new exact input; atoms cannot be projected from different Source wording as if the whole Memory were unchanged |
 | Refine | Cache only exact Memory, instruction, and revision tuples; new participant wording or instructions run live |
 | Impact | Recompute deterministic impact from an exact prepared proposal when possible; otherwise cache the exact proposal-digest report, not a loosely related operation result |
@@ -741,7 +753,7 @@ provider work begins.
 | Tutorial | Atomize the frozen practice Source directly; retain optional review findings without adding an inspection or approval step; exercise fixed Refine examples only as evaluation fixtures | Modified instruction and modified Source are live misses; an excerpt is a separate exact Atomize input, never a parent projection |
 | Task 1 | Compare, Update, symmetric Meld, directional Meld, and Impact on descendant-inclusive `construction-updates` `75` and `campus-wiki` `300` | Three scenario topics such as building access, route/facility changes, and parking/shop effects; reverse Meld direction and one Source or baseline edit are live controls; fixed Refine samples are evaluator-only unless the protocol displays those exact Memories |
 | Task 2 | Compare and symmetric Meld on `advisor1` `150` and `advisor2` `150`, plus Impact for the exact prepared Meld | Three aligned section pairs, including structure, methods/evaluation, and style/expression, plus one asymmetric-size partial; same-advisor comparison and a changed advisor revision are live controls; Update without an editable participant Target is a negative precondition test |
-| Task 3 | Every declared year-pair Compare and symmetric Meld; every declared rule-pair Compare and symmetric Meld; full `personal-memory` `300` to exact Criteria Sever; Impact for exact prepared Sever/Meld proposals | Year-to-month and month-to-month Compare controls; Source-year, Source-month, large-deletion, and Criteria-subtree Sever projections; edited or added Criteria and added personal Memory are misses; Forget utterance families run live only |
+| Task 3 | Every declared year-pair Compare and symmetric Meld; every declared rule-pair Compare and symmetric Meld; the protocol's full personal-memory × full guardrails Sever request; Impact for exact prepared Sever/Meld proposals | Year-to-month and month-to-month Compare controls; any narrower or otherwise changed Sever frame, edited or added Criteria, and added personal Memory are misses; Forget utterance families run live only |
 
 Each materializing operation runs on an isolated copy for quality evaluation.
 The campaign records the proposal, review decision, applied result, read-only
@@ -757,17 +769,17 @@ earlier all-pairs graph sidecars.
 
 | Work item | Implementation | Required verification |
 | --- | --- | --- |
-| Registry and lookup | Persist the frozen matrix, exact basis keys, preparation status, offline provider time, and allowed `EXACT_PREWARM` or projection route. Lookup is an optimization decision, never operation authorization. | A checked exact key hits with zero provider calls; an unchecked route, wrong operation mode, changed digest, or unlisted key takes the ordinary live path. No unrelated output file is searched. |
-| Compare | Store one canonical whole-pair relation artifact per declared basis. Project only a requested left subset versus right subset, repair relation sides and coverage, and label the result projected. | Extend `test_compare_prewarm_projection.py`: exact hit, subset coverage, group-count bound, same-side rejection, add/edit miss, stale ruleset miss, and zero partial publication. |
+| Registry and lookup | Persist one immutable content-addressed baseline bundle. `init-study` pins its digest and baseline UID; participant operations materialize only requested run-local state. Lookup is an optimization decision, never operation authorization. | Two runs share one bundle but have separate local sessions; a changed baseline creates a new digest; stale/tampered artifacts fail closed; copied legacy registries remain readable. |
+| Compare | Store one ordinary Compare artifact per declared named pair; no participant-facing parent projection. The frozen current matrix contains 718 pairs. | Exact hit, truthful pair-specific report, no provider on hit, missing pair live call, add/edit/config miss, and no partial publication. Generate and publish every matrix row before claiming complete coverage. |
 | Update | **Task 1 equal-frame reuse and unchanged-subset projection implemented.** Store an ordered Source-to-Target action proposal keyed by both complete evidence ledgers, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Retain only actions with complete surviving support and owner routing. | All `224/224` active Task 1 locator/descendant combinations hit without a provider: `6` equal and `218` projected, including `134` valid zero-action projections. Additions, edits, cross-task inputs, reversal, and configuration drift remain live misses. |
-| Symmetric Meld | **Task 1, Task 2, and all declared Task 3 equal and opposite-side subset paths implemented.** Reuse or project the Compare seed, bind only to a valid empty new C, and keep participant-authored synthesis turns live. | The active graph's executable Compare/Meld prerequisite products hit without a provider and retain exhaustive relation coverage. Same-side, cross-task, added, edited, or ambiguous inputs still miss. |
+| Symmetric Meld | Require the exact Compare seed for each declared named pair, bind only to a valid empty new C, and keep participant-authored synthesis turns live. | Every prepared pair opens without a provider; an unprepared pair runs the ordinary complete Compare prerequisite. Same-side, cross-task, added, edited, or ambiguous inputs still miss. |
 | Directional Meld | **Task 1 equal-frame reuse and unchanged-subset action projection implemented.** The operation-owned action ledger preserves direction, complete Source support, baseline identity, and writable owner routing independently of the projected Compare prerequisite. | All `182/182` executable active Task 1 products hit without a provider; the other `42` raw products have an empty Source or baseline and are outside Meld's request domain. Participant comments and fresh-partial semantic comparison remain separate work. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
-| Sever | **Task 3 equal-frame reuse and unchanged Source/Criteria subset projection implemented.** Store whole-Source plus whole-Criteria decisions as a hidden basis, then create a fresh review only after current authority and evidence validation. Removed support degrades a surviving candidate to exact KEEP. | All `1,408/1,408` executable active products hit without a provider (`1` equal, `1,407` projected); `88` empty-Source products are outside Sever's request domain. Additions, edits, output-name changes, and configuration drift remain live misses. |
+| Sever | Store each supported ordinary whole-frame Source × Criteria request as one exact artifact. The current intended full personal-memory × full guardrails request needs one real provider execution; any additional named request needs its own whole-frame execution unless its complete binding is evidence-identical. | Exact hit creates a fresh participant-local review without a provider; scope, evidence, description, output, or configuration drift makes one live whole-frame call; no projection, cell composition, or partial publication. |
 | Tutorial Atomize | **Implemented.** Store only the exact frozen practice Source and instruction analysis in Atomize's existing durable slot; create fresh run-local review state. | Exact reopen without provider, Source or instruction change miss, complete source provenance, configuration skip, atomic installation rollback, and no mutation before its existing review boundary. |
 | Refine | Store only frozen exact Memory, instruction, revision, and style-contract tuples that the protocol actually exposes. Participant-authored wording remains live. | Exact reopen, instruction or Source miss, bidirectional meaning review, required style checks, no unsupported factual unit, and unchanged Source until acceptance. |
 | Impact | Key a prepared report by the exact proposal and Source/Target revision digests, or recompute it deterministically when the proposal already contains the full typed diff. | Predicted-versus-applied owner, action, count, and digest agreement; exact reopen; proposal change miss; review before mutation; and read-only post-apply verification. |
-| Participant-visible status and study ledger | Render and record `EXACT PREWARM`, `PROJECTED`, or `LIVE`, registry version, foreground elapsed time, and separate offline provider work. | End-to-end Study runs assert the same registry for every participant. If UI changes materially, capture the required ordered color-PTY states for exact hit, projection, live miss, review, apply, and read-only verification. |
+| Participant-visible status and study ledger | Render and record the operation's truthful origin (`EXACT PREWARM`, an explicitly retained operation-owned projection, or `LIVE`), registry version, foreground elapsed time, and separate offline provider work. | End-to-end Study runs assert the same bundle digest for every participant. If UI changes materially, capture the required ordered color-PTY states for exact hit, any retained operation-owned projection, live miss, review, apply, and read-only verification. |
 
 The final integration campaign uses the frozen Study Profile and the repetition
 schedule above. It exercises every declared whole basis, all three predetermined

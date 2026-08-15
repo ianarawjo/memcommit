@@ -214,6 +214,43 @@ def test_exact_atomize_cli_discloses_prewarm_and_zero_provider(
     assert "practice/source-atomized · NOT CREATED" in result.output
 
 
+def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, source, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    memory = next(item for item in source.iter_items() if isinstance(item, Memory))
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("equivalent focused prewarm opened a provider")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "atomize",
+            "--context",
+            source.name,
+            "--memory",
+            memory.uid,
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "EXACT PREWARM · CURRENT" in result.output
+    assert "provider was not called" in result.output
+
+
 def test_exact_atomize_source_change_fails_before_publication(
     isolated_store,
     tmp_path,

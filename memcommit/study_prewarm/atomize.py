@@ -27,6 +27,7 @@ from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
+    declared_artifact_available,
     declared_installation_matches,
     record_declared_installation,
 )
@@ -424,7 +425,7 @@ def find_declared_atomize_prewarm(
             artifact.get("reasoning"),
         ) != (provider, model, reasoning):
             continue
-        if not declared_installation_matches(
+        if not declared_artifact_available(
             store,
             entry=entry,
             evidence=_installation_evidence(

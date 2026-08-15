@@ -26,7 +26,7 @@ from memcommit.profile_config import (
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
-    declared_installation_matches,
+    declared_artifact_available,
     record_declared_installation,
 )
 from memcommit.study_prewarm.registry import (
@@ -758,7 +758,7 @@ def find_installed_projectable_update_prewarm(
                 ),
             )
             if not (
-                declared_installation_matches(
+                declared_artifact_available(
                     store,
                     entry=entry,
                     evidence=_installation_evidence(

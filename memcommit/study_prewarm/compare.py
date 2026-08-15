@@ -34,6 +34,7 @@ from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_id
 from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
+    declared_artifact_available,
     declared_installation_matches,
     record_declared_installation,
 )
@@ -42,6 +43,7 @@ from memcommit.study_prewarm.registry import (
     payload_digest,
     load_artifact,
     load_registry,
+    uses_shared_bundle,
 )
 from memcommit.study_prewarm.scope_equivalence import (
     transparent_context_scope_matches,
@@ -720,6 +722,14 @@ def find_declared_equivalent_compare_analysis(
     registry = load_registry(store.store_dir)
     if registry is None:
         return None
+    if uses_shared_bundle(store.store_dir):
+        identity = study_run_identity(registry_snapshot.active)
+        if (
+            identity is None
+            or identity.role != "PARTICIPANT"
+            or identity.baseline_profile_uid != registry.baseline_profile_uid
+        ):
+            return None
     task = _task_root(comparison_input.frames[0].context_name)
     if (
         task is None
@@ -982,7 +992,7 @@ def _declared_compare_installation_matches(
 ) -> bool:
     # The legacy materialized receipt remains readable for already-created
     # Study runs; new runs use only the entry-key hidden receipt until first use.
-    return declared_installation_matches(
+    return declared_artifact_available(
         store,
         entry=entry,
         evidence=_installation_evidence(

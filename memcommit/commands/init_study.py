@@ -8,7 +8,9 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.commands.study_name_dialog import choose_study_profile_name
 from memcommit.profile_config import (
     ProfileConfigError,
@@ -145,16 +147,18 @@ def cmd(
     )
     if any(
         (
-            result.installed_compare_prewarms,
-            result.installed_atomize_prewarms,
-            result.installed_update_prewarms,
-            result.installed_sever_prewarms,
-            result.installed_directional_meld_prewarms,
+            result.declared_compare_prewarms,
+            result.declared_atomize_prewarms,
+            result.declared_summarize_prewarms,
+            result.declared_update_prewarms,
+            result.declared_sever_prewarms,
+            result.declared_directional_meld_prewarms,
+            result.declared_meld_resolution_prewarms,
         )
     ):
         # Setup diagnostics must not prime participants with operation names or
         # reveal which measured task has a prepared semantic path.
-        typer.echo("Prewarms and receipts installed.")
+        typer.echo("Shared Study prewarm bundle attached.")
     typer.echo(
         "Operational history starts empty; declared caches remain hidden until "
         "the first matching operation. Checkpoints, sessions, ad-hoc caches, "

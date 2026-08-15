@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.authority.access import ContextAccess, resolve_context_access
 from memcommit.config import Config
 from memcommit.context import Context
 from memcommit.derived_policy import (
@@ -31,7 +31,7 @@ from memcommit.store import (
 )
 from memcommit.study_prewarm.installations import (
     INSTALLATIONS_DIRECTORY_NAME,
-    declared_installation_matches,
+    declared_artifact_available,
     record_declared_installation,
 )
 from memcommit.study_prewarm.registry import (
@@ -40,11 +40,6 @@ from memcommit.study_prewarm.registry import (
     load_registry,
     payload_digest,
 )
-from memcommit.study_prewarm.scope_equivalence import (
-    ordered_scope_evidence_relation,
-)
-
-
 SEVER_ARTIFACT_KIND = "STUDY_SEVER_EXACT_PREWARM"
 SEVER_ARTIFACT_SCHEMA_VERSION = 1
 TASK = "task-3"
@@ -64,7 +59,7 @@ class SeverPrewarmInstallResult:
 
 @dataclass(frozen=True)
 class SeverPrewarmMatch:
-    """One complete candidate ledger rebound onto an unchanged source subset."""
+    """One complete candidate ledger rebound onto an exact whole request."""
 
     session: SeverSession
     origin: str
@@ -142,7 +137,7 @@ def build_sever_prewarm_artifact(
     reasoning: str | None,
     offline_provider_seconds: float,
 ) -> tuple[str, dict[str, object]]:
-    """Build one portable exact Task 3 Source × Criteria proposal."""
+    """Build one portable exact Task 3 whole-Source × whole-Criteria proposal."""
 
     portable = _portable_session(session)
     if (
@@ -225,8 +220,10 @@ def _validate_artifact(
     provider = value.get("provider")
     model = value.get("model")
     reasoning = value.get("reasoning")
-    if not isinstance(provider, str) or not isinstance(model, str) or (
-        reasoning is not None and not isinstance(reasoning, str)
+    if (
+        not isinstance(provider, str)
+        or not isinstance(model, str)
+        or (reasoning is not None and not isinstance(reasoning, str))
     ):
         raise StudyPrewarmRegistryError("Sever provider identity is invalid.")
     expected = payload_digest(
@@ -298,7 +295,7 @@ def _receipt_matches(
             ),
             None,
         )
-        if entry is not None and declared_installation_matches(
+        if entry is not None and declared_artifact_available(
             store,
             entry=entry,
             evidence=_installation_evidence(source, criteria),
@@ -335,9 +332,9 @@ def _fresh_review(
     source: SeverContextBinding,
     criteria: SeverContextBinding,
 ) -> SeverSession:
-    if not _semantic_binding_matches(prepared.source, source) or not _semantic_binding_matches(
-        prepared.criteria, criteria
-    ):
+    if not _semantic_binding_matches(
+        prepared.source, source
+    ) or not _semantic_binding_matches(prepared.criteria, criteria):
         raise StudyPrewarmRegistryError(
             "Declared Sever prewarm does not match current inputs."
         )
@@ -363,97 +360,6 @@ def _fresh_review(
     )
 
 
-def _memory_evidence(binding: SeverContextBinding) -> tuple[tuple[str, str, str], ...]:
-    return tuple(
-        (memory.uid, memory.context_name, memory.content)
-        for memory in binding.memories
-    )
-
-
-def _project_review(
-    prepared: SeverSession,
-    *,
-    source: SeverContextBinding,
-    criteria: SeverContextBinding,
-) -> tuple[SeverSession, str] | None:
-    """Filter decisions only when their complete semantic support survives."""
-
-    source_relation = ordered_scope_evidence_relation(
-        _memory_evidence(prepared.source),
-        _memory_evidence(source),
-    )
-    criteria_relation = ordered_scope_evidence_relation(
-        _memory_evidence(prepared.criteria),
-        _memory_evidence(criteria),
-    )
-    if source_relation is None or criteria_relation is None or not source.memories:
-        return None
-    source_uids = {memory.uid for memory in source.memories}
-    criterion_uids = {memory.uid for memory in criteria.memories}
-    prepared_by_source = {
-        candidate.source_memory_uid: candidate
-        for candidate in prepared.candidates
-    }
-    source_by_uid = {memory.uid: memory for memory in source.memories}
-    if not source_uids <= set(prepared_by_source):
-        return None
-    candidates = tuple(
-        candidate
-        if set(candidate.criterion_memory_uids) <= criterion_uids
-        else replace(
-            candidate,
-            recommendation="KEEP_AS_WRITTEN",
-            proposed_content=source_by_uid[source_uid].content,
-            rationale=(
-                "The requested Criteria subset removes prepared support for "
-                "this transformation, so the Source is preserved as written."
-            ),
-            criterion_memory_uids=(),
-        )
-        for source_uid in (memory.uid for memory in source.memories)
-        for candidate in (prepared_by_source[source_uid],)
-    )
-    session_uid = str(uuid.uuid4())
-    candidates = tuple(
-        replace(
-            candidate,
-            uid=str(uuid.uuid5(uuid.UUID(session_uid), candidate.source_memory_uid)),
-            selection="RECOMMENDED",
-            custom_content="",
-        )
-        for candidate in candidates
-    )
-    summary = prepared.applied_summary
-    if summary is not None and (
-        not set(summary.source_memory_uids) <= source_uids
-        or not set(summary.criterion_memory_uids) <= criterion_uids
-    ):
-        summary = None
-    projected = replace(
-        prepared,
-        uid=session_uid,
-        revision=1,
-        state="REVIEWING",
-        source=source,
-        criteria=criteria,
-        overview=(
-            prepared.overview
-            if source_relation == criteria_relation == "EQUAL"
-            else "Projected from the declared Sever basis; every displayed "
-            "Source decision retains all of its cited Criteria support."
-        ),
-        candidates=candidates,
-        applied_summary=summary,
-        application=None,
-    )
-    # Round-trip through validation so projection can never publish partial
-    # Source coverage or dangling Criteria references.
-    validated = SeverSession.from_dict(projected.to_dict())
-    return validated, (
-        "EQUIVALENT_SCOPE_PREWARM"
-        if source_relation == criteria_relation == "EQUAL"
-        else "PROJECTED_PREWARM"
-    )
 def _validate_description(store: MemoryStore, description: dict[str, str]) -> None:
     current = store.load_direct(description["name"])
     if (
@@ -463,6 +369,45 @@ def _validate_description(store: MemoryStore, description: dict[str, str]) -> No
         raise StudyPrewarmRegistryError(
             "Task 3 description changed after Sever was prepared."
         )
+
+
+def _capture_prepared_basis(
+    store: MemoryStore,
+    prepared: SeverSession,
+    *,
+    registry_snapshot: ProfileRegistry | None = None,
+) -> tuple[ContextAccess, ContextAccess, SeverContextBinding, SeverContextBinding]:
+    """Reload one declared whole request by its exact locators and scope flags."""
+
+    current_name = store.current_context_name()
+    source_access = resolve_context_access(
+        store,
+        prepared.source.root_name,
+        current_name=current_name,
+        required_permission="READ",
+        registry=registry_snapshot,
+    )
+    criteria_access = resolve_context_access(
+        store,
+        prepared.criteria.root_name,
+        current_name=current_name,
+        required_permission="READ",
+        registry=registry_snapshot,
+    )
+    # Import lazily because the production runtime consults this module for an
+    # exact lookup after freezing ordinary inputs. The application boundary,
+    # rather than the CLI command, owns the shared frame-capture contract.
+    from memcommit.sever_runtime import capture_sever_binding
+
+    source = capture_sever_binding(
+        source_access,
+        include_descendants=prepared.source.include_descendants,
+    )
+    criteria = capture_sever_binding(
+        criteria_access,
+        include_descendants=prepared.criteria.include_descendants,
+    )
+    return source_access, criteria_access, source, criteria
 
 
 def install_declared_sever_prewarms(
@@ -479,9 +424,13 @@ def install_declared_sever_prewarms(
         return SeverPrewarmInstallResult(0, 0, 0, ())
     identity = study_run_identity(profile)
     if identity is None or identity.role != "PARTICIPANT":
-        raise StudyPrewarmRegistryError("Sever prewarm requires a participant Study Profile.")
+        raise StudyPrewarmRegistryError(
+            "Sever prewarm requires a participant Study Profile."
+        )
     if registry.baseline_profile_uid != identity.baseline_profile_uid:
-        raise StudyPrewarmRegistryError("Sever prewarm belongs to a different baseline.")
+        raise StudyPrewarmRegistryError(
+            "Sever prewarm belongs to a different baseline."
+        )
     provider_identity = _configured_semantic_identity()
     declared = skipped = 0
     installed: list[str] = []
@@ -499,32 +448,16 @@ def install_declared_sever_prewarms(
             skipped += 1
             continue
         _validate_description(store, description)
-        current_name = store.current_context_name()
-        source_access = resolve_context_access(
+        source_access, criteria_access, source, criteria = _capture_prepared_basis(
             store,
-            SOURCE_NAME,
-            current_name=current_name,
-            required_permission="READ",
-            registry=registry_snapshot,
+            prepared,
+            registry_snapshot=registry_snapshot,
         )
-        criteria_access = resolve_context_access(
-            store,
-            CRITERIA_NAME,
-            current_name=current_name,
-            required_permission="READ",
-            registry=registry_snapshot,
-        )
-        output_access = _local_output_access(store, OUTPUT_NAME)
+        output_access = _local_output_access(store, prepared.output_name)
         authorize_combination((source_access, criteria_access))
         authorize_derived_transfer(source_access, output_access)
         authorize_derived_transfer(criteria_access, output_access)
         authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
-        # Import lazily because the runtime cache adapter consults this module;
-        # Study installation must not route through the terminal command.
-        from memcommit.sever_runtime import capture_sever_binding
-
-        source = capture_sever_binding(source_access, include_descendants=True)
-        criteria = capture_sever_binding(criteria_access, include_descendants=True)
         _fresh_review(prepared, source=source, criteria=criteria)
         if publish:
             record_declared_installation(
@@ -577,10 +510,14 @@ def find_installed_exact_sever_prewarm(
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
         if (
-            artifact.get("provider"),
-            artifact.get("model"),
-            artifact.get("reasoning"),
-        ) != provider_identity or prepared.output_name != output_name:
+            (
+                artifact.get("provider"),
+                artifact.get("model"),
+                artifact.get("reasoning"),
+            )
+            != provider_identity
+            or prepared.output_name != output_name
+        ):
             continue
         try:
             _validate_description(store, description)
@@ -614,77 +551,17 @@ def find_installed_projectable_sever_prewarm(
     criteria: SeverContextBinding,
     output_name: str,
 ) -> SeverPrewarmMatch | None:
-    """Return an equal or support-preserving subset review without inference."""
+    """Compatibility facade; projection is intentionally unavailable."""
 
-    registry = load_registry(store.store_dir)
-    if registry is None or not (
-        source.root_name.startswith(TASK + "/")
-        and criteria.root_name.startswith(TASK + "/")
-    ):
+    exact = find_installed_exact_sever_prewarm(
+        store=store,
+        source=source,
+        criteria=criteria,
+        output_name=output_name,
+    )
+    if exact is None:
         return None
-    provider_identity = _configured_semantic_identity()
-    matches: list[SeverPrewarmMatch] = []
-    for entry in registry.entries:
-        if not entry.enabled or entry.operation != "SEVER":
-            continue
-        artifact = load_artifact(store.store_dir, entry)
-        prepared, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
-            (
-                artifact.get("provider"),
-                artifact.get("model"),
-                artifact.get("reasoning"),
-            )
-            != provider_identity
-            or prepared.output_name != output_name
-        ):
-            continue
-        try:
-            _validate_description(store, description)
-            from memcommit.sever_runtime import capture_sever_binding
-
-            current_name = store.current_context_name()
-            canonical_source = capture_sever_binding(
-                resolve_context_access(
-                    store,
-                    SOURCE_NAME,
-                    current_name=current_name,
-                    required_permission="READ",
-                ),
-                include_descendants=True,
-            )
-            canonical_criteria = capture_sever_binding(
-                resolve_context_access(
-                    store,
-                    CRITERIA_NAME,
-                    current_name=current_name,
-                    required_permission="READ",
-                ),
-                include_descendants=True,
-            )
-        except (OSError, StudyPrewarmRegistryError, ValueError):
-            continue
-        if not _receipt_matches(
-            store,
-            entry_key=entry.key,
-            source=canonical_source,
-            criteria=canonical_criteria,
-        ):
-            continue
-        projected = _project_review(
-            prepared,
-            source=source,
-            criteria=criteria,
-        )
-        if projected is None:
-            continue
-        session, origin = projected
-        matches.append(SeverPrewarmMatch(session=session, origin=origin))
-    if len(matches) > 1:
-        raise StudyPrewarmRegistryError(
-            "Multiple declared Sever prewarms match the same frozen request."
-        )
-    return matches[0] if matches else None
+    return SeverPrewarmMatch(session=exact, origin="EXACT_PREWARM")
 
 
 def installed_sever_request_origin(
@@ -712,9 +589,12 @@ def is_installed_exact_sever_request(
 ) -> bool:
     """Report whether this already-frozen request used the declared exact row."""
 
-    return find_installed_exact_sever_prewarm(
-        store=store,
-        source=source,
-        criteria=criteria,
-        output_name=output_name,
-    ) is not None
+    return (
+        find_installed_exact_sever_prewarm(
+            store=store,
+            source=source,
+            criteria=criteria,
+            output_name=output_name,
+        )
+        is not None
+    )

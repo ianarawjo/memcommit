@@ -14,10 +14,17 @@ import json
 from pathlib import Path
 from typing import Mapping
 
+from memcommit.profile_config import (
+    load_profile_registry,
+    profile_store_dir,
+    study_run_identity,
+)
 from memcommit.store import MemoryStore, _write_json_atomic
 from memcommit.study_prewarm.registry import (
     StudyPrewarmEntry,
     StudyPrewarmRegistryError,
+    load_registry,
+    uses_shared_bundle,
 )
 
 
@@ -128,4 +135,36 @@ def declared_installation_matches(
         and value.get("entry_key") == entry.key
         and value.get("artifact_sha256") == entry.artifact_sha256
         and value.get("evidence") == _normalized_evidence(evidence)
+    )
+
+
+def declared_artifact_available(
+    store: MemoryStore,
+    *,
+    entry: StudyPrewarmEntry,
+    evidence: Mapping[str, str],
+) -> bool:
+    """Authorize one old receipt or one first-use shared Study artifact.
+
+    A copied legacy run proves setup-time validation with its hidden receipt.
+    A new Study run instead pins an immutable shared bundle and performs the
+    same operation-specific evidence validation at first use.  The bundle
+    reference is the availability proof; ordinary session or analysis state
+    is still created only by the operation the participant actually invoked.
+    """
+
+    if declared_installation_matches(store, entry=entry, evidence=evidence):
+        return True
+    if not uses_shared_bundle(store.store_dir):
+        return False
+    registry = load_registry(store.store_dir)
+    profiles = load_profile_registry()
+    identity = study_run_identity(profiles.active)
+    return bool(
+        registry is not None
+        and entry in registry.entries
+        and store.store_dir.resolve() == profile_store_dir(profiles.active).resolve()
+        and identity is not None
+        and identity.role == "PARTICIPANT"
+        and identity.baseline_profile_uid == registry.baseline_profile_uid
     )

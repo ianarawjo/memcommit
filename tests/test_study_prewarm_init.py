@@ -39,6 +39,11 @@ from memcommit.study_prewarm.compare import (
     find_declared_equivalent_compare_analysis,
 )
 from memcommit.study_prewarm.registry import publish_artifact
+from memcommit.study_prewarm.registry import (
+    bundle_reference_path,
+    registry_root,
+    shared_bundle_root,
+)
 
 
 runner = CliRunner(mix_stderr=False)
@@ -240,12 +245,18 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     initialized = runner.invoke(app, ["init-study", "seed-target"])
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
-    assert initialized.output.count("Prewarms and receipts installed.") == 1
+    assert initialized.output.count("Shared Study prewarm bundle attached.") == 1
     assert "Compare prewarms" not in initialized.output
     assert "Atomize prewarms" not in initialized.output
     second_registry = load_profile_registry()
     second = second_registry.active
     second_store = MemoryStore(root=profile_store_dir(second), create=False)
+    reference = json.loads(
+        bundle_reference_path(second_store.store_dir).read_text(encoding="utf-8")
+    )
+    assert not registry_root(second_store.store_dir).exists()
+    assert not (second_store.store_dir / "study-prewarm-installations").exists()
+    assert shared_bundle_root(reference["bundle_digest"]).is_dir()
     saved = load_granted_comparison_artifact(
         second_store,
         analysis.frames[0].context_uid,
@@ -274,6 +285,12 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         output_context_name=atomize_match.output_context_name,
     )
     assert opened_atomize.materialized_prepared is True
+    assert comparison_session_entries(second_store) == ()
+    assert load_granted_comparison_artifact(
+        second_store,
+        analysis.frames[0].context_uid,
+        analysis.frames[1].context_uid,
+    ) is None
 
     current_name = second_store.current_context_name()
     compare_accesses = tuple(

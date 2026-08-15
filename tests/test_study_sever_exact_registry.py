@@ -231,6 +231,7 @@ def test_exact_sever_cli_discloses_prewarm_origin(
             CRITERIA_NAME,
             "--save-as",
             OUTPUT_NAME,
+            "--recursive",
         ],
     )
 
@@ -349,7 +350,7 @@ def _subset_binding(binding, memories):
     )
 
 
-def test_sever_projects_only_when_every_selected_decision_keeps_its_support(
+def test_sever_never_projects_a_whole_frame_artifact_to_subsets(
     isolated_store, tmp_path, monkeypatch
 ):
     store, profile, registry, _prepared, source, criteria = _fixture(
@@ -363,25 +364,26 @@ def test_sever_projects_only_when_every_selected_decision_keeps_its_support(
     secret, preference = source.memories
     empty_criteria = _subset_binding(criteria, ())
 
-    supported = find_installed_projectable_sever_prewarm(
+    exact = find_installed_projectable_sever_prewarm(
+        store=store,
+        source=source,
+        criteria=criteria,
+        output_name=OUTPUT_NAME,
+    )
+    preference_subset = find_installed_projectable_sever_prewarm(
         store=store,
         source=_subset_binding(source, (preference,)),
         criteria=empty_criteria,
         output_name=OUTPUT_NAME,
     )
-    unsupported = find_installed_projectable_sever_prewarm(
+    secret_subset = find_installed_projectable_sever_prewarm(
         store=store,
         source=_subset_binding(source, (secret,)),
         criteria=empty_criteria,
         output_name=OUTPUT_NAME,
     )
 
-    assert supported is not None
-    assert supported.origin == "PROJECTED_PREWARM"
-    assert [item.source_memory_uid for item in supported.session.candidates] == [
-        preference.uid
-    ]
-    assert unsupported is not None
-    assert unsupported.origin == "PROJECTED_PREWARM"
-    assert unsupported.session.candidates[0].recommendation == "KEEP_AS_WRITTEN"
-    assert unsupported.session.candidates[0].criterion_memory_uids == ()
+    assert exact is not None
+    assert exact.origin == "EXACT_PREWARM"
+    assert preference_subset is None
+    assert secret_subset is None

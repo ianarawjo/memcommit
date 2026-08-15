@@ -1,9 +1,11 @@
 """Strict task-local registry for setup-time Study semantic artifacts.
 
-The registry is copied only from the selected Study baseline into a new run.
-It is not searched under ``outputs/`` and it is never an operation allowlist.
-Each enabled entry names one exact artifact whose digest is checked before an
-operation-owned installer is allowed to inspect its semantic payload.
+The selected Study baseline publishes one content-addressed, immutable bundle.
+Participant runs pin that bundle with a small local reference instead of
+copying every artifact.  It is not searched under ``outputs/`` and it is never
+an operation allowlist.  Each enabled entry names one exact artifact whose
+digest is checked before an operation-owned installer may inspect its semantic
+payload.
 """
 
 from __future__ import annotations
@@ -13,8 +15,11 @@ import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
+import shutil
 from typing import Literal
 import uuid
+
+from memcommit.profile_config import profile_control_dir
 
 
 REGISTRY_DIRECTORY_NAME = "study-semantic-prewarm"
@@ -22,13 +27,19 @@ REGISTRY_FILE_NAME = "registry.json"
 REGISTRY_KIND = "STUDY_SEMANTIC_PREWARM_REGISTRY"
 REGISTRY_SCHEMA_VERSION = 1
 REGISTRY_POLICY_VERSION = "declared-exact-v1"
+BUNDLE_REFERENCE_FILE_NAME = "study-semantic-prewarm-reference.json"
+BUNDLE_REFERENCE_KIND = "STUDY_SEMANTIC_PREWARM_BUNDLE_REFERENCE"
+BUNDLE_REFERENCE_SCHEMA_VERSION = 1
+SHARED_BUNDLES_DIRECTORY_NAME = "study-semantic-prewarm-bundles"
 
 PrewarmOperation = Literal[
     "COMPARE",
     "UPDATE",
     "MELD_DIRECTIONAL",
+    "MELD_RESOLUTION",
     "SEVER",
     "ATOMIZE",
+    "SUMMARIZE",
 ]
 
 
@@ -65,6 +76,18 @@ def file_digest(path: Path) -> str:
 
 def registry_root(store_root: Path) -> Path:
     return Path(store_root) / REGISTRY_DIRECTORY_NAME
+
+
+def bundle_reference_path(store_root: Path) -> Path:
+    return Path(store_root) / BUNDLE_REFERENCE_FILE_NAME
+
+
+def shared_bundles_root() -> Path:
+    return profile_control_dir() / SHARED_BUNDLES_DIRECTORY_NAME
+
+
+def shared_bundle_root(bundle_digest: str) -> Path:
+    return shared_bundles_root() / bundle_digest
 
 
 def _artifact_relative_path(value: object) -> str:
@@ -120,8 +143,10 @@ class StudyPrewarmEntry:
                 "COMPARE",
                 "UPDATE",
                 "MELD_DIRECTIONAL",
+                "MELD_RESOLUTION",
                 "SEVER",
                 "ATOMIZE",
+                "SUMMARIZE",
             }
             or not isinstance(task, str)
             or task not in {"tutorial", "task-1", "task-2", "task-3"}
@@ -205,10 +230,17 @@ class StudyPrewarmRegistry:
         }
 
 
-def load_registry(store_root: Path) -> StudyPrewarmRegistry | None:
-    root = registry_root(store_root)
-    if not root.exists():
-        return None
+def registry_bundle_digest(registry: StudyPrewarmRegistry) -> str:
+    """Identify the registry and every artifact byte it transitively binds."""
+
+    return payload_digest(registry.to_dict())
+
+
+def _load_registry_root(
+    root: Path,
+    *,
+    validate_artifacts: bool,
+) -> StudyPrewarmRegistry:
     if not root.is_dir() or root.is_symlink():
         raise StudyPrewarmRegistryError("Study prewarm directory is unsafe.")
     path = root / REGISTRY_FILE_NAME
@@ -220,22 +252,111 @@ def load_registry(store_root: Path) -> StudyPrewarmRegistry | None:
     except (OSError, json.JSONDecodeError, ValueError) as error:
         raise StudyPrewarmRegistryError("Cannot read Study prewarm registry.") from error
     registry = StudyPrewarmRegistry.from_dict(raw)
-    for entry in registry.entries:
-        artifact_path = root / entry.artifact
-        if (
-            not artifact_path.exists()
-            or not artifact_path.is_file()
-            or artifact_path.is_symlink()
-            or file_digest(artifact_path) != entry.artifact_sha256
-        ):
-            raise StudyPrewarmRegistryError(
-                f"Study prewarm artifact {entry.key!r} is missing or stale."
-            )
+    if validate_artifacts:
+        for entry in registry.entries:
+            artifact_path = root / entry.artifact
+            if (
+                not artifact_path.exists()
+                or not artifact_path.is_file()
+                or artifact_path.is_symlink()
+                or file_digest(artifact_path) != entry.artifact_sha256
+            ):
+                raise StudyPrewarmRegistryError(
+                    f"Study prewarm artifact {entry.key!r} is missing or stale."
+                )
     return registry
 
 
+def _read_bundle_reference(store_root: Path) -> tuple[str, str] | None:
+    path = bundle_reference_path(store_root)
+    if not path.exists():
+        return None
+    if not path.is_file() or path.is_symlink():
+        raise StudyPrewarmRegistryError("Study prewarm bundle reference is unsafe.")
+    try:
+        with path.open(encoding="utf-8") as file:
+            value = json.load(file, object_pairs_hook=_strict_object)
+    except (OSError, json.JSONDecodeError, ValueError) as error:
+        raise StudyPrewarmRegistryError(
+            "Cannot read Study prewarm bundle reference."
+        ) from error
+    expected = {
+        "kind",
+        "schema_version",
+        "baseline_profile_uid",
+        "bundle_digest",
+    }
+    if not isinstance(value, dict) or set(value) != expected:
+        raise StudyPrewarmRegistryError("Study prewarm bundle reference is invalid.")
+    digest = value.get("bundle_digest")
+    baseline_uid = value.get("baseline_profile_uid")
+    if (
+        value.get("kind") != BUNDLE_REFERENCE_KIND
+        or value.get("schema_version") != BUNDLE_REFERENCE_SCHEMA_VERSION
+        or not isinstance(digest, str)
+        or len(digest) != 64
+        or any(character not in "0123456789abcdef" for character in digest)
+        or not isinstance(baseline_uid, str)
+    ):
+        raise StudyPrewarmRegistryError("Study prewarm bundle reference is invalid.")
+    try:
+        canonical_uid = str(uuid.UUID(baseline_uid))
+    except (AttributeError, TypeError, ValueError) as error:
+        raise StudyPrewarmRegistryError(
+            "Study prewarm bundle baseline identity is invalid."
+        ) from error
+    if canonical_uid != baseline_uid:
+        raise StudyPrewarmRegistryError(
+            "Study prewarm bundle baseline identity is invalid."
+        )
+    return digest, baseline_uid
+
+
+def _registry_source_root(store_root: Path) -> Path | None:
+    local = registry_root(store_root)
+    if local.exists():
+        if bundle_reference_path(store_root).exists():
+            raise StudyPrewarmRegistryError(
+                "Study prewarm store has both a local bundle and a shared reference."
+            )
+        return local
+    reference = _read_bundle_reference(store_root)
+    if reference is None:
+        return None
+    digest, baseline_uid = reference
+    root = shared_bundle_root(digest)
+    registry = _load_registry_root(root, validate_artifacts=False)
+    if (
+        registry_bundle_digest(registry) != digest
+        or registry.baseline_profile_uid != baseline_uid
+    ):
+        raise StudyPrewarmRegistryError(
+            "Shared Study prewarm bundle does not match its pinned reference."
+        )
+    return root
+
+
+def load_registry(store_root: Path) -> StudyPrewarmRegistry | None:
+    root = _registry_source_root(store_root)
+    if root is None:
+        return None
+    # Registry metadata is cheap and binds every artifact digest.  Artifact
+    # bytes remain lazy: the operation reads and verifies only its requested
+    # exact entry through ``load_artifact``.
+    return _load_registry_root(root, validate_artifacts=False)
+
+
+def uses_shared_bundle(store_root: Path) -> bool:
+    """Report whether this store pins a shared Study bundle."""
+
+    return _read_bundle_reference(store_root) is not None
+
+
 def load_artifact(store_root: Path, entry: StudyPrewarmEntry) -> dict[str, object]:
-    path = registry_root(store_root) / entry.artifact
+    root = _registry_source_root(store_root)
+    if root is None:
+        raise StudyPrewarmRegistryError("Study prewarm registry is unavailable.")
+    path = root / entry.artifact
     if not path.is_file() or path.is_symlink() or file_digest(path) != entry.artifact_sha256:
         raise StudyPrewarmRegistryError("Study prewarm artifact changed after lookup.")
     try:
@@ -265,6 +386,120 @@ def _write_json_atomic(path: Path, value: object) -> None:
             temporary.unlink()
 
 
+def publish_shared_bundle(store_root: Path) -> tuple[str, StudyPrewarmRegistry] | None:
+    """Publish one baseline's declared artifacts into immutable shared storage.
+
+    The bundle directory is content-addressed by the validated registry, whose
+    entries already bind every artifact byte by SHA-256.  A later baseline
+    revision therefore creates a new directory rather than changing an older
+    participant run's semantic starting point.
+    """
+
+    source = registry_root(store_root)
+    if not source.exists():
+        return None
+    if bundle_reference_path(store_root).exists():
+        raise StudyPrewarmRegistryError(
+            "A shared Study run cannot republish its pinned prewarm bundle."
+        )
+    registry = _load_registry_root(source, validate_artifacts=False)
+    digest = registry_bundle_digest(registry)
+    parent = shared_bundles_root()
+    if parent.exists() and (not parent.is_dir() or parent.is_symlink()):
+        raise StudyPrewarmRegistryError("Shared Study prewarm storage is unsafe.")
+    parent.mkdir(parents=True, exist_ok=True)
+    destination = shared_bundle_root(digest)
+    if destination.exists():
+        # Existing immutable content was validated when first published.
+        # Later init-study runs only pin its digest; exact artifact bytes are
+        # rechecked lazily by the operation that requests that entry.
+        restored = _load_registry_root(destination, validate_artifacts=False)
+        if registry_bundle_digest(restored) != digest or restored != registry:
+            raise StudyPrewarmRegistryError(
+                "Shared Study prewarm bundle digest is occupied."
+            )
+        return digest, restored
+
+    # A new digest is the only path that pays the one-time full source-tree
+    # validation and copy cost.
+    registry = _load_registry_root(source, validate_artifacts=True)
+    staging = parent / f".{digest}.write-{uuid.uuid4().hex}"
+    try:
+        staging.mkdir()
+        _write_json_atomic(staging / REGISTRY_FILE_NAME, registry.to_dict())
+        for entry in registry.entries:
+            source_path = source / entry.artifact
+            target_path = staging / entry.artifact
+            target_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source_path, target_path)
+        restored = _load_registry_root(staging, validate_artifacts=True)
+        if registry_bundle_digest(restored) != digest or restored != registry:
+            raise StudyPrewarmRegistryError(
+                "Shared Study prewarm bundle changed while publishing."
+            )
+        try:
+            os.replace(staging, destination)
+        except OSError:
+            # Two init-study processes may finish the same digest concurrently.
+            # The losing publisher accepts only a fully validated identical
+            # destination; every other collision remains an error.
+            if not destination.exists():
+                raise
+            concurrent = _load_registry_root(
+                destination,
+                validate_artifacts=True,
+            )
+            if registry_bundle_digest(concurrent) != digest or concurrent != registry:
+                raise StudyPrewarmRegistryError(
+                    "Concurrent Study prewarm bundle publication conflicted."
+                )
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+    return digest, registry
+
+
+def attach_shared_bundle(
+    *,
+    baseline_store_root: Path,
+    participant_store_root: Path,
+) -> str | None:
+    """Pin a participant run to one shared immutable baseline bundle."""
+
+    published = publish_shared_bundle(baseline_store_root)
+    if published is None:
+        return None
+    digest, registry = published
+    participant_root = Path(participant_store_root)
+    if registry_root(participant_root).exists():
+        raise StudyPrewarmRegistryError(
+            "Participant Study store already contains a local prewarm bundle."
+        )
+    path = bundle_reference_path(participant_root)
+    if path.exists():
+        raise StudyPrewarmRegistryError(
+            "Participant Study prewarm reference is already occupied."
+        )
+    _write_json_atomic(
+        path,
+        {
+            "kind": BUNDLE_REFERENCE_KIND,
+            "schema_version": BUNDLE_REFERENCE_SCHEMA_VERSION,
+            "baseline_profile_uid": registry.baseline_profile_uid,
+            "bundle_digest": digest,
+        },
+    )
+    # Read through the participant boundary before publication.  This proves
+    # that later operations can resolve the exact pinned bundle without
+    # inheriting mutable state from the baseline Profile.
+    rebound = load_registry(participant_root)
+    if rebound != registry:
+        raise StudyPrewarmRegistryError(
+            "Participant Study prewarm reference could not be reloaded."
+        )
+    return digest
+
+
 def publish_artifact(
     store_root: Path,
     *,
@@ -277,6 +512,10 @@ def publish_artifact(
     """Atomically add one declared exact artifact to a baseline registry."""
 
     root = registry_root(store_root)
+    if bundle_reference_path(store_root).exists():
+        raise StudyPrewarmRegistryError(
+            "Cannot publish an artifact into a shared Study bundle reference."
+        )
     if root.exists() and (not root.is_dir() or root.is_symlink()):
         raise StudyPrewarmRegistryError("Study prewarm directory is unsafe.")
     artifact_relative = f"artifacts/{operation.lower()}/{key}.json"
@@ -298,7 +537,11 @@ def publish_artifact(
         artifact_sha256=artifact_sha256,
         enabled=True,
     )
-    previous = load_registry(store_root) if root.exists() else None
+    previous = (
+        _load_registry_root(root, validate_artifacts=True)
+        if root.exists()
+        else None
+    )
     if previous is not None and previous.baseline_profile_uid != baseline_profile_uid:
         raise StudyPrewarmRegistryError(
             "Cannot mix prewarms from different Study baselines."
@@ -320,7 +563,7 @@ def publish_artifact(
     )
     _write_json_atomic(root / REGISTRY_FILE_NAME, registry.to_dict())
     # Validate the just-published bundle using the same strict setup reader.
-    restored = load_registry(store_root)
+    restored = _load_registry_root(root, validate_artifacts=True)
     if restored is None or entry not in restored.entries:
         raise StudyPrewarmRegistryError("Published prewarm could not be reloaded.")
     return entry
