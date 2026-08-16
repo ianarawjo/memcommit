@@ -396,7 +396,7 @@ def test_memory_refs_search_target_content_and_dedupe_logical_target():
     source = ops.init("source")
     memory = ops.add(source, "latest referenced fact")
     parent = ops.init("parent")
-    first_ref = ops.reference_memory(memory, source, parent)
+    first_ref = ops.embed_memory(memory, source, parent)
     parent.add(
         MemoryRef(
             uid="second-ref",
@@ -1521,7 +1521,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
     memory = ops.add(source, "Referenced parking detail")
     store.save(source)
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
     store.set_current(parent.name)
     monkeypatch.setattr(

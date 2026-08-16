@@ -1,5 +1,9 @@
- MEM EMBED · CHILD → INTO                                                                                                                                                           
- CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                        
+ MEM EMBED · LIVE LINK → INTO                                                                                                                                                       
+ CHOOSE ONE CHILD CONTEXT AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                         
+┌──────────────────────────────────────────────────────────────────────────────────| LINK TYPE |───────────────────────────────────────────────────────────────────────────────────┐
+│  LINK TYPE · [ CONTEXT ]  [ MEMORY ] · ←/→ SELECT                                                                                                                                │
+│  MEANING · Keep one Child Context live inside the Target.                                                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────┐
 │  ·   · archive                                                                                                                                                                  ^│
 │› ✓   · examples                                                                                                                                                                  │
@@ -7,16 +11,12 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃› ✓   ▾ archive                                                                                                                                                                  ^┃
-┃  · [memory f82e1635] Opening orientation for the guide.                                                                                                                          ┃
-┃  · [memory 93cd201c] Detailed operating notes follow the examples.                                                                                                               ┃
-┃  · [memory 246e913e] Closing verification for the guide.                                                                                                                         ┃
+┃  · [memory 6d273e33] Opening orientation for the guide.                                                                                                                          ┃
+┃  · [memory 46b998fd] Detailed operating notes follow the examples.                                                                                                               ┃
+┃  · [memory 5be6107d] Closing verification for the guide.                                                                                                                         ┃
 ┃    ✓ ───────── LAST · DEFAULT · 4/4 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃
 ┃  ·   · examples                                                                                                                                                                  ┃
 ┃  · * · guide                                                                                                                                                                     ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -37,12 +37,12 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
 │PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem embed examples --into archive --after 246e913e-edc1-4fb0-bd50-a842025ba9c0                                                                                                  │
+│  mem embed examples --into archive --after 5be6107d-7614-4132-8fcf-cf4ae466dba8                                                                                                  │
 │                                                                                                                                                                                  │
 │EFFECTS · ONE COMMAND                                                                                                                                                             │
 │  Only Context 'archive' is changed.                                                                                                                                              │
 │  Context 'examples' keeps its identity and ownership; the target stores a live Context reference.                                                                                │
-│  Insert at gap 4/4, after [246e913e] at the end.                                                                                                                                 │
+│  Insert at gap 4/4, after [5be6107d] at the end.                                                                                                                                 │
 │                                                                                                                                                                                  │
 │Approval applies only to the exact command shown above.                                                                                                                           │
 │                                                                                                                                                                                  │

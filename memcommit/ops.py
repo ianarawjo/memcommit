@@ -20,6 +20,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
@@ -153,33 +154,48 @@ def edit_many(
     return prepared
 
 
-def reference_memory(
+def _direct_source_memory(
     memory: Memory,
     source: Context,
-    target: Context,
-) -> MemoryRef:
-    """
-    Add a read-only live reference to a directly owned source Memory.
+) -> Memory:
+    """Return the exact directly owned Source object behind one request."""
 
-    The reference has its own uid and stores only target identity metadata.
-    Target content is refreshed whenever the containing Context is reloaded.
-    """
     source_item = source.memories.get(memory.uid)
     if not isinstance(source_item, Memory):
         raise ValueError(
             f"Memory [{memory.uid[:8]}] is not directly owned by '{source.name}'."
         )
-    memory = source_item
+    return source_item
+
+
+def embed_memory(
+    memory: Memory,
+    source: Context,
+    target: Context,
+    *,
+    position: int | None = None,
+) -> MemoryRef:
+    """Add a read-only live Memory link whose content resolves from Source."""
+
+    if source.uid == target.uid:
+        raise ValueError("Cannot embed a Memory into its owning Context.")
+    memory = _direct_source_memory(memory, source)
+    if position is not None and not 0 <= position <= len(target.ordered_uids()):
+        raise ValueError(
+            "Memory Embed position must be between 0 and "
+            f"{len(target.ordered_uids())}."
+        )
 
     for info in target.iter_items():
         if (
             isinstance(info, MemoryRef)
+            and info.is_live
             and info.target_context_uid == source.uid
             and info.target_memory_uid == memory.uid
         ):
             raise ValueError(
                 f"Memory [{memory.uid[:8]}] from '{source.name}' is already "
-                f"referenced in '{target.name}'."
+                f"embedded in '{target.name}'."
             )
 
     ref = MemoryRef(
@@ -188,6 +204,39 @@ def reference_memory(
         target_context_name=source.name,
         target_memory_uid=memory.uid,
         target=memory,
+    )
+    target.add(ref, position=position)
+    return ref
+
+
+def reference_memory(
+    memory: Memory,
+    source: Context,
+    target: Context,
+) -> MemoryRef:
+    """Add an immutable read-only snapshot of one directly owned Memory."""
+
+    memory = _direct_source_memory(memory, source)
+    digest = hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
+    for info in target.iter_items():
+        if (
+            isinstance(info, MemoryRef)
+            and info.is_snapshot
+            and info.target_context_uid == source.uid
+            and info.target_memory_uid == memory.uid
+            and info.snapshot_content_sha256 == digest
+        ):
+            raise ValueError(
+                f"Memory [{memory.uid[:8]}] from '{source.name}' already has "
+                f"this exact snapshot in '{target.name}'."
+            )
+    ref = MemoryRef(
+        uid=str(uuid.uuid4()),
+        target_context_uid=source.uid,
+        target_context_name=source.name,
+        target_memory_uid=memory.uid,
+        target=memory,
+        snapshot_content_sha256=digest,
     )
     target.add(ref)
     return ref
@@ -377,6 +426,12 @@ def branch_subtree(
             if isinstance(item, Memory):
                 target.add(Memory(uid=item.uid, content=item.content))
             elif isinstance(item, MemoryRef):
+                if item.is_snapshot:
+                    # A snapshot records the original Source identity. Branch
+                    # copies the retained evidence but must not retarget its
+                    # provenance to the new branch.
+                    target.add(item.copy())
+                    continue
                 internal_owner = source_by_name.get(item.target_context_name)
                 if internal_owner is None:
                     target.add(item.copy())
@@ -479,8 +534,14 @@ def merge(source: Context, target: Context) -> list[Information]:
             continue
         if isinstance(info, MemoryRef) and any(
             isinstance(existing, MemoryRef)
+            and existing.is_snapshot == info.is_snapshot
             and existing.target_context_uid == info.target_context_uid
             and existing.target_memory_uid == info.target_memory_uid
+            and (
+                info.is_live
+                or existing.snapshot_content_sha256
+                == info.snapshot_content_sha256
+            )
             for existing in target.iter_items()
         ):
             continue

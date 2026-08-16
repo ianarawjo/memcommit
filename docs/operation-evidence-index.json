@@ -37,7 +37,8 @@
       "docs/distill-elaborate-application-boundary-matrix.md"
     ],
     "embed": [
-      "docs/embed-application-boundary-matrix.md"
+      "docs/embed-application-boundary-matrix.md",
+      "docs/memory-reference-embed-semantics-design-rationale.md"
     ],
     "eval": [],
     "find": [
@@ -99,7 +100,10 @@
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "redo": [],
-    "reference": [],
+    "reference": [
+      "docs/memory-reference-embed-semantics-design-rationale.md",
+      "docs/reference-callable-boundary-matrix.md"
+    ],
     "rename": [],
     "replace": [
       "docs/replace-callable-boundary-matrix.md",

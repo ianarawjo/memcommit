@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.   ┃^
+┃ ▸ mem init              Create a new empty Context and make it the current working Context.     ┃ 
+┃                         USE WHEN: Starting a separate workspace for a new topic, task, or group ┃ 
+┃                                   of Memories.                                                  ┃ 
+┃ ▸ mem add               Add one or more Memories to the current or explicit Context.            ┃ 
+┃                         USE WHEN: Adding one or more facts, instructions, or notes directly to  ┃ 
+┃                                   a Context.                                                    ┃ 
+┃ ▸ mem branch            Copy a Context or subtree into a new branch and switch to it.           ┃ 
+┃                         USE WHEN: Editing a Context or subtree independently while preserving   ┃ 
+┃                                   the original.                                                 ┃ 
+┃ ▾ mem import [PARTIAL]  Import a clean-baseline Profile, Context tree, or Memory by value while ┃ 
+┃                         preserving resource identity.                                           ┃ 
+┃                         USE WHEN: Bringing externally supplied material into a locally managed  ┃ 
+┃                                   store.                                                        ┃ 
+┃   FLOW      · External resource -> local owned copy                                             ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
+┃   EFFECT    · Creates or changes local owned resources                                          ┃ 
+┃   RANGE     · Profile, exact Context, subtree, or one Memory                                    ┃ 
+┃   CURRENT LIMITATION                                                                            ┃ 
+┃   mem import currently covers only MemCommit-to-MemCommit transfer, so its broader              ┃ 
+┃   resource-import role is not yet complete. It accepts Profiles from an external .mem store or  ┃ 
+┃   package, and Profiles, Context trees, or Memories from another registered Profile. Conversion ┃ 
+┃   from arbitrary documents or Skills, and Export, are planned but not yet implemented.          ┃ 
+┃   FORM 1 · mem import (choose a non-active source and import Profile, Context, or Memory)       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

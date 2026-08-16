@@ -15,6 +15,55 @@ from memcommit.store import MemoryStore
 runner = CliRunner()
 
 
+def test_snapshot_reference_round_trip_retains_exact_content(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "version one")
+    store.save(source)
+    parent = ops.init("parent")
+    reference = ops.reference_memory(memory, source, parent)
+    store.save(parent)
+
+    record = json.loads(
+        (isolated_store / "contexts" / "parent" / "context.json").read_text()
+    )["memories"][reference.uid]
+    assert record == {
+        "type": "memory_snapshot_ref",
+        "uid": reference.uid,
+        "target_context": {"uid": source.uid, "name": source.name},
+        "target_memory_uid": memory.uid,
+        "content": "version one",
+        "content_sha256": reference.snapshot_content_sha256,
+    }
+
+    source.replace(Memory(uid=memory.uid, content="version two"))
+    store.save(source)
+    loaded = store.load("parent").memories[reference.uid]
+    assert isinstance(loaded, MemoryRef)
+    assert loaded.is_snapshot
+    assert loaded.target is not None
+    assert loaded.target.content == "version one"
+
+
+def test_snapshot_reference_survives_source_deletion(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "retained evidence")
+    store.save(source)
+    parent = ops.init("parent")
+    reference = ops.reference_memory(memory, source, parent)
+    store.save(parent)
+
+    store.delete("source")
+
+    loaded = store.load("parent").memories[reference.uid]
+    assert isinstance(loaded, MemoryRef)
+    assert loaded.is_snapshot
+    assert loaded.is_resolved
+    assert loaded.target is not None
+    assert loaded.target.content == "retained evidence"
+
+
 def test_memory_ref_round_trip_stores_pointer_only(isolated_store):
     store = MemoryStore()
     source = ops.init("source")
@@ -22,7 +71,7 @@ def test_memory_ref_round_trip_stores_pointer_only(isolated_store):
     store.save(source)
 
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
 
     context_file = isolated_store / "contexts" / "parent" / "context.json"
@@ -51,7 +100,7 @@ def test_memory_ref_reads_latest_target_after_parent_reload(isolated_store):
     store.save(source)
 
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
 
     source.replace(Memory(uid=memory.uid, content="version two"))
@@ -70,7 +119,7 @@ def test_deleted_target_leaves_dangling_ref_that_can_be_resaved(isolated_store):
     store.save(source)
 
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
 
     source.remove(memory.uid)
@@ -93,7 +142,7 @@ def test_recreated_context_with_same_name_does_not_retarget_ref(isolated_store):
     store.save(source)
 
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
 
     store.delete("source")
@@ -113,7 +162,7 @@ def test_revert_restores_pointer_and_order_but_reads_latest_target(isolated_stor
     store.save(source)
 
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(
         parent,
         AutoCheckpoint(
@@ -170,7 +219,7 @@ def test_reference_has_independent_uid_and_is_selected_by_that_uid():
     memory = ops.add(source, "target")
     parent = ops.init("parent")
 
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
 
     assert ref.uid != memory.uid
     assert ops.resolve(parent, ref.uid[:8]) is ref
@@ -182,7 +231,7 @@ def test_remove_reference_detaches_only_the_parent():
     source = ops.init("source")
     memory = ops.add(source, "keep me")
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
 
     removed = ops.remove(parent, ref.uid)
 
@@ -195,7 +244,7 @@ def test_reference_target_view_cannot_mutate_source_memory():
     source = ops.init("source")
     memory = ops.add(source, "original")
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
 
     assert ref.target is not None
     ref.target.content = "attempted write-through"
@@ -209,8 +258,8 @@ def test_merge_deduplicates_references_to_the_same_target():
     memory = ops.add(origin, "shared target")
     source = ops.init("source")
     target = ops.init("target")
-    source_ref = ops.reference_memory(memory, origin, source)
-    target_ref = ops.reference_memory(memory, origin, target)
+    source_ref = ops.embed_memory(memory, origin, source)
+    target_ref = ops.embed_memory(memory, origin, target)
 
     added = ops.merge(source, target)
 
@@ -223,7 +272,7 @@ def test_semantic_proposals_cannot_edit_or_remove_reference():
     source = ops.init("source")
     memory = ops.add(source, "protected")
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
 
     changes = parse_proposals(
         {
@@ -321,7 +370,7 @@ def test_branch_and_merge_preserve_explicit_order():
     assert target.ordered_uids() == [existing.uid, second.uid, first.uid]
 
 
-def test_reference_cli_lists_shows_updates_and_detaches(isolated_store):
+def test_reference_cli_lists_shows_snapshot_and_detaches(isolated_store):
     assert runner.invoke(app, ["init", "source"]).exit_code == 0
     assert runner.invoke(app, ["add", "version one"]).exit_code == 0
     store = MemoryStore()
@@ -347,7 +396,7 @@ def test_reference_cli_lists_shows_updates_and_detaches(isolated_store):
 
     shown = runner.invoke(app, ["show", ref.uid[:8]])
     assert shown.exit_code == 0
-    assert "Memory ref:" in shown.output
+    assert "Reference:" in shown.output
     assert "State: READ ONLY" in shown.output
     assert "version one" in shown.output
 
@@ -355,8 +404,8 @@ def test_reference_cli_lists_shows_updates_and_detaches(isolated_store):
     store.save(source)
     shown_again = runner.invoke(app, ["show", ref.uid[:8]])
     assert shown_again.exit_code == 0
-    assert "version two" in shown_again.output
-    assert "version one" not in shown_again.output
+    assert "version one" in shown_again.output
+    assert "version two" not in shown_again.output
 
     removed = runner.invoke(app, ["remove", ref.uid[:8]])
     assert removed.exit_code == 0
@@ -370,7 +419,7 @@ def test_show_handles_a_dangling_reference(isolated_store):
     memory = ops.add(source, "will disappear")
     store.save(source)
     parent = ops.init("parent")
-    ref = ops.reference_memory(memory, source, parent)
+    ref = ops.embed_memory(memory, source, parent)
     store.save(parent)
     store.set_current("parent")
 
@@ -380,8 +429,9 @@ def test_show_handles_a_dangling_reference(isolated_store):
     result = runner.invoke(app, ["show", ref.uid[:8]])
 
     assert result.exit_code == 0
-    assert "Memory ref:" in result.output
+    assert "Embedded Memory:" in result.output
     assert "State: DANGLING" in result.output
+    assert "embedded Memory Source is unavailable" in result.output
 
 
 def test_chunk_replaces_a_memory_at_its_original_order_position(isolated_store):

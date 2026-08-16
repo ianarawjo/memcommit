@@ -1,0 +1,154 @@
+30 100
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────[99C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                 [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐[99C[0;1m^[0m
+[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                  [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                       [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                     [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;48;5;248m [0m
+[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;248m [0m
+[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and           [0m│[99C[0;48;5;248m [0m
+[0m│             continued; it does not itself mean Context changes were applied.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[99C[0;48;5;248m [0m
+[0m│             affected Context.                                                                   [0m│[99C[0;48;5;248m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[99C[0;48;5;248m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                     [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.             [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                           [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.               [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                    [0m│[99C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
+[99C[0;48;5;248m [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0m         namespace.                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show the current Context's inventory, first five direct Memories,              [0;38;5;117;1m┃[99C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[23A[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[0m
+[2C[0m            affected Co[Ctext.[C           [C      [C  [C [C        [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[0m
+[2C[0;1m↑/↓    [5C     [0mMove or[Cscroll within the focused surface[0m
+[2C[0;1m←/→  [7C     [0mChange a horiz[2Ctal choice, expand, or[Cgo[Cba[Ck according [Co focus.      [0m
+[2C[0;1mTab / Shift-Tab  [0mMove foc[Cs[Cbetween visible surfaces.  [C     [C [C       [C   [C   [C         [C  [0m
+[2C[0;1mEnter            [0mOpen, select, or submit the focus[Cd action. [C       [C      [0m
+[2C[0;1mH      [5C     [0mOpen or hide[CHelp from a[Csession's[Cread-only n[Cvig[Ction[Csurfac[C.[C   [0m
+[2C[0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text i[C writable fields[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[C[0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context[5C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0m         namespace.    [C [C          [C       [C       [C  [C  [C    [C         [C  [C      [13C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▾ mem status     [0mShow[Cthe current Context's[Cinventory,[Cfirst[Cfive[Cdirect[CMemories,[14C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                  [0mrelationships, and lates[C checkpoints.     [36C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m G[Ctting[Co[Ciented to what[Cthe current Context contains,[Chow[Cit[Cis[5C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                   [C    [C  connected, and which operations we[Ce rec[Cntly applied.[15C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m   FLOW      · Current Context state + history -> status report                                  [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m   EXECUTION · DETERMINISTIC                                                                     [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m   EFFECT    · Read-only                                                                         [0;38;5;117;1m┃[0m
+[2C[0m  RANGE     · Current Context by default; -r includes readable descendants and embedded    [0m
+[2C[0m              Contexts[0m
+[C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem status (detailed current-Context status)                                         [0m
+
+[60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cf[2A[0m[23A[2C[0;1m↑/↓       [2C     [0mMove or scroll withi[C the[Cfocus[3Csu[Cface.[C       [C         [C   [C        [C   [0m
+[2C[0;1m←/→              [0mChange a horizontal[Cchoice,[Cexpand,[Cor[Cgo[Cback[Caccording[Cto[Cfocus.[14C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                           [0m│[0m
+[2C[0;1mEnter[12C[0mOpen, select, or submi[C the focused action.[37C[0;48;5;238m [0m
+[2C[0;1mH  [14C[0mOpe[C or hide Help from a session's read-[Cnly navigatio[C surface.  [14C[0;48;5;238m [0m
+[2C[0;1mEsc[3CBackspace[2C[0mG[C back one lay[Cr;[CBackspace edits text[Cin[Cwritable[Cfields.[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context     [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0m         namespace.                                                                             [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▾ mem status     [0mShow the current Context's inventory, first five direct Memories,              [0;38;5;117;1m┃[0m
+[C[0;1m                  [0mrelationships, and latest checkpoints.                                    [0m
+[C[0;1m [0m                 [0;1mUSE WHEN:[C[0mGetting[Coriented[Cto[Cwhat[Cthe[Ccurrent[CContext[Ccontains,[Chow[Cit[Cis[0m
+[2C[0m                     [C   [C connected, and wh[Cch ope[Cations were recently[Capplied. [0m
+[C[0m   FLOW      · Cur[2Cnt C[2Ctext st[Cte[C+ hi[2Cory -> sta[Cus[Creport[0m
+[C[0m [2CEXECUTION[C·[CDETERMINISTIC       [C        [C  [C    [C   [C       [C       [C         [C   [C  [C  [0m
+[C[0m [2CEFFECT[4C·[CRead-only[4C          [C   [C     [C          [C    [C        [C        [0m
+[4C[0mRANGE[23Cby d[Cfault; -[C includes readable[Cdescendants[Cand[Cembedded[0m
+[4C[0m         [C [CContexts     [0m
+[C[0;38;5;189m   FORM 1 · mem status (detailed current-Context status)                                         [0m
+[C[0;38;5;189m   FORM 2 · mem status --short (one-line status)                                                 [0m
+[C[0;38;5;189m   FORM 3 · mem status --branch (include Profile and Context lineage)                            [0m
+[9C[0;38;5;234;48;5;117;1;7m4[14C--recursive (include r[Cadable descendants[Cand[Cembedded[CContexts)[88D[0m[3A[C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem status (detailed current-Context status)                                         [0m
+
+
+[C[0;38;5;189m   FORM 4 · mem status --recursive (include readable descendants and embedded Contexts)          [3A[98D[0m[9A[C[0;38;5;234;48;5;117;1m ▾ mem status     Show the current Context's inventory, first five direct Memories,              [0m
+[C[0;38;5;234;48;5;117;1m                  relationships, and latest checkpoints.                                         [0m
+[C[0;38;5;234;48;5;117;1m                  USE WHEN: Getting oriented to what the current Context contains, how it is     [0m
+[C[0;38;5;234;48;5;117;1m                            connected, and which operations were recently applied.               [0m
+
+
+
+
+
+[C[0;38;5;189m   FORM 1 · mem status (detailed current-Context status)                                         [0m
+
+
+
+
+[60C[0mop[Cn forms  Tab[Cnext[Ckind[C H full help[0m[K[14A[98D[0m[C[0;1m ▸ mem status     [0mShow the current Context's inventory, first five direct Memories,              [0m
+[C[0;1m                  [0mrelationships, and latest checkpoints.                                         [0m
+[C[0;1m [0m                 [0;1mUSE WHEN:[0m Getting oriented to what the current Context contains, how it is     [0m
+[C[0;1m [0m                           connected, and which operations were recently applied.               [0m
+[C[0;38;5;234;48;5;117;1m ▸ mem pwd        Print the current canonical Context name without loading its contents.         [0m
+[C[0;38;5;234;48;5;117;1m                  USE WHEN: Confirming the active Context in a script or terminal.               [0m
+[C[0;1m ▸ mem contexts   [0mBr[Cwse[Clocal[CContexts[Cand[Creadable[Ccross-Profile[CContext[Cviews[Cwithout[0m
+[C[0;1m                  [0mswi[Cchi[Cg.  [C  [C        [C  [C        [C        [C           [C   [C        [0m
+[C[0;1m [14C[0m   [0;1mUSE WHEN:[C[0mExploring[Cevery[CContext[Ccurrently[Cavailable[Cto[Cthe[CProfile.[0m
+[C[0;1m ▸ mem list (ls)  [0mList a Context's direct items—Memories, Memory references, query views, and    [0m
+[C[0;1m                  [0membedded Contexts—and its readable child Contexts. Use -r to recursively       [0m
+[C[0;1m                  [0minclude items from descendant and embedded Contexts; ls is the compact alias.  [0m
+[C[0;1m [0m                 [0;1mUSE WHEN:[0m Inspecting the structure and direct contents of a Context.           [8A[98D[0m[15A[0m│[0;1m [0m                     [C  [C      [C know[2Clocal Context scop[39C[0m│[0m
+[0m│[0;1m ▸ mem chunk            [0mMec[Can[Ccally split one direct[CMemory [Ct heade[C, paragraph, or[12C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m                        [0mapproximat[C sentenc[2Cboundaries.[41C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m [0m                      [C[0;1mUSE WHEN:[0m A Me[Cory already has [Clear text[Cboundaries[Cthat[Cshould[Cbecome[2C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m [0m                     [C  [C    [C   separate[CM[Cmories.[C         [C          [C        [15C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem delete (remove)  [0mSelect [C Context or dir[Cct item [Co delete, or[Cname it[Cby[Clocator,[Cname,[2C[0m│[0m
+[0m│[0;1m                        [0mor UID.                                                                  [0m│[0m
+[0m│[0;1m [0m                       [0;1mUSE WHEN:[0m Removing a specific Context or item that is no longer needed.  [0m│[99C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem clear            [0mRemove all direct items from the current or explicit Context after       [0m│[99C[0;48;5;238m [0m
+[0m│[0;1m                        [0mconfirmation.                                                       [5C[0m│[99C[0;48;5;238m [0m
+[0m│[0;1m [0m                   [4C[0;1mUSE WHEN:[C[0mEmptying[Ca[CContext[Cwhile[Cretaining[Cthe[CContext[Citself.[9C[0m│[99C[0;48;5;238m [0m
+[0m│[7C[0;1mmerge [5C      [0mAdd Source-only i[Cems to the current Targ[Ct, choosing Source[Cor[CTarget[3C[0m│[0m
+[0m│[18C[0;1m      [0mwherever[Cstored items confl[Cc[C. [41C[0m│[0m
+[0m│[18C      [0;1mUSE WHEN:[0m Bringi[Cg work[Cfrom[Ca copied or[Cbranched Context back[2Cnto the[2C[0m│[0m
+[0m│[28C      current Context.         [C    [C        [C        [15C[0m│[0m
+[0m│[0;1m ▸ mem dedup            [0mKeep one unchanged existing Memory per confirmed duplicate component.    [0m│[0m
+[0m│[0;1m [0m                       [0;1mUSE WHEN:[0m Collapsing confirmed equivalent Memories while preserving one  [0m│[0m
+[0m│[C                       [C     [C   existing UID and its exact wording.     [C     [C       [9C[0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0;38;5;117;1m┏ SEMANTIC TRANSFORMATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[C[0m [0;1mLLM-BASED[0m · Uses LLM semantic analysis to restructure, derive, translate, curate, or reconcile[0m
+[C[0m [0m            content.    [C     [C    [C          [C   [C        [C         [C  [C  [C   [C       [C      [0m
+[C[0;38;5;234;48;5;117;1m ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped       [98D[0m[23A[0m                                                                                                   [0m
+[0m┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────┐[0m
+[C[0m [0;1mNO LLM[0m · Select and administer complete local Profile stores and their managed names.[0m
+[2C[0;1m▸ mem profile  [0mEnter[Cthe interactive Profile selector, or manage[Cc[Cmplete local Mem[CryStore   [0m
+[2C[0;1m               [0mProfiles.[9C        [C         [0m
+[2C[0m               [0;1mUSE WHEN:[0m Managing separate[Cusers,[Cenvironments, or Memory[Cs[Cores.       [C     [0m
+[2C[0;1m▸[Cmem[Crename[3C[0mRename the[Ccurrent[Cor[Can[Cexplicit[Cmanaged[CProfile[Cwithout[Cmoving[Cor[Crewriting[0m
+[2C[0;1m               [0mits[Cstore; mem profile rename is the explici[2Cequ[Cvalent. [C  [C  [C      [C       [3C[0;48;5;248m [0m
+[2C[0m               [0;1mUSE WHEN:[0m Gi[Cing an exis[Cing [Canaged[CProfile a clear[Cr name.[C       [C     [8C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
+[0m                                                                                                   [99C[0;48;5;248m [0m
+[0m┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────┐[0m
+[C[0m [0;1mNO LLM[0m · Deliver owned Contexts and protect Memory, Context, or Profile writes.[0m
+[2C[0;1m▸ mem share   [0mSend[Cone[Cordinary Context thr[Cugh a gr[Cnt-backed receiver endpoin[C.    [C    [C   [0m
+[16C[0;1mUSE WHEN:[C[0mDelivering an owned Con[Cext[Cto[Can[Cauthorized[Creceiver.[0m
+[8C[0;1mlock [3C[0mLock the current Co[Ctext, a[Crecursive Context set, Memory, or Profile.        [0m
+[16C[0;1mUSE WHEN:[0m Preventing accide[Ctal modification of s[Cable material. [C          [C   [0m
+[2C[0;1m▸ mem unlock  [0mUnlock[Cthe[Ccurrent[CContext,[Ca recurs[Cve[Cset, Memory, or[CProfile.[0m
+[0m│[0;1m [0m              [0;1mUSE WHEN:[0m Reopening protected material for intentional revision.                  [0m│[99C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;238m [0m
+[0m                                                                                                   [99C[0;48;5;238m [0m
+[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;238m [0m
+[2C[0mConfigure[CMemCommi[C and prepare or run study and evaluation utilities.[0m
+[8C[0;38;5;234;48;5;117;1mhelp   [4C      Enter th[2Cinte[Cactive command browser [Cnd[Copen synt[Cx[Chelp.       [91D[0m

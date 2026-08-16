@@ -657,7 +657,7 @@ def test_physical_fit_rejects_typed_context_input_before_provider_construction(
     memory = ops.add(source, "An externally owned market observation.")
     store.create_context(source)
     contexts = store.load_for_update("physical-fit/contexts")
-    ops.reference_memory(memory, source, contexts)
+    ops.embed_memory(memory, source, contexts)
     store.save(contexts)
     provider_constructions = 0
 

@@ -42,9 +42,10 @@
       },
       "embed": {
         "evidence": [
-          "docs/embed-application-boundary-matrix.md"
+          "docs/embed-application-boundary-matrix.md",
+          "docs/memory-reference-embed-semantics-design-rationale.md"
         ],
-        "reason": "The mutable relationship plan, freeze, CAS Apply, plain CLI, and interactive setup point to one terminal-independent use case."
+        "reason": "Context and Memory live-link CLI/TUI, Python, agent, and MCP routes share typed placement, Source freeze, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
       },
       "find": {
         "evidence": [
@@ -106,6 +107,13 @@
           "docs/query-reference-application-boundary-matrix.md"
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
+      },
+      "reference": {
+        "evidence": [
+          "docs/memory-reference-embed-semantics-design-rationale.md",
+          "docs/reference-callable-boundary-matrix.md"
+        ],
+        "reason": "CLI, Python, agent, and MCP routes share one provider-free frozen Source/Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
       },
       "replace": {
         "evidence": [
@@ -207,7 +215,6 @@
       "provider",
       "rationale",
       "redo",
-      "reference",
       "rename",
       "revert",
       "review",

@@ -67,6 +67,57 @@ class EmbedResult:
     checkpoint_uid: str
 
 
+# Explicit aliases name the existing closed route without breaking callers
+# while Memory Embed is added beside it.
+ContextEmbedRequest = EmbedRequest
+FrozenContextEmbedPlan = FrozenEmbedPlan
+ContextEmbedResult = EmbedResult
+
+
+@dataclass(frozen=True)
+class MemoryEmbedRequest:
+    """One live Source Memory link and exact local Target placement."""
+
+    memory_selector: str
+    source_locator: str
+    into_locator: str
+    before: str | None = None
+    after: str | None = None
+
+
+@dataclass(frozen=True)
+class FrozenMemoryEmbedPlan:
+    """Reviewed live-link identities and exact Target insertion gap."""
+
+    request: MemoryEmbedRequest
+    source_name: str
+    source_uid: str
+    source_digest: str
+    memory_uid: str
+    memory_content: str
+    memory_content_sha256: str
+    into_name: str
+    into_uid: str
+    into_digest: str
+    placement: EmbedPlacement
+    item_count: int
+    token: object = field(repr=False, compare=False)
+
+
+@dataclass(frozen=True)
+class MemoryEmbedResult:
+    """Durable live Memory Embed receipt shared by every adapter."""
+
+    embed_uid: str
+    source_name: str
+    source_uid: str
+    memory_uid: str
+    into_name: str
+    into_uid: str
+    placement: EmbedPlacement
+    checkpoint_uid: str
+
+
 class EmbedPort(Protocol):
     """Freeze and atomically apply one authorized Context relationship."""
 
@@ -75,6 +126,16 @@ class EmbedPort(Protocol):
 
     def apply(self, plan: FrozenEmbedPlan) -> EmbedResult:
         """Commit the frozen plan or publish none of it."""
+
+
+class MemoryEmbedPort(Protocol):
+    """Freeze and atomically apply one local live Memory relationship."""
+
+    def freeze_memory(self, request: MemoryEmbedRequest) -> FrozenMemoryEmbedPlan:
+        """Resolve one direct Source Memory and exact Target gap."""
+
+    def apply_memory(self, plan: FrozenMemoryEmbedPlan) -> MemoryEmbedResult:
+        """Commit the frozen live link or publish none of it."""
 
 
 def validate_embed_request(request: EmbedRequest) -> EmbedRequest:
@@ -96,6 +157,28 @@ def validate_embed_request(request: EmbedRequest) -> EmbedRequest:
         not isinstance(request.after, str) or not request.after
     ):
         raise EmbedError("Embed after selector must be nonempty text.")
+    if request.before is not None and request.after is not None:
+        raise EmbedError("Pass only one of --before or --after.")
+    return request
+
+
+def validate_memory_embed_request(
+    request: MemoryEmbedRequest,
+) -> MemoryEmbedRequest:
+    """Validate one adapter-independent live Memory Embed request."""
+
+    if not isinstance(request, MemoryEmbedRequest):
+        raise TypeError("Memory Embed requires a MemoryEmbedRequest.")
+    for value, label in (
+        (request.memory_selector, "Memory selector"),
+        (request.source_locator, "Source locator"),
+        (request.into_locator, "Into locator"),
+    ):
+        if not isinstance(value, str) or not value.strip():
+            raise EmbedError(f"Memory Embed {label} must be nonempty text.")
+    for value, label in ((request.before, "before"), (request.after, "after")):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise EmbedError(f"Memory Embed {label} selector must be nonempty text.")
     if request.before is not None and request.after is not None:
         raise EmbedError("Pass only one of --before or --after.")
     return request
@@ -157,3 +240,88 @@ def run_embed(
     ):
         raise EmbedError("Embed receipt does not match the frozen plan.")
     return result
+
+
+def prepare_memory_embed(
+    request: MemoryEmbedRequest,
+    *,
+    port: MemoryEmbedPort,
+) -> FrozenMemoryEmbedPlan:
+    """Freeze one exact live Memory link without mutation."""
+
+    validated = validate_memory_embed_request(request)
+    plan = port.freeze_memory(validated)
+    if not isinstance(plan, FrozenMemoryEmbedPlan):
+        raise TypeError("Memory Embed port returned an invalid frozen plan.")
+    if plan.request != validated:
+        raise EmbedError("Memory Embed plan does not describe the request.")
+    if not all(
+        (
+            plan.source_name,
+            plan.source_uid,
+            plan.source_digest,
+            plan.memory_uid,
+            plan.memory_content_sha256,
+            plan.into_name,
+            plan.into_uid,
+            plan.into_digest,
+        )
+    ):
+        raise EmbedError("Memory Embed plan has an incomplete binding.")
+    if not 0 <= plan.placement.position <= plan.item_count:
+        raise EmbedError("Memory Embed plan has an invalid insertion gap.")
+    return plan
+
+
+def run_memory_embed(
+    request: MemoryEmbedRequest,
+    *,
+    port: MemoryEmbedPort,
+    frozen_plan: FrozenMemoryEmbedPlan | None = None,
+) -> MemoryEmbedResult:
+    """Apply one reviewed live Memory link through the supplied port."""
+
+    validated = validate_memory_embed_request(request)
+    plan = frozen_plan or prepare_memory_embed(validated, port=port)
+    if not isinstance(plan, FrozenMemoryEmbedPlan):
+        raise TypeError("Memory Embed requires a valid frozen plan.")
+    if plan.request != validated:
+        raise EmbedError("Frozen Memory Embed plan no longer matches the request.")
+    result = port.apply_memory(plan)
+    if not isinstance(result, MemoryEmbedResult):
+        raise TypeError("Memory Embed port returned an invalid durable receipt.")
+    if (
+        result.source_name != plan.source_name
+        or result.source_uid != plan.source_uid
+        or result.memory_uid != plan.memory_uid
+        or result.into_name != plan.into_name
+        or result.into_uid != plan.into_uid
+        or result.placement != plan.placement
+        or not result.embed_uid
+        or not result.checkpoint_uid
+    ):
+        raise EmbedError("Memory Embed receipt does not match the frozen plan.")
+    return result
+
+
+__all__ = [
+    "ContextEmbedRequest",
+    "ContextEmbedResult",
+    "EmbedError",
+    "EmbedPlacement",
+    "EmbedPort",
+    "EmbedRequest",
+    "EmbedResult",
+    "FrozenContextEmbedPlan",
+    "FrozenEmbedPlan",
+    "FrozenMemoryEmbedPlan",
+    "MemoryEmbedPort",
+    "MemoryEmbedRequest",
+    "MemoryEmbedResult",
+    "prepare_embed",
+    "prepare_memory_embed",
+    "run_embed",
+    "run_memory_embed",
+    "validate_embed_request",
+    "validate_memory_embed_request",
+]

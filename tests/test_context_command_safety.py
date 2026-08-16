@@ -126,7 +126,7 @@ def test_reference_rejects_source_renamed_after_load(
         return original_reference(item, candidate, target)
 
     monkeypatch.setattr(
-        "memcommit.commands.reference.ops.reference_memory",
+        "memcommit.reference_runtime.ops.reference_memory",
         rename_then_reference,
     )
 

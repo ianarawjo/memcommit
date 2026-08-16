@@ -227,7 +227,9 @@ def _snapshot_item(
         }
     if isinstance(item, MemoryRef):
         return {
-            "kind": "memory_ref",
+            "kind": (
+                "memory_snapshot_ref" if item.is_snapshot else "memory_ref"
+            ),
             "uid": item.uid,
             "target_context_uid": item.target_context_uid,
             "target_context_name": item.target_context_name,
@@ -364,9 +366,14 @@ def _snapshot_memory_rows(
                     source=SourceDisplayFacts(form=SourceForm.MEMORY),
                 )
             )
-        elif kind == "memory_ref":
+        elif kind in {"memory_ref", "memory_snapshot_ref"}:
             content = item.get("resolved_content")
             target_name = _require_string(item, "target_context_name")
+            form = (
+                SourceForm.MEMORY_REFERENCE
+                if kind == "memory_snapshot_ref"
+                else SourceForm.MEMORY_EMBED
+            )
             rows.append(
                 ContextMemoryRow(
                     uid[:8],
@@ -374,7 +381,7 @@ def _snapshot_memory_rows(
                     if isinstance(content, str)
                     else target_name,
                     source=SourceDisplayFacts(
-                        form=SourceForm.MEMORY_REF,
+                        form=form,
                         states=(
                             (SourceState.READ_ONLY,)
                             if isinstance(content, str)
@@ -509,7 +516,7 @@ def _group_snapshot_items(
         kind = _require_string(item, "kind")
         if kind in {"context", "namespace_context", "query_context_ref"}:
             contexts.append(item)
-        elif kind in {"memory", "memory_ref"}:
+        elif kind in {"memory", "memory_ref", "memory_snapshot_ref"}:
             memories.append(item)
         else:
             raise _snapshot_error()
@@ -603,7 +610,7 @@ def _render_snapshot_item(
         else:
             lines.append(f"{prefix}{name}/ · {query_label}")
         return
-    if kind == "memory_ref":
+    if kind in {"memory_ref", "memory_snapshot_ref"}:
         expected = {
             "kind",
             "uid",
@@ -620,7 +627,11 @@ def _render_snapshot_item(
         content = item.get("resolved_content")
         if content is None:
             reference_facts = SourceDisplayFacts(
-                form=SourceForm.MEMORY_REF,
+                form=(
+                    SourceForm.MEMORY_REFERENCE
+                    if kind == "memory_snapshot_ref"
+                    else SourceForm.MEMORY_EMBED
+                ),
                 states=(SourceState.DANGLING,),
             )
             reference_label = source_object_label(reference_facts)
@@ -636,7 +647,11 @@ def _render_snapshot_item(
                 )
         elif isinstance(content, str):
             reference_facts = SourceDisplayFacts(
-                form=SourceForm.MEMORY_REF,
+                form=(
+                    SourceForm.MEMORY_REFERENCE
+                    if kind == "memory_snapshot_ref"
+                    else SourceForm.MEMORY_EMBED
+                ),
                 states=(SourceState.READ_ONLY,),
             )
             reference_label = source_object_label(reference_facts)

@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐^
+│ MEMORY      An atomic unit of information stored in a Context.                                  │ 
+│ CONTEXT     A named workspace that organizes Memories and other Contexts.                       │ 
+│ PROFILE     An ownership and storage boundary for Contexts.                                     │ 
+│ GRANT       A permission relationship that can be given or received, selectively allowing       │ 
+│             someone without direct ownership to read or query a Context and its Memories, or    │ 
+│             run permitted operations on them, while the Grant remains valid.                    │ 
+│ SESSION     A saved record of an analysis or review workflow that can be reopened and           │ 
+│             continued; it does not itself mean Context changes were applied.                    │ 
+│ CHECKPOINT  A recoverable history boundary created for each applied operation and recorded per  │ 
+│             affected Context.                                                                   │ 
+├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤ 
+│ ↑/↓              Move or scroll within the focused surface.                                     │ 
+│ ←/→              Change a horizontal choice, expand, or go back according to focus.             │ 
+│ Tab / Shift-Tab  Move focus between visible surfaces.                                           │ 
+│ Enter            Open, select, or submit the focused action.                                    │ 
+│ H                Open or hide Help from a session's read-only navigation surface.               │ 
+│ Esc / Backspace  Go back one layer; Backspace edits text in writable fields.                    │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Inspect the current location and available Contexts, then move through the Context     ┃ 
+┃          namespace.                                                                             ┃ 
+┃ ▸ mem status     Show the current Context's inventory, first five direct Memories,              ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

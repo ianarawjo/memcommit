@@ -10,7 +10,11 @@ from memcommit.embed_application import (
     EmbedPlacement,
     EmbedRequest,
     EmbedResult,
+    FrozenMemoryEmbedPlan,
+    MemoryEmbedRequest,
+    MemoryEmbedResult,
     run_embed,
+    run_memory_embed,
 )
 from memcommit.embed_runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.console.terminal import is_interactive_terminal
@@ -36,9 +40,19 @@ def _gap_description(placement: EmbedPlacement) -> str:
     return "as the only direct item"
 
 
-def render_embed_plain(result: EmbedResult) -> None:
+def render_embed_plain(result: EmbedResult | MemoryEmbedResult) -> None:
     """Render the established compact success line from a typed receipt."""
 
+    if isinstance(result, MemoryEmbedResult):
+        typer.secho(
+            f"Embedded Memory [{result.memory_uid[:8]}] from "
+            f"'{display_escape_text(result.source_name)}' as "
+            f"[{result.embed_uid[:8]}] in "
+            f"'{display_escape_text(result.into_name)}' "
+            f"{_gap_description(result.placement)}.",
+            fg=typer.colors.GREEN,
+        )
+        return
     typer.secho(
         f"Embedded '{display_escape_text(result.child_name)}' into "
         f"'{display_escape_text(result.into_name)}' "
@@ -52,9 +66,16 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Context to embed; omit with all options in a terminal to choose "
-                "the Child, target, and insertion gap"
+                "Context name to embed, or Source Memory UID/prefix with --from; "
+                "omit with all options in a terminal for interactive setup"
             )
+        ),
+    ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Direct Source Context; its presence selects Memory Embed",
         ),
     ] = None,
     into: Annotated[
@@ -88,18 +109,24 @@ def cmd(
     port = MemoryStoreEmbedPort.capture(store)
     frozen_plan = None
     if a is None:
-        if into is not None or before is not None or after is not None:
+        if (
+            source_name is not None
+            or into is not None
+            or before is not None
+            or after is not None
+        ):
             typer.secho(
                 "Error: run 'mem embed' with no operands for interactive setup, "
-                "or pass CHILD together with --into.",
+                "or pass an item together with --into.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(2)
         if not _interactive_terminal():
             typer.secho(
-                "Error: CHILD and --into are required outside a terminal; "
-                "for example: mem embed CHILD --into CONTEXT.",
+                "Error: an item and --into are required outside a terminal; "
+                "for example: mem embed CHILD --into CONTEXT, or mem embed "
+                "MEMORY --from SOURCE --into CONTEXT.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -120,24 +147,45 @@ def cmd(
     else:
         if into is None:
             typer.secho(
-                "Error: --into is required when CHILD is supplied.",
+                "Error: --into is required when an item is supplied.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(2)
-        request = EmbedRequest(
-            child_locator=a,
-            into_locator=into,
-            before=before,
-            after=after,
+        request = (
+            MemoryEmbedRequest(
+                memory_selector=a,
+                source_locator=source_name,
+                into_locator=into,
+                before=before,
+                after=after,
+            )
+            if source_name is not None
+            else EmbedRequest(
+                child_locator=a,
+                into_locator=into,
+                before=before,
+                after=after,
+            )
         )
 
     try:
-        result = run_embed(
-            request,
-            port=port,
-            frozen_plan=frozen_plan,
-        )
+        if isinstance(request, MemoryEmbedRequest):
+            result = run_memory_embed(
+                request,
+                port=port,
+                frozen_plan=(
+                    frozen_plan
+                    if isinstance(frozen_plan, FrozenMemoryEmbedPlan)
+                    else None
+                ),
+            )
+        else:
+            result = run_embed(
+                request,
+                port=port,
+                frozen_plan=frozen_plan,
+            )
     except (
         FileNotFoundError,
         KeyError,

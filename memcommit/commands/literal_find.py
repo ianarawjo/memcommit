@@ -29,7 +29,6 @@ from memcommit.interfaces.console import (
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.find import (
-    LiteralFindTuiOutcome,
     LiteralFindTuiSetup,
     run_literal_find_tui,
 )

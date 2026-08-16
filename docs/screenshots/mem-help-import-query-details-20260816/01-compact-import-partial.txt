@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                  include items from descendant and embedded Contexts; ls is the compact alias.  │^
+│                  USE WHEN: Inspecting the structure and direct contents of a Context.           │ 
+│ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of a        │ 
+│                  current/explicit Context.                                                      │ 
+│                  USE WHEN: Reading the complete content of a known item or Context.             │ 
+│ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit Context.        │ 
+│                  USE WHEN: Moving the working position to another existing Context.             │ 
+│ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new    │ 
+│                  Context branch.                                                                │ 
+│                  USE WHEN: Using a Git-like workflow to switch or create a branch.              │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ CREATE, COPY & CONNECT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.   ┃ 
+┃ ▸ mem init              Create a new empty Context and make it the current working Context.     ┃ 
+┃                         USE WHEN: Starting a separate workspace for a new topic, task, or group ┃ 
+┃                                   of Memories.                                                  ┃ 
+┃ ▸ mem add               Add one or more Memories to the current or explicit Context.            ┃ 
+┃                         USE WHEN: Adding one or more facts, instructions, or notes directly to  ┃ 
+┃                                   a Context.                                                    ┃ 
+┃ ▸ mem branch            Copy a Context or subtree into a new branch and switch to it.           ┃ 
+┃                         USE WHEN: Editing a Context or subtree independently while preserving   ┃ 
+┃                                   the original.                                                 ┃ 
+┃ ▸ mem import [PARTIAL]  Import a clean-baseline Profile, Context tree, or Memory by value while ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

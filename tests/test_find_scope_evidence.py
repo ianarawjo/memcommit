@@ -20,7 +20,7 @@ def test_visible_reference_excludes_its_direct_target_from_remainder():
     source = ops.init("source")
     memory = ops.add(source, "The shared fact.")
     root = ops.init("root")
-    ref = ops.reference_memory(memory, source, root)
+    ref = ops.embed_memory(memory, source, root)
     root.add(source)
     candidates = collect_candidates(root)
 
@@ -96,7 +96,7 @@ def test_outside_collection_resolves_refs_and_excludes_frame_logical_items(
     hidden = ops.add(root, "Already in the frame corpus.")
     store.save(root)
     other = ops.init("other")
-    ops.reference_memory(hidden, root, other)
+    ops.embed_memory(hidden, root, other)
     independent = ops.add(other, "Independent outside evidence.")
     store.save(other)
     loaded_root = store.load("root")

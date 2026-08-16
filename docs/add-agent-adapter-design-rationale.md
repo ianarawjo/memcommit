@@ -1,6 +1,6 @@
 # Add agent adapter design rationale
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-16.
 
 ## Motivation
 
@@ -64,13 +64,23 @@ schemas, result serialization, error categories, and retry rules remain
 operation-owned. In particular, Query may retry one provider failure while Add
 never advertises an automatic retry.
 
-`skills/memcommit-add/` is checked-in host guidance. It directs an agent to the
-registered tool, preserves exact-batch meaning, requires durable user intent,
-and forbids hidden CLI or filesystem fallback. The skill is not automatically
-installed and is not included in the Python wheel. The default in-process agent
-registry now binds this adapter and schema to a caller-owned public client;
-external host exposure and skill installation remain explicit deployment
-responsibilities.
+`skills/memcommit-add/` is checked-in host guidance. Its frontmatter description
+states when Add should be selected. Its body directs an agent to the registered
+tool, preserves exact-batch meaning, requires durable user intent, distinguishes
+literal Add content from independent Branch/Merge work, immutable Reference
+snapshots, and live Embed links, and forbids hidden CLI or filesystem fallback.
+The Skill is not automatically installed and is
+not included in the Python wheel. The default in-process agent registry binds
+this adapter and schema to a caller-owned public client and obtains Add's
+`use_when` discovery value from canonical Help.
+
+MCP preserves that trigger in both standard description text and namespaced
+metadata. A caller that needs the complete structured `COPY OR LINK` comparison
+calls `memcommit_help` with `kind: describe-detail`, `operation: add`, and
+`detail: copy-or-link`. MCP exposes that stable ID as compact metadata but does
+not flatten the full comparison into Add's input schema. The Skill names the
+same ID and retains only the actionable version needed to avoid choosing the
+wrong tool; it is not another semantic source.
 
 ## Verification and non-goals
 
@@ -80,8 +90,7 @@ stable error categories, no mutation retry, error redaction and bounds,
 dependency direction, and the companion skill contract. Query adapter tests
 also run after extraction of the shared envelope mechanics.
 
-This slice does not add an MCP server, network endpoint, Codex plugin, process
-transport, authentication layer, idempotency key, dry run, status lookup,
-context creation, or skill installer. The shared in-process registry can expose
-the returned schema and invoke the adapter, but a transport must not broaden
-its authority or reinterpret an absent receipt as success.
+This slice does not add a network endpoint, Codex plugin, authentication layer,
+idempotency key, dry run, status lookup, context creation, or Skill installer.
+The optional MCP stdio server projects the shared registry; it must not broaden
+Add authority or reinterpret an absent receipt as success.

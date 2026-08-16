@@ -691,6 +691,7 @@ def test_companion_skill_preserves_review_cache_and_exact_apply_boundaries():
     normalized = " ".join(skill.split())
 
     assert "name: memcommit-atomize" in normalized
+    assert "Use when the user asks" in normalized
     assert "Invoke `memcommit_atomize` directly." in normalized
     assert "Send `version: 1` and `kind: open`" in normalized
     assert "`EXACT_PREWARM` is cached" in normalized

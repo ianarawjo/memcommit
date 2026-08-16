@@ -236,7 +236,7 @@ def test_switch_preview_projects_every_direct_item_in_persisted_order():
     ]
     assert [row.source.form for row in rows if row.source is not None] == [
         SourceForm.MEMORY,
-        SourceForm.MEMORY_REF,
+        SourceForm.MEMORY_EMBED,
         SourceForm.QUERY_VIEW,
         SourceForm.CONTEXT,
     ]
@@ -258,15 +258,15 @@ def test_switch_preview_projects_every_direct_item_in_persisted_order():
         )
     )
     assert rendered.index("[memory memory-u]") < rendered.index(
-        "[memory ref referenc]"
+        "[embedded memory referenc]"
     )
-    assert rendered.index("[memory ref referenc]") < rendered.index(
+    assert rendered.index("[embedded memory referenc]") < rendered.index(
         "[query view query-ui]"
     )
     assert rendered.index("[query view query-ui]") < rendered.index(
         "[context embedded]"
     )
-    assert "[memory ref referenc] READ ONLY · owned Memory" in rendered
+    assert "[embedded memory referenc] READ ONLY · owned Memory" in rendered
     assert "[context embedded] VIA EMBED · parent/embedded" in rendered
 
 

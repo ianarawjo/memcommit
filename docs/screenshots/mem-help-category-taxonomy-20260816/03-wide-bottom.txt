@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem review             Enter an interactive Review session or stage semantic review  │ USE WHEN: Resolving issues in a saved analysis before a later Apply.                   │^
+│                          responses; never apply Memories.                              │                                                                                        │ 
+│ ▸ mem fit                Judge proposition compatibility, or detect coherence issues   │ USE WHEN: Checking whether Memories, Rules, Goals, or other propositions can coexist   │ 
+│                          across one saved Ground graph.                                │           without contradiction.                                                       │ 
+│ ▸ mem check-conformance  Check Ground examples or one Context against explicit Rules.  │ USE WHEN: Checking a Context or saved Ground against explicit Rules.                   │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Build a reviewable common ground for agent memory by developing its Goal, Rules, and example Memories together.                                                     │ 
+│ ▸ mem ground  Create or continue a reviewed Goal-Rules-Memories Ground workbench.      │ USE WHEN: Building a reviewed evaluation or behavior contract from evidence.           │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  │ 
+│ ▸ mem log         Browse Context checkpoints, inspect one Memory lineage with          │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           │ 
+│                   --memory, search history, or list Profile command attempts.          │                                                                                        │ 
+│ ▸ mem diff        Inspect recorded Context or Update changes without applying them.    │ USE WHEN: Verifying exactly what a recorded operation changed.                         │ 
+│ ▸ mem trace       Trace one retained Memory through its recorded lineage.              │ USE WHEN: Determining where a Memory came from and how it changed.                     │ 
+│ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed,        │ USE WHEN: Understanding why a Memory exists or reached its current form.               │ 
+│                   inference.                                                           │                                                                                        │ 
+│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or      │ USE WHEN: Creating a recovery point before risky work.                                 │ 
+│                   Revert.                                                              │                                                                                        │ 
+│ ▸ mem undo        Undo the most recent recorded Context command across its affected    │ USE WHEN: Reversing the latest recorded mutation as one operation.                     │ 
+│                   Contexts.                                                            │                                                                                        │ 
+│ ▸ mem redo        Redo the most recently undone recorded Context command.              │ USE WHEN: Reapplying a command that was undone accidentally.                           │ 
+│ ▸ mem revert      Select a checkpoint and review restoration of one local Context.     │ USE WHEN: Restoring a Context to a deliberately saved recovery point.                  │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           │ 
+│ ▸ mem profile  Enter the interactive Profile selector, or manage complete local        │ USE WHEN: Managing separate users, environments, or Memory stores.                     │ 
+│                MemoryStore Profiles.                                                   │                                                                                        │ 
+│ ▸ mem rename   Rename the current or an explicit managed Profile without moving or     │ USE WHEN: Giving an existing managed Profile a clearer name.                           │ 
+│                rewriting its store; mem profile rename is the explicit equivalent.     │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 │ 
+│ ▸ mem share   Send one ordinary Context through a grant-backed receiver endpoint.      │ USE WHEN: Delivering an owned Context to an authorized receiver.                       │ 
+│ ▸ mem lock    Lock the current Context, a recursive Context set, Memory, or Profile.   │ USE WHEN: Preventing accidental modification of stable material.                       │ 
+│ ▸ mem unlock  Unlock the current Context, a recursive set, Memory, or Profile.         │ USE WHEN: Reopening protected material for intentional revision.                       │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ Configure MemCommit and prepare or run study and evaluation utilities.                                                                                                          ┃ 
+┃ ▸ mem help             Enter the interactive command browser and open syntax help.     │ USE WHEN: Discovering available operations and their invocation forms.                 ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

@@ -46,7 +46,9 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
     render_horizontal_choice,
 )
 from memcommit.help_catalog import (
+    OperationComparisonDetail,
     OperationHelp,
+    OperationTextDetail,
     compose_operation_help,
 )
 from memcommit.help_application import list_operation_help
@@ -133,7 +135,7 @@ HELP_COMMON_KEYS = (
 
 HELP_CATEGORY_GROUPS = (
     (
-        "CONTEXTS",
+        "BROWSE & NAVIGATE",
         (
             "status",
             "pwd",
@@ -142,17 +144,31 @@ HELP_CATEGORY_GROUPS = (
             "show",
             "switch",
             "checkout",
+        ),
+    ),
+    (
+        "CREATE, COPY & CONNECT",
+        (
             "init",
+            "add",
             "branch",
             "import",
+            "reference",
             "embed",
         ),
     ),
     (
-        "MECHANICAL MEMORY OPERATIONS",
+        "SEARCH & EXPLAIN",
         (
-            "add",
-            "reference",
+            "find",
+            "search",
+            "query",
+            "summarize",
+        ),
+    ),
+    (
+        "DETERMINISTIC CONTENT CHANGES",
+        (
             "edit",
             "replace",
             "chunk",
@@ -163,67 +179,118 @@ HELP_CATEGORY_GROUPS = (
         ),
     ),
     (
-        "SEARCH & EXPLAIN",
+        "SEMANTIC TRANSFORMATIONS",
         (
-            "find",
-            "search",
-            "query",
-            "summarize",
-            "trace",
-            "rationale",
-            "find-duplicates",
-            "find-ambiguities",
-            "find-conflicts",
-        ),
-    ),
-    (
-        "SEMANTIC MEMORY OPERATIONS",
-        (
-            "audit",
             "atomize",
             "distill",
             "elaborate",
-            "compare",
-            "impact",
-            "review",
-            "meld",
-            "update",
-            "sever",
             "translate",
-            "resolve",
             "forget",
+            "resolve",
+            "update",
+            "meld",
+            "sever",
         ),
     ),
     (
+        "CHECK, COMPARE & REVIEW",
+        (
+            "compare",
+            "find-duplicates",
+            "find-ambiguities",
+            "find-conflicts",
+            "audit",
+            "impact",
+            "review",
+            "fit",
+            "check-conformance",
+        ),
+    ),
+    (
+        "GROUND WORKBENCH",
+        ("ground",),
+    ),
+    (
         "HISTORY & RECOVERY",
-        ("log", "diff", "checkpoint", "undo", "redo", "revert"),
+        (
+            "log",
+            "diff",
+            "trace",
+            "rationale",
+            "checkpoint",
+            "undo",
+            "redo",
+            "revert",
+        ),
     ),
     (
-        "GROUND & EVALUATION",
-        ("ground", "fit", "check-conformance", "init-study", "eval"),
+        "PROFILES",
+        ("profile", "rename"),
     ),
     (
-        "PROFILE & SHARING",
-        ("profile", "rename", "share", "lock", "unlock"),
+        "SHARING & PROTECTION",
+        ("share", "lock", "unlock"),
     ),
     (
-        "SYSTEM",
-        ("help", "provider", "shell-init", "config"),
+        "SYSTEM & STUDY TOOLS",
+        ("help", "provider", "shell-init", "config", "init-study", "eval"),
     ),
 )
 
-# These descriptions classify where an operation's meaning comes from, not
-# whether every invocation starts a new provider call. Semantic operations may
-# replay an exact cache or saved analysis while retaining LLM-derived meaning.
+# Category copy explains the user's intended activity. Execution labels remain
+# concise orientation rather than a promise that every form has one route.
 HELP_CATEGORY_DESCRIPTIONS = {
-    "MECHANICAL MEMORY OPERATIONS": (
+    "BROWSE & NAVIGATE": (
         "NO LLM",
-        "Explicit inputs and reviewed deterministic choices determine the result.",
+        "Inspect the current location and available Contexts, then move through "
+        "the Context namespace.",
     ),
-    "SEMANTIC MEMORY OPERATIONS": (
+    "CREATE, COPY & CONNECT": (
+        "NO LLM",
+        "Create Contexts or Memories, copy or import resources, or connect "
+        "existing material.",
+    ),
+    "SEARCH & EXPLAIN": (
+        "MIXED",
+        "Find exact text directly, or use LLM-based semantic retrieval, answering, "
+        "and summarization within the selected authorized scope.",
+    ),
+    "DETERMINISTIC CONTENT CHANGES": (
+        "NO LLM",
+        "Apply explicit inputs and reviewed choices through deterministic program "
+        "logic to change content.",
+    ),
+    "SEMANTIC TRANSFORMATIONS": (
         "LLM-BASED",
-        "Uses LLM-produced semantic analysis; a run may call a provider or reuse "
-        "exact cached or saved analysis.",
+        "Uses LLM semantic analysis to restructure, derive, translate, curate, or "
+        "reconcile content.",
+    ),
+    "CHECK, COMPARE & REVIEW": (
+        "MIXED",
+        "Check compatibility, differences, quality, or expected impact. Review "
+        "saved analysis and decide what should happen next.",
+    ),
+    "GROUND WORKBENCH": (
+        "LLM-BASED",
+        "Build a reviewable common ground for agent memory by developing its Goal, "
+        "Rules, and example Memories together.",
+    ),
+    "HISTORY & RECOVERY": (
+        "MIXED",
+        "Inspect provenance and recorded changes. Restore an earlier state through "
+        "explicit history operations.",
+    ),
+    "PROFILES": (
+        "NO LLM",
+        "Select and administer complete local Profile stores and their managed names.",
+    ),
+    "SHARING & PROTECTION": (
+        "NO LLM",
+        "Deliver owned Contexts and protect Memory, Context, or Profile writes.",
+    ),
+    "SYSTEM & STUDY TOOLS": (
+        None,
+        "Configure MemCommit and prepare or run study and evaluation utilities.",
     ),
 }
 
@@ -377,10 +444,13 @@ COMMAND_FORMS = {
         'mem replace "[text]" "[replacement]" --apply [plan_digest] (re-freeze and atomically Apply the reviewed plan)',
     ),
     "embed": (
-        "mem embed (choose Child, target, and insertion gap interactively)",
+        "mem embed (choose Context or Memory link, target, and insertion gap interactively)",
         "mem embed [child_context] --into [target_context] (append)",
         "mem embed [child_context] --into [target_context] --before [item]",
         "mem embed [child_context] --into [target_context] --after [item]",
+        "mem embed [memory] --from [source_context] --into [target_context] (live Memory link)",
+        "mem embed [memory] --from [source_context] --into [target_context] --before [item]",
+        "mem embed [memory] --from [source_context] --into [target_context] --after [item]",
     ),
     "eval": (
         "mem eval semantic status (show retained semantic campaign status)",
@@ -565,8 +635,8 @@ COMMAND_FORMS = {
         "mem rationale [memory] --recorded-only (skip inference and its cache)",
     ),
     "reference": (
-        "mem reference [memory] --from [source_context] (add to current Context)",
-        "mem reference [memory] --from [source_context] --into [target_context]",
+        "mem reference [memory] --from [source_context] (snapshot into current Context)",
+        "mem reference [memory] --from [source_context] --into [target_context] (immutable snapshot)",
     ),
     "rename": (
         "mem rename [new_name] (rename the active Profile)",
@@ -689,6 +759,7 @@ class CommandEntry:
     forms: tuple[str, ...]
     aliases: tuple[str, ...] = ()
     operation_help: OperationHelp | None = None
+    maturity: str | None = None
 
 
 @dataclass(frozen=True)
@@ -860,6 +931,7 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
             ),
             aliases=COMMAND_DISPLAY_ALIASES.get(name, ()),
             operation_help=operation_help_by_name[name],
+            maturity=operation_help_by_name[name].maturity,
         )
         for name, command in commands
     ]
@@ -871,6 +943,8 @@ def _entry_label(entry: CommandEntry) -> str:
         label += f" ({', '.join(entry.aliases)})"
     if entry.annotation:
         label += f" ({entry.annotation})"
+    if entry.maturity:
+        label += f" [{entry.maturity}]"
     return label
 
 
@@ -1033,7 +1107,7 @@ def _help_group_fragments(
     category_description = HELP_CATEGORY_DESCRIPTIONS.get(title)
     if category_description is not None:
         classification, description = category_description
-        prefix = f"{classification} · "
+        prefix = f"{classification} · " if classification is not None else ""
         lines = textwrap.wrap(
             prefix + display_escape_text(description),
             width=content_width,
@@ -1043,7 +1117,7 @@ def _help_group_fragments(
         ) or [prefix]
         for line_index, line in enumerate(lines):
             fragments.extend([(border_style, vertical), ("", " ")])
-            if line_index == 0:
+            if line_index == 0 and classification is not None:
                 fragments.extend(
                     [
                         (
@@ -1137,6 +1211,62 @@ def _help_group_fragments(
                                 (border_style, vertical + "\n"),
                             ]
                         )
+            details = () if entry.operation_help is None else entry.operation_help.details
+            for detail in details:
+                detail_lines: list[tuple[str, str]] = []
+                title_prefix = "  "
+                for line in textwrap.wrap(
+                    display_escape_text(detail.title),
+                    width=content_width,
+                    initial_indent=title_prefix,
+                    subsequent_indent=title_prefix,
+                    break_long_words=True,
+                    break_on_hyphens=False,
+                ) or [title_prefix]:
+                    detail_lines.append(("bold", line))
+                if isinstance(detail, OperationComparisonDetail):
+                    for line in textwrap.wrap(
+                        display_escape_text(detail.explanation),
+                        width=content_width,
+                        initial_indent="  ",
+                        subsequent_indent="  ",
+                        break_long_words=True,
+                        break_on_hyphens=False,
+                    ) or ["  "]:
+                        detail_lines.append(("", line))
+                    for option in detail.options:
+                        # Terminal Help uses a literal hyphen rather than relying on
+                        # renderer-specific Markdown bullet projection.
+                        value = f"{option.label} · {option.guidance}"
+                        for line in textwrap.wrap(
+                            display_escape_text(value),
+                            width=content_width,
+                            initial_indent="  - ",
+                            subsequent_indent="    ",
+                            break_long_words=True,
+                            break_on_hyphens=False,
+                        ) or ["  -"]:
+                            detail_lines.append(("", line))
+                elif isinstance(detail, OperationTextDetail):
+                    for line in textwrap.wrap(
+                        display_escape_text(detail.body),
+                        width=content_width,
+                        initial_indent="  ",
+                        subsequent_indent="  ",
+                        break_long_words=True,
+                        break_on_hyphens=False,
+                    ) or ["  "]:
+                        detail_lines.append(("", line))
+                else:  # pragma: no cover - catalog validation closes the union
+                    raise TypeError("Unsupported Operation Help detail type.")
+                for style, line in detail_lines:
+                    fragments.extend(
+                        [
+                            (border_style, vertical),
+                            (style, f" {line:<{content_width}} "),
+                            (border_style, vertical + "\n"),
+                        ]
+                    )
             for form_index, form in enumerate(entry.forms):
                 form_focused = (
                     focused and owns_selection and selected_form == form_index

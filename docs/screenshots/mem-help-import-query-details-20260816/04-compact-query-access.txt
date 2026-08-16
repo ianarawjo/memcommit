@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, and           ┃^
+┃         summarization within the selected authorized scope.                                     ┃ 
+┃ ▸ mem find       Find exact text or explicit regular-expression (regex) matches in readable     ┃ 
+┃                  Memories.                                                                      ┃ 
+┃                  USE WHEN: Locating exact words, identifiers, or text patterns within a         ┃ 
+┃                            selected Context scope.                                              ┃ 
+┃ ▸ mem search     Semantically rank Memories relevant to a natural-language request across       ┃ 
+┃                  selected Contexts.                                                             ┃ 
+┃                  USE WHEN: Finding relevant Memories through meaning and context, including     ┃ 
+┃                            related content expressed in different words.                        ┃ 
+┃ ▾ mem query      Generate an LLM-based answer from readable Context knowledge or an authorized  ┃ 
+┃                  concealed query-only view.                                                     ┃ 
+┃                  USE WHEN: Getting a grounded natural-language answer instead of a list of      ┃ 
+┃                            matching Memories.                                                   ┃ 
+┃   FLOW      · Readable source + question -> answer with references                              ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · No Context content changes; visible transcript may be retained                    ┃ 
+┃   RANGE     · Readable exact, descendant, or embedded Context scope; or one QUERY-authorized    ┃ 
+┃               query-only view                                                                   ┃ 
+┃   QUERY-ONLY ACCESS                                                                             ┃ 
+┃   Shared agent memory may allow QUERY without READ: it can answer a specific question within    ┃ 
+┃   the granted boundary while keeping its complete Source Memories and full underlying policy    ┃ 
+┃   concealed.                                                                                    ┃ 
+┃   FORM 1 · mem query (open the interactive Question, Source, and saved transcript workbench)    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

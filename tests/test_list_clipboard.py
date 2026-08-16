@@ -354,7 +354,7 @@ def test_clean_copy_keeps_reference_meaning_without_object_ids(
     result = invoke("ls", "--copy")
 
     assert result.exit_code == 0
-    assert "[memory ref " in result.stdout
+    assert "[reference " in result.stdout
     assert "READ ONLY" in result.stdout
     assert (
         "Referenced atomic name. -> source"
@@ -388,7 +388,7 @@ def test_clean_copy_keeps_user_authored_bracket_text_literal(
     assert fake_system_clipboard["text"].count("[memory") == 1
 
 
-def test_clean_copy_describes_a_dangling_reference_without_ids(
+def test_clean_copy_keeps_a_snapshot_after_its_source_is_deleted(
     isolated_store,
     fake_system_clipboard,
 ):
@@ -402,7 +402,10 @@ def test_clean_copy_describes_a_dangling_reference_without_ids(
     result = invoke("ls", "target", "--copy")
 
     assert result.exit_code == 0
-    assert "memory ref · source · DANGLING" in fake_system_clipboard["text"]
+    assert "reference · Fact that will become unavailable." in fake_system_clipboard[
+        "text"
+    ]
+    assert "READ ONLY" in fake_system_clipboard["text"]
     assert source_memory_uid[:8] not in fake_system_clipboard["text"]
 
 

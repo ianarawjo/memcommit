@@ -5,7 +5,8 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.embed_application import FrozenEmbedPlan
+from memcommit.context_targeting.tui.picker import context_memory_rows
+from memcommit.embed_application import FrozenEmbedPlan, FrozenMemoryEmbedPlan
 from memcommit.authority.access import resolve_context_access
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.embed_runtime import MemoryStoreEmbedPort
@@ -35,6 +36,7 @@ def build_embed_tui_setup(port: MemoryStoreEmbedPort) -> EmbedTuiSetup:
         child_names=child_names,
         child_selectable_names=frozenset(selectable),
         into_names=local_names,
+        memory_source_names=local_names,
         current_context=(
             port.current_context_name
             if port.current_context_name in local_names
@@ -52,7 +54,7 @@ def choose_embed_setup(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> FrozenEmbedPlan | None:
+) -> FrozenEmbedPlan | FrozenMemoryEmbedPlan | None:
     """Review one relationship without letting the TUI own storage."""
 
     setup = build_embed_tui_setup(port)
@@ -60,6 +62,10 @@ def choose_embed_setup(
         setup,
         inspect_context=port.inspect_local_context,
         freeze_exact_gap=port.freeze_exact_gap,
+        memory_loader=lambda name: context_memory_rows(
+            port.inspect_local_context(name)
+        ),
+        freeze_memory_exact_gap=port.freeze_memory_exact_gap,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

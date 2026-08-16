@@ -455,6 +455,7 @@ def test_companion_skill_preserves_route_and_failure_boundaries():
     ).read_text(encoding="utf-8")
 
     assert "name: memcommit-query" in skill
+    assert "Use when a user asks an agent" in skill
     assert "Invoke `memcommit_query` directly." in skill
     assert "Always send `version: 1`." in skill
     assert all(

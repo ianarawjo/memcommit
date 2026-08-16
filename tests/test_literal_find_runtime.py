@@ -70,7 +70,7 @@ def test_runtime_searches_resolved_reference_content_without_changing_source(tmp
     source = ops.init("source")
     memory = ops.add(source, "one shared needle")
     target = ops.init("target")
-    ops.reference_memory(memory, source, target)
+    ops.embed_memory(memory, source, target)
     store.save(source)
     store.save(target)
     before = store.load_direct(source.name).to_dict()

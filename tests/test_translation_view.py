@@ -475,7 +475,7 @@ def test_view_sends_only_direct_memories_and_preserves_mixed_pointers(
     )
     parent = ops.init("mixed")
     owned = ops.add(parent, "직접 소유")
-    memory_ref = ops.reference_memory(
+    memory_ref = ops.embed_memory(
         referenced_memory,
         referenced,
         parent,

@@ -142,6 +142,11 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                 )
             )
         elif isinstance(item, MemoryRef):
+            form = (
+                SourceForm.MEMORY_REFERENCE
+                if item.is_snapshot
+                else SourceForm.MEMORY_EMBED
+            )
             content = (
                 item.target.content
                 if item.target is not None
@@ -152,7 +157,7 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                     item.uid[:8],
                     content,
                     source=SourceDisplayFacts(
-                        form=SourceForm.MEMORY_REF,
+                        form=form,
                         states=(
                             (SourceState.READ_ONLY,)
                             if item.target is not None

@@ -156,7 +156,7 @@ def test_status_lists_direct_pointer_and_embed_relationships(isolated_store):
     source_memory = ops.add(source, "Shared source Memory")
     child = ops.init("child")
     parent = ops.init("parent")
-    reference = ops.reference_memory(source_memory, source, parent)
+    reference = ops.embed_memory(source_memory, source, parent)
     ops.embed(child, parent)
     for context in (source, child, parent):
         store.save(context)

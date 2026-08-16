@@ -74,16 +74,20 @@ def _child(store_root: Path, *, mode: str) -> None:
     }
     app(prog_name="mem", args=["embed"], standalone_mode=False)
 
-    if mode == "apply":
+    if mode in {"apply", "memory"}:
         print("CAPTURE PAUSE · press Enter for read-only verification", flush=True)
         input()
-        print("CAPTURE VERIFICATION COMMAND · mem show --context archive")
+        verification_name = archive.name if mode == "apply" else guide.name
+        print(
+            "CAPTURE VERIFICATION COMMAND · mem show --context "
+            f"{verification_name}"
+        )
         app(
             prog_name="mem",
-            args=["show", "--context", archive.name],
+            args=["show", "--context", verification_name],
             standalone_mode=False,
         )
-        reloaded = store.load_direct(archive.name)
+        reloaded = store.load_direct(verification_name)
         print(f"ORDER · {' → '.join(reloaded.ordered_uids())}")
         print(f"CURRENT CONTEXT · {store.current_context_name()}")
         return
@@ -223,7 +227,7 @@ def _capture_apply(environment: dict[str, str]) -> bytes:
         _wait_for(child, raw, b"MEM EMBED")
         _render_snapshot("01-setup-entry", bytes(raw))
 
-        child.send(b"\x1b[B\r")
+        child.send(b"\t\x1b[B\r")
         _settle(child, raw)
         _render_snapshot("02-child-selected", bytes(raw))
 
@@ -271,11 +275,48 @@ def _capture_invalid(environment: dict[str, str]) -> bytes:
     with tempfile.TemporaryDirectory(prefix="memcommit-embed-invalid-") as directory:
         child = _spawn(environment, directory, mode="invalid")
         _wait_for(child, raw, b"MEM EMBED")
-        child.send(b"\x1b[B\x1b[B\r\t\t\t\r")
+        child.send(b"\t\x1b[B\x1b[B\r\t\t\t\r")
         _settle(child, raw, delay=0.5)
         _render_snapshot("10-self-embed-rejected", bytes(raw))
         child.send(b"\x1b")
         _wait_for(child, raw, b"ALL CONTEXTS UNCHANGED")
+        child.close()
+    return bytes(raw)
+
+
+def _capture_memory(environment: dict[str, str]) -> bytes:
+    raw = bytearray()
+    with tempfile.TemporaryDirectory(prefix="memcommit-memory-embed-") as directory:
+        child = _spawn(environment, directory, mode="memory")
+        _wait_for(child, raw, b"MEM EMBED")
+
+        child.send(b"\x1b[C")
+        _settle(child, raw)
+        _render_snapshot("11-memory-mode", bytes(raw))
+
+        child.send(b"\t\x1b[B\r")
+        _settle(child, raw)
+        _render_snapshot("12-memory-selected", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("13-memory-target", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("14-memory-position", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("15-memory-exact-command", bytes(raw))
+
+        child.send(b"\r")
+        _wait_for(child, raw, b"CAPTURE PAUSE")
+        _render_snapshot("16-memory-success-receipt", bytes(raw))
+
+        child.send(b"\r")
+        _wait_for(child, raw, b"CURRENT CONTEXT")
+        _render_snapshot("17-memory-read-only-verification", bytes(raw))
         child.close()
     return bytes(raw)
 
@@ -285,7 +326,11 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--child")
-    parser.add_argument("--mode", choices=("apply", "cancel", "invalid"), default="apply")
+    parser.add_argument(
+        "--mode",
+        choices=("apply", "memory", "cancel", "invalid"),
+        default="apply",
+    )
     arguments = parser.parse_args()
     if arguments.child:
         _child(Path(arguments.child), mode=arguments.mode)
@@ -298,6 +343,7 @@ def main() -> None:
     environment["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
     streams = (
         _capture_apply(environment),
+        _capture_memory(environment),
         _capture_cancel(environment),
         _capture_invalid(environment),
     )

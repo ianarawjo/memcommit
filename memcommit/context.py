@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+import hashlib
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
@@ -31,7 +32,14 @@ class Memory:
 
 
 class MemoryRef:
-    """Read-only reference to one directly owned Memory in another Context."""
+    """Read-only live embed or immutable snapshot of one Source Memory.
+
+    Legacy ``memory_ref`` records are live links and deliberately persist no
+    content. New ``memory_snapshot_ref`` records retain the exact reviewed
+    content. Keeping both modes in one direct-item class preserves existing
+    operation guards that already prevent references from being edited as
+    directly owned Memories.
+    """
 
     def __init__(
         self,
@@ -40,13 +48,23 @@ class MemoryRef:
         target_context_name: str,
         target_memory_uid: str,
         target: Memory | None = None,
+        *,
+        snapshot_content_sha256: str | None = None,
     ):
         self.uid = uid
         self.target_context_uid = target_context_uid
         self.target_context_name = target_context_name
         self.target_memory_uid = target_memory_uid
+        self.snapshot_content_sha256 = snapshot_content_sha256
+        if snapshot_content_sha256 is not None:
+            if target is None:
+                raise ValueError("A Memory snapshot reference requires content.")
+            expected = hashlib.sha256(target.content.encode("utf-8")).hexdigest()
+            if snapshot_content_sha256 != expected:
+                raise ValueError("Memory snapshot content digest does not match.")
         # Keep a detached view so mutating ref.target cannot write through to
-        # a source Context object. Parent serialization ignores this content.
+        # a source Context object. Live-parent serialization ignores this
+        # content; snapshot serialization retains the detached exact value.
         self.target = (
             Memory(uid=target.uid, content=target.content)
             if target is not None
@@ -57,10 +75,18 @@ class MemoryRef:
     def is_resolved(self) -> bool:
         return self.target is not None
 
+    @property
+    def is_snapshot(self) -> bool:
+        return self.snapshot_content_sha256 is not None
+
+    @property
+    def is_live(self) -> bool:
+        return not self.is_snapshot
+
     def to_dict(self) -> dict[str, Any]:
-        """Serialize the pointer only; target content is intentionally omitted."""
-        return {
-            "type": "memory_ref",
+        """Serialize one live identity link or exact immutable snapshot."""
+        record: dict[str, Any] = {
+            "type": "memory_snapshot_ref" if self.is_snapshot else "memory_ref",
             "uid": self.uid,
             "target_context": {
                 "uid": self.target_context_uid,
@@ -68,6 +94,12 @@ class MemoryRef:
             },
             "target_memory_uid": self.target_memory_uid,
         }
+        if self.is_snapshot:
+            if self.target is None or self.snapshot_content_sha256 is None:
+                raise ValueError("Memory snapshot reference has no retained content.")
+            record["content"] = self.target.content
+            record["content_sha256"] = self.snapshot_content_sha256
+        return record
 
     @classmethod
     def from_dict(
@@ -76,12 +108,21 @@ class MemoryRef:
         target: Memory | None = None,
     ) -> MemoryRef:
         target_context = data["target_context"]
+        if data.get("type") == "memory_snapshot_ref":
+            content = data.get("content")
+            digest = data.get("content_sha256")
+            if not isinstance(content, str) or not isinstance(digest, str):
+                raise ValueError("Memory snapshot reference is incomplete.")
+            target = Memory(uid=data["target_memory_uid"], content=content)
+        else:
+            digest = None
         return cls(
             uid=data["uid"],
             target_context_uid=target_context["uid"],
             target_context_name=target_context["name"],
             target_memory_uid=data["target_memory_uid"],
             target=target,
+            snapshot_content_sha256=digest,
         )
 
     def copy(self) -> MemoryRef:
@@ -92,6 +133,7 @@ class MemoryRef:
             target_context_name=self.target_context_name,
             target_memory_uid=self.target_memory_uid,
             target=self.target,
+            snapshot_content_sha256=self.snapshot_content_sha256,
         )
 
 
@@ -372,10 +414,10 @@ class Context:
             item = serialized[uid]
             if item["type"] == "memory":
                 ctx.add(Memory.from_dict(item))
-            elif item["type"] == "memory_ref":
+            elif item["type"] in {"memory_ref", "memory_snapshot_ref"}:
                 target_context = item["target_context"]
                 target = None
-                if memory_loader is not None:
+                if item["type"] == "memory_ref" and memory_loader is not None:
                     target = memory_loader(
                         target_context["name"],
                         target_context["uid"],
@@ -420,8 +462,8 @@ class Context:
         return ctx
 
 
-# A direct item is an atomic Memory, a read-only MemoryRef, an opaque
-# QueryContextRef, or a nested Context.
+# A direct item is an atomic Memory, a read-only live/snapshot MemoryRef, an
+# opaque QueryContextRef, or a nested Context.
 Information: TypeAlias = Memory | MemoryRef | QueryContextRef | Context
 
 

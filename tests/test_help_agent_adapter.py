@@ -52,8 +52,90 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
             "Bringing work from a copied or branched Context back into the "
             "current Context."
         ),
+        "use_when": (
+            "Bringing work from a copied or branched Context back into the "
+            "current Context."
+        ),
+        "maturity": None,
+        "details": [],
     }
     assert response["result"]["effect"] == "NONE"
+
+
+def test_describe_add_returns_use_when_and_compact_detail_reference(tmp_path):
+    adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
+
+    response = adapter.invoke({"version": 1, "kind": "describe", "operation": "add"})
+
+    operation = response["result"]["operation"]
+    assert operation["use_when"] == operation["best_for"]
+    [reference] = operation["details"]
+    assert reference["id"] == "copy-or-link"
+    assert "options" not in reference
+
+    comparison = adapter.invoke(
+        {
+            "version": 1,
+            "kind": "describe-detail",
+            "operation": "add",
+            "detail": "copy-or-link",
+        }
+    )["result"]["detail"]
+    assert [option["label"] for option in comparison["options"]] == [
+        "INDEPENDENT WORK",
+        "EXACT MEMORY VERSION",
+        "LIVE MEMORY",
+        "EXISTING CONTEXT",
+    ]
+
+
+def test_import_limitation_and_query_access_boundary_are_addressable(tmp_path):
+    adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
+
+    imported = adapter.invoke(
+        {"version": 1, "kind": "describe", "operation": "import"}
+    )["result"]["operation"]
+    limitation = adapter.invoke(
+        {
+            "version": 1,
+            "kind": "describe-detail",
+            "operation": "import",
+            "detail": "current-limitation",
+        }
+    )
+    access = adapter.invoke(
+        {
+            "version": 1,
+            "kind": "describe-detail",
+            "operation": "query",
+            "detail": "query-only-access",
+        }
+    )
+
+    assert imported["maturity"] == "PARTIAL"
+    assert imported["details"][0]["kind"] == "LIMITATION"
+    assert limitation["ok"] is True
+    assert limitation["result"]["detail"]["title"] == "CURRENT LIMITATION"
+    assert "MemCommit-to-MemCommit" in limitation["result"]["detail"]["body"]
+    assert access["ok"] is True
+    assert access["result"]["detail"]["kind"] == "ACCESS_BOUNDARY"
+    assert "QUERY without READ" in access["result"]["detail"]["body"]
+
+
+def test_agent_can_list_compact_detail_ids_before_requesting_one(tmp_path):
+    adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
+
+    response = adapter.invoke(
+        {"version": 1, "kind": "list-details", "operation": "add"}
+    )
+
+    assert response["ok"] is True
+    assert response["result"]["operation"] == "add"
+    assert response["result"]["count"] == 1
+    [detail] = response["result"]["details"]
+    assert detail["id"] == "copy-or-link"
+    assert detail["discovery"] == "TOOL_SELECTION"
+    assert "options" not in detail
 
 
 @pytest.mark.parametrize(
@@ -65,6 +147,14 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
         {"version": 1, "kind": "list", "operation": "help"},
         {"version": 1, "kind": "describe"},
         {"version": 1, "kind": "describe", "operation": "unknown"},
+        {"version": 1, "kind": "list-details"},
+        {"version": 1, "kind": "describe-detail", "operation": "add"},
+        {
+            "version": 1,
+            "kind": "describe-detail",
+            "operation": "init",
+            "detail": "copy-or-link",
+        },
     ],
 )
 def test_invalid_requests_fail_closed(payload, tmp_path):
@@ -82,8 +172,18 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
 
     assert schema["name"] == HELP_AGENT_TOOL_NAME
     assert schema["parameters"]["additionalProperties"] is False
-    assert schema["parameters"]["allOf"][0]["else"] == {
+    assert schema["parameters"]["allOf"][0]["then"] == {
         "not": {"required": ["operation"]}
     }
+    assert schema["parameters"]["allOf"][0]["else"] == {"required": ["operation"]}
     assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 62
+    assert schema["parameters"]["properties"]["detail"]["enum"] == [
+        "copy-or-link",
+        "current-limitation",
+        "parent-contexts",
+        "query-only-access",
+    ]
+    assert schema["parameters"]["allOf"][1]["then"] == {"required": ["detail"]}
+    assert "use-when guidance" in schema["description"]
+    assert "individually addressable typed details" in schema["description"]
     json.dumps(schema)

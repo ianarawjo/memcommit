@@ -61,6 +61,13 @@ from memcommit.interfaces.agent.elaborate import (
     ElaborateAgentAdapter,
     elaborate_agent_tool_schema,
 )
+from memcommit.interfaces.agent.embed import (
+    EMBED_AGENT_CONTRACT_VERSION,
+    EMBED_AGENT_TOOL_NAME,
+    EmbedAgentAdapter,
+    EmbedAgentKind,
+    embed_agent_tool_schema,
+)
 from memcommit.interfaces.agent.fit import (
     FIT_AGENT_CONTRACT_VERSION,
     FIT_AGENT_TOOL_NAME,
@@ -103,6 +110,13 @@ from memcommit.interfaces.agent.find import (
     FindAgentKind,
     find_agent_tool_schema,
 )
+from memcommit.interfaces.agent.reference import (
+    REFERENCE_AGENT_CONTRACT_VERSION,
+    REFERENCE_AGENT_TOOL_NAME,
+    ReferenceAgentAdapter,
+    ReferenceAgentKind,
+    reference_agent_tool_schema,
+)
 from memcommit.interfaces.agent.replace import (
     REPLACE_AGENT_CONTRACT_VERSION,
     REPLACE_AGENT_TOOL_NAME,
@@ -113,6 +127,7 @@ from memcommit.interfaces.agent.replace import (
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
+    AgentToolDefinition,
     AgentToolRegistrationError,
     AgentToolRegistry,
     build_default_agent_tool_registry,
@@ -143,6 +158,7 @@ __all__ = [
     "ATOMIZE_GROUNDING_AGENT_TOOL_NAME",
     "AddAgentAdapter",
     "AgentToolBinding",
+    "AgentToolDefinition",
     "AgentToolRegistrationError",
     "AgentToolRegistry",
     "AtomizeAgentAdapter",
@@ -167,6 +183,10 @@ __all__ = [
     "ELABORATE_AGENT_CONTRACT_VERSION",
     "ELABORATE_AGENT_TOOL_NAME",
     "ElaborateAgentAdapter",
+    "EMBED_AGENT_CONTRACT_VERSION",
+    "EMBED_AGENT_TOOL_NAME",
+    "EmbedAgentAdapter",
+    "EmbedAgentKind",
     "FIT_AGENT_CONTRACT_VERSION",
     "FIT_AGENT_TOOL_NAME",
     "FitAgentAdapter",
@@ -191,6 +211,10 @@ __all__ = [
     "QUERY_AGENT_ERROR_MESSAGE_LIMIT",
     "QUERY_AGENT_TOOL_NAME",
     "QueryAgentAdapter",
+    "REFERENCE_AGENT_CONTRACT_VERSION",
+    "REFERENCE_AGENT_TOOL_NAME",
+    "ReferenceAgentAdapter",
+    "ReferenceAgentKind",
     "QUALITY_FIND_AGENT_CONTRACT_VERSION",
     "QUALITY_FIND_AGENT_TOOL_NAME",
     "QualityFindAgentAdapter",
@@ -215,12 +239,14 @@ __all__ = [
     "distill_agent_tool_schema",
     "dedup_agent_tool_schema",
     "elaborate_agent_tool_schema",
+    "embed_agent_tool_schema",
     "fit_agent_tool_schema",
     "forget_agent_tool_schema",
     "find_agent_tool_schema",
     "replace_agent_tool_schema",
     "help_agent_tool_schema",
     "query_agent_tool_schema",
+    "reference_agent_tool_schema",
     "quality_find_agent_tool_schema",
     "quality_finding_handoff_agent_schema",
     "resolve_agent_tool_schema",

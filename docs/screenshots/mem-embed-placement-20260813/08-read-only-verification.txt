@@ -1,4 +1,4 @@
-Embedded 'examples' into 'archive' between [f82e1635] and [93cd201c].                                                                                                               
+Embedded 'examples' into 'archive' between [6d273e33] and [46b998fd].                                                                                                               
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
 CAPTURE VERIFICATION COMMAND · mem show --context archive                                                                                                                           
@@ -6,11 +6,11 @@ Context: archive
   Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory f82e1635] Opening orientation for the guide.                                                                                                                              
-  [context 8bf67162] examples  VIA EMBED                                                                                                                                            
-  [memory 93cd201c] Detailed operating notes follow the examples.                                                                                                                   
-  [memory 246e913e] Closing verification for the guide.                                                                                                                             
-ORDER · f82e1635-8b97-4d47-8045-f25905af0698 → 8bf67162-3d70-4b2b-8000-5fc66136be78 → 93cd201c-1a5b-4e6e-8392-5f16a267fe9f → 246e913e-edc1-4fb0-bd50-a842025ba9c0                   
+  [memory 6d273e33] Opening orientation for the guide.                                                                                                                              
+  [context 8c0293ce] examples  VIA EMBED                                                                                                                                            
+  [memory 46b998fd] Detailed operating notes follow the examples.                                                                                                                   
+  [memory 5be6107d] Closing verification for the guide.                                                                                                                             
+ORDER · 6d273e33-e997-4281-839b-d8989f9fc55f → 8c0293ce-ba03-413d-98a4-47b6336d2990 → 46b998fd-fbb8-4100-b3f9-0cde3ef2a4f4 → 5be6107d-7614-4132-8fcf-cf4ae466dba8                   
 CURRENT CONTEXT · guide                                                                                                                                                             
                                                                                                                                                                                     
                                                                                                                                                                                     

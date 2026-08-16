@@ -1743,7 +1743,7 @@ def test_atomize_save_blocks_stale_analysis_and_inbound_split_reference(
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
 
     target = ops.init("target")
-    ops.reference_memory(composite, source, target)
+    ops.embed_memory(composite, source, target)
     store.save(target)
     context_before = store._context_file(source.name).read_bytes()
     checkpoints_before = store.list_checkpoints(source.name)
@@ -1802,7 +1802,7 @@ def test_atomize_save_as_is_one_creation_command_with_lifecycle_undo_redo(
     store.set_current(source.name)
 
     observer = ops.init("observer")
-    reference = ops.reference_memory(composite, source, observer)
+    reference = ops.embed_memory(composite, source, observer)
     store.save(observer)
 
     def respond(payload):

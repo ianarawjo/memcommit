@@ -1,6 +1,6 @@
 # Agent tool registry design rationale
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-16.
 
 ## Motivation
 
@@ -18,20 +18,25 @@ CLI or TUI and without choosing a wire protocol.
 
 ## Frozen host contract
 
-`build_default_agent_tool_registry(client)` binds the twelve shipped tools,
-from `memcommit_query` through `memcommit_forget` and `memcommit_resolve`, to
-one caller-owned `MemCommitClient`. The client has
+`build_default_agent_tool_registry(client)` binds the twenty currently shipped
+tools, from Help and direct inspection through deterministic and semantic
+operations, to one caller-owned `MemCommitClient`. The client has
 already frozen its Store/Profile root and provider configuration; the registry
 does not reconstruct or widen those choices.
 
-Each `AgentToolBinding` contains a public tool name, schema factory, and handler.
-At registry construction, every binding is checked for:
+Each `AgentToolBinding` contains a public tool name, schema factory, handler,
+use-when guidance, and immutable compact Help-detail references. One-to-one
+operation bindings obtain the latter two through the public Help API rather
+than importing catalog internals. At registry construction, every binding is
+checked for:
 
 - a nonblank unique name;
 - callable schema and handler values;
 - a schema name equal to the binding name;
 - recursively text-only JSON object keys; and
-- finite, JSON-safe schema values.
+- finite, JSON-safe schema values;
+- nonblank use-when guidance; and
+- a typed tuple of uniquely identified detail references.
 
 The schema is serialized once into a canonical process-local snapshot.
 Discovery returns a newly decoded object every time, so callers cannot mutate
@@ -64,12 +69,18 @@ operation contract was entered.
 
 ## MCP and transport boundary
 
-The shipped schemas use the existing function-tool shape: `name`,
-`description`, and `parameters`. A concrete MCP adapter can project
-`parameters` to MCP `inputSchema`, expose discovery, decode arguments, call
-`registry.invoke`, and encode the returned object. Authentication, stdio or
-HTTP lifecycle, MCP capability negotiation, cancellation, and transport error
-codes belong to that adapter.
+The shipped function-tool schemas retain the standard `name`, `description`,
+and `parameters` shape. A registry discovery definition pairs that unchanged
+schema with separate `use_when` and `help_details` slots. One-to-one operation
+bindings take both from the public Help facade; composite tools supply one
+reviewed composite trigger and only details they actually own. Registration
+rejects blank guidance, disagreement between a schema factory and its binding,
+untyped detail containers, or duplicate detail IDs; it freezes all three
+values. A concrete MCP adapter projects `parameters` to MCP `inputSchema`,
+selectively exposes the guidance and compact detail references, decodes
+arguments, calls `registry.invoke`, and encodes the returned object.
+Authentication, stdio or HTTP lifecycle, MCP capability negotiation,
+cancellation, and transport error codes belong to that adapter.
 
 Keeping this translation outside the registry means an in-process agent,
 MCP server, test harness, or another tool runtime shares the same frozen
@@ -78,9 +89,10 @@ requirement for the Python library or CLI.
 
 ## Verification and limitations
 
-Focused tests verify schema freezing and fresh discovery, duplicate and invalid
-registration rejection, unknown-name zero effects, result redaction, JSON
-safety, and terminal-free imports. The principal integration test invokes Add
+Focused tests verify schema and Help-discovery freezing, fresh discovery,
+duplicate and invalid registration rejection, unknown-name zero effects,
+result redaction, JSON safety, and terminal-free imports. The principal
+integration test invokes Add
 through the registry into a real Store, verifies the exact three-Memory batch
 and one checkpoint, then invokes ordinary Query through the same registry and
 public client. Query observes both the newly added Memories and the ordinary
@@ -99,7 +111,9 @@ invocation. On 2026-08-16 a fresh current-worktree wheel exposed all fifteen
 then-current tools and executed Help, Show, a real Add, a saved Grounding `open`,
 structural Atomize saved `open`/Apply/retry, and Forget's provider-free
 empty-Source Analyze/no-op Apply/replay through the official stdio client
-outside the checkout. Provider-backed semantic execution remains in-process
-evidence. The registry is not a plugin, network endpoint, authentication
-service, skill installer, idempotency service, or dynamic runtime registry.
-Adding shipped operations remains an explicit code and compatibility change.
+outside the checkout. The current registry contains twenty tools; this is a
+source-tree discovery assertion rather than a new installed-wheel claim.
+Provider-backed semantic execution remains in-process evidence. The registry
+is not a plugin, network endpoint, authentication service, Skill installer,
+idempotency service, or dynamic runtime registry. Adding shipped operations
+remains an explicit code and compatibility change.

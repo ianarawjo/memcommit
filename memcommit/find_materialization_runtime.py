@@ -228,7 +228,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
                 )
                 output.add(output_item)
             else:
-                output_item = ops.reference_memory(
+                output_item = ops.embed_memory(
                     source.memory,
                     source.context,
                     output,

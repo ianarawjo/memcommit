@@ -317,7 +317,7 @@ def test_batch_edit_rejects_reference_without_partial_edit(
     source_memory = ops.add(source_context, "source")
     parent = ops.init("parent")
     direct = ops.add(parent, "direct")
-    reference = ops.reference_memory(source_memory, source_context, parent)
+    reference = ops.embed_memory(source_memory, source_context, parent)
     store.save(source_context)
     store.save(parent)
     store.set_current("parent")

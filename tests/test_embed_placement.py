@@ -345,7 +345,8 @@ def test_flagless_embed_requires_a_terminal(isolated_store) -> None:
     result = runner.invoke(app, ["embed"])
 
     assert result.exit_code == 1
-    assert "CHILD and --into are required outside a terminal" in result.stderr
+    assert "an item and --into are required outside a terminal" in result.stderr
+    assert "MEMORY --from SOURCE" in result.stderr
 
 
 def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None:
@@ -353,7 +354,7 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
     with create_pipe_input() as pipe_input:
         # Child → Into → Position; move from append to the middle gap, stage it,
         # then advance to the exact-command action and approve the receipt.
-        pipe_input.send_text("\t\t\x1b[A\r\t\r")
+        pipe_input.send_text("\t\t\t\x1b[A\r\t\r")
         receipt = choose_embed_setup(
             MemoryStoreEmbedPort.capture(store),
             app_input=pipe_input,
@@ -398,7 +399,7 @@ def test_embed_enter_applies_only_the_returned_frozen_plan_once(
     with create_pipe_input() as pipe_input:
         # Review the middle gap and approve the focused exact command with
         # Enter. The TUI may freeze the plan, but it must not apply it itself.
-        pipe_input.send_text("\t\t\x1b[A\r\t\r")
+        pipe_input.send_text("\t\t\t\x1b[A\r\t\r")
         plan = choose_embed_setup(
             port,
             app_input=pipe_input,

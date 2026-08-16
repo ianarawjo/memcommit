@@ -26,12 +26,18 @@ from memcommit.api.atomize import (
 )
 from memcommit.api.compare import ComparisonResult
 from memcommit.api.dedup import DedupApplyResult, DedupPlanResult
+from memcommit.api.embed import EmbeddedContextResult, EmbeddedMemoryResult
 from memcommit.api.forget import (
     ForgetApplyResult,
     ForgetReviewResult,
 )
 from memcommit.api.find import FindResult
-from memcommit.api.help import HelpCatalogResult, OperationHelpResult
+from memcommit.api.help import (
+    HelpCatalogResult,
+    HelpDetailCatalogResult,
+    HelpDetailResult,
+    OperationHelpResult,
+)
 from memcommit.api.errors import (
     QueryConfigurationError,
 )
@@ -45,6 +51,7 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
+from memcommit.api.reference import MemoryReferenceResult
 from memcommit.api.replace import ReplaceApplyReceipt, ReplacePlanResult
 from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
@@ -180,6 +187,27 @@ class MemCommitClient:
         from memcommit.api._operations.help import describe_operation
 
         return describe_operation(operation_name)
+
+    def list_operation_details(
+        self,
+        operation_name: str,
+    ) -> HelpDetailCatalogResult:
+        """List individually retrievable Help details for one operation."""
+
+        from memcommit.api._operations.help import list_operation_details
+
+        return list_operation_details(operation_name)
+
+    def describe_operation_detail(
+        self,
+        operation_name: str,
+        detail_id: str,
+    ) -> HelpDetailResult:
+        """Describe one exact typed Help detail without executing it."""
+
+        from memcommit.api._operations.help import describe_operation_detail
+
+        return describe_operation_detail(operation_name, detail_id)
 
     def show(
         self,
@@ -934,6 +962,66 @@ class MemCommitClient:
             self._runtime,
             contents,
             context_name=context_name,
+        )
+
+    def reference_memory(
+        self,
+        memory_selector: str,
+        *,
+        source_context: str,
+        into_context: str | None = None,
+    ) -> MemoryReferenceResult:
+        """Retain one immutable snapshot of a directly owned Source Memory."""
+
+        from memcommit.api._operations.reference import reference_memory
+
+        return reference_memory(
+            self._runtime,
+            memory_selector,
+            source_context=source_context,
+            into_context=into_context,
+        )
+
+    def embed_memory(
+        self,
+        memory_selector: str,
+        *,
+        source_context: str,
+        into_context: str,
+        before: str | None = None,
+        after: str | None = None,
+    ) -> EmbeddedMemoryResult:
+        """Create one live link to a directly owned Source Memory."""
+
+        from memcommit.api._operations.embed import embed_memory
+
+        return embed_memory(
+            self._runtime,
+            memory_selector,
+            source_context=source_context,
+            into_context=into_context,
+            before=before,
+            after=after,
+        )
+
+    def embed_context(
+        self,
+        child_context: str,
+        *,
+        into_context: str,
+        before: str | None = None,
+        after: str | None = None,
+    ) -> EmbeddedContextResult:
+        """Create one live link to an existing Context."""
+
+        from memcommit.api._operations.embed import embed_context
+
+        return embed_context(
+            self._runtime,
+            child_context,
+            into_context=into_context,
+            before=before,
+            after=after,
         )
 
     def query_ordinary(

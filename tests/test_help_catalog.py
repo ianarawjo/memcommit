@@ -5,6 +5,8 @@ from typer.main import get_command
 
 from memcommit.cli import app
 from memcommit.commands.help_inventory import (
+    HELP_CATEGORY_DESCRIPTIONS,
+    HELP_CATEGORY_GROUPS,
     _help_group_fragments,
     command_entries,
 )
@@ -15,6 +17,7 @@ from memcommit.help_catalog import (
     operation_help,
 )
 from memcommit.help_catalog.best_for import BEST_FOR_BY_OPERATION
+from memcommit.help_catalog.details import ALL_OPERATION_DETAILS, DETAILS_BY_OPERATION
 
 
 def _root_context():
@@ -40,9 +43,58 @@ def test_catalog_covers_every_visible_top_level_operation_exactly():
 def test_every_operation_has_one_reviewed_best_for_value():
     assert set(BEST_FOR_BY_OPERATION) == set(OPERATION_HELP_BY_NAME)
     assert all(
-        operation.best_for == BEST_FOR_BY_OPERATION[name] and operation.best_for.strip()
+        operation.best_for == BEST_FOR_BY_OPERATION[name]
+        and operation.use_when == operation.best_for
+        and operation.best_for.strip()
         for name, operation in OPERATION_HELP_BY_NAME.items()
     )
+
+
+def test_detailed_help_topics_reference_only_visible_operations():
+    assert set(DETAILS_BY_OPERATION) <= set(OPERATION_HELP_BY_NAME)
+
+
+def test_typed_detail_registry_has_stable_unique_ids_and_discovery_summaries():
+    keys = [(detail.operation, detail.id) for detail in ALL_OPERATION_DETAILS]
+
+    assert len(keys) == len(set(keys))
+    assert {detail.kind.value for detail in ALL_OPERATION_DETAILS} == {
+        "COMPARISON",
+        "LIMITATION",
+        "ACCESS_BOUNDARY",
+    }
+    assert all(
+        detail.discovery.value != "TOOL_SELECTION"
+        or detail.discovery_summary is not None
+        for detail in ALL_OPERATION_DETAILS
+    )
+
+
+def test_add_has_one_structured_copy_or_link_comparison():
+    [comparison] = operation_help("add").details
+
+    assert comparison.title == "COPY OR LINK"
+    assert "Memory UID or Context name" in comparison.explanation
+    assert [option.label for option in comparison.options] == [
+        "INDEPENDENT WORK",
+        "EXACT MEMORY VERSION",
+        "LIVE MEMORY",
+        "EXISTING CONTEXT",
+    ]
+    assert "mem reference" in comparison.options[1].guidance
+    assert "mem embed" in comparison.options[2].guidance
+
+
+def test_init_has_one_structured_parent_context_comparison():
+    [comparison] = operation_help("init").details
+
+    assert comparison.title == "PARENT CONTEXTS"
+    assert "mem init NAME creates only that exact Context" in comparison.explanation
+    assert [option.label for option in comparison.options] == [
+        "DEFAULT",
+        "WITH -P",
+    ]
+    assert "does not embed children" in comparison.options[1].guidance
 
 
 def test_registered_cli_summaries_share_the_catalog_source():
@@ -159,7 +211,7 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
 
     fragments = _help_group_fragments(
         [(0, entry)],
-        title="SEMANTIC MEMORY OPERATIONS",
+        title="CHECK, COMPARE & REVIEW",
         width=180,
         focused=True,
         selected_index=0,
@@ -185,20 +237,26 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
     assert "FORM 1" not in rendered
 
 
-def test_memory_operation_categories_explain_llm_use_without_promising_a_call():
+def test_every_help_category_explains_its_intent_and_execution_basis():
     root, context = _root_context()
     try:
         entries = command_entries(context)
-        add_entry = next(entry for entry in entries if entry.name == "add")
-        compare_entry = next(entry for entry in entries if entry.name == "compare")
+        edit_entry = next(entry for entry in entries if entry.name == "edit")
+        atomize_entry = next(entry for entry in entries if entry.name == "atomize")
+        ground_entry = next(entry for entry in entries if entry.name == "ground")
+        help_entry = next(entry for entry in entries if entry.name == "help")
     finally:
         context.close()
 
-    mechanical = "".join(
+    assert set(HELP_CATEGORY_DESCRIPTIONS) == {
+        title for title, _commands in HELP_CATEGORY_GROUPS
+    }
+
+    deterministic = "".join(
         text
         for _style, text in _help_group_fragments(
-            [(0, add_entry)],
-            title="MECHANICAL MEMORY OPERATIONS",
+            [(0, edit_entry)],
+            title="DETERMINISTIC CONTENT CHANGES",
             width=120,
             focused=False,
             selected_index=0,
@@ -209,8 +267,32 @@ def test_memory_operation_categories_explain_llm_use_without_promising_a_call():
     semantic = "".join(
         text
         for _style, text in _help_group_fragments(
-            [(0, compare_entry)],
-            title="SEMANTIC MEMORY OPERATIONS",
+            [(0, atomize_entry)],
+            title="SEMANTIC TRANSFORMATIONS",
+            width=120,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    ground = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, ground_entry)],
+            title="GROUND WORKBENCH",
+            width=120,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    system = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, help_entry)],
+            title="SYSTEM & STUDY TOOLS",
             width=120,
             focused=False,
             selected_index=0,
@@ -221,7 +303,7 @@ def test_memory_operation_categories_explain_llm_use_without_promising_a_call():
     a_z = "".join(
         text
         for _style, text in _help_group_fragments(
-            [(0, add_entry)],
+            [(0, edit_entry)],
             title="A–Z",
             width=120,
             focused=False,
@@ -231,9 +313,12 @@ def test_memory_operation_categories_explain_llm_use_without_promising_a_call():
         )
     )
 
-    assert "NO LLM · Explicit inputs" in mechanical
-    assert "LLM-BASED · Uses LLM-produced semantic analysis" in semantic
-    assert "call a provider or reuse exact cached or saved analysis" in semantic
+    assert "NO LLM · Apply explicit inputs" in deterministic
+    assert "deterministic program logic" in deterministic
+    assert "LLM-BASED · Uses LLM semantic analysis" in semantic
+    assert "reviewable common ground for agent memory" in ground
+    assert "Configure MemCommit and prepare or run study" in system
+    assert "MIXED · Configure" not in system
     assert "NO LLM" not in a_z
     assert "LLM-BASED" not in a_z
 
@@ -280,7 +365,7 @@ def test_collapsed_narrow_row_stacks_best_for_below_the_summary():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="SEMANTIC MEMORY OPERATIONS",
+            title="CHECK, COMPARE & REVIEW",
             width=90,
             focused=False,
             selected_index=0,
@@ -323,7 +408,7 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="SEMANTIC MEMORY OPERATIONS",
+            title="SEMANTIC TRANSFORMATIONS",
             width=120,
             focused=True,
             selected_index=0,
@@ -342,3 +427,173 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
         rendered.count("Updating an existing Context using newly verified Memories.")
         == 1
     )
+
+
+def test_expanded_add_explains_literal_content_and_copy_or_link_routes():
+    root, context = _root_context()
+    try:
+        entry = next(entry for entry in command_entries(context) if entry.name == "add")
+    finally:
+        context.close()
+
+    collapsed = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    rendered = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=0,
+            selected_form=None,
+        )
+    )
+
+    assert "COPY OR LINK" not in collapsed
+    assert "COPY OR LINK" in rendered
+    assert "Memory UID or Context name does not" in rendered
+    assert "copy that object; it creates a new Memory containing that text" in rendered
+    assert "Branch the containing Context and merge it" in rendered
+    assert "copy the Memory content and add it" in rendered
+    assert "directly." in rendered
+    assert (
+        "- EXACT MEMORY VERSION · Use mem reference to retain an immutable" in rendered
+    )
+    assert "- LIVE MEMORY · Use mem embed MEMORY --from SOURCE" in rendered
+    assert "- EXISTING CONTEXT · Use mem embed." in rendered
+    assert "parent stores" in rendered
+    assert "only the Context identity" in rendered
+    assert "* EXISTING MEMORY" not in rendered
+
+
+def test_expanded_init_keeps_parent_context_guidance_out_of_collapsed_row():
+    root, context = _root_context()
+    try:
+        entry = next(
+            entry for entry in command_entries(context) if entry.name == "init"
+        )
+    finally:
+        context.close()
+
+    collapsed = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    rendered = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=0,
+            selected_form=None,
+        )
+    )
+
+    assert "PARENT CONTEXTS" not in collapsed
+    assert "PARENT CONTEXTS" in rendered
+    assert "mem init NAME creates only that exact Context" in rendered
+    assert "WITH -P" in rendered
+    assert "does not embed children" in rendered
+
+
+def test_import_keeps_ordinary_copy_and_use_case_with_partial_scope_detail():
+    operation = operation_help("import")
+
+    assert operation.summary == (
+        "Import a clean-baseline Profile, Context tree, or Memory by value "
+        "while preserving resource identity."
+    )
+    assert operation.use_when == (
+        "Bringing externally supplied material into a locally managed store."
+    )
+    assert operation.maturity == "PARTIAL"
+    [detail] = operation.details
+    assert detail.kind.value == "LIMITATION"
+    assert detail.title == "CURRENT LIMITATION"
+    assert "MemCommit-to-MemCommit transfer" in detail.body
+    assert "arbitrary documents or Skills" in detail.body
+
+
+def test_import_partial_tag_is_collapsed_while_its_limitation_is_expanded():
+    root, context = _root_context()
+    try:
+        entry = next(
+            entry for entry in command_entries(context) if entry.name == "import"
+        )
+    finally:
+        context.close()
+
+    collapsed = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    expanded = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="CREATE, COPY & CONNECT",
+            width=120,
+            focused=True,
+            selected_index=0,
+            expanded_index=0,
+            selected_form=None,
+        )
+    )
+
+    assert "mem import [PARTIAL]" in collapsed
+    assert "CURRENT LIMITATION" not in collapsed
+    assert "CURRENT LIMITATION" in expanded
+    assert "MemCommit-to-MemCommit transfer" in expanded
+
+
+def test_search_and_explain_copy_distinguishes_exact_and_llm_based_routes():
+    assert operation_help("find").execution is ExecutionKind.DETERMINISTIC
+    assert operation_help("find").best_for == (
+        "Locating exact words, identifiers, or text patterns within a selected "
+        "Context scope."
+    )
+    assert operation_help("search").best_for == (
+        "Finding relevant Memories through meaning and context, including "
+        "related content expressed in different words."
+    )
+    assert operation_help("query").summary.startswith("Generate an LLM-based answer")
+    assert operation_help("summarize").summary.startswith(
+        "Show an LLM-derived overview"
+    )
+
+    [query_detail] = operation_help("query").details
+    assert query_detail.kind.value == "ACCESS_BOUNDARY"
+    assert query_detail.title == "QUERY-ONLY ACCESS"
+    assert "QUERY without READ" in query_detail.body
+    assert "full underlying policy concealed" in query_detail.body

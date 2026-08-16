@@ -225,7 +225,7 @@ def test_contexts_lane_accepts_the_same_memory_and_reference_shapes(
     source_memory = external.add("Apple Inc. uses AAPL.")
     store.create_context(external)
     lane = store.load_for_update("project111/contexts")
-    reference = ops.reference_memory(source_memory, external, lane)
+    reference = ops.embed_memory(source_memory, external, lane)
     store.save(lane)
 
     restored = load_ground_workspace(store, "project111")

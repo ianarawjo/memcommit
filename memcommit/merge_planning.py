@@ -107,8 +107,13 @@ def _record(item: Information) -> dict[str, object]:
 def _logical_reference_match(left: Information, right: Information) -> bool:
     if isinstance(left, MemoryRef) and isinstance(right, MemoryRef):
         return (
-            left.target_context_uid == right.target_context_uid
+            left.is_snapshot == right.is_snapshot
+            and left.target_context_uid == right.target_context_uid
             and left.target_memory_uid == right.target_memory_uid
+            and (
+                left.is_live
+                or left.snapshot_content_sha256 == right.snapshot_content_sha256
+            )
         )
     if isinstance(left, QueryContextRef) and isinstance(right, QueryContextRef):
         return left.target_source_uid == right.target_source_uid

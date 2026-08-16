@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                                  known local Context scope.                                     │^
+│ ▸ mem chunk            Mechanically split one direct Memory at header, paragraph, or            │ 
+│                        approximate sentence boundaries.                                         │ 
+│                        USE WHEN: A Memory already has clear text boundaries that should become  │ 
+│                                  separate Memories.                                             │ 
+│ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name,  │ 
+│                        or UID.                                                                  │ 
+│                        USE WHEN: Removing a specific Context or item that is no longer needed.  │ 
+│ ▸ mem clear            Remove all direct items from the current or explicit Context after       │ 
+│                        confirmation.                                                            │ 
+│                        USE WHEN: Emptying a Context while retaining the Context itself.         │ 
+│ ▸ mem merge            Add Source-only items to the current Target, choosing Source or Target   │ 
+│                        wherever stored items conflict.                                          │ 
+│                        USE WHEN: Bringing work from a copied or branched Context back into the  │ 
+│                                  current Context.                                               │ 
+│ ▸ mem dedup            Keep one unchanged existing Memory per confirmed duplicate component.    │ 
+│                        USE WHEN: Collapsing confirmed equivalent Memories while preserving one  │ 
+│                                  existing UID and its exact wording.                            │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ SEMANTIC TRANSFORMATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ LLM-BASED · Uses LLM semantic analysis to restructure, derive, translate, curate, or reconcile  ┃ 
+┃             content.                                                                            ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

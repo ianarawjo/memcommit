@@ -590,7 +590,7 @@ def test_physical_ground_elaborate_rejects_typed_rule_before_provider(
     memory = ops.add(source, "Act only after explicit confirmation.")
     store.create_context(source)
     rules = store.load_for_update("physical-elaborate/rules")
-    ops.reference_memory(memory, source, rules)
+    ops.embed_memory(memory, source, rules)
     store.save(rules)
 
     with pytest.raises(ElaborateError, match="authority-aware Ground projection"):

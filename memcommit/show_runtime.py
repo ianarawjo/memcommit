@@ -60,6 +60,11 @@ def _snapshot_context(
                 )
             )
         elif isinstance(item, MemoryRef):
+            form = (
+                SourceForm.MEMORY_REFERENCE
+                if item.is_snapshot
+                else SourceForm.MEMORY_EMBED
+            )
             items.append(
                 ShowMemoryReference(
                     uid=item.uid,
@@ -69,7 +74,7 @@ def _snapshot_context(
                     content=(item.target.content if item.target is not None else None),
                     source=explicit
                     or SourceDisplayFacts(
-                        form=SourceForm.MEMORY_REF,
+                        form=form,
                         states=(
                             (SourceState.READ_ONLY,)
                             if item.is_resolved

@@ -15,6 +15,7 @@ from memcommit.interfaces.agent import (
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     COMPARE_AGENT_TOOL_NAME,
     DEDUP_AGENT_TOOL_NAME,
+    EMBED_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
@@ -24,6 +25,7 @@ from memcommit.interfaces.agent import (
     MELD_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
+    REFERENCE_AGENT_TOOL_NAME,
     REPLACE_AGENT_TOOL_NAME,
     RESOLVE_AGENT_TOOL_NAME,
     SEARCH_AGENT_TOOL_NAME,
@@ -75,6 +77,8 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
         QUERY_AGENT_TOOL_NAME,
         QUALITY_FIND_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
+        REFERENCE_AGENT_TOOL_NAME,
+        EMBED_AGENT_TOOL_NAME,
         COMPARE_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
         ATOMIZE_AGENT_TOOL_NAME,
@@ -86,17 +90,98 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
         RESOLVE_AGENT_TOOL_NAME,
         DEDUP_AGENT_TOOL_NAME,
     )
-    registry_schemas = registry.tool_schemas()
-    for tool, schema in zip(first, registry_schemas, strict=True):
-        assert tool.description == schema["description"]
+    registry_definitions = registry.tool_definitions()
+    for tool, definition in zip(first, registry_definitions, strict=True):
+        schema = definition.tool_schema
+        assert definition.use_when
+        assert "use_when" not in schema
+        assert tool.use_when == definition.use_when
+        expected_description = (
+            schema["description"] + "\n\nUse when: " + definition.use_when
+        )
+        for detail in definition.help_details:
+            if detail.discovery == "TOOL_SELECTION":
+                expected_description += (
+                    f"\n\nSelection boundary ({detail.title}): "
+                    f"{detail.discovery_summary}"
+                )
+        assert tool.description == expected_description
         assert tool.input_schema == schema["parameters"]
         wire = tool.to_dict()
         assert wire["inputSchema"] == schema["parameters"]
+        assert wire["_meta"]["memcommit/useWhen"] == definition.use_when
+        if definition.help_details:
+            assert wire["_meta"]["memcommit/helpDetails"]
+        else:
+            assert "memcommit/helpDetails" not in wire["_meta"]
         assert "parameters" not in wire
         json.dumps(wire)
 
     first[0].input_schema["type"] = "changed"
     assert projection.list_tools()[0].input_schema["type"] == "object"
+
+
+def test_mcp_help_call_indexes_then_describes_exact_detail(tmp_path):
+    projection = McpRegistryProjection(
+        build_default_agent_tool_registry(MemCommitClient(root=tmp_path / "store"))
+    )
+
+    result = projection.call_tool(
+        HELP_AGENT_TOOL_NAME,
+        {"version": 1, "kind": "describe", "operation": "add"},
+    )
+
+    operation = result.structured_content["result"]["operation"]
+    assert operation["use_when"] == operation["best_for"]
+    assert operation["details"][0]["id"] == "copy-or-link"
+    assert "options" not in operation["details"][0]
+
+    detail_result = projection.call_tool(
+        HELP_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "describe-detail",
+            "operation": "add",
+            "detail": "copy-or-link",
+        },
+    )
+    detail = detail_result.structured_content["result"]["detail"]
+    assert detail["title"] == "COPY OR LINK"
+    assert detail["options"][0]["label"] == "INDEPENDENT WORK"
+
+
+def test_mcp_query_discovery_surfaces_query_only_selection_boundary(tmp_path):
+    projection = McpRegistryProjection(
+        build_default_agent_tool_registry(MemCommitClient(root=tmp_path / "store"))
+    )
+
+    query_tool = next(
+        tool for tool in projection.list_tools() if tool.name == QUERY_AGENT_TOOL_NAME
+    )
+    wire = query_tool.to_dict()
+
+    assert "Selection boundary (QUERY-ONLY ACCESS)" in query_tool.description
+    [detail] = wire["_meta"]["memcommit/helpDetails"]
+    assert detail["id"] == "query-only-access"
+    assert detail["kind"] == "ACCESS_BOUNDARY"
+
+
+def test_mcp_add_discovery_surfaces_copy_or_link_before_tool_selection(tmp_path):
+    projection = McpRegistryProjection(
+        build_default_agent_tool_registry(MemCommitClient(root=tmp_path / "store"))
+    )
+
+    add_tool = next(
+        tool for tool in projection.list_tools() if tool.name == ADD_AGENT_TOOL_NAME
+    )
+    wire = add_tool.to_dict()
+
+    assert "Selection boundary (COPY OR LINK)" in add_tool.description
+    assert "Add stores input literally" in add_tool.description
+    [detail] = wire["_meta"]["memcommit/helpDetails"]
+    assert detail["id"] == "copy-or-link"
+    assert detail["discovery"] == "TOOL_SELECTION"
+    assert detail["discoverySummary"].startswith("Add stores input literally")
 
 
 def test_successful_call_preserves_structured_and_text_envelopes():

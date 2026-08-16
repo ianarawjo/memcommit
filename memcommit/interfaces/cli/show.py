@@ -51,7 +51,10 @@ def _render_memory_ref(
     )
     typer.echo()
     if memory_ref.content is None:
-        typer.secho("(memory ref target is unavailable)", fg=typer.colors.YELLOW)
+        typer.secho(
+            "(embedded Memory Source is unavailable)",
+            fg=typer.colors.YELLOW,
+        )
     else:
         typer.echo(safe_terminal_text(memory_ref.content))
 

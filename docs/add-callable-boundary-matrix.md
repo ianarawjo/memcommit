@@ -1,6 +1,6 @@
 # Add callable and effect boundary matrix
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-16.
 
 This matrix records ownership and effects for the first writable operation
 exposed through several adapters. A callable's layer determines where it may be
@@ -21,6 +21,9 @@ an interface.
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
 | `interfaces.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
 | `interfaces.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
+| default `AgentToolBinding` for Add | agent registry | standard Add schema + public Help trigger/detail references → frozen discovery definition | none | nonblank `use_when` and typed `copy-or-link` reference stay outside the standard function-tool schema; malformed binding fails at host construction | `VERIFIED` |
+| `McpRegistryProjection` for Add | MCP adapter | frozen discovery definition → MCP Tool | none during discovery; call delegates exactly once | standard description exposes the bounded selection summary; `memcommit/useWhen` and `memcommit/helpDetails` retain structured discovery; input schema remains unchanged | `VERIFIED` |
+| `skills/memcommit-add/SKILL.md` | agent host guidance | user intent + discovered tool → bounded tool procedure | none by itself | frontmatter states when to use Add; literal content is not object lookup; independent work, Reference snapshot, and live Embed stay distinct | `VERIFIED` |
 
 ## Operation effect summary
 
@@ -30,9 +33,11 @@ an interface.
 | Add TUI | process-local drafts only | exact reviewed drafts and one Add checkpoint | cancel/edit failure publishes nothing |
 | Public Python | none | explicit ordered sequence and one Add checkpoint | typed error; no partial public receipt |
 | Agent tool adapter | none | same public Add and JSON-safe complete receipt | bounded error; every failure is non-retryable |
+| MCP-projected agent tool | none during discovery | same agent/public Add after a call | same bounded envelope; transport does not reinterpret retry or success |
+| Companion Skill | none until tool invocation | no independent effect | missing tool is reported; no CLI/filesystem fallback |
 
 The public method does not call the CLI and the application does not call the
 public facade. CLI and TUI point to the application/runtime boundary; the
 Python facade and agent projection point inward without importing either
-terminal adapter. A concrete tool host remains a deployment owner rather than
-an Add callable.
+terminal adapter. MCP remains a projection of the frozen agent registry, and
+the Skill remains host guidance rather than an Add implementation or callable.

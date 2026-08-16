@@ -82,20 +82,43 @@ prompt-toolkit selector:
   separately presented compatibility commands remain adjacent. This order
   comes from `HELP_CATEGORY_GROUPS`; the renderer must not alphabetize it
   again. `A–Z` alone provides lexical lookup.
-  `MECHANICAL MEMORY OPERATIONS` groups provider-free actions whose result is
-  determined by explicit identities, text boundaries, replacement values, or
-  reviewed deterministic choices. `SEMANTIC MEMORY OPERATIONS` groups
-  meaning-based analysis, transformation, and review workflows. The latter
-  label does not promise a provider call for every form: an exact cache hit or
-  saved-artifact replay may remain local, and each operation's `EXECUTION` row
-  is authoritative. The two category boxes expose that distinction directly:
-  Mechanical says `NO LLM`, while Semantic says `LLM-BASED` and explicitly
-  allows either a provider call or reuse of exact cached or saved analysis.
-  This text classifies the source of meaning rather than promising a fresh
-  call. Forget belongs to the semantic group because it interprets one
-  natural-language criterion over a complete Memory frame; Merge and Dedup
-  belong to the mechanical group because their application choices are exact
-  and provider-free.
+  Categories follow user intent rather than resource type alone. Browse and
+  creation come first; search, deterministic changes, semantic transformations,
+  checking/review, the distinct Ground workbench, history, Profiles, access,
+  and system/study utilities follow. This keeps within-Context and
+  Context-to-Context operations together when they answer the same user goal,
+  while each operation's expanded `FLOW`, `EXECUTION`, and `RANGE` remain the
+  authoritative scope contract.
+  Every BY KIND box includes one short intent description. Pure deterministic
+  groups say `NO LLM`; semantic transformations and Ground say `LLM-BASED`;
+  route-dependent groups say `MIXED`. System and Study tools omit an execution
+  label because configuration and research utilities do not form one useful
+  inference class. `DETERMINISTIC CONTENT CHANGES` uses that technical name
+  deliberately and explains it as explicit inputs and reviewed choices applied
+  through deterministic program logic. `replace` is reserved in a separate
+  planned-category registry while its reviewed command is built. Planned names
+  cannot enter `HELP_CATEGORY_GROUPS`, whose stale-entry check deliberately
+  prevents Help from rendering or accepting a command that does not exist.
+  Expanded details may additionally render a canonical structured comparison
+  when valid input can be mistaken for object lookup or adjacent operations are
+  otherwise easy to confuse. The first such comparison, `add`'s `COPY OR
+  LINK`, makes its literal-content boundary explicit and distinguishes
+  independent work, an immutable Memory Reference, a live Memory Embed, and an
+  embedded Context. The Help
+  catalog owns that decision meaning so Python, agent, MCP, and terminal callers
+  reach the same conclusion; the terminal adapter owns only layout and CLI
+  forms. Terminal alternatives use literal `-` markers so rendering does not
+  depend on Markdown bullet projection.
+  Expanded prose follows the same catalog-owned rule, but remains typed rather
+  than entering a generic note bag. Every detail has an operation-local ID and
+  a discovery role. `LIMITATION` records explain an incomplete
+  implementation boundary and `ACCESS_BOUNDARY` records explain an authority
+  distinction. The terminal shows their title and body only after expansion;
+  Python and agent-facing discovery can address the same detail by its stable
+  operation-local ID. A `TOOL_SELECTION` detail exposes one bounded summary
+  during MCP discovery; an `ON_DEMAND` detail remains indexed without copying
+  its body into every execution tool. Import's current MemCommit-to-MemCommit
+  scope and Query's QUERY-without-READ behavior are the first two prose details.
   An exact alternate spelling that adds no operation may instead be folded into
   its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
   directly executable. `remove` is therefore not a second deletion operation:
@@ -213,6 +236,14 @@ spelling with its canonical operation, as in `list (ls)` and
 instead of occupying an inventory row that suggests they can still be selected.
 Ordinary TUI entry is described inside expanded Forms instead of repeating a
 badge across the inventory.
+
+One implementation-scope exception may use a compact bracketed maturity tag.
+`import [PARTIAL]` keeps Import's ordinary Summary and `USE WHEN` readable in
+the collapsed inventory, while its expanded `CURRENT LIMITATION` detail states
+exactly which transfers exist and which broader import/export routes do not.
+This tag is Help-facing product maturity, not an operation-route judgment: it
+must not be interpreted as, or copied into, the separate `CLOSED`, `MIXED`,
+`LEGACY`, `N/A`, and `UNREVIEWED` evidence ledger.
 
 ## Invocation forms
 

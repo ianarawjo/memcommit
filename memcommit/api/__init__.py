@@ -16,6 +16,16 @@ __all__ = [
     "AddMemoriesResult",
     "AddStorageError",
     "AddedMemoryResult",
+    "EmbeddedContextResult",
+    "EmbeddedMemoryResult",
+    "EmbedPlacementResult",
+    "EmbedAuthorityError",
+    "EmbedConflictError",
+    "EmbedContextError",
+    "EmbedError",
+    "EmbedExecutionError",
+    "EmbedInputError",
+    "EmbedStorageError",
     "AtomizeGroundingApplyResult",
     "AtomizeGroundingConflictError",
     "AtomizeGroundingContextError",
@@ -68,6 +78,12 @@ __all__ = [
     "DedupPlanResult",
     "GrantedQueryResult",
     "HelpCatalogResult",
+    "HelpComparisonOptionResult",
+    "HelpComparisonResult",
+    "HelpDetailCatalogResult",
+    "HelpDetailReferenceResult",
+    "HelpDetailResult",
+    "HelpTextDetailResult",
     "HelpError",
     "HelpInputError",
     "MemCommitClient",
@@ -85,6 +101,7 @@ __all__ = [
     "MeldProviderFailure",
     "MeldSessionResult",
     "MeldStorageError",
+    "MemoryReferenceResult",
     "OrdinaryQueryResult",
     "OperationHelpResult",
     "QueryAuthorityError",
@@ -105,6 +122,12 @@ __all__ = [
     "QualityFindingReviewDraft",
     "QualityFindingSource",
     "ReferenceQueryResult",
+    "ReferenceConflictError",
+    "ReferenceContextError",
+    "ReferenceError",
+    "ReferenceExecutionError",
+    "ReferenceInputError",
+    "ReferenceStorageError",
     "ReplaceApplyReceipt",
     "ReplaceAuthorityError",
     "ReplaceCheckpointResult",
@@ -180,6 +203,13 @@ __all__ = [
 _LAZY_EXPORTS = {
     "AddMemoriesResult": ("memcommit.api.add", "AddMemoriesResult"),
     "AddedMemoryResult": ("memcommit.api.add", "AddedMemoryResult"),
+    "EmbeddedContextResult": ("memcommit.api.embed", "EmbeddedContextResult"),
+    "EmbeddedMemoryResult": ("memcommit.api.embed", "EmbeddedMemoryResult"),
+    "EmbedPlacementResult": ("memcommit.api.embed", "EmbedPlacementResult"),
+    "MemoryReferenceResult": (
+        "memcommit.api.reference",
+        "MemoryReferenceResult",
+    ),
     **{
         name: ("memcommit.api.atomize", name)
         for name in (
@@ -215,6 +245,18 @@ _LAZY_EXPORTS = {
     ),
     "MemCommitClient": ("memcommit.api.client", "MemCommitClient"),
     "HelpCatalogResult": ("memcommit.api.help", "HelpCatalogResult"),
+    "HelpComparisonOptionResult": (
+        "memcommit.api.help",
+        "HelpComparisonOptionResult",
+    ),
+    "HelpComparisonResult": ("memcommit.api.help", "HelpComparisonResult"),
+    "HelpDetailCatalogResult": ("memcommit.api.help", "HelpDetailCatalogResult"),
+    "HelpDetailReferenceResult": (
+        "memcommit.api.help",
+        "HelpDetailReferenceResult",
+    ),
+    "HelpDetailResult": ("memcommit.api.help", "HelpDetailResult"),
+    "HelpTextDetailResult": ("memcommit.api.help", "HelpTextDetailResult"),
     "OperationHelpResult": ("memcommit.api.help", "OperationHelpResult"),
     **{
         name: ("memcommit.api.show", name)
@@ -315,7 +357,9 @@ def __getattr__(name: str):
     try:
         module_name, attribute_name = _LAZY_EXPORTS[name]
     except KeyError as error:
-        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from error
+        raise AttributeError(
+            f"module {__name__!r} has no attribute {name!r}"
+        ) from error
     value = getattr(import_module(module_name), attribute_name)
     # Cache the real public object, not a proxy, so identity remains stable.
     globals()[name] = value

@@ -1140,7 +1140,7 @@ def test_direct_only_cli_preserves_refs_query_only_and_embedded_context(
     )
     parent = ops.init("parent")
     owned = ops.add(parent, "직접 소유")
-    memory_ref = ops.reference_memory(source_memory, source, parent)
+    memory_ref = ops.embed_memory(source_memory, source, parent)
     query_ref = ops.reference_query_context(
         "restricted-source",
         hidden.uid,
@@ -1388,7 +1388,7 @@ def test_trace_rejects_pointer_change_hidden_inside_translation_checkpoint(
     store.save(source)
     ctx = ops.init("pointer-parent")
     ops.add(ctx, "원문")
-    reference = ops.reference_memory(target, source, ctx)
+    reference = ops.embed_memory(target, source, ctx)
     store.save(
         ctx,
         AutoCheckpoint(

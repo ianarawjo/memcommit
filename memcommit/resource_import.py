@@ -213,6 +213,11 @@ def _closed_import_contexts(
                     raise ProfileError("Imported Context reference identity is stale.")
                 item.name = mapping[item.name]
             elif isinstance(item, MemoryRef):
+                if item.is_snapshot:
+                    # Snapshot content and provenance are self-contained. An
+                    # Import must not turn it back into a live cross-Profile
+                    # dependency merely because its original Source is absent.
+                    continue
                 referenced = source_by_name.get(item.target_context_name)
                 if referenced is None or item.target_context_name not in mapping:
                     raise ProfileError(

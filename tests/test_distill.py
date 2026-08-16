@@ -704,7 +704,7 @@ def test_physical_ground_distill_rejects_unresolved_typed_context_input(
     memory = ops.add(source, "An externally owned ticker observation.")
     store.create_context(source)
     contexts = store.load_for_update("physical-distill/contexts")
-    ops.reference_memory(memory, source, contexts)
+    ops.embed_memory(memory, source, contexts)
     store.save(contexts)
 
     with pytest.raises(DistillError, match="authority-aware Ground projection"):

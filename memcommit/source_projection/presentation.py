@@ -53,12 +53,16 @@ _REACH_LABELS = {
 _OBJECT_LABELS = {
     SourceForm.CONTEXT: "context",
     SourceForm.MEMORY: "memory",
+    SourceForm.MEMORY_EMBED: "embedded memory",
+    SourceForm.MEMORY_REFERENCE: "reference",
     SourceForm.MEMORY_REF: "memory ref",
     SourceForm.QUERY_VIEW: "query view",
 }
 _OBJECT_TITLE_LABELS = {
     SourceForm.CONTEXT: "Context",
     SourceForm.MEMORY: "Memory",
+    SourceForm.MEMORY_EMBED: "Embedded Memory",
+    SourceForm.MEMORY_REFERENCE: "Reference",
     SourceForm.MEMORY_REF: "Memory ref",
     SourceForm.QUERY_VIEW: "Query view",
 }

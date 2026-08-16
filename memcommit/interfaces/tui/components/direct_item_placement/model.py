@@ -64,6 +64,11 @@ def _preview(item: Memory | MemoryRef | QueryContextRef | Context) -> DirectItem
             SourceDisplayFacts(form=SourceForm.MEMORY),
         )
     if isinstance(item, MemoryRef):
+        form = (
+            SourceForm.MEMORY_REFERENCE
+            if item.is_snapshot
+            else SourceForm.MEMORY_EMBED
+        )
         return DirectItemPreview(
             item.uid[:8],
             (
@@ -73,7 +78,7 @@ def _preview(item: Memory | MemoryRef | QueryContextRef | Context) -> DirectItem
             ),
             "memory-object" if item.target is not None else "report-neutral",
             SourceDisplayFacts(
-                form=SourceForm.MEMORY_REF,
+                form=form,
                 states=(
                     (SourceState.READ_ONLY,)
                     if item.target is not None

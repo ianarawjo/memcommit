@@ -16,6 +16,7 @@ from memcommit.interfaces.agent import (
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     COMPARE_AGENT_TOOL_NAME,
     DEDUP_AGENT_TOOL_NAME,
+    EMBED_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
@@ -25,6 +26,7 @@ from memcommit.interfaces.agent import (
     QUALITY_FIND_AGENT_TOOL_NAME,
     HELP_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
+    REFERENCE_AGENT_TOOL_NAME,
     REPLACE_AGENT_TOOL_NAME,
     RESOLVE_AGENT_TOOL_NAME,
     SEARCH_AGENT_TOOL_NAME,
@@ -90,6 +92,8 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         QUERY_AGENT_TOOL_NAME,
         QUALITY_FIND_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
+        REFERENCE_AGENT_TOOL_NAME,
+        EMBED_AGENT_TOOL_NAME,
         COMPARE_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
         ATOMIZE_AGENT_TOOL_NAME,
@@ -105,10 +109,28 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     second = registry.tool_schemas()
     assert first is not second
     assert [schema["name"] for schema in first] == list(registry.tool_names)
+    assert all("use_when" not in schema for schema in first)
+    assert all(
+        isinstance(definition.use_when, str) and definition.use_when.strip()
+        for definition in registry.tool_definitions()
+    )
+    definitions_by_name = {
+        definition.tool_schema["name"]: definition
+        for definition in registry.tool_definitions()
+    }
+    assert [
+        detail.id for detail in definitions_by_name[ADD_AGENT_TOOL_NAME].help_details
+    ] == ["copy-or-link"]
+    assert [
+        detail.id for detail in definitions_by_name[QUERY_AGENT_TOOL_NAME].help_details
+    ] == ["query-only-access"]
+    assert definitions_by_name[REFERENCE_AGENT_TOOL_NAME].help_details == ()
     json.dumps(first)
 
     first[0]["name"] = "changed"
     first[7]["parameters"]["required"].clear()
+    definitions = registry.tool_definitions()
+    definitions[0].tool_schema["name"] = "changed-definition"
     third = registry.tool_schemas()
     assert third[0]["name"] == HELP_AGENT_TOOL_NAME
     assert third[7]["parameters"]["required"] == [
@@ -116,6 +138,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         "kind",
         "contents",
     ]
+    assert registry.tool_definitions()[0].tool_schema["name"] == HELP_AGENT_TOOL_NAME
 
 
 def test_default_registry_help_is_a_provider_free_entrypoint(tmp_path):
@@ -155,6 +178,26 @@ def test_registration_freezes_schema_factory_once():
     assert calls == 1
 
 
+def test_registration_freezes_explicit_use_when_for_discovery():
+    binding = AgentToolBinding(
+        name="example_tool",
+        schema_factory=lambda: {
+            "name": "example_tool",
+            "description": "Example.",
+            "parameters": {"type": "object"},
+        },
+        handler=lambda payload: {"ok": True, "payload": payload},
+        use_when="Using the example operation.",
+    )
+
+    registry = AgentToolRegistry((binding,))
+
+    [definition] = registry.tool_definitions()
+    assert definition.use_when == "Using the example operation."
+    assert definition.tool_schema == registry.tool_schemas()[0]
+    assert "use_when" not in definition.tool_schema
+
+
 @pytest.mark.parametrize(
     ("bindings", "message"),
     [
@@ -181,6 +224,52 @@ def test_registration_freezes_schema_factory_once():
                 ),
             ),
             "JSON-safe",
+        ),
+        (
+            (
+                AgentToolBinding(
+                    name="example_tool",
+                    schema_factory=lambda: {
+                        "name": "example_tool",
+                        "description": "Example.",
+                        "parameters": {"type": "object"},
+                        "use_when": "Schema guidance.",
+                    },
+                    handler=lambda payload: {"ok": True, "payload": payload},
+                    use_when="Binding guidance.",
+                ),
+            ),
+            "use_when differ",
+        ),
+        (
+            (
+                AgentToolBinding(
+                    name="example_tool",
+                    schema_factory=lambda: {
+                        "name": "example_tool",
+                        "description": "Example.",
+                        "parameters": {"type": "object"},
+                    },
+                    handler=lambda payload: {"ok": True, "payload": payload},
+                    use_when=" ",
+                ),
+            ),
+            "use_when must be nonblank",
+        ),
+        (
+            (
+                AgentToolBinding(
+                    name="example_tool",
+                    schema_factory=lambda: {
+                        "name": "example_tool",
+                        "description": "Example.",
+                        "parameters": {"type": "object"},
+                    },
+                    handler=lambda payload: {"ok": True, "payload": payload},
+                    help_details=[],  # type: ignore[arg-type]
+                ),
+            ),
+            "help_details must be a typed tuple",
         ),
     ],
 )

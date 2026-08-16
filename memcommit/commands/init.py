@@ -2,7 +2,6 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.commands.init_study as init_study_command
 from memcommit.context_init_application import (
     ContextInitError,
     ContextInitRequest,
@@ -17,7 +16,6 @@ from memcommit.interfaces.tui.operations.context_init import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
-from memcommit.profiles import STUDY_BASELINE_PROFILE_NAME
 from memcommit.store import MemoryStore, validate_context_name
 
 
@@ -25,11 +23,7 @@ def cmd(
     name: Annotated[
         Optional[str],
         typer.Argument(
-            help=(
-                "Unique name for the new Context, or for the new Study Profile "
-                "with --study; omit to use the corresponding interactive or "
-                "generated default"
-            )
+            help="Unique name for the new Context; omit to use the interactive picker",
         ),
     ] = None,
     parents: Annotated[
@@ -43,55 +37,7 @@ def cmd(
             ),
         ),
     ] = False,
-    study: Annotated[
-        bool,
-        typer.Option(
-            "--study",
-            help=(
-                "Initialize an isolated Study Profile pair instead of an "
-                "ordinary Context"
-            ),
-        ),
-    ] = False,
-    baseline_profile: Annotated[
-        Optional[str],
-        typer.Option(
-            "--from-profile",
-            help=(
-                "Editable Study baseline to copy; valid only together with "
-                "--study"
-            ),
-        ),
-    ] = None,
 ) -> None:
-    if study:
-        if parents:
-            typer.secho(
-                "Error: --study cannot be combined with --parents.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        # Keep Study initialization as a separate use case.  The compatibility
-        # command and the new option must share its Profile-pair, hidden-cache,
-        # and action-ledger path instead of reimplementing those rules here.
-        init_study_command.cmd(
-            name=name,
-            baseline_profile=(
-                baseline_profile
-                if baseline_profile is not None
-                else STUDY_BASELINE_PROFILE_NAME
-            ),
-        )
-        return
-    if baseline_profile is not None:
-        typer.secho(
-            "Error: --from-profile requires --study.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-
     store = MemoryStore()
     snapshot = prepare_context_init(store)
     try:

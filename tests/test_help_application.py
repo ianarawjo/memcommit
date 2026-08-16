@@ -10,7 +10,9 @@ import pytest
 from memcommit.help_application import (
     HelpApplicationInputError,
     describe_operation,
+    describe_operation_detail,
     list_operation_help,
+    list_operation_details,
 )
 
 
@@ -35,6 +37,35 @@ def test_describe_returns_the_exact_catalog_contract():
     assert compare.flow == "Context <-> Context -> comparison report"
     assert compare.execution.value == "SEMANTIC"
     assert compare.effect == "Read-only; neither Context is treated as authoritative"
+
+
+def test_detail_queries_use_exact_stable_ids_without_runtime_state():
+    details = list_operation_details("add")
+    detail = describe_operation_detail("add", "copy-or-link")
+
+    assert [item.id for item in details] == ["copy-or-link"]
+    assert detail is details[0]
+    assert detail.operation == "add"
+    assert detail.kind.value == "COMPARISON"
+    assert detail.discovery.value == "TOOL_SELECTION"
+
+
+@pytest.mark.parametrize(
+    ("operation_name", "detail_id"),
+    [
+        ("add", "missing"),
+        ("add", " copy-or-link"),
+        ("add", "COPY-OR-LINK"),
+        ("missing", "copy-or-link"),
+        ("add", None),
+    ],
+)
+def test_detail_queries_reject_nonexact_operation_or_detail_ids(
+    operation_name,
+    detail_id,
+):
+    with pytest.raises(HelpApplicationInputError):
+        describe_operation_detail(operation_name, detail_id)  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize("operation_name", [None, "", "   ", " compare", "COMPARE"])

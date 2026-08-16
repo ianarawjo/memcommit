@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from memcommit.help_catalog.best_for import BEST_FOR_BY_OPERATION
+from memcommit.help_catalog.details import DETAILS_BY_OPERATION
 from memcommit.help_catalog.model import ExecutionKind, OperationHelp
 
 
@@ -13,6 +14,8 @@ def _operation(
     execution: ExecutionKind,
     effect: str,
     range: str | None = None,
+    *,
+    maturity: str | None = None,
 ) -> OperationHelp:
     try:
         best_for = BEST_FOR_BY_OPERATION[name]
@@ -28,6 +31,8 @@ def _operation(
         effect=effect,
         best_for=best_for,
         range=range,
+        maturity=maturity,
+        details=DETAILS_BY_OPERATION.get(name, ()),
     )
 
 
@@ -179,11 +184,11 @@ _OPERATIONS = (
     ),
     _operation(
         "embed",
-        "Place a Child Context inside a target while retaining its identity and ownership.",
-        "Child Context -> parent Context placement",
+        "Place a live link to one Memory or Context inside a local Target while retaining Source ownership.",
+        "Source Memory or Child Context -> Target placement",
         ExecutionKind.DETERMINISTIC,
-        "Changes target structure; Child identity is retained",
-        "One Child and one exact target",
+        "Changes Target structure; Source identity and ownership are retained",
+        "One direct local Memory or one readable Child Context, and one exact local Target",
     ),
     _operation(
         "eval",
@@ -194,19 +199,25 @@ _OPERATIONS = (
     ),
     _operation(
         "find",
-        "Find literal text or explicit regular-expression matches in readable Memories.",
+        "Find exact text or explicit regular-expression (regex) matches in readable Memories.",
         "Text pattern + Context scope -> exact Memory spans",
         ExecutionKind.DETERMINISTIC,
-        "Read-only; no provider, semantic cache, session, or Context change",
-        "One or more readable roots; lexical descendants and embedded reach are independent",
+        "Read-only; no Context changes",
+        "One or more readable Context roots; descendants and embedded Contexts are optional",
     ),
     _operation(
         "search",
-        "Search selected Contexts with explicit lexical-descendant and embedded-Context reach.",
+        "Semantically rank Memories relevant to a natural-language request across selected Contexts.",
         "Context set + query -> ranked Memories",
         ExecutionKind.SEMANTIC,
-        "Read-only search",
-        "Selected roots; lexical and embedded reach are independent",
+        (
+            "Search results are read-only; optional reviewed Save As creates a "
+            "new local Context"
+        ),
+        (
+            "One or more readable roots; lexical descendants and embedded "
+            "Context reach are independently selectable"
+        ),
     ),
     _operation(
         "fit",
@@ -293,10 +304,11 @@ _OPERATIONS = (
         ExecutionKind.DETERMINISTIC,
         "Creates or changes local owned resources",
         "Profile, exact Context, subtree, or one Memory",
+        maturity="PARTIAL",
     ),
     _operation(
         "init",
-        "Create a named Context, optionally ensure its parents, and switch to it.",
+        "Create a new empty Context and make it the current working Context.",
         "New Context name -> Context",
         ExecutionKind.DETERMINISTIC,
         "Creates a Context and switches to it",
@@ -311,11 +323,19 @@ _OPERATIONS = (
     ),
     _operation(
         "list",
-        "Browse child Contexts and direct items; ls is the equivalent compact spelling.",
-        "Context -> Context and direct-item listing",
+        (
+            "List a Context's direct items—Memories, Memory references, query "
+            "views, and embedded Contexts—and its readable child Contexts. "
+            "Use -r to recursively include items from descendant and embedded "
+            "Contexts; ls is the compact alias."
+        ),
+        "Context -> direct-item and child-Context listing",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
-        "One exact Context or lexical descendants",
+        (
+            "One exact Context; -r follows readable lexical descendants and "
+            "embedded Contexts"
+        ),
     ),
     _operation(
         "lock",
@@ -375,11 +395,17 @@ _OPERATIONS = (
     ),
     _operation(
         "query",
-        "Ask readable Context knowledge or an authorized concealed query-only view.",
+        (
+            "Generate an LLM-based answer from readable Context knowledge or an "
+            "authorized concealed query-only view."
+        ),
         "Readable source + question -> answer with references",
         ExecutionKind.SEMANTIC,
         "No Context content changes; visible transcript may be retained",
-        "Exact, descendants, embeds, or authorized query-only view",
+        (
+            "Readable exact, descendant, or embedded Context scope; or one "
+            "QUERY-authorized query-only view"
+        ),
     ),
     _operation(
         "rationale",
@@ -398,11 +424,11 @@ _OPERATIONS = (
     ),
     _operation(
         "reference",
-        "Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.",
-        "Source Memory -> Target Context reference",
+        "Copy one direct Source Memory version into a Target as an immutable read-only snapshot.",
+        "Source Memory version -> Target snapshot",
         ExecutionKind.DETERMINISTIC,
-        "Adds reference metadata to the Target",
-        "One direct Source Memory and one exact Target",
+        "Adds a self-contained snapshot to the Target; the Source stays unchanged",
+        "One direct local Source Memory and one exact local Target",
     ),
     _operation(
         "rename",
@@ -474,11 +500,17 @@ _OPERATIONS = (
     ),
     _operation(
         "summarize",
-        "Show what Mem understands from a Context's visible ordinary Memories.",
+        (
+            "Show an LLM-derived overview of ordinary Memories in a readable "
+            "Context scope."
+        ),
         "Context -> summary",
         ExecutionKind.SEMANTIC,
         "Read-only",
-        "Exact Context or descendants plus embedded Contexts",
+        (
+            "One readable Context; optionally includes readable lexical "
+            "descendants and embedded Contexts; ordinary Memories only"
+        ),
     ),
     _operation(
         "switch",
@@ -542,6 +574,12 @@ if set(BEST_FOR_BY_OPERATION) != set(OPERATION_HELP_BY_NAME):  # pragma: no cove
     raise RuntimeError(
         "Operation Help BEST FOR coverage mismatch: "
         f"missing={missing!r}, stale={stale!r}."
+    )
+
+stale_details = sorted(set(DETAILS_BY_OPERATION) - set(OPERATION_HELP_BY_NAME))
+if stale_details:  # pragma: no cover
+    raise RuntimeError(
+        f"Operation Help details reference unknown operations: {stale_details!r}."
     )
 
 

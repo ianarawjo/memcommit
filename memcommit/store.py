@@ -452,7 +452,7 @@ def _rewrite_context_pointers(
             if previous == "query_context_ref":
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
-        elif kind == "memory_ref":
+        elif kind in {"memory_ref", "memory_snapshot_ref"}:
             target = item.get("target_context")
             if not isinstance(target, dict):
                 raise ValueError("Memory reference has no valid target Context.")
@@ -471,6 +471,13 @@ def _rewrite_context_pointers(
                         "Memory reference identity and stored target name "
                         f"disagree for uid '{target_uid}'."
                     )
+            if kind == "memory_snapshot_ref":
+                content = item.get("content")
+                digest = item.get("content_sha256")
+                if not isinstance(content, str) or not isinstance(digest, str):
+                    raise ValueError("Memory snapshot has invalid retained content.")
+                if hashlib.sha256(content.encode("utf-8")).hexdigest() != digest:
+                    raise ValueError("Memory snapshot content digest does not match.")
         elif kind == "query_context_ref":
             query_name = item.get("name")
             if not isinstance(query_name, str):
@@ -598,6 +605,18 @@ def _rewrite_branched_context_pointers(
             )
             if target is not None:
                 target_context["uid"], target_context["name"] = target
+        elif kind == "memory_snapshot_ref":
+            target_context = item.get("target_context")
+            if not isinstance(target_context, dict):
+                raise ValueError("Memory snapshot has no valid Source Context.")
+            if not isinstance(item.get("content"), str) or not isinstance(
+                item.get("content_sha256"), str
+            ):
+                raise ValueError("Memory snapshot has invalid retained content.")
+            if hashlib.sha256(
+                item["content"].encode("utf-8")
+            ).hexdigest() != item["content_sha256"]:
+                raise ValueError("Memory snapshot content digest does not match.")
         elif kind == "query_context_ref":
             name = item.get("name")
             if not isinstance(name, str):

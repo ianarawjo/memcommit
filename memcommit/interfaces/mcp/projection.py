@@ -6,7 +6,8 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 import json
 
-from memcommit.interfaces.agent import AgentToolRegistry
+from memcommit.api import HelpDetailReferenceResult
+from memcommit.interfaces.agent import AgentToolDefinition, AgentToolRegistry
 from memcommit.interfaces.agent.contract import JsonObject
 
 
@@ -51,9 +52,11 @@ class McpToolDefinition:
     name: str
     description: str
     input_schema: JsonObject
+    use_when: str | None = None
+    help_details: tuple[HelpDetailReferenceResult, ...] = ()
 
     def to_dict(self) -> JsonObject:
-        return {
+        value: JsonObject = {
             "name": self.name,
             "description": self.description,
             "inputSchema": _json_object(
@@ -61,6 +64,16 @@ class McpToolDefinition:
                 label=f"MCP tool {self.name!r} inputSchema",
             ),
         }
+        metadata: JsonObject = {}
+        if self.use_when is not None:
+            metadata["memcommit/useWhen"] = self.use_when
+        if self.help_details:
+            metadata["memcommit/helpDetails"] = [
+                _help_detail_reference(detail) for detail in self.help_details
+            ]
+        if metadata:
+            value["_meta"] = metadata
+        return value
 
 
 @dataclass(frozen=True)
@@ -77,17 +90,57 @@ class _FrozenMcpTool:
     name: str
     description: str
     input_schema_json: str
+    use_when: str | None
+    help_details: tuple[HelpDetailReferenceResult, ...]
 
 
-def _project_tool(schema: JsonObject) -> _FrozenMcpTool:
+def _help_detail_reference(detail: HelpDetailReferenceResult) -> JsonObject:
+    value: JsonObject = {
+        "id": detail.id,
+        "operation": detail.operation,
+        "kind": detail.kind,
+        "title": detail.title,
+        "useWhen": detail.use_when,
+        "discovery": detail.discovery,
+    }
+    if detail.discovery_summary is not None:
+        value["discoverySummary"] = detail.discovery_summary
+    return value
+
+
+def _description(
+    base: str,
+    *,
+    use_when: str | None,
+    help_details: tuple[HelpDetailReferenceResult, ...],
+) -> str:
+    paragraphs = [base]
+    if use_when is not None:
+        paragraphs.append(f"Use when: {use_when}")
+    paragraphs.extend(
+        f"Selection boundary ({detail.title}): {detail.discovery_summary}"
+        for detail in help_details
+        if detail.discovery == "TOOL_SELECTION" and detail.discovery_summary is not None
+    )
+    return "\n\n".join(paragraphs)
+
+
+def _project_tool(definition: AgentToolDefinition) -> _FrozenMcpTool:
+    schema = definition.tool_schema
     name = schema.get("name")
     description = schema.get("description")
     parameters = schema.get("parameters")
+    use_when = definition.use_when
+    help_details = definition.help_details
     if not isinstance(name, str) or not name.strip():
         raise McpToolProjectionError("Registry tool name must be nonblank text.")
     if not isinstance(description, str) or not description.strip():
         raise McpToolProjectionError(
             f"Registry tool {name!r} description must be nonblank text."
+        )
+    if use_when is not None and (not isinstance(use_when, str) or not use_when.strip()):
+        raise McpToolProjectionError(
+            f"Registry tool {name!r} use_when must be nonblank text."
         )
     input_schema = _json_object(
         parameters,
@@ -103,6 +156,8 @@ def _project_tool(schema: JsonObject) -> _FrozenMcpTool:
             sort_keys=True,
             separators=(",", ":"),
         ),
+        use_when=use_when,
+        help_details=help_details,
     )
 
 
@@ -112,7 +167,7 @@ class McpRegistryProjection:
     def __init__(self, registry: AgentToolRegistry) -> None:
         if not isinstance(registry, AgentToolRegistry):
             raise TypeError("MCP projection requires an AgentToolRegistry.")
-        tools = tuple(_project_tool(schema) for schema in registry.tool_schemas())
+        tools = tuple(_project_tool(item) for item in registry.tool_definitions())
         if tuple(tool.name for tool in tools) != registry.tool_names:
             raise McpToolProjectionError(
                 "Projected MCP tool order must match the frozen registry."
@@ -126,8 +181,14 @@ class McpRegistryProjection:
         return tuple(
             McpToolDefinition(
                 name=tool.name,
-                description=tool.description,
+                description=_description(
+                    tool.description,
+                    use_when=tool.use_when,
+                    help_details=tool.help_details,
+                ),
                 input_schema=json.loads(tool.input_schema_json),
+                use_when=tool.use_when,
+                help_details=tool.help_details,
             )
             for tool in self._tools
         )

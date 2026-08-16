@@ -77,6 +77,9 @@ def project_context_for_tree_merge(
         if memory_only:
             continue
         if isinstance(item, MemoryRef):
+            if item.is_snapshot:
+                projected.add(item.copy())
+                continue
             internal_owner = source_by_uid.get(item.target_context_uid)
             if internal_owner is None:
                 projected.add(item.copy())

@@ -117,6 +117,58 @@ class AddExecutionError(AddError):
     """An authorized Add failed without publishing a complete receipt."""
 
 
+class ReferenceError(MemCommitError):
+    """Base class for public immutable Memory Reference failures."""
+
+
+class ReferenceInputError(ReferenceError):
+    """The caller supplied an invalid Memory Reference request."""
+
+
+class ReferenceContextError(ReferenceError):
+    """A requested local Reference Source or Target is unavailable."""
+
+
+class ReferenceConflictError(ReferenceError):
+    """The frozen Reference Source or Target changed before publication."""
+
+
+class ReferenceStorageError(ReferenceError):
+    """Reference could not safely read or publish local durable state."""
+
+
+class ReferenceExecutionError(ReferenceError):
+    """Reference failed before one complete snapshot receipt was published."""
+
+
+class EmbedError(MemCommitError):
+    """Base class for public live Context or Memory Embed failures."""
+
+
+class EmbedInputError(EmbedError):
+    """The caller supplied an invalid Embed request or insertion gap."""
+
+
+class EmbedContextError(EmbedError):
+    """A requested Embed Source or local Target is unavailable."""
+
+
+class EmbedAuthorityError(EmbedError):
+    """The active Profile or Grant does not authorize this Context Embed."""
+
+
+class EmbedConflictError(EmbedError):
+    """The frozen Embed Source, Target, or insertion gap changed."""
+
+
+class EmbedStorageError(EmbedError):
+    """Embed could not safely read or publish durable state."""
+
+
+class EmbedExecutionError(EmbedError):
+    """Embed failed before one complete live-link receipt was published."""
+
+
 class QueryError(MemCommitError):
     """Base class for public Query failures."""
 
@@ -345,6 +397,13 @@ __all__ = [
     "AddExecutionError",
     "AddInputError",
     "AddStorageError",
+    "EmbedAuthorityError",
+    "EmbedConflictError",
+    "EmbedContextError",
+    "EmbedError",
+    "EmbedExecutionError",
+    "EmbedInputError",
+    "EmbedStorageError",
     "AtomizeGroundingConflictError",
     "AtomizeGroundingContextError",
     "AtomizeGroundingError",
@@ -395,6 +454,12 @@ __all__ = [
     "QueryProviderFailure",
     "QueryPublicationError",
     "QueryStorageError",
+    "ReferenceConflictError",
+    "ReferenceContextError",
+    "ReferenceError",
+    "ReferenceExecutionError",
+    "ReferenceInputError",
+    "ReferenceStorageError",
     "SemanticAuthorityError",
     "SemanticConflictError",
     "SemanticContextError",

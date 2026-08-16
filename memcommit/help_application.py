@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from memcommit.help_catalog import OPERATION_HELP_BY_NAME, OperationHelp
+from memcommit.help_catalog.model import OperationHelpDetail
 
 
 class HelpApplicationInputError(ValueError):
@@ -28,10 +29,40 @@ def list_operation_help() -> tuple[OperationHelp, ...]:
 def describe_operation(operation_name: str) -> OperationHelp:
     """Return one exact operation contract from the same discovery snapshot."""
 
-    if not isinstance(operation_name, str) or not operation_name.strip():
+    return _operation(operation_name)
+
+
+def list_operation_details(operation_name: str) -> tuple[OperationHelpDetail, ...]:
+    """List compactly addressable details for one exact public operation."""
+
+    operation = _operation(operation_name)
+    return operation.details
+
+
+def describe_operation_detail(
+    operation_name: str,
+    detail_id: str,
+) -> OperationHelpDetail:
+    """Return one exact typed detail without opening runtime state."""
+
+    operation = _operation(operation_name)
+    if not isinstance(detail_id, str) or not detail_id.strip():
+        raise HelpApplicationInputError("Help detail_id must be nonblank text.")
+    if detail_id != detail_id.strip():
         raise HelpApplicationInputError(
-            "Help operation_name must be nonblank text."
+            "Help detail_id must not contain surrounding whitespace."
         )
+    for detail in operation.details:
+        if detail.id == detail_id:
+            return detail
+    raise HelpApplicationInputError(
+        f"Operation {operation.name!r} has no Help detail named {detail_id!r}."
+    )
+
+
+def _operation(operation_name: str) -> OperationHelp:
+    if not isinstance(operation_name, str) or not operation_name.strip():
+        raise HelpApplicationInputError("Help operation_name must be nonblank text.")
     if operation_name != operation_name.strip():
         raise HelpApplicationInputError(
             "Help operation_name must not contain surrounding whitespace."
@@ -47,5 +78,7 @@ def describe_operation(operation_name: str) -> OperationHelp:
 __all__ = [
     "HelpApplicationInputError",
     "describe_operation",
+    "describe_operation_detail",
     "list_operation_help",
+    "list_operation_details",
 ]

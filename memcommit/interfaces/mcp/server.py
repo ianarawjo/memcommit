@@ -56,6 +56,7 @@ def project_sdk_tools(projection: McpRegistryProjection) -> list[Any]:
             name=tool.name,
             description=tool.description,
             inputSchema=tool.input_schema,
+            _meta=tool.to_dict().get("_meta"),
         )
         for tool in projection.list_tools()
     ]
@@ -177,7 +178,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         anyio, _types, _server_type, _stdio_server = _load_mcp_sdk()
         projection = _projection_from_args(arguments)
         anyio.run(serve_stdio, projection)
-    except (McpSdkUnavailableError, MemCommitError, OSError, TypeError, ValueError) as error:
+    except (
+        McpSdkUnavailableError,
+        MemCommitError,
+        OSError,
+        TypeError,
+        ValueError,
+    ) as error:
         print(f"mem-mcp: {error}", file=sys.stderr)
         return 2
     return 0

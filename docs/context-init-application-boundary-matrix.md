@@ -106,34 +106,18 @@ interaction-semantic TUI change was introduced, so the prior flow remains the
 visual contract and no replacement screenshot set was generated for this
 structural extraction.
 
-## Study routing and command compatibility
+## Study initialization is a separate operation
 
-`mem init --study` is a console-level route to the existing Study Init use
-case. The positional name becomes the Study Profile name and
-`--from-profile` keeps its established Study-baseline meaning. The historical
-`mem init-study` command remains public for study scripts, demonstrations, and
-recorded procedures. Both spellings execute `commands/init_study.py`; the new
-route does not copy Profile-pair creation, hidden prepared-receipt, or action
-ledger behavior into ordinary Context Init.
+Ordinary `mem init` creates and selects an ordinary Context. It deliberately
+does not accept `--study` or `--from-profile`: Study initialization creates a
+participant/authority Profile pair, installs hidden prepared receipts, and
+writes a study action ledger, so it is not another mode of Context Init.
 
-This routing intentionally occurs before constructing an ordinary
-`MemoryStore` or taking a Context snapshot. Consequently Study mode cannot
-create or switch an ordinary Context as an accidental side effect.
-`--parents` remains exclusive to ordinary Context Init and fails when combined
-with `--study`. Conversely, `--from-profile` fails without `--study`, rather
-than being silently ignored.
-
-Verification covers both a spy-level routing contract and a real initialized
-Study bundle. The latter proves that `mem init NAME --study` publishes the
-participant and granted-memory Profiles through the established path with one
-shared Study UID. Thirteen existing `init-study` regression cases and the
-hidden-prewarm initialization test also pass unchanged, preserving the old
-spelling and its durable behavior.
-
-The shared Study implementation is still a command-owned use case. Moving it
-behind its own typed application/runtime boundary remains later work; command
-unification is not evidence that Context Init and Study Init share a domain
-request.
+`mem init-study` remains the sole public Study-run entry point for study
+scripts, demonstrations, and recorded procedures. Keeping the commands
+separate makes their resource boundary visible in both CLI discovery and
+callable classification instead of presenting unrelated use cases as options
+of one command.
 
 ## Remaining boundaries
 
@@ -146,5 +130,5 @@ request.
 - Ordinary Init has no provider or cache boundary. Sever or another semantic
   durable operation is still needed to validate those axes.
 - Study initialization owns Profile-pair creation, hidden prepared receipts,
-  action-ledger writes, and wider rollback behavior; it must remain a separate
-  use case even if the console spelling moves under `mem init --study`.
+  action-ledger writes, and wider rollback behavior; it remains available only
+  through the separate `mem init-study` operation.

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import json
 from types import MappingProxyType
 
-from memcommit.api import MemCommitClient
+from memcommit.api import HelpDetailReferenceResult, MemCommitClient
 from memcommit.interfaces.agent.add import (
     ADD_AGENT_TOOL_NAME,
     AddAgentAdapter,
@@ -43,6 +43,11 @@ from memcommit.interfaces.agent.elaborate import (
     ELABORATE_AGENT_TOOL_NAME,
     ElaborateAgentAdapter,
     elaborate_agent_tool_schema,
+)
+from memcommit.interfaces.agent.embed import (
+    EMBED_AGENT_TOOL_NAME,
+    EmbedAgentAdapter,
+    embed_agent_tool_schema,
 )
 from memcommit.interfaces.agent.fit import (
     FIT_AGENT_TOOL_NAME,
@@ -84,6 +89,11 @@ from memcommit.interfaces.agent.query import (
     QueryAgentAdapter,
     query_agent_tool_schema,
 )
+from memcommit.interfaces.agent.reference import (
+    REFERENCE_AGENT_TOOL_NAME,
+    ReferenceAgentAdapter,
+    reference_agent_tool_schema,
+)
 from memcommit.interfaces.agent.quality_find import (
     QUALITY_FIND_AGENT_TOOL_NAME,
     QualityFindAgentAdapter,
@@ -117,12 +127,25 @@ class AgentToolBinding:
     name: str
     schema_factory: AgentToolSchemaFactory
     handler: AgentToolHandler
+    use_when: str | None = None
+    help_details: tuple[HelpDetailReferenceResult, ...] = ()
+
+
+@dataclass(frozen=True)
+class AgentToolDefinition:
+    """One fresh standard tool schema plus host-neutral selection guidance."""
+
+    tool_schema: JsonObject
+    use_when: str | None = None
+    help_details: tuple[HelpDetailReferenceResult, ...] = ()
 
 
 @dataclass(frozen=True)
 class _FrozenAgentTool:
     name: str
     schema_json: str
+    use_when: str | None
+    help_details: tuple[HelpDetailReferenceResult, ...]
     handler: AgentToolHandler
 
 
@@ -137,7 +160,9 @@ def _has_only_text_object_keys(value: object) -> bool:
     return True
 
 
-def _registration_schema(binding: AgentToolBinding) -> str:
+def _registration_schema(
+    binding: AgentToolBinding,
+) -> tuple[str, str | None, tuple[HelpDetailReferenceResult, ...]]:
     if not isinstance(binding.name, str) or not binding.name.strip():
         raise AgentToolRegistrationError("Agent tool name must be nonblank text.")
     if not callable(binding.schema_factory):
@@ -162,15 +187,48 @@ def _registration_schema(binding: AgentToolBinding) -> str:
         raise AgentToolRegistrationError(
             f"Agent tool {binding.name!r} schema name must match its binding."
         )
+    schema_use_when = schema.get("use_when")
+    if binding.use_when is not None and schema_use_when not in (
+        None,
+        binding.use_when,
+    ):
+        raise AgentToolRegistrationError(
+            f"Agent tool {binding.name!r} schema and binding use_when differ."
+        )
+    use_when = binding.use_when if binding.use_when is not None else schema_use_when
+    if use_when is not None and (not isinstance(use_when, str) or not use_when.strip()):
+        raise AgentToolRegistrationError(
+            f"Agent tool {binding.name!r} use_when must be nonblank text."
+        )
+    if not isinstance(binding.help_details, tuple) or any(
+        not isinstance(item, HelpDetailReferenceResult) for item in binding.help_details
+    ):
+        raise AgentToolRegistrationError(
+            f"Agent tool {binding.name!r} help_details must be a typed tuple."
+        )
+    detail_ids = [item.id for item in binding.help_details]
+    if len(detail_ids) != len(set(detail_ids)):
+        raise AgentToolRegistrationError(
+            f"Agent tool {binding.name!r} help detail ids must be unique."
+        )
+    if schema_use_when is not None:
+        # Selection guidance is registry discovery metadata, not a nonstandard
+        # field in the function-tool schema passed to strict tool hosts.
+        schema = dict(schema)
+        del schema["use_when"]
     try:
         # Store a canonical JSON snapshot so discovery cannot mutate the
         # registered schema and later factory changes cannot alter this host.
-        return json.dumps(
-            schema,
-            ensure_ascii=False,
-            allow_nan=False,
-            sort_keys=True,
-            separators=(",", ":"),
+        return (
+            json.dumps(
+                schema,
+                ensure_ascii=False,
+                allow_nan=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+            use_when,
+            binding.help_details,
         )
     except (TypeError, ValueError) as error:
         raise AgentToolRegistrationError(
@@ -202,9 +260,12 @@ class AgentToolRegistry:
                 raise AgentToolRegistrationError(
                     f"Agent tool {binding.name!r} is registered more than once."
                 )
+            schema_json, use_when, help_details = _registration_schema(binding)
             frozen[binding.name] = _FrozenAgentTool(
                 name=binding.name,
-                schema_json=_registration_schema(binding),
+                schema_json=schema_json,
+                use_when=use_when,
+                help_details=help_details,
                 handler=binding.handler,
             )
         self._tools = MappingProxyType(frozen)
@@ -219,6 +280,18 @@ class AgentToolRegistry:
         """Return fresh JSON objects for the frozen registered schemas."""
 
         return tuple(json.loads(tool.schema_json) for tool in self._tools.values())
+
+    def tool_definitions(self) -> tuple[AgentToolDefinition, ...]:
+        """Return standard schemas paired with frozen discovery guidance."""
+
+        return tuple(
+            AgentToolDefinition(
+                tool_schema=json.loads(tool.schema_json),
+                use_when=tool.use_when,
+                help_details=tool.help_details,
+            )
+            for tool in self._tools.values()
+        )
 
     def invoke(self, tool_name: object, payload: object) -> JsonObject:
         """Invoke one known tool with an already decoded JSON-compatible payload."""
@@ -264,6 +337,23 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
 
     if not isinstance(client, MemCommitClient):
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
+
+    def operation_binding(
+        operation_name: str,
+        *,
+        name: str,
+        schema_factory: AgentToolSchemaFactory,
+        handler: AgentToolHandler,
+    ) -> AgentToolBinding:
+        guidance = client.describe_operation(operation_name)
+        return AgentToolBinding(
+            name=name,
+            schema_factory=schema_factory,
+            handler=handler,
+            use_when=guidance.use_when,
+            help_details=guidance.details,
+        )
+
     help_adapter = HelpAgentAdapter(client)
     show_adapter = ShowAgentAdapter(client)
     search = SearchAgentAdapter(client)
@@ -272,6 +362,8 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
+    reference = ReferenceAgentAdapter(client)
+    embed = EmbedAgentAdapter(client)
     compare = CompareAgentAdapter(client)
     meld = MeldAgentAdapter(client)
     atomize = AtomizeAgentAdapter(client)
@@ -284,32 +376,38 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     dedup = DedupAgentAdapter(client)
     return AgentToolRegistry(
         (
-            AgentToolBinding(
+            operation_binding(
+                "help",
                 name=HELP_AGENT_TOOL_NAME,
                 schema_factory=help_agent_tool_schema,
                 handler=help_adapter.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "show",
                 name=SHOW_AGENT_TOOL_NAME,
                 schema_factory=show_agent_tool_schema,
                 handler=show_adapter.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "find",
                 name=FIND_AGENT_TOOL_NAME,
                 schema_factory=find_agent_tool_schema,
                 handler=find.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "replace",
                 name=REPLACE_AGENT_TOOL_NAME,
                 schema_factory=replace_agent_tool_schema,
                 handler=replace.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "search",
                 name=SEARCH_AGENT_TOOL_NAME,
                 schema_factory=search_agent_tool_schema,
                 handler=search.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "query",
                 name=QUERY_AGENT_TOOL_NAME,
                 schema_factory=query_agent_tool_schema,
                 handler=query.invoke,
@@ -318,23 +416,43 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=QUALITY_FIND_AGENT_TOOL_NAME,
                 schema_factory=quality_find_agent_tool_schema,
                 handler=quality_find.invoke,
+                use_when=(
+                    "Finding duplicate, ambiguous, or conflicting Memories before "
+                    "cleanup or review."
+                ),
             ),
-            AgentToolBinding(
+            operation_binding(
+                "add",
                 name=ADD_AGENT_TOOL_NAME,
                 schema_factory=add_agent_tool_schema,
                 handler=add.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "reference",
+                name=REFERENCE_AGENT_TOOL_NAME,
+                schema_factory=reference_agent_tool_schema,
+                handler=reference.invoke,
+            ),
+            operation_binding(
+                "embed",
+                name=EMBED_AGENT_TOOL_NAME,
+                schema_factory=embed_agent_tool_schema,
+                handler=embed.invoke,
+            ),
+            operation_binding(
+                "compare",
                 name=COMPARE_AGENT_TOOL_NAME,
                 schema_factory=compare_agent_tool_schema,
                 handler=compare.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "meld",
                 name=MELD_AGENT_TOOL_NAME,
                 schema_factory=meld_agent_tool_schema,
                 handler=meld.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "atomize",
                 name=ATOMIZE_AGENT_TOOL_NAME,
                 schema_factory=atomize_agent_tool_schema,
                 handler=atomize.invoke,
@@ -343,33 +461,43 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
                 schema_factory=atomize_grounding_agent_tool_schema,
                 handler=atomize_grounding.invoke,
+                use_when=(
+                    "Discussing or resolving one saved Atomize issue through "
+                    "reviewed conversational turns."
+                ),
             ),
-            AgentToolBinding(
+            operation_binding(
+                "distill",
                 name=DISTILL_AGENT_TOOL_NAME,
                 schema_factory=distill_agent_tool_schema,
                 handler=distill.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "elaborate",
                 name=ELABORATE_AGENT_TOOL_NAME,
                 schema_factory=elaborate_agent_tool_schema,
                 handler=elaborate.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "fit",
                 name=FIT_AGENT_TOOL_NAME,
                 schema_factory=fit_agent_tool_schema,
                 handler=fit.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "forget",
                 name=FORGET_AGENT_TOOL_NAME,
                 schema_factory=forget_agent_tool_schema,
                 handler=forget.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "resolve",
                 name=RESOLVE_AGENT_TOOL_NAME,
                 schema_factory=resolve_agent_tool_schema,
                 handler=resolve.invoke,
             ),
-            AgentToolBinding(
+            operation_binding(
+                "dedup",
                 name=DEDUP_AGENT_TOOL_NAME,
                 schema_factory=dedup_agent_tool_schema,
                 handler=dedup.invoke,

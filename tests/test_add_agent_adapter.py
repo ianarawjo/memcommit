@@ -267,10 +267,16 @@ def test_companion_skill_preserves_exact_mutation_and_failure_boundaries():
     )
 
     assert "name: memcommit-add" in skill
+    assert "Use when the user explicitly asks" in skill
     assert "Invoke `memcommit_add_memories` directly." in skill
     assert "Always send `version: 1` and `kind: memories`" in skill
     assert "Preserve item order, exact" in skill
     assert "Never retry an Add failure automatically." in skill
     assert "has no idempotency key" in skill
+    assert "Treat every `contents` item as literal Memory content." in skill
+    assert "separate Branch/Merge workflow" in skill
+    assert "exact immutable Memory version, use Reference" in skill
+    assert "live link" in skill and "use Embed" in skill
+    assert "stable `add` detail `copy-or-link`" in skill
     assert "Do not fall back to shell access" in skill
     assert "$memcommit-add" in metadata

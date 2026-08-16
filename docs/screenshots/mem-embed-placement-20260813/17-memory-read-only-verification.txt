@@ -1,0 +1,52 @@
+Embedded Memory [e5b8c237] from 'archive' as [07e6542b] in 'guide' after [f7046b8c] at the end.                                                                                     
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+CAPTURE VERIFICATION COMMAND · mem show --context guide                                                                                                                             
+Context: guide                                                                                                                                                                      
+  Memories 1  |  Memory Refs 1  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory f7046b8c] The current Context is only the initial Into suggestion.                                                                                                        
+  [embedded memory 07e6542b] archive#e5b8c237  READ ONLY                                                                                                                            
+           Opening orientation for the guide.                                                                                                                                       
+ORDER · f7046b8c-ae21-4c58-8165-5791bfec8649 → 07e6542b-ff40-4727-98bf-b6a4a16bb2da                                                                                                 
+CURRENT CONTEXT · guide                                                                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

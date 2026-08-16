@@ -81,8 +81,9 @@ class TestHelp:
         )
         list_row = next(line for line in lines if line.startswith("list (ls) "))
         assert not any(line.startswith("ls ") for line in lines)
-        assert "Browse child Contexts and direct items" in list_row
-        assert "equivalent compact spelling" in list_row
+        assert "List a Context's direct items" in list_row
+        assert "Use -r to recursively include items" in list_row
+        assert "ls is the compact alias" in list_row
         assert any(
             line.startswith("checkout ")
             and "Git-style syntax" in line
@@ -108,7 +109,7 @@ class TestHelp:
         )
         assert any(
             line.startswith("reference ")
-            and "identity metadata rather than copying" in line
+            and "immutable read-only snapshot" in line
             for line in lines
         )
         assert any(
@@ -143,7 +144,8 @@ class TestHelp:
         assert root_result.exit_code == 0
         assert "│ list " in root_result.output
         assert "│ delete " in root_result.output
-        assert "equivalent compact spelling" in root_result.output
+        assert "ls is the" in root_result.output
+        assert "compact alias" in root_result.output
         assert "│ ls " not in root_result.output
         assert "│ remove " not in root_result.output
         assert inventory_result.exit_code == 0
@@ -260,23 +262,27 @@ class TestHelp:
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
-            == "SEMANTIC MEMORY OPERATIONS"
+            == "SEMANTIC TRANSFORMATIONS"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["forget"]
-            == "SEMANTIC MEMORY OPERATIONS"
+            == "SEMANTIC TRANSFORMATIONS"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["reference"]
-            == "MECHANICAL MEMORY OPERATIONS"
+            == "CREATE, COPY & CONNECT"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["merge"]
-            == "MECHANICAL MEMORY OPERATIONS"
+            == "DETERMINISTIC CONTENT CHANGES"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["dedup"]
-            == "MECHANICAL MEMORY OPERATIONS"
+            == "DETERMINISTIC CONTENT CHANGES"
+        )
+        assert (
+            help_inventory.HELP_CATEGORY_BY_COMMAND["replace"]
+            == "DETERMINISTIC CONTENT CHANGES"
         )
         names = (
             "clear",
@@ -309,8 +315,8 @@ class TestHelp:
             "contexts",
             "show",
             "switch",
-            "branch",
             "add",
+            "branch",
             "reference",
             "edit",
             "delete",
@@ -709,11 +715,11 @@ class TestHelp:
                 command=object(),
                 forms=(f"mem {name}",),
             )
-            for name in ("add", "branch", "find")
+            for name in ("add", "find", "edit")
         ]
         with create_pipe_input() as pipe_input:
-            # BY KIND starts at branch (Contexts). Successive Tabs must reach
-            # add (Memories) and then find (Search & Explain), rather than
+            # BY KIND starts at Add (Create, Copy & Connect). Successive Tabs
+            # must reach Find and then Edit in their following categories, rather than
             # alternating between the original row and VIEW.
             pipe_input.send_text("\t\t\r\r")
             selected = run_help_selector(
@@ -724,7 +730,7 @@ class TestHelp:
             )
 
         assert selected is not None
-        assert selected.command_line == "mem find"
+        assert selected.command_line == "mem edit"
 
     def test_selector_reaches_view_then_keeps_a_z_as_one_list_surface(self):
         entries = [
@@ -735,10 +741,10 @@ class TestHelp:
                 command=object(),
                 forms=(f"mem {name}",),
             )
-            for name in ("add", "branch")
+            for name in ("add", "find")
         ]
         with create_pipe_input() as pipe_input:
-            # Contexts -> Memories -> VIEW, then switch projection. A–Z keeps
+            # Create -> Search -> VIEW, then switch projection. A–Z keeps
             # its single list surface and the selected command by name.
             pipe_input.send_text("\t\t\x1b[C\t\r\r")
             selected = run_help_selector(
@@ -749,7 +755,7 @@ class TestHelp:
             )
 
         assert selected is not None
-        assert selected.command_line == "mem add"
+        assert selected.command_line == "mem find"
 
     def test_selector_tab_wraps_through_view_and_restores_kind_cursor(self):
         entries = [
@@ -760,11 +766,11 @@ class TestHelp:
                 command=object(),
                 forms=(f"mem {name}",),
             )
-            for name in ("status", "branch", "add")
+            for name in ("init", "add", "find")
         ]
         with create_pipe_input() as pipe_input:
-            # Retain branch inside Contexts, cross Memories and VIEW, then
-            # re-enter Contexts. Tab traversal preserves that kind's cursor.
+            # Retain add inside Create, cross Search and VIEW, then re-enter
+            # Create. Tab traversal preserves that kind's cursor.
             pipe_input.send_text("\x1b[B\t\t\t\r\r")
             selected = run_help_selector(
                 entries,
@@ -774,7 +780,7 @@ class TestHelp:
             )
 
         assert selected is not None
-        assert selected.command_line == "mem branch"
+        assert selected.command_line == "mem add"
 
     def test_selector_shift_tab_reaches_previous_kind_through_view(self):
         entries = [
@@ -785,7 +791,7 @@ class TestHelp:
                 command=object(),
                 forms=(f"mem {name}",),
             )
-            for name in ("add", "branch", "find")
+            for name in ("add", "find", "edit")
         ]
         with create_pipe_input() as pipe_input:
             pipe_input.send_text("\x1b[Z\x1b[Z\r\r")
@@ -797,7 +803,7 @@ class TestHelp:
             )
 
         assert selected is not None
-        assert selected.command_line == "mem find"
+        assert selected.command_line == "mem edit"
 
     def test_selector_right_expands_left_collapses_and_enter_enters_forms(self):
         with create_pipe_input() as pipe_input:
@@ -1157,7 +1163,7 @@ class TestList:
         reference_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory ref " in line
+            if "[reference " in line
             and "READ ONLY" in line
             and "Referenced atomic name." in line
         )

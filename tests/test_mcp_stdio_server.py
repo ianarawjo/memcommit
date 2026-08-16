@@ -11,6 +11,7 @@ import tomllib
 import anyio
 import pytest
 
+from memcommit.api import HelpDetailReferenceResult
 from memcommit.interfaces.agent import AgentToolBinding, AgentToolRegistry
 from memcommit.interfaces.mcp import McpRegistryProjection
 from memcommit.interfaces.mcp.server import (
@@ -38,6 +39,18 @@ def _projection(*, handler=None) -> McpRegistryProjection:
     binding = AgentToolBinding(
         name="example_tool",
         schema_factory=lambda: schema,
+        use_when="Returning one bounded example envelope.",
+        help_details=(
+            HelpDetailReferenceResult(
+                id="choose-example",
+                operation="help",
+                kind="COMPARISON",
+                title="CHOOSE EXAMPLE",
+                use_when="Choosing the example tool.",
+                discovery="TOOL_SELECTION",
+                discovery_summary="Use this example only for bounded envelopes.",
+            ),
+        ),
         handler=handler
         or (
             lambda payload: {
@@ -60,6 +73,25 @@ def test_sdk_values_preserve_frozen_schema_and_complete_result_envelope():
 
     assert len(tools) == 1
     assert tools[0].name == "example_tool"
+    assert "Use when: Returning one bounded example envelope." in tools[0].description
+    assert tools[0].description.endswith(
+        "Selection boundary (CHOOSE EXAMPLE): Use this example only for bounded "
+        "envelopes."
+    )
+    assert tools[0].meta == {
+        "memcommit/useWhen": "Returning one bounded example envelope.",
+        "memcommit/helpDetails": [
+            {
+                "id": "choose-example",
+                "operation": "help",
+                "kind": "COMPARISON",
+                "title": "CHOOSE EXAMPLE",
+                "useWhen": "Choosing the example tool.",
+                "discovery": "TOOL_SELECTION",
+                "discoverySummary": "Use this example only for bounded envelopes.",
+            }
+        ],
+    }
     assert tools[0].input_schema == projection.list_tools()[0].input_schema
     assert result.is_error is False
     assert result.structured_content == projected.structured_content
@@ -88,6 +120,29 @@ def test_v2_client_discovers_and_calls_the_low_level_server_in_memory():
 
         assert initialized.server_info.name == MCP_SERVER_NAME
         assert [tool.name for tool in listed.tools] == ["example_tool"]
+        assert "Use when: Returning one bounded example envelope." in (
+            listed.tools[0].description
+        )
+        assert listed.tools[0].description.endswith(
+            "Selection boundary (CHOOSE EXAMPLE): Use this example only for "
+            "bounded envelopes."
+        )
+        assert listed.tools[0].meta == {
+            "memcommit/useWhen": "Returning one bounded example envelope.",
+            "memcommit/helpDetails": [
+                {
+                    "id": "choose-example",
+                    "operation": "help",
+                    "kind": "COMPARISON",
+                    "title": "CHOOSE EXAMPLE",
+                    "useWhen": "Choosing the example tool.",
+                    "discovery": "TOOL_SELECTION",
+                    "discoverySummary": (
+                        "Use this example only for bounded envelopes."
+                    ),
+                }
+            ],
+        }
         assert listed.tools[0].input_schema == projection.list_tools()[0].input_schema
         assert called.is_error is False
         assert called.structured_content["result"] == {"text": "through MCP"}
@@ -110,9 +165,7 @@ def test_mcp_entrypoint_and_v2_sdk_remain_an_optional_distribution_surface():
 
 
 def test_server_source_is_a_thin_transport_adapter():
-    path = (
-        Path(__file__).parents[1] / "memcommit" / "interfaces" / "mcp" / "server.py"
-    )
+    path = Path(__file__).parents[1] / "memcommit" / "interfaces" / "mcp" / "server.py"
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imported: list[str] = []
     for node in ast.walk(tree):

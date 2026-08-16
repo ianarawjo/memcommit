@@ -144,7 +144,7 @@ def test_rename_migrates_ordinary_context_and_memory_refs_by_target_uid(
     source_memory = next(iter(source.iter_items()))
     observer = ops.init("observer")
     observer.add(source)
-    memory_ref = ops.reference_memory(source_memory, source, observer)
+    memory_ref = ops.embed_memory(source_memory, source, observer)
     query_ref = QueryContextRef(
         uid=str(uuid.uuid4()),
         name="old/child",
@@ -243,7 +243,7 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
     source_memory = next(iter(source.iter_items()))
     observer = ops.init("observer")
     observer.add(source)
-    memory_ref = ops.reference_memory(source_memory, source, observer)
+    memory_ref = ops.embed_memory(source_memory, source, observer)
     pointer_checkpoint = store.save(
         observer,
         AutoCheckpoint(

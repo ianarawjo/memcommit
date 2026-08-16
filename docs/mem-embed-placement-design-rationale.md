@@ -1,4 +1,4 @@
-# Ordered Context Embed placement
+# Ordered live Embed placement
 
 ## Status
 
@@ -7,11 +7,15 @@ Implemented for both public entry routes:
 ```text
 mem embed
 mem embed CHILD --into CONTEXT [--before ITEM | --after ITEM]
+mem embed MEMORY --from SOURCE --into CONTEXT [--before ITEM | --after ITEM]
 ```
 
-The flagless form presents owned local Contexts plus visible Grant rows as
-possible Children; only local owned Contexts can be targets. The explicit form
-remains the non-interactive and scripting route.
+The flagless form first selects Context or Memory link type. Context mode
+presents owned local Contexts plus visible Grant rows as possible Children;
+Memory mode presents directly owned ordinary Memories from local Contexts.
+Only local owned Contexts can be targets. The explicit forms remain the
+non-interactive and scripting routes, with `--from` as the unambiguous Memory
+discriminator.
 
 The implementation now enters through `memcommit.embed_application`, with
 `memcommit.embed_runtime` owning Store loading, concurrency checks, checkpoint
@@ -39,7 +43,8 @@ accepted an exact insertion position and the persisted `order` field retains
 it. The former public Embed operation did not expose that capability:
 `ops.embed()` always called `parent.add(child)` without a position, and
 `mem embed CHILD --into CONTEXT` therefore always appended the live Context
-reference.
+reference. Memory Embed now applies the same ordered-gap contract to the
+legacy live `memory_ref` relationship.
 
 Append-only Embed loses part of the direct sequence's meaning. If two adjacent
 Memories establish a local reading order, a nested Context may belong between
@@ -53,6 +58,7 @@ The explicit command accepts at most one direct-item anchor:
 ```text
 mem embed examples --into guide --before 7cc52c10
 mem embed examples --into guide --after 191884c4
+mem embed a94c120e --from examples --into guide --before 7cc52c10
 ```
 
 - `--before ITEM` inserts immediately before the direct item resolved by an
@@ -64,9 +70,12 @@ mem embed examples --into guide --after 191884c4
   directly owned Memories. Hidden exclusion of pointer slots would make the
   visible gap differ from the persisted position.
 
-The command resolves `CHILD` and `--into` through the shared existing-Context
-locator snapshot. `--before` and `--after` are direct-item selectors, not
-Context locators, so relative Context syntax is never applied to them.
+The command resolves `CHILD`, `--from`, and `--into` through one shared
+existing-Context locator snapshot. `--before` and `--after` are direct-item
+selectors, not Context locators, so relative Context syntax is never applied
+to them. Memory Embed requires a directly owned ordinary Source Memory and a
+Source Context distinct from the Target; this prevents a recursive live link
+back into the record currently being loaded.
 
 The checkpoint records the numeric position and both neighboring full UIDs.
 The number explains the realized slot; the neighbors preserve the semantic gap
@@ -77,13 +86,18 @@ end, or only-item relationship.
 
 `mem embed` with no operands opens one top-to-bottom setup form:
 
-1. `CHILD · EMBED THIS CONTEXT`
-2. `INTO + POSITION · CHANGE THIS CONTEXT`
-3. `TO DO · EXACT COMMAND`
+1. `LINK TYPE · CONTEXT | MEMORY`
+2. conditional `CHILD · EMBED THIS CONTEXT` or
+   `SOURCE MEMORY · DIRECTLY OWNED`
+3. `INTO + POSITION · CHANGE THIS CONTEXT`
+4. `TO DO · EXACT COMMAND`
 
 The current local Context is the initial `INTO` choice because it is the only
-Context mutated by Embed. The initial Child is the first distinct local
-Context. At least two local Contexts are therefore required.
+Context mutated by Embed. Context mode initially selects the first authorized
+Child distinct from that target. Memory mode composes the shared Context tree,
+lazy direct-item previews, and retained direct-Memory selection; read-only
+references, query views, and embedded Context rows remain visible but cannot
+be selected as a directly owned Source Memory.
 
 `INTO` is not followed by an unrelated operation-specific picker. Its frame
 reuses the checked Context tree and the direct-item preview renderer used by
@@ -111,18 +125,21 @@ The final frame shows one exact CLI command. A middle or initial gap is encoded
 with the next full UID through `--before`; an ending gap is encoded with the
 previous full UID through `--after`; the only gap in an empty Context needs no
 anchor. The effect block states that only the Into Context changes, that the
-Child retains identity and ownership, and which exact neighbor gap is used.
+Child Context or Source Memory retains identity and ownership, and which exact
+neighbor gap is used.
 
 ## Safety and concurrency invariants
 
-- `ops.validate_embed()` checks self-embedding, duplicate Context/query names,
-  and the exact numeric range before mutation. Embed does not rely on
-  `Context.add()`'s generic clamping because a reviewed gap must not move.
-- The TUI receipt freezes canonical Child and Into names, identities, record
-  digests, both gap neighbors, and the complete exact-command review.
-- Application reloads the Child and mutation-safe Into Context, then rejects
+- Context Embed checks self-embedding, duplicate Context/query names, and the
+  exact numeric range before mutation. Memory Embed additionally rejects a
+  Source/Target self-link and duplicate logical live link. Neither relies on
+  generic insertion clamping because a reviewed gap must not move.
+- The TUI receipt freezes canonical Source and Into names, identities, record
+  digests, both gap neighbors, and the complete exact-command review. Memory
+  mode also freezes the direct Source Memory UID, content, and digest.
+- Application reloads the Source and mutation-safe Into Context, then rejects
   identity, content, direct-order, neighbor, or exact-command drift before
-  calling `ops.embed()`.
+  calling the operation-owned mutation.
 - The existing target digest compare-and-set and source binding remain the
   final locked persistence boundary. No partial Context order is published
   after a rejected or concurrent change.
@@ -158,13 +175,13 @@ those callers is a separate rollout and Embed does not reach through them.
 - A separate Position picker and a list containing `INSERT EMBED HERE` in every
   gap were rejected because target choice and target order are one semantic
   decision. One moving line inside the shared selector preserves
-  `CHILD → INTO → GAP`, keeps the surrounding Memories legible, and avoids
+  `SOURCE → INTO → GAP`, keeps the surrounding Memories legible, and avoids
   repeating an operation label between every item.
 - Side-by-side panels were rejected because the repository's shared terminal
   topology is vertical and must remain reconstructable at narrower widths.
 - This operation does not reorder existing items, move a Child's own Memories,
   embed a lexical subtree, or infer a namespace relationship. It inserts one
-  live Context pointer into one exact direct-item gap.
+  live Context or Memory pointer into one exact direct-item gap.
 - Grant-backed Embed does not copy or cache authority content. It persists a
   typed revocable link and reauthorizes it whenever traversal opens the Child.
 - Indirect Embed cycles remain governed by the existing graph behavior. This

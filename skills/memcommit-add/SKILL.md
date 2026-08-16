@@ -23,6 +23,19 @@ Invoke `memcommit_add_memories` directly. Do not reconstruct the operation with
 
 Do not reinterpret revise, remove, forget, update, or merge requests as Add.
 
+## Choose Add, copy, or link
+
+- Treat every `contents` item as literal Memory content. A Memory UID or
+  Context name in `contents` is stored as that text; it does not locate or copy
+  the named object.
+- For independent work, use a separate Branch/Merge workflow for the containing
+  Context when available, or add user-approved copied Memory content directly.
+- To retain an exact immutable Memory version, use Reference. For a live link
+  to an existing Memory or Context, use Embed. Do not simulate snapshots or
+  links by sending an object's UID or name to Add.
+- If the choice still needs review and `memcommit_help` is available, request
+  the stable `add` detail `copy-or-link` before invoking a mutation tool.
+
 ## Interpret the receipt
 
 - On `ok: true`, verify that `count` and the ordered `memories` cover the full

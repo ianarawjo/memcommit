@@ -10,14 +10,29 @@ from memcommit.help_catalog.composer import (
     HelpRow,
     compose_operation_help,
 )
-from memcommit.help_catalog.model import ExecutionKind, OperationHelp
+from memcommit.help_catalog.model import (
+    DetailDiscovery,
+    ExecutionKind,
+    HelpDetailKind,
+    OperationComparisonDetail,
+    OperationComparisonOption,
+    OperationHelp,
+    OperationHelpDetail,
+    OperationTextDetail,
+)
 
 __all__ = [
     "ComposedOperationHelp",
+    "DetailDiscovery",
     "ExecutionKind",
+    "HelpDetailKind",
     "HelpRow",
     "OPERATION_HELP_BY_NAME",
+    "OperationComparisonDetail",
+    "OperationComparisonOption",
     "OperationHelp",
+    "OperationHelpDetail",
+    "OperationTextDetail",
     "compose_operation_help",
     "operation_help",
     "operation_summary",
