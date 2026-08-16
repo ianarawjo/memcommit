@@ -39,8 +39,14 @@ One request freezes one exact local Context or its lexical/embedded traversal
 plus an optional Goal. Every Rule contains standalone content, rationale,
 supporting Memory UIDs, and optional boundary/contrast Memory UIDs. Every
 Source Memory must be cited by at least one Rule or appear in the analysis-wide
-outside set. Cited and outside sets are disjoint, aliases are resolved locally,
-and every provider response crosses a strict schema and local decoder.
+outside set. Within one Rule, support and boundary evidence are disjoint; cited
+and outside sets are also disjoint. Aliases are resolved locally, and every
+provider response crosses a strict schema and local decoder. The prompt states
+both exclusion rules explicitly because a real 50-Example ticker run otherwise
+put the same late boundary Example in both evidence lists. The decoder correctly
+failed closed, but the provider contract had described only the cited/outside
+exclusion. Provider contract version 3 prevents an exact prepared result made
+under the weaker instruction from being treated as compatible.
 
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of

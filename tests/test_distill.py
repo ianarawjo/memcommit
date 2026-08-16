@@ -107,6 +107,7 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
     assert analysis.outside_memory_uids == ()
     payload = json.loads(provider.calls[0][0].split(DISTILL_PAYLOAD_MARKER, 1)[1])
     assert payload["goal"] == "Recommend a setting for a family conversation."
+    assert "support and boundary lists must be disjoint" in provider.calls[0][0]
 
 
 def test_distill_rejects_silent_source_omission():
