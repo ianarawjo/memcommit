@@ -23,6 +23,41 @@ class MeldStartError(RuntimeError):
     """A new Meld could not safely reach a durable reviewed session."""
 
 
+def validate_meld_start_scope(
+    *,
+    mode: MeldStartMode,
+    left_descendants: bool,
+    right_descendants: bool,
+    incoming_memory: str | None,
+    baseline_memory: str | None,
+    comparison: ComparisonAnalysis | None,
+    error_type: type[RuntimeError],
+) -> None:
+    """Validate directional Memory focus before any Store or provider work."""
+
+    selectors = (incoming_memory, baseline_memory)
+    if any(
+        selector is not None
+        and (not isinstance(selector, str) or not selector.strip())
+        for selector in selectors
+    ):
+        raise error_type("Meld Memory selectors must be nonempty text.")
+    if mode != "DIRECTIONAL" and any(selector is not None for selector in selectors):
+        raise error_type("Only directional Meld supports direct-Memory focus.")
+    if incoming_memory is not None and left_descendants:
+        raise error_type(
+            "INCOMING Memory focus cannot be combined with descendants."
+        )
+    if baseline_memory is not None and right_descendants:
+        raise error_type(
+            "BASELINE Memory focus cannot be combined with descendants."
+        )
+    if comparison is not None and any(selector is not None for selector in selectors):
+        raise error_type(
+            "Meld Memory focus cannot reuse a whole-frame Compare analysis."
+        )
+
+
 @dataclass(frozen=True)
 class MeldStartRequest:
     """One canonical source pair and target contract, independent of argv."""
@@ -34,6 +69,8 @@ class MeldStartRequest:
     left_descendants: bool = False
     right_descendants: bool = False
     create_target: bool = False
+    incoming_memory: str | None = None
+    baseline_memory: str | None = None
     comparison: ComparisonAnalysis | None = None
 
     def __post_init__(self) -> None:
@@ -49,6 +86,15 @@ class MeldStartRequest:
             raise MeldStartError("Meld descendant controls must be booleans.")
         if not isinstance(self.create_target, bool):
             raise MeldStartError("Meld create_target must be a boolean.")
+        validate_meld_start_scope(
+            mode=self.mode,
+            left_descendants=self.left_descendants,
+            right_descendants=self.right_descendants,
+            incoming_memory=self.incoming_memory,
+            baseline_memory=self.baseline_memory,
+            comparison=self.comparison,
+            error_type=MeldStartError,
+        )
         if self.left_name == self.right_name:
             raise MeldStartError("Meld sources must be distinct Contexts.")
         if self.mode == "DIRECTIONAL":
@@ -94,11 +140,26 @@ def run_meld_start(
     result = port.start(request, provider_factory=provider_factory)
     session = result.session
     frame_names = tuple(frame.context_name for frame in session.frames)
+    selected_memories = tuple(
+        getattr(frame, "selected_memory_uid", None) for frame in session.frames
+    )
+    requested_memories = (request.incoming_memory, request.baseline_memory)
+    memory_scope_matches = all(
+        (selected is None if requested is None else (
+            isinstance(selected, str) and selected.startswith(requested)
+        ))
+        for selected, requested in zip(
+            selected_memories,
+            requested_memories,
+            strict=True,
+        )
+    )
     if (
         session.mode != request.mode
         or frame_names != (request.left_name, request.right_name)
         or session.target.context_name != request.target_name
         or result.created_target != request.create_target
+        or not memory_scope_matches
         or session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
     ):
         raise MeldStartError("Meld start returned a session outside its request.")
@@ -113,4 +174,5 @@ __all__ = [
     "MeldStartRequest",
     "MeldStartResult",
     "run_meld_start",
+    "validate_meld_start_scope",
 ]

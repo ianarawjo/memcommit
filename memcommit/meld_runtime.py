@@ -771,6 +771,8 @@ def _start_comparison(
     right: Context,
     error_type: type[RuntimeError] = MeldStartError,
 ) -> ComparisonAnalysis | None:
+    if request.incoming_memory is not None or request.baseline_memory is not None:
+        return None
     analysis = request.comparison
     if analysis is None:
         analysis = load_comparison_analysis(
@@ -918,6 +920,8 @@ def _execute_initial_meld(
                 baseline_descendants=request.right_descendants,
                 granted_incoming=granted_incoming,
                 granted_target=granted_target,
+                incoming_memory_selector=request.incoming_memory,
+                baseline_memory_selector=request.baseline_memory,
             )
             if comparison is None
             else MeldSession.create_directional_from_comparison(

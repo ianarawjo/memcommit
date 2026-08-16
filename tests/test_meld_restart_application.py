@@ -49,6 +49,19 @@ def test_restart_requires_an_opaque_saved_version():
         )
 
 
+def test_restart_rejects_memory_focus_with_recursive_baseline():
+    with pytest.raises(MeldRestartError, match="BASELINE.*descendants"):
+        MeldRestartRequest(
+            mode="DIRECTIONAL",
+            left_name="incoming",
+            right_name="baseline",
+            target_name="baseline",
+            expected_version="version-1",
+            right_descendants=True,
+            baseline_memory="def456",
+        )
+
+
 def test_run_meld_restart_validates_the_complete_port_result():
     request = MeldRestartRequest(
         mode="DIRECTIONAL",

@@ -104,13 +104,12 @@ def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
     assert frozen.cached_completion == completion
 
 
-def test_directional_restart_reuses_prewarm_and_cas_replaces_without_provider(
+def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_without_provider(
     monkeypatch,
 ):
     incoming = Context(uid="11111111-1111-4111-8111-111111111111", name="incoming")
-    incoming.add(
-        Memory(uid="22222222-2222-4222-8222-222222222222", content="New fact.")
-    )
+    incoming_memory_uid = "22222222-2222-4222-8222-222222222222"
+    incoming.add(Memory(uid=incoming_memory_uid, content="New fact."))
     baseline = Context(uid="33333333-3333-4333-8333-333333333333", name="baseline")
     baseline.add(
         Memory(uid="44444444-4444-4444-8444-444444444444", content="Old fact.")
@@ -209,6 +208,7 @@ def test_directional_restart_reuses_prewarm_and_cas_replaces_without_provider(
             right_name=baseline.name,
             target_name=baseline.name,
             expected_version=version,
+            incoming_memory=incoming_memory_uid[:8],
         ),
         store=store,
         provider_factory=lambda: (_ for _ in ()).throw(
@@ -217,4 +217,5 @@ def test_directional_restart_reuses_prewarm_and_cas_replaces_without_provider(
     )
 
     assert result.origin == "EXACT_PREWARM"
+    assert result.session.frames[0].selected_memory_uid == incoming_memory_uid
     assert store.saved == [(result.session, version)]

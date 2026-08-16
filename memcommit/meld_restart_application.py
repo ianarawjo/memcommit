@@ -7,7 +7,11 @@ from typing import Protocol
 
 from memcommit.comparison import ComparisonAnalysis
 from memcommit.meld import MeldSession
-from memcommit.meld_start_application import MeldStartMode, MeldStartOrigin
+from memcommit.meld_start_application import (
+    MeldStartMode,
+    MeldStartOrigin,
+    validate_meld_start_scope,
+)
 
 
 class MeldRestartError(RuntimeError):
@@ -25,6 +29,8 @@ class MeldRestartRequest:
     expected_version: str
     left_descendants: bool = False
     right_descendants: bool = False
+    incoming_memory: str | None = None
+    baseline_memory: str | None = None
     comparison: ComparisonAnalysis | None = None
 
     def __post_init__(self) -> None:
@@ -40,6 +46,15 @@ class MeldRestartRequest:
             bool,
         ):
             raise MeldRestartError("Meld descendant controls must be booleans.")
+        validate_meld_start_scope(
+            mode=self.mode,
+            left_descendants=self.left_descendants,
+            right_descendants=self.right_descendants,
+            incoming_memory=self.incoming_memory,
+            baseline_memory=self.baseline_memory,
+            comparison=self.comparison,
+            error_type=MeldRestartError,
+        )
         if self.left_name == self.right_name:
             raise MeldRestartError("Meld sources must be distinct Contexts.")
         if self.mode == "DIRECTIONAL" and self.target_name != self.right_name:
@@ -86,10 +101,25 @@ def run_meld_restart(
     result = port.restart(request, provider_factory=provider_factory)
     session = result.session
     frame_names = tuple(frame.context_name for frame in session.frames)
+    selected_memories = tuple(
+        getattr(frame, "selected_memory_uid", None) for frame in session.frames
+    )
+    requested_memories = (request.incoming_memory, request.baseline_memory)
+    memory_scope_matches = all(
+        (selected is None if requested is None else (
+            isinstance(selected, str) and selected.startswith(requested)
+        ))
+        for selected, requested in zip(
+            selected_memories,
+            requested_memories,
+            strict=True,
+        )
+    )
     if (
         session.mode != request.mode
         or frame_names != (request.left_name, request.right_name)
         or session.target.context_name != request.target_name
+        or not memory_scope_matches
         or session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
     ):
         raise MeldRestartError("Meld restart returned a session outside its request.")

@@ -48,6 +48,50 @@ def test_start_request_enforces_directional_baseline_target():
         )
 
 
+def test_start_request_rejects_memory_focus_outside_exact_directional_scope():
+    with pytest.raises(MeldStartError, match="Only directional"):
+        MeldStartRequest(
+            mode="SYMMETRIC",
+            left_name="left",
+            right_name="right",
+            target_name="result",
+            incoming_memory="abc123",
+        )
+
+    with pytest.raises(MeldStartError, match="INCOMING.*descendants"):
+        MeldStartRequest(
+            mode="DIRECTIONAL",
+            left_name="incoming",
+            right_name="baseline",
+            target_name="baseline",
+            left_descendants=True,
+            incoming_memory="abc123",
+        )
+
+
+def test_run_meld_start_rejects_a_port_that_drops_memory_focus():
+    request = MeldStartRequest(
+        mode="DIRECTIONAL",
+        left_name="incoming",
+        right_name="baseline",
+        target_name="baseline",
+        incoming_memory="abc123",
+    )
+
+    with pytest.raises(MeldStartError, match="outside"):
+        run_meld_start(
+            request,
+            port=_Port(
+                MeldStartResult(
+                    session=_session(),
+                    origin="PROVIDER",
+                    created_target=False,
+                )
+            ),
+            provider_factory=object(),
+        )
+
+
 def test_run_meld_start_validates_the_complete_port_result():
     request = MeldStartRequest(
         mode="DIRECTIONAL",
