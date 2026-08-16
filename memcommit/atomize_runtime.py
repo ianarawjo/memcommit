@@ -737,11 +737,16 @@ class MemoryStoreAtomizeSaveAsOutputPort:
                 separators=(",", ":"),
             ).encode("utf-8")
         ).hexdigest()
+        analysis_evidence_digest = getattr(
+            snapshot.analysis,
+            "evidence_digest",
+            None,
+        )
         if (
             save_as.get("source_frame_digest") != expected_frame_digest
             or expected_frame_digest
             != (
-                snapshot.analysis.evidence_digest
+                analysis_evidence_digest
                 or snapshot.analysis.context_digest
             )
         ):
@@ -794,11 +799,16 @@ class MemoryStoreAtomizeSaveAsOutputPort:
     ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization]:
         source = self.store.load_for_update(snapshot.analysis.context_name)
         source_digest = context_record_digest(source)
+        analysis_evidence_digest = getattr(
+            snapshot.analysis,
+            "evidence_digest",
+            None,
+        )
         if (
             source.uid != snapshot.analysis.context_uid
             or direct_context_digest(source)
             != (
-                snapshot.analysis.evidence_digest
+                analysis_evidence_digest
                 or snapshot.analysis.context_digest
             )
         ):
@@ -806,21 +816,22 @@ class MemoryStoreAtomizeSaveAsOutputPort:
                 "The Atomize Source changed before Save As. Reopen the review."
             )
         output = ops.branch(source, destination_name)
-        output_analysis = replace(
-            snapshot.analysis,
-            context_uid=output.uid,
-            context_name=output.name,
-            context_digest=(
+        output_fields: dict[str, object] = {
+            "context_uid": output.uid,
+            "context_name": output.name,
+            "context_digest": (
                 snapshot.analysis.context_digest
-                if snapshot.analysis.evidence_digest is not None
+                if analysis_evidence_digest is not None
                 else direct_context_digest(output)
             ),
-            evidence_digest=(
+        }
+        if hasattr(snapshot.analysis, "evidence_digest"):
+            output_fields["evidence_digest"] = (
                 direct_context_digest(output)
-                if snapshot.analysis.evidence_digest is not None
+                if analysis_evidence_digest is not None
                 else None
-            ),
-        )
+            )
+        output_analysis = replace(snapshot.analysis, **output_fields)
         # Structural application completes in memory. Until the final Context
         # write below, only a hidden derived analysis may exist.
         result = apply_atomize_analysis(output, output_analysis)
