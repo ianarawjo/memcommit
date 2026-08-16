@@ -1,0 +1,20 @@
+[1m                                                                                                                                                                                    [0m
+[1m [0m[1;33mUsage: [0m[1mmem profile [OPTIONS] COMMAND|PROFILE[0m[1m                                                                                                                                      [0m[1m [0m
+[1m                                                                                                                                                                                    [0m
+ Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.                                                                                             
+                                                                                                                                                                                    
+[2m╭─[0m[2m Options [0m[2m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m[2m─╮[0m
+[2m│[0m [1;36m-[0m[1;36m-help[0m          Show this message and exit.                                                                                                                                      [2m│[0m
+[2m╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+[2m╭─[0m[2m Commands [0m[2m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m[2m─╮[0m
+[2m│[0m [1;36mlist         [0m[1;36m [0m List locally registered whole-store profiles.                                                                                                                     [2m│[0m
+[2m│[0m [1;36mcurrent      [0m[1;36m [0m Show the selected profile and its current Context.                                                                                                                [2m│[0m
+[2m│[0m [1;36muse          [0m[1;36m [0m Select the complete store used by the next mem invocation.                                                                                                        [2m│[0m
+[2m│[0m [1;36mrename       [0m[1;36m [0m Rename one managed Profile without moving or rewriting its store.                                                                                                 [2m│[0m
+[2m│[0m [1;36mimport       [0m[1;36m [0m Copy one complete store into a new editable managed profile.                                                                                                      [2m│[0m
+[2m│[0m [1;36mimport-study [0m[1;36m [0m Bootstrap one editable Profile containing the complete Study baseline.                                                                                            [2m│[0m
+[2m│[0m [1;36mrefresh-study[0m[1;36m [0m Refresh the editable Study baseline from validated fixture packages.                                                                                              [2m│[0m
+[2m│[0m [1;36marchive-study[0m[1;36m [0m Detach a legacy split Study while preserving all of its store data.                                                                                               [2m│[0m
+[2m│[0m [1;36mgrant        [0m[1;36m [0m Grant, inspect, revise, or revoke cross-Profile Context views.                                                                                                    [2m│[0m
+[2m╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+

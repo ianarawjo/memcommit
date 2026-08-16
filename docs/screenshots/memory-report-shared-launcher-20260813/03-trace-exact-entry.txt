@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab Memories  q cancel
+ RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab items  q cancel

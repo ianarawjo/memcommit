@@ -1,0 +1,1 @@
+Branched 'task-2/participant/proposal-workspace' → 'task-2/participant/proposal-workspace/branch' and switched to it.

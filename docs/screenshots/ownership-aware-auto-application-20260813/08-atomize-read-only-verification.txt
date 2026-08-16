@@ -1,0 +1,6 @@
+52 180                                                                                                                                                                              
+READ-ONLY ATOMIZE VERIFICATION                                                                                                                                                      
+MEMORY · Use the same NFC for access.                                                                                                                                               
+APPLICATION OUTPUT · study/ownership-auto/atomize-target                                                                                                                            
+APPLICATION CHECKPOINT · 8d4b9c42                                                                                                                                                   
+ATOMIZE CHECKPOINTS · 1

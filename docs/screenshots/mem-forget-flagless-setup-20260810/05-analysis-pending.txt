@@ -13,7 +13,7 @@
 │  …                                                                                                                                                                               │
 │                                                                                                                                                                                  │
 │The completed report will replace these markers after analysis.                                                                                                                   │
-│C shows the exact frozen inputs; H opens Help.                                                                                                                                    │
+│C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C inputs/report · H / ? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q request close · read-only                                                                                
+ C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                       

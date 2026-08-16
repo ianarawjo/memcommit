@@ -1,0 +1,53 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Delete or Remove · SELECT A CONTEXT OR DIRECT ITEM[0m
+[0m Roots · practice · task-1 · task-2 · task-3[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    ▸ practice[165C[0;1m^[0m
+[0m    ▸ task-1[167C[0;48;5;238m [0m
+[0m    ▸ task-2[167C[0;48;5;238m [0m
+[0m    ▾ task-3[167C[0;48;5;238m [0m
+[0m      ▾ task-3/description[153C[0;48;5;238m [0m
+[0;38;5;189m    · [memory 77ea44c9] Imagine that the government provides a new AI healthcare agent capable of supporting most stages of the healthcare process. To provide more useful[9C[0;48;5;238m [0m
+[0;38;5;189m                        assistance, the agent requests access to the personal memory previously used by your local agent. This memory contains past conversations with other[7C[0;48;5;238m [0m
+[0;38;5;189m                        agents as well as information about nearly every area of your life. You must decide which information to provide and which information to exclude, and[5C[0;48;5;238m [0m
+[0;38;5;189m                        then transfer only the selected information.[111C[0;48;5;238m [0m
+[0m      ▾ task-3/local[159C[0;48;5;238m [0m
+[0;38;5;255m    · [context 10c1e5b1] VIA EMBED · task-3/local/guardrails[119C[0;48;5;238m [0m
+[0;38;5;255m    · [context 33ffd77c] VIA EMBED · task-3/local/personal-memory[114C[0;48;5;238m [0m
+[0m        ▸ task-3/local/guardrails[146C[0;48;5;238m [0m
+[0;38;5;255m      · [context 900828d4] VIA EMBED · task-3/local/guardrails/purpose-and-scope[99C[0;48;5;238m [0m
+[0;38;5;255m      · [context 755575aa] VIA EMBED · task-3/local/guardrails/privacy-and-others[98C[0;48;5;238m [0m
+[0;38;5;255m      · [context 136dface] VIA EMBED · task-3/local/guardrails/evidence-and-uncertainty[92C[0;48;5;238m [0m
+[0;38;5;255m      · [context 37cd6139] VIA EMBED · task-3/local/guardrails/approval-and-delivery[95C[0;48;5;238m [0m
+[0;38;5;255m      · [context 9fd65004] VIA EMBED · task-3/local/guardrails/retention-and-revocation[92C[0;48;5;238m [0m
+[0;38;5;255m      · [context cfdffebb] VIA EMBED · task-3/local/guardrails/recipient-and-authority[93C[0;48;5;238m [0m
+[0;38;5;255m      · [context d0f950bf] VIA EMBED · task-3/local/guardrails/minimization-and-redaction[90C[0;48;5;238m [0m
+[0;38;5;255m      · [context 34f4d62a] VIA EMBED · task-3/local/guardrails/channel-and-format[98C[0;48;5;238m [0m
+[0;38;5;255m      · [context 62523a5e] VIA EMBED · task-3/local/guardrails/downstream-use[102C[0;48;5;238m [0m
+[0;38;5;255m      · [context 731a18ea] VIA EMBED · task-3/local/guardrails/audit-and-recovery[98C[0;48;5;238m [0m
+[0;1;7m› *     ▾ task-3/local/personal-memory[141C[0;48;5;238m [0m
+[0;38;5;255m      · [context f60cba75] VIA EMBED · task-3/local/personal-memory/2024[107C[0;48;5;238m [0m
+[0;38;5;255m      · [context dbe52d14] VIA EMBED · task-3/local/personal-memory/2025[107C[0;48;5;238m [0m
+[0;38;5;255m      · [context 03415050] VIA EMBED · task-3/local/personal-memory/2026[107C[0;48;5;238m [0m
+[0m          ▸ task-3/local/personal-memory/2024[134C[0;48;5;238m [0m
+[0;38;5;255m        · [context cbd2e4d6] VIA EMBED · task-3/local/personal-memory/2024/01[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 7bedad96] VIA EMBED · task-3/local/personal-memory/2024/02[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 97c5905c] VIA EMBED · task-3/local/personal-memory/2024/03[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 206e1cd3] VIA EMBED · task-3/local/personal-memory/2024/04[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 683986e6] VIA EMBED · task-3/local/personal-memory/2024/05[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 8c641e5b] VIA EMBED · task-3/local/personal-memory/2024/06[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 8747b4f6] VIA EMBED · task-3/local/personal-memory/2024/07[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 8764c16b] VIA EMBED · task-3/local/personal-memory/2024/08[102C[0;48;5;238m [0m
+[0;38;5;255m        · [context 497036ef] VIA EMBED · task-3/local/personal-memory/2024/09[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 7c55b789] VIA EMBED · task-3/local/personal-memory/2024/10[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 0d5e1eef] VIA EMBED · task-3/local/personal-memory/2024/11[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 66c3e5de] VIA EMBED · task-3/local/personal-memory/2024/12[102C[0;48;5;248m [0m
+[0m          ▸ task-3/local/personal-memory/2025[134C[0;48;5;248m [0m
+[0;38;5;255m        · [context 2ce7ce06] VIA EMBED · task-3/local/personal-memory/2025/01[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context ce7367b8] VIA EMBED · task-3/local/personal-memory/2025/02[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 913e0bfd] VIA EMBED · task-3/local/personal-memory/2025/03[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 720d2021] VIA EMBED · task-3/local/personal-memory/2025/04[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 1f913bb6] VIA EMBED · task-3/local/personal-memory/2025/05[102C[0;48;5;248m [0m
+[0;38;5;255m        · [context 870f7336] VIA EMBED · task-3/local/personal-memory/2025/06[0m                                                                                                      [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m hide items here  M hide all items  y copy Context  Y copy visible branch  Enter delete  q cancel · 21/57 · 67 selectable[157D[25A[0m

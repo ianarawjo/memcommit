@@ -1,0 +1,7 @@
+[1mContext: task-3/local/results/additive-final[0m
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory a3bef2e1] [2mThe user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m
+  [memory a4356922] [2mConfirm the date, time, address, and floor with the user before adding a follow-up visit to the calendar.[0m
+  [memory b6b89c6c] [2mBecause the user’s availability varies by week, confirm it separately for each appointment rather than relying on prior availability.[0m

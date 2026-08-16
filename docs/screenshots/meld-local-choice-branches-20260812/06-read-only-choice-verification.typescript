@@ -1,0 +1,20 @@
+52 180
+MELD LOCAL CHOICE BRANCHES · READ-ONLY
+SESSION · 229674e4-8cd0-4852-a0a5-bc8a65d440cd
+ASSESSMENT · fd4eb1b6fddfc0f099ef731df29b51717fa5fc94e62b2af773e061cb3467fbe7
+SAVED CHOICES · 1
+{
+  "kind": "MELD_CHOICE_BRANCH_SET",
+  "schema_version": 1,
+  "session_uid": "229674e4-8cd0-4852-a0a5-bc8a65d440cd",
+  "target_context_uid": "6e68f0eb-1d36-42d8-a760-4ca1817d2e55",
+  "assessment_digest": "fd4eb1b6fddfc0f099ef731df29b51717fa5fc94e62b2af773e061cb3467fbe7",
+  "branches": [
+    {
+      "issue_uid": "c114d278-7b91-53cd-ac6f-391279ccd887",
+      "option_uid": "b0865d33-2aca-527b-b089-d13db5d7bb48",
+      "explanation": ""
+    }
+  ]
+}
+PROVIDER CALLS · 0

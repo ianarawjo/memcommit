@@ -1,0 +1,1443 @@
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM FIND · INTERACTIVE · AUTO FROM QUERY[0m
+[0m ROOTS 1 · CONTEXTS 34 · INCLUDE DESCENDANTS · FOLLOW EMBEDS[0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SEARCH · ENTER TO RUN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m›                                                                                                                                                                                 [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────| TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT |─────────────────┐ [0m┌──────────────────────────────────| SCOPE |──────────────────────────────────[179C┐[0m
+[0m│  ·       · task-3/local/candidates/accessibility-communication                                  [0;1m^[0m│ [0m│  TARGET SELECTION · [ SINGLE TARGET ]  [0;38;2;16;36;47;48;2;139;213;255m[ MULTIPLE TARGETS ][0m · ←/→ SELECT    [179C│[0m
+[0m│  ·       ▸ task-3/local/guardrails                                                              [0;48;2;68;68;68m [0m│ [0m│  CONTEXT RANGE · [ THIS CONTEXT ONLY ]  [0;38;2;16;36;47;48;2;139;213;255m[ INCLUDE DESCENDANTS ][0m · ←/→ SELECT[179C│[0m
+[0m│› ✓ *     ▸ [0;38;2;16;36;47;48;2;139;213;255mtask-3/local/personal-memory[0m                                                         [0;1mv[0m│ [0m│  EMBEDDED CONTEXTS · [ EXCLUDE ]  [0;38;2;16;36;47;48;2;139;213;255m[ FOLLOW ][0m · ←/→ SELECT                   [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────┘ └─────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────| RESULTS |────────────────────────────────────────┐ [0m┌──────────────────────────────────| MATERIALIZE |───────────────────────────────────[179C┐[0m
+[0m│Enter a query to search the selected scope.                                               [0;1m^[0m│ [0m│  MATERIALIZE AS · [0;38;2;16;36;47;48;2;139;213;255m[ COPY ][0m  [ REFERENCE ] · ←/→ SELECT                             [179C│[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m│                                                                                    [179C│[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m└────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m┌────────────────────| PARENT CONTEXT · ENTER SELECTS LOCATION |─────────────────────[179C┐[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m│› ✓ *     ▸ [0;38;2;16;36;47;48;2;139;213;255mtask-3/local/personal-memory[0m                                           [0;1m^[179C[0m│[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m└────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m┌──────────────────────────| SAVE LOCATION · NEW CONTEXT |───────────────────────────[179C┐[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m│› task-3/local/personal-memory/results/find                                         [179C│[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m└────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m│                                                                                          [0;48;2;68;68;68m [0m│ [0m┌────────────────────────────| TO DO · ENTER TO CREATE |─────────────────────────────[179C┐[0m
+[0m│                                                                                          [0;1mv[0m│ [0m│  CREATE 0 CHECKED AS COPY                                                          [179C│[0m
+[0m└───────────────────────────────────────────────────────────────────────────────────────────┘ └────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m READY · ENTER A QUERY · Enter search · Tab/Shift-Tab panes · Esc/Ctrl-C close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [48A[3C[0m[?12l[?25h[?25l[A[3D[0m┌────────────────────────────────────────────────────────────────────────────| SEARCH · ENTER TO RUN |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│inders, preparation, language, preferred contact channel, or support logistics, excluding actual phone numbers, addresses, dates, medication details, and third-party information [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+
+
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESULTS · SEARCHING . ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;2;139;213;255;1m┃[0mEnter a query to search the selected scope.                                               [0;1m^[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                          [0;1mv[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m
+[C[0mS[2CRCHING . ·[Cscope froze[C · Ctrl-C closes after search[0m[K[12A[55D[0m[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[A[32C[0;38;2;139;213;255;1m━┃ RESULTS · SEARCHING …[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m… · scope frozen · Ctrl-C closes after search[0m[K[12A[55D[0m[A[55C[0;38;2;139;213;255;1m.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[11C[0m.[12A[11D[0m[A[32C[0;38;2;139;213;255;1m┃ RESULTS · SEARCHING .[0m
+
+
+
+
+
+
+
+
+
+
+
+
+[12C[0m. · scope frozen · Ctrl-C closes after search[12A[56D[0m[11A[25C[0mC[CRRENT[0m[K[0m
+
+
+
+
+
+
+
+
+
+[33C[0;38;2;139;213;255;1m━━━━━━━━━━━━━━━━━━┃ RESULTS ┃[30C━━━━━━━━━━━━━━━━━━━━━┓[0m [0m┌[13C───────────| MATERIALIZE |[0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  1. task-3/local/personal-memory/2025/02 · [memory f9197c33][29C[0m                     [0;1m^[0;38;2;139;213;255;1m┃[0m [0m│  MATERIALIZE AS · [0;38;2;16;36;47;48;2;139;213;255m[ COPY ][C[0m [ REFERENCE ] · ←/→ SELECT[0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  The user feels that a reminder the day before an appointment gives them enough[10C[0m                     [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m [0m│[0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  time to recheck preparation items.[54C[0m                     [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m [0m└[0m
+[91C[0m                     [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m [0m┌──────────| PARENT CONTEXT · ENTER SELECTS LOCATION |[0m
+[C[0m  2. task-3/local/personal-memory/2024/04 · [memory e265e637][29C                     [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m [0m│› ✓ *     ▸ [0;38;2;16;36;47;48;2;139;213;255mtask-3/local/personal-memory[0m
+[C[0m  Before adding a follow-up visit to the calendar, confirm the date, time, address,[7C                     [0;48;2;68;68;68m [0;38;2;139;213;255;1m┃[0m [0m└[0m
+[C[0m  and floor with the user.[64C                     [0;48;2;170;170;170m [0;38;2;139;213;255;1m┃[0m [0m┌[5C───────────| SAVE[CLOCATION · NEW CONTEXT |[0m
+[91C[0m                     [0;48;2;170;170;170m [0;38;2;139;213;255;1m┃[0m [0m│emory/result[C/s[Cable-current-healthcare-coordination-preferenc [0m
+[C[0m  3. task-3/local/personal-memory/2024/09 · [memory 84b4519d][29C                     [0;48;2;170;170;170m [0;38;2;139;213;255;1m┃[0m [0m└[0m
+[C[0m  The user's available days and times vary by week, making it difficult to apply[10C                     [0;48;2;170;170;170m [0;38;2;139;213;255;1m┃[0m [0m┌[7C───────────| TO[CD[2C· [CN[2CR TO CREATE |[0m
+[C[0m  last month's free time directly to the next appointment.[32C                     [0;1mv[0;38;2;139;213;255;1m┃[0m [0m│[C CREATE 0 CHECKED AS COPY[0m
+[92C[0;38;2;139;213;255;1m━━━━━━━━━━━━━━━━━━━━━┛[0m └[0m
+[C[0mCUR[CENT ·[C5 RESULT(S) · SCOPE[CFROZEN[C· ↑/↓ move/cross · Enter activate/check · ←/→ adjust · / search · Esc back · Q close[23A[122D[0m[0m
+
+
+
+
+
+
+
+
+
+
+[C[0m  Before adding a follow-up visit to the calendar, confirm the date, time, address,[0m
+[C[0m  and floor with the user.                                                      [31C[0;48;2;170;170;170m [0m
+[C[0m                                    [75C[0;48;2;170;170;170m [0m
+[C[0m  3. task-3/local/personal-memory/2024/09 · [memory 84b4519d][0m
+[3C[0mThe u[Cer's av[Cilable d[Cys and times vary by week,[Cmaking it difficult to apply[0m
+[3C[0mlast month's free time directly[8Cnext appointment.                         [28C[0;48;2;68;68;68m [0m
+[C[0m                          [85C[0;48;2;68;68;68m [0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  4. task-3/local/personal-memory/2025/02 · [memory 51d03bff][50C[0;48;2;68;68;68m [0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  After changing the same content into a checklist, the user marked every item they[0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  had prepared.[0m                                                                 [0m
+[C[0m                                                          [21A[59D[0m[0m
+
+
+
+
+
+
+
+
+
+
+[3C[0mThe user's availab[Ce days[Cand [Cimes vary by week, mak[Cng[Cit difficult to[2Cpply   [0m
+[3C[0mlast m[Cnth's free tim[C directly to the next appointment.[0m
+[112C[0;48;2;170;170;170m [0m
+[3C[0m4[34C5[2C2[11C51d03bff[51C[0;48;2;170;170;170m [0m
+[3C[0mAfter changing the same conten[C into [C checklist[2Cthe user marked every item they[28C[0;48;2;170;170;170m [0m
+[3C[0mh[Cd prepared.                                           [0m
+
+[3C[0;38;2;16;36;47;48;2;139;213;255;1m5[34C4[2C4[11Ccd0bce79[51C[0;48;2;68;68;68m [0m
+[4C[0;38;2;16;36;47;48;2;139;213;255;1mt the next visit,[Cwhen[Cquestions were[Casked one a[C a[Ctime, the us[Cr answered each[27C[0;48;2;68;68;68m [0m
+[3C[0;38;2;16;36;47;48;2;139;213;255;1mwithout omission.[92C[0;48;2;68;68;68m [20A[113D[0m[0m
+
+
+
+
+
+
+
+
+
+
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  The user's available days and times vary by week, making it difficult to apply[0m
+[C[0;38;2;16;36;47;48;2;139;213;255;1m  last month's free time directly to the next appointment.[0m
+
+[C[0;38;2;16;36;47;48;2;139;213;255m✓ 4. task-3/local/personal-memory/2025/02 · [memory 51d03bff][0m
+[C[0;38;2;16;36;47;48;2;139;213;255m  After changing the same content into a checklist, the user marked every item they[0m
+[C[0;38;2;16;36;47;48;2;139;213;255m  had prepared.[0m
+
+[C[0m  5. task-3/local/personal-memory/2024/04 · [memory cd0bce79][0m
+[C[0m  At the next visit, when questions were asked one at a time, the user answered each[0m
+[C[0m  without omission.[0m
+[125C[0m2[0m
+
+[2C[0mHECKED[CRESULT 3 · 2 TOTAL · ↑/↓ move/cross · Enter activa[2C/check · ←[C→ adjust · / search · E[Cc back · Q close[0m[K[23A[112D[0m[0m
+
+
+
+
+
+
+
+
+
+[0m┌──────────────────────────────────────────────────| RESULTS |───────────────────────────────────────────────────┐[0m
+[0m│  1. task-3/local/personal-memory/2025/02 · [memory f9197c33]                                                  [0;1m^[0m│[C│  MATERIALIZE AS · [0;38;2;16;36;47;48;2;139;213;255m[ COPY ][0m  [ REFERENCE ] · ←/→ SELECT        [179C│[0m
+[0m│  The user feels that a reminder the day before an appointment gives them enough                               [0;48;2;68;68;68m [0m│[C└───────────────────────────────────────────────────────────────[179C┘[0m
+[0m│  time to recheck preparation items.                                                                           [0;48;2;68;68;68m [0m│[0m[K[0m
+[0m│                                                                                                               [0;48;2;68;68;68m [0m│[0m
+[0m│  2. task-3/local/personal-memory/2024/04 · [memory e265e637]                                                  [0;48;2;68;68;68m [0m│[0m
+[0m│  Before adding a follow-up visit to the calendar, confirm the date, time, address,                            [0;48;2;68;68;68m [0m│[0m
+[0m│  and floor with the user.                                                                                     [0;48;2;170;170;170m [0m│[0m
+[0m│                                                                                                               [0;48;2;170;170;170m [0m│[2C/c[Cordination-preparation                                      [0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ 3. task-3/local/personal-memory/2024/09 · [memory 84b4519d][0m                                                  [0;48;2;170;170;170m [0m│[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m  The user's available days and times vary by week, making it difficult to apply[0m                               [0;48;2;170;170;170m [0m│[C[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━┃ TO DO · ENTER TO CREATE ┃━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m  last month's free time directly to the next appointment.[0m                                                     [0;1mv[0m│[C[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m> CREATE 2 CHECKED AS COPY[0m                                     [179C[0;38;2;139;213;255;1m┃[0m
+[0m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[C[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[A[116C[0m[116D[21A[J[0m[?7h[?1049l[?2004l[?12l[?25h[32mMaterialized 2 checked Find result(s) as COPY in new Context 'task-3/local/candidates/coordination-preparation' [bd217c6c]; sources unchanged.[0m

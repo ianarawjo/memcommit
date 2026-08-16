@@ -50,7 +50,7 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab Memories  q cancel[97D[48A[C[0m[?25l[2C[0m[ THIS CONTEXT ONLY ][2C[0;38;5;234;48;5;117;1m[ INCLUDE DESCENDANTS ][0m
+[0m RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab items  q cancel[94D[48A[C[0m[?25l[2C[0m[ THIS CONTEXT ONLY ][2C[0;38;5;234;48;5;117;1m[ INCLUDE DESCENDANTS ][0m
 
 
 
@@ -145,7 +145,7 @@ PTY 180 52
 [0;38;5;117;1m┃[0;38;5;189m      · [99c29cea][r0] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.[0m                                [0;48;5;248m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;189m      · [26131bc5][r0] Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.[0m                                       [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0m↑↓ move[C ←→ expand  A restore tree  m hide Memories[Cher[C  M hide all Memories[C Enter open[Cli[Ceage  q close · 4/83 · 8 selectable[42A[128D[0m[9A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · MEMORY [8b077f2a] · task-1/participant/construction-updates/building-access[0m
+[C[0m↑↓ move[C ←→ expand  A restore tree  m hide items here  M hide all items[C y/Y copy item[C E[Ct[Cr open lineage  q close · 4/83 · 8 selectable[42A[137D[0m[9A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · MEMORY [8b077f2a] · task-1/participant/construction-updates/building-access[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ UID          0                                                                                                                                                                  [0;1m^[179C[0m│[0m
 [0m│ Time         (current)                                                                                                                                                          [0;48;5;238m [179C[0m│[0m

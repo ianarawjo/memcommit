@@ -15,7 +15,7 @@
  ›  1. [BOUNDARY] AMBIGUITY · DOMINANT / REQUIRED
        The day scope is omitted.
 
-Analysis [28fb53cb] · INPUT atomize/apply-boundary → OUTPUT atomize/apply-boundary · ORDER: SOURCE · 0/2 answered
+Analysis [5eead25f] · INPUT atomize/apply-boundary → OUTPUT atomize/apply-boundary · ORDER: SOURCE · 0/2 answered
 
 ACTIONABLE ISSUES
 ›  1. · AMBIGUITY · INTERPRETATION · DOMINANT
@@ -27,7 +27,7 @@ CLARIFICATION · REQUIRED  “The library entrance closes at five.”
 
 AMBIGUITY 1/2
 
-SOURCE [c12933d3]
+SOURCE [7b845e35]
 The library entrance closes at five.
 
 CLASSIFICATION
@@ -50,7 +50,7 @@ REFINE, COMMENT, OR ENTER A DIFFERENT READING
 > 
 
 ALL ATOMIZE RESULTS
-  1. UNCERTAIN [c12933d3] The library entrance closes at five.
+  1. UNCERTAIN [7b845e35] The library entrance closes at five.
 
 SOURCE means canonical Context order; Memory creation timestamps are not recorded.
 No Memory changes have been applied. No checkpoint was created.

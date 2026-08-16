@@ -1,0 +1,10 @@
+[1mContext: task-3/local/criteria/additive-minimum[0m
+  Memories 6  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 0b4adf1a] [2mKeep only information that independently states a stable accessibility, communication, scheduling, preparation, or safety preference useful across healthcare interactions.[0m
+  [memory cce5184f] [2mExclude names, contact values, addresses, credentials, financial details, third-party circumstances, and private event causes.[0m
+  [memory 0e146ea6] [2mTreat medication, availability, appointments, contact details, locations, and functional status as stale unless the Memory itself states a stable preference rather than a current fact.[0m
+  [memory 2f14e5b1] [2mPrefer the smallest preference or policy summary over a historical event; preserve uncertainty and do not invent current status.[0m
+  [memory e01cdefe] [2mBecause no exact healthcare service or minimum category list is confirmed, exclude any item whose necessity is only possible rather than independently supported.[0m
+  [memory ded70947] [2mThe initial recipient is a government healthcare institution; downstream recipients, retention, deletion, and precise use remain unconfirmed.[0m

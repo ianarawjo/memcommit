@@ -6,8 +6,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃  * ▾ notes                                                                                                                                                                      ^┃
 ┃›     ▾ notes/child                                                                                                                                                               ┃
-┃    · [b86d94c7][r3] Final wording used by both reports                                                                                                                           ┃
-┃    › [historical][77a85fff][r2] Retained historical wording                                                                                                                      ┃
+┃    · [d9f8836c][r3] Final wording used by both reports                                                                                                                           ┃
+┃    › [historical][2910838e][r2] Retained historical wording                                                                                                                      ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -49,4 +49,4 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- ↑↓ move  ←→ expand  A restore tree  m hide Memories here  M hide all Memories  Enter open rationale  q close · 4/4 · 2 selectable
+ ↑↓ move  ←→ expand  A restore tree  m hide items here  M hide all items  y/Y copy item  Enter open rationale  q close · 4/4 · 2 selectable

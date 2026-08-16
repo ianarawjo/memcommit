@@ -1,0 +1,52 @@
+ MEM SEVER · 1/1 · ANALYZING . · 0s                                                                                                                                                 
+┌───────────────────────────────────────────────────────────────────────────| SEVER REPORT · BUILDING |────────────────────────────────────────────────────────────────────────────┐
+│MEM SEVER · REPORT BUILDING                                                                                                                                                      ^│
+│CONTENT PENDING · THIS IS NOT A RESULT                                                                                                                                            │
+│                                                                                                                                                                                  │
+│WHAT MEM UNDERSTOOD                                                                                                                                                               │
+│  .                                                                                                                                                                               │
+│                                                                                                                                                                                  │
+│REVIEW DECISIONS                                                                                                                                                                  │
+│  ..                                                                                                                                                                              │
+│                                                                                                                                                                                  │
+│TO DO                                                                                                                                                                             │
+│  …                                                                                                                                                                               │
+│                                                                                                                                                                                  │
+│The completed report will replace these markers after analysis.                                                                                                                   │
+│C/c opens Contexts; R/r returns here; H/h/? opens Help.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c Contexts · R/r report · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                                                 

@@ -1,0 +1,13 @@
+[1mProfile: study-alt-20260810-t3-find-additive[0m
+Context lineage: task-3 > local > personal-memory
+[1mOn context: task-3/local/personal-memory[0m
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 3  |  Checkpoints 0
+[1m
+VIA EMBED Contexts:[0m
+  [f60cba75] task-3/local/personal-memory/2024
+  [dbe52d14] task-3/local/personal-memory/2025
+  [03415050] task-3/local/personal-memory/2026
+
+  (no memories yet)
+
+  (no checkpoints yet)

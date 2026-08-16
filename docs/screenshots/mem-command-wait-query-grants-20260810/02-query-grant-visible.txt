@@ -1,0 +1,52 @@
+ MEM SEVER · 1/1 · ANALYZING . · 0s                                                                                                                                                 
+┌──────────────────────────────────────────────────────────────| CONTEXTS · SWITCH BROWSER · READ-ONLY · * CURRENT |───────────────────────────────────────────────────────────────┐
+│ Roots · capture/local · public/query-guidance · public/readable-guidance                                                                                                        ^│
+│                                                                                                                                                                                  │
+│  * ▸ capture/local                                                                                                                                                               │
+│›   · public/query-guidance  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · UNAVAILABLE                                                                                   │
+│    ▸ public/readable-guidance  READ GRANT · PERMISSIONS READ + DERIVE                                                                                                            │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c back · R/r report · ↑/↓ move · ←/→ expand · Enter browse · A/a all · m Memories here · M all Memories · Q/q close · read-only                                                  

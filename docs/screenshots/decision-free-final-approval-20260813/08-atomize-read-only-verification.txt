@@ -1,6 +1,0 @@
-52 180                                                                                                                                                                              
-READ-ONLY ATOMIZE VERIFICATION                                                                                                                                                      
-MEMORY · Use the same NFC for access.                                                                                                                                               
-APPLICATION OUTPUT · study/direct-final/atomize-target                                                                                                                              
-APPLICATION CHECKPOINT · dbd4fb5b                                                                                                                                                   
-ATOMIZE CHECKPOINTS · 1

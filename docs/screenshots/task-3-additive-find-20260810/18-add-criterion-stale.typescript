@@ -1,0 +1,1 @@
+[32mAdded [0e146ea6] Treat medication, availability, appointments, contact details, locations, and functional status as stale unless the Memory itself states a stable preference rather than a current fact.[0m

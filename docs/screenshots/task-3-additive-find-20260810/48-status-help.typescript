@@ -1,0 +1,11 @@
+[1m                                                                                                                                                                                    [0m
+[1m [0m[1;33mUsage: [0m[1mmem status [OPTIONS][0m[1m                                                                                                                                                       [0m[1m [0m
+[1m                                                                                                                                                                                    [0m
+ Show current Context counts, recent Memories, and checkpoints.                                                                                                                     
+                                                                                                                                                                                    
+[2m╭─[0m[2m Options [0m[2m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m[2m─╮[0m
+[2m│[0m [1;36m-[0m[1;36m-short[0m   [1;32m-s[0m        Show the current Context and counts on one line                                                                                                              [2m│[0m
+[2m│[0m [1;36m-[0m[1;36m-branch[0m  [1;32m-b[0m        Include the active Profile and Context lineage                                                                                                               [2m│[0m
+[2m│[0m [1;36m-[0m[1;36m-help[0m              Show this message and exit.                                                                                                                                  [2m│[0m
+[2m╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+

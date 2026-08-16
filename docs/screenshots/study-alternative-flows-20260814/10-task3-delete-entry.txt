@@ -1,0 +1,52 @@
+ Delete or Remove · SELECT A CONTEXT OR DIRECT ITEM                                                                                                                                 
+ Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    ▸ practice                                                                                                                                                                     ^
+    ▸ task-1                                                                                                                                                                        
+    ▸ task-2                                                                                                                                                                        
+    ▾ task-3                                                                                                                                                                        
+      ▾ task-3/description                                                                                                                                                          
+    · [memory 77ea44c9] Imagine that the government provides a new AI healthcare agent capable of supporting most stages of the healthcare process. To provide more useful          
+                        assistance, the agent requests access to the personal memory previously used by your local agent. This memory contains past conversations with other        
+                        agents as well as information about nearly every area of your life. You must decide which information to provide and which information to exclude, and      
+                        then transfer only the selected information.                                                                                                                
+      ▾ task-3/local                                                                                                                                                                
+    · [context 10c1e5b1] VIA EMBED · task-3/local/guardrails                                                                                                                        
+    · [context 33ffd77c] VIA EMBED · task-3/local/personal-memory                                                                                                                   
+        ▸ task-3/local/guardrails                                                                                                                                                   
+      · [context 900828d4] VIA EMBED · task-3/local/guardrails/purpose-and-scope                                                                                                    
+      · [context 755575aa] VIA EMBED · task-3/local/guardrails/privacy-and-others                                                                                                   
+      · [context 136dface] VIA EMBED · task-3/local/guardrails/evidence-and-uncertainty                                                                                             
+      · [context 37cd6139] VIA EMBED · task-3/local/guardrails/approval-and-delivery                                                                                                
+      · [context 9fd65004] VIA EMBED · task-3/local/guardrails/retention-and-revocation                                                                                             
+      · [context cfdffebb] VIA EMBED · task-3/local/guardrails/recipient-and-authority                                                                                              
+      · [context d0f950bf] VIA EMBED · task-3/local/guardrails/minimization-and-redaction                                                                                           
+      · [context 34f4d62a] VIA EMBED · task-3/local/guardrails/channel-and-format                                                                                                   
+      · [context 62523a5e] VIA EMBED · task-3/local/guardrails/downstream-use                                                                                                       
+      · [context 731a18ea] VIA EMBED · task-3/local/guardrails/audit-and-recovery                                                                                                   
+› *     ▾ task-3/local/personal-memory                                                                                                                                              
+      · [context f60cba75] VIA EMBED · task-3/local/personal-memory/2024                                                                                                            
+      · [context dbe52d14] VIA EMBED · task-3/local/personal-memory/2025                                                                                                            
+      · [context 03415050] VIA EMBED · task-3/local/personal-memory/2026                                                                                                            
+          ▸ task-3/local/personal-memory/2024                                                                                                                                       
+        · [context cbd2e4d6] VIA EMBED · task-3/local/personal-memory/2024/01                                                                                                       
+        · [context 7bedad96] VIA EMBED · task-3/local/personal-memory/2024/02                                                                                                       
+        · [context 97c5905c] VIA EMBED · task-3/local/personal-memory/2024/03                                                                                                       
+        · [context 206e1cd3] VIA EMBED · task-3/local/personal-memory/2024/04                                                                                                       
+        · [context 683986e6] VIA EMBED · task-3/local/personal-memory/2024/05                                                                                                       
+        · [context 8c641e5b] VIA EMBED · task-3/local/personal-memory/2024/06                                                                                                       
+        · [context 8747b4f6] VIA EMBED · task-3/local/personal-memory/2024/07                                                                                                       
+        · [context 8764c16b] VIA EMBED · task-3/local/personal-memory/2024/08                                                                                                       
+        · [context 497036ef] VIA EMBED · task-3/local/personal-memory/2024/09                                                                                                       
+        · [context 7c55b789] VIA EMBED · task-3/local/personal-memory/2024/10                                                                                                       
+        · [context 0d5e1eef] VIA EMBED · task-3/local/personal-memory/2024/11                                                                                                       
+        · [context 66c3e5de] VIA EMBED · task-3/local/personal-memory/2024/12                                                                                                       
+          ▸ task-3/local/personal-memory/2025                                                                                                                                       
+        · [context 2ce7ce06] VIA EMBED · task-3/local/personal-memory/2025/01                                                                                                       
+        · [context ce7367b8] VIA EMBED · task-3/local/personal-memory/2025/02                                                                                                       
+        · [context 913e0bfd] VIA EMBED · task-3/local/personal-memory/2025/03                                                                                                       
+        · [context 720d2021] VIA EMBED · task-3/local/personal-memory/2025/04                                                                                                       
+        · [context 1f913bb6] VIA EMBED · task-3/local/personal-memory/2025/05                                                                                                       
+        · [context 870f7336] VIA EMBED · task-3/local/personal-memory/2025/06                                                                                                      v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑↓ move  ←→ expand  A expand all  m hide items here  M hide all items  y copy Context  Y copy visible branch  Enter delete  q cancel · 21/57 · 67 selectable

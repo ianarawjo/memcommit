@@ -1,0 +1,14 @@
+                                                                                                                                                                                    
+SETUP RECEIPT · EXACT MEMORY TARGET                                                                                                                                                 
+  INPUT · study/source                                                                                                                                                              
+  MEMORY UID · f1a4679b-60a4-4756-b17b-8d1dfe09fb91                                                                                                                                 
+  OUTPUT · study/focused-output · NOT CREATED                                                                                                                                       
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
+v                                                                                                                                                                                   
+                                                                                                                                                                                    
+READ-ONLY CONTRACT CHECK                                                                                                                                                            
+  SELECTED UID MATCH · True                                                                                                                                                         
+  SOURCE DIRECT MEMORIES · 2                                                                                                                                                        
+  OUTPUT EXISTS · False                                                                                                                                                             
+  PROVIDER CALLS · 0                                                                                                                                                                
+  CONTEXT CHECKPOINTS · 0

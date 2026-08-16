@@ -6,8 +6,8 @@
 ┌─────────────────────────────────────────────────────────────────────────────| CONTEXTS & MEMORIES |──────────────────────────────────────────────────────────────────────────────┐
 │› * ▾ notes                                                                                                                                                                      ^│
 │      ▾ notes/child                                                                                                                                                               │
-│    · [b86d94c7][r3] Final wording used by both reports                                                                                                                           │
-│    · [historical][77a85fff][r2] Retained historical wording                                                                                                                      │
+│    · [d9f8836c][r3] Final wording used by both reports                                                                                                                           │
+│    · [historical][2910838e][r2] Retained historical wording                                                                                                                      │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab Memories  q cancel
+ RANGE · ← this Context only  → include descendants  Enter/Space toggle  ↓/Tab items  q cancel

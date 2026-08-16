@@ -1,0 +1,194 @@
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Context · semantic clipboard[0m
+[0m Roots · practice · task-1 · task-2 · task-3[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m    ▾ practice[165C[0;1m^[0m
+[0;1;7m› * ▾ task-1[167C[0;48;5;238m [0m
+[0m      ▾ task-1/description[153C[0;48;5;238m [0m
+[0;38;5;189m    · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI[C[0;48;5;238m [0m
+[0;38;5;189m                        agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local[5C[0;48;5;238m [0m
+[0;38;5;189m                        work memory.[143C[0;48;5;238m [0m
+[0m      ▸ task-1/participant[153C[0;48;5;238m [0m
+[0m      ▸ task-1/campus-wiki  [0;38;5;231mREAD GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT[59C[0;48;5;238m [0m
+[0m    ▾ task-2[167C[0;48;5;238m [0m
+[0m    ▾ task-3[167C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable[160D[47A[0m[?25l[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0;38;5;150;1m COPIED · Context task-1[0m  y copy Context [CY c[Cpy visible[Cbranch[C q cancel[0m[K[47A[73D[0m[?25l[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[10C[0;38;5;150;1mvisible[Cbranch task-1 · 4 Contexts · 1 Memory[0m [Cy copy[CContext  Y copy visible branch  q cancel[47A[104D[0m[?25l[0m  * ▾ task-1[0m
+[0m›[0m
+[0;1;7m    · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI[0m
+[0;1;7m                        agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local[0m
+[0;1;7m                        work memory.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here[2CM[Chide[Call Memories  [C/Y copy Memory [CEnter preview only  q cancel · 4/8 · 9 selectable[45A[144D[0m

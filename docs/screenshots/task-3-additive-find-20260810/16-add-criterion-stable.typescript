@@ -1,0 +1,4 @@
+ainty and do not invent current status.'
+script -q docs/screenshots/task-3-additive-find-20260810/20-add-criterion-necessity.typescript env -u NO_COLOR TERM=xterm-256color COLORTERM=truecolor mem add --context task-3/local/criteria/additive-minimum 'Because no exact healthcare service or minimum category list is confirmed, exclude any item whose necessity is only possible rather than independently supported.'
+script -q docs/screenshots/task-3-additive-find-20260810/21-add-criterion-boundary.typescript env -u NO_COLOR TERM=xterm-256color COLORTERM=truecolor mem add --context task-3/local/criteria/additive-minimum 'The initial recipient is a government healthcare institution; downstream recipients, retention, deletion, and precise use remain unconfirmed.'
+[32mAdded [0b4adf1a] Keep only information that independently states a stable accessibility, communication, scheduling, preparation, or safety preference useful across healthcare interactions.[0m

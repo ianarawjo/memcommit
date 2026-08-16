@@ -1,0 +1,52 @@
+Switch cancelled.                                                                                                                                                                   
+SWITCH DIRECT-ITEM VERIFICATION · READ-ONLY                                                                                                                                         
+STORE FILES · 2903                                                                                                                                                                  
+STORE BYTE DIGEST UNCHANGED · YES                                                                                                                                                   
+CURRENT CONTEXT · task-1/description-atomized                                                                                                                                       
+VERIFICATION COMMAND · mem show --context task-1/participant/construction-updates                                                                                                   
+Context: task-1/participant/construction-updates                                                                                                                                    
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 7                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [context 5a66e0ec] task-1/participant/construction-updates/building-access  VIA EMBED                                                                                             
+  [context f95f7748] task-1/participant/construction-updates/event-relocations  VIA EMBED                                                                                           
+  [context b392133c] task-1/participant/construction-updates/temporary-parking  VIA EMBED                                                                                           
+  [context 94dbac4b] task-1/participant/construction-updates/shop-updates  VIA EMBED                                                                                                
+  [context fe3ca57d] task-1/participant/construction-updates/facility-updates  VIA EMBED                                                                                            
+  [context 725d4213] task-1/participant/construction-updates/route-changes  VIA EMBED                                                                                               
+  [context a63350c9] task-1/campus-wiki  READ GRANT                                                                                                                                 
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

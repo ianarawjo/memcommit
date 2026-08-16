@@ -1,14 +1,14 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale for [77a85fff]                                                                                                                                                         ^┃
-┃Context: notes/child [a273be9a]                                                                                                                                                   ┃
+┃Rationale for [2910838e]                                                                                                                                                         ^┃
+┃Context: notes/child [e7c0c81f]                                                                                                                                                   ┃
 ┃Rationale scope: notes and readable descendants · 2 Context(s)                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  Retained historical wording                                                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED ORIGIN                                                                                                                                                                   ┃
-┃  CREATED via add at 2026-08-13 16:19                                                                                                                                             ┃
-┃  Checkpoint: c3428bfa  |  Evidence: RECORDED                                                                                                                                     ┃
+┃  CREATED via add at 2026-08-13 16:11                                                                                                                                             ┃
+┃  Checkpoint: c3228b59  |  Evidence: RECORDED                                                                                                                                     ┃
 ┃  Source occurrence: single item 1/1, original line 1                                                                                                                             ┃
 ┃                                                                                                                                                                                  ┃
 ┃RECORDED RATIONALE                                                                                                                                                                ┃
@@ -25,7 +25,7 @@
 ┃                                                                                                                                                                                  ┃
 ┃CURRENT CONTEXT WINDOW — and readable descendants, deterministic fallback only                                                                                                    ┃
 ┃  No semantic relationship is asserted by this list.                                                                                                                              ┃
-┃  [b86d94c7] notes/child · position 1                                                                                                                                             ┃
+┃  [d9f8836c] notes/child · position 1                                                                                                                                             ┃
 ┃      Final wording used by both reports                                                                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
 ┃UNRESOLVED / UNRECORDED                                                                                                                                                           ┃

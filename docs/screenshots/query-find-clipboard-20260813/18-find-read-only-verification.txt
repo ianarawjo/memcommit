@@ -1,0 +1,18 @@
+FIND CLOSED · NO RESULT CHECKS SAVED · NO CONTEXT CREATED                                                                                                                           
+FIND CLIPBOARD WRITES 3                                                                                                                                                             
+WRITE 1 · PHYSICAL LINES 3 · UTF-8 BYTES 96                                                                                                                                         
+  1: SEARCH RESULTS                                                                                                                                                                 
+  2: task-1/description                                                                                                                                                             
+  3:   [1 memory 2db26309] The Main Building is under construction.                                                                                                                 
+WRITE 2 · PHYSICAL LINES 3 · UTF-8 BYTES 138                                                                                                                                        
+  1: SEARCH RESULTS                                                                                                                                                                 
+  2: task-1/participant/construction-updates                                                                                                                                        
+  3:   [2 memory 5ab81742] Visitor parking moves to the east garage during construction.                                                                                            
+WRITE 3 · PHYSICAL LINES 6 · UTF-8 BYTES 221                                                                                                                                        
+  1: SEARCH RESULTS                                                                                                                                                                 
+  2: task-1/description                                                                                                                                                             
+  3:   [1 memory 2db26309] The Main Building is under construction.                                                                                                                 
+  4:                                                                                                                                                                                
+  5: task-1/participant/construction-updates                                                                                                                                        
+  6:   [2 memory 5ab81742] Visitor parking moves to the east garage during construction.                                                                                            
+FOCUSED RESULTS DISTINCT AND COMPLETE SET CONTAINS BOTH · YES

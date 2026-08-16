@@ -1,0 +1,5 @@
+QUERY CLOSED · NO SESSION SAVE · NO SOURCE MUTATION                                                                                                                                 
+QUERY CLIPBOARD WRITES 1                                                                                                                                                            
+WRITE 1 · PHYSICAL LINES 1 · UTF-8 BYTES 148                                                                                                                                        
+  1: The Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]                           
+FAILED QUERY COPY DID NOT REPLACE CLIPBOARD TEXT

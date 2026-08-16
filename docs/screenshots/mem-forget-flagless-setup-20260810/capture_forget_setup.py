@@ -85,7 +85,7 @@ def _child(store_root: Path, *, cancel: bool) -> None:
             assert operation == "forget"
             assert output_schema is not None
             # Keep the real command-wait surface visible for capture.
-            time.sleep(3.0)
+            time.sleep(8.0)
             messages = json.loads(prompt.split("FORGET CHAT MESSAGES:\n", 1)[1])
             payload = json.loads(
                 messages[1]["content"].split("FORGET PAYLOAD:\n", 1)[1]
@@ -302,32 +302,36 @@ def _capture_apply(environment: dict[str, str]) -> bytearray:
         _render_snapshot("05-analysis-pending", bytes(raw))
 
         child.send(b"c")
+        _settle(child, raw, delay=0.5)
+        _render_snapshot("06-context-browser", bytes(raw))
+
+        child.send(b"i")
         _wait_for(child, raw, b"FROZEN MEMORIES", timeout=3)
-        _render_snapshot("06-confirmed-inputs", bytes(raw))
-        child.send(b"c")
+        _render_snapshot("07-confirmed-inputs", bytes(raw))
+        child.send(b"r")
 
         _wait_for(child, raw, b"Remove the obsolete location", timeout=15)
-        _render_snapshot("07-review-report", bytes(raw))
+        _render_snapshot("08-review-report", bytes(raw))
 
         child.send(b"\t\x1b[B\r")
         _wait_for(child, raw, b"WHY THIS ACTION", timeout=5)
-        _render_snapshot("08-decision-detail", bytes(raw))
+        _render_snapshot("09-decision-detail", bytes(raw))
 
         child.send(b"a")
         _settle(child, raw, delay=0.5)
-        _render_snapshot("09-approval-summary", bytes(raw))
+        _render_snapshot("10-approval-summary", bytes(raw))
 
         child.send(b"\x1b[F")
         _settle(child, raw)
-        _render_snapshot("10-exact-apply-action", bytes(raw))
+        _render_snapshot("11-exact-apply-action", bytes(raw))
 
         child.send(b"\r")
         _wait_for(child, raw, b"CAPTURE PAUSE", timeout=8)
-        _render_snapshot("11-success-receipt", bytes(raw))
+        _render_snapshot("12-success-receipt", bytes(raw))
 
         child.send(b"\r")
         _wait_for(child, raw, b"PROVIDER CONNECTIONS", timeout=5)
-        _render_snapshot("12-read-only-verification", bytes(raw))
+        _render_snapshot("13-read-only-verification", bytes(raw))
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Apply capture child exited with {child.exitstatus}.")
@@ -341,7 +345,7 @@ def _capture_cancel(environment: dict[str, str]) -> bytearray:
         _wait_for(child, raw, b"MEM FORGET", timeout=5)
         child.send(b"\x1b")
         _wait_for(child, raw, b"CANCEL VERIFICATION", timeout=5)
-        _render_snapshot("13-cancelled-before-provider", bytes(raw))
+        _render_snapshot("14-cancelled-before-provider", bytes(raw))
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Cancel capture child exited with {child.exitstatus}.")

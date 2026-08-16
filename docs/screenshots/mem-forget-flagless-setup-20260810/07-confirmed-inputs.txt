@@ -1,0 +1,52 @@
+ MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 1s                                                                                                              
+┌─────────────────────────────────────────────────────────────────────| FORGET CONFIRMED INPUTS · READ-ONLY |──────────────────────────────────────────────────────────────────────┐
+│MEM FORGET · FROZEN INPUT · RESULT PENDING                                                                                                                                       ^│
+│                                                                                                                                                                                  │
+│SOURCE · beta · THIS CONTEXT ONLY                                                                                                                                                 │
+│FROZEN MEMORIES · 3                                                                                                                                                               │
+│SOURCE STATE · UNCHANGED                                                                                                                                                          │
+│                                                                                                                                                                                  │
+│INSTRUCTION                                                                                                                                                                       │
+│Forget the previous west-entrance desk location and obsolete access code; keep general accessibility guidance.                                                                    │
+│                                                                                                                                                                                  │
+│The review report will replace this setup after the provider returns.                                                                                                             │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                       

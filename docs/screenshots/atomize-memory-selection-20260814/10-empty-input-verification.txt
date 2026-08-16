@@ -1,0 +1,6 @@
+                                                                                                                                                                                    
+EMPTY-INPUT CANCELLATION RECEIPT                                                                                                                                                    
+  SETUP RECEIPT · None                                                                                                                                                              
+  SOURCE DIRECT MEMORIES · 0                                                                                                                                                        
+  PROVIDER CALLS · 0                                                                                                                                                                
+  CONTEXT CHECKPOINTS · 0

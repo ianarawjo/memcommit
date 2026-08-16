@@ -1,0 +1,17 @@
+PICKER CLOSED · NO CONTEXT SWITCH RECEIPT · NO STORE MUTATION                                                                                                                       
+CLIPBOARD WRITE 1 · PHYSICAL LINES 1 · UTF-8 BYTES 16                                                                                                                               
+  1: › * ▾ task-1                                                                                                                                                                   
+CLIPBOARD WRITE 2 · PHYSICAL LINES 5 · UTF-8 BYTES 542                                                                                                                              
+  1: › * ▾ task-1                                                                                                                                                                   
+  2:       ▾ task-1/description                                                                                                                                                     
+  3:     · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and
+ AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory.             
+  4:       ▸ task-1/participant                                                                                                                                                     
+  5:       ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT                                                       
+CLIPBOARD WRITE 3 · PHYSICAL LINES 1 · UTF-8 BYTES 343                                                                                                                              
+  1:     · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and
+ AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory.             
+CLIPBOARD WRITE 4 · PHYSICAL LINES 1 · UTF-8 BYTES 343                                                                                                                              
+  1:     · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and
+ AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory.             
+MEMORY y/Y IDENTICAL · YES

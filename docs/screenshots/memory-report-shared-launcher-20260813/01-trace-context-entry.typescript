@@ -1,15 +1,15 @@
 [32mInitialized context 'empty-current'.[0m
 [32mInitialized context 'notes'.[0m
 [32mInitialized context 'notes/child'.[0m
-[32mAdded [06b0a952] First wording[0m
-[32m[1mEdited [06b0a952] in 'notes/child':[0m
+[32mAdded [8acf07dc] First wording[0m
+[32m[1mEdited [8acf07dc] in 'notes/child':[0m
 [31m  - First wording[0m
 [32m  + Second wording[0m
-[32m[1mEdited [06b0a952] in 'notes/child':[0m
+[32m[1mEdited [8acf07dc] in 'notes/child':[0m
 [31m  - Second wording[0m
 [32m  + Final wording used by both reports[0m
-[32mAdded [3a0ee5b8] Retained historical wording[0m
-[32mRemoved [3a0ee5b8] Retained historical wording[0m
+[32mAdded [e3bbf029] Retained historical wording[0m
+[32mRemoved [e3bbf029] Retained historical wording[0m
 [32mSwitched to context 'empty-current'.[0m
 PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A CONTEXT · LOCAL CONTEXTS[0m
@@ -63,4 +63,4 @@ PTY 180 52
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  Enter open Memories  q cancel · 1/2 · 3 selectable[85D[48A[0m
+[0m ↑↓ move  ←→ expand  A expand all  y copy Context  Y copy visible branch  Enter open Memories  q cancel · 1/2 · 3 selectable[124D[48A[0m

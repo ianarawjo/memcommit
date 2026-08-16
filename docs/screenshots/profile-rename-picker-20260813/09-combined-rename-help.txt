@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem chunk             Preview and, after confirmation, split one direct current-Context Memory by headers, paragraphs, or sentences.                                          ┃^
+┃ ▸ mem clear             Remove all direct items from the current or explicit Context after confirmation.                                                                        ┃ 
+┃ ▸ mem compare           Enter the interactive Compare session launcher with no endpoints, or compare the active Context with an equal-authority PEER; save no target changes.   ┃ 
+┃ ▸ mem config (legacy)   Read and write global configuration.                                                                                                                    ┃ 
+┃ ▸ mem contexts          Browse ordinary local Contexts and readable cross-Profile Context views without switching; print the catalog outside a terminal.                        ┃ 
+┃ ▸ mem delete            Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                         ┃ 
+┃ ▸ mem diff              Select or name a Context and browse its checkpoint changes in a TTY, or render the active Update record outside a TTY.                                  ┃ 
+┃ ▸ mem edit              Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                      ┃ 
+┃ ▸ mem embed             Choose a Child, target, and direct-item insertion gap interactively, or add one Context at an explicit before/after position while the Child retains    ┃ 
+┃                         its identity and ownership.                                                                                                                             ┃ 
+┃ ▸ mem eval              Run and inspect staged semantic evaluation campaigns.                                                                                                   ┃ 
+┃ ▸ mem find              Open interactive search when QUERY is omitted, or search once when QUERY is supplied. One-shot search defaults to the selected Context roots only; use  ┃ 
+┃                         -r/--recursive for namespace descendants and embedded Contexts. The interactive workbench keeps its visible scope controls. Descendant and embedded     ┃ 
+┃                         reach also have independent long flags. Explicitly temporal wording searches retained Memory history.                                                   ┃ 
+┃ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                ┃ 
+┃ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                          ┃ 
+┃ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                ┃ 
+┃ ▸ mem forget            Enter interactive instruction and direct-Source setup when no operand is supplied, or analyze one instruction against the current direct Memories;      ┃ 
+┃                         review each keep/edit/delete decision and apply only the accepted batch.                                                                                ┃ 
+┃ ▸ mem ground            Enter an interactive Ground session, or open one named Goal–Rules–Memories workbench; --sessions enters its launcher.                                   ┃ 
+┃ ▸ mem help              Enter the interactive command browser and open syntax help.                                                                                             ┃ 
+┃ ▸ mem impact            Preview a directional Update or Atomize analysis, or inspect a saved Meld, Sever, or Update Impact; no Context changes occur in the Impact view, and    ┃ 
+┃                         APPLY? hands saved work to its normal Apply flow.                                                                                                       ┃ 
+┃ ▸ mem import            Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                   ┃ 
+┃ ▸ mem init              Edit a suggested name, or create an explicitly named Context, and switch to it; --parents ensures its hierarchy.                                        ┃ 
+┃ ▸ mem init-study        Copy one Study baseline into an isolated participant/authority Profile pair.                                                                            ┃ 
+┃ ▸ mem list (ls)         Browse child Contexts and direct items in the current or explicit Context; ls is the equivalent compact spelling.                                       ┃ 
+┃ ▸ mem lock              Lock the current Context, a recursive Context set, Memory, or Profile.                                                                                  ┃ 
+┃ ▸ mem log               Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                                 ┃ 
+┃ ▸ mem meld              Enter the interactive Meld session launcher with no operands, combine two equal-authority Contexts into the current empty Context, or directionally use ┃ 
+┃                         INCOMING --into authoritative BASELINE; --from INCOMING uses the current authoritative BASELINE and is normalized to INCOMING --into BASELINE.          ┃ 
+┃ ▸ mem merge             Add UID-new direct items from another Context; no semantic reconciliation.                                                                              ┃ 
+┃ ▸ mem profile           Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.                                                                  ┃ 
+┃ ▸ mem provider          Select and verify Codex, Ollama, or OpenRouter semantic execution.                                                                                      ┃ 
+┃ ▸ mem query             Open interactive Query with a read-only saved transcript browser, or ask visible Context knowledge or a concealed query-only view; sessions retain only ┃ 
+┃                         visible Q/A when permitted.                                                                                                                             ┃ 
+┃ ▸ mem rationale         Enter interactive recent reports or the Memory picker when no Memory is given, or show recorded evidence and optional labeled contextual inference; no  ┃ 
+┃                         Context changes.                                                                                                                                        ┃ 
+┃ ▸ mem redo              Redo the most recently undone recorded Context command.                                                                                                 ┃ 
+┃ ▸ mem reference         Add a read-only live pointer to a directly owned source Memory; the target stores identity metadata rather than copying its content.                    ┃ 
+┃ ▸ mem remove            Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                         ┃ 
+┃ ▾ mem rename            Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.                 ┃ 
+┃   FORM 1 · mem rename [new_name] (rename the active Profile)                                                                                                                    ┃ 
+┃   FORM 2 · mem rename [profile_name] [new_name] (rename an explicit Profile)                                                                                                    ┃ 
+┃   FORM 3 · mem profile rename [new_name] (explicit equivalent for the active Profile)                                                                                           ┃ 
+┃   FORM 4 · mem profile rename [profile_name] [new_name] (explicit equivalent for a named Profile)                                                                               ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  H full help

@@ -1,0 +1,7 @@
+[1mContext: task-3/remote/government/healthcare-agent/received-shares/50a7f929-1b4c-5766-b2de-acacc137fee5[0m
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 06e6fa56] [2mThe user considers a reminder the day before an appointment sufficient for rechecking preparation items.[0m
+  [memory 120505ee] [2mConfirm the date, time, address, and floor with the user before adding a follow-up visit to the calendar.[0m
+  [memory c1706a26] [2mBecause the user’s availability varies by week, confirm it separately for each appointment rather than relying on prior availability.[0m

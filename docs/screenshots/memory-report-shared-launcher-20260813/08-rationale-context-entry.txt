@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  Enter open Memories  q cancel · 1/2 · 3 selectable
+ ↑↓ move  ←→ expand  A expand all  y copy Context  Y copy visible branch  Enter open Memories  q cancel · 1/2 · 3 selectable
