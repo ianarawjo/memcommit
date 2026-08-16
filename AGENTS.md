@@ -191,6 +191,21 @@ conversation.
 
 ### TTY debugging captures
 
+- Treat an ordered snapshot set as part of the deliverable for every new or
+  materially changed interactive TUI flow, even when the user did not
+  separately request screenshots. Before reporting the flow complete, capture
+  each materially distinct step in at least one representative end-to-end
+  path: entry, Source/target choice, every semantic selection or input
+  transition, review or exact approval, success or failure receipt, and
+  read-only result verification. Capture each meaningful branch whose state or
+  safety boundary differs; do not substitute a final-state screenshot for the
+  intervening process.
+- Store those snapshots as an ordered, numbered set under one focused
+  `docs/screenshots/...` directory. Keep a README or interaction log beside
+  them that maps every image to the exact command, PTY size, profile/current
+  Context, preceding keys or text, visible state, and whether that step mutated
+  durable state. A later behavior change must refresh the affected snapshots
+  and log entries so the recorded process continues to match the implementation.
 - When the user asks for screenshots, snapshots, or captures of a terminal UI,
   run the reproduction in a color-capable PTY. Explicitly remove `NO_COLOR`
   from the capture process and set a capable terminal such as

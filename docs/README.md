@@ -88,11 +88,18 @@ considered sufficient design history.
   defines canonical names, explicit relative existing-Context locators, the
   one-current-snapshot rule, and the rollout boundary between lookup operands
   and newly declared names.
+- [`mem-embed-placement-design-rationale.md`](mem-embed-placement-design-rationale.md)
+  defines explicit before/after direct-item anchors, the flagless Child/Into/gap
+  form, exact-command review, and neighbor-bound concurrency checks.
+- [`context-scope-cli-design-rationale.md`](context-scope-cli-design-rationale.md)
+  defines the shared `-d/--direct` and `-r/--recursive` presets, precise
+  role/axis overrides, and the direct-only operation boundary.
 - [`mem-rename-design-rationale.md`](mem-rename-design-rationale.md) defines
-  UID-preserving slash-subtree migration; typed reference, current-state,
-  checkpoint, Ground, and translation continuity; the query-only non-access
-  boundary; reviewed graph freshness; exception rollback; and the remaining
-  crash-journal limitation.
+  the internal UID-preserving slash-subtree relocation primitive; typed
+  reference, current-state, checkpoint, Ground, and translation continuity;
+  the query-only non-access boundary; graph freshness; exception rollback; and
+  the remaining crash-journal limitation. Public `mem rename` is the Profile
+  display-name operation described by the Profile rationale.
 
 ## Translation contract
 
@@ -167,6 +174,13 @@ considered sufficient design history.
   defines the host-first exact/surface split, strict four-way semantic stage,
   observed Qwen/Luna/Sol calibration timing, and the independent duplicate
   holdout still required before a generalization claim.
+
+## Ground iteration plan
+
+- [`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md)
+  records the staged one-to-approximately-twenty Example demonstration, the
+  missing reviewed binding-refresh action, and the later exact hidden-receipt
+  boundary without treating a case count as automatic Ground completion.
 
 ## Atomize contract notes
 
