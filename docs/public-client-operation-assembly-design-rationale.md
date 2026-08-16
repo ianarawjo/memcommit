@@ -69,6 +69,12 @@ defer, and apply cannot acquire different dependency snapshots. With that
 move, the loader namespace and its sentinels are removed from `client.py`.
 Typer command registration remains a separate console composition boundary.
 
+Atomize Grounding is the next adapter built directly in the extracted shape.
+Its five public lifecycle methods delegate to one operation-owned assembly and
+reuse the same application/runtime port as the CLI. The adapter deliberately
+requires an existing saved Atomize analysis/workbench rather than hiding a
+second semantic operation inside Grounding Start.
+
 The move also closes one accidental taxonomy leak: reading the current
 Context for a Meld formerly reused a client helper that raised
 `QueryStorageError`. The Meld adapter now projects that failure as
@@ -115,8 +121,9 @@ MCP distribution boundaries, not full CLI readiness.
 
 ## Remaining rollout
 
-Add, Query, and the complete Meld lifecycle are now extracted; the committed
-public facade contains delegation and shared runtime construction only. Fit,
+Add, Query, the complete Meld lifecycle, and Atomize Grounding are now
+operation-owned assemblies; their public facade methods contain delegation and
+shared runtime construction only. Fit,
 Elaborate, standalone Distill, and their Ground adapters must enter through
 the same boundary when those public methods are published. Audit the CLI
 registry independently afterward.

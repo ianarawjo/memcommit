@@ -101,6 +101,34 @@ class MeldExecutionError(MeldError):
     """An authorized Meld failed before a complete result was published."""
 
 
+class AtomizeGroundingError(MemCommitError):
+    """Base class for public conversational Atomize Grounding failures."""
+
+
+class AtomizeGroundingInputError(AtomizeGroundingError):
+    """The caller supplied an invalid Grounding selector or dialogue turn."""
+
+
+class AtomizeGroundingContextError(AtomizeGroundingError):
+    """The requested Context or its saved Atomize analysis is unavailable."""
+
+
+class AtomizeGroundingProviderFailure(AtomizeGroundingError):
+    """The semantic provider could not complete a Grounding turn."""
+
+
+class AtomizeGroundingConflictError(AtomizeGroundingError):
+    """A bound Context, analysis, workbench, or dialogue changed concurrently."""
+
+
+class AtomizeGroundingStorageError(AtomizeGroundingError):
+    """Grounding could not safely read or publish local durable state."""
+
+
+class AtomizeGroundingExecutionError(AtomizeGroundingError):
+    """Grounding failed before publishing one complete requested outcome."""
+
+
 __all__ = [
     "AddAuthorityError",
     "AddConflictError",
@@ -109,6 +137,13 @@ __all__ = [
     "AddExecutionError",
     "AddInputError",
     "AddStorageError",
+    "AtomizeGroundingConflictError",
+    "AtomizeGroundingContextError",
+    "AtomizeGroundingError",
+    "AtomizeGroundingExecutionError",
+    "AtomizeGroundingInputError",
+    "AtomizeGroundingProviderFailure",
+    "AtomizeGroundingStorageError",
     "MemCommitError",
     "MeldAuthorityError",
     "MeldConflictError",

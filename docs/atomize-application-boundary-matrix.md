@@ -256,4 +256,6 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 - no deletion or cleanup of a published save-as destination;
 - no change yet to save-as partial-publication or Undo semantics;
 - no unification of structural Atomize and grounding-proposal schemas;
-- no claim that Atomize is a stable public Python API yet.
+- no claim that structural Atomize analysis, workbench editing, or structural
+  Apply is a stable public Python API yet; only the separately reviewed
+  conversational Grounding lifecycle now has that public contract.

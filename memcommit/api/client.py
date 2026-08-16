@@ -13,6 +13,10 @@ from memcommit.api._support.providers import (
     connect_route_provider,
 )
 from memcommit.api.add import AddMemoriesResult
+from memcommit.api.atomize_grounding import (
+    AtomizeGroundingApplyResult,
+    AtomizeGroundingSessionResult,
+)
 from memcommit.api.errors import (
     QueryConfigurationError,
 )
@@ -236,6 +240,82 @@ class MemCommitClient:
         from memcommit.api._operations.meld import apply_meld
 
         return apply_meld(self._runtime, target_context)
+
+    def open_atomize_grounding(
+        self,
+        context_name: str | None = None,
+    ) -> AtomizeGroundingSessionResult:
+        """Open one saved Grounding dialogue without provider access."""
+
+        from memcommit.api._operations.atomize_grounding import (
+            open_atomize_grounding,
+        )
+
+        return open_atomize_grounding(self._runtime, context_name)
+
+    def start_atomize_grounding(
+        self,
+        selector: str,
+        comment: str,
+        *,
+        context_name: str | None = None,
+    ) -> AtomizeGroundingSessionResult:
+        """Start and assess one issue-scoped Grounding dialogue."""
+
+        from memcommit.api._operations.atomize_grounding import (
+            start_atomize_grounding,
+        )
+
+        return start_atomize_grounding(
+            self._runtime,
+            selector,
+            comment,
+            context_name=context_name,
+        )
+
+    def reply_atomize_grounding(
+        self,
+        reply: str,
+        *,
+        context_name: str | None = None,
+        revision: str = "EXTEND",
+    ) -> AtomizeGroundingSessionResult:
+        """Append and assess one explicit revision to the saved dialogue."""
+
+        from memcommit.api._operations.atomize_grounding import (
+            reply_atomize_grounding,
+        )
+
+        return reply_atomize_grounding(
+            self._runtime,
+            reply,
+            context_name=context_name,
+            revision=revision,
+        )
+
+    def keep_atomize_grounding(
+        self,
+        context_name: str | None = None,
+    ) -> AtomizeGroundingSessionResult:
+        """Close one Grounding dialogue as review-only without mutation."""
+
+        from memcommit.api._operations.atomize_grounding import (
+            keep_atomize_grounding,
+        )
+
+        return keep_atomize_grounding(self._runtime, context_name)
+
+    def apply_atomize_grounding(
+        self,
+        context_name: str | None = None,
+    ) -> AtomizeGroundingApplyResult:
+        """Apply or recover one exact ready Grounding proposal."""
+
+        from memcommit.api._operations.atomize_grounding import (
+            apply_atomize_grounding,
+        )
+
+        return apply_atomize_grounding(self._runtime, context_name)
 
     def add_memories(
         self,
