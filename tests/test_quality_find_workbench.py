@@ -83,6 +83,27 @@ def test_flagless_setup_can_check_multiple_independent_contexts():
     assert receipt.include_descendants is False
 
 
+def test_flagless_setup_projects_profile_as_one_exclusive_virtual_target():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[A\r\t\t\r")
+        receipt = choose_quality_find_setup(
+            ("root", "peer"),
+            current="root",
+            kind="duplicates",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt == QualityFindSetupReceipt(
+        target_names=(),
+        context_names=("root", "peer"),
+        selection_mode="MULTIPLE",
+        include_descendants=False,
+        profile_selected=True,
+    )
+
+
 def test_flagless_setup_escape_cancels_without_a_receipt():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
