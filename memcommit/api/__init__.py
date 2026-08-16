@@ -91,6 +91,10 @@ __all__ = [
     "QueryPublicationError",
     "QuerySessionReceipt",
     "QueryStorageError",
+    "QualityFindResult",
+    "QualityFindingHandoff",
+    "QualityFindingReviewDraft",
+    "QualityFindingSource",
     "ReferenceQueryResult",
     "ResolveAnalysisResult",
     "ResolveApplyResult",
@@ -176,6 +180,15 @@ _LAZY_EXPORTS = {
     "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
     "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
     "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
+    "QualityFindResult": ("memcommit.api.quality_find", "QualityFindResult"),
+    **{
+        name: ("memcommit.quality_finding_handoff", name)
+        for name in (
+            "QualityFindingHandoff",
+            "QualityFindingReviewDraft",
+            "QualityFindingSource",
+        )
+    },
     "ResolveAnalysisResult": ("memcommit.api.resolve", "ResolveAnalysisResult"),
     "ResolveApplyResult": ("memcommit.api.resolve", "ResolveApplyResult"),
     "ResolveCandidateResult": ("memcommit.api.resolve", "ResolveCandidateResult"),

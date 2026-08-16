@@ -49,6 +49,11 @@ from memcommit.interfaces.agent.query import (
     QueryAgentAdapter,
     query_agent_tool_schema,
 )
+from memcommit.interfaces.agent.quality_find import (
+    QUALITY_FIND_AGENT_TOOL_NAME,
+    QualityFindAgentAdapter,
+    quality_find_agent_tool_schema,
+)
 from memcommit.interfaces.agent.resolve import (
     RESOLVE_AGENT_TOOL_NAME,
     ResolveAgentAdapter,
@@ -225,6 +230,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     if not isinstance(client, MemCommitClient):
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
     query = QueryAgentAdapter(client)
+    quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
     compare = CompareAgentAdapter(client)
     meld = MeldAgentAdapter(client)
@@ -240,6 +246,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=QUERY_AGENT_TOOL_NAME,
                 schema_factory=query_agent_tool_schema,
                 handler=query.invoke,
+            ),
+            AgentToolBinding(
+                name=QUALITY_FIND_AGENT_TOOL_NAME,
+                schema_factory=quality_find_agent_tool_schema,
+                handler=quality_find.invoke,
             ),
             AgentToolBinding(
                 name=ADD_AGENT_TOOL_NAME,

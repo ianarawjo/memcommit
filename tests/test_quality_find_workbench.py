@@ -353,6 +353,46 @@ def test_process_local_resolution_shell_can_close_without_mutating_context():
     assert ctx.to_dict() == before
 
 
+def test_conflict_workbench_hands_off_the_selected_typed_finding():
+    ctx, first, second = _context()
+    session = create_quality_find_workbench(
+        "conflicts",
+        ctx,
+        ConflictReport(
+            memory_count=2,
+            pair_count=1,
+            findings=(
+                ConflictFinding(
+                    first,
+                    second,
+                    "YES",
+                    ("TIME",),
+                    "The entrance hours conflict.",
+                    "Which opening time is authoritative?",
+                ),
+            ),
+        ),
+    )
+    observed = []
+
+    with create_pipe_input() as pipe_input:
+        # Viewer -> Items -> To Do, then run the selected finding handoff.
+        pipe_input.send_text("\t\t\r")
+        result = run_quality_find_resolution_workbench(
+            session,
+            ctx,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            handoff_handler=observed.append,
+        )
+
+    assert result is session
+    assert len(observed) == 1
+    assert observed[0].finding_uid == f"conflict:{first.uid}:{second.uid}"
+    assert observed[0].route == "RESOLVE"
+
+
 @pytest.mark.parametrize(
     ("module_name", "command_name", "kind"),
     [
@@ -381,7 +421,7 @@ def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
     )
     monkeypatch.setattr(
         f"{module_path}.run_interactive_quality_find",
-        lambda _store, *, current_name, kind, analyze: (
+        lambda _store, *, current_name, kind, analyze, **_kwargs: (
             observed.append((current_name, kind)) or True
         ),
     )

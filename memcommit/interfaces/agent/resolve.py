@@ -26,6 +26,13 @@ from memcommit.interfaces.agent.contract import (
     object_value,
     text_value,
 )
+from memcommit.interfaces.agent.quality_find import (
+    quality_finding_handoff_agent_schema,
+)
+from memcommit.quality_finding_handoff import (
+    QualityFindingHandoff,
+    QualityFindingHandoffError,
+)
 
 
 RESOLVE_AGENT_CONTRACT_VERSION = 1
@@ -71,6 +78,7 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
         "allow_create",
         "allow_delete",
         "guidance",
+        "finding_handoff",
     }
     required = {"version", "kind"}
     optional = common
@@ -103,6 +111,17 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
             else ""
         ),
     }
+    if "finding_handoff" in value:
+        try:
+            handoff = QualityFindingHandoff.from_dict(value["finding_handoff"])
+        except (QualityFindingHandoffError, TypeError, ValueError) as error:
+            raise AgentRequestError(str(error)) from error
+        if arguments["context_name"] is not None or arguments["memory_selectors"]:
+            raise AgentRequestError(
+                "finding_handoff cannot be combined with context_name or "
+                "memory_selectors."
+            )
+        arguments["finding_handoff"] = handoff
     if kind == "apply":
         arguments.update(
             candidate_uid=text_value(value["candidate_uid"], field="candidate_uid"),
@@ -239,9 +258,21 @@ class ResolveAgentAdapter:
         try:
             candidate_uid = arguments.pop("candidate_uid", None)
             expected_revision = arguments.pop("expected_revision", None)
-            analysis = self._client.resolve_context(
-                **arguments,
-                expected_revision=expected_revision,
+            finding_handoff = arguments.pop("finding_handoff", None)
+            if isinstance(finding_handoff, QualityFindingHandoff):
+                arguments.pop("context_name", None)
+                arguments.pop("memory_selectors", None)
+            analysis = (
+                self._client.resolve_conflict_finding(
+                    finding_handoff,
+                    **arguments,
+                    expected_revision=expected_revision,
+                )
+                if isinstance(finding_handoff, QualityFindingHandoff)
+                else self._client.resolve_context(
+                    **arguments,
+                    expected_revision=expected_revision,
+                )
             )
             if kind == "analyze":
                 result = _analysis_result(analysis)
@@ -331,6 +362,7 @@ def resolve_agent_tool_schema() -> JsonObject:
                 "allow_create": {"type": "boolean", "default": False},
                 "allow_delete": {"type": "boolean", "default": False},
                 "guidance": text,
+                "finding_handoff": quality_finding_handoff_agent_schema(),
                 "candidate_uid": text,
                 "expected_revision": text,
             },

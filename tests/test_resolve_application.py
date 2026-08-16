@@ -44,16 +44,19 @@ from memcommit.resolve_application import (
     ResolveConflictError,
     ResolveError,
     ResolveRequest,
+    ResolveSourcePrecondition,
     apply_resolve,
     run_resolve,
 )
 from memcommit.resolve_runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore
 
 
 FIT_MARKER = "FIT PROPOSITION PAYLOAD:\n"
 VERIFY_MARKER = "VERIFY PAYLOAD:\n"
+QUALITY_FIND_MARKER = "QUALITY FIND PAYLOAD:\n"
 runner = CliRunner(mix_stderr=False)
 
 
@@ -163,6 +166,31 @@ class ResolveFixtureProvider:
                 }
             )
         raise AssertionError(operation)
+
+
+class ResolveFindingFixtureProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "find_conflicts":
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(QUALITY_FIND_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "findings": [
+                        {
+                            "pair_id": payload["pairs"][0]["pair_id"],
+                            "conflict": "YES",
+                            "scope_dimensions": ["TIME"],
+                            "reason": "The schedules state incompatible times.",
+                            "question": "Which schedule is authoritative?",
+                        }
+                    ]
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
 
 
 class ResolveChoiceProvider(ResolveFixtureProvider):
@@ -353,6 +381,59 @@ def test_resolve_expected_revision_fails_before_provider_connection(isolated_sto
             provider_factory=ForbiddenProviderFactory(),
             expected_revision=analysis.frame.revision,
         )
+
+
+def test_resolve_finding_source_mismatch_fails_before_provider_connection(
+    isolated_store,
+):
+    store = MemoryStore()
+    context, first, second = _context(store)
+
+    class ForbiddenProviderFactory:
+        def __call__(self):
+            raise AssertionError("provider must not connect for stale finding evidence")
+
+    request = ResolveRequest(
+        context.name,
+        memory_selectors=(first.uid, second.uid),
+        source_precondition=ResolveSourcePrecondition(
+            context_uid=context.uid,
+            display_name=context.name,
+            direct_memory_digest="0" * 64,
+        ),
+    )
+    port = MemoryStoreResolvePort(store, current_name=context.name)
+
+    with pytest.raises(ResolveConflictError, match="finding source"):
+        run_resolve(
+            request,
+            frame_port=port,
+            semantic_port=ProviderResolveSemanticPort(),
+            provider_factory=ForbiddenProviderFactory(),
+        )
+
+
+def test_resolve_accepts_matching_finding_source_precondition(isolated_store):
+    store = MemoryStore()
+    context, first, second = _context(store)
+    provider = ResolveFixtureProvider(initial_verdict="YES")
+
+    analysis, _port = _run(
+        store,
+        provider,
+        ResolveRequest(
+            context.name,
+            memory_selectors=(first.uid, second.uid),
+            source_precondition=ResolveSourcePrecondition(
+                context_uid=context.uid,
+                display_name=context.name,
+                direct_memory_digest=direct_context_digest(context),
+            ),
+        ),
+    )
+
+    assert analysis.status == "ALREADY_FIT"
+    assert provider.operations == ["fit_propositions"]
 
 
 def test_resolve_delete_requires_guidance() -> None:
@@ -745,6 +826,30 @@ def test_granted_resolve_intersects_requested_and_granted_effects(
     assert authority_store.load_direct("schedule").memories[
         receipt.updated_uids[0]
     ].content == "The office opens at 9 on weekends."
+
+
+def test_granted_finding_handoff_reauthorizes_requested_effects(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _authority_store, _grant = _granted_resolve_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        ("READ", "DERIVE", "UPDATE"),
+    )
+    provider = ResolveFindingFixtureProvider()
+    client = MemCommitClient(semantic_provider_factory=lambda: provider)
+
+    finding = client.find_conflicts(("shared/schedule",)).handoffs[0]
+    analysis = client.resolve_conflict_finding(finding, allow_create=True)
+
+    assert finding.sources[0].display_name == "shared/schedule"
+    assert analysis.requested_effects == ("UPDATE", "CREATE")
+    assert analysis.allowed_effects == ("UPDATE",)
+    assert analysis.denied_effects == ("CREATE",)
+    assert provider.operations[0] == "find_conflicts"
 
 
 def test_granted_resolve_without_derive_never_connects_provider(

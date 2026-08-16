@@ -19,6 +19,7 @@ from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
+    QUALITY_FIND_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
     RESOLVE_AGENT_TOOL_NAME,
     AgentToolBinding,
@@ -75,6 +76,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
 
     assert registry.tool_names == (
         QUERY_AGENT_TOOL_NAME,
+        QUALITY_FIND_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
         COMPARE_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
@@ -92,10 +94,10 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     json.dumps(first)
 
     first[0]["name"] = "changed"
-    first[1]["parameters"]["required"].clear()
+    first[2]["parameters"]["required"].clear()
     third = registry.tool_schemas()
     assert third[0]["name"] == QUERY_AGENT_TOOL_NAME
-    assert third[1]["parameters"]["required"] == [
+    assert third[2]["parameters"]["required"] == [
         "version",
         "kind",
         "contents",

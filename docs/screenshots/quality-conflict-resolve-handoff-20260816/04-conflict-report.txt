@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FIND CONFLICTS                                                                                                                                                              ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · quality/capture                                                                                                                                                       ┃
+┃ PROCESS LOCAL · 0/1 ANSWERED · 1 CONTEXTS · 2 SOURCE MEMORIES · 1 PAIRS · 1 FINDINGS · 0 ANSWERED                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ SCOPE                                                                                                                                                                            ┃
+┃ Inspected 2 direct Memories across 1 frozen readable Context as one analysis frame. MULTIPLE TARGET SELECTION · THIS CONTEXT ONLY. Embedded Context edges were not followed.     ┃
+┃                                                                                                                                                                                  ┃
+┃ FINDINGS                                                                                                                                                                         ┃
+┃ Reported 1 actionable conflict finding.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ Responses are process-local review notes. No Context or Memory changes have been applied.                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 1                                                                                                                                                          ┃
+┃ CONFLICT 1 · The main entrance opens at 8:00 every day. ↔ The main entrance remains closed until 9:00 every day.                                                                 ┃
+┃ [YES] Both Memories govern the same entrance every day but require incompatible opening times.                                                                                   ┃
+┃ QUESTION · Which opening time should govern every day?                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Find Conflicts report                                                                                                                                  ^│
+│  CONFLICT       The main entrance opens at 8:00 every day. ↔ The main entrance remains closed until 9:00 every day.                                                              │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ RESOLVE ]  Resolve selected conflict · Enter to open Resolve for this exact conflict. Resolve will recheck the complete source, authority, and Fit before any Apply.            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close

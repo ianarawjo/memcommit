@@ -52,7 +52,7 @@ architectural-closure conclusion. `Curated state` comes from the reviewed
 | `redo` | `memcommit.commands.redo:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `reference` | `memcommit.commands.reference:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `rename` | `memcommit.commands.rename:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
-| `resolve` | `memcommit.commands.resolve:cmd` | `memcommit.resolve_application`<br>`memcommit.resolve_runtime` | `memcommit.interfaces.tui.operations.resolve`<br>`memcommit.interfaces.tui.operations.resolve.screen` | `apply_resolve`<br>`resolve_context` | `memcommit.interfaces.agent.resolve` | — | `PARTIAL_SURFACE` | `CLOSED` |
+| `resolve` | `memcommit.commands.resolve:cmd` | `memcommit.resolve_application`<br>`memcommit.resolve_runtime` | `memcommit.interfaces.tui.operations.resolve`<br>`memcommit.interfaces.tui.operations.resolve.screen` | `apply_resolve`<br>`resolve_conflict_finding`<br>`resolve_context` | `memcommit.interfaces.agent.resolve` | — | `PARTIAL_SURFACE` | `CLOSED` |
 | `revert` | `memcommit.commands.revert:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `review` | `memcommit.commands.review:cmd` | — | — | — | — | — | `COMMAND_ONLY` | `UNREVIEWED` |
 | `sever` | `memcommit.commands.sever:cmd` | `memcommit.sever_application`<br>`memcommit.sever_runtime` | — | — | — | `docs/sever-application-boundary-matrix.md` | `BOUNDED_INTERNAL` | `CLOSED` |

@@ -26,6 +26,7 @@ from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.commands.resolution_workbench_shell import (
+    SessionTodoView,
     run_resolution_workbench_shell,
 )
 from memcommit.interfaces.tui.components.focus import (
@@ -75,6 +76,10 @@ from memcommit.quality_find_workbench import (
     validate_quality_find_response,
 )
 from memcommit.resolution_workbench import ResolutionNavigation
+from memcommit.quality_finding_handoff import (
+    QualityFindingHandoff,
+    quality_finding_handoff,
+)
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
@@ -537,11 +542,29 @@ def run_quality_find_resolution_workbench(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
 ) -> QualityFindWorkbenchSession:
     """Inspect and answer one process-local report in the common workbench."""
 
     navigation = ResolutionNavigation()
     workbench_navigation = SessionWorkbenchNavigation()
+    item_handoff = (
+        SessionTodoView(
+            "RESOLVE",
+            "Resolve selected conflict",
+            (
+                "Enter to open Resolve for this exact conflict. Resolve will "
+                "recheck the complete source, authority, and Fit before any Apply."
+            ),
+        )
+        if (
+            handoff_handler is not None
+            and session.kind == "conflicts"
+            and len(session.source.contexts) == 1
+            and bool(session.report.findings)
+        )
+        else None
+    )
 
     def load_draft(item_uid: str) -> tuple[str | None, str]:
         response = session.response_for(item_uid)
@@ -571,8 +594,16 @@ def run_quality_find_resolution_workbench(
             response_validator=validate_quality_find_response,
             save_draft_on_close=True,
             split_viewer_items=True,
+            item_handoff=item_handoff,
         )
         if action.kind == "CLOSE":
+            return session
+        if action.kind == "HANDOFF" and action.item_uid is not None:
+            if handoff_handler is None:
+                raise QualityFindWorkbenchError(
+                    "Quality finding handoff is unavailable in this adapter."
+                )
+            handoff_handler(quality_finding_handoff(session, action.item_uid))
             return session
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise QualityFindWorkbenchError(
@@ -587,6 +618,7 @@ def run_interactive_quality_find(
     current_name: str | None,
     kind: QualityFindKind,
     analyze: QualityFindAnalyzer,
+    handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
 ) -> bool:
     """Select, analyze, and inspect one flagless quality-finder invocation."""
 
@@ -643,5 +675,9 @@ def run_interactive_quality_find(
     ):
         report = analyze(source)
     session = create_quality_find_workbench(kind, source, report)
-    run_quality_find_resolution_workbench(session, source)
+    run_quality_find_resolution_workbench(
+        session,
+        source,
+        handoff_handler=handoff_handler,
+    )
     return True

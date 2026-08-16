@@ -69,6 +69,40 @@ class ResolveProviderFactory(Protocol):
 
 
 @dataclass(frozen=True)
+class ResolveSourcePrecondition:
+    """Finder-owned direct-Memory source that must still back Resolve.
+
+    The public display name is retained because a granted Context may have a
+    different authority-local name. Authority and effect permissions are not
+    carried across this boundary; the Resolve frame port freezes them again.
+    """
+
+    context_uid: str
+    display_name: str
+    direct_memory_digest: str
+
+    def __post_init__(self) -> None:
+        if any(
+            not isinstance(value, str) or not value
+            for value in (self.context_uid, self.display_name)
+        ):
+            raise ResolveError(
+                "Resolve source precondition requires a Context identity."
+            )
+        if (
+            not isinstance(self.direct_memory_digest, str)
+            or len(self.direct_memory_digest) != 64
+            or any(
+                character not in "0123456789abcdef"
+                for character in self.direct_memory_digest
+            )
+        ):
+            raise ResolveError(
+                "Resolve source precondition requires a SHA-256 Memory digest."
+            )
+
+
+@dataclass(frozen=True)
 class ResolveRequest:
     """One direct-Memory Fit repair request.
 
@@ -82,6 +116,7 @@ class ResolveRequest:
     allow_create: bool = False
     allow_delete: bool = False
     guidance: str = ""
+    source_precondition: ResolveSourcePrecondition | None = None
 
     def __post_init__(self) -> None:
         if self.context_name is not None and (
@@ -103,6 +138,13 @@ class ResolveRequest:
             raise ResolveError("Resolve effect opt-ins must be boolean values.")
         if not isinstance(self.guidance, str):
             raise ResolveError("Resolve guidance must be text.")
+        if self.source_precondition is not None and not isinstance(
+            self.source_precondition,
+            ResolveSourcePrecondition,
+        ):
+            raise ResolveError(
+                "Resolve source precondition must use the typed contract."
+            )
         if self.allow_delete and not self.guidance.strip():
             raise ResolveError(
                 "Resolve --allow-delete requires grounding guidance that explains "
@@ -465,6 +507,36 @@ def candidate_digest(
     return "resolve-" + hashlib.sha256(encoded).hexdigest()
 
 
+def _direct_memory_digest(frame: FrozenResolveFrame) -> str:
+    payload = [
+        {"uid": memory.uid, "content": memory.content}
+        for memory in frame.memories
+    ]
+    encoded = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _require_source_precondition(frame: FrozenResolveFrame) -> None:
+    expected = frame.request.source_precondition
+    if expected is None:
+        return
+    if (
+        frame.context_uid != expected.context_uid
+        or frame.display_name != expected.display_name
+        or _direct_memory_digest(frame) != expected.direct_memory_digest
+    ):
+        # Finder reports are observations, not mutation authority. Re-freezing
+        # may therefore reauthorize, but it must never retarget stale evidence.
+        raise ResolveConflictError(
+            "The quality finding source no longer matches the frozen Resolve "
+            "Context. Run the finder again before resolving it."
+        )
+
+
 def run_resolve(
     request: ResolveRequest,
     *,
@@ -478,6 +550,7 @@ def run_resolve(
     if not isinstance(request, ResolveRequest):
         raise TypeError("Resolve requires a typed request.")
     frame = frame_port.freeze(request)
+    _require_source_precondition(frame)
     if expected_revision is not None and expected_revision != frame.revision:
         raise ResolveConflictError(
             "The Resolve Context or requested capability frame changed before "
@@ -560,6 +633,7 @@ __all__ = [
     "ResolveProviderFactory",
     "ResolveReceipt",
     "ResolveRequest",
+    "ResolveSourcePrecondition",
     "ResolveSemanticPort",
     "ResolveStatus",
     "apply_resolve",

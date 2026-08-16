@@ -7,6 +7,9 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.commands.conflict_resolve_handoff import (
+    run_conflict_resolve_handoff,
+)
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
@@ -25,6 +28,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.findings import FindingsError
+from memcommit.fit_judgment import FitJudgmentError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -32,6 +36,15 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.resolve_application import ResolveError
+from memcommit.quality_find_workbench import (
+    QualityFindSourceFrame,
+    create_quality_find_workbench,
+)
+from memcommit.quality_finding_handoff import (
+    quality_finding_handoff_json,
+    quality_finding_handoffs,
+)
 
 
 _CONFLICT_COLORS = {
@@ -50,10 +63,21 @@ def cmd(
             help="Context to inspect (defaults to current)",
         ),
     ] = None,
+    handoff_json: Annotated[
+        bool,
+        typer.Option(
+            "--handoff-json",
+            help="Print one canonical JSON handoff per finding",
+        ),
+    ] = False,
 ) -> None:
     """Report conflicting Memory pairs; never reconcile or checkpoint them."""
     store = MemoryStore(create=False)
-    if context_name is None and interactive_quality_find_available():
+    if (
+        context_name is None
+        and not handoff_json
+        and interactive_quality_find_available()
+    ):
         try:
             context_snapshot = ContextOperandSnapshot.capture(store)
             completed = run_interactive_quality_find(
@@ -65,6 +89,11 @@ def cmd(
                     connect_codex_chatgpt_provider,
                     context_name_by_uid=source.memory_context_names,
                 ),
+                handoff_handler=lambda handoff: run_conflict_resolve_handoff(
+                    store,
+                    current_name=context_snapshot.current_name,
+                    handoff=handoff,
+                ),
             )
         except (
             FileNotFoundError,
@@ -74,7 +103,9 @@ def cmd(
             RuntimeError,
             ValueError,
             FindingsError,
+            FitJudgmentError,
             QueryProviderError,
+            ResolveError,
         ) as error:
             typer.secho(
                 "Find conflicts error: " + display_escape_text(str(error)),
@@ -127,6 +158,16 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+
+    if handoff_json:
+        source = QualityFindSourceFrame.create(
+            (ctx,),
+            context_names=(access.display_name,),
+        )
+        session = create_quality_find_workbench("conflicts", source, report)
+        for handoff in quality_finding_handoffs(session):
+            typer.echo(quality_finding_handoff_json(handoff))
+        return
 
     render_heading(
         context_name=display_escape_text(ctx.name),

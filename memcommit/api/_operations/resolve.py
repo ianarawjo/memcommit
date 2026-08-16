@@ -40,6 +40,11 @@ from memcommit.resolve_application import (
     apply_resolve as apply_core_resolve,
     run_resolve,
 )
+from memcommit.quality_finding_handoff import (
+    QualityFindingHandoff,
+    QualityFindingHandoffError,
+    conflict_handoff_to_resolve_request,
+)
 from memcommit.resolve_runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.store import ConcurrentContextUpdateError
@@ -143,6 +148,40 @@ def resolve_context(
         )
     except (ResolveError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
+    return _run_request(runtime, request, expected_revision=expected_revision)
+
+
+def resolve_conflict_finding(
+    runtime: ClientRuntime,
+    handoff: QualityFindingHandoff,
+    *,
+    allow_create: bool = False,
+    allow_delete: bool = False,
+    guidance: str = "",
+    expected_revision: str | None = None,
+) -> ResolveAnalysisResult:
+    """Resolve one exact conflict receipt through the normal fresh authority frame."""
+
+    try:
+        request = conflict_handoff_to_resolve_request(
+            handoff,
+            allow_create=allow_create,
+            allow_delete=allow_delete,
+            guidance=guidance,
+        )
+    except (QualityFindingHandoffError, ResolveError, TypeError, ValueError) as error:
+        raise_public(SemanticInputError, error)
+    return _run_request(runtime, request, expected_revision=expected_revision)
+
+
+def _run_request(
+    runtime: ClientRuntime,
+    request: ResolveRequest,
+    *,
+    expected_revision: str | None,
+) -> ResolveAnalysisResult:
+    """Execute one already-typed request without dropping its source binding."""
+
     port = _port(runtime)
     if request.context_name is not None:
         try:
@@ -155,6 +194,7 @@ def resolve_context(
                 allow_create=request.allow_create,
                 allow_delete=request.allow_delete,
                 guidance=request.guidance,
+                source_precondition=request.source_precondition,
             )
         except (ResolveError, TypeError, ValueError) as error:
             raise_public(SemanticInputError, error)
@@ -228,4 +268,4 @@ def apply_resolve(
     )
 
 
-__all__ = ["apply_resolve", "resolve_context"]
+__all__ = ["apply_resolve", "resolve_conflict_finding", "resolve_context"]

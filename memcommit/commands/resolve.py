@@ -33,6 +33,11 @@ from memcommit.resolve_application import (
 )
 from memcommit.resolve_runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.quality_finding_handoff import (
+    QualityFindingHandoffError,
+    conflict_handoff_to_resolve_request,
+    quality_finding_handoff_from_json,
+)
 from memcommit.store import MemoryStore
 
 
@@ -73,6 +78,13 @@ def cmd(
         typer.Option(
             "--guidance",
             help="Grounding instruction or fact available to candidate generation",
+        ),
+    ] = None,
+    finding_handoff: Annotated[
+        Optional[str],
+        typer.Option(
+            "--finding-handoff",
+            help="Canonical conflict handoff JSON emitted by find-conflicts",
         ),
     ] = None,
     candidate_uid: Annotated[
@@ -131,13 +143,26 @@ def cmd(
 
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
-        request = ResolveRequest(
-            context_name=snapshot.resolve_or_current(context_name),
-            memory_selectors=tuple(memory_selectors or ()),
-            allow_create=allow_create,
-            allow_delete=allow_delete,
-            guidance=guidance or "",
-        )
+        if finding_handoff is not None:
+            if context_name is not None or memory_selectors:
+                raise ResolveError(
+                    "Resolve --finding-handoff cannot be combined with a Context "
+                    "or Memory selector."
+                )
+            request = conflict_handoff_to_resolve_request(
+                quality_finding_handoff_from_json(finding_handoff),
+                allow_create=allow_create,
+                allow_delete=allow_delete,
+                guidance=guidance or "",
+            )
+        else:
+            request = ResolveRequest(
+                context_name=snapshot.resolve_or_current(context_name),
+                memory_selectors=tuple(memory_selectors or ()),
+                allow_create=allow_create,
+                allow_delete=allow_delete,
+                guidance=guidance or "",
+            )
         port = MemoryStoreResolvePort(
             store,
             current_name=snapshot.current_name,
@@ -194,6 +219,7 @@ def cmd(
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
+        QualityFindingHandoffError,
         ResolveError,
         RuntimeError,
         TypeError,

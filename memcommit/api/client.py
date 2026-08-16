@@ -38,6 +38,7 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
+from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
 from memcommit.api.semantic import (
     DistillApplyResult,
@@ -47,6 +48,7 @@ from memcommit.api.semantic import (
     FitPropositionInput,
 )
 from memcommit.context import QueryContextRef
+from memcommit.quality_finding_handoff import QualityFindingHandoff
 from memcommit.profile_config import (
     ProfileConfigError,
     ProfileEntry,
@@ -232,6 +234,58 @@ class MemCommitClient:
             self._runtime,
             context_name,
             memory_selectors=memory_selectors,
+            allow_create=allow_create,
+            allow_delete=allow_delete,
+            guidance=guidance,
+            expected_revision=expected_revision,
+        )
+
+    def find_duplicates(
+        self,
+        context_names: Sequence[str] = (),
+    ) -> QualityFindResult:
+        """Find duplicate evidence in one frozen readable Context frame."""
+
+        from memcommit.api._operations.quality_find import find_quality
+
+        return find_quality(self._runtime, "duplicates", context_names)
+
+    def find_ambiguities(
+        self,
+        context_names: Sequence[str] = (),
+    ) -> QualityFindResult:
+        """Find ambiguity in one frozen readable Context frame."""
+
+        from memcommit.api._operations.quality_find import find_quality
+
+        return find_quality(self._runtime, "ambiguities", context_names)
+
+    def find_conflicts(
+        self,
+        context_names: Sequence[str] = (),
+    ) -> QualityFindResult:
+        """Find conflicting pairs in one frozen readable Context frame."""
+
+        from memcommit.api._operations.quality_find import find_quality
+
+        return find_quality(self._runtime, "conflicts", context_names)
+
+    def resolve_conflict_finding(
+        self,
+        handoff: QualityFindingHandoff,
+        *,
+        allow_create: bool = False,
+        allow_delete: bool = False,
+        guidance: str = "",
+        expected_revision: str | None = None,
+    ) -> ResolveAnalysisResult:
+        """Resolve one exact finder receipt after fresh source and authority checks."""
+
+        from memcommit.api._operations.resolve import resolve_conflict_finding
+
+        return resolve_conflict_finding(
+            self._runtime,
+            handoff,
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,

@@ -35,6 +35,13 @@ from memcommit.interfaces.agent.query import (
     QueryAgentAdapter,
     query_agent_tool_schema,
 )
+from memcommit.interfaces.agent.quality_find import (
+    QUALITY_FIND_AGENT_CONTRACT_VERSION,
+    QUALITY_FIND_AGENT_TOOL_NAME,
+    QualityFindAgentAdapter,
+    quality_find_agent_tool_schema,
+    quality_finding_handoff_agent_schema,
+)
 from memcommit.interfaces.agent.distill import (
     DISTILL_AGENT_CONTRACT_VERSION,
     DISTILL_AGENT_TOOL_NAME,
@@ -113,6 +120,9 @@ __all__ = [
     "QUERY_AGENT_ERROR_MESSAGE_LIMIT",
     "QUERY_AGENT_TOOL_NAME",
     "QueryAgentAdapter",
+    "QUALITY_FIND_AGENT_CONTRACT_VERSION",
+    "QUALITY_FIND_AGENT_TOOL_NAME",
+    "QualityFindAgentAdapter",
     "RESOLVE_AGENT_CONTRACT_VERSION",
     "RESOLVE_AGENT_TOOL_NAME",
     "ResolveAgentAdapter",
@@ -127,5 +137,7 @@ __all__ = [
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
     "query_agent_tool_schema",
+    "quality_find_agent_tool_schema",
+    "quality_finding_handoff_agent_schema",
     "resolve_agent_tool_schema",
 ]

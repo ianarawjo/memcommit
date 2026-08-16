@@ -243,6 +243,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert initialized.server_info.name == "memcommit"
     assert [tool.name for tool in listed.tools] == [
         "memcommit_query",
+        "memcommit_quality_find",
         "memcommit_add_memories",
         "memcommit_compare",
         "memcommit_meld",
