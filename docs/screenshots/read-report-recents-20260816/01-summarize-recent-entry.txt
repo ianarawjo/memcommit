@@ -1,6 +1,6 @@
  MEM SUMMARIZE · RECENTS OR SELECT · RECENT FIRST · ALL                                                                                                                             
  PROFILE · (unregistered)                                                                                                                                                           
- STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-read-report-capture-ntt0vo1n/.mem                                                                             
+ STORE   · /Users/KimMunyeong/Github/memcommit/docs/screenshots/read-report-recents-20260816/.fixture-summarize/.mem                                                                
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   + SELECT A TARGET                                                                                                                                                                ^
 › 2026-08-16 12:00Z  reports/empty  [COMPLETED]  SUMMARIZE · DIRECT + RECURSIVE                                                                                                     
@@ -20,7 +20,7 @@
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
  Kind         summarize                                                                                                                                                            ^
- Key          72eef0bf-5f01-47f3-b38a-f1cf9d06747c                                                                                                                                  
+ Key          11111111-1111-4111-8111-111111111111                                                                                                                                  
  Title        reports/empty                                                                                                                                                         
  Status       COMPLETED                                                                                                                                                             
  Context      reports/empty                                                                                                                                                         

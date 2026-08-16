@@ -1,6 +1,6 @@
  MEM FIND DUPLICATES · RECENTS OR SELECT · RECENT FIRST · ALL                                                                                                                       
  PROFILE · (unregistered)                                                                                                                                                           
- STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-read-report-capture-84if6dpl/.mem                                                                             
+ STORE   · /Users/KimMunyeong/Github/memcommit/docs/screenshots/read-report-recents-20260816/.fixture-find/.mem                                                                     
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   + SELECT A TARGET                                                                                                                                                                ^
 › 2026-08-16 12:00Z  reports/find  [COMPLETED]  FIND DUPLICATES · DIRECT                                                                                                            
@@ -20,7 +20,7 @@
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
  Kind         find-duplicates                                                                                                                                                      ^
- Key          cdd1b07f-7f68-4d64-a74a-b6689b24d5d7                                                                                                                                  
+ Key          22222222-2222-4222-8222-222222222222                                                                                                                                  
  Title        reports/find                                                                                                                                                          
  Status       COMPLETED                                                                                                                                                             
  Context      reports/find                                                                                                                                                          

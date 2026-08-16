@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
 import importlib.util
 import io
 import os
 from pathlib import Path
 import re
+import shutil
 import sys
-import tempfile
 
 import pexpect
 
@@ -55,22 +54,27 @@ def _isolate_store(root: Path) -> None:
 
 
 def _record_recent(store, target, started_at: str) -> None:
-    from memcommit.command_attempts import (
-        annotate_read_report_attempt,
-        begin_command_attempt,
-        finish_command_attempt,
-    )
+    from memcommit.command_attempts import CommandAttempt, CommandAttemptLedger
 
-    active = begin_command_attempt(
-        store_dir=store.store_dir,
-        operation=target.operation,
-        stdin_tty=True,
-        stdout_tty=True,
+    uid = (
+        "11111111-1111-4111-8111-111111111111"
+        if target.operation == "summarize"
+        else "22222222-2222-4222-8222-222222222222"
     )
-    active.record = replace(active.record, started_at=started_at)
-    active.ledger.replace(active.record)
-    annotate_read_report_attempt(target)
-    finish_command_attempt(active, status="COMPLETED")
+    CommandAttemptLedger(store.store_dir).create(
+        CommandAttempt(
+            uid=uid,
+            operation=target.operation,
+            status="COMPLETED",
+            started_at=started_at,
+            completed_at=started_at,
+            elapsed_seconds=0.0,
+            stdin_tty=True,
+            stdout_tty=True,
+            details={"read_report": target.to_metadata()},
+            failure=None,
+        )
+    )
 
 
 def _context_state(store, name: str) -> tuple[bytes, tuple[str, ...]]:
@@ -87,8 +91,14 @@ def _run_child(kind: str) -> None:
     from memcommit.read_report import ReadReportTarget
     from memcommit.store import MemoryStore
 
-    with tempfile.TemporaryDirectory(prefix="memcommit-read-report-capture-") as temp:
-        _isolate_store(Path(temp))
+    fixture_root = OUT / f".fixture-{kind}"
+    if fixture_root.exists():
+        # The exact repository-local scratch path is never part of the
+        # evidence. Clearing it makes repeated captures byte-for-byte stable.
+        shutil.rmtree(fixture_root)
+    fixture_root.mkdir(parents=True)
+    try:
+        _isolate_store(fixture_root)
         store = MemoryStore()
         if kind == "summarize":
             context = ops.init("reports/empty")
@@ -140,6 +150,8 @@ def _run_child(kind: str) -> None:
             f"{kind.upper()} CLOSED · READ REPORT RECENT REVALIDATED · "
             "CONTEXT BYTES UNCHANGED · CHECKPOINTS UNCHANGED"
         )
+    finally:
+        shutil.rmtree(fixture_root)
 
 
 def _environment() -> dict[str, str]:
