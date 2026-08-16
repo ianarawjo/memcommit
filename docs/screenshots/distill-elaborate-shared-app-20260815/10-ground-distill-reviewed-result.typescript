@@ -1,5 +1,5 @@
 $ mem distill --ground capture-ground --tui
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
 [0m READ-ONLY · SOURCE FROZEN BY CALLER[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| REACH · FROZEN |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ RANGE · [ THIS CONTEXT ONLY ] · FROZEN                                                                                                                                           [179C│[0m
@@ -50,7 +50,7 @@ $ mem distill --ground capture-ground --tui
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m Enter run · Esc/Backspace/Q close · read-only[46D[40A[C[0m[11A[J[0m[?7h[?1049l[?2004lMEM DISTILL · 1/2 · FREEZING SOURCE . · 0sMEM DISTILL · 2/2 · DISTILLING RULES . · 0s                                           [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
+[0m Enter run · Esc/Backspace/Q close · read-only[46D[40A[C[0m[11A[J[0m[?7h[?1049l[?2004l[?12l[?25hMEM DISTILL · 1/2 · FREEZING SOURCE . · 0sMEM DISTILL · 2/2 · DISTILLING RULES . · 0s                                           [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
 [0m READ-ONLY · SOURCE FROZEN BY CALLER[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| REACH · FROZEN |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ RANGE · [ THIS CONTEXT ONLY ] · FROZEN                                                                                                                                           [179C│[0m

@@ -112,24 +112,30 @@ without making the client facade or a generic semantic dispatcher their owner.
 
 ## Verification
 
-The extracted surface passed 113 focused tests on the latest Meld runtime,
-covering Add, all Query routes, the public Meld lifecycle, agent adapters,
-fresh-process import isolation, Store-root handling, and the agent registry.
-The agent/MCP projection suite passed 76 tests after its stale two-tool
-expectation was updated to include the already registered Meld tool.
+The extracted surface passed 194 focused tests after the Atomize Grounding and
+shared-interface changes were integrated. The set covers the QualityFind
+source frame, Distill and Elaborate core/CLI/TUI behavior, Add, every Query
+route, the complete Meld and Atomize Grounding public lifecycles, all seven agent
+adapters, MCP projection, and fresh-process import isolation. Ruff passed for
+every Python file changed by this rollout, the package compiled, and
+`python -m memcommit.cli --help` loaded the Fit, Distill, and Elaborate commands.
 
 An isolated `uv build` wheel was installed with the `mcp` extra under Python
 3.13. From that `site-packages` origin, constructing the client loaded no
-operation adapter; selecting Add, Query, and Meld loaded only the requested
-adapter in sequence. The installed `mem-mcp` stdio entry point initialized,
-listed Query, Add, and Meld, applied one two-Memory Add with exactly one
-checkpoint, and returned the typed unknown-tool error.
+operation adapter. An invalid standalone Elaborate request then loaded only
+`api._operations.elaborate`, not Ground Elaborate or Distill. The installed
+Ground Distill route loaded only `api._operations.ground_distill`, not the
+standalone Distill or Ground Elaborate adapter. The installed
+`mem` entry point listed Fit, Distill, and Elaborate. The installed `mem-mcp`
+stdio entry point initialized, listed Query, Add, Meld, Atomize Grounding,
+Distill, Elaborate, and Fit, opened one saved Grounding session, applied one
+two-Memory Add with exactly one checkpoint, and returned the typed unknown-tool
+error.
 
 The earlier general `mem --help` blocker was a partial-commit mismatch between
-`quality_audit` and `QualityFindSourceFrame`. That aggregate source-frame
-implementation and its owner-aware finder payload are now committed and
-verified separately, so installed CLI readiness can be included in the next
-wheel gate.
+`quality_audit` and `QualityFindSourceFrame`. The committed aggregate
+source-frame implementation and owner-aware finder payload now pass their
+focused tests and the installed CLI gate.
 
 ## Remaining rollout
 
@@ -138,5 +144,5 @@ Distill, Ground Distill, standalone Elaborate, and Ground Elaborate are now
 operation-owned assemblies. Their public facade methods contain delegation and
 shared runtime construction only. New public operations must add a sibling
 adapter and fresh-process import contract rather than restoring client-owned
-loaders or assembly. Audit the CLI registry independently as its own console
-composition boundary.
+loaders or assembly. The CLI and agent registries remain independently
+composed and tested boundaries rather than client-owned assembly.

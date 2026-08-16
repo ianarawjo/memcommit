@@ -6,6 +6,8 @@ color-capable `180×52` PTY. `NO_COLOR` is removed, `TERM=xterm-256color`,
 script injects deterministic provider responses at the provider port; it does
 not replace the application, command, setup workbench, semantic Viewer,
 clipboard, Apply, Store, or CLI routes. Every run uses a disposable Store.
+The set can be reproduced from the repository root with
+`uv run --with pexpect --with pyte --with pillow python docs/screenshots/distill-elaborate-shared-app-20260815/capture.py`.
 
 | Capture | Exact command / preceding input | Visible state | Durable mutation |
 | --- | --- | --- | --- |

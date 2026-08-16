@@ -1,5 +1,5 @@
 $ mem distill --ground capture-ground --tui
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DISTILL[0m
 [0m READ-ONLY · SOURCE FROZEN BY CALLER[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| REACH · FROZEN |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ RANGE · [ THIS CONTEXT ONLY ] · FROZEN                                                                                                                                           [179C│[0m

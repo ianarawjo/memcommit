@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.util
 import io
 import json
 import os
@@ -11,6 +10,8 @@ import sys
 import tempfile
 
 import pexpect
+
+from capture_support import StreamRecorder, settle, snapshot
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -21,15 +22,6 @@ DOWN = "\x1b[B"
 RIGHT = "\x1b[C"
 SHIFT_TAB = "\x1b[Z"
 TAB = "\t"
-
-BASE_PATH = ROOT / "docs/screenshots/atomize-memory-selection-20260814/capture.py"
-SPEC = importlib.util.spec_from_file_location("semantic_capture_base", BASE_PATH)
-assert SPEC is not None and SPEC.loader is not None
-BASE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(BASE)
-BASE.OUT = OUT
-BASE.COLUMNS = COLUMNS
-BASE.ROWS = ROWS
 
 
 class CaptureProvider:
@@ -339,7 +331,7 @@ def _environment() -> dict[str, str]:
 
 
 def _spawn(kind: str, root: Path) -> tuple[pexpect.spawn, io.StringIO]:
-    recorder = BASE._StreamRecorder()
+    recorder = StreamRecorder()
     child = pexpect.spawn(
         sys.executable,
         [str(Path(__file__).resolve()), "--child", kind, str(root)],
@@ -355,30 +347,30 @@ def _spawn(kind: str, root: Path) -> tuple[pexpect.spawn, io.StringIO]:
 
 
 def _snapshot(recorder: io.StringIO, stem: str) -> None:
-    BASE._snapshot(recorder, stem)
+    snapshot(recorder, stem, out=OUT, columns=COLUMNS, rows=ROWS)
 
 
 def _capture_distill_review(root: Path) -> None:
     child, recorder = _spawn("distill-review", root)
     try:
         child.expect("MEM DISTILL")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "01-distill-context-entry")
         child.send(SHIFT_TAB + RIGHT)
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "02-distill-descendants-selected")
         child.send(TAB * 2)
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "03-distill-run-ready")
         child.send("s")
         child.expect("SOURCE UNCHANGED")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "04-distill-reviewed-result")
         child.send(DOWN * 4 + "y")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "05-distill-focused-rule-copied")
         child.send("Y")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "06-distill-whole-proposal-copied")
         child.send("q")
         child.expect("Create 'capture/rules'")
@@ -420,13 +412,13 @@ def _capture_ground_distill(root: Path) -> None:
     child, recorder = _spawn("ground-distill", root)
     try:
         child.expect("SOURCE FROZEN BY CALLER")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "10-ground-distill-frozen-source")
         # These keys would retarget ordinary Distill. The locked branch keeps
         # the run action and exact request unchanged.
         child.send(SHIFT_TAB + RIGHT + "s")
         child.expect("SOURCE UNCHANGED")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, "10-ground-distill-reviewed-result")
         child.send("q")
         child.expect("GROUND DISTILL VERIFIED")
@@ -441,10 +433,10 @@ def _capture_elaborate(kind: str, root: Path, stem: str) -> None:
     child, recorder = _spawn(kind, root)
     try:
         child.expect("ELABORATE ·")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, f"{stem}-result")
         child.send(DOWN * 3 + "y")
-        BASE._settle(child)
+        settle(child)
         _snapshot(recorder, f"{stem}-focused-copied")
         child.send("Yq")
         child.expect("ELABORATE VERIFIED")

@@ -10,20 +10,20 @@ The examples support a confirmation Rule while the contrast limits when action i
 
 PROPOSED RULES · 1
 
-1. [0ef14f47] Act only after the person explicitly confirms the selected option.
-   SUPPORT · 308715a6
-   BOUNDARY · 28fffb82
+1. [f3926335] Act only after the person explicitly confirms the selected option.
+   SUPPORT · 7f96f3b8
+   BOUNDARY · b5243ae9
    WHY · The confirmed Case supports action and the mention-only Case bounds it.
 
 OUTSIDE PROPOSED RULES · 0 Memories
 No Result Context or checkpoint has been created.
 
 [32mCreated Distill Result 'capture/rules' with 1 Rules; Source unchanged.[0m
-CHECKPOINT · bbcd9b96 · RECOVERY · mem undo
+CHECKPOINT · 3ba0c8a4 · RECOVERY · mem undo
 $ mem show --context capture/rules
 [1mContext: capture/rules[0m
   Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
 [1m
 Items (in context order):[0m
-  [memory ccab28e1] [2mAct only after the person explicitly confirms the selected option.[0m
+  [memory 05b92acf] [2mAct only after the person explicitly confirms the selected option.[0m
 APPLY + READ-ONLY VERIFICATION · ONE RESULT RULE · ONE DISTILL CHECKPOINT · SOURCE UNCHANGED

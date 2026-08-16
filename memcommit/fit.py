@@ -23,15 +23,15 @@ from memcommit.conformance import (
 )
 from memcommit.fit_judgment import (
     FIT_JUDGMENT_OPERATION,
-    FitAnalysis,
-    FitAssessment,
-    FitBatchAnalysis,
+    FitAnalysis as FitAnalysis,
+    FitAssessment as FitAssessment,
+    FitBatchAnalysis as FitBatchAnalysis,
     FitJudgmentError,
     FitProposition,
     FitQuestion,
-    FitRole,
+    FitRole as FitRole,
     FitVerdict,
-    judge_fit,
+    judge_fit as judge_fit,
     judge_fit_questions,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity

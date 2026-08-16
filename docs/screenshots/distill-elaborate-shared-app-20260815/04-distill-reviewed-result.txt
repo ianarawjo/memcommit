@@ -20,8 +20,8 @@
 ┃                                                                                                                                                                                  ┃
 ┃ RULE 1                                                                                                                                                                           ┃
 ┃ Act only after the person explicitly confirms the selected option.                                                                                                               ┃
-┃ SUPPORT · b50c55dd                                                                                                                                                               ┃
-┃ BOUNDARY · c3e132c7                                                                                                                                                              ┃
+┃ SUPPORT · 3516dd72                                                                                                                                                               ┃
+┃ BOUNDARY · 0803ea39                                                                                                                                                              ┃
 ┃ WHY · The confirmed Case supports action and the mention-only Case bounds it.                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ OUTSIDE PROPOSED RULES · 0 Memories                                                                                                                                              ┃
