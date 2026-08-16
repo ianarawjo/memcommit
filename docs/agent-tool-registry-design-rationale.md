@@ -95,13 +95,11 @@ fields, and prove that neither read-only tool creates a Context or accepts a
 proposal.
 
 The earlier clean-wheel check covered Query/Add discovery and a real Add
-invocation. On 2026-08-15 a fresh current-worktree wheel exposed the then-current
-eight-tool registry and executed a real Grounding `open` plus structural
-Atomize saved `open`, exact Apply, and retry through the official stdio client
+invocation. On 2026-08-16 a fresh current-worktree wheel exposed all fifteen
+current tools and executed Help, Show, a real Add, a saved Grounding `open`,
+structural Atomize saved `open`/Apply/retry, and Forget's provider-free
+empty-Source Analyze/no-op Apply/replay through the official stdio client
 outside the checkout. Provider-backed semantic execution remains in-process
-evidence. Forget's in-process tests additionally prove process-local versioning,
-real Apply, and exact replay without a second checkpoint; a new installed-wheel
-gate for the expanded registry remains pending. The registry is not a plugin,
-network endpoint, authentication service, skill installer, idempotency service,
-or dynamic runtime registry. Adding shipped operations remains an explicit code
-and compatibility change.
+evidence. The registry is not a plugin, network endpoint, authentication
+service, skill installer, idempotency service, or dynamic runtime registry.
+Adding shipped operations remains an explicit code and compatibility change.

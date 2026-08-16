@@ -88,6 +88,7 @@ def _prepare_store(root: Path) -> MemoryStore:
     store = MemoryStore(root=root)
     context = ops.init("smoke/target")
     store.save(context)
+    store.save(ops.init("smoke/forget-empty"))
     store.set_current(context.name)
     digest = "0" * 64
     grounding = AtomizeGroundingSession.create(
@@ -250,6 +251,30 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "expected_version": output_proposal["version"],
                 },
             )
+            forget = await session.call_tool(
+                "memcommit_forget",
+                {
+                    "version": 1,
+                    "kind": "analyze",
+                    "instruction": "Forget any obsolete detail.",
+                    "context_name": "smoke/forget-empty",
+                },
+            )
+            forget_result = forget.structured_content["result"]
+            forget_apply_request = {
+                "version": 1,
+                "kind": "apply",
+                "review_uid": forget_result["review_uid"],
+                "expected_version": forget_result["version"],
+            }
+            forget_apply = await session.call_tool(
+                "memcommit_forget",
+                forget_apply_request,
+            )
+            forget_retry = await session.call_tool(
+                "memcommit_forget",
+                forget_apply_request,
+            )
             unknown = await session.call_tool("not_registered", {})
 
     assert initialized.server_info.name == "memcommit"
@@ -266,6 +291,7 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "memcommit_distill",
         "memcommit_elaborate",
         "memcommit_fit",
+        "memcommit_forget",
         "memcommit_resolve",
         "memcommit_dedup",
     ]
@@ -311,6 +337,19 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert atomize_save_retry.structured_content["result"]["checkpoint_uid"] == (
         atomize_save.structured_content["result"]["checkpoint_uid"]
     )
+    assert forget.is_error is False
+    assert forget_result["retention"] == "PROCESS_LOCAL"
+    assert forget_result["provider_used"] is False
+    assert forget_result["candidates"] == []
+    assert forget_result["effect"] == "NONE"
+    assert forget_apply.is_error is False
+    assert forget_apply.structured_content["result"]["applied"] is False
+    assert forget_apply.structured_content["result"]["changed_count"] == 0
+    assert forget_apply.structured_content["result"]["recovered"] is False
+    assert forget_apply.structured_content["result"]["effect"] == "NONE"
+    assert forget_retry.is_error is False
+    assert forget_retry.structured_content["result"]["recovered"] is True
+    assert forget_retry.structured_content["result"]["effect"] == "NONE"
     assert unknown.is_error is True
     assert unknown.structured_content["error"]["code"] == "unknown_tool"
     return {
@@ -329,6 +368,9 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "atomize_output_plan": atomize_output_plan.structured_content,
         "atomize_save": atomize_save.structured_content,
         "atomize_save_retry": atomize_save_retry.structured_content,
+        "forget": forget.structured_content,
+        "forget_apply": forget_apply.structured_content,
+        "forget_retry": forget_retry.structured_content,
         "unknown_error": unknown.structured_content["error"],
     }
 
@@ -381,6 +423,9 @@ def main() -> int:
         protocol["atomize_save"]["result"]["checkpoint_uid"]
     )
     assert store.current_context_name() == "smoke/atomize-output"
+    forgotten = store.load_direct("smoke/forget-empty")
+    assert forgotten.memories == {}
+    assert store.list_checkpoints(forgotten.name) == []
 
     print(
         json.dumps(
@@ -392,6 +437,7 @@ def main() -> int:
                 "checkpoint_count": len(checkpoints),
                 "atomize_checkpoint_count": len(atomize_checkpoints),
                 "atomize_save_checkpoint_count": len(save_checkpoints),
+                "forget_checkpoint_count": 0,
                 **protocol,
             },
             ensure_ascii=False,

@@ -81,5 +81,6 @@ operation, infrastructure, or Store imports from the transport adapter.
 
 The installed-wheel check is recorded separately in
 `mcp-installed-wheel-verification.md`. It uses an isolated environment and the
-real stdio entry point to prove discovery, one durable Add checkpoint, bounded
-unknown-tool failure, and source-checkout independence.
+real stdio entry point to prove fifteen-tool discovery, one durable Add
+checkpoint, bounded unknown-tool failure, source-checkout independence, and a
+provider-free Forget Analyze/no-op Apply/replay with zero Forget checkpoints.

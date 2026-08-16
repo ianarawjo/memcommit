@@ -1,38 +1,52 @@
 # MCP installed-wheel verification
 
-Last verified: 2026-08-15 against the structural Atomize agent worktree.
+Last verified: 2026-08-16 against the Forget application-boundary worktree.
 
-## Current eight-tool and import-isolation gate
+## Current fifteen-tool and import-isolation gate
 
 A fresh wheel built from the current worktree was installed with its `[mcp]`
 extra into a new `uv` virtual environment. The official MCP
 2.0.0 stdio client ran from outside the checkout, imported MemCommit from that
 environment's `site-packages`, and discovered this exact registry order:
 
-1. `memcommit_query`
-2. `memcommit_add_memories`
-3. `memcommit_meld`
-4. `memcommit_atomize`
-5. `memcommit_atomize_grounding`
-6. `memcommit_distill`
-7. `memcommit_elaborate`
-8. `memcommit_fit`
+1. `memcommit_help`
+2. `memcommit_show`
+3. `memcommit_query`
+4. `memcommit_quality_find`
+5. `memcommit_add_memories`
+6. `memcommit_compare`
+7. `memcommit_meld`
+8. `memcommit_atomize`
+9. `memcommit_atomize_grounding`
+10. `memcommit_distill`
+11. `memcommit_elaborate`
+12. `memcommit_fit`
+13. `memcommit_forget`
+14. `memcommit_resolve`
+15. `memcommit_dedup`
 
 The client then invoked Add and verified its checkpoint independently. It
 opened a durable review-only Grounding dialogue without a provider. For
 structural Atomize it exercised two saved sessions without provider access:
 one exact in-place Apply/retry, plus response replacement, require-new Output
 planning, Save As/retry, Source preservation, destination selection, and both
-single-checkpoint outcomes. Finally, it confirmed that an unknown tool returns
-the typed `unknown_tool` error. This proves that the eight
+single-checkpoint outcomes. It also invoked Forget Analyze on an empty direct
+Source without constructing a provider, applied the explicit no-op, retried
+the exact version in the same process, and verified zero Forget checkpoints.
+Finally, it confirmed that an unknown tool returns the typed `unknown_tool`
+error. This proves that the fifteen
 registered adapters and their transitive modules ship in the wheel and cross
 the installed MCP discovery boundary. Provider-backed semantic execution remains
 covered by the in-process public-client, agent-registry, and MCP-projection
 tests; the installed smoke intentionally makes no external provider call.
+Compare and Resolve are exercised through installed discovery here rather than
+live semantic invocation. Forget additionally crosses installed
+execution through its provider-free empty-Source route; its provider-backed
+and changed-Apply paths remain covered in-process.
 
 From a second process whose working directory was outside the checkout,
 `import memcommit` did not load `memcommit.api`; resolving the real public
-client loaded no Add, Fit, Distill, Elaborate, Ground, Meld, or Query
+client loaded no Add, Fit, Distill, Elaborate, Forget, Ground, Meld, or Query
 application implementation. The resolved root/API client objects retained
 identity and the module origin remained under `site-packages`.
 
@@ -69,7 +83,7 @@ registry order:
 1. `memcommit_query`
 2. `memcommit_add_memories`
 
-The current eight-tool run above supersedes that historical discovery list for
+The current fifteen-tool run above supersedes that historical discovery list for
 package-completeness evidence while preserving the older run's clean-commit and
 invalid-HOME regression record.
 
@@ -88,6 +102,10 @@ the source checkout. Query was verified through discovery in this run; invoking
 it was intentionally excluded because it would require an external semantic
 provider. Query execution remains covered at the public client, agent adapter,
 registry, projection, and in-memory MCP server layers.
+
+The installed Forget call separately verified process-local retention,
+provider-free empty-Source analysis, explicit no-op Apply, exact replay, and
+zero checkpoints.
 
 The same installed wheel passed twice: once with the person's normal HOME and
 once with a deliberately invalid HOME Profile registry containing unsupported
