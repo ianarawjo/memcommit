@@ -213,6 +213,14 @@ Dedup adapter translates it to survivor selections.
 - Apply consumes an exact operation-owned plan and repeats ordinary authority,
   freshness, and receipt validation.  Resolution never weakens that boundary.
 
+The boundary audit is executable rather than a directory-name convention.
+Static dependency tests require the Dedup and Resolve application owners to
+remain independent of command, TUI, prompt-toolkit, and Typer modules; require
+their plain and TUI presenters plus public Python assembly to import the same
+operation owner; and require agent adapters to enter through the public API
+without importing either application internals or terminal adapters. Merge has
+the same CLI/TUI gate but deliberately has no public or agent adapter yet.
+
 ## Intentional limitations
 
 - The deterministic and saved-session Resolution TUI models are not collapsed
