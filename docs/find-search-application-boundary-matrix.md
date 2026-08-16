@@ -1,6 +1,6 @@
 # Search application-boundary matrix
 
-Last reviewed: 2026-08-14.
+Last reviewed: 2026-08-16.
 
 ## Purpose
 
@@ -12,15 +12,17 @@ contract.
 
 Search and result materialization remain two separate use cases. The
 conversational Search controller, answer synthesis, and broader-scope
-confirmation remain outside both. The new callables are internal architectural
-evidence, not a versioned public Python API.
+confirmation remain outside both. Public Python and the versioned agent/MCP
+adapter now enter the same typed Search application rather than invoking the
+CLI or reconstructing its semantics.
 
 ## Intended call path
 
 ```text
-plain mem search QUERY ---------\
-                                 -> FindSearchRequest
-interactive Search workbench ---/          |
+plain mem search QUERY ----------\
+interactive Search workbench ----+--> FindSearchRequest
+MemCommitClient.search ----------+
+agent/MCP memcommit_search ------/          |
                                             v
                               run_find_search
                               (application)
@@ -53,6 +55,7 @@ imports the application owner directly.
 | Temporal execution | `run_find_search` + `search_history` | Local `HistoryTimeline` construction | TTY may open the existing read-only history picker from returned local evidence | Only direct local durable history enters the semantic turn; MemoryRef and query-source content stay closed |
 | Result | `FindSearchResponse` / `FindSearchResult` | `execute_find_search` | Plain and TUI projections may differ without rerunning | Response retains the exact request and either CURRENT or HISTORY evidence, never both for one row |
 | Durable effect | None | None | Search adapters only present results or construct a separate materialization request | Searching does not create, mutate, switch, copy, or persist a Context |
+| Public projection | `SearchResult` / `SearchItemResult` | `api._operations.search` resolves one frozen client Store/Profile boundary | Python returns immutable DTOs; agent/MCP returns version-1 JSON with `effect: NONE` | Public routes call `execute_find_search`; they neither import the CLI nor own a second ranking path |
 
 ## Authority and disclosure matrix
 
@@ -135,7 +138,9 @@ reaches this same application path.
 
 Existing Search, Search history, search-workbench, result-materialization,
 source-projection, authority, and Context-operand tests remain the parity gate
-for CLI and TUI adapters. The combined focused run passed 324 tests. An
+for CLI and TUI adapters. Public-client, agent-registry, and MCP-projection
+tests additionally prove the versioned external route. The earlier combined
+focused run passed 324 tests. An
 expanded run passed 476 tests after excluding one unrelated untracked
 provider-policy test whose compatibility name and implementation specify Search=`terra/low`
 and Query=`sol/none` while its assertion
@@ -155,15 +160,15 @@ commit self-contained.
 1. A Search result is a frozen moment-in-time search outcome. This slice does not
    re-open every source after semantic ranking, and it does not claim the
    source remained unchanged while the provider ran.
-2. `execute_find_search` requires an already frozen readable catalog. Stable
-   public store-root ownership, Profile/config bootstrap, typed public errors,
-   and compatibility/version policy remain undecided.
+2. `execute_find_search` requires an already frozen readable catalog. The
+   public operation adapter now owns Store/Profile bootstrap and stable typed
+   errors; operation-specific provider configuration remains infrastructure.
 3. The interactive workbench is still physically hosted under
    `memcommit.commands`; only its application data and execution dependency
    point moved. Physical TUI relocation is a separate presentation change.
 4. Conversational refinement, answer generation, and outside-Context
    confirmation retain their existing controllers and must be extracted as
    separate use cases.
-5. This slice does not add an MCP adapter. A future CLI, Python, or MCP route
-   must construct the same request and call the same application use case
-   rather than invoking another interface through a subprocess.
+5. The version-1 agent/MCP contract exposes bounded semantic Search only. It
+   does not expose the conversational refinement shell or materialization
+   controls; those remain separate reviewed operations.

@@ -46,6 +46,7 @@ from memcommit.api.query import (
 )
 from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
+from memcommit.api.search import SearchResult
 from memcommit.api.show import ShowResult
 from memcommit.api.semantic import (
     DistillApplyResult,
@@ -189,6 +190,28 @@ class MemCommitClient:
         from memcommit.api._operations.show import show
 
         return show(self._runtime, selector, context_name=context_name)
+
+    def search(
+        self,
+        query: str,
+        context_names: Sequence[str] = (),
+        *,
+        include_descendants: bool = False,
+        follow_embeds: bool = False,
+        limit: int = 5,
+    ) -> SearchResult:
+        """Search a readable Context scope by semantic relevance."""
+
+        from memcommit.api._operations.search import search
+
+        return search(
+            self._runtime,
+            query,
+            context_names,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+            limit=limit,
+        )
 
     def fit(
         self,

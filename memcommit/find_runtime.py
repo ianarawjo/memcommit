@@ -1,4 +1,4 @@
-"""MemoryStore composition for terminal-independent read-only Find search."""
+"""MemoryStore composition for terminal-independent semantic Search."""
 
 from __future__ import annotations
 
@@ -126,7 +126,7 @@ class MemoryStoreFindSearchSourcePort(FindSearchSourcePort):
         )
         if any(self._catalog.access_for(name).is_granted for name in names):
             raise RuntimeError(
-                "Temporal Find is unavailable for a granted READ view because "
+                "Temporal Search is unavailable for a granted READ view because "
                 "the grant does not expose authority checkpoint history."
             )
         return FrozenFindHistorySource(
@@ -142,7 +142,7 @@ def execute_find_search(
     provider_factory: FindSearchProviderFactory,
     observer: FindSearchObserver | None = None,
 ) -> FindSearchResponse:
-    """Execute Find with no argv, terminal, clipboard, or materialization edge."""
+    """Execute Search with no argv, terminal, clipboard, or materialization edge."""
 
     return run_find_search(
         request,

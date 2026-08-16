@@ -64,7 +64,7 @@ SearchItem = Memory | MemoryRef | QueryContextRef | SearchArtifact
 
 
 class FindError(RuntimeError):
-    """Safe, user-facing find error."""
+    """Compatibility-named safe semantic Search error."""
 
 
 def _valid_related_query(value: object, *, allow_empty: bool) -> bool:
@@ -112,13 +112,13 @@ class SearchMatch:
 
     def __post_init__(self) -> None:
         if self.relevance not in {"primary", "related"}:
-            raise ValueError("Invalid Find match relevance.")
+            raise ValueError("Invalid Search match relevance.")
         if self.relevance == "primary" and self.related_query is not None:
-            raise ValueError("Primary Find matches cannot carry a related query.")
+            raise ValueError("Primary Search matches cannot carry a related query.")
         if self.relevance == "related" and (
             not _valid_related_query(self.related_query, allow_empty=False)
         ):
-            raise ValueError("Related Find matches require a bounded related query.")
+            raise ValueError("Related Search matches require a bounded related query.")
 
 
 def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -410,9 +410,9 @@ def _rank_candidate_batch(
 ) -> list[SearchMatch]:
     """Return validated primary matches or an explicitly related fallback."""
     if not isinstance(query, str) or not query.strip():
-        raise FindError("Find query must be non-empty.")
+        raise FindError("Search query must be non-empty.")
     if not 1 <= limit <= 20:
-        raise FindError("Find limit must be between 1 and 20.")
+        raise FindError("Search limit must be between 1 and 20.")
     if not candidates:
         return []
 
@@ -533,9 +533,9 @@ def rank_candidates(
     """Rank one frozen corpus, staging Context-shaped batches when required."""
 
     if not isinstance(query, str) or not query.strip():
-        raise FindError("Find query must be non-empty.")
+        raise FindError("Search query must be non-empty.")
     if not 1 <= limit <= 20:
-        raise FindError("Find limit must be between 1 and 20.")
+        raise FindError("Search limit must be between 1 and 20.")
     if not candidates:
         return []
     plan = plan_semantic_execution(
@@ -578,7 +578,7 @@ def rank_candidates(
     )
     if final_plan.mode is not ExecutionMode.ONE_SHOT:
         raise FindError(
-            "The staged Find shortlist is still too large for final reranking; "
+            "The staged Search shortlist is still too large for final reranking; "
             "stored content is never truncated."
         )
     if on_progress is not None:

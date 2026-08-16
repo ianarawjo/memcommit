@@ -109,6 +109,8 @@ __all__ = [
     "ResolveApplyResult",
     "ResolveCandidateResult",
     "ResolveEffectResult",
+    "SearchItemResult",
+    "SearchResult",
     "DistillApplyResult",
     "DistillProposal",
     "DistillRuleProposal",
@@ -239,6 +241,8 @@ _LAZY_EXPORTS = {
     "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
     "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
     "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
+    "SearchItemResult": ("memcommit.api.search", "SearchItemResult"),
+    "SearchResult": ("memcommit.api.search", "SearchResult"),
     "QualityFindResult": ("memcommit.api.quality_find", "QualityFindResult"),
     **{
         name: ("memcommit.quality_finding_handoff", name)

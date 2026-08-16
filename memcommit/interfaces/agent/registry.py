@@ -64,6 +64,11 @@ from memcommit.interfaces.agent.show import (
     ShowAgentAdapter,
     show_agent_tool_schema,
 )
+from memcommit.interfaces.agent.search import (
+    SEARCH_AGENT_TOOL_NAME,
+    SearchAgentAdapter,
+    search_agent_tool_schema,
+)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QueryAgentAdapter,
@@ -251,6 +256,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
         raise TypeError("Default agent tool registry requires a MemCommitClient.")
     help_adapter = HelpAgentAdapter(client)
     show_adapter = ShowAgentAdapter(client)
+    search = SearchAgentAdapter(client)
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
@@ -275,6 +281,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=SHOW_AGENT_TOOL_NAME,
                 schema_factory=show_agent_tool_schema,
                 handler=show_adapter.invoke,
+            ),
+            AgentToolBinding(
+                name=SEARCH_AGENT_TOOL_NAME,
+                schema_factory=search_agent_tool_schema,
+                handler=search.invoke,
             ),
             AgentToolBinding(
                 name=QUERY_AGENT_TOOL_NAME,

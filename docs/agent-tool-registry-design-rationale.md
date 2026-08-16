@@ -96,7 +96,7 @@ proposal.
 
 The earlier clean-wheel check covered Query/Add discovery and a real Add
 invocation. On 2026-08-16 a fresh current-worktree wheel exposed all fifteen
-current tools and executed Help, Show, a real Add, a saved Grounding `open`,
+then-current tools and executed Help, Show, a real Add, a saved Grounding `open`,
 structural Atomize saved `open`/Apply/retry, and Forget's provider-free
 empty-Source Analyze/no-op Apply/replay through the official stdio client
 outside the checkout. Provider-backed semantic execution remains in-process

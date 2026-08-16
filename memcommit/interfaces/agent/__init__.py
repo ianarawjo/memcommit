@@ -89,6 +89,13 @@ from memcommit.interfaces.agent.show import (
     ShowAgentKind,
     show_agent_tool_schema,
 )
+from memcommit.interfaces.agent.search import (
+    SEARCH_AGENT_CONTRACT_VERSION,
+    SEARCH_AGENT_TOOL_NAME,
+    SearchAgentAdapter,
+    SearchAgentKind,
+    search_agent_tool_schema,
+)
 from memcommit.interfaces.agent.registry import (
     AGENT_TOOL_REGISTRY_VERSION,
     AgentToolBinding,
@@ -169,6 +176,10 @@ __all__ = [
     "SHOW_AGENT_TOOL_NAME",
     "ShowAgentAdapter",
     "ShowAgentKind",
+    "SEARCH_AGENT_CONTRACT_VERSION",
+    "SEARCH_AGENT_TOOL_NAME",
+    "SearchAgentAdapter",
+    "SearchAgentKind",
     "RESOLVE_AGENT_CONTRACT_VERSION",
     "RESOLVE_AGENT_TOOL_NAME",
     "ResolveAgentAdapter",
@@ -190,4 +201,5 @@ __all__ = [
     "quality_finding_handoff_agent_schema",
     "resolve_agent_tool_schema",
     "show_agent_tool_schema",
+    "search_agent_tool_schema",
 ]

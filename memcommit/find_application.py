@@ -1,4 +1,4 @@
-"""Terminal-independent application boundary for read-only Find search."""
+"""Terminal-independent application boundary for read-only semantic Search."""
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ class FindSearchRequest:
 
     def __post_init__(self) -> None:
         if not isinstance(self.query, str) or not self.query.strip():
-            raise ValueError("Enter a nonblank Find query.")
+            raise ValueError("Enter a nonblank Search query.")
         if (
             not self.target_names
             or any(not isinstance(name, str) or not name for name in self.target_names)
@@ -63,9 +63,9 @@ class FindSearchRequest:
         if not isinstance(self.include_descendants, bool) or not isinstance(
             self.follow_embeds, bool
         ):
-            raise ValueError("Find scope choices must be explicit booleans.")
+            raise ValueError("Search scope choices must be explicit booleans.")
         if isinstance(self.limit, bool) or not 1 <= self.limit <= 20:
-            raise ValueError("Find limit must be between 1 and 20.")
+            raise ValueError("Search limit must be between 1 and 20.")
 
 
 @dataclass(frozen=True)
@@ -85,7 +85,7 @@ class FindSearchResult:
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name.strip():
-            raise ValueError("Find results require a Context name.")
+            raise ValueError("Search results require a Context name.")
         if self.kind not in {
             "memory",
             "ref",
@@ -95,13 +95,13 @@ class FindSearchResult:
             "memory_transition",
             "checkpoint",
         }:
-            raise ValueError("Find returned an unsupported result kind.")
+            raise ValueError("Search returned an unsupported result kind.")
         if not isinstance(self.uid, str) or not self.uid.strip():
-            raise ValueError("Find results require a local identity.")
+            raise ValueError("Search results require a local identity.")
         if not isinstance(self.content, str) or not self.content.strip():
-            raise ValueError("Find results require nonblank content.")
+            raise ValueError("Search results require nonblank content.")
         if self.relevance not in {"primary", "related"}:
-            raise ValueError("Find returned invalid relevance.")
+            raise ValueError("Search returned invalid relevance.")
         source_values = (
             self.source_context_name,
             self.source_context_uid,
@@ -110,10 +110,10 @@ class FindSearchResult:
         if any(value is not None for value in source_values) and not all(
             isinstance(value, str) and value.strip() for value in source_values
         ):
-            raise ValueError("Find result Save As identity must be complete or absent.")
+            raise ValueError("Search result Save As identity must be complete or absent.")
         if self.current_match is not None and self.history_result is not None:
             raise ValueError(
-                "A Find result cannot contain current and history evidence."
+                "A Search result cannot contain current and history evidence."
             )
 
 
@@ -128,21 +128,21 @@ class FindSearchResponse:
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, FindSearchRequest):
-            raise ValueError("Find responses require the frozen request.")
+            raise ValueError("Search responses require the frozen request.")
         if self.mode not in {"CURRENT", "HISTORY"}:
-            raise ValueError("Find returned an invalid search mode.")
+            raise ValueError("Search returned an invalid search mode.")
         if not isinstance(self.results, tuple) or any(
             not isinstance(result, FindSearchResult) for result in self.results
         ):
-            raise ValueError("Find returned invalid result rows.")
+            raise ValueError("Search returned invalid result rows.")
         if not isinstance(self.related_query, str):
-            raise ValueError("Find returned an invalid broader query.")
+            raise ValueError("Search returned an invalid broader query.")
         related = [result for result in self.results if result.relevance == "related"]
         primary = [result for result in self.results if result.relevance == "primary"]
         if related and (primary or not self.related_query.strip()):
-            raise ValueError("Related Find results require one separate broader query.")
+            raise ValueError("Related Search results require one separate broader query.")
         if not related and self.related_query:
-            raise ValueError("A broader Find query requires related results.")
+            raise ValueError("A broader Search query requires related results.")
 
 
 @dataclass(frozen=True)
@@ -276,10 +276,10 @@ def related_query_for_matches(matches: list[SearchMatch]) -> str:
     primary_count = sum(match.relevance == "primary" for match in matches)
     related_count = sum(match.relevance == "related" for match in matches)
     if primary_count and related_count:
-        raise FindError("Find cannot mix primary and related results.")
+        raise FindError("Search cannot mix primary and related results.")
     if related_count:
         if len(related_queries) != 1 or None in related_queries:
-            raise FindError("Related Find results require one broader query.")
+            raise FindError("Related Search results require one broader query.")
         return next(iter(related_queries)) or ""
     return ""
 
@@ -310,7 +310,7 @@ def _current_result(match: SearchMatch) -> FindSearchResult:
         content = f"{item.title}\n{item.content}"
         source_identity = (None, None, None)
     else:  # pragma: no cover - SearchCandidate validates this union.
-        raise FindError("Find returned an unsupported result type.")
+        raise FindError("Search returned an unsupported result type.")
     return FindSearchResult(
         context_name=candidate.context_name,
         kind=kind,
@@ -347,7 +347,7 @@ def run_find_search(
     provider_factory: FindSearchProviderFactory,
     observer: FindSearchObserver | None = None,
 ) -> FindSearchResponse:
-    """Execute one read-only Find request without CLI or TUI dependencies."""
+    """Execute one read-only Search request without CLI or TUI dependencies."""
 
     if is_temporal_query(request.query):
         history_source = source_port.freeze_history(request)
