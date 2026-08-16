@@ -67,6 +67,14 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
+from memcommit.interfaces.agent.forget import (
+    FORGET_AGENT_CONTRACT_VERSION,
+    FORGET_AGENT_REVIEW_LIMIT,
+    FORGET_AGENT_TOOL_NAME,
+    ForgetAgentAdapter,
+    ForgetAgentKind,
+    forget_agent_tool_schema,
+)
 from memcommit.interfaces.agent.help import (
     HELP_AGENT_CONTRACT_VERSION,
     HELP_AGENT_TOOL_NAME,
@@ -141,6 +149,11 @@ __all__ = [
     "FIT_AGENT_CONTRACT_VERSION",
     "FIT_AGENT_TOOL_NAME",
     "FitAgentAdapter",
+    "FORGET_AGENT_CONTRACT_VERSION",
+    "FORGET_AGENT_REVIEW_LIMIT",
+    "FORGET_AGENT_TOOL_NAME",
+    "ForgetAgentAdapter",
+    "ForgetAgentKind",
     "HELP_AGENT_CONTRACT_VERSION",
     "HELP_AGENT_TOOL_NAME",
     "HelpAgentAdapter",
@@ -170,6 +183,7 @@ __all__ = [
     "dedup_agent_tool_schema",
     "elaborate_agent_tool_schema",
     "fit_agent_tool_schema",
+    "forget_agent_tool_schema",
     "help_agent_tool_schema",
     "query_agent_tool_schema",
     "quality_find_agent_tool_schema",

@@ -4,9 +4,9 @@ Last reviewed: 2026-08-16.
 
 ## Status
 
-`MIGRATING` while public and interface adapters are completed. The semantic,
-review, authority, freshness, and Apply owners are terminal-independent and
-the existing command route enters them.
+`MIGRATING` until installed-wheel verification and route classification are
+complete. The semantic, review, authority, freshness, Apply, public Python,
+agent, MCP, and existing command routes now enter the same application owners.
 
 ## Motivation
 
@@ -128,11 +128,12 @@ identity-preserving facades over `interfaces.tui.operations.forget`.
 
 ## Remaining work and non-goals
 
-1. Add a versioned process-local agent/MCP projection over the same
-   Analyze/Select/Revise/Apply use cases. The stable Python facade is recorded
-   in `forget-public-python-api-design-rationale.md`.
-2. Run installed-wheel discovery and effect smoke before classifying the route
+1. Run installed-wheel discovery and effect smoke before classifying the route
    `CLOSED`.
-3. Cross-process durable resume is intentionally not part of Forget. Adding it
+2. Cross-process durable resume is intentionally not part of Forget. Adding it
    later would require a separately reviewed session schema and retention
    policy.
+
+The stable Python facade is recorded in
+`forget-public-python-api-design-rationale.md`; the versioned process-local
+machine route is recorded in `forget-agent-adapter-design-rationale.md`.

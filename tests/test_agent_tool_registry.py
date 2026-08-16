@@ -20,6 +20,7 @@ from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
+    FORGET_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
     HELP_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
@@ -90,6 +91,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
+        FORGET_AGENT_TOOL_NAME,
         RESOLVE_AGENT_TOOL_NAME,
         DEDUP_AGENT_TOOL_NAME,
     )
@@ -347,5 +349,6 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     assert "memcommit.interfaces.agent.atomize" in imported
     assert "memcommit.interfaces.agent.atomize_grounding" in imported
     assert "memcommit.interfaces.agent.query" in imported
+    assert "memcommit.interfaces.agent.forget" in imported
     assert "memcommit.interfaces.agent.resolve" in imported
     assert "memcommit.interfaces.agent.help" in imported

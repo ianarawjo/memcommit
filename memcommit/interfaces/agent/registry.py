@@ -49,6 +49,11 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
+from memcommit.interfaces.agent.forget import (
+    FORGET_AGENT_TOOL_NAME,
+    ForgetAgentAdapter,
+    forget_agent_tool_schema,
+)
 from memcommit.interfaces.agent.help import (
     HELP_AGENT_TOOL_NAME,
     HelpAgentAdapter,
@@ -256,6 +261,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     distill = DistillAgentAdapter(client)
     elaborate = ElaborateAgentAdapter(client)
     fit = FitAgentAdapter(client)
+    forget = ForgetAgentAdapter(client)
     resolve = ResolveAgentAdapter(client)
     dedup = DedupAgentAdapter(client)
     return AgentToolRegistry(
@@ -319,6 +325,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=FIT_AGENT_TOOL_NAME,
                 schema_factory=fit_agent_tool_schema,
                 handler=fit.invoke,
+            ),
+            AgentToolBinding(
+                name=FORGET_AGENT_TOOL_NAME,
+                schema_factory=forget_agent_tool_schema,
+                handler=forget.invoke,
             ),
             AgentToolBinding(
                 name=RESOLVE_AGENT_TOOL_NAME,

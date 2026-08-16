@@ -18,6 +18,7 @@ from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
+    FORGET_AGENT_TOOL_NAME,
     HELP_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
@@ -75,6 +76,7 @@ def test_default_registry_projects_parameters_to_fresh_mcp_input_schemas(tmp_pat
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
+        FORGET_AGENT_TOOL_NAME,
         RESOLVE_AGENT_TOOL_NAME,
         DEDUP_AGENT_TOOL_NAME,
     )
