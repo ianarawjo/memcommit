@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from dataclasses import replace
 import uuid
 
 import pytest
@@ -27,11 +28,16 @@ from memcommit.ground_resolution import (
     GroundResolutionError,
 )
 from memcommit.ground_resolution_application import (
+    apply_ground_resolution,
     resolve_distill_rule,
     resolve_elaborate_candidate,
     resolve_fit_issue,
 )
-from memcommit.store import ground_session_record_digest
+from memcommit.store import (
+    ConcurrentGroundUpdateError,
+    MemoryStore,
+    ground_session_record_digest,
+)
 from memcommit.summarize import collect_summary_scope
 from memcommit.summarize_application import FrozenSummarySource
 
@@ -198,6 +204,14 @@ def _fit_receipt(session, rule, example, *, status="UNDERDETERMINED"):
     return GroundFitReceipt(report=report, current=True)
 
 
+def _persist_ground(store: MemoryStore):
+    session, contexts, rule, example = _ground()
+    for context in contexts:
+        store.create_context(context)
+    store.save_ground_session(session)
+    return session, contexts, rule, example
+
+
 def test_resolve_elaborate_keeps_candidate_unverified_and_nonmutating() -> None:
     session, _contexts, _rule, _example = _ground()
     result = _elaborate_result(
@@ -330,3 +344,173 @@ def test_resolve_fit_defer_is_an_explicit_nonmutating_plan() -> None:
     assert plan.action.kind == "DEFER"
     assert plan.candidate_verification == "REVISION_BOUND_JUDGMENT"
     assert ground_session_record_digest(session) == before
+
+
+def test_apply_resolve_elaborate_creates_exactly_one_ground_revision(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, _contexts, _rule, _example = _persist_ground(store)
+    result = _elaborate_result(
+        session,
+        rule_content="Remove legal-form suffixes before generating a ticker.",
+    )
+    plan = resolve_elaborate_candidate(
+        session,
+        result,
+        candidate_uid=result.elaborate.analysis.rules[0].uid,
+    )
+
+    receipt = apply_ground_resolution(store, plan, artifact=result)
+
+    saved = store.load_ground_session(session.contract_name)
+    assert saved is not None
+    assert receipt.mutated is True
+    assert receipt.previous_identity.ground_revision == session.revision
+    assert receipt.resulting_identity.ground_revision == session.revision + 1
+    assert saved.revision == session.revision + 1
+    assert saved.items_of_kind("RULE")[-1].content == plan.action.content
+    assert saved.items_of_kind("RULE")[-1].status == "PROPOSED"
+    assert saved.items_of_kind("RULE")[-1].origin == "AGENT"
+
+
+def test_apply_resolve_fit_refinement_stales_the_exact_source(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    session, _contexts, rule, example = _persist_ground(store)
+    artifact = _fit_receipt(session, rule, example)
+    plan = resolve_fit_issue(
+        session,
+        artifact,
+        choice=GroundFitResolutionChoice(
+            example_uid=example.uid,
+            action="REFINE_RULE",
+            rule_uid=rule.uid,
+            content=(
+                "For a normalized single-word name, use its first three "
+                "alphabetic characters in uppercase."
+            ),
+            rationale="The Redwood boundary requires a deterministic algorithm.",
+        ),
+    )
+
+    receipt = apply_ground_resolution(store, plan, artifact=artifact)
+
+    saved = store.load_ground_session(session.contract_name)
+    assert saved is not None
+    assert receipt.mutated is True
+    assert saved.revision == session.revision + 1
+    assert saved.items_of_kind("RULE")[0].content == plan.action.content
+    with pytest.raises(GroundResolutionError, match="changed after"):
+        apply_ground_resolution(store, plan, artifact=artifact)
+
+
+def test_apply_resolve_defer_writes_nothing(isolated_store) -> None:
+    store = MemoryStore()
+    session, _contexts, rule, example = _persist_ground(store)
+    artifact = _fit_receipt(session, rule, example)
+    plan = resolve_fit_issue(
+        session,
+        artifact,
+        choice=GroundFitResolutionChoice(
+            example_uid=example.uid,
+            action="DEFER",
+            rationale="Wait for an explicit transliteration policy.",
+        ),
+    )
+
+    receipt = apply_ground_resolution(store, plan, artifact=artifact)
+
+    assert receipt.mutated is False
+    assert receipt.previous_identity == receipt.resulting_identity
+    assert store.load_ground_session(session.contract_name) == session
+
+
+def test_apply_resolve_rejects_a_hand_built_action_change(isolated_store) -> None:
+    store = MemoryStore()
+    session, _contexts, _rule, _example = _persist_ground(store)
+    result = _elaborate_result(
+        session,
+        rule_content="Remove legal-form suffixes before generating a ticker.",
+    )
+    plan = resolve_elaborate_candidate(
+        session,
+        result,
+        candidate_uid=result.elaborate.analysis.rules[0].uid,
+    )
+    forged = replace(
+        plan,
+        action=replace(plan.action, content="A different uncited Rule."),
+    )
+
+    with pytest.raises(GroundResolutionError, match="does not exactly match"):
+        apply_ground_resolution(store, forged, artifact=result)
+
+    assert store.load_ground_session(session.contract_name) == session
+
+
+def test_apply_resolve_rejects_a_changed_bound_context(isolated_store) -> None:
+    store = MemoryStore()
+    session, contexts, _rule, _example = _persist_ground(store)
+    result = _elaborate_result(
+        session,
+        rule_content="Remove legal-form suffixes before generating a ticker.",
+    )
+    plan = resolve_elaborate_candidate(
+        session,
+        result,
+        candidate_uid=result.elaborate.analysis.rules[0].uid,
+    )
+    changed = store.load_direct(contexts[1].name)
+    changed.add(Memory(uid=_uid(), content="A concurrent Context change."))
+    store.save(changed)
+
+    with pytest.raises(ValueError, match="stale|changed|match"):
+        apply_ground_resolution(store, plan, artifact=result)
+
+    assert store.load_ground_session(session.contract_name) == session
+
+
+def test_apply_resolve_store_cas_rejects_a_concurrent_ground_turn(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, contexts, _rule, _example = _persist_ground(store)
+    result = _elaborate_result(
+        session,
+        rule_content="Remove legal-form suffixes before generating a ticker.",
+    )
+    plan = resolve_elaborate_candidate(
+        session,
+        result,
+        candidate_uid=result.elaborate.analysis.rules[0].uid,
+    )
+    original_save = store.save_ground_session
+    concurrent = propose_ground_rule(
+        session,
+        rule="A separately reviewed concurrent Rule.",
+        rationale="Land another exact Ground action before Resolve CAS.",
+        current_contexts=contexts,
+    )
+
+    def save_after_concurrent_turn(revised, **kwargs):
+        original_save(
+            concurrent,
+            replace=True,
+            expected_uid=session.uid,
+            expected_revision=session.revision,
+            expected_digest=ground_session_record_digest(session),
+            verify_bound_frames=True,
+        )
+        original_save(revised, **kwargs)
+
+    monkeypatch.setattr(store, "save_ground_session", save_after_concurrent_turn)
+
+    with pytest.raises(ConcurrentGroundUpdateError, match="changed"):
+        apply_ground_resolution(store, plan, artifact=result)
+
+    saved = store.load_ground_session(session.contract_name)
+    assert saved == concurrent
+    assert all(item.content != plan.action.content for item in saved.items)

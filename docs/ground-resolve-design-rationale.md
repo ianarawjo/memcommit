@@ -88,16 +88,25 @@ make rejection or correction less traceable.
 
 ## Current boundary and next slice
 
-`memcommit.ground_resolution` currently owns dependency-light plan values and
-their deterministic digest. `memcommit.ground_resolution_application` owns
-source-specific projection and local freshness validation, so importing the
-value contract does not eagerly assemble Fit storage or the Ground Distill and
-Elaborate adapters. Resolve does not yet persist plans, expose a CLI/TUI screen,
-call a provider to suggest a Fit response, or apply a plan. The next slice must
-add an application service that revalidates the exact source, translates the
-plan to the existing deterministic Ground primitive, and saves it with
-UID/revision/digest CAS. Only after that service is proven should the Ground
-workbench, Python client, and agent tool share it.
+`memcommit.ground_resolution` owns dependency-light plan values and their
+deterministic digest. `memcommit.ground_resolution_application` owns
+source-specific projection, local freshness validation, and application, so
+importing the value contract does not eagerly assemble Fit storage or the
+Ground Distill and Elaborate adapters.
+
+Application rebuilds the plan from the supplied exact source artifact, rejects
+a hand-authored or changed action, reloads all bound Contexts, invokes one
+existing Ground primitive, and saves with UID/revision/digest CAS plus locked
+frame verification. A concurrent Ground turn wins independently and the
+Resolve action fails without being partially added. A changed bound Context
+also fails before Ground publication. `DEFER` returns a typed non-mutating
+receipt and writes no Ground revision.
+
+Resolve does not yet persist plans, expose a CLI/TUI screen, or call a provider
+to suggest a Fit response. The next slice should expose the application service
+through the stable Python and agent boundaries, then compose the same service
+into the Ground workbench. Those adapters must not recreate the planning or
+mutation logic.
 
 The staged ticker benchmark in
 [`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md)

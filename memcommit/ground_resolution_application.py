@@ -2,8 +2,19 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from typing import TypeAlias
+
+from memcommit.context import Context
 from memcommit.fit_store import GroundFitReceipt
-from memcommit.ground import GroundSession
+from memcommit.ground import (
+    GroundSession,
+    propose_ground_example,
+    propose_ground_rule,
+    review_ground_item,
+    revise_ground_goal,
+    set_ground_example_use,
+)
 from memcommit.ground_distill import GroundDistillResult
 from memcommit.ground_elaborate import GroundElaborateResult
 from memcommit.ground_resolution import (
@@ -15,6 +26,24 @@ from memcommit.ground_resolution import (
     GroundResolutionSource,
 )
 from memcommit.store import ground_session_record_digest
+from memcommit.store import MemoryStore
+
+
+GroundResolutionArtifact: TypeAlias = (
+    GroundFitReceipt | GroundDistillResult | GroundElaborateResult
+)
+
+
+@dataclass(frozen=True)
+class GroundResolutionApplyReceipt:
+    """One exact Resolve outcome; DEFER is successful but non-mutating."""
+
+    plan_digest: str
+    artifact_uid: str
+    action_kind: str
+    previous_identity: GroundResolutionIdentity
+    resulting_identity: GroundResolutionIdentity
+    mutated: bool
 
 
 def _identity(session: GroundSession) -> GroundResolutionIdentity:
@@ -136,7 +165,6 @@ def resolve_elaborate_candidate(
             rationale=getattr(candidate, "rationale"),
             source_item_uid=getattr(candidate, "uid"),
             case_role=getattr(candidate, "case_role"),
-            expected=getattr(candidate, "expected"),
         )
     return GroundResolutionPlan(
         source=source,
@@ -257,7 +285,7 @@ def _fit_action(
             source_item_uid=choice.example_uid,
         )
     if choice.action == "SET_EXAMPLE_USE":
-        if choice.use not in {"INCLUDE", "EXCLUDE", "UNRESOLVED"}:
+        if choice.use not in {"INCLUDE", "EXCLUDE"}:
             raise GroundResolutionError("Resolve Example USE is invalid.")
         if content or choice.rule_uid:
             raise GroundResolutionError("A USE change cannot carry replacement text.")
@@ -271,7 +299,166 @@ def _fit_action(
     raise GroundResolutionError("Resolve Fit action is invalid.")
 
 
+def _revalidate_plan(
+    session: GroundSession,
+    plan: GroundResolutionPlan,
+    artifact: GroundResolutionArtifact,
+) -> GroundResolutionPlan:
+    """Rebuild a plan from its exact artifact so hand-built plans fail closed."""
+
+    if isinstance(artifact, GroundDistillResult):
+        if plan.source.kind != "DISTILL":
+            raise GroundResolutionError("Resolve plan and artifact kinds differ.")
+        rebuilt = resolve_distill_rule(
+            session,
+            artifact,
+            rule_uid=plan.action.source_item_uid,
+        )
+    elif isinstance(artifact, GroundElaborateResult):
+        if plan.source.kind != "ELABORATE":
+            raise GroundResolutionError("Resolve plan and artifact kinds differ.")
+        rebuilt = resolve_elaborate_candidate(
+            session,
+            artifact,
+            candidate_uid=plan.action.source_item_uid,
+        )
+    elif isinstance(artifact, GroundFitReceipt):
+        if plan.source.kind != "FIT":
+            raise GroundResolutionError("Resolve plan and artifact kinds differ.")
+        if plan.action.kind not in {
+            "REVISE_GOAL",
+            "REFINE_RULE",
+            "REFINE_EXAMPLE",
+            "SET_EXAMPLE_USE",
+            "DEFER",
+        }:
+            raise GroundResolutionError("Resolve Fit plan has an invalid action.")
+        rebuilt = resolve_fit_issue(
+            session,
+            artifact,
+            choice=GroundFitResolutionChoice(
+                example_uid=plan.action.source_item_uid,
+                action=plan.action.kind,
+                content=plan.action.content,
+                rationale=plan.action.rationale,
+                rule_uid=plan.action.selector,
+                use=plan.action.use,
+            ),
+        )
+    else:
+        raise TypeError("Resolve application requires a supported source artifact.")
+    if rebuilt != plan:
+        raise GroundResolutionError(
+            "Resolve plan does not exactly match its source artifact."
+        )
+    return rebuilt
+
+
+def _load_bound_contexts(
+    store: MemoryStore,
+    session: GroundSession,
+) -> tuple[Context, ...]:
+    # Loading happens before the store's save-boundary frame locks; the Ground
+    # primitive validates this snapshot and save_ground_session verifies it
+    # again under the graph/Context/Ground lock order.
+    return tuple(store.load(frame.context_name) for frame in session.frames)
+
+
+def apply_ground_resolution(
+    store: MemoryStore,
+    plan: GroundResolutionPlan,
+    *,
+    artifact: GroundResolutionArtifact,
+) -> GroundResolutionApplyReceipt:
+    """Apply one revalidated plan through existing revision and store CAS rules."""
+
+    if not isinstance(store, MemoryStore):
+        raise TypeError("Resolve application requires a MemoryStore.")
+    if not isinstance(plan, GroundResolutionPlan):
+        raise TypeError("Resolve application requires a GroundResolutionPlan.")
+    previous = store.load_ground_session(plan.source.identity.ground_name)
+    if previous is None:
+        raise GroundResolutionError("Resolve Ground was not found.")
+    _revalidate_plan(previous, plan, artifact)
+    action = plan.action
+    if action.kind == "DEFER":
+        identity = _identity(previous)
+        return GroundResolutionApplyReceipt(
+            plan_digest=plan.digest,
+            artifact_uid=plan.source.artifact_uid,
+            action_kind=action.kind,
+            previous_identity=identity,
+            resulting_identity=identity,
+            mutated=False,
+        )
+
+    contexts = _load_bound_contexts(store, previous)
+    if action.kind == "REVISE_GOAL":
+        revised = revise_ground_goal(
+            previous,
+            action.content,
+            reason=action.rationale,
+            current_contexts=contexts,
+        )
+    elif action.kind == "PROPOSE_RULE":
+        revised = propose_ground_rule(
+            previous,
+            rule=action.content,
+            rationale=action.rationale,
+            current_contexts=contexts,
+            rule_provenance=action.rule_provenance,  # type: ignore[arg-type]
+        )
+    elif action.kind == "PROPOSE_EXAMPLE":
+        revised = propose_ground_example(
+            previous,
+            proposition=action.content,
+            rationale=action.rationale,
+            current_contexts=contexts,
+            case_role=action.case_role,  # type: ignore[arg-type]
+            origin="AGENT",
+        )
+    elif action.kind in {"REFINE_RULE", "REFINE_EXAMPLE"}:
+        revised = review_ground_item(
+            previous,
+            action.selector,
+            action="REFINE",
+            response=action.content,
+            current_contexts=contexts,
+        )
+    elif action.kind == "SET_EXAMPLE_USE":
+        revised = set_ground_example_use(
+            previous,
+            action.selector,
+            use=action.use,
+            current_contexts=contexts,
+        )
+    else:  # pragma: no cover - closed GroundResolutionActionKind
+        raise GroundResolutionError("Resolve action is not applicable.")
+
+    store.save_ground_session(
+        revised,
+        replace=True,
+        expected_uid=previous.uid,
+        expected_revision=previous.revision,
+        expected_digest=ground_session_record_digest(previous),
+        verify_bound_frames=True,
+    )
+    saved = store.load_ground_session(previous.contract_name)
+    if saved != revised:
+        raise GroundResolutionError("Resolve application could not verify its save.")
+    return GroundResolutionApplyReceipt(
+        plan_digest=plan.digest,
+        artifact_uid=plan.source.artifact_uid,
+        action_kind=action.kind,
+        previous_identity=_identity(previous),
+        resulting_identity=_identity(revised),
+        mutated=True,
+    )
+
+
 __all__ = [
+    "GroundResolutionApplyReceipt",
+    "apply_ground_resolution",
     "resolve_distill_rule",
     "resolve_elaborate_candidate",
     "resolve_fit_issue",

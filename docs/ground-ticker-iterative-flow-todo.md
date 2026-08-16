@@ -152,3 +152,14 @@ be proved as a separate Distill compatibility rule.
 - an ordered `180x52` PTY capture covering entry, Example growth,
   contradiction, Rule revision, explicit unresolved boundaries, stale receipt,
   reviewed Resolve, new Fit, and final read-only verification.
+
+## Progress
+
+- [x] freeze and strictly validate the 5→10→20→35→50 benchmark;
+- [x] define one-source/one-action Resolve plans and verification labels;
+- [x] revalidate exact artifacts and apply one existing Ground primitive with
+  bound-frame checks and Ground CAS;
+- [ ] expose Resolve through the stable Python and agent boundaries;
+- [ ] compose the same action into the Ground workbench and exact approval UI;
+- [ ] run and capture the complete provider-backed ticker progression; and
+- [ ] evaluate convergence, regressions, and explicit unresolved coverage.

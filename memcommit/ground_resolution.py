@@ -31,7 +31,7 @@ GroundResolutionActionKind: TypeAlias = Literal[
     "SET_EXAMPLE_USE",
     "DEFER",
 ]
-GroundResolutionUse: TypeAlias = Literal["INCLUDE", "EXCLUDE", "UNRESOLVED"]
+GroundResolutionUse: TypeAlias = Literal["INCLUDE", "EXCLUDE"]
 
 
 class GroundResolutionError(ValueError):
@@ -67,7 +67,6 @@ class GroundResolutionAction:
     selector: str = ""
     source_item_uid: str = ""
     case_role: str = ""
-    expected: str = ""
     use: str = ""
     rule_provenance: str = ""
 
@@ -78,7 +77,6 @@ class GroundResolutionAction:
             self.selector,
             self.source_item_uid,
             self.case_role,
-            self.expected,
             self.use,
             self.rule_provenance,
         ):
@@ -117,7 +115,6 @@ class GroundResolutionPlan:
                 "selector": self.action.selector,
                 "source_item_uid": self.action.source_item_uid,
                 "case_role": self.action.case_role,
-                "expected": self.action.expected,
                 "use": self.action.use,
                 "rule_provenance": self.action.rule_provenance,
             },
