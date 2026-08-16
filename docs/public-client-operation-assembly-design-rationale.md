@@ -90,6 +90,29 @@ Context for a Meld formerly reused a client helper that raised
 6. Fresh-process and installed-wheel tests verify the physical import graph;
    ordinary in-process tests verify behavioral parity.
 
+## Verification
+
+The extracted surface passed 113 focused tests on the latest Meld runtime,
+covering Add, all Query routes, the public Meld lifecycle, agent adapters,
+fresh-process import isolation, Store-root handling, and the agent registry.
+The agent/MCP projection suite passed 76 tests after its stale two-tool
+expectation was updated to include the already registered Meld tool.
+
+An isolated `uv build` wheel was installed with the `mcp` extra under Python
+3.13. From that `site-packages` origin, constructing the client loaded no
+operation adapter; selecting Add, Query, and Meld loaded only the requested
+adapter in sequence. The installed `mem-mcp` stdio entry point initialized,
+listed Query, Add, and Meld, applied one two-Memory Add with exactly one
+checkpoint, and returned the typed unknown-tool error.
+
+The same installed wheel's general `mem --help` entry point remains blocked by
+an independent repository-state mismatch: `quality_audit` imports
+`QualityFindSourceFrame`, while that definition is not yet present in the
+committed `quality_find_workbench`. The working tree contains the pending
+quality-find implementation, but it was intentionally not absorbed into this
+assembly-boundary change. Therefore this verification proves the Python and
+MCP distribution boundaries, not full CLI readiness.
+
 ## Remaining rollout
 
 Add, Query, and the complete Meld lifecycle are now extracted; the committed
