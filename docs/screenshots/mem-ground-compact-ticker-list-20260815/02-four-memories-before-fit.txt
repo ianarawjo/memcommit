@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- MEMORIES: ↑/↓ Example · Enter · details    F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit
+ MEMORIES: ↑/↓ Example · Space · toggle USE    Enter · details    F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit

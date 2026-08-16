@@ -1281,7 +1281,7 @@ whole-frame-only because neighboring Rules may jointly determine a result and
 a counterexample may change the interpretation of an otherwise plausible
 generalization.
 
-`mem fit GROUND` now executes this contract and publishes a create-only report
+`mem fit --ground GROUND` now executes this compatibility adapter and publishes a create-only report
 under the Profile's private `ground-fit-receipts` directory. Publication takes
 the same per-Ground lock as Ground mutation and revalidates the frozen UID,
 revision, and digest before writing, so a result cannot be attached to a

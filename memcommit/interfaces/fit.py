@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from memcommit.fit import FitStatus
-from memcommit.fit_application import FitResult
+from memcommit.fit_application import (
+    FitPropositionsResult,
+    FitResult,
+)
 from memcommit.interfaces.console.text import safe_terminal_text
 
 
@@ -13,6 +16,34 @@ FIT_STATUS_ORDER: tuple[FitStatus, ...] = (
     "UNDERDETERMINED",
     "NOT_APPLICABLE",
 )
+
+
+def proposition_fit_mark(result: FitPropositionsResult) -> str:
+    """Project the stable mark for one general YES/MAY/NO verdict."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit marks require a typed result.")
+    return {"YES": "✓", "MAY": "?", "NO": "!"}[
+        result.analysis.assessment.verdict
+    ]
+
+
+def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
+    """Return the compact, role-neutral general Fit judgment."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit summaries require a typed result.")
+    assessment = result.analysis.assessment
+    return (
+        f"{proposition_fit_mark(result)} {assessment.verdict} · "
+        f"{safe_terminal_text(assessment.reason)}"
+    )
+
+
+def proposition_fit_result_text(result: FitPropositionsResult) -> str:
+    """Return the stable plain projection for one general Fit judgment."""
+
+    return proposition_fit_summary_line(result)
 
 
 def fit_status_counts(result: FitResult) -> tuple[tuple[FitStatus, int], ...]:

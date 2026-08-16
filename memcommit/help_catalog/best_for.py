@@ -33,7 +33,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "find-conflicts": "Finding mutually incompatible claims or instructions.",
     "find-duplicates": ("Locating semantically redundant Memories before cleanup."),
-    "fit": "Re-evaluating active Ground Examples after its Rules or Cases change.",
+    "fit": "Checking whether Memories, Rules, Goals, or other propositions can coexist without contradiction.",
     "forget": ("Removing or transforming material according to a semantic criterion."),
     "ground": "Building a reviewed evaluation or behavior contract from evidence.",
     "help": "Discovering available operations and their invocation forms.",

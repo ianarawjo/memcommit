@@ -26,11 +26,11 @@
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│› c1 · [PROPOSED · FIT / INCLUDE] · Axiom AI Technologies → AAT                                                                                                                  [0;1m^[179C[0m│[0m
+[0m│  USE ID  FIT EXAMPLE                                                                                                                                                            [0;1m^[179C[0m│[0m
+[0m│› [x] c1  ·  Axiom AI Technologies → AAT                                                                                                                                         [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│PLACEMENT · DIRECT SELECTION                                                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ticker/output                                                                                                                                                                    [0;48;2;68;68;68m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -50,11 +50,11 @@
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m Enter · send    Ctrl-J · newline    Tab · panes (B Grounds · Q quit)[69D[4A[3C[0m[?12l[?25h[?25l[20A[3D[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;2;139;213;255;1m┃[0m› c1 · [PROPOSED · FIT / INCLUDE] · Axiom AI Technologies → AAT                                                                                                                  [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  USE ID  FIT EXAMPLE                                                                                                                                                            [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m› [x] c1  ·  Axiom AI Technologies → AAT                                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0mPLACEMENT · DIRECT SELECTION                                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0mticker/output                                                                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
@@ -73,7 +73,7 @@
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[C[0mCASES[3CLIST:[C↑/↓ Case[3CV · table[2C  F[3Cru[C Fit [C  P · placement    C · comment    Enter · talk here    E · edit selected    B · Grounds    Q · quit[23A[150D[0m[?12l[?25h[?25l[0m
+[C[0mMEMORIES: ↑/↓[CExamp[Ce · Space · toggle USE    Enter · details [C  F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit[23A[156D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -96,7 +96,7 @@
 
 
 
-[C[0mFIT RUNNING. · Ground and Con[Cexts[Cunchanged · Esc/Q[Ccloses aft[Cr the[Creceipt boundary[0m[K[23A[86D[0m[?12l[?25h[?25l[0m
+[C[0mFIT [CUNNING. · Ground[Cand Contex[Cs unchanged[C· Esc/Q closes after the rece[Cpt[Cboundary[0m[K[22A[86D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -118,8 +118,8 @@
 
 
 
+[13C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[22A[87D[0m[?12l[?25h[?25l[0m
 
-[13C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[23A[87D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -140,9 +140,9 @@
 
 
 
+[14C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[22A[88D[0m[?12l[?25h[?25l[0m
 
 
-[14C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[23A[88D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -162,10 +162,10 @@
 
 
 
+[13C[0m ·[CGround and Contexts unchanged ·[CEsc/Q close[C after the rec[Cipt boundary[0m[K[22A[86D[0m[?12l[?25h[?25l[0m
 
 
 
-[13C[0m ·[CGround and Contexts unchanged ·[CEsc/Q close[C after the rec[Cipt boundary[0m[K[23A[86D[0m[?12l[?25h[?25l[0m
 
 
 
@@ -184,12 +184,12 @@
 
 
 
+[13C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[22A[87D[0m[?12l[?25h[?25l[2A[176C[0;38;2;245;169;127;1m●[0m
 
+[11C[0m✓[0m
 
 
 
-[13C[0m. · Ground and Contexts unchanged · Esc/Q closes after the receipt boundary[23A[87D[0m[?12l[?25h[?25l[A[176C[0;38;2;245;169;127;1m●[0m
-[6C[0m✓[0m
 
 
 
@@ -208,8 +208,4 @@
 
 
 
-
-
-
-
-[C[0m✓ 1/1[0m[K[23A[5D[0m[?12l[?25h
+[C[0m✓ 1/1[0m[K[22A[5D[0m[?12l[?25h

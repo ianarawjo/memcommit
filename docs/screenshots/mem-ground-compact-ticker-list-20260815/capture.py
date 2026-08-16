@@ -43,20 +43,31 @@ def _proposition(company: str, ticker: str) -> str:
 
 
 class _DelayedTickerFitProvider:
-    def complete(self, _prompt, *, operation, output_schema=None):
-        if operation != "fit_ground_propositions":
+    def complete(self, prompt, *, operation, output_schema=None):
+        if operation != "fit_propositions":
             raise RuntimeError(f"Unexpected Fit operation: {operation}")
         time.sleep(1.4)
+        payload = json.loads(prompt.split("FIT PROPOSITION PAYLOAD:\n", 1)[1])
         return json.dumps(
             {
                 "overview": "The Rule reproduces all four reviewed ticker examples.",
                 "judgments": [
                     {
-                        "example_id": f"e{index}",
-                        "status": "FIT",
+                        "question_id": question["question_id"],
+                        "verdict": "YES",
                         "reason": "The active Rule supports the reviewed proposition.",
+                        "considered_proposition_ids": [
+                            item["proposition_id"]
+                            for item in (
+                                *question["background"],
+                                *question["propositions"],
+                            )
+                        ],
+                        "material_proposition_ids": [],
+                        "consistent_reading": "",
+                        "inconsistent_reading": "",
                     }
-                    for index, (_content, expected, _role) in enumerate(TICKERS, 1)
+                    for question in payload["questions"]
                 ],
             }
         )

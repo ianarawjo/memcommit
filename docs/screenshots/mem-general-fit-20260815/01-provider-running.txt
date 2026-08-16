@@ -1,0 +1,2 @@
+$ mem fit "The main entrance is closed after 5 p.m." "Staff may use the entrance after 6 p.m." --background "The building has separate main and staff entrances."                   
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0s

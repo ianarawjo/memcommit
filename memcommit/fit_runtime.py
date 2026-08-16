@@ -14,6 +14,13 @@ from memcommit.fit import (
     fit_ground_examples,
 )
 from memcommit.fit_application import FitRequest, FitResult
+from memcommit.fit_application import FitPropositionsRequest, FitPropositionsResult
+from memcommit.fit_judgment import (
+    FitAnalysis,
+    FitQuestion,
+    execute_fit_judgments,
+    prepare_fit_judgments,
+)
 from memcommit.ground import (
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GroundItem,
@@ -27,6 +34,34 @@ from memcommit.store import MemoryStore, ground_session_record_digest
 class FitProviderFactory(Protocol):
     def __call__(self) -> FitProvider:
         """Connect only after the Ground snapshot is locally validated."""
+
+
+def run_proposition_fit(
+    request: FitPropositionsRequest,
+    *,
+    provider_factory: FitProviderFactory,
+) -> FitPropositionsResult:
+    """Plan a complete general Fit frame before connecting its provider."""
+
+    if not isinstance(request, FitPropositionsRequest):
+        raise TypeError("General Fit runtime requires a typed request.")
+    question = FitQuestion(
+        "fit",
+        propositions=request.propositions,
+        background=request.background,
+    )
+    prepared = prepare_fit_judgments((question,))
+    batch = execute_fit_judgments(prepared, provider=provider_factory())
+    return FitPropositionsResult(
+        FitAnalysis(
+            uid=batch.uid,
+            question=question,
+            assessment=batch.assessments[0],
+            overview=batch.overview,
+            created_at=batch.created_at,
+            provider_identity=batch.provider_identity,
+        )
+    )
 
 
 @dataclass(frozen=True)

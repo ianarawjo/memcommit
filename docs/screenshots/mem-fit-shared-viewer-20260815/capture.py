@@ -50,19 +50,6 @@ class _ImmediateFitProvider(_DelayedFitProvider):
 
 class _IssueFitProvider:
     def complete(self, _prompt, *, operation, output_schema=None):
-        if operation == "fit_ground_propositions":
-            return json.dumps(
-                {
-                    "overview": "The active Rule leaves the Example open.",
-                    "judgments": [
-                        {
-                            "example_id": "e1",
-                            "status": "UNDERDETERMINED",
-                            "reason": "The Rule does not choose between AAT and AAIT.",
-                        }
-                    ],
-                }
-            )
         return json.dumps(
             {
                 "overview": "The active Rule produces a different symbol.",
@@ -79,29 +66,17 @@ class _IssueFitProvider:
 
 
 def _fit_response(operation: str) -> str:
-    if operation == "fit_ground_propositions":
-        payload = {
-            "overview": "The active Rule supports the reviewed Example.",
-            "judgments": [
-                {
-                    "example_id": "e1",
-                    "status": "FIT",
-                    "reason": "The reviewed initials Rule permits AAT.",
-                }
-            ],
-        }
-    else:
-        payload = {
-            "overview": "The active Rule reproduces the reviewed Example.",
-            "predictions": [
-                {
-                    "case_id": "e1",
-                    "disposition": "PREDICTED",
-                    "predicted": "AAT",
-                    "reason": "The reviewed initials Rule produces AAT.",
-                }
-            ],
-        }
+    payload = {
+        "overview": "The active Rule reproduces the reviewed Example.",
+        "predictions": [
+            {
+                "case_id": "e1",
+                "disposition": "PREDICTED",
+                "predicted": "AAT",
+                "reason": "The reviewed initials Rule produces AAT.",
+            }
+        ],
+    }
     return json.dumps(payload)
 
 
@@ -162,12 +137,14 @@ def _run_standalone_child(
     fit_command.write_system_clipboard = copied.append
 
     print(
-        f"$ mem fit {session.contract_name}"
+        f"$ mem fit --ground {session.contract_name}"
         + (f" --receipt {receipt_uid}" if receipt_uid else ""),
         flush=True,
     )
     fit_command.cmd(
-        session.contract_name,
+        None,
+        background=None,
+        ground_name=session.contract_name,
         receipt=receipt_uid,
         plain=False,
         tui=True,

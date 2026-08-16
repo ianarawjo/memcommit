@@ -1,0 +1,4 @@
+GENERAL FIT CLOSED · READ-ONLY VERIFICATION                                                                                                                                         
+  VERDICT · MAY                                                                                                                                                                     
+  CLIPBOARD PROJECTIONS · 2                                                                                                                                                         
+  DURABLE WRITES · 0

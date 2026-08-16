@@ -105,9 +105,13 @@ def test_proposition_fit_accounts_for_observation_counterexample() -> None:
             "overview": "The observation conflicts with the universal claim.",
             "judgments": [
                 {
-                    "example_id": "e1",
-                    "status": "CONTRADICTS",
+                    "question_id": "e1",
+                    "verdict": "NO",
                     "reason": "One yellow observation refutes always blue.",
+                    "considered_proposition_ids": ["r1", "e1"],
+                    "material_proposition_ids": ["r1", "e1"],
+                    "consistent_reading": "",
+                    "inconsistent_reading": "",
                 }
             ],
         }
@@ -123,10 +127,11 @@ def test_proposition_fit_accounts_for_observation_counterexample() -> None:
     )
 
     assert report.judgments[0].status == "CONTRADICTS"
-    assert provider.operation == "fit_ground_propositions"
-    assert "Do not invent a cause" in provider.prompt
-    assert "return UNDERDETERMINED rather than supplying" in provider.prompt
-    assert "which characters it contributes" in provider.prompt
+    assert provider.operation == "fit_propositions"
+    assert "role-neutral compatibility judgment" in provider.prompt
+    assert "MAY describes a real semantic split" in provider.prompt
+    assert "Missing support or an unknown fact is not itself a contradiction" in provider.prompt
+    assert "Do not omit, rank, retrieve, generate, revise" in provider.prompt
 
 
 def test_fit_rejects_mixed_projection_and_incomplete_coverage() -> None:
@@ -357,7 +362,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
         _passing_provider,
     )
 
-    result = CliRunner().invoke(app, ["fit", session.contract_name])
+    result = CliRunner().invoke(app, ["fit", "--ground", session.contract_name])
 
     assert result.exit_code == 0, result.output
     assert result.output == "✓ ticker · 1/1\n"
@@ -366,7 +371,13 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
 
     reopened = CliRunner().invoke(
         app,
-        ["fit", session.contract_name, "--receipt", receipt.report.uid],
+        [
+            "fit",
+            "--ground",
+            session.contract_name,
+            "--receipt",
+            receipt.report.uid,
+        ],
     )
     assert reopened.exit_code == 0, reopened.output
     assert reopened.output == "✓ ticker · 1/1\n"
@@ -384,7 +395,10 @@ def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
         _passing_provider,
     )
 
-    result = CliRunner().invoke(app, ["fit", session.contract_name, "--plain"])
+    result = CliRunner().invoke(
+        app,
+        ["fit", "--ground", session.contract_name, "--plain"],
+    )
 
     assert result.exit_code == 0, result.output
     assert result.output == "✓ ticker · 1/1\n"
@@ -396,7 +410,7 @@ def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:
 
     monkeypatch.setattr(fit_command, "MemoryStore", fail_store)
 
-    result = CliRunner().invoke(app, ["fit", "ticker", "--tui"])
+    result = CliRunner().invoke(app, ["fit", "--ground", "ticker", "--tui"])
 
     assert result.exit_code == 1
     assert "Interactive presentation requires a TTY" in result.output

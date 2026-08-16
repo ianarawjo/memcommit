@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- MEMORY DETAIL: Esc/Backspace · list    F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit
+ MEMORY DETAIL: Esc/Backspace · list    Space · toggle USE    F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit

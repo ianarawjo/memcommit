@@ -2,15 +2,169 @@
 
 from __future__ import annotations
 
-from memcommit.fit_application import FitResult
+from memcommit.fit_application import FitPropositionsResult, FitResult
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.interfaces.fit import fit_mark, fit_result_text, fit_summary_line
+from memcommit.interfaces.fit import (
+    fit_mark,
+    fit_result_text,
+    fit_summary_line,
+    proposition_fit_mark,
+    proposition_fit_result_text,
+)
 from memcommit.interfaces.tui.operations.fit.model import FitClipboardProjection
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
+
+
+def _proposition_fit_inputs_text(result: FitPropositionsResult) -> str:
+    question = result.analysis.question
+    lines: list[str] = []
+    for item in question.background:
+        lines.append(
+            f"BACKGROUND · {item.alias} · {item.role}\n{safe_terminal_text(item.content)}"
+        )
+    for item in question.propositions:
+        lines.append(
+            f"PROPOSITION · {item.alias} · {item.role}\n{safe_terminal_text(item.content)}"
+        )
+    return "\n\n".join(lines)
+
+
+def _proposition_fit_readings_text(result: FitPropositionsResult) -> str:
+    assessment = result.analysis.assessment
+    if assessment.verdict != "MAY":
+        raise ValueError("Only MAY Fit results have split ordinary readings.")
+    return (
+        "CONSISTENT READING\n"
+        + safe_terminal_text(assessment.consistent_reading)
+        + "\n\nINCONSISTENT READING\n"
+        + safe_terminal_text(assessment.inconsistent_reading)
+    )
+
+
+def project_proposition_fit_clipboard(
+    result: FitPropositionsResult,
+    *,
+    focused_uid: str | None = None,
+    whole_document: bool = True,
+) -> FitClipboardProjection:
+    """Project one focused section or the complete general Fit document."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit clipboard requires a typed result.")
+    sections = [
+        ("FIT:JUDGMENT", proposition_fit_result_text(result), "Fit judgment"),
+        ("FIT:INPUTS", _proposition_fit_inputs_text(result), "Fit inputs"),
+    ]
+    if result.analysis.assessment.verdict == "MAY":
+        sections.append(
+            (
+                "FIT:READINGS",
+                _proposition_fit_readings_text(result),
+                "Fit ordinary readings",
+            )
+        )
+    if whole_document:
+        return FitClipboardProjection(
+            "\n\n".join(text for _uid, text, _label in sections),
+            "complete Fit result",
+        )
+    for uid, text, label in sections:
+        if focused_uid == uid:
+            return FitClipboardProjection(text, label)
+    raise ValueError("The focused Fit section is unavailable.")
+
+
+def project_proposition_fit_result(
+    result: FitPropositionsResult,
+) -> SemanticViewerDocument:
+    """Build the general Fit Viewer without re-parsing plain output."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit TUI requires a typed result.")
+    assessment = result.analysis.assessment
+    verdict_style = {
+        "YES": "class:impact.keep",
+        "MAY": "class:impact.custom",
+        "NO": "class:impact.remove",
+    }[assessment.verdict]
+    sections: list[SemanticViewerSection] = [
+        SemanticViewerSection(
+            "FIT:JUDGMENT",
+            "JUDGMENT",
+            SemanticViewerBlock(
+                (
+                    (
+                        verdict_style,
+                        f" {proposition_fit_mark(result)} {assessment.verdict}\n",
+                    ),
+                    (
+                        "class:viewer-body",
+                        " " + safe_terminal_text(assessment.reason) + "\n",
+                    ),
+                )
+            ),
+        )
+    ]
+    input_fragments: list[tuple[str, str]] = []
+    for prefix, items in (
+        ("BACKGROUND", result.analysis.question.background),
+        ("PROPOSITION", result.analysis.question.propositions),
+    ):
+        for item in items:
+            input_fragments.extend(
+                (
+                    (
+                        "class:viewer-label",
+                        f"\n {prefix} · {item.alias} · {item.role}\n ",
+                    ),
+                    (
+                        "class:memory-object"
+                        if item.role == "MEMORY"
+                        else "class:viewer-body",
+                        safe_terminal_text(item.content) + "\n",
+                    ),
+                )
+            )
+    sections.append(
+        SemanticViewerSection(
+            "FIT:INPUTS",
+            "COMPLETE FROZEN INPUT",
+            SemanticViewerBlock(tuple(input_fragments), anchor="end"),
+        )
+    )
+    if assessment.verdict == "MAY":
+        sections.append(
+            SemanticViewerSection(
+                "FIT:READINGS",
+                "ORDINARY READINGS",
+                SemanticViewerBlock(
+                    (
+                        (
+                            "class:viewer-label",
+                            "\n CONSISTENT\n ",
+                        ),
+                        (
+                            "class:viewer-body",
+                            safe_terminal_text(assessment.consistent_reading) + "\n",
+                        ),
+                        (
+                            "class:viewer-label",
+                            "\n INCONSISTENT\n ",
+                        ),
+                        (
+                            "class:viewer-body",
+                            safe_terminal_text(assessment.inconsistent_reading) + "\n",
+                        ),
+                    ),
+                    anchor="end",
+                ),
+            )
+        )
+    return SemanticViewerDocument(tuple(sections))
 
 
 def _example_text(result: FitResult, example_uid: str) -> str:

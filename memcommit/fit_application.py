@@ -1,15 +1,43 @@
-"""Interface-independent request and result values for Fit."""
+"""Interface-independent requests and results for general and Ground Fit."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from memcommit.fit import FitReport
+from memcommit.fit_judgment import FitAnalysis, FitProposition
+
+
+@dataclass(frozen=True)
+class FitPropositionsRequest:
+    """Judge one complete role-neutral proposition set without persistence."""
+
+    propositions: tuple[FitProposition, ...]
+    background: tuple[FitProposition, ...] = ()
+
+    def __post_init__(self) -> None:
+        if len(self.propositions) < 2:
+            raise ValueError("Fit requires at least two propositions.")
+        if any(not isinstance(item, FitProposition) for item in self.propositions):
+            raise TypeError("Fit propositions must be typed values.")
+        if any(not isinstance(item, FitProposition) for item in self.background):
+            raise TypeError("Fit background must contain typed values.")
+
+
+@dataclass(frozen=True)
+class FitPropositionsResult:
+    """One read-only YES/MAY/NO Fit analysis."""
+
+    analysis: FitAnalysis
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.analysis, FitAnalysis):
+            raise TypeError("Fit result requires a typed proposition analysis.")
 
 
 @dataclass(frozen=True)
 class FitRequest:
-    """Run Fit for one Ground or reopen one exact immutable receipt."""
+    """Legacy Ground adapter: run or reopen one immutable receipt."""
 
     ground_name: str
     receipt_uid: str | None = None

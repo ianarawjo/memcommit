@@ -6,11 +6,20 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
-from memcommit.fit_application import FitResult
+from memcommit.fit_application import FitPropositionsResult, FitResult
+from memcommit.fit_judgment import (
+    FitAnalysis,
+    FitAssessment,
+    FitProposition,
+    FitQuestion,
+)
 from memcommit.interfaces.fit import fit_result_text
 from memcommit.interfaces.tui.operations.fit import (
+    project_proposition_fit_clipboard,
+    project_proposition_fit_result,
     project_fit_clipboard,
     project_fit_result,
+    run_proposition_fit_tui,
     run_fit_tui,
 )
 
@@ -64,6 +73,38 @@ def _result(*, current: bool = True) -> FitResult:
         created_at="2026-08-15T12:00:00Z",
     )
     return FitResult(report, current)
+
+
+def _proposition_result(*, verdict="MAY") -> FitPropositionsResult:
+    question = FitQuestion(
+        "fit",
+        (
+            FitProposition("goal", "Keep an entrance usable.", "GOAL"),
+            FitProposition("rule", "The entrance closes at five.", "RULE"),
+        ),
+        (FitProposition("context", "There are two entrances.", "MEMORY"),),
+    )
+    return FitPropositionsResult(
+        FitAnalysis(
+            uid="00000000-0000-0000-0000-000000000010",
+            question=question,
+            assessment=FitAssessment(
+                question_id="fit",
+                verdict=verdict,
+                reason="The referent changes whether the constraints conflict.",
+                considered_proposition_ids=("context", "goal", "rule"),
+                material_proposition_ids=("context", "goal", "rule"),
+                consistent_reading=(
+                    "A different entrance remains usable." if verdict == "MAY" else ""
+                ),
+                inconsistent_reading=(
+                    "The only required entrance closes." if verdict == "MAY" else ""
+                ),
+            ),
+            overview="The ordinary readings divide.",
+            created_at="2026-08-15T12:00:00Z",
+        )
+    )
 
 
 def test_fit_projects_typed_result_with_stable_example_sections() -> None:
@@ -146,3 +187,45 @@ def test_fit_stale_state_replaces_prior_judgment_marks() -> None:
     assert "UNDERDETERMINED" not in rendered
     assert focused.text.startswith("◷ e2")
     assert "UNDERDETERMINED" not in focused.text
+
+
+def test_general_fit_projects_complete_inputs_and_may_readings() -> None:
+    result = _proposition_result()
+    document = project_proposition_fit_result(result)
+    rendered = "".join(
+        text for _style, text in document.render(focused_uid="FIT:JUDGMENT")
+    )
+    complete = project_proposition_fit_clipboard(result, whole_document=True)
+
+    assert [section.uid for section in document.sections] == [
+        "FIT:JUDGMENT",
+        "FIT:INPUTS",
+        "FIT:READINGS",
+    ]
+    assert "? MAY" in rendered
+    assert "BACKGROUND · context · MEMORY" in complete.text
+    assert "PROPOSITION · goal · GOAL" in complete.text
+    assert "CONSISTENT READING" in complete.text
+    assert "INCONSISTENT READING" in complete.text
+
+
+def test_general_fit_viewer_y_and_uppercase_y_copy_focused_then_complete() -> None:
+    copied: list[str] = []
+    result = _proposition_result()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yYq")
+        returned = run_proposition_fit_tui(
+            result,
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned == result
+    assert copied[0].startswith("? MAY")
+    assert "PROPOSITION · goal" not in copied[0]
+    assert copied[1].startswith("? MAY")
+    assert "PROPOSITION · goal · GOAL" in copied[1]
+    assert "INCONSISTENT READING" in copied[1]

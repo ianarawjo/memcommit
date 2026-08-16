@@ -272,6 +272,18 @@ does not instruct someone to eat packaging, while an ice-cream cone may be
 part of what is eaten. The judge should reflect those ordinary distinctions
 without enumerating every absurd literal possibility.
 
+This predictive role matches the operational problem better than formal
+theorem proving or an open-ended request to imagine a case. Natural-language
+Memory does not supply a complete axiom set or closed semantics; it accumulates
+partial, context-dependent propositions that people must later read together.
+The useful question is therefore whether a competent ordinary reader would
+take the selected frame as coherent, contradictory, or materially split—not
+whether one rare possible world can be invented to save or break it. A prompt
+to imagine one compatible or conflicting scenario rewards precisely such an
+exception. General Fit instead freezes the complete frame, asks for the
+ordinary reading distribution, and confines the answer to `YES`, `MAY`, or
+`NO`. The restored Fit rationale records this boundary in more detail.
+
 This is an empirical justification, not a guarantee:
 
 - the model can omit findings;
@@ -562,8 +574,10 @@ Here:
 - `NO` means the pair is jointly explainable;
 - `MAY` means ordinary readings divide between those outcomes.
 
-The field name and polarity must never be mixed. If a future API revives
-`fit`, it must either invert the labels explicitly or use different names.
+The field name and polarity must never be mixed. The general Fit API has now
+been revived with the original polarity. Its set-level `YES` means compatible,
+`NO` means incompatible, and `MAY` means ordinary readings split. The public
+pairwise `conflict` finder retains the inverse polarity described here.
 
 There was also a temporary preference for making conflict a binary `YES/NO`
 decision. That would have been simpler when two statements clearly deny and
@@ -663,9 +677,11 @@ to a theorem prover:
 - it identifies whether the selected operational knowledge can jointly govern
   under ordinary reading.
 
-Version 1 is pairwise. A set of three or more Memories can be collectively
-inconsistent even when every pair is acceptable. Such higher-arity conflict is
-an explicit non-goal of the initial finder.
+Version 1 of the Conflict finder is pairwise. A set of three or more Memories
+can be collectively inconsistent even when every pair is acceptable. Such
+higher-arity findings remain outside that finder, while general Fit now judges
+one complete set without reducing it to pairwise Conflict calls. See
+`fit-general-judgment-design-rationale.md` for the restored operator.
 
 ## 5. Duplicate: equivalence is stronger than relatedness
 

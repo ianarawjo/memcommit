@@ -5,17 +5,28 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeAlias
 
-from memcommit.fit_application import FitRequest, FitResult
+from memcommit.fit_application import (
+    FitPropositionsRequest,
+    FitPropositionsResult,
+    FitRequest,
+    FitResult,
+)
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.distill_application import DistillRequest, DistillResult
 from memcommit.interfaces.cli.distill import render_distill_plain
 from memcommit.interfaces.cli.elaborate import render_elaborate_plain
-from memcommit.interfaces.cli.fit import render_fit_plain
+from memcommit.interfaces.cli.fit import (
+    render_fit_plain,
+    render_proposition_fit_plain,
+)
 from memcommit.interfaces.cli.summarize import render_summarize_plain
 from memcommit.interfaces.console.router import ConsoleRunner
 from memcommit.interfaces.console.terminal import TerminalCapabilities
 from memcommit.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.interfaces.tui.operations.fit import run_fit_tui
+from memcommit.interfaces.tui.operations.fit import (
+    run_fit_tui,
+    run_proposition_fit_tui,
+)
 from memcommit.interfaces.tui.operations.distill import (
     DistillTuiSetup,
     run_distill_tui,
@@ -103,6 +114,34 @@ def build_fit_console_runner(
     return ConsoleRunner(
         execute=execute,
         present_plain=render_fit_plain,
+        run_tui=run_tui,
+        terminal=terminal,
+    )
+
+
+def build_proposition_fit_console_runner(
+    *,
+    execute: Callable[[FitPropositionsRequest], FitPropositionsResult],
+    clipboard_writer: ClipboardWriter,
+    terminal: TerminalCapabilities,
+) -> ConsoleRunner[FitPropositionsRequest, FitPropositionsResult]:
+    """Wire the role-neutral Fit judge to plain and TUI presenters."""
+
+    def run_tui(
+        request: FitPropositionsRequest,
+        application_execute: Callable[
+            [FitPropositionsRequest], FitPropositionsResult
+        ],
+    ) -> FitPropositionsResult:
+        result = application_execute(request)
+        return run_proposition_fit_tui(
+            result,
+            clipboard_writer=clipboard_writer,
+        )
+
+    return ConsoleRunner(
+        execute=execute,
+        present_plain=render_proposition_fit_plain,
         run_tui=run_tui,
         terminal=terminal,
     )

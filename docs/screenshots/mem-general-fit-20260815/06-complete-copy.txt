@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ? MAY                                                                                                                                                                           ^┃
+┃ The statements coexist if the second proposition means the staff entrance, but conflict if it means the main entrance.                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ BACKGROUND · k1 · PROPOSITION                                                                                                                                                    ┃
+┃ The building has separate main and staff entrances.                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSITION · p1 · PROPOSITION                                                                                                                                                   ┃
+┃ The main entrance is closed after 5 p.m.                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSITION · p2 · PROPOSITION                                                                                                                                                   ┃
+┃ Staff may use the entrance after 6 p.m.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ CONSISTENT                                                                                                                                                                       ┃
+┃ Staff use the separate staff entrance after 6 p.m.                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ INCONSISTENT                                                                                                                                                                     ┃
+┃ Staff use the closed main entrance after 6 p.m.                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FIT · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only · COPIED · complete Fit result

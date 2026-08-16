@@ -75,7 +75,7 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[C[0mMEMORIES: ↑/↓[CExamp[Ce · E[Cter · details[C [C F · run[CFit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit[23A[134D[0m[?12l[?25h[?25l[0mMEMORY ·[Cc1           [0m
+[C[0mMEMORIES: ↑/↓[CExamp[Ce · Space · toggle USE    Enter · details [C  F · run Fit    P · placement    C · comment    E · edit selected    B · Grounds    Q · quit[23A[156D[0m[?12l[?25h[?25l[0mMEMORY ·[Cc1           [0m
 [C[0mSTATUS ·[CPROPOSED                                                       [0m
 [C[0mUSE ·[C[x][CINCLUDE                                                       [105C[0;48;2;68;68;68m [0m
 [C[0mFIT ·[C·                                                                            [94C[0;48;2;170;170;170m [0m
@@ -98,4 +98,4 @@ PTY 180 52
 
 
 
-[6C[0mY DETAIL: Esc/Backspac[C · lis[C    F[C·[Crun[CFit[C   P[C·[Cplacement    C[C·[Ccomment    E[C·[Cedit selected    B[C·[CGrounds    Q[C·[Cquit[0m[K[23A[130D[0m[?12l[?25h
+[6C[0mY DETAIL: Esc/Backspace · list   [CSpace[C· toggle[CUSE    F[C·[Crun[CFit[C   P[C·[Cplacement    C[C·[Ccomment    E[C·[Cedit selected    B[C·[CGrounds    Q[C·[Cquit[0m[K[23A[152D[0m[?12l[?25h

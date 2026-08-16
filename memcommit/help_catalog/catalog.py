@@ -184,11 +184,11 @@ _OPERATIONS = (
     ),
     _operation(
         "fit",
-        "Fit every active Ground Example against its active Rules and save an immutable receipt.",
-        "Ground Rules + Examples -> revision-bound Fit receipt",
+        "Judge whether two or more propositions can jointly hold under ordinary readings.",
+        "Propositions + optional background -> YES / MAY / NO",
         ExecutionKind.SEMANTIC,
-        "Read-only Ground judgment; saves only a derived receipt",
-        "One exact saved Ground revision",
+        "Read-only; changes no Context, Ground, Rule, Goal, or Memory",
+        "One complete frozen proposition set; Ground is an explicit adapter",
     ),
     _operation(
         "find-ambiguities",
