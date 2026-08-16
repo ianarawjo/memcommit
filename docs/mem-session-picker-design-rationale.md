@@ -1,5 +1,27 @@
 # Saved-work session picker design rationale
 
+## Neutral launcher ownership
+
+The visual catalog is now owned by
+`memcommit.interfaces.tui.components.operation_launcher`. Its public model
+contains frozen entry identity and display metadata, an optional pinned action,
+orientation rows, and a returned entry/action identity. It deliberately has no
+argv, Store object, session repository, provider, cache handle, or callback.
+
+Saved work remains one adapter of that component. The session adapter retains
+`SessionPickerEntry`, exact reopen/New argv receipts, and the compatibility
+`choose_session()` function, but translates them before and after the neutral
+screen. Every production caller imports that interface adapter directly;
+`commands.session_picker` is an import-only compatibility facade. This split
+lets content-free recent reports use the same visible catalog without falsely
+claiming that a recent execution is a durable session.
+
+The alternative—generalizing `SessionPickerEntry.reopen_argv` to every report
+and operation—was rejected because it would make a presentation component an
+execution dispatcher and would preserve the incorrect implication that all
+launcher rows reopen persisted sessions. The launcher returns identity only;
+the operation adapter must revalidate it and decide what happens next.
+
 ## Motivation
 
 Memcommit now retains several kinds of work that can be reopened: named

@@ -12,7 +12,7 @@ from memcommit.command_attempts import (
     CommandAttemptLedger,
 )
 from memcommit.commands.ground_session_picker import session_picker_location
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

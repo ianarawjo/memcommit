@@ -9,8 +9,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
-import memcommit.commands.session_picker as session_picker_module
-from memcommit.commands.session_picker import (
+import memcommit.interfaces.tui.components.operation_launcher.screen as launcher_screen
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,
@@ -547,8 +547,8 @@ def test_detail_only_mode_renders_content_without_metadata_envelope():
 
 
 def test_picker_rejects_non_tty_by_default(monkeypatch):
-    monkeypatch.setattr(session_picker_module.sys, "stdin", io.StringIO())
-    monkeypatch.setattr(session_picker_module.sys, "stdout", io.StringIO())
+    monkeypatch.setattr(launcher_screen.sys, "stdin", io.StringIO())
+    monkeypatch.setattr(launcher_screen.sys, "stdout", io.StringIO())
 
     with pytest.raises(ValueError, match="requires a terminal"):
         choose_session(
@@ -710,7 +710,7 @@ def test_application_is_full_screen_and_receives_no_io_callbacks(monkeypatch):
         def run(self):
             return None
 
-    monkeypatch.setattr(session_picker_module, "Application", FakeApplication)
+    monkeypatch.setattr(launcher_screen, "Application", FakeApplication)
 
     assert (
         choose_session(

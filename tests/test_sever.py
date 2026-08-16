@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands import sever as sever_command
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )

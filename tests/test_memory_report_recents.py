@@ -20,7 +20,7 @@ from memcommit.commands.memory_report_recents import (
     choose_memory_report_recent,
     memory_report_recents,
 )
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.store import MemoryStore
 
 

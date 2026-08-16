@@ -28,7 +28,7 @@ from memcommit.commands.review_shell import (
 from memcommit.commands.review_resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,

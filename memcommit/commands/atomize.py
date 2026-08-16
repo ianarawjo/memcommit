@@ -61,7 +61,7 @@ from memcommit.commands.atomize_sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
-from memcommit.commands.session_picker import SessionNewReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.review import (
     atomize_review_declared_frames,

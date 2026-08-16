@@ -46,7 +46,7 @@ from memcommit.commands.command_wait import (
 )
 from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
-from memcommit.commands.session_picker import SessionNewReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )

@@ -11,7 +11,7 @@ import memcommit.commands.review as review_command
 import memcommit.commands.review_sessions as review_sessions
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
 )

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from memcommit.commands.session_picker import SessionPickerEntry
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionPickerEntry
 from memcommit.quality_audit import QualityAuditSession
 from memcommit.quality_audit_store import QualityAuditStore
 

@@ -37,7 +37,7 @@ from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     comparison_session_entries,
 )
-from memcommit.commands.session_picker import SessionNewReceipt, SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
 from memcommit.store import MemoryStore
 from memcommit.query_provider import CodexChatGPTProvider
 

@@ -52,7 +52,7 @@ from memcommit.commands.atomize_sessions import (
 from memcommit.commands.endpoint_setup_flows import AtomizeSetupReceipt
 from memcommit.interfaces.tui.workbenches.review import RESPONSE_LABEL
 from memcommit.interfaces.tui.workbenches.resolution import ResolutionDestination
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerLocation,

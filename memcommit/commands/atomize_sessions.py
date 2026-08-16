@@ -13,7 +13,7 @@ from memcommit.atomize import (
     AtomizeAnalysisSession,
     atomize_analysis_matches_context,
 )
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

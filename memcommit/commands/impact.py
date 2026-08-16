@@ -40,7 +40,7 @@ from memcommit.authority.access import (
 )
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
 from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,

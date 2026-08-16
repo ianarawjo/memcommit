@@ -15,7 +15,7 @@ from memcommit.commands.atomize_sessions import atomize_session_entries
 from memcommit.commands.compare_sessions import comparison_session_entries
 from memcommit.commands.ground_session_picker import session_picker_location
 from memcommit.commands.meld_sessions import list_meld_session_catalog
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,

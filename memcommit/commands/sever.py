@@ -14,7 +14,7 @@ from memcommit.authority.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     choose_session,

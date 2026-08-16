@@ -83,7 +83,7 @@ from memcommit.commands.meld_sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
     SessionPickerEntry,

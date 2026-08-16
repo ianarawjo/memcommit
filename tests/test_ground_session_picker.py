@@ -15,7 +15,7 @@ from memcommit.commands.ground_session_picker import (
     list_ground_session_entries,
     reload_selected_ground_session,
 )
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,

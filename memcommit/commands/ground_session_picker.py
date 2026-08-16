@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 
 import memcommit.store as store_module
-from memcommit.commands.session_picker import (
+from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     SessionPickerLocation,
 )

@@ -131,6 +131,7 @@ units, not proposed universal implementations.
 
 ## First convergence queue
 
+| `TUI-C10` | Operation launcher | `interfaces.tui.components.operation_launcher` | Atomize, Audit, Compare, Ground, Impact, Meld, Review, Sever, Update, and Trace/Rationale recent adapters | A frozen catalog supports sort, grouping, filtering, detail, orientation, and one pinned action; the shared screen returns entry/action identity only and owns no argv, persistence, provider, cache, or session meaning | Saved-session reopen/New receipts remain in the session adapter; recent-run rerun and new-target meaning remain with each read-report adapter; `commands.session_picker` is import-only | `CHARACTERIZED` | Adopt the neutral model directly for content-free Read Report recents, then retire session vocabulary from those callers without changing durable session formats |
 The queue is ordered by risk of duplicating a safety contract during ongoing
 migration, not by visual prominence. Exact command review identity and the
 second Endpoint Setup consumer have crossed their earlier gates; their

@@ -13,7 +13,7 @@ import memcommit.commands.update as update_command
 import memcommit.commands.update_render as update_render
 from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
-from memcommit.commands.session_picker import SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.provenance import build_trace
