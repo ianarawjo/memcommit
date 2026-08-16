@@ -16,6 +16,7 @@ from memcommit.comparison import ComparisonInput
 from memcommit.comparison_provider import analyze_comparison
 from memcommit.context import Memory
 from memcommit.interfaces.tui.operations.summarize import SummarizeTuiOutcome
+from memcommit.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.summarize import (
     SUMMARIZE_OPERATION,
     SummarizeError,
@@ -226,6 +227,172 @@ def test_mem_summarize_forced_tui_requires_terminal_before_store_execution(
 
     assert result.exit_code == 1
     assert "requires a TTY" in result.output
+
+
+def test_flagless_summarize_replays_a_recent_context_and_range(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    store.save(ops.init("summary/recent"))
+    store.set_current("summary/recent")
+    target = ReadReportTarget(
+        operation="summarize",
+        context_names=("summary/recent",),
+        target_names=("summary/recent",),
+        selection_mode="SINGLE",
+        ranges=("RECURSIVE",),
+    )
+    recent = ReadReportRecent(
+        attempt_uid="recent-summary",
+        target=target,
+        started_at="2026-08-16T12:00:00+00:00",
+    )
+    captured = {}
+
+    class InteractiveTerminal:
+        def is_interactive(self):
+            return True
+
+    class FakeRunner:
+        def run(self, request, *, mode):
+            captured["request"] = request
+            captured["mode"] = mode
+            return SummarizeResult(
+                context_name="summary/recent",
+                include_descendants=True,
+                follow_embeds=True,
+                source_digest="a" * 64,
+                source_count=0,
+                understanding=UnderstandingSummary("Nothing to summarize.", ()),
+            )
+
+    monkeypatch.setattr(
+        summarize_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "read_report_recents",
+        lambda *_args, **_kwargs: (recent,),
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "choose_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "revalidate_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "build_summarize_console_runner",
+        lambda **_kwargs: FakeRunner(),
+    )
+
+    summarize_command.cmd(
+        context_name=None,
+        direct=False,
+        recursive=False,
+        copy_result=False,
+        plain=False,
+        tui=False,
+    )
+
+    assert captured["request"].context_locator == "summary/recent"
+    assert captured["request"].include_descendants is True
+    assert captured["request"].follow_embeds is True
+
+
+def test_flagless_summarize_replays_both_ranges_into_tui_setup(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    store.save(ops.init("summary/both"))
+    store.set_current("summary/both")
+    target = ReadReportTarget(
+        operation="summarize",
+        context_names=("summary/both",),
+        target_names=("summary/both",),
+        selection_mode="SINGLE",
+        ranges=("DIRECT", "RECURSIVE"),
+    )
+    recent = ReadReportRecent(
+        attempt_uid="recent-summary-both",
+        target=target,
+        started_at="2026-08-16T12:00:00+00:00",
+    )
+    captured = {}
+
+    class InteractiveTerminal:
+        def is_interactive(self):
+            return True
+
+    class FakeRunner:
+        def __init__(self, prepare_tui):
+            self.prepare_tui = prepare_tui
+
+        def run(self, request, *, mode):
+            captured["setup"] = self.prepare_tui(request)
+            direct_result = SummarizeResult(
+                context_name="summary/both",
+                include_descendants=False,
+                follow_embeds=False,
+                source_digest="a" * 64,
+                source_count=0,
+                understanding=UnderstandingSummary("Nothing direct.", ()),
+            )
+            recursive_result = SummarizeResult(
+                context_name="summary/both",
+                include_descendants=True,
+                follow_embeds=True,
+                source_digest="b" * 64,
+                source_count=0,
+                understanding=UnderstandingSummary("Nothing recursive.", ()),
+            )
+            return SummarizeTuiOutcome((direct_result, recursive_result))
+
+    monkeypatch.setattr(
+        summarize_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "read_report_recents",
+        lambda *_args, **_kwargs: (recent,),
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "choose_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "revalidate_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "build_summarize_console_runner",
+        lambda **kwargs: FakeRunner(kwargs["prepare_tui"]),
+    )
+
+    summarize_command.cmd(
+        context_name=None,
+        direct=False,
+        recursive=False,
+        copy_result=False,
+        plain=False,
+        tui=False,
+    )
+
+    assert captured["setup"].selected_context == "summary/both"
+    assert captured["setup"].initial_range_mode == "BOTH"
 
 
 def test_mem_summarize_plain_preserves_noninteractive_output(

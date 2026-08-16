@@ -21,6 +21,7 @@ from memcommit.commands.findings_render import (
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.quality_find_workbench import (
+    annotate_quality_find_attempt,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
@@ -159,11 +160,13 @@ def cmd(
         )
         raise typer.Exit(1)
 
+    source = QualityFindSourceFrame.create(
+        (ctx,),
+        context_names=(access.display_name,),
+    )
+    annotate_quality_find_attempt("conflicts", source)
+
     if handoff_json:
-        source = QualityFindSourceFrame.create(
-            (ctx,),
-            context_names=(access.display_name,),
-        )
         session = create_quality_find_workbench("conflicts", source, report)
         for handoff in quality_finding_handoffs(session):
             typer.echo(quality_finding_handoff_json(handoff))

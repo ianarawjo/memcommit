@@ -18,6 +18,7 @@ from memcommit.commands.findings_render import (
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.quality_find_workbench import (
+    annotate_quality_find_attempt,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
@@ -32,6 +33,7 @@ from memcommit.query_provider import (
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.quality_find_workbench import QualityFindSourceFrame
 
 
 _CLARIFICATION_COLORS = {
@@ -127,6 +129,14 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+
+    annotate_quality_find_attempt(
+        "ambiguities",
+        QualityFindSourceFrame.create(
+            (ctx,),
+            context_names=(access.display_name,),
+        ),
+    )
 
     render_heading(
         context_name=display_escape_text(ctx.name),

@@ -1,7 +1,5 @@
 """Compatibility imports for the shared operation-launcher session adapter."""
 
-import sys
-
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionGroupMode,
     SessionNewReceipt,

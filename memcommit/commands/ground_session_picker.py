@@ -3,10 +3,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 import re
 
 import memcommit.store as store_module
+from memcommit.commands.operation_launcher_location import (
+    operation_launcher_orientation,
+)
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionPickerEntry,
     SessionPickerLocation,
@@ -18,11 +20,6 @@ from memcommit.ground import GroundSession, validate_ground_contract_name
 from memcommit.store import (
     MemoryStore,
     ground_session_record_digest,
-)
-from memcommit.profile_config import (
-    ProfileConfigError,
-    load_profile_registry,
-    profile_store_dir,
 )
 
 
@@ -42,32 +39,13 @@ class GroundSessionCatalogEntry:
 def session_picker_location(
     store: MemoryStore | None = None,
 ) -> SessionPickerLocation:
-    """Identify the frozen process profile/store for any session launcher.
+    """Compatibility projection for saved-session launcher callers."""
 
-    ``memcommit.store`` freezes its root at import time. Another process may
-    change the registry's active profile while this picker is open, so the
-    active UID is not authoritative here. Matching all registered roots keeps
-    the label aligned with the store that the catalog actually came from.
-    """
-    frozen_root = (
-        store.store_dir if store is not None else Path(store_module.STORE_DIR)
-    )
-    profile_name = "(unregistered)"
-    try:
-        registry = load_profile_registry()
-    except ProfileConfigError:
-        profile_name = "(registry unavailable)"
-    else:
-        matches = tuple(
-            profile.name
-            for profile in registry.profiles
-            if profile_store_dir(profile) == frozen_root
-        )
-        if len(matches) == 1:
-            profile_name = matches[0]
+    orientation = operation_launcher_orientation(store)
+    rows = dict(orientation.rows)
     return SessionPickerLocation(
-        profile_name=profile_name,
-        store_path=str(frozen_root),
+        profile_name=rows["PROFILE"],
+        store_path=rows["STORE"],
     )
 
 

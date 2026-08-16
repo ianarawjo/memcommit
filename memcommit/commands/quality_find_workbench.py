@@ -18,6 +18,10 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.command_attempts import annotate_read_report_attempt
+from memcommit.commands.operation_launcher_location import (
+    operation_launcher_orientation,
+)
 from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
@@ -54,6 +58,10 @@ from memcommit.interfaces.console.terminal import (
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
+from memcommit.interfaces.tui.workbenches.read_report import (
+    ReadReportSelectTarget,
+    choose_read_report_recent,
+)
 from memcommit.context import Context
 from memcommit.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
@@ -85,6 +93,11 @@ from memcommit.dedup_application import DEDUP_ELIGIBLE_RELATIONS
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
+from memcommit.read_report import ReadReportError, ReadReportTarget
+from memcommit.read_report_recents import (
+    read_report_recents,
+    revalidate_read_report_recent,
+)
 
 
 @dataclass(frozen=True)
@@ -138,6 +151,28 @@ def interactive_quality_find_available() -> bool:
 
 def _operation_label(kind: QualitySetupKind) -> str:
     return "AUDIT" if kind == "audit" else f"FIND {kind.upper()}"
+
+
+def _read_report_operation(kind: QualityFindKind):
+    return f"find-{kind}"
+
+
+def annotate_quality_find_attempt(
+    kind: QualityFindKind,
+    source: QualityFindSourceFrame,
+) -> None:
+    """Record only the reviewed target/range identity, never report content."""
+
+    annotate_read_report_attempt(
+        ReadReportTarget(
+            operation=_read_report_operation(kind),
+            context_names=source.context_names,
+            target_names=source.target_names,
+            selection_mode=source.selection_mode,
+            ranges=("RECURSIVE",) if source.include_descendants else ("DIRECT",),
+            profile_selected=source.profile_selected,
+        )
+    )
 
 
 def choose_quality_find_setup(
@@ -689,12 +724,41 @@ def run_interactive_quality_find(
         for name in names
         if catalog.access_for(name).is_granted
     }
-    receipt = choose_quality_find_setup(
-        names,
-        current=initial,
-        kind=kind,
-        annotations=annotations,
+    operation = _read_report_operation(kind)
+    recents = read_report_recents(store, operation=operation)
+    launch = choose_read_report_recent(
+        recents,
+        operation=operation,
+        orientation=operation_launcher_orientation(store),
     )
+    if isinstance(launch, ReadReportTarget):
+        matching = next(
+            (recent for recent in recents if recent.target == launch),
+            None,
+        )
+        if matching is None:
+            raise ReadReportError(
+                "Quality Find launcher returned an unknown recent target."
+            )
+        target = revalidate_read_report_recent(store, matching)
+        receipt = QualityFindSetupReceipt(
+            target_names=target.target_names,
+            context_names=target.context_names,
+            selection_mode=target.selection_mode,
+            include_descendants=target.include_descendants,
+            profile_selected=target.profile_selected,
+        )
+    elif isinstance(launch, ReadReportSelectTarget):
+        receipt = choose_quality_find_setup(
+            names,
+            current=initial,
+            kind=kind,
+            annotations=annotations,
+        )
+    elif launch is None:
+        return False
+    else:
+        raise ReadReportError("Quality Find launcher returned an invalid action.")
     if receipt is None:
         return False
     # Resolve every effective checked row through the same frozen catalog used
@@ -721,6 +785,7 @@ def run_interactive_quality_find(
         total=1,
     ):
         report = analyze(source)
+    annotate_quality_find_attempt(kind, source)
     session = create_quality_find_workbench(kind, source, report)
     run_quality_find_resolution_workbench(
         session,

@@ -19,6 +19,8 @@ import time
 from typing import Literal
 import uuid
 
+from memcommit.read_report import ReadReportTarget
+
 
 AttemptStatus = Literal["RUNNING", "COMPLETED", "FAILED", "INTERRUPTED"]
 _FINAL_STATUSES = frozenset({"COMPLETED", "FAILED", "INTERRUPTED"})
@@ -144,8 +146,18 @@ class CommandAttempt:
 
 
 def _validated_details(value: object) -> None:
-    if not isinstance(value, dict) or set(value) - {"sever", "memory_report"}:
+    if not isinstance(value, dict) or set(value) - {
+        "sever",
+        "memory_report",
+        "read_report",
+    }:
         raise CommandAttemptError("Command attempt details are invalid.")
+    read_report = value.get("read_report")
+    if read_report is not None:
+        try:
+            ReadReportTarget.from_metadata(read_report)
+        except ValueError as error:
+            raise CommandAttemptError("Read Report attempt details are invalid.") from error
     memory_report = value.get("memory_report")
     if memory_report is not None:
         required = {"operation", "context_name", "memory_uid"}
@@ -413,6 +425,39 @@ def annotate_memory_report_attempt(
             else {}
         ),
     }
+    details["read_report"] = ReadReportTarget(
+        operation=operation,
+        context_names=(context_name,),
+        target_names=(context_name,),
+        selection_mode="SINGLE",
+        ranges=("RECURSIVE",)
+        if (
+            include_descendants
+            if include_descendants is not None
+            else operation == "rationale"
+        )
+        else ("DIRECT",),
+        memory_uid=memory_uid,
+    ).to_metadata()
+    updated = replace(active.record, details=details)
+    active.ledger.replace(updated)
+    active.record = updated
+
+
+def annotate_read_report_attempt(target: ReadReportTarget) -> None:
+    """Persist one content-free report identity on the active CLI attempt."""
+
+    if not isinstance(target, ReadReportTarget):
+        raise TypeError("Read Report annotation requires a typed target.")
+    active = _ACTIVE_ATTEMPT.get()
+    if active is None:
+        return
+    if active.record.operation != target.operation:
+        raise CommandAttemptError(
+            "Read Report metadata does not match the active operation."
+        )
+    details = dict(active.record.details)
+    details["read_report"] = target.to_metadata()
     updated = replace(active.record, details=details)
     active.ledger.replace(updated)
     active.record = updated

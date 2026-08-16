@@ -1,0 +1,52 @@
+ MEM SUMMARIZE · RECENTS OR SELECT · RECENT FIRST · ALL                                                                                                                             
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-read-report-capture-ntt0vo1n/.mem                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + SELECT A TARGET                                                                                                                                                                ^
+› 2026-08-16 12:00Z  reports/empty  [COMPLETED]  SUMMARIZE · DIRECT + RECURSIVE                                                                                                     
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         summarize                                                                                                                                                            ^
+ Key          72eef0bf-5f01-47f3-b38a-f1cf9d06747c                                                                                                                                  
+ Title        reports/empty                                                                                                                                                         
+ Status       COMPLETED                                                                                                                                                             
+ Context      reports/empty                                                                                                                                                         
+ Modified     2026-08-16 12:00Z                                                                                                                                                     
+ Summary      SUMMARIZE · DIRECT + RECURSIVE                                                                                                                                        
+ Detail       SUMMARIZE report                                                                                                                                                      
+              Targets reports/empty                                                                                                                                                 
+              Effective Contexts 1                                                                                                                                                  
+              Range DIRECT + RECURSIVE                                                                                                                                              
+              Opened 2026-08-16T12:00:00+00:00                                                                                                                                      
+                                                                                                                                                                                    
+              Report and Memory content are not copied into Recents. Opening this row revalidates the current targets and permissions.                                              
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N SELECT A TARGET  Esc/q cancel  ·  2/2

@@ -1,0 +1,52 @@
+ MEM FIND DUPLICATES · RECENTS OR SELECT · RECENT FIRST · ALL                                                                                                                       
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-read-report-capture-84if6dpl/.mem                                                                             
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + SELECT A TARGET                                                                                                                                                                ^
+› 2026-08-16 12:00Z  reports/find  [COMPLETED]  FIND DUPLICATES · DIRECT                                                                                                            
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         find-duplicates                                                                                                                                                      ^
+ Key          cdd1b07f-7f68-4d64-a74a-b6689b24d5d7                                                                                                                                  
+ Title        reports/find                                                                                                                                                          
+ Status       COMPLETED                                                                                                                                                             
+ Context      reports/find                                                                                                                                                          
+ Modified     2026-08-16 12:00Z                                                                                                                                                     
+ Summary      FIND DUPLICATES · DIRECT                                                                                                                                              
+ Detail       FIND DUPLICATES report                                                                                                                                                
+              Targets reports/find                                                                                                                                                  
+              Effective Contexts 1                                                                                                                                                  
+              Range DIRECT                                                                                                                                                          
+              Opened 2026-08-16T12:00:00+00:00                                                                                                                                      
+                                                                                                                                                                                    
+              Report and Memory content are not copied into Recents. Opening this row revalidates the current targets and permissions.                                              
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open  S sort  G group  / filter  N SELECT A TARGET  Esc/q cancel  ·  2/2

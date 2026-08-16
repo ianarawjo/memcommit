@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FIND DUPLICATES                                                                                                                                                             ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · reports/find                                                                                                                                                          ┃
+┃ PROCESS LOCAL · 0/0 ANSWERED · 1 CONTEXTS · 1 SOURCE MEMORIES · 0 FINDINGS · 0 ANSWERED                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ SCOPE                                                                                                                                                                            ┃
+┃ Inspected 1 direct Memories across 1 frozen readable Context as one analysis frame. SINGLE TARGET SELECTION · THIS CONTEXT ONLY. Embedded Context edges were not followed.       ┃
+┃                                                                                                                                                                                  ┃
+┃ FINDINGS                                                                                                                                                                         ┃
+┃ Reported 0 actionable duplicate findings.                                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ Responses are process-local review notes. No Context or Memory changes have been applied.                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 0                                                                                                                                                          ┃
+┃  No actionable duplicate findings in this analysis.                                                                                                                              ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Find Duplicates report                                                                                                                                 ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · No whole-set action is required; close or revisit an item.                                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close

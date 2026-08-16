@@ -1,22 +1,21 @@
-"""Shared recent-report launcher for Trace and Rationale."""
+"""Trace/Rationale adapter over the shared Read Report recent lifecycle."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Literal
 
-from memcommit.command_attempts import (
-    CommandAttempt,
-    CommandAttemptError,
-    CommandAttemptLedger,
+from memcommit.commands.operation_launcher_location import (
+    operation_launcher_orientation,
 )
-from memcommit.commands.ground_session_picker import session_picker_location
-from memcommit.interfaces.tui.components.operation_launcher.session import (
-    SessionNewReceipt,
-    SessionOpenReceipt,
-    SessionPickerEntry,
-    choose_session,
+from memcommit.interfaces.tui.workbenches.read_report import (
+    ReadReportSelectTarget,
+    choose_read_report_recent,
+)
+from memcommit.read_report import ReadReportError, ReadReportTarget
+from memcommit.read_report_recents import (
+    read_report_recents,
+    revalidate_read_report_recent,
 )
 from memcommit.store import MemoryStore
 
@@ -25,7 +24,7 @@ MemoryReportOperation = Literal["trace", "rationale"]
 
 
 class MemoryReportRecentError(ValueError):
-    """A recent report receipt cannot be trusted or reopened."""
+    """A recent Memory report cannot be trusted or reopened."""
 
 
 @dataclass(frozen=True)
@@ -50,38 +49,17 @@ class MemoryReportSelectAction:
     """Request the normal common Context/Memory selector."""
 
 
-def _recent_from_attempt(
-    attempt: CommandAttempt,
-    *,
-    operation: MemoryReportOperation,
-) -> MemoryReportRecent | None:
-    details = attempt.details.get("memory_report")
-    if (
-        attempt.status != "COMPLETED"
-        or attempt.operation
-        not in ({operation, "log"} if operation == "trace" else {operation})
-        or not isinstance(details, dict)
-        or details.get("operation") != operation
-    ):
-        return None
-    context_name = details.get("context_name")
-    memory_uid = details.get("memory_uid")
-    if not isinstance(context_name, str) or not isinstance(memory_uid, str):
-        raise MemoryReportRecentError("Recent report metadata is invalid.")
-    include_descendants = details.get("include_descendants")
-    if include_descendants is None:
-        # Before range selection existed, Rationale was always subtree-scoped
-        # and Trace was always exact. Preserve those historical receipts.
-        include_descendants = operation == "rationale"
-    if type(include_descendants) is not bool:
-        raise MemoryReportRecentError("Recent report scope is invalid.")
+def _memory_recent(recent) -> MemoryReportRecent:
+    target = recent.target
+    if target.memory_uid is None or len(target.context_names) != 1:
+        raise MemoryReportRecentError("Recent Memory report metadata is invalid.")
     return MemoryReportRecent(
-        attempt_uid=attempt.uid,
-        operation=operation,
-        context_name=context_name,
-        memory_uid=memory_uid,
-        include_descendants=include_descendants,
-        started_at=attempt.started_at,
+        attempt_uid=recent.attempt_uid,
+        operation=target.operation,  # type: ignore[arg-type]
+        context_name=target.context_names[0],
+        memory_uid=target.memory_uid,
+        include_descendants=target.include_descendants,
+        started_at=recent.started_at,
     )
 
 
@@ -91,66 +69,19 @@ def memory_report_recents(
     operation: MemoryReportOperation,
     limit: int = 20,
 ) -> tuple[MemoryReportRecent, ...]:
-    """Return latest unique report targets without retaining Memory content."""
-    if operation not in {"trace", "rationale"}:
-        raise MemoryReportRecentError("Recent report operation is invalid.")
-    if isinstance(limit, bool) or not isinstance(limit, int) or limit <= 0:
-        raise MemoryReportRecentError("Recent report limit must be positive.")
+    """Retain the legacy typed projection while using shared Recents storage."""
+
     try:
-        attempts = CommandAttemptLedger(store.store_dir).list()
-    except CommandAttemptError as error:
-        raise MemoryReportRecentError(str(error)) from error
-    result: list[MemoryReportRecent] = []
-    seen: set[tuple[str, str, bool]] = set()
-    for attempt in attempts:
-        recent = _recent_from_attempt(attempt, operation=operation)
-        if recent is None:
-            continue
-        identity = (
-            recent.context_name,
-            recent.memory_uid,
-            recent.include_descendants,
+        return tuple(
+            _memory_recent(recent)
+            for recent in read_report_recents(
+                store,
+                operation=operation,
+                limit=limit,
+            )
         )
-        if identity in seen:
-            continue
-        seen.add(identity)
-        result.append(recent)
-        if len(result) == limit:
-            break
-    return tuple(result)
-
-
-def _entry(recent: MemoryReportRecent) -> SessionPickerEntry:
-    try:
-        timestamp = datetime.fromisoformat(recent.started_at).timestamp()
-    except ValueError as error:  # The ledger normally validates this first.
-        raise MemoryReportRecentError("Recent report time is invalid.") from error
-    command = recent.operation.upper()
-    return SessionPickerEntry(
-        kind=recent.operation,
-        key=recent.attempt_uid,
-        title=recent.context_name,
-        status="COMPLETED",
-        subtitle=f"{command} · Memory [{recent.memory_uid[:8]}]",
-        group=recent.context_name,
-        sort_timestamp=timestamp,
-        detail=(
-            f"{command} report\n"
-            f"Context {recent.context_name}\n"
-            f"Range {'INCLUDE DESCENDANTS' if recent.include_descendants else 'THIS CONTEXT ONLY'}\n"
-            f"Memory UID {recent.memory_uid}\n"
-            f"Opened {recent.started_at}\n\n"
-            "Memory content is not copied into Recents. Opening this row "
-            "revalidates the current Context, UID, and permissions."
-        ),
-        reopen_argv=(
-            "mem",
-            recent.operation,
-            recent.memory_uid,
-            "--context",
-            recent.context_name,
-        ),
-    )
+    except ReadReportError as error:
+        raise MemoryReportRecentError(str(error)) from error
 
 
 def choose_memory_report_recent(
@@ -158,53 +89,38 @@ def choose_memory_report_recent(
     *,
     operation: MemoryReportOperation,
 ) -> MemoryReportRecentSelection | MemoryReportSelectAction | None:
-    """Choose a frozen recent target or enter the normal Memory selector."""
-    recents = memory_report_recents(store, operation=operation)
-    entries = tuple(_entry(recent) for recent in recents)
-    if not entries:
-        # With no navigation history there is no catalog decision to make.
-        # Continue directly to the common Context/Memory target picker instead
-        # of presenting an empty saved-session-shaped launcher.
-        return MemoryReportSelectAction()
-    select_receipt = SessionNewReceipt(
-        kind=f"{operation}-select",
-        argv=("mem", operation),
-        action_label="SELECT A MEMORY",
-        action_description=(
-            "Leave Recents and choose from the common Context/Memory tree."
-        ),
-    )
-    receipt = choose_session(
-        entries,
-        title=f"MEM {operation.upper()} · RECENTS OR SELECT",
-        new_receipt=select_receipt,
-        location=session_picker_location(store),
-        catalog_label="recent reports",
-    )
-    if receipt is None:
-        return None
-    if isinstance(receipt, SessionNewReceipt):
-        if receipt != select_receipt:
-            raise MemoryReportRecentError("Report launcher returned a forged action.")
-        return MemoryReportSelectAction()
-    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != operation:
-        raise MemoryReportRecentError("Report launcher returned an invalid receipt.")
-    by_key = {recent.attempt_uid: recent for recent in recents}
-    selected = by_key.get(receipt.key)
-    if selected is None or receipt.argv != _entry(selected).reopen_argv:
-        raise MemoryReportRecentError("Report launcher returned a forged receipt.")
+    """Choose and revalidate a shared content-free recent Memory target."""
+
     try:
-        live_attempt = CommandAttemptLedger(store.store_dir).load(selected.attempt_uid)
-    except CommandAttemptError as error:
-        raise MemoryReportRecentError(
-            "The selected recent report no longer exists. Reopen Recents."
-        ) from error
-    if _recent_from_attempt(live_attempt, operation=operation) != selected:
-        raise MemoryReportRecentError(
-            "The selected recent report changed. Reopen Recents."
+        recents = read_report_recents(store, operation=operation)
+        selected = choose_read_report_recent(
+            recents,
+            operation=operation,
+            orientation=operation_launcher_orientation(store),
         )
+        if selected is None:
+            return None
+        if isinstance(selected, ReadReportSelectTarget):
+            return MemoryReportSelectAction()
+        if not isinstance(selected, ReadReportTarget):
+            raise MemoryReportRecentError(
+                "Memory report launcher returned an invalid selection."
+            )
+        matching = next(
+            (recent for recent in recents if recent.target == selected),
+            None,
+        )
+        if matching is None:
+            raise MemoryReportRecentError(
+                "Memory report launcher returned an unknown selection."
+            )
+        target = revalidate_read_report_recent(store, matching)
+    except ReadReportError as error:
+        raise MemoryReportRecentError(str(error)) from error
+    if target.memory_uid is None or len(target.context_names) != 1:
+        raise MemoryReportRecentError("Recent Memory report target is invalid.")
     return MemoryReportRecentSelection(
-        context_name=selected.context_name,
-        memory_uid=selected.memory_uid,
-        include_descendants=selected.include_descendants,
+        context_name=target.context_names[0],
+        memory_uid=target.memory_uid,
+        include_descendants=target.include_descendants,
     )

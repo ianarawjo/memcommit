@@ -29,6 +29,7 @@ from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
     quality_find_resolution_view,
 )
+from memcommit.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.store import MemoryStore
 
 
@@ -174,6 +175,70 @@ def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
         root_memory.uid: root.name,
         child_memory.uid: child.name,
     }
+
+
+def test_interactive_orchestration_replays_recent_target_without_saved_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root = ops.init("quality/recent")
+    child = ops.init("quality/recent/child")
+    ops.add(root, "First duplicate candidate.")
+    ops.add(child, "First duplicate candidate.")
+    store.create_context(root)
+    store.create_context(child)
+    store.set_current(root.name)
+    target = ReadReportTarget(
+        operation="find-duplicates",
+        context_names=(root.name, child.name),
+        target_names=(root.name,),
+        selection_mode="SINGLE",
+        ranges=("RECURSIVE",),
+    )
+    recent = ReadReportRecent(
+        attempt_uid="recent-attempt",
+        target=target,
+        started_at="2026-08-16T12:00:00+00:00",
+    )
+    observed: list[QualityFindSourceFrame] = []
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.read_report_recents",
+        lambda *_args, **_kwargs: (recent,),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.choose_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.revalidate_read_report_recent",
+        lambda *_args, **_kwargs: target,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.choose_quality_find_setup",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("a recent target must bypass fresh setup")
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench."
+        "run_quality_find_resolution_workbench",
+        lambda *_args, **_kwargs: None,
+    )
+
+    completed = run_interactive_quality_find(
+        store,
+        current_name=root.name,
+        kind="duplicates",
+        analyze=lambda source: (
+            observed.append(source)
+            or DuplicateReport(memory_count=2, findings=())
+        ),
+    )
+
+    assert completed is True
+    assert observed[0].context_names == (root.name, child.name)
+    assert observed[0].include_descendants is True
 
 
 def test_ambiguity_projection_keeps_readings_and_process_local_response():

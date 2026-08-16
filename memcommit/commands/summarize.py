@@ -9,8 +9,12 @@ import typer
 
 from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.clipboard import ClipboardError, write_system_clipboard
+from memcommit.command_attempts import annotate_read_report_attempt
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.operation_launcher_location import (
+    operation_launcher_orientation,
+)
 from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
@@ -25,9 +29,14 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.interfaces.console import (
+    ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
+)
+from memcommit.interfaces.tui.workbenches.read_report import (
+    ReadReportSelectTarget,
+    choose_read_report_recent,
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.summarize import (
@@ -42,6 +51,11 @@ from memcommit.query_provider import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import MemoryStore
+from memcommit.read_report import ReadReportError, ReadReportTarget
+from memcommit.read_report_recents import (
+    read_report_recents,
+    revalidate_read_report_recent,
+)
 from memcommit.summarize import SummarizeError, SummarizeProvider
 from memcommit.summarize_application import SummarizeRequest, SummarizeResult
 from memcommit.summarize_runtime import run_summarize_with_store
@@ -138,13 +152,8 @@ def cmd(
 ) -> None:
     """Summarize what Mem understands; never change or checkpoint a Context."""
     try:
-        preset = resolve_scope_preset(
-            direct=direct,
-            recursive=recursive,
-            default=ContextScopePreset.DIRECT,
-        )
-        traversal = resolve_context_traversal(preset=preset)
         mode = resolve_console_mode(plain=plain, tui=tui)
+        terminal = SystemTerminalCapabilities()
         resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
 
         def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:
@@ -153,6 +162,50 @@ def cmd(
                 store = MemoryStore(create=False)
                 resources = (store, ContextOperandSnapshot.capture(store))
             return resources
+
+        if (
+            context_name is None
+            and not direct
+            and not recursive
+            and mode is not ConsoleMode.PLAIN
+            and terminal.is_interactive()
+        ):
+            store, _snapshot = command_resources()
+            recents = read_report_recents(store, operation="summarize")
+            launch = choose_read_report_recent(
+                recents,
+                operation="summarize",
+                orientation=operation_launcher_orientation(store),
+            )
+            if launch is None:
+                typer.echo("Summarize cancelled.")
+                return
+            if isinstance(launch, ReadReportTarget):
+                matching = next(
+                    (recent for recent in recents if recent.target == launch),
+                    None,
+                )
+                if matching is None:
+                    raise ReadReportError(
+                        "Summarize launcher returned an unknown recent target."
+                    )
+                launch = revalidate_read_report_recent(store, matching)
+                if len(launch.target_names) != 1:
+                    raise ReadReportError(
+                        "Summarize recent target must contain one Context."
+                    )
+                context_name = launch.target_names[0]
+                direct = launch.ranges == ("DIRECT",)
+                recursive = launch.ranges == ("RECURSIVE",)
+            elif not isinstance(launch, ReadReportSelectTarget):
+                raise ReadReportError("Summarize launcher returned an invalid action.")
+
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        traversal = resolve_context_traversal(preset=preset)
 
         def execute(request: SummarizeRequest):
             # Route validation happens before opening durable or semantic
@@ -201,7 +254,7 @@ def cmd(
             execute=execute,
             prepare_tui=prepare_tui,
             clipboard_writer=write_system_clipboard,
-            terminal=SystemTerminalCapabilities(),
+            terminal=terminal,
         )
         result = runner.run(
             SummarizeRequest(
@@ -211,6 +264,31 @@ def cmd(
             ),
             mode=mode,
         )
+        if isinstance(result, SummarizeTuiOutcome):
+            annotate_read_report_attempt(
+                ReadReportTarget(
+                    operation="summarize",
+                    context_names=(result.results[0].context_name,),
+                    target_names=(result.results[0].context_name,),
+                    selection_mode="SINGLE",
+                    ranges=tuple(
+                        "RECURSIVE" if item.include_descendants else "DIRECT"
+                        for item in result.results
+                    ),
+                )
+            )
+        elif isinstance(result, SummarizeResult):
+            annotate_read_report_attempt(
+                ReadReportTarget(
+                    operation="summarize",
+                    context_names=(result.context_name,),
+                    target_names=(result.context_name,),
+                    selection_mode="SINGLE",
+                    ranges=(
+                        "RECURSIVE" if result.include_descendants else "DIRECT",
+                    ),
+                )
+            )
     except (
         FileNotFoundError,
         OSError,
@@ -219,6 +297,7 @@ def cmd(
         QueryProviderError,
         RuntimeError,
         SummarizeError,
+        ReadReportError,
         ConsoleModeError,
         ValueError,
     ) as error:

@@ -20,7 +20,7 @@ from memcommit.commands.memory_report_recents import (
     choose_memory_report_recent,
     memory_report_recents,
 )
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
+from memcommit.read_report import ReadReportTarget
 from memcommit.store import MemoryStore
 
 
@@ -93,7 +93,15 @@ def test_recents_are_latest_unique_completed_targets_and_content_free(isolated_s
             "operation": "trace",
             "context_name": "notes",
             "memory_uid": "memory-one",
-        }
+        },
+        "read_report": ReadReportTarget(
+            operation="trace",
+            context_names=("notes",),
+            target_names=("notes",),
+            selection_mode="SINGLE",
+            ranges=("DIRECT",),
+            memory_uid="memory-one",
+        ).to_metadata(),
     }
 
 
@@ -101,7 +109,7 @@ def test_empty_launcher_goes_directly_to_common_memory_picker(
     isolated_store, monkeypatch
 ):
     monkeypatch.setattr(
-        "memcommit.commands.memory_report_recents.choose_session",
+        "memcommit.interfaces.tui.workbenches.read_report.launcher.run_operation_launcher",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("an empty recent catalog must be skipped")
         ),
@@ -114,7 +122,7 @@ def test_empty_launcher_goes_directly_to_common_memory_picker(
 
 def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
     store = MemoryStore()
-    attempt_uid = _record_report(
+    _record_report(
         store,
         operation="rationale",
         context_name="research/granted",
@@ -122,16 +130,11 @@ def test_launcher_revalidates_selected_recent(isolated_store, monkeypatch):
         started_at="2026-08-06T12:00:00+00:00",
     )
 
-    def choose(entries, **kwargs):
-        entry = entries[0]
-        return SessionOpenReceipt(
-            kind="rationale",
-            key=attempt_uid,
-            argv=entry.reopen_argv,
-        )
+    def choose(recents, **kwargs):
+        return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.commands.memory_report_recents.choose_session",
+        "memcommit.commands.memory_report_recents.choose_read_report_recent",
         choose,
     )
 
@@ -157,7 +160,7 @@ def test_launcher_rejects_recent_that_changes_after_selection(
         started_at="2026-08-06T12:00:00+00:00",
     )
 
-    def choose(entries, **kwargs):
+    def choose(recents, **kwargs):
         ledger = CommandAttemptLedger(store.store_dir)
         attempt = ledger.load(attempt_uid)
         ledger.replace(
@@ -172,14 +175,10 @@ def test_launcher_rejects_recent_that_changes_after_selection(
                 },
             )
         )
-        return SessionOpenReceipt(
-            kind="trace",
-            key=attempt_uid,
-            argv=entries[0].reopen_argv,
-        )
+        return recents[0].target
 
     monkeypatch.setattr(
-        "memcommit.commands.memory_report_recents.choose_session",
+        "memcommit.commands.memory_report_recents.choose_read_report_recent",
         choose,
     )
 
