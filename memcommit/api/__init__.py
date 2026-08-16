@@ -1,50 +1,10 @@
-"""Stable public Python API for MemCommit."""
+"""Stable public Python API for MemCommit.
 
-from memcommit.api.client import MemCommitClient
-from memcommit.api.add import AddMemoriesResult, AddedMemoryResult
-from memcommit.api.errors import (
-    AddAuthorityError,
-    AddConflictError,
-    AddContextError,
-    AddError,
-    AddExecutionError,
-    AddInputError,
-    AddStorageError,
-    MemCommitError,
-    MeldAuthorityError,
-    MeldConflictError,
-    MeldContextError,
-    MeldError,
-    MeldExecutionError,
-    MeldInputError,
-    MeldProviderFailure,
-    MeldStorageError,
-    QueryAuthorityError,
-    QueryConfigurationError,
-    QueryContextError,
-    QueryError,
-    QueryExecutionError,
-    QueryInputError,
-    QueryProviderFailure,
-    QueryPublicationError,
-    QueryStorageError,
-)
-from memcommit.api.meld import (
-    MeldApplyResult,
-    MeldIssueResult,
-    MeldOptionResult,
-    MeldProposalResult,
-    MeldSessionResult,
-)
-from memcommit.api.query import (
-    GrantedQueryResult,
-    OrdinaryQueryResult,
-    QueryCatalogEntry,
-    QueryCitation,
-    QueryProviderConfig,
-    QuerySessionReceipt,
-    ReferenceQueryResult,
-)
+The public names remain available from this module, but resolving one DTO or
+client must not eagerly assemble every operation implementation.
+"""
+
+from importlib import import_module
 
 __all__ = [
     "AddAuthorityError",
@@ -88,3 +48,42 @@ __all__ = [
     "QueryStorageError",
     "ReferenceQueryResult",
 ]
+
+
+_LAZY_EXPORTS = {
+    "AddMemoriesResult": ("memcommit.api.add", "AddMemoriesResult"),
+    "AddedMemoryResult": ("memcommit.api.add", "AddedMemoryResult"),
+    "MemCommitClient": ("memcommit.api.client", "MemCommitClient"),
+    "MeldApplyResult": ("memcommit.api.meld", "MeldApplyResult"),
+    "MeldIssueResult": ("memcommit.api.meld", "MeldIssueResult"),
+    "MeldOptionResult": ("memcommit.api.meld", "MeldOptionResult"),
+    "MeldProposalResult": ("memcommit.api.meld", "MeldProposalResult"),
+    "MeldSessionResult": ("memcommit.api.meld", "MeldSessionResult"),
+    "GrantedQueryResult": ("memcommit.api.query", "GrantedQueryResult"),
+    "OrdinaryQueryResult": ("memcommit.api.query", "OrdinaryQueryResult"),
+    "QueryCatalogEntry": ("memcommit.api.query", "QueryCatalogEntry"),
+    "QueryCitation": ("memcommit.api.query", "QueryCitation"),
+    "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
+    "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
+    "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
+    **{
+        name: ("memcommit.api.errors", name)
+        for name in __all__
+        if name.endswith("Error") or name.endswith("Failure")
+    },
+}
+
+
+def __getattr__(name: str):
+    try:
+        module_name, attribute_name = _LAZY_EXPORTS[name]
+    except KeyError as error:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from error
+    value = getattr(import_module(module_name), attribute_name)
+    # Cache the real public object, not a proxy, so identity remains stable.
+    globals()[name] = value
+    return value
+
+
+def __dir__() -> list[str]:
+    return sorted(set(globals()) | set(__all__))

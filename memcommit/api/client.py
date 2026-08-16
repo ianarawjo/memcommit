@@ -6,14 +6,6 @@ from collections.abc import Callable, Sequence
 import json
 from pathlib import Path
 
-from memcommit.add_application import (
-    AddError as ApplicationAddError,
-    AddRequest,
-    AddSource,
-    run_add,
-    validate_add_request,
-)
-from memcommit.add_runtime import MemoryStoreAddTargetPort
 from memcommit.api.add import (
     AddMemoriesResult,
     AddedMemoryResult,
@@ -57,56 +49,7 @@ from memcommit.api.query import (
     QuerySessionReceipt,
     ReferenceQueryResult,
 )
-from memcommit.authority.access import resolve_context_access
 from memcommit.context import QueryContextRef
-from memcommit.context_locator import resolve_context_locator
-from memcommit.context_targeting.readable_catalog import (
-    freeze_profile_readable_context_catalog,
-)
-from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
-from memcommit.infrastructure.providers.find_query import (
-    connect_ordinary_query_provider,
-    connect_query_route_provider,
-)
-from memcommit.meld import (
-    MELD_SCHEMA_VERSION,
-    MeldError as CoreMeldError,
-    meld_canonical_digest,
-)
-from memcommit.meld_application import MeldApplyRequest
-from memcommit.meld_provider import MeldProviderError
-from memcommit.meld_runtime import (
-    execute_meld_apply,
-    execute_meld_assessment,
-    execute_meld_preservation,
-    execute_meld_restart,
-    execute_meld_session_defer,
-    execute_meld_session_open,
-    execute_meld_start,
-    load_meld_source,
-    prepare_meld_assessment,
-)
-from memcommit.meld_session_application import (
-    MeldTurnRequest,
-    prepare_meld_preservation_turn,
-    prepare_meld_turn,
-)
-from memcommit.meld_start_application import MeldStartError, MeldStartRequest
-from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
-from memcommit.operations.query.granted_application import (
-    GrantedQueryRequest,
-    GrantedQueryTarget,
-)
-from memcommit.operations.query.granted_runtime import (
-    execute_granted_query_read,
-    execute_granted_query_session_publication,
-    freeze_granted_query_targets,
-)
-from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
-from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.operations.query.reference_application import QueryReferenceRequest
-from memcommit.operations.query.reference_runtime import execute_query_reference
-from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import (
     ProfileConfigError,
     ProfileEntry,
@@ -115,16 +58,112 @@ from memcommit.profile_config import (
     profile_store_dir,
 )
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import QueryProviderError
-from memcommit.query_sessions import QuerySessionError
-from memcommit.search import FindError
 from memcommit.store import MemoryStore
-from memcommit.store import ConcurrentContextUpdateError
 
 
 ProviderFactory = Callable[[], object]
 RouteProviderFactory = Callable[[str], object]
 StageObserver = Callable[[str], None]
+
+
+_UNLOADED_INTEGRATION = object()
+
+# These names remain patchable without eagerly importing their implementations.
+# The loaders replace only this sentinel, so an injected test or host adapter wins.
+run_add = _UNLOADED_INTEGRATION
+execute_granted_query_session_publication = _UNLOADED_INTEGRATION
+execute_meld_start = _UNLOADED_INTEGRATION
+execute_meld_restart = _UNLOADED_INTEGRATION
+
+
+def _publish_integration(namespace: dict[str, object]) -> None:
+    for name, value in namespace.items():
+        if name.startswith("_"):
+            continue
+        if globals().get(name, _UNLOADED_INTEGRATION) is _UNLOADED_INTEGRATION:
+            globals()[name] = value
+
+
+def _load_add_integration() -> None:
+    """Load Add's application/runtime assembly only when Add is selected."""
+
+    from memcommit.add_application import (
+        AddError as ApplicationAddError,
+        AddRequest,
+        AddSource,
+        run_add,
+        validate_add_request,
+    )
+    from memcommit.add_runtime import MemoryStoreAddTargetPort
+    from memcommit.context_locator import resolve_context_locator
+    from memcommit.store import ConcurrentContextUpdateError
+
+    _publish_integration(locals())
+
+
+def _load_meld_integration() -> None:
+    """Load Meld's durable review assembly only when a Meld method is used."""
+
+    from memcommit.authority.access import resolve_context_access
+    from memcommit.context_locator import resolve_context_locator
+    from memcommit.meld import (
+        MELD_SCHEMA_VERSION,
+        MeldError as CoreMeldError,
+        meld_canonical_digest,
+    )
+    from memcommit.meld_application import MeldApplyRequest
+    from memcommit.meld_provider import MeldProviderError
+    from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
+    from memcommit.meld_runtime import (
+        execute_meld_apply,
+        execute_meld_assessment,
+        execute_meld_preservation,
+        execute_meld_restart,
+        execute_meld_session_defer,
+        execute_meld_session_open,
+        execute_meld_start,
+        load_meld_source,
+        prepare_meld_assessment,
+    )
+    from memcommit.meld_session_application import (
+        MeldTurnRequest,
+        prepare_meld_preservation_turn,
+        prepare_meld_turn,
+    )
+    from memcommit.meld_start_application import MeldStartError, MeldStartRequest
+    from memcommit.store import ConcurrentContextUpdateError
+
+    _publish_integration(locals())
+
+
+def _load_query_integration() -> None:
+    """Load Query authority/runtime assembly only when Query is selected."""
+
+    from memcommit.authority.access import resolve_context_access
+    from memcommit.context_locator import resolve_context_locator
+    from memcommit.context_targeting.readable_catalog import (
+        freeze_profile_readable_context_catalog,
+    )
+    from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
+    from memcommit.operations.query.granted_application import (
+        GrantedQueryRequest,
+        GrantedQueryTarget,
+    )
+    from memcommit.operations.query.granted_runtime import (
+        execute_granted_query_read,
+        execute_granted_query_session_publication,
+        freeze_granted_query_targets,
+    )
+    from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
+    from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
+    from memcommit.operations.query.reference_application import QueryReferenceRequest
+    from memcommit.operations.query.reference_runtime import execute_query_reference
+    from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
+    from memcommit.query_provider import QueryProviderError
+    from memcommit.query_sessions import QuerySessionError
+    from memcommit.search import FindError
+
+    _publish_integration(locals())
 
 
 def _raise(error_type: type[Exception], error: BaseException) -> None:
@@ -213,6 +252,10 @@ class MemCommitClient:
         return self._query_config
 
     def _connect_ordinary_provider(self) -> object:
+        from memcommit.infrastructure.providers.find_query import (
+            connect_ordinary_query_provider,
+        )
+
         config = self._query_config
         return connect_ordinary_query_provider(
             model=config.model,
@@ -221,6 +264,10 @@ class MemCommitClient:
         )
 
     def _connect_route_provider(self, provider_name: str) -> object:
+        from memcommit.infrastructure.providers.find_query import (
+            connect_query_route_provider,
+        )
+
         config = self._query_config
         return connect_query_route_provider(
             provider_name,
@@ -255,6 +302,7 @@ class MemCommitClient:
 
     @staticmethod
     def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
+        _load_meld_integration()
         assessment = session.current_assessment
         application = session.application
         return MeldSessionResult(
@@ -313,6 +361,7 @@ class MemCommitClient:
         )
 
     def _meld_snapshot(self, target_name: str):
+        _load_meld_integration()
         current_name = self._current_context_name()
         canonical = resolve_context_locator(target_name, current=current_name)
         access = resolve_context_access(
@@ -337,6 +386,7 @@ class MemCommitClient:
     ) -> MeldSessionResult:
         """Create one durable reviewed Meld without opening a terminal UI."""
 
+        _load_meld_integration()
         try:
             if mode not in {"directional", "symmetric"}:
                 raise ValueError("mode must be directional or symmetric.")
@@ -414,6 +464,7 @@ class MemCommitClient:
     ) -> MeldSessionResult:
         """Replace one exact saved Meld review without deleting its target."""
 
+        _load_meld_integration()
         try:
             if mode not in {"directional", "symmetric"}:
                 raise ValueError("mode must be directional or symmetric.")
@@ -648,6 +699,7 @@ class MemCommitClient:
     ) -> AddMemoriesResult:
         """Append one exact ordered batch and publish one Add checkpoint."""
 
+        _load_add_integration()
         try:
             if isinstance(contents, (str, bytes)):
                 raise TypeError("contents must be a sequence of Memory texts.")
@@ -741,6 +793,7 @@ class MemCommitClient:
     ) -> OrdinaryQueryResult:
         """Answer from one exact readable Context set without publishing state."""
 
+        _load_query_integration()
         current_name = self._current_context_name()
         operands: tuple[str, ...]
         if context_names is None:
@@ -864,6 +917,7 @@ class MemCommitClient:
         visible turn was also reauthorized and CAS-published.
         """
 
+        _load_query_integration()
         try:
             if not isinstance(public_name, str) or not public_name:
                 raise ValueError("Granted Query public name must be nonblank.")
@@ -984,6 +1038,7 @@ class MemCommitClient:
     ) -> ReferenceQueryResult:
         """Answer through one exact legacy QueryContextRef without persistence."""
 
+        _load_query_integration()
         try:
             if not isinstance(reference, QueryContextRef):
                 raise TypeError("reference must be a QueryContextRef.")
