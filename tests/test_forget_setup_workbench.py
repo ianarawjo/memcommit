@@ -5,6 +5,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.forget_runtime as forget_runtime
 from memcommit.cli import app
 from memcommit.commands import forget as forget_command
 from memcommit.commands.forget_setup_workbench import (
@@ -39,19 +40,19 @@ def test_forget_provider_policy_pins_sol_none_and_keeps_shared_timeout(
         captured.update(kwargs)
         return _Provider()
 
-    monkeypatch.setattr(forget_command, "Config", _Settings)
+    monkeypatch.setattr(forget_runtime, "Config", _Settings)
     monkeypatch.setattr(
-        forget_command.CodexChatGPTProvider,
+        forget_runtime.CodexChatGPTProvider,
         "connect",
         staticmethod(connect),
     )
     monkeypatch.setattr(
-        forget_command,
+        forget_runtime,
         "record_provider_connection_started",
         lambda operation: completed.append(("started", operation)) or 1.0,
     )
     monkeypatch.setattr(
-        forget_command,
+        forget_runtime,
         "record_provider_connection_finished",
         lambda operation, started_at, **kwargs: completed.append(
             ("finished", operation, started_at, kwargs)

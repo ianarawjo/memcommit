@@ -3,7 +3,6 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.application_review_policy import (
     ownership_aware_application_review,
 )
@@ -15,9 +14,7 @@ from memcommit.commands.command_wait import (
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.forget_setup_workbench import choose_forget_setup
 from memcommit.authority.access import (
-    authorized_context_mutation,
     context_access_display_facts,
-    grant_checkpoint_args,
     resolve_context_access,
 )
 from memcommit.commands.readable_context_catalog import (
@@ -26,71 +23,47 @@ from memcommit.commands.readable_context_catalog import (
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
-from memcommit.context import AutoCheckpoint, Context
-from memcommit.config import Config
+from memcommit.context import Context
+from memcommit.forget_application import (
+    ForgetAnalysisRequest,
+    ForgetApplyRequest,
+    ForgetRevisionRequest,
+    ForgetSelectionRequest,
+    ForgetSessionSnapshot,
+    ForgetSourcePort,
+    FrozenForgetSource,
+    prepare_forget_snapshot,
+    run_forget_analysis,
+    run_forget_apply,
+    run_forget_revision,
+    run_forget_selection,
+)
 from memcommit.forget_resolution_adapter import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.forget_review import ForgetReview, ForgetSelection
+from memcommit.forget_review import ForgetSelection
+from memcommit.forget_runtime import (
+    MemoryStoreForgetSourcePort,
+    connect_forget_provider,
+)
 from memcommit.impact_controller import ImpactController
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.provider_types import ProviderIdentity
 from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
 from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
+from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange
 from memcommit.store import MemoryStore
-from memcommit.study_action_log import (
-    record_provider_connection_finished,
-    record_provider_connection_started,
-)
-
-
-FORGET_PROVIDER_MODEL = "gpt-5.6-sol"
-FORGET_PROVIDER_REASONING_EFFORT = "none"
 
 
 def connect_codex_chatgpt_provider() -> CodexChatGPTProvider:
-    """Connect Forget's benchmark-selected provisional provider policy.
+    """Compatibility name for Forget's infrastructure-owned provider factory."""
 
-    Forget intentionally pins only its model and reasoning effort. The shared
-    timeout and subscription-authentication boundary remain unchanged, while
-    every other semantic operation continues to use its configured provider.
-    """
-
-    started_at = record_provider_connection_started("forget")
-    try:
-        provider = CodexChatGPTProvider.connect(
-            timeout=Config().semantic_timeout_seconds(),
-            model=FORGET_PROVIDER_MODEL,
-            reasoning_effort=FORGET_PROVIDER_REASONING_EFFORT,
-        )
-    except BaseException as error:
-        record_provider_connection_finished(
-            "forget",
-            started_at,
-            failure=error,
-        )
-        raise
-    record_provider_connection_finished(
-        "forget",
-        started_at,
-        provider=provider.identity.provider,
-    )
-    return provider
+    return connect_forget_provider()
 
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
-
-
-def _provider_label(provider: object) -> str:
-    identity = getattr(provider, "identity", None)
-    if isinstance(identity, ProviderIdentity):
-        return identity.display_name()
-    model = getattr(provider, "model", None)
-    return str(model) if model else "configured semantic provider"
 
 
 def _forget_analysis_stage(ctx: Context) -> str:
@@ -119,13 +92,31 @@ def _forget_wait_view(ctx: Context, info: str) -> CommandWaitView:
     return CommandWaitView(title="FORGET CONFIRMED INPUTS · READ-ONLY", text=text)
 
 
-def _run_resolution_forget(
-    ctx: Context,
-    info: str,
-    llm: object,
+class _FrozenContextForgetSourcePort:
+    """Compatibility port for historical in-memory controller tests."""
+
+    def __init__(self, context: Context) -> None:
+        self.source = FrozenForgetSource(
+            context=context,
+            display_name=context.name,
+            granted=False,
+            _runtime_token=self,
+        )
+
+    def freeze(self, _request: ForgetAnalysisRequest) -> FrozenForgetSource:
+        return self.source
+
+    def apply(self, *_args, **_kwargs):
+        raise RuntimeError("The in-memory Forget compatibility port cannot Apply.")
+
+
+def _run_resolution_forget_snapshot(
+    source_port: ForgetSourcePort,
+    request: ForgetAnalysisRequest,
+    provider_factory,
     *,
     mutates_granted_authority: bool = False,
-) -> list[ProposedChange] | None:
+) -> ForgetSessionSnapshot | None:
     from memcommit.commands.resolution_workbench_shell import (
         run_resolution_workbench_shell,
     )
@@ -133,22 +124,30 @@ def _run_resolution_forget(
     # Forget remains one whole-frame provider turn. Only its host execution is
     # moved off the foreground so Help can be explored without partitioning or
     # changing the semantic request.
-    analysis, _history = run_command_wait(
+    source = source_port.freeze(request)
+    ctx = source.context
+    info = request.instruction
+    result = run_command_wait(
         "FORGET",
         _forget_analysis_stage(ctx),
         total=1,
-        work=lambda _progress: ops.analyze_forget(ctx, info, llm),
+        work=lambda _progress: run_forget_analysis(
+            request,
+            source_port=source_port,
+            provider_factory=provider_factory,
+        ),
         return_view=build_report_loading_view(
             "FORGET",
             sections=("What mem understood", "Review decisions", "To do"),
         ),
         context_view=_forget_wait_view(ctx, info),
     )
-    if not analysis.decisions:
-        return []
-    review = ForgetReview.create(ctx, info, analysis)
+    snapshot = result.snapshot
+    if not snapshot.review.candidates:
+        return snapshot
     navigation = ResolutionNavigation()
     while True:
+        review = snapshot.review
         active_view = ForgetResolutionWorkbenchAdapter(review).view()
         impact_controller = ImpactController.from_memory_changes(
             operation=active_view.operation,
@@ -182,16 +181,17 @@ def _run_resolution_forget(
         if action.kind == "CLOSE":
             return None
         if action.kind == "ACCEPT":
-            # The workbench returns the exact reviewed application input. The
-            # command owns authority revalidation, CAS, mutation, and receipt.
-            return review.changes()
+            return snapshot
         if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
             raise ValueError("Unsupported Forget workbench action.")
         if action.comment.strip():
-            review = review.select(
-                action.item_uid,
-                "CUSTOM",
-                action.comment.strip(),
+            snapshot = run_forget_selection(
+                ForgetSelectionRequest(
+                    snapshot=snapshot,
+                    candidate_uid=action.item_uid,
+                    selection="CUSTOM",
+                    custom_content=action.comment.strip(),
+                )
             )
             continue
         suffix = (action.option_uid or "").rpartition(":")[2]
@@ -202,15 +202,50 @@ def _run_resolution_forget(
         }.get(suffix)  # type: ignore[assignment]
         if selection is None:
             raise ValueError("Unsupported Forget decision.")
-        review = review.select(action.item_uid, selection)
+        snapshot = run_forget_selection(
+            ForgetSelectionRequest(
+                snapshot=snapshot,
+                candidate_uid=action.item_uid,
+                selection=selection,
+            )
+        )
 
 
-def _required_permissions(changes: list[ProposedChange]) -> tuple[str, ...]:
-    permissions = {
-        "DELETE" if isinstance(change, RemoveChange) else "UPDATE"
-        for change in changes
-    }
-    return tuple(sorted(permissions))
+def _run_resolution_forget(
+    source_port: MemoryStoreForgetSourcePort | Context,
+    request: ForgetAnalysisRequest | str,
+    provider_factory,
+    *,
+    mutates_granted_authority: bool = False,
+) -> ForgetSessionSnapshot | list[ProposedChange] | None:
+    """Run the current typed controller or adapt the historical test signature."""
+
+    if isinstance(source_port, Context):
+        if not isinstance(request, str):
+            raise TypeError("Legacy Forget controller requires an instruction.")
+        context = source_port
+        port = _FrozenContextForgetSourcePort(context)
+        typed_request = ForgetAnalysisRequest(context.name, request)
+        provider = provider_factory
+
+        def legacy_provider_factory():
+            return provider
+
+        snapshot = _run_resolution_forget_snapshot(
+            port,
+            typed_request,
+            legacy_provider_factory,
+            mutates_granted_authority=mutates_granted_authority,
+        )
+        return None if snapshot is None else snapshot.review.changes()
+    if not isinstance(request, ForgetAnalysisRequest):
+        raise TypeError("Forget controller requires a typed analysis request.")
+    return _run_resolution_forget_snapshot(
+        source_port,
+        request,
+        provider_factory,
+        mutates_granted_authority=mutates_granted_authority,
+    )
 
 
 def _print_proposals(proposals: list[ProposedChange], query: str) -> None:
@@ -235,36 +270,45 @@ def _print_proposals(proposals: list[ProposedChange], query: str) -> None:
     typer.echo("-" * 56)
 
 
-def _run_interactive_forget(
-    ctx: Context,
-    info: str,
-    llm: object,
+def _run_interactive_forget_snapshot(
+    source_port: ForgetSourcePort,
+    request: ForgetAnalysisRequest,
+    provider_factory,
     *,
     mutates_granted_authority: bool = False,
-) -> list[ProposedChange] | None:
+) -> ForgetSessionSnapshot | list[ProposedChange] | None:
     if _interactive_terminal():
         return _run_resolution_forget(
-            ctx,
-            info,
-            llm,
+            source_port,
+            request,
+            provider_factory,
             mutates_granted_authority=mutates_granted_authority,
         )
-    typer.secho(f"Consulting {_provider_label(llm)!r}...", dim=True)
+    source = source_port.freeze(request)
+    ctx = source.context
+    info = request.instruction
+    typer.secho("Consulting the configured Forget provider...", dim=True)
     # The shared wait is intentionally silent outside a TTY, preserving the
     # stable redirected output while keeping one orchestration path.
-    proposals, history = run_command_wait(
+    result = run_command_wait(
         "FORGET",
         _forget_analysis_stage(ctx),
         total=1,
-        work=lambda _progress: ops.forget(ctx, info, llm),
+        work=lambda _progress: run_forget_analysis(
+            request,
+            source_port=source_port,
+            provider_factory=provider_factory,
+        ),
     )
+    snapshot = result.snapshot
 
     while True:
+        proposals = snapshot.review.changes()
         _print_proposals(proposals, info)
 
         if not proposals:
             typer.echo("Nothing to apply.")
-            return []
+            return snapshot
 
         n = len(proposals)
         label = "change" if n == 1 else "changes"
@@ -273,7 +317,7 @@ def _run_interactive_forget(
         decision = typer.prompt(">", default="", show_default=False).strip()
 
         if decision.lower() in ("y", "yes"):
-            return proposals
+            return snapshot
 
         if decision.lower() in ("n", "no"):
             typer.echo("Aborted - no changes made.")
@@ -285,8 +329,47 @@ def _run_interactive_forget(
         if not feedback:
             continue
 
-        typer.secho(f"Revising with {_provider_label(llm)!r}...", dim=True)
-        proposals, history = ops.revise_forget(feedback, llm, history, ctx)
+        typer.secho("Revising with the configured Forget provider...", dim=True)
+        snapshot = run_forget_revision(
+            ForgetRevisionRequest(snapshot=snapshot, feedback=feedback),
+            provider_factory=provider_factory,
+        )
+
+
+def _run_interactive_forget(
+    source_port: MemoryStoreForgetSourcePort | Context,
+    request: ForgetAnalysisRequest | str,
+    provider_factory,
+    *,
+    mutates_granted_authority: bool = False,
+) -> ForgetSessionSnapshot | list[ProposedChange] | None:
+    """Preserve the historical command hook while entering typed use cases."""
+
+    if isinstance(source_port, Context):
+        if not isinstance(request, str):
+            raise TypeError("Legacy Forget execution requires an instruction.")
+        context = source_port
+        port = _FrozenContextForgetSourcePort(context)
+        typed_request = ForgetAnalysisRequest(context.name, request)
+        provider = provider_factory
+
+        def legacy_provider_factory():
+            return provider
+
+        return _run_interactive_forget_snapshot(
+            port,
+            typed_request,
+            legacy_provider_factory,
+            mutates_granted_authority=mutates_granted_authority,
+        )
+    if not isinstance(request, ForgetAnalysisRequest):
+        raise TypeError("Forget execution requires a typed analysis request.")
+    return _run_interactive_forget_snapshot(
+        source_port,
+        request,
+        provider_factory,
+        mutates_granted_authority=mutates_granted_authority,
+    )
 
 
 def cmd(
@@ -311,15 +394,16 @@ def cmd(
         raise typer.Exit(1)
 
     active_store = MemoryStore()
+    source_locator: str | None = None
     try:
         context_snapshot = ContextOperandSnapshot.capture(active_store)
-        access = resolve_context_access(
-            active_store,
-            None,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
-        )
         if info is None:
+            access = resolve_context_access(
+                active_store,
+                None,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
             catalog = freeze_profile_readable_context_catalog(
                 active_store,
                 access,
@@ -339,12 +423,21 @@ def cmd(
             if receipt is None:
                 typer.echo("Forget cancelled.")
                 return
-            # The receipt names a row from this frozen public catalog. Preserve
-            # its exact Grant/store binding instead of consulting current again.
-            access = catalog.access_for(receipt.context_name)
+            # The receipt is already canonical in the frozen public catalog.
+            # The runtime revalidates its exact local/Grant binding before any
+            # provider construction instead of trusting selection visibility.
+            source_locator = receipt.context_name
             info = receipt.instruction
-        store = access.store
-        ctx = store.load_direct(access.context_name)
+        assert info is not None
+        request = ForgetAnalysisRequest(
+            source_locator=source_locator,
+            instruction=info,
+        )
+        source_port = MemoryStoreForgetSourcePort(
+            active_store,
+            current_name=context_snapshot.current_name,
+        )
+        source = source_port.freeze(request)
     except (
         FileNotFoundError,
         OSError,
@@ -357,59 +450,36 @@ def cmd(
         raise typer.Exit(1)
 
     try:
-        assert info is not None
         provider = connect_codex_chatgpt_provider()
-        applied = _run_interactive_forget(
-            ctx,
+        reviewed = _run_interactive_forget(
+            source.context,
             info,
             provider,
-            mutates_granted_authority=access.is_granted,
+            mutates_granted_authority=source.granted,
         )
     except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    if applied is None:
+    if reviewed is None:
         if _interactive_terminal():
             typer.echo(
                 "Forget cancelled · SOURCE "
-                f"{safe_terminal_text(access.display_name)} · Context unchanged"
+                f"{safe_terminal_text(source.display_name)} · Context unchanged"
             )
         return
 
-    if not applied:
-        if _interactive_terminal():
-            typer.echo(
-                "Forget complete · SOURCE "
-                f"{safe_terminal_text(access.display_name)} · "
-                "no changes needed · Context unchanged · no checkpoint"
-            )
-        return
-
-    removes = [c for c in applied if isinstance(c, RemoveChange)]
-    edits = [c for c in applied if isinstance(c, EditChange)]
-    parts = []
-    if removes:
-        parts.append(f'removed "{removes[0].content[:40]}"' if len(removes) == 1 else f"removed {len(removes)}")
-    if edits:
-        parts.append(f'edited "{edits[0].old_content[:40]}"' if len(edits) == 1 else f"edited {len(edits)}")
     try:
-        with authorized_context_mutation(
-            access,
-            required_permissions=_required_permissions(applied),
-        ):
-            apply_changes(ctx, applied)
-            checkpoint = store.save(
-                ctx,
-                AutoCheckpoint(
-                    command="forget",
-                    args={
-                        "query": info,
-                        **grant_checkpoint_args(access),
-                    },
-                    description=f'Forgot ({info[:40]}): {", ".join(parts)}',
-                ),
-            )
+        reviewed_changes = (
+            reviewed
+            if isinstance(reviewed, list)
+            else reviewed.review.changes()
+        )
+        snapshot = prepare_forget_snapshot(source, info, reviewed_changes)
+        result = run_forget_apply(
+            ForgetApplyRequest(snapshot=snapshot),
+            source_port=source_port,
+        )
     except (
         OSError,
         ProfileConfigError,
@@ -419,21 +489,32 @@ def cmd(
     ) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
-    effects = []
-    if removes:
-        effects.append(f"{len(removes)} removed")
-    if edits:
-        effects.append(f"{len(edits)} edited")
+
+    receipt = result.receipt
+    if not result.applied:
+        if _interactive_terminal():
+            typer.echo(
+                "Forget complete · SOURCE "
+                f"{safe_terminal_text(receipt.source_name)} · "
+                "no changes needed · Context unchanged · no checkpoint"
+            )
+        return
+
+    effects: list[str] = []
+    if receipt.removed_count:
+        effects.append(f"{receipt.removed_count} removed")
+    if receipt.edited_count:
+        effects.append(f"{receipt.edited_count} edited")
     if _interactive_terminal():
         checkpoint_label = (
-            f" · checkpoint [{checkpoint.uid[:8]}]"
-            if checkpoint is not None
+            f" · checkpoint [{receipt.checkpoint_uid[:8]}]"
+            if receipt.checkpoint_uid is not None
             else ""
         )
-        recovery_label = " · recovery mem undo" if not access.is_granted else ""
+        recovery_label = " · recovery mem undo" if receipt.undo_available else ""
         typer.secho(
             "Forget applied · SOURCE "
-            f"{safe_terminal_text(access.display_name)} · "
+            f"{safe_terminal_text(receipt.source_name)} · "
             f"{', '.join(effects)}{checkpoint_label}{recovery_label}",
             fg=typer.colors.GREEN,
         )

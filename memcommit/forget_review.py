@@ -109,6 +109,38 @@ class ForgetReview:
             raise ForgetReviewError("Unknown Forget candidate.")
         return replace(self, revision=self.revision + 1, candidates=tuple(candidates))
 
+    def revise(
+        self,
+        context: Context,
+        analysis: CurationAnalysis,
+    ) -> "ForgetReview":
+        """Replace provider decisions while preserving process-local identity.
+
+        Provider feedback is a new semantic turn over the same frozen Source,
+        not a new durable session. Keeping the review UID and advancing the
+        revision lets non-terminal adapters reject stale selections without
+        inventing persisted Forget state.
+        """
+
+        if context.name != self.context_name or context.uid != self.context_uid:
+            raise ForgetReviewError(
+                "Forget revision must use the original frozen Source Context."
+            )
+        revised = ForgetReview.create(context, self.instruction, analysis)
+        candidates = tuple(
+            replace(
+                candidate,
+                uid=str(uuid.uuid5(uuid.UUID(self.uid), candidate.source.uid)),
+            )
+            for candidate in revised.candidates
+        )
+        return replace(
+            revised,
+            uid=self.uid,
+            revision=self.revision + 1,
+            candidates=candidates,
+        )
+
     def changes(self) -> list[ProposedChange]:
         changes: list[ProposedChange] = []
         for candidate in self.candidates:

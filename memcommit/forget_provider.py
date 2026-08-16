@@ -300,6 +300,23 @@ def revise_forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Revise the complete proposal set against one preserved dialogue."""
 
+    analysis, updated_history = revise_forget_analysis(
+        feedback,
+        provider,
+        history,
+        ctx,
+    )
+    return forget_changes(analysis, ctx), updated_history
+
+
+def revise_forget_analysis(
+    feedback: str,
+    provider: object,
+    history: list[dict[str, object]],
+    ctx: Context,
+) -> tuple[CurationAnalysis, list[dict[str, object]]]:
+    """Revise and retain the complete decision ledger for review surfaces."""
+
     if not isinstance(feedback, str) or not feedback.strip():
         raise ValueError("Forget revision feedback must be nonblank.")
     instruction = _instruction_from_history(history)
@@ -322,7 +339,7 @@ def revise_forget(
     text = _complete_turn(provider, messages, output_schema)
     updated_history = messages + [{"role": "assistant", "content": text}]
     analysis = _decode_analysis(text, ctx, instruction)
-    return forget_changes(analysis, ctx), updated_history
+    return analysis, updated_history
 
 
 __all__ = [
@@ -333,4 +350,5 @@ __all__ = [
     "forget",
     "forget_changes",
     "revise_forget",
+    "revise_forget_analysis",
 ]
