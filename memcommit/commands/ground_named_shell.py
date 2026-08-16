@@ -1,7 +1,7 @@
 """Persistent Goal–Rules–Memories TUI for one already named Ground."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Literal, Protocol
 
 from prompt_toolkit.application import Application, run_in_terminal
@@ -110,6 +110,7 @@ class GroundCommandProposal:
     expected_revision: int
     expected_state_digest: str
     expected_context_versions: tuple[str, ...] = ()
+    application_payload: object | None = None
 
 
 class NamedGroundApplier(Protocol):
@@ -134,6 +135,53 @@ class NamedGroundFitRunner(Protocol):
 class NamedGroundFitLookup(Protocol):
     def __call__(self, session: GroundSession) -> GroundFitReceipt | None:
         """Return the latest immutable Fit receipt for this Ground identity."""
+
+
+class NamedGroundFitResolutionPreparer(Protocol):
+    def __call__(
+        self,
+        session: GroundSession,
+        receipt: GroundFitReceipt,
+        *,
+        example_uid: str,
+        action: str,
+        content: str = "",
+        rationale: str = "",
+        rule_uid: str = "",
+        use: str = "",
+    ) -> GroundCommandProposal:
+        """Freeze one Fit-bound Resolve plan as one exact reviewed action."""
+
+
+@dataclass(frozen=True)
+class _FitResolutionOption:
+    """One visible response path for a selected non-FIT Example."""
+
+    action: str
+    label: str
+    rule_uid: str = ""
+
+
+@dataclass(frozen=True)
+class _FitResolutionMenu:
+    """Process-local picker bound to one immutable Fit judgment."""
+
+    receipt_uid: str
+    example_uid: str
+    example_alias: str
+    judgment: FitJudgment
+    options: tuple[_FitResolutionOption, ...]
+    selected_index: int = 0
+
+
+@dataclass(frozen=True)
+class _FitResolutionEdit:
+    """Inline edit provenance retained until exact command review."""
+
+    action: str
+    example_uid: str
+    rule_uid: str
+    rationale: str
 
 
 class NamedGroundDraftPreparer(Protocol):
@@ -962,6 +1010,7 @@ def run_named_ground_shell(
     reload_session: NamedGroundReloader | None = None,
     run_fit: NamedGroundFitRunner | None = None,
     lookup_fit: NamedGroundFitLookup | None = None,
+    prepare_fit_resolution: NamedGroundFitResolutionPreparer | None = None,
     initial_receipt: str = "",
     context_hints: tuple[str, ...] = (),
     new_context_hint: str | None = None,
@@ -1025,6 +1074,15 @@ def run_named_ground_shell(
     selected_rule_index = {"value": 0}
     selected_memory_index = {"value": 0}
     memory_detail_open = {"value": False}
+    fit_resolution_menu: dict[str, _FitResolutionMenu | None] = {
+        "value": None
+    }
+    fit_resolution_edit: dict[str, _FitResolutionEdit | None] = {
+        "value": None
+    }
+    pending_fit_resolution_edit: dict[
+        str, _FitResolutionEdit | None
+    ] = {"value": None}
     bound_target_names = tuple(
         frame.context_name
         for frame in session.frames
@@ -1165,8 +1223,45 @@ def run_named_ground_shell(
         lambda: memory_detail_open["value"]
     )
 
+    def render_fit_resolution_menu() -> str:
+        menu = fit_resolution_menu["value"]
+        if menu is None:
+            return ""
+        lines = [
+            (
+                f"RESOLVE FIT ISSUE · {safe_terminal_text(menu.example_alias)} "
+                f"· {safe_terminal_text(menu.judgment.status)}"
+            ),
+            f"  {safe_terminal_text(menu.judgment.reason)}",
+        ]
+        if menu.judgment.observed:
+            lines.append(
+                "  OBSERVED · "
+                + safe_terminal_text(menu.judgment.observed)
+            )
+        lines.extend(
+            (
+                "",
+                "CHOOSE ONE RESPONSE · NOTHING APPLIED",
+            )
+        )
+        for index, option in enumerate(menu.options):
+            marker = "›" if index == menu.selected_index else " "
+            lines.append(f"{marker} {safe_terminal_text(option.label)}")
+        lines.extend(
+            (
+                "",
+                "Edits open the existing inline editor, then freeze one exact ",
+                "Ground command. DEFER is process-local and changes nothing.",
+            )
+        )
+        return "\n".join(lines)
+
     def conversation_text() -> str:
         blocks = list(conversation)
+        resolution_menu = render_fit_resolution_menu()
+        if resolution_menu:
+            blocks.append(resolution_menu)
         proposal = pending["value"]
         if proposal is not None:
             command_block, effects_block = render_named_ground_proposal_blocks(
@@ -1244,6 +1339,16 @@ def run_named_ground_shell(
         title="ACTION",
         height=compact_action_height,
     )
+    fit_resolution_panel = Frame(
+        Window(
+            FormattedTextControl(
+                "↑/↓ choose · Enter continue · Esc cancel"
+            ),
+            wrap_lines=True,
+        ),
+        title="FIT RESOLVE",
+        height=compact_action_height,
+    )
     empty_action_panel = Window(height=Dimension.exact(0))
     action_panel = DynamicContainer(
         lambda: (
@@ -1253,6 +1358,8 @@ def run_named_ground_shell(
             if mode["value"] == "APPLY_ERROR"
             else error_panel
             if mode["value"] == "ERROR"
+            else fit_resolution_panel
+            if mode["value"] == "FIT_RESOLVE"
             else empty_action_panel
         )
     )
@@ -1286,6 +1393,11 @@ def run_named_ground_shell(
         if status_message["value"]:
             return f" {status_message['value']}"
         active_mode = mode["value"]
+        if active_mode == "FIT_RESOLVE":
+            return (
+                " FIT RESOLVE: ↑/↓ · response    Enter · continue    "
+                "Esc · cancel · nothing applied"
+            )
         if (
             active_mode in {"INPUT", "APPROVAL"}
             and application.layout.has_focus(cases_pane.text_area)
@@ -1299,13 +1411,14 @@ def run_named_ground_shell(
             if memory_detail_open["value"]:
                 return (
                     " MEMORY DETAIL: Esc/Backspace · list    "
-                    f"Space · toggle USE    F · run Fit    P · placement    "
+                    f"Space · toggle USE    F · run Fit    X · resolve issue    "
+                    "P · placement    "
                     f"C · comment    {tail}    "
                     "B · Grounds    Q · quit"
                 )
             return (
                 " MEMORIES: ↑/↓ Example · Space · toggle USE    "
-                "Enter · details    F · run Fit    "
+                "Enter · details    F · run Fit    X · resolve issue    "
                 f"P · placement    C · comment    {tail}    "
                 "B · Grounds    Q · quit"
             )
@@ -1574,6 +1687,9 @@ def run_named_ground_shell(
         mode["value"] = "INPUT"
         pending["value"] = None
         pending_inline_edit["value"] = None
+        pending_fit_resolution_edit["value"] = None
+        fit_resolution_menu["value"] = None
+        fit_resolution_edit["value"] = None
         pending_draft_index["value"] = None
         review_view["value"] = "COMMAND"
         error_message["value"] = ""
@@ -1638,6 +1754,9 @@ def run_named_ground_shell(
             max(0, len(_aliased_items(refreshed, "CASE")) - 1),
         )
         cycle_dialogue.clear()
+        fit_resolution_menu["value"] = None
+        fit_resolution_edit["value"] = None
+        pending_fit_resolution_edit["value"] = None
         draft_queue["value"] = ()
         draft_index["value"] = 0
         draft_queue_stale["value"] = False
@@ -1848,6 +1967,7 @@ def run_named_ground_shell(
         inline_selector["value"] = ""
         inline_original["value"] = ""
         inline_direct_locked["value"] = False
+        fit_resolution_edit["value"] = None
         direct_edit_area.text = ""
         composer.frame.title = "MESSAGE"
         input_area.text = suspended_message["value"]
@@ -1986,6 +2106,7 @@ def run_named_ground_shell(
         original = inline_original["value"]
         edited = direct_edit_area.text
         comment = input_area.text.strip()
+        resolution_edit = fit_resolution_edit["value"]
         submission_kind = classify_inline_edit_submission(
             original=original,
             edited=edited,
@@ -2020,20 +2141,43 @@ def run_named_ground_shell(
                 focus=focus_label,
             )
             return
-        if prepare_direct_edit is None:
+        if resolution_edit is None and prepare_direct_edit is None:
             status_message["value"] = (
                 "This shell cannot prepare a direct Ground edit."
             )
             application.invalidate()
             return
-        try:
-            proposal = prepare_direct_edit(
-                current["value"],
-                target,
-                selector,
-                edited,
-                comment,
+        if resolution_edit is not None and prepare_fit_resolution is None:
+            status_message["value"] = (
+                "This shell cannot prepare a Fit-bound Ground edit."
             )
+            application.invalidate()
+            return
+        try:
+            if resolution_edit is not None:
+                receipt = fit_receipt["value"]
+                if receipt is None or not receipt.current:
+                    raise ValueError(
+                        "The selected Fit receipt is missing or stale. Run Fit again."
+                    )
+                proposal = prepare_fit_resolution(
+                    current["value"],
+                    receipt,
+                    example_uid=resolution_edit.example_uid,
+                    action=resolution_edit.action,
+                    content=edited,
+                    rationale=comment or resolution_edit.rationale,
+                    rule_uid=resolution_edit.rule_uid,
+                )
+            else:
+                assert prepare_direct_edit is not None
+                proposal = prepare_direct_edit(
+                    current["value"],
+                    target,
+                    selector,
+                    edited,
+                    comment,
+                )
         except Exception as error:
             status_message["value"] = (
                 f"{type(error).__name__}: "
@@ -2076,6 +2220,7 @@ def run_named_ground_shell(
             edited,
             comment,
         )
+        pending_fit_resolution_edit["value"] = resolution_edit
         collapse_inline_editor(focus_owner=False)
         pending["value"] = proposal
         review_view["value"] = "COMMAND"
@@ -2097,6 +2242,9 @@ def run_named_ground_shell(
     )
     normal_input_mode = input_mode & ~inline_editor_mode & ~panel_comment_mode
     approval_mode = Condition(lambda: mode["value"] == "APPROVAL")
+    fit_resolution_mode = Condition(
+        lambda: mode["value"] == "FIT_RESOLVE"
+    )
     approval_dialogue_focus = approval_mode & has_focus(
         dialogue_pane.text_area
     )
@@ -2471,6 +2619,293 @@ def run_named_ground_shell(
             status_message["value"] = (
                 "FIT ALREADY RUNNING · wait for the current receipt boundary"
             )
+        event.app.invalidate()
+
+    def selected_fit_issue() -> tuple[
+        GroundFitReceipt, str, GroundItem, FitJudgment
+    ]:
+        receipt = fit_receipt["value"]
+        if receipt is None:
+            raise ValueError("Run Fit before resolving an Example.")
+        if not receipt.current:
+            raise ValueError("The Fit receipt is stale. Run Fit again.")
+        selected = selected_saved_item(
+            "CASE",
+            selected_memory_index["value"],
+        )
+        if selected is None:
+            raise ValueError("No saved Example is selected.")
+        alias, item = selected
+        judgments = tuple(
+            judgment
+            for judgment in receipt.report.judgments
+            if judgment.example_uid == item.uid
+        )
+        if len(judgments) != 1:
+            raise ValueError(
+                "The current Fit receipt does not contain this Example."
+            )
+        judgment = judgments[0]
+        if judgment.status == "FIT":
+            raise ValueError(
+                "The selected Example already fits the current Rules."
+            )
+        return receipt, alias, item, judgment
+
+    @bindings.add(
+        "x",
+        filter=normal_input_mode & memory_pane_focus,
+        eager=True,
+    )
+    @bindings.add(
+        "X",
+        filter=normal_input_mode & memory_pane_focus,
+        eager=True,
+    )
+    def _open_fit_resolution(event) -> None:
+        if prepare_fit_resolution is None:
+            status_message["value"] = (
+                "Fit Resolve is unavailable in this Ground adapter."
+            )
+            event.app.invalidate()
+            return
+        try:
+            refresh_current(announce=True)
+            receipt, alias, item, judgment = selected_fit_issue()
+            rule_aliases = _item_aliases_by_uid(current["value"])
+            rules_by_uid = {
+                candidate.uid: candidate
+                for candidate in current["value"].items
+                if candidate.kind == "RULE"
+            }
+            rule_options = tuple(
+                _FitResolutionOption(
+                    action="REFINE_RULE",
+                    rule_uid=rule_uid,
+                    label=(
+                        "REFINE RULE · "
+                        f"{rule_aliases.get(rule_uid, rule_uid[:8])} · "
+                        f"{_line(rules_by_uid[rule_uid].content)}"
+                    ),
+                )
+                for rule_uid in judgment.rule_uids
+                if rule_uid in rules_by_uid
+            )
+            next_use = (
+                "EXCLUDE" if item.disposition == "INCLUDE" else "INCLUDE"
+            )
+            options = (
+                _FitResolutionOption("REVISE_GOAL", "REVISE GOAL"),
+                *rule_options,
+                _FitResolutionOption(
+                    "REFINE_EXAMPLE",
+                    f"REFINE EXAMPLE · {alias}",
+                ),
+                _FitResolutionOption(
+                    "SET_EXAMPLE_USE",
+                    f"SET USE · {next_use}",
+                ),
+                _FitResolutionOption(
+                    "DEFER",
+                    "DEFER · KEEP EXPLICITLY UNRESOLVED",
+                ),
+            )
+            fit_resolution_menu["value"] = _FitResolutionMenu(
+                receipt_uid=receipt.report.uid,
+                example_uid=item.uid,
+                example_alias=alias,
+                judgment=judgment,
+                options=options,
+            )
+            mode["value"] = "FIT_RESOLVE"
+            status_message["value"] = ""
+            sync_input_host()
+            sync_panes(dialogue_anchor="end")
+            focus_conversation()
+        except Exception as error:
+            status_message["value"] = (
+                f"{type(error).__name__}: {safe_terminal_text(str(error))}"
+            )
+        event.app.invalidate()
+
+    def move_fit_resolution(step: int) -> None:
+        menu = fit_resolution_menu["value"]
+        if menu is None:
+            return
+        selected_index = max(
+            0,
+            min(menu.selected_index + step, len(menu.options) - 1),
+        )
+        fit_resolution_menu["value"] = replace(
+            menu,
+            selected_index=selected_index,
+        )
+        sync_panes(dialogue_anchor="end")
+        application.invalidate()
+
+    def collapse_fit_resolution(event: object | None = None) -> bool:
+        if fit_resolution_menu["value"] is None:
+            return False
+        fit_resolution_menu["value"] = None
+        mode["value"] = "INPUT"
+        status_message["value"] = "Fit Resolve cancelled · nothing applied"
+        sync_input_host()
+        sync_panes(dialogue_anchor="end")
+        application.layout.focus(cases_pane.text_area)
+        if event is not None:
+            getattr(event, "app").invalidate()
+        else:
+            application.invalidate()
+        return True
+
+    @bindings.add("down", filter=fit_resolution_mode, eager=True)
+    @bindings.add("right", filter=fit_resolution_mode, eager=True)
+    def _next_fit_resolution(_event) -> None:
+        move_fit_resolution(1)
+
+    @bindings.add("up", filter=fit_resolution_mode, eager=True)
+    @bindings.add("left", filter=fit_resolution_mode, eager=True)
+    def _previous_fit_resolution(_event) -> None:
+        move_fit_resolution(-1)
+
+    @bindings.add("enter", filter=fit_resolution_mode, eager=True)
+    def _choose_fit_resolution(event) -> None:
+        menu = fit_resolution_menu["value"]
+        if menu is None:
+            return
+        option = menu.options[menu.selected_index]
+        receipt = fit_receipt["value"]
+        if (
+            receipt is None
+            or not receipt.current
+            or receipt.report.uid != menu.receipt_uid
+        ):
+            fit_resolution_menu["value"] = None
+            mode["value"] = "INPUT"
+            status_message["value"] = (
+                "The Fit receipt changed. Run Fit and choose again."
+            )
+            sync_input_host()
+            sync_panes(dialogue_anchor="end")
+            application.layout.focus(cases_pane.text_area)
+            event.app.invalidate()
+            return
+        if option.action == "DEFER":
+            conversation.append(
+                "\n".join(
+                    (
+                        "FIT ISSUE DEFERRED · NOTHING APPLIED",
+                        (
+                            f"  {safe_terminal_text(menu.example_alias)} · "
+                            f"{safe_terminal_text(menu.judgment.status)}"
+                        ),
+                        f"  RECEIPT · {safe_terminal_text(menu.receipt_uid)}",
+                        "  The Fit receipt and Ground remain unchanged.",
+                        "  This acknowledgement is process-local, not durable.",
+                    )
+                )
+            )
+            fit_resolution_menu["value"] = None
+            mode["value"] = "INPUT"
+            status_message["value"] = "DEFERRED · NOTHING APPLIED"
+            sync_input_host()
+            sync_panes(dialogue_anchor="end")
+            application.layout.focus(cases_pane.text_area)
+            event.app.invalidate()
+            return
+        selected = selected_saved_item(
+            "CASE",
+            selected_memory_index["value"],
+        )
+        if selected is None or selected[1].uid != menu.example_uid:
+            status_message["value"] = (
+                "The selected Example changed. Open Resolve again."
+            )
+            fit_resolution_menu["value"] = None
+            mode["value"] = "INPUT"
+            sync_input_host()
+            sync_panes(dialogue_anchor="end")
+            application.layout.focus(cases_pane.text_area)
+            event.app.invalidate()
+            return
+        alias, item = selected
+        if option.action == "SET_EXAMPLE_USE":
+            next_use = (
+                "EXCLUDE" if item.disposition == "INCLUDE" else "INCLUDE"
+            )
+            try:
+                proposal = prepare_fit_resolution(
+                    current["value"],
+                    receipt,
+                    example_uid=menu.example_uid,
+                    action=option.action,
+                    rationale=menu.judgment.reason,
+                    use=next_use,
+                )
+            except Exception as error:
+                status_message["value"] = (
+                    f"{type(error).__name__}: "
+                    f"{safe_terminal_text(str(error))}"
+                )
+                event.app.invalidate()
+                return
+            conversation.append(
+                "FIT RESOLVE · EXACT ACTION FROZEN\n"
+                f"  {safe_terminal_text(alias)} · SET USE {next_use}\n"
+                "  Nothing changes until Enter approves the displayed command."
+            )
+            fit_resolution_menu["value"] = None
+            pending["value"] = proposal
+            pending_inline_edit["value"] = None
+            pending_fit_resolution_edit["value"] = None
+            review_view["value"] = "COMMAND"
+            mode["value"] = "APPROVAL"
+            sync_input_host()
+            sync_panes(dialogue_anchor="end")
+            focus_conversation()
+            event.app.invalidate()
+            return
+
+        fit_resolution_edit["value"] = _FitResolutionEdit(
+            action=option.action,
+            example_uid=menu.example_uid,
+            rule_uid=option.rule_uid,
+            rationale=menu.judgment.reason,
+        )
+        fit_resolution_menu["value"] = None
+        mode["value"] = "INPUT"
+        if option.action == "REVISE_GOAL":
+            open_inline_editor(
+                target="GOAL",
+                selector="",
+                original=current["value"].goal,
+            )
+        elif option.action == "REFINE_RULE":
+            rule = next(
+                candidate
+                for candidate in current["value"].items
+                if candidate.uid == option.rule_uid
+            )
+            open_inline_editor(
+                target="RULE",
+                selector=_item_aliases_by_uid(current["value"])[rule.uid],
+                original=rule.content,
+            )
+        else:
+            open_inline_editor(
+                target="MEMORY",
+                selector=alias,
+                original=(
+                    item.proposition
+                    if current["value"].schema_version
+                    == GROUND_PROPOSITION_SCHEMA_VERSION
+                    else item.expected
+                ),
+            )
+        # The menu is a transient Chat projection. Repaint after mounting the
+        # existing pane-local editor so the old choices cannot look active
+        # while replacement text is being authored.
+        sync_panes(dialogue_anchor="end")
         event.app.invalidate()
 
     def move_saved_item(
@@ -2877,6 +3312,13 @@ def run_named_ground_shell(
             sync_memories_pane(align_selection=True)
             application.layout.focus(cases_pane.text_area)
             application.invalidate()
+        elif applied_kind.startswith("RESOLVE_"):
+            status_message["value"] = (
+                "RESOLVED · one Ground revision applied · prior Fit is stale"
+            )
+            sync_memories_pane(align_selection=True)
+            application.layout.focus(cases_pane.text_area)
+            application.invalidate()
         if draft_queue["value"]:
             status_message["value"] = (
                 "Ground changed; remaining drafts are NOT SAVED and require "
@@ -2912,6 +3354,7 @@ def run_named_ground_shell(
             return
         previous_mode = mode["value"]
         inline_draft = pending_inline_edit["value"]
+        fit_resolution_draft = pending_fit_resolution_edit["value"]
         conversation.append(
             "REFINEMENT\n  The pending action returned for revision."
         )
@@ -2923,6 +3366,7 @@ def run_named_ground_shell(
                 selector=selector,
                 original=original,
             )
+            fit_resolution_edit["value"] = fit_resolution_draft
             direct_edit_area.text = edited
             direct_edit_area.buffer.cursor_position = len(edited)
             input_area.text = comment
@@ -2990,6 +3434,7 @@ def run_named_ground_shell(
     def _close_on_escape(event) -> None:
         dispatch_tui_back(
             event,
+            collapse_fit_resolution,
             collapse_memory_detail,
             collapse_panel_comment,
             collapse_inline_editor,

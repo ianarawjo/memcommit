@@ -140,13 +140,32 @@ durable. Restart or eviction returns `artifact_expired`/`plan_expired` and the
 agent must rerun analysis or planning. Ground and Context freshness checks
 remain authoritative even while an item is retained.
 
-Resolve does not yet persist plans, expose a CLI/TUI screen, or call a provider
-to suggest a Fit response. The next slice should compose the same service into
-the Ground workbench. That adapter must not recreate the planning or mutation
-logic.
+The named Ground workbench now composes the same service for current non-FIT
+rows. `X` on a selected Example opens one process-local response menu: revise
+the Goal, refine any Rule cited by that exact judgment, refine the Example,
+change USE, or defer. Edit choices reuse the existing pane-local editor and
+then show the existing exact command/effects review. Enter approval invokes
+the typed Resolve application in-process; it does not shell out or recreate
+planning logic. A successful edit creates one Ground revision and immediately
+reprojects the retained Fit receipt as stale.
+
+TUI Defer deliberately remains a process-local acknowledgement because it has
+no durable Ground command or state change. It is shown as `NOTHING APPLIED`
+and explicitly says it is not durable. The Python and agent boundaries can
+still apply a typed `DEFER` plan and receive a no-mutation receipt. Persisting
+deferrals would require a separately designed Ground decision rather than a
+fake executable command.
+
+Resolve plans are not persisted and the TUI does not call a provider to
+suggest a Fit response. The person chooses the affected semantic layer and
+authors replacement text; the Fit reason is retained as the default rationale
+unless the person supplies a visible inline comment.
 
 The staged ticker benchmark in
 [`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md)
 is the first end-to-end evaluation. Its four deliberately unsupported cases
 must remain unresolved unless a separately reviewed policy is added; Resolve
 must never turn provider confidence into fabricated ticker outcomes.
+
+The focused production-TUI evidence is stored under
+[`screenshots/mem-ground-fit-resolve-ticker-20260815/`](screenshots/mem-ground-fit-resolve-ticker-20260815/README.md).

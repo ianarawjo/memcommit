@@ -163,6 +163,8 @@ be proved as a separate Distill compatibility rule.
   Python boundary;
 - [x] expose process-local Ground artifacts and Resolve through the agent/MCP
   boundary;
-- [ ] compose the same action into the Ground workbench and exact approval UI;
+- [x] compose the same action into the Ground workbench and exact approval UI,
+  with ordered 180×52 PTY evidence for non-FIT selection, cited-Rule edit,
+  exact command/effects review, one-revision Apply, and stale receipt;
 - [ ] run and capture the complete provider-backed ticker progression; and
 - [ ] evaluate convergence, regressions, and explicit unresolved coverage.

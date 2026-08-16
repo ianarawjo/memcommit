@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import subprocess
 import uuid
+from datetime import datetime, timezone
 from dataclasses import replace
 from pathlib import Path
 
@@ -13,6 +14,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.store as store_module
 import memcommit.commands.ground as ground_command
+from memcommit.context import Context
 from memcommit.cli import app
 from memcommit.commands.ground import (
     render_ground_focus,
@@ -51,6 +53,12 @@ from memcommit.ground_turn_dialogue import (
     GroundTurnAction,
     GroundTurnDraft,
     GroundTurnDraftBatch,
+)
+from memcommit.fit import FitExample, FitJudgment, FitReport, FitRule
+from memcommit.fit_store import GroundFitReceipt
+from memcommit.ground_resolution import GroundResolutionIdentity
+from memcommit.ground_resolution_application import (
+    GroundResolutionApplyReceipt,
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
 
@@ -102,6 +110,263 @@ TASK_1_TARGET_REQUIREMENTS = tuple(
     )
     for name in TASK_1_TARGET_NAMES
 )
+
+
+def _fit_resolve_command_fixture():
+    raw = Context(uid=str(uuid.uuid4()), name="fit-resolve/raw")
+    examples = Context(uid=str(uuid.uuid4()), name="fit-resolve/examples")
+    output = Context(uid=str(uuid.uuid4()), name="fit-resolve/output")
+    contexts = (raw, examples, output)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "fit-resolve-command",
+            goal="티커가 어떻게 만들어지는지 규칙을 알고 싶어",
+        ),
+        description="Resolve one Fit issue through an exact reviewed action.",
+        raw_context=raw,
+        derived_context=examples,
+        target_contexts=(output,),
+        target_requirements=(
+            GroundTargetSpec(
+                context_name=output.name,
+                description="Retain reviewed synthetic ticker Rules.",
+                role="PUBLICATION_TARGET",
+            ),
+        ),
+    )
+    session = upgrade_ground_to_propositions(session)
+    session = propose_ground_rule(
+        session,
+        rule="Use initials from every company-name token.",
+        rationale="One deliberately incomplete ticker hypothesis.",
+        current_contexts=contexts,
+    )
+    rule = session.items_of_kind("RULE")[0]
+    session = propose_ground_example(
+        session,
+        proposition=(
+            'Applying the ticker Rules to "Redwood Inc." produces "RED".'
+        ),
+        rationale="A single-word boundary Example.",
+        current_contexts=contexts,
+        input_text="Redwood Inc.",
+        expected_output="RED",
+        case_role="BOUNDARY",
+    )
+    example = session.items_of_kind("CASE")[0]
+    report = FitReport(
+        uid=str(uuid.uuid4()),
+        ground_uid=session.uid,
+        ground_name=session.contract_name,
+        ground_revision=session.revision,
+        ground_digest=ground_session_record_digest(session),
+        rules=(FitRule(rule.uid, "r1", rule.content),),
+        examples=(
+            FitExample(
+                example.uid,
+                "e1",
+                example.proposition,
+                "PROPOSITION",
+                (rule.uid,),
+            ),
+        ),
+        judgments=(
+            FitJudgment(
+                example_uid=example.uid,
+                status="UNDERDETERMINED",
+                rule_uids=(rule.uid,),
+                reason="The Rule does not define a single-word algorithm.",
+            ),
+        ),
+        overview="One unresolved ticker boundary.",
+        created_at=datetime.now(timezone.utc).isoformat(),
+    )
+    return (
+        session,
+        contexts,
+        rule,
+        example,
+        GroundFitReceipt(report, current=True),
+    )
+
+
+def test_fit_resolve_command_freezes_plan_then_applies_through_typed_boundary(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, contexts, rule, example, artifact = _fit_resolve_command_fixture()
+    store.save_ground_session(session)
+    monkeypatch.setattr(
+        ground_command,
+        "_load_bound_contexts",
+        lambda _store, _session: (),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "stale_ground_frames",
+        lambda _session, _contexts: False,
+    )
+    proposal = ground_command._ground_fit_resolution_proposal(
+        session,
+        artifact,
+        example_uid=example.uid,
+        action="REFINE_RULE",
+        content="Use the first three letters for a normalized single word.",
+        rationale="The boundary Example requires a deterministic algorithm.",
+        rule_uid=rule.uid,
+    )
+
+    assert proposal.kind == "RESOLVE_REFINE_RULE"
+    assert proposal.review.argv[:3] == (
+        "mem",
+        "ground",
+        session.contract_name,
+    )
+    assert "--if-ground-version" in proposal.review.argv
+    assert "--decide" in proposal.review.argv
+    assert store.load_ground_session(session.contract_name) == session
+
+    calls = []
+
+    def apply_typed(active_store, plan, *, artifact):
+        calls.append((plan, artifact))
+        latest = active_store.load_ground_session(session.contract_name)
+        assert latest == session
+        updated = review_ground_item(
+            latest,
+            rule.uid,
+            action="REFINE",
+            response=plan.action.content,
+            current_contexts=contexts,
+        )
+        active_store.save_ground_session(updated, replace=True)
+        before = GroundResolutionIdentity(
+            ground_uid=session.uid,
+            ground_name=session.contract_name,
+            ground_revision=session.revision,
+            ground_digest=ground_session_record_digest(session),
+        )
+        after = GroundResolutionIdentity(
+            ground_uid=updated.uid,
+            ground_name=updated.contract_name,
+            ground_revision=updated.revision,
+            ground_digest=ground_session_record_digest(updated),
+        )
+        return GroundResolutionApplyReceipt(
+            plan_digest=plan.digest,
+            artifact_uid=artifact.report.uid,
+            action_kind=plan.action.kind,
+            previous_identity=before,
+            resulting_identity=after,
+            mutated=True,
+        )
+
+    monkeypatch.setattr(
+        ground_command,
+        "apply_ground_resolution",
+        apply_typed,
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_approved_ground_command",
+        lambda _argv: pytest.fail("typed Resolve must not launch a subprocess"),
+    )
+
+    updated, output = ground_command._apply_named_ground_proposal(
+        session,
+        proposal,
+    )
+
+    assert len(calls) == 1
+    assert calls[0][1] == artifact
+    assert updated.revision == session.revision + 1
+    assert updated.items_of_kind("RULE")[0].content == (
+        "Use the first three letters for a normalized single word."
+    )
+    assert "Resolve REFINE_RULE saved Ground revision" in output
+
+
+def test_fit_resolve_command_rejects_a_tampered_application_payload(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, _contexts, rule, example, artifact = (
+        _fit_resolve_command_fixture()
+    )
+    store.save_ground_session(session)
+    monkeypatch.setattr(
+        ground_command,
+        "_load_bound_contexts",
+        lambda _store, _session: (),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "stale_ground_frames",
+        lambda _session, _contexts: False,
+    )
+    proposal = ground_command._ground_fit_resolution_proposal(
+        session,
+        artifact,
+        example_uid=example.uid,
+        action="REFINE_RULE",
+        content="Use the first three letters for a normalized single word.",
+        rationale="The boundary Example requires a deterministic algorithm.",
+        rule_uid=rule.uid,
+    )
+    tampered = replace(proposal, application_payload=object())
+
+    with pytest.raises(GroundError, match="application payload is invalid"):
+        ground_command._apply_named_ground_proposal(session, tampered)
+
+    assert store.load_ground_session(session.contract_name) == session
+
+
+def test_fit_resolve_command_rejects_displayed_argv_plan_mismatch(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    session, _contexts, rule, example, artifact = (
+        _fit_resolve_command_fixture()
+    )
+    store.save_ground_session(session)
+    monkeypatch.setattr(
+        ground_command,
+        "_load_bound_contexts",
+        lambda _store, _session: (),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "stale_ground_frames",
+        lambda _session, _contexts: False,
+    )
+    proposal = ground_command._ground_fit_resolution_proposal(
+        session,
+        artifact,
+        example_uid=example.uid,
+        action="REFINE_RULE",
+        content="Use the first three letters for a normalized single word.",
+        rationale="The boundary Example requires a deterministic algorithm.",
+        rule_uid=rule.uid,
+    )
+    argv = list(proposal.review.argv)
+    argv[argv.index("--response") + 1] = "Different displayed replacement."
+    tampered = replace(
+        proposal,
+        review=replace(proposal.review, argv=tuple(argv)),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "apply_ground_resolution",
+        lambda *_args, **_kwargs: pytest.fail("mismatched plan must not apply"),
+    )
+
+    with pytest.raises(GroundError, match="does not exactly match"):
+        ground_command._apply_named_ground_proposal(session, tampered)
+
+    assert store.load_ground_session(session.contract_name) == session
 
 
 def test_explicit_proposition_upgrade_preserves_v2_semantics_and_identity(

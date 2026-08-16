@@ -5,7 +5,7 @@ from collections.abc import Sequence
 import re
 import sys
 import subprocess
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from typing import Annotated, Iterable, Literal, Optional
 
 import typer
@@ -82,13 +82,27 @@ from memcommit.ground_turn_dialogue import (
     interpret_ground_turn,
 )
 from memcommit.fit_runtime import execute_and_save_ground_fit
-from memcommit.fit_store import FitStore
+from memcommit.fit_store import FitStore, GroundFitReceipt
+from memcommit.ground_resolution import (
+    GroundFitResolutionChoice,
+    GroundResolutionPlan,
+)
+from memcommit.ground_resolution_application import (
+    apply_ground_resolution,
+    resolve_fit_issue,
+)
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.store import (
     ConcurrentGroundUpdateError,
     MemoryStore,
     ground_session_record_digest,
 )
+
+
+@dataclass(frozen=True)
+class _GroundResolutionApplicationPayload:
+    plan: GroundResolutionPlan
+    artifact: GroundFitReceipt
 
 
 def _validated_start_request(value: str) -> str:
@@ -1053,7 +1067,8 @@ def _ground_example_use_proposal(
     return GroundCommandProposal(
         kind="SET_EXAMPLE_USE",
         understanding=(
-            f"Memory {selector} will be {'used' if next_use == 'INCLUDE' else 'excluded'} "
+            f"Memory {selector} will be "
+            f"{'used' if next_use == 'INCLUDE' else 'excluded'} "
             "by future Fit and Ground Distill runs."
         ),
         question=f"Approve setting Memory {selector} USE to {next_use}?",
@@ -1073,6 +1088,112 @@ def _ground_example_use_proposal(
         expected_ground_uid=session.uid,
         expected_revision=session.revision,
         expected_state_digest=_ground_digest(session),
+    )
+
+
+def _ground_fit_resolution_proposal(
+    session: GroundSession,
+    receipt: GroundFitReceipt,
+    *,
+    example_uid: str,
+    action: str,
+    content: str = "",
+    rationale: str = "",
+    rule_uid: str = "",
+    use: str = "",
+) -> GroundCommandProposal:
+    """Freeze one exact Fit issue response without accepting it implicitly."""
+
+    contexts = _load_bound_contexts(MemoryStore(create=False), session)
+    if stale_ground_frames(session, contexts):
+        raise GroundError(
+            "Grounding workbench is stale. Refresh or replace its explicit "
+            "binding before resolving Fit."
+        )
+    plan = resolve_fit_issue(
+        session,
+        receipt,
+        choice=GroundFitResolutionChoice(
+            example_uid=example_uid,
+            action=action,  # type: ignore[arg-type]
+            content=content,
+            rationale=rationale,
+            rule_uid=rule_uid,
+            use=use,
+        ),
+    )
+    resolution = plan.action
+    if resolution.kind == "DEFER":
+        raise GroundError(
+            "A non-mutating Fit deferral is acknowledged directly and has no "
+            "exact Ground command to approve."
+        )
+    if resolution.kind == "REVISE_GOAL":
+        argv = (
+            "mem",
+            "ground",
+            session.contract_name,
+            "--revise-goal",
+            resolution.content,
+            "--change-reason",
+            resolution.rationale,
+        )
+        effect = "Goal: REVISE from selected Fit issue"
+    elif resolution.kind in {"REFINE_RULE", "REFINE_EXAMPLE"}:
+        argv = (
+            "mem",
+            "ground",
+            session.contract_name,
+            "--decide",
+            resolution.selector,
+            "--action",
+            "REFINE",
+            "--response",
+            resolution.content,
+        )
+        effect = (
+            "Selected Rule: REFINE and reopen"
+            if resolution.kind == "REFINE_RULE"
+            else "Selected Example: REFINE and reopen"
+        )
+    elif resolution.kind == "SET_EXAMPLE_USE":
+        argv = (
+            "mem",
+            "ground",
+            session.contract_name,
+            "--set-example-use",
+            resolution.selector,
+            "--use",
+            resolution.use,
+        )
+        effect = f"Selected Example USE: SET {resolution.use}"
+    else:  # pragma: no cover - Fit Resolve action union
+        raise GroundError("This Fit Resolve action is not available in Ground.")
+    return GroundCommandProposal(
+        kind=f"RESOLVE_{resolution.kind}",
+        understanding=plan.explanation,
+        question="Approve this one exact Fit-bound Ground action?",
+        review=ExactCommandReview(
+            argv=_with_ground_version_guard(session, argv),
+            effects=(
+                (
+                    "Precondition: same current Fit receipt and Ground at "
+                    f"revision {session.revision}"
+                ),
+                effect,
+                "Fit receipt: retained and becomes stale after revision",
+                "Other Ground items: unchanged",
+                "Contexts, Context Memories, and checkpoints: unchanged",
+                "Acceptance: unchanged; refined items remain PROPOSED",
+            ),
+        ),
+        expected_ground_uid=session.uid,
+        expected_revision=session.revision,
+        expected_state_digest=_ground_digest(session),
+        application_payload=_GroundResolutionApplicationPayload(
+            plan=plan,
+            artifact=receipt,
+        ),
     )
 
 
@@ -1278,6 +1399,48 @@ def _apply_named_ground_proposal(
             "The named Ground changed after this proposal. Refine the turn "
             "against the refreshed state."
         )
+    if proposal.application_payload is not None:
+        payload = proposal.application_payload
+        if not isinstance(payload, _GroundResolutionApplicationPayload):
+            raise GroundError("The reviewed Ground application payload is invalid.")
+        action = payload.plan.action
+        rebuilt = _ground_fit_resolution_proposal(
+            session,
+            payload.artifact,
+            example_uid=action.source_item_uid,
+            action=action.kind,
+            content=action.content,
+            rationale=action.rationale,
+            rule_uid=action.selector,
+            use=action.use,
+        )
+        if rebuilt != proposal:
+            raise GroundError(
+                "The displayed Ground command does not exactly match its "
+                "typed Resolve plan."
+            )
+        receipt = apply_ground_resolution(
+            store,
+            payload.plan,
+            artifact=payload.artifact,
+        )
+        updated = store.load_ground_session(session.contract_name)
+        if (
+            updated is None
+            or updated.uid != proposal.expected_ground_uid
+            or updated.revision != receipt.resulting_identity.ground_revision
+            or _ground_digest(updated)
+            != receipt.resulting_identity.ground_digest
+        ):
+            raise GroundError(
+                "Resolve reported success, but its exact Ground revision could "
+                "not be verified."
+            )
+        return (
+            updated,
+            f"Resolve {receipt.action_kind} saved Ground revision "
+            f"{updated.revision}.",
+        )
     try:
         result = _run_approved_ground_command(proposal.review.argv)
     except (OSError, subprocess.TimeoutExpired) as error:
@@ -1354,6 +1517,7 @@ def _run_existing_ground_shell(
         reload_session=reload_session,
         run_fit=run_fit,
         lookup_fit=lookup_fit,
+        prepare_fit_resolution=_ground_fit_resolution_proposal,
         initial_receipt=initial_receipt,
         context_hints=context_hints,
         new_context_hint=new_context_hint,
