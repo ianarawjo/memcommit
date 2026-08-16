@@ -3,16 +3,12 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application_review_policy import (
-    ownership_aware_application_review,
-)
 from memcommit.commands.command_wait import (
     CommandWaitView,
     build_report_loading_view,
     run_command_wait,
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.forget_setup_workbench import choose_forget_setup
 from memcommit.authority.access import (
     context_access_display_facts,
     resolve_context_access,
@@ -28,7 +24,6 @@ from memcommit.forget_application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,
     ForgetRevisionRequest,
-    ForgetSelectionRequest,
     ForgetSessionSnapshot,
     ForgetSourcePort,
     FrozenForgetSource,
@@ -36,22 +31,18 @@ from memcommit.forget_application import (
     run_forget_analysis,
     run_forget_apply,
     run_forget_revision,
-    run_forget_selection,
 )
-from memcommit.forget_resolution_adapter import (
-    ForgetResolutionWorkbenchAdapter,
-    forget_memory_changes,
-)
-from memcommit.forget_review import ForgetSelection
 from memcommit.forget_runtime import (
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.impact_controller import ImpactController
+from memcommit.interfaces.tui.operations.forget import (
+    choose_forget_setup,
+    run_forget_review_workbench,
+)
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
-from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange
 from memcommit.store import MemoryStore
 
@@ -117,10 +108,6 @@ def _run_resolution_forget_snapshot(
     *,
     mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | None:
-    from memcommit.commands.resolution_workbench_shell import (
-        run_resolution_workbench_shell,
-    )
-
     # Forget remains one whole-frame provider turn. Only its host execution is
     # moved off the foreground so Help can be explored without partitioning or
     # changing the semantic request.
@@ -142,73 +129,10 @@ def _run_resolution_forget_snapshot(
         ),
         context_view=_forget_wait_view(ctx, info),
     )
-    snapshot = result.snapshot
-    if not snapshot.review.candidates:
-        return snapshot
-    navigation = ResolutionNavigation()
-    while True:
-        review = snapshot.review
-        active_view = ForgetResolutionWorkbenchAdapter(review).view()
-        impact_controller = ImpactController.from_memory_changes(
-            operation=active_view.operation,
-            artifact_uid=active_view.artifact_uid,
-            revision=active_view.revision,
-            title="IMPACT · PROPOSED SOURCE REVISION",
-            summary=(
-                "These are the exact changes Apply would make to the frozen "
-                "Source. Nothing has changed yet."
-            ),
-            changes=forget_memory_changes(review),
-        )
-        action = run_resolution_workbench_shell(
-            active_view,
-            navigation=navigation,
-            terminal_label="Interactive Forget",
-            snapshot_hint=(
-                "Run 'mem forget INSTRUCTION' in a terminal to review the batch."
-            ),
-            review_and_apply=True,
-            decision_free_behavior=ownership_aware_application_review(
-                mutates_granted_authority=mutates_granted_authority,
-                local_undo_available=True,
-                # An all-KEEP review crosses no Context mutation boundary,
-                # even when the frozen Source was reached through a Grant.
-                publishes_context_mutation=bool(review.changes()),
-            ).decision_free_behavior,
-            split_viewer_items=True,
-            impact_controller=impact_controller,
-        )
-        if action.kind == "CLOSE":
-            return None
-        if action.kind == "ACCEPT":
-            return snapshot
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-            raise ValueError("Unsupported Forget workbench action.")
-        if action.comment.strip():
-            snapshot = run_forget_selection(
-                ForgetSelectionRequest(
-                    snapshot=snapshot,
-                    candidate_uid=action.item_uid,
-                    selection="CUSTOM",
-                    custom_content=action.comment.strip(),
-                )
-            )
-            continue
-        suffix = (action.option_uid or "").rpartition(":")[2]
-        selection: ForgetSelection | None = {
-            "recommended": "RECOMMENDED",
-            "keep": "KEEP",
-            "delete": "DELETE",
-        }.get(suffix)  # type: ignore[assignment]
-        if selection is None:
-            raise ValueError("Unsupported Forget decision.")
-        snapshot = run_forget_selection(
-            ForgetSelectionRequest(
-                snapshot=snapshot,
-                candidate_uid=action.item_uid,
-                selection=selection,
-            )
-        )
+    return run_forget_review_workbench(
+        result.snapshot,
+        mutates_granted_authority=mutates_granted_authority,
+    )
 
 
 def _run_resolution_forget(
@@ -415,19 +339,19 @@ def cmd(
                 for name in names
                 if catalog.access_for(name).is_granted
             }
-            receipt = choose_forget_setup(
+            setup_receipt = choose_forget_setup(
                 names,
                 current=access.display_name,
                 annotations=annotations,
             )
-            if receipt is None:
+            if setup_receipt is None:
                 typer.echo("Forget cancelled.")
                 return
             # The receipt is already canonical in the frozen public catalog.
             # The runtime revalidates its exact local/Grant binding before any
             # provider construction instead of trusting selection visibility.
-            source_locator = receipt.context_name
-            info = receipt.instruction
+            source_locator = setup_receipt.context_name
+            info = setup_receipt.instruction
         assert info is not None
         request = ForgetAnalysisRequest(
             source_locator=source_locator,
@@ -490,31 +414,33 @@ def cmd(
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    receipt = result.receipt
+    apply_receipt = result.receipt
     if not result.applied:
         if _interactive_terminal():
             typer.echo(
                 "Forget complete · SOURCE "
-                f"{safe_terminal_text(receipt.source_name)} · "
+                f"{safe_terminal_text(apply_receipt.source_name)} · "
                 "no changes needed · Context unchanged · no checkpoint"
             )
         return
 
     effects: list[str] = []
-    if receipt.removed_count:
-        effects.append(f"{receipt.removed_count} removed")
-    if receipt.edited_count:
-        effects.append(f"{receipt.edited_count} edited")
+    if apply_receipt.removed_count:
+        effects.append(f"{apply_receipt.removed_count} removed")
+    if apply_receipt.edited_count:
+        effects.append(f"{apply_receipt.edited_count} edited")
     if _interactive_terminal():
         checkpoint_label = (
-            f" · checkpoint [{receipt.checkpoint_uid[:8]}]"
-            if receipt.checkpoint_uid is not None
+            f" · checkpoint [{apply_receipt.checkpoint_uid[:8]}]"
+            if apply_receipt.checkpoint_uid is not None
             else ""
         )
-        recovery_label = " · recovery mem undo" if receipt.undo_available else ""
+        recovery_label = (
+            " · recovery mem undo" if apply_receipt.undo_available else ""
+        )
         typer.secho(
             "Forget applied · SOURCE "
-            f"{safe_terminal_text(receipt.source_name)} · "
+            f"{safe_terminal_text(apply_receipt.source_name)} · "
             f"{', '.join(effects)}{checkpoint_label}{recovery_label}",
             fg=typer.colors.GREEN,
         )

@@ -28,6 +28,16 @@ from memcommit.forget_runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
+from memcommit.forget_resolution_adapter import (
+    ForgetResolutionWorkbenchAdapter as LegacyForgetResolutionWorkbenchAdapter,
+)
+from memcommit.commands.forget_setup_workbench import (
+    ForgetSetupReceipt as LegacyForgetSetupReceipt,
+)
+from memcommit.interfaces.tui.operations.forget.resolution import (
+    ForgetResolutionWorkbenchAdapter,
+)
+from memcommit.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
 from memcommit.semantic.changes import ProposedChange
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
@@ -141,6 +151,24 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
         assert not any(name.startswith("memcommit.commands") for name in imports)
         assert "typer" not in imports
         assert not any(name.startswith("prompt_toolkit") for name in imports)
+
+
+def test_forget_tui_modules_own_the_legacy_component_identities() -> None:
+    assert LegacyForgetSetupReceipt is ForgetSetupReceipt
+    assert (
+        LegacyForgetResolutionWorkbenchAdapter
+        is ForgetResolutionWorkbenchAdapter
+    )
+    root = Path(__file__).parents[1] / "memcommit" / "interfaces" / "tui"
+    for name in ("setup.py", "resolution.py", "workbench.py"):
+        path = root / "operations" / "forget" / name
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        imports = {
+            node.module
+            for node in ast.walk(tree)
+            if isinstance(node, ast.ImportFrom) and node.module is not None
+        }
+        assert not any(module.startswith("memcommit.commands") for module in imports)
 
 
 def test_forget_freezes_source_before_provider_construction() -> None:

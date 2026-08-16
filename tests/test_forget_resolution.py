@@ -400,7 +400,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         return action
 
     monkeypatch.setattr(
-        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.interfaces.tui.operations.forget.workbench.run_resolution_workbench_shell",
         choose,
     )
 
@@ -438,7 +438,7 @@ def test_granted_forget_requires_review_only_when_it_will_publish_a_change(
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
     monkeypatch.setattr(
-        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.interfaces.tui.operations.forget.workbench.run_resolution_workbench_shell",
         choose,
     )
     monkeypatch.setattr(

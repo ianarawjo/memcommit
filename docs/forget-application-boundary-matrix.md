@@ -62,7 +62,7 @@ run_forget_apply
 | Apply | `run_forget_apply` | `MemoryStoreForgetSourcePort.apply` | Only sparse reviewed edits/removals enter the exact frozen Source mutation boundary |
 | Authority | runtime adapter | `authorized_context_mutation` | Local writes use Context CAS; granted writes retain required UPDATE/DELETE permissions through the authority save |
 | Receipt | `ForgetApplyReceipt` | Store checkpoint | Source identity, removed/edited counts, checkpoint, Grant state, and local Undo availability must match the reviewed effect |
-| Presentation | none | command/TUI adapters | Terminal wording, focus, review choices, and cancellation do not decide authority or mutate the Source |
+| Presentation | none | `interfaces.tui.operations.forget` plus the CLI adapter | Terminal wording, focus, review choices, and cancellation do not decide authority or mutate the Source |
 
 ## Process-local review decision
 
@@ -104,7 +104,8 @@ dialogue as a portable token.
 
 ## Verification evidence
 
-The current application/runtime and compatibility run passes 86 tests covering:
+The current application/runtime, TUI-owner, and compatibility run passes 87
+tests covering:
 
 - Source freeze before provider construction;
 - provider-free empty Source handling;
@@ -117,19 +118,20 @@ The current application/runtime and compatibility run passes 86 tests covering:
 - local and granted command behavior, frozen setup selection, direct Context
   references, and operation-unit Undo/Redo; and
 - AST-level absence of `commands.*`, Typer, and prompt-toolkit imports from the
-  application, runtime, and provider modules.
+  application, runtime, and provider modules; plus absence of `commands.*`
+  reverse imports from the Forget-specific TUI owner.
 
 The existing ordered Forget PTY sets remain the visual baseline because this
-stage changes execution ownership, not terminal topology or key behavior.
+stage changes execution ownership and physical module placement, not terminal
+topology or key behavior. Legacy setup and Resolution import paths are thin
+identity-preserving facades over `interfaces.tui.operations.forget`.
 
 ## Remaining work and non-goals
 
-1. Move the setup and Resolution projections under
-   `interfaces.tui.operations.forget` while keeping compatibility facades.
-2. Add stable public Python values and a versioned process-local agent/MCP
+1. Add stable public Python values and a versioned process-local agent/MCP
    projection over the same Analyze/Select/Revise/Apply use cases.
-3. Run installed-wheel discovery and effect smoke before classifying the route
+2. Run installed-wheel discovery and effect smoke before classifying the route
    `CLOSED`.
-4. Cross-process durable resume is intentionally not part of Forget. Adding it
+3. Cross-process durable resume is intentionally not part of Forget. Adding it
    later would require a separately reviewed session schema and retention
    policy.
