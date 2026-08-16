@@ -31,9 +31,9 @@ from memcommit.atomize_workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
-from memcommit.commands.atomize_workbench_shell import (
-    render_atomize_workbench_snapshot,
-    run_atomize_workbench_shell,
+from memcommit.interfaces.cli.atomize import render_atomize_apply_result
+from memcommit.interfaces.tui.operations.atomize.adapter import (
+    present_atomize_workbench,
 )
 from memcommit.commands.atomize_grounding import (
     AtomizeGroundingCommandError,
@@ -56,7 +56,6 @@ from memcommit.commands.atomize_sessions import (
 from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
 from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.review_shell import ReviewCancelled
 from memcommit.review import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
@@ -68,7 +67,6 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.resolution_workbench import ResolutionWorkbenchAction
 
 
 def _interactive_terminal() -> bool:
@@ -90,117 +88,6 @@ def _incorporable_workbench_response_count(
         response.answered and len(findings[issue_uid].source_uids) == 1
         for issue_uid, response in workbench.responses.items()
     )
-
-
-def _render_apply_result(
-    *,
-    session: AtomizeAnalysisSession,
-    context_name: str,
-    result,
-    created: bool,
-    unresolved_at_apply_count: int,
-    recovered_application: bool = False,
-) -> None:
-    action = "Created and atomized" if created else "Applied atomize analysis to"
-    typer.secho(
-        f"{action} '{context_name}' from analysis [{session.uid[:8]}].",
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
-    typer.echo(
-        f"  {result.split_count} "
-        f"{'split' if result.split_count == 1 else 'splits'} "
-        f"-> {result.child_count} children"
-    )
-    typer.echo(f"  {result.preserved_count} Memories preserved in place")
-    if unresolved_at_apply_count:
-        typer.secho(
-            f"  Applied as is with {unresolved_at_apply_count} unresolved "
-            f"{'finding' if unresolved_at_apply_count == 1 else 'findings'} "
-            "recorded",
-            fg=typer.colors.YELLOW,
-        )
-    for item in result.items:
-        if item.classification != "COMPOSITE":
-            continue
-        typer.echo(
-            f"  [{item.source_uid[:8]}] -> "
-            + ", ".join(f"[{uid[:8]}]" for uid in item.result_uids)
-        )
-    if recovered_application:
-        typer.secho(
-            "  Recovered the exact prior checkpoint; no duplicate was created",
-            fg=typer.colors.YELLOW,
-        )
-    if created:
-        typer.echo(
-            "One Atomize checkpoint created; no intermediate Context was "
-            "published."
-        )
-        typer.echo(f"Switched to '{context_name}'.")
-    else:
-        typer.echo("One Context checkpoint created. The saved analysis remains linked.")
-
-
-def _present_workbench(
-    *,
-    store: MemoryStore,
-    analysis: AtomizeAnalysisSession,
-    workbench,
-    show_all: bool,
-    workflow_actions: bool = True,
-    application_complete: bool = False,
-) -> ResolutionWorkbenchAction | None:
-    if not sys.stdin.isatty() or not sys.stdout.isatty():
-        typer.echo(
-            render_atomize_workbench_snapshot(
-                workbench,
-                analysis,
-                show_all=show_all,
-            )
-        )
-        return None
-    try:
-        from memcommit.commands.resolution_workbench_shell import (
-            ResolutionDestination,
-        )
-
-        planned_output = workbench.output_context_name or analysis.context_name
-
-        def validate_destination(name: str) -> None:
-            if name == analysis.context_name:
-                raise ValueError(
-                    "A distinct Atomize Output cannot be changed to the Input "
-                    "Context from Save Location."
-                )
-            store.assert_context_creatable(name)
-
-        result = run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=store.save_atomize_workbench,
-            workflow_actions=workflow_actions,
-            application_complete=application_complete,
-            destination=(
-                ResolutionDestination(
-                    value=planned_output,
-                    state="NOT CREATED",
-                    detail=(
-                        "Enter to change this exact new Context name before "
-                        "Review and Apply."
-                    ),
-                    validate=validate_destination,
-                    context_names=tuple(store.list_context_names()),
-                    current_context=store.current_context_name(),
-                )
-                if workflow_actions and planned_output != analysis.context_name
-                else None
-            ),
-        )
-        return result if isinstance(result, ResolutionWorkbenchAction) else None
-    except ReviewCancelled:
-        typer.echo("Atomize workbench saved. No Memory changes applied.")
-        return None
 
 
 def _materialize_reviewed_workbench(
@@ -299,7 +186,7 @@ def _resume_selected_atomize(
             fg=typer.colors.CYAN,
         )
         return
-    action = _present_workbench(
+    action = present_atomize_workbench(
         store=store,
         analysis=analysis,
         workbench=workbench,
@@ -744,7 +631,7 @@ def cmd(
                     # it would make the session launcher observe two owners
                     # for one analysis UID on the next invocation.
                     workbench = create_atomize_workbench(session)
-                _present_workbench(
+                present_atomize_workbench(
                     store=store,
                     analysis=session,
                     workbench=workbench,
@@ -790,7 +677,7 @@ def cmd(
                     "continuing this session."
                 )
             while True:
-                action = _present_workbench(
+                action = present_atomize_workbench(
                     store=store,
                     analysis=session,
                     workbench=opened.workbench,
@@ -1074,7 +961,7 @@ def cmd(
         typer.secho(f"Atomize error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    _render_apply_result(
+    render_atomize_apply_result(
         session=applied_session,
         context_name=applied_name,
         result=result,

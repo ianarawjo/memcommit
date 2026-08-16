@@ -24,7 +24,7 @@ from memcommit.atomize_workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
 )
-from memcommit.commands.atomize_workbench_shell import (
+from memcommit.interfaces.tui.operations.atomize.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
@@ -39,7 +39,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
-from memcommit.commands.review_shell import ReviewCancelled
+from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
 from memcommit.commands.session_picker import (
     SessionOpenReceipt,
     SessionPickerEntry,

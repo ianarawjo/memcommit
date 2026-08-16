@@ -195,7 +195,7 @@ def _invoke_save(store) -> None:
 
 
 def _child_review(store_root: Path) -> None:
-    from memcommit.commands.atomize_workbench_shell import (
+    from memcommit.interfaces.tui.operations.atomize.screen import (
         run_atomize_workbench_shell,
     )
     from memcommit.store import MemoryStore
@@ -232,7 +232,7 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.commands.atomize_workbench_shell import (
+    from memcommit.interfaces.tui.operations.atomize.screen import (
         render_atomize_workbench_snapshot,
     )
     from memcommit.store import MemoryStore

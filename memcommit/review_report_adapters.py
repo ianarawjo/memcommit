@@ -73,7 +73,7 @@ def atomize_review_report(
 ) -> ReviewReportController:
     """Expose Atomize findings and saved clarification responses."""
     from memcommit.atomize_result_adapter import AtomizeResultWorkbenchAdapter
-    from memcommit.commands.result_workbench_shell import (
+    from memcommit.interfaces.tui.workbenches.result import (
         render_result_workbench_snapshot,
     )
 

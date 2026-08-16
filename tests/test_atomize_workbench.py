@@ -35,7 +35,7 @@ from memcommit.atomize_workflow import (
 )
 from memcommit.cli import app
 from memcommit.commands.atomize import _materialize_reviewed_workbench
-from memcommit.commands.atomize_workbench_shell import (
+from memcommit.interfaces.tui.operations.atomize.screen import (
     _finding_map,
     _list_fragments,
     _list_text,
@@ -49,8 +49,8 @@ from memcommit.commands.atomize_sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.endpoint_setup_flows import AtomizeSetupReceipt
-from memcommit.commands.review_shell import RESPONSE_LABEL
-from memcommit.commands.resolution_workbench_shell import ResolutionDestination
+from memcommit.interfaces.tui.workbenches.review import RESPONSE_LABEL
+from memcommit.interfaces.tui.workbenches.resolution import ResolutionDestination
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -1389,7 +1389,8 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.interfaces.tui.workbenches.resolution."
+        "run_resolution_workbench_shell",
         inspect_view,
     )
 
@@ -1426,7 +1427,8 @@ def test_actionable_atomize_enters_final_review_when_no_response_is_required(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.interfaces.tui.workbenches.resolution."
+        "run_resolution_workbench_shell",
         inspect_view,
     )
 
@@ -1545,7 +1547,7 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
     assert reviewed.analysis.source_review_uid == opened.workbench.uid
     checkpoints_before = store.list_checkpoints(ctx.name)
     monkeypatch.setattr(
-        "memcommit.commands.atomize._present_workbench",
+        "memcommit.commands.atomize.present_atomize_workbench",
         lambda **_kwargs: ResolutionWorkbenchAction(kind="ACCEPT"),
     )
 
@@ -1580,7 +1582,7 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
         )
     )
     monkeypatch.setattr(
-        "memcommit.commands.atomize._present_workbench",
+        "memcommit.commands.atomize.present_atomize_workbench",
         lambda **_kwargs: next(actions),
     )
     monkeypatch.setattr(
@@ -1675,7 +1677,7 @@ def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
     store.save_atomize_workbench(opened.workbench)
     checkpoints_before = store.list_checkpoints(ctx.name)
     monkeypatch.setattr(
-        "memcommit.commands.atomize._present_workbench",
+        "memcommit.commands.atomize.present_atomize_workbench",
         lambda **_kwargs: ResolutionWorkbenchAction(
             kind="INCORPORATE_AND_APPLY",
             comment="Incorporate every saved Atomize response and apply.",

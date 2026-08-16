@@ -1,4 +1,4 @@
-"""Compatibility imports for the interface-owned Result workbench."""
+"""Shared read-only result workbench presentation."""
 
 from memcommit.interfaces.tui.workbenches.result.shell import (
     render_result_workbench_snapshot,

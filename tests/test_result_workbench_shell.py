@@ -6,7 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.commands.result_workbench_shell import (
+from memcommit.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
     run_result_workbench_shell,
 )

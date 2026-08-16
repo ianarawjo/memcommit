@@ -33,15 +33,11 @@ from memcommit.review import (
     ReviewItem,
     ReviewSession,
 )
-
-
-RESPONSE_LABEL = "REFINE, COMMENT, OR ENTER A DIFFERENT READING"
-ATOMIZE_RESPONSE_LABEL = RESPONSE_LABEL
-
-
-class ReviewCancelled(Exception):
-    """The interactive review closed normally without applying Memories."""
-
+from memcommit.interfaces.tui.workbenches.review import (
+    ATOMIZE_RESPONSE_LABEL,
+    RESPONSE_LABEL,
+    ReviewCancelled,
+)
 
 def visible_ordinal_index(selector: str, item_count: int) -> int | None:
     """Resolve only the canonical spelling of a visible 1-based ordinal.

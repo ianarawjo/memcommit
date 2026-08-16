@@ -2,9 +2,11 @@
 
 This ordered replay records the local Atomize in-place Apply path after moving
 materialization and terminal receipt persistence behind typed application and
-runtime ports. The semantic assessment, explicit `--save` command boundary,
-and ordinary success receipt remain unchanged; the new evidence covers the
-failure and recovery branches that were previously incomplete.
+runtime ports. It was replayed again after the saved-workbench screen moved to
+`memcommit.interfaces.tui.operations.atomize`; the command compatibility path
+is not used by the recorder. The semantic assessment, explicit `--save`
+command boundary, ordinary success receipt, and visible terminal grammar remain
+unchanged.
 
 ## Environment
 

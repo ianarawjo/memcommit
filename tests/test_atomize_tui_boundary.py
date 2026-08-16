@@ -1,0 +1,74 @@
+"""Dependency and compatibility contracts for the interface-owned Atomize TUI."""
+
+from __future__ import annotations
+
+import ast
+from pathlib import Path
+
+
+REPOSITORY = Path(__file__).parents[1]
+INTERFACE_MODULES = (
+    REPOSITORY / "memcommit/interfaces/tui/operations/atomize/adapter.py",
+    REPOSITORY / "memcommit/interfaces/tui/operations/atomize/screen.py",
+    REPOSITORY / "memcommit/interfaces/tui/workbenches/result/shell.py",
+    REPOSITORY / "memcommit/interfaces/tui/workbenches/review/model.py",
+)
+
+
+def _command_imports(path: Path) -> tuple[str, ...]:
+    imports: list[str] = []
+    for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+        if isinstance(node, ast.ImportFrom) and node.module:
+            if node.module.startswith("memcommit.commands"):
+                imports.append(node.module)
+        elif isinstance(node, ast.Import):
+            imports.extend(
+                alias.name
+                for alias in node.names
+                if alias.name.startswith("memcommit.commands")
+            )
+    return tuple(imports)
+
+
+def test_atomize_tui_boundary_does_not_import_command_modules() -> None:
+    violations = {
+        str(path.relative_to(REPOSITORY)): _command_imports(path)
+        for path in INTERFACE_MODULES
+        if _command_imports(path)
+    }
+
+    assert violations == {}
+
+
+def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
+    from memcommit.commands import atomize_render as legacy_cli
+    from memcommit.commands import atomize_workbench_shell as legacy_atomize
+    from memcommit.commands import result_workbench_shell as legacy_result
+    from memcommit.interfaces.cli import atomize as atomize_cli
+    from memcommit.interfaces.tui.operations.atomize import screen as atomize_screen
+    from memcommit.interfaces.tui.workbenches.result import shell as result_screen
+
+    assert (
+        legacy_atomize.run_atomize_workbench_shell
+        is atomize_screen.run_atomize_workbench_shell
+    )
+    assert (
+        legacy_atomize.render_atomize_workbench_snapshot
+        is atomize_screen.render_atomize_workbench_snapshot
+    )
+    assert (
+        legacy_result.run_result_workbench_shell
+        is result_screen.run_result_workbench_shell
+    )
+    assert legacy_cli.render_atomize_impact is atomize_cli.render_atomize_impact
+
+
+def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None:
+    source = (
+        REPOSITORY / "memcommit/commands/atomize.py"
+    ).read_text(encoding="utf-8")
+
+    assert "memcommit.interfaces.tui.operations.atomize.adapter" in source
+    assert "memcommit.interfaces.cli.atomize" in source
+    assert "memcommit.commands.atomize_workbench_shell" not in source
+    assert "prompt_toolkit" not in source

@@ -1,19 +1,15 @@
-"""Compatibility imports for the interface-owned Atomize workbench."""
+"""Atomize terminal adapter and screen."""
 
+from memcommit.interfaces.tui.operations.atomize.adapter import (
+    present_atomize_workbench,
+)
 from memcommit.interfaces.tui.operations.atomize.screen import (
-    _finding_map,
-    _list_fragments,
-    _list_text,
-    _source_map,
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
 
 __all__ = [
-    "_finding_map",
-    "_list_fragments",
-    "_list_text",
-    "_source_map",
+    "present_atomize_workbench",
     "render_atomize_workbench_snapshot",
     "run_atomize_workbench_shell",
 ]

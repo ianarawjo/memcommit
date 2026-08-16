@@ -917,7 +917,7 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     presented = []
     with monkeypatch.context() as terminal_review:
         terminal_review.setattr(
-            "memcommit.commands.atomize._present_workbench",
+            "memcommit.commands.atomize.present_atomize_workbench",
             lambda **kwargs: presented.append(kwargs),
         )
         reopened = runner.invoke(
