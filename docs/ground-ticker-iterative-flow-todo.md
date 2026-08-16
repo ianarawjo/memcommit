@@ -194,5 +194,11 @@ be proved as a separate Distill compatibility rule.
 - [x] execute the complete 5→10→20→35→50 path against a deterministic semantic
   provider and verify proposal-only artifacts, one-revision mutations, stale
   Fit projection, separately reviewed acceptance, and prompt-label isolation;
-- [ ] run and capture the complete provider-backed ticker progression; and
-- [ ] evaluate convergence, regressions, and explicit unresolved coverage.
+- [x] run and capture the complete provider-backed ticker progression, retaining
+  the first fail-closed evidence-overlap failure and the fresh post-contract-fix
+  rerun; and
+- [x] evaluate convergence, regressions, and explicit unresolved coverage: the
+  run reached 48/50 FIT with no prior-FIT regression, preserved all four
+  unsupported boundaries without fabricated outputs, exposed one genuine Rule
+  conflict and one internally inconsistent Fit verdict, and showed that the
+  issue-triggered Goal refinement policy can leave the visible Goal vague.
