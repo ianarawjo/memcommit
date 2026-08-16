@@ -64,6 +64,27 @@ content. Embedded and lexical reach locate eligible owning Contexts but do not
 turn a pointer into a writable owner. A successful Apply records exact counts,
 affected Contexts, before/after digests, and one operation-level Undo/Redo unit.
 
+The implemented application/runtime core keeps the plan process-local but
+reproducible: its public digest excludes the opaque runtime token, so a later
+adapter can rebuild the same plan from exact request values and compare the
+digest before Apply. The token binds one in-process Apply to the Store instance,
+all scanned Context identities and digests, and one operation UID used only to
+group checkpoints for Undo/Redo.
+
+Completeness includes Contexts that contained no match during planning. Apply
+holds those read-only source bindings through every changed-Context write, so
+a newly matching sibling makes the plan stale instead of being silently
+missed. Version 1 also freezes the complete local Context-name catalog. This is
+deliberately conservative: creating or deleting an unrelated Context requires
+replanning, but it closes descendant-membership races without teaching the
+Store transaction about Replace-specific lexical or embedded scope semantics.
+
+Regex controls which spans match; replacement text itself remains literal and
+does not expand backreferences. Empty replacement removes only the matched
+text and retains the Memory identity. Checkpoint metadata stores hashes of the
+pattern and replacement rather than duplicating potentially redacted text;
+the ordinary before/after snapshots remain the recovery source of truth.
+
 ## Interface and evidence rollout
 
 Each operation owns one terminal-independent application contract and projects
@@ -77,7 +98,8 @@ The rollout is intentionally staged:
    its result meaning;
 2. add provider-free Find and verify it never constructs a provider (complete;
    see `find-application-boundary-matrix.md`);
-3. add frozen-plan Replace and its atomic Apply/Undo boundary;
+3. add frozen-plan Replace and its atomic Apply/Undo boundary (application and
+   Store core complete; exposed adapters remain next);
 4. expose and verify every adapter, Help projection, and real-terminal flow.
 
 Search retains the current route conclusion until its conversational controller

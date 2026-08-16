@@ -4588,6 +4588,9 @@ class MemoryStore:
     def save_context_command_batch(
         self,
         entries: Iterable[tuple[Context, AutoCheckpoint, str]],
+        *,
+        source_bindings: Iterable[tuple[str, str, str]] = (),
+        expected_context_catalog: Iterable[str] | None = None,
     ) -> tuple[Checkpoint, ...]:
         """Persist one existing multi-Context command with exception rollback.
 
@@ -4612,12 +4615,56 @@ class MemoryStore:
         names = tuple(context.name for context, _, _ in records)
         if len(names) != len(set(names)):
             raise ValueError("Context command batch contains duplicate names.")
+        bindings = tuple(source_bindings)
+        source_names = tuple(name for name, _uid, _digest in bindings)
+        if len(source_names) != len(set(source_names)):
+            raise ValueError("Context command batch repeats a source binding.")
+        if any(
+            not isinstance(name, str)
+            or not name
+            or not isinstance(uid, str)
+            or not uid
+            or not isinstance(digest, str)
+            or not digest
+            for name, uid, digest in bindings
+        ):
+            raise TypeError("Invalid Context command source binding.")
         for name in names:
             validate_context_name(name)
+        for name in source_names:
+            validate_context_name(name)
+        expected_catalog = (
+            None
+            if expected_context_catalog is None
+            else tuple(expected_context_catalog)
+        )
+        if expected_catalog is not None and (
+            len(expected_catalog) != len(set(expected_catalog))
+            or any(not isinstance(name, str) or not name for name in expected_catalog)
+        ):
+            raise ValueError("Expected Context command catalog is invalid.")
 
         with self._command_write_lock():
-            with self._context_graph_lock(exclusive=False):
-                with self._context_write_locks(names):
+            # A complete-scope operation may bind catalog membership as well
+            # as Context bytes. Use the exclusive graph lock only for those
+            # callers; ordinary batches retain the narrower shared lock.
+            with self._context_graph_lock(exclusive=expected_catalog is not None):
+                if (
+                    expected_catalog is not None
+                    and tuple(self.list_context_names()) != expected_catalog
+                ):
+                    raise ConcurrentContextUpdateError(
+                        "The Context namespace changed after the command was reviewed."
+                    )
+                # Read-only members of a complete operation frame stay locked
+                # through the writes as well. Otherwise a plan claiming all
+                # matches could silently miss a newly changed sibling.
+                with self._context_write_locks((*names, *source_names)):
+                    if bindings:
+                        self._assert_source_bindings_locked(
+                            bindings,
+                            result_label="Context command batch",
+                        )
                     original_records: dict[str, dict[str, object]] = {}
                     for context, _, expected_digest in records:
                         try:

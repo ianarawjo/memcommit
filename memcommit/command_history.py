@@ -285,6 +285,16 @@ def _unit_uid(
                 and operation_uid
             ):
                 return f"merge:{operation_uid}"
+    if command == "replace":
+        record = args.get("replace")
+        if isinstance(record, dict):
+            operation_uid = record.get("operation_uid")
+            if (
+                record.get("version") == 1
+                and isinstance(operation_uid, str)
+                and operation_uid
+            ):
+                return f"replace:{operation_uid}"
     return f"checkpoint:{checkpoint_uid}"
 
 
