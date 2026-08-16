@@ -9,7 +9,6 @@ and the resulting store state.
 All scenarios use the `isolated_store` fixture from conftest.py so they never
 touch the real ~/.mem directory.
 """
-import pytest
 from typer.testing import CliRunner
 
 from memcommit.cli import app
@@ -307,8 +306,6 @@ class TestCheckpointAndRevertWorkflow:
         # Get the uid of the "after add" checkpoint.
         store = MemoryStore()
         cps = store.list_checkpoints("scratchpad")
-        add_uid = cps[0]["uid"]
-
         # Revert past it — back to empty.
         init_cp = cps[-1]["uid"]
         mem("revert", init_cp[:8])

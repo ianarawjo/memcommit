@@ -25,7 +25,6 @@ from memcommit.eval.task2_discovery import (
     Task2DiscoveryInput,
     Task2GoldRelation,
     build_task2_discovery_input,
-    load_task2_discovery_corpus,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity, SemanticProvider
 

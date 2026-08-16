@@ -136,8 +136,10 @@ def run_forget_eval(
         issues = []
         if has_expected_matches and not ok_p:
             issues.append(f"precision {avg_p:.2f} < {PASS_PRECISION}")
-        if not ok_r:   issues.append(f"recall {avg_r:.2f} < {PASS_RECALL}")
-        if not ok_stab: issues.append(f"stability {stability:.2f} < {PASS_STABILITY}")
+        if not ok_r:
+            issues.append(f"recall {avg_r:.2f} < {PASS_RECALL}")
+        if not ok_stab:
+            issues.append(f"stability {stability:.2f} < {PASS_STABILITY}")
         issue_str = "  (" + ", ".join(issues) + ")" if issues else ""
         print_fn(f"         → {verdict}{issue_str}  [stability={stability:.2f}]\n")
 
