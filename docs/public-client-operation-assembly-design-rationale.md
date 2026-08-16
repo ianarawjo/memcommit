@@ -75,19 +75,24 @@ application/runtime port as the CLI. The adapter deliberately requires an
 existing saved Atomize analysis/workbench rather than hiding a second semantic
 operation inside Grounding Start.
 
-Fit, Distill, and Elaborate follow the same boundary. The client exposes only
-typed inputs, proposals, results, and stable public errors; private operation
-adapters own request construction, provider projection, and application/runtime
-calls. Standalone Distill and Elaborate keep their Ground imports inside the
-Ground-selected method, so importing or calling the standalone route does not
-assemble the Ground subsystem. Distill Apply accepts the exact opaque proposal
-returned by the same client surface and revalidates its frozen Source before
-publishing one new Context.
-
 The Meld move also closes one accidental taxonomy leak: reading the current
 Context formerly reused a client helper that raised `QueryStorageError`. The
 Meld adapter projects that failure as `MeldStorageError`, matching every other
 Meld storage failure.
+
+Fit, Distill, and Elaborate follow the same boundary without being collapsed
+into one generic semantic operation. Fit owns a proposition-only, Store-free
+adapter. Standalone Distill owns Context freezing and exact reviewed Apply;
+Ground Distill owns the separately frozen Ground revision and cannot Apply.
+Standalone Elaborate owns explicit Goal-or-Rules input, while Ground Elaborate
+owns its exact Ground Goal-or-active-Rules projection. The standalone adapters
+never import either Ground adapter.
+
+The two Distill routes and two Elaborate routes share only bounded provider
+failure handling and public DTO projection under `api/_support/semantic.py`.
+They do not import sibling operation adapters, infer Ground state, or share
+mutation authority. This keeps their common application meaning reusable
+without making the client facade or a generic semantic dispatcher their owner.
 
 ## Invariants
 
@@ -107,17 +112,31 @@ Meld storage failure.
 
 ## Verification
 
-Fresh-process tests construct the client with no operation assembly loaded,
-then select Add, Query, Meld, and standalone semantic routes independently.
-They also import every private adapter while blocking any dependency back on
-the client facade. Behavioral tests cover typed Fit judgments, standalone and
-Ground Distill/Elaborate proposals, exact Distill Apply, stable error mapping,
-and agent/MCP projections.
+The extracted surface passed 113 focused tests on the latest Meld runtime,
+covering Add, all Query routes, the public Meld lifecycle, agent adapters,
+fresh-process import isolation, Store-root handling, and the agent registry.
+The agent/MCP projection suite passed 76 tests after its stale two-tool
+expectation was updated to include the already registered Meld tool.
+
+An isolated `uv build` wheel was installed with the `mcp` extra under Python
+3.13. From that `site-packages` origin, constructing the client loaded no
+operation adapter; selecting Add, Query, and Meld loaded only the requested
+adapter in sequence. The installed `mem-mcp` stdio entry point initialized,
+listed Query, Add, and Meld, applied one two-Memory Add with exactly one
+checkpoint, and returned the typed unknown-tool error.
+
+The earlier general `mem --help` blocker was a partial-commit mismatch between
+`quality_audit` and `QualityFindSourceFrame`. That aggregate source-frame
+implementation and its owner-aware finder payload are now committed and
+verified separately, so installed CLI readiness can be included in the next
+wheel gate.
 
 ## Remaining rollout
 
-Add, Query, the complete Meld lifecycle, Atomize Grounding, Fit, Distill, and
-Elaborate now have operation-owned assemblies. The public client contains only
-stable construction, typed signatures, and local delegation imports. Future
-public operations must enter through the same boundary; CLI registration and
-installed-wheel verification remain independent rollout concerns.
+Add, Query, the complete Meld lifecycle, Atomize Grounding, Fit, standalone
+Distill, Ground Distill, standalone Elaborate, and Ground Elaborate are now
+operation-owned assemblies. Their public facade methods contain delegation and
+shared runtime construction only. New public operations must add a sibling
+adapter and fresh-process import contract rather than restoring client-owned
+loaders or assembly. Audit the CLI registry independently as its own console
+composition boundary.

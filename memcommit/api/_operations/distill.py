@@ -1,12 +1,13 @@
-"""Public Distill assembly without a dependency on the client facade."""
+"""Operation-owned assembly for standalone public Distill."""
 
 from __future__ import annotations
 
 from memcommit.api._runtime import ClientRuntime
 from memcommit.api._support.errors import raise_public
 from memcommit.api._support.semantic import (
+    project_distill,
     raise_semantic_execution_error,
-    semantic_provider,
+    safe_semantic_provider,
 )
 from memcommit.api.errors import (
     SemanticConflictError,
@@ -15,40 +16,11 @@ from memcommit.api.errors import (
     SemanticProviderFailure,
     SemanticStorageError,
 )
-from memcommit.api.semantic import (
-    DistillApplyResult,
-    DistillProposal,
-    DistillRuleProposal,
-)
+from memcommit.api.semantic import DistillApplyResult, DistillProposal
 from memcommit.distill import DistillError
 from memcommit.distill_application import DistillApplyRequest, DistillRequest
 from memcommit.distill_runtime import execute_distill, execute_distill_apply
 from memcommit.query_provider import QueryProviderError
-
-
-def _project_distill(result, *, apply_allowed: bool) -> DistillProposal:
-    analysis = result.analysis
-    return DistillProposal(
-        analysis_uid=analysis.uid,
-        source_context=analysis.source.context_name,
-        source_digest=analysis.source.digest,
-        goal=analysis.goal,
-        overview=analysis.overview,
-        rules=tuple(
-            DistillRuleProposal(
-                uid=rule.uid,
-                content=rule.content,
-                rationale=rule.rationale,
-                support_memory_uids=rule.support_memory_uids,
-                boundary_memory_uids=rule.boundary_memory_uids,
-            )
-            for rule in analysis.rules
-        ),
-        outside_memory_uids=analysis.outside_memory_uids,
-        origin=result.origin,
-        apply_allowed=apply_allowed,
-        _application_result=result,
-    )
 
 
 def distill_context(
@@ -85,7 +57,7 @@ def distill_context(
         result = execute_distill(
             request,
             store=runtime.store,
-            provider_factory=lambda: semantic_provider(runtime),
+            provider_factory=lambda: safe_semantic_provider(runtime),
         )
     except SemanticProviderFailure:
         raise
@@ -97,39 +69,7 @@ def distill_context(
         raise_public(SemanticStorageError, error)
     except DistillError as error:
         raise_semantic_execution_error(error)
-    return _project_distill(result, apply_allowed=True)
-
-
-def distill_ground(runtime: ClientRuntime, ground_name: str) -> DistillProposal:
-    """Distill one exact bound Ground frame without mutating the Ground."""
-
-    if not isinstance(ground_name, str) or not ground_name.strip():
-        raise SemanticInputError("ground_name must be nonblank text.")
-    # Keep the standalone public path physically independent from Ground.
-    # Ground composition is loaded only when the caller selects this route.
-    from memcommit.ground_distill import (
-        execute_ground_distill,
-        freeze_ground_distill,
-    )
-
-    try:
-        frozen = freeze_ground_distill(runtime.store, ground_name=ground_name)
-        result = execute_ground_distill(
-            frozen,
-            store=runtime.store,
-            provider_factory=lambda: semantic_provider(runtime),
-        ).distill
-    except SemanticProviderFailure:
-        raise
-    except QueryProviderError as error:
-        raise_public(SemanticProviderFailure, error)
-    except FileNotFoundError as error:
-        raise_public(SemanticContextError, error)
-    except OSError as error:
-        raise_public(SemanticStorageError, error)
-    except DistillError as error:
-        raise_semantic_execution_error(error)
-    return _project_distill(result, apply_allowed=False)
+    return project_distill(result, apply_allowed=True)
 
 
 def apply_distill(
@@ -138,7 +78,7 @@ def apply_distill(
     *,
     output_name: str,
 ) -> DistillApplyResult:
-    """Materialize one exact reviewed standalone proposal into a new Context."""
+    """Materialize one exact reviewed proposal into a new Context."""
 
     if not isinstance(proposal, DistillProposal):
         raise SemanticInputError("proposal must be a DistillProposal.")
@@ -168,4 +108,4 @@ def apply_distill(
     )
 
 
-__all__ = ["apply_distill", "distill_context", "distill_ground"]
+__all__ = ["apply_distill", "distill_context"]

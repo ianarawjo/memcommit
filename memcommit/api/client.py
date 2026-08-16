@@ -152,7 +152,7 @@ class MemCommitClient:
         *,
         background: Sequence[str | FitPropositionInput] = (),
     ) -> FitJudgmentResult:
-        """Judge one complete proposition set without reading or changing Store state."""
+        """Judge one complete proposition set without Store effects."""
 
         from memcommit.api._operations.fit import fit
 
@@ -166,7 +166,7 @@ class MemCommitClient:
         include_descendants: bool = False,
         follow_embeds: bool = False,
     ) -> DistillProposal:
-        """Propose evidence-bound Rules from one exact local Context frame."""
+        """Propose evidence-bound Rules from one exact Context frame."""
 
         from memcommit.api._operations.distill import distill_context
 
@@ -181,7 +181,7 @@ class MemCommitClient:
     def distill_ground(self, ground_name: str) -> DistillProposal:
         """Distill one exact bound Ground frame without mutating the Ground."""
 
-        from memcommit.api._operations.distill import distill_ground
+        from memcommit.api._operations.ground_distill import distill_ground
 
         return distill_ground(self._runtime, ground_name)
 
@@ -191,7 +191,7 @@ class MemCommitClient:
         *,
         output_name: str,
     ) -> DistillApplyResult:
-        """Materialize one exact reviewed standalone proposal into a new Context."""
+        """Materialize one reviewed standalone proposal into a new Context."""
 
         from memcommit.api._operations.distill import apply_distill
 
@@ -217,7 +217,7 @@ class MemCommitClient:
     ) -> ElaborateProposal:
         """Project one exact Ground Goal or Rule set through Elaborate."""
 
-        from memcommit.api._operations.elaborate import elaborate_ground
+        from memcommit.api._operations.ground_elaborate import elaborate_ground
 
         return elaborate_ground(
             self._runtime,

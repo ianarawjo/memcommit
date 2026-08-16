@@ -1,4 +1,4 @@
-"""Public Fit assembly without a dependency on the client facade."""
+"""Operation-owned assembly for read-only public Fit judgments."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from collections.abc import Sequence
 
 from memcommit.api._runtime import ClientRuntime
 from memcommit.api._support.errors import raise_public
-from memcommit.api._support.semantic import semantic_provider
+from memcommit.api._support.semantic import safe_semantic_provider
 from memcommit.api.errors import (
     SemanticExecutionError,
     SemanticInputError,
@@ -55,14 +55,17 @@ def fit(
     *,
     background: Sequence[str | FitPropositionInput] = (),
 ) -> FitJudgmentResult:
-    """Judge one complete proposition set without reading or changing Store state."""
+    """Judge one proposition set without reading or changing Store state."""
 
     try:
         public_propositions, core_propositions = _fit_inputs(
             propositions,
             prefix="p",
         )
-        public_background, core_background = _fit_inputs(background, prefix="k")
+        public_background, core_background = _fit_inputs(
+            background,
+            prefix="k",
+        )
         request = FitPropositionsRequest(
             propositions=core_propositions,
             background=core_background,
@@ -72,7 +75,7 @@ def fit(
     try:
         result = run_proposition_fit(
             request,
-            provider_factory=lambda: semantic_provider(runtime),
+            provider_factory=lambda: safe_semantic_provider(runtime),
         )
     except SemanticProviderFailure:
         raise
