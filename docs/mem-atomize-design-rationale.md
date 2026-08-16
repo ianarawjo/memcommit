@@ -44,6 +44,11 @@ refreshes or mutates it. Its New row opens the shared
 `INPUT A → OUTPUT B` setup and may create a fresh analysis through the normal
 Atomize controller. Setup itself remains process-local: it does not create
 Output, switch the current Context, change a Memory, or create a checkpoint.
+Revealing Input Memories with `m` permits one exact direct Memory to be checked
+and passed through the setup receipt. Choosing the owning Context again returns
+to whole-Context Atomize. Apply validation rejects an Input with zero directly
+owned Memories before a provider is connected; an empty lexical parent is not
+silently treated as one of its child Contexts.
 
 The launcher renders the frozen process profile and store root above its
 catalog. It derives the profile by matching that root against registered

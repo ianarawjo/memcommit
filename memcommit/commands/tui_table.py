@@ -17,7 +17,9 @@ from prompt_toolkit.layout.processors import (
 from prompt_toolkit.layout.utils import explode_text_fragments
 from prompt_toolkit.utils import get_cwidth
 
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     pad_terminal_text,

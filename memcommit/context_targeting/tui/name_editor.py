@@ -28,15 +28,19 @@ from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
 )
 from memcommit.interfaces.tui.components.report_card import boxed_lines
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    focused_control_style,
+)
+from memcommit.interfaces.tui.components.frame import (
+    build_focused_frame,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.interfaces.tui.components.focus import focus_in_order
-from memcommit.interfaces.tui.components.frame import build_focused_frame
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    focused_control_style,
+from memcommit.interfaces.tui.components.focus import (
+    focus_in_order,
 )
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,

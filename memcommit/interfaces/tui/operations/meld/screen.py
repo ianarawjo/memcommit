@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Callable
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import has_focus
@@ -13,11 +14,9 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 
-from memcommit.interfaces.tui.components.multiline_input import (
-    build_framed_multiline_input,
+from memcommit.application_review_policy import (
+    ownership_aware_application_review,
 )
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     build_tui_frame,
@@ -25,6 +24,15 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
+)
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
+)
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
 )
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
@@ -571,6 +579,9 @@ def run_meld_shell(
     read_only: bool = False,
     review_only: bool = False,
     destination=None,
+    analysis_origin: str | None = None,
+    draft_loader: Callable[[str], tuple[str | None, str]] | None = None,
+    draft_saver: Callable[[str, str | None, str], None] | None = None,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
     from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
@@ -594,6 +605,18 @@ def run_meld_shell(
     if session.current_assessment is None:
         return None
     adapter = MeldResolutionWorkbenchAdapter(session)
+
+    def current_view():
+        view = adapter.view()
+        if analysis_origin is None:
+            return view
+        label = (
+            "EXACT PREWARM"
+            if analysis_origin == "EXACT_PREWARM"
+            else "EQUIVALENT SCOPE PREWARM"
+        )
+        return replace(view, status=f"{view.status} · {label} · PROVIDER NOT CALLED")
+
     review_view = None
     if review_only:
         review_view = meld_review_report(session).report().view
@@ -611,11 +634,25 @@ def run_meld_shell(
             render_comparison(
                 session.comparison_seed.analysis,
                 reused=True,
+                origin=analysis_origin or "SAVED_REUSE",
                 durable=True,
             )
             .partition("\nThe complete source-linked relation ledger")[0]
             .rstrip()
         )
+        if analysis_origin is not None:
+            label = (
+                "EXACT PREWARM"
+                if analysis_origin == "EXACT_PREWARM"
+                else "EQUIVALENT SCOPE PREWARM"
+            )
+            first_line, separator, remainder = compare_report.partition("\n")
+            compare_report = (
+                first_line
+                + separator
+                + f"ANALYSIS ORIGIN · {label} · PROVIDER NOT CALLED\n"
+                + remainder
+            )
     report_badges = _comparison_issue_resolution_badges(session)
     report_conflicts_remaining = sum(not badge for badge in report_badges)
     global_strategies = (
@@ -680,7 +717,7 @@ def run_meld_shell(
             ),
         ),
     )
-    active_view = adapter.view()
+    active_view = current_view()
     impact_controller = (
         ImpactController.from_text(
             operation=active_view.operation,
@@ -695,7 +732,7 @@ def run_meld_shell(
         )
         if compare_report is not None
         else ImpactController.from_resolution(
-            adapter.view,
+            current_view,
             title="IMPACT · DIRECTIONAL MELD",
             summary=(
                 "These are the exact proposed baseline effects of this "
@@ -704,7 +741,7 @@ def run_meld_shell(
         )
     )
     action = run_resolution_workbench_shell(
-        review_view if review_view is not None else adapter.view,
+        review_view if review_view is not None else current_view,
         navigation=navigation,
         app_input=app_input,
         app_output=app_output,
@@ -717,9 +754,20 @@ def run_meld_shell(
         split_report_item_badges=report_badges,
         split_report_conflicts_remaining=report_conflicts_remaining,
         review_and_apply=not read_only and not review_only,
+        decision_free_behavior=(
+            ownership_aware_application_review(
+                mutates_granted_authority=session.granted_target is not None,
+                local_undo_available=True,
+            ).decision_free_behavior
+            if not read_only and not review_only
+            else "REPORT_FIRST"
+        ),
         read_only=read_only,
         impact_controller=None if review_only else impact_controller,
         destination=destination,
+        draft_loader=draft_loader,
+        draft_saver=draft_saver,
+        save_draft_on_close=draft_saver is not None,
     )
     if action.kind == "CLOSE":
         return None

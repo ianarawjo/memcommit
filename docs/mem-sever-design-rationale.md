@@ -69,6 +69,12 @@ If they share no local ancestor, it proposes the top-level `severed`; occupied
 suggestions receive a numeric suffix. This keeps a granted
 `task-3/remote/...` Source and local `task-3/local/...` Criteria oriented under
 `task-3/severed` without pretending the granted path is locally writable.
+Both input trees reuse the common lazy Memory-preview controller: lowercase
+`m` reveals the current readable Context and uppercase `M` reveals all visible
+readable Contexts. Revealed Memories are read-only viewport stops and cannot
+select their owning Source or Criteria. Query-only rows remain name-only, and
+preview loading neither changes the frozen Sever scope nor starts provider
+analysis.
 
 The provider turn creates only a retained review session. The shared Resolution
 Workbench then shows:
@@ -211,7 +217,11 @@ a `sever` checkpoint with the session, Source, Criteria, Result, and
 source-to-result mapping. A stale or revoked granted input, including a change
 during creation, leaves no partial Result. Forgotten content and rationale
 remain only in the Sever session. The Source record and its Memories are never
-mutated. An all-KEEP disposition is still a real Sever result and
+mutated. Because provider dispositions already give every Source Memory one
+complete treatment, the owning TTY skips the redundant review/approval
+workbench when no user response remains and creates the local Result directly.
+This remains true for granted inputs: the Grant is read-only input, not the
+mutation target. An all-KEEP disposition is still a real Sever result and
 therefore creates the reviewed Result Context and checkpoint; it is not treated
 as a no-op on Source.
 

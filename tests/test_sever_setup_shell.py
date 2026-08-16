@@ -10,6 +10,7 @@ from memcommit.commands.sever_setup_shell import (
     _shared_local_output_name,
     choose_sever_setup,
 )
+from memcommit.commands.context_picker import ContextMemoryRow
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 
 
@@ -152,3 +153,27 @@ def test_three_pane_setup_can_be_cancelled_without_a_receipt() -> None:
         )
 
     assert result is None
+
+
+def test_sever_setup_memory_preview_is_lazy_and_read_only() -> None:
+    loaded: list[str] = []
+
+    def load(name: str):
+        loaded.append(name)
+        return (ContextMemoryRow("memory abcdef12", f"{name} content"),)
+
+    with create_pipe_input() as pipe_input:
+        # Enter on the Memory must stay in Source. The second m therefore
+        # closes the cached Source preview instead of opening Criteria.
+        pipe_input.send_text("m\x1b[B\rmq")
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            memory_loader=load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is None
+    assert loaded == ["personal-memory"]

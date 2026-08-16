@@ -124,6 +124,37 @@ def test_profile_can_be_cleanly_imported_from_registered_profile(
     assert not any(copied_root.rglob("source-history.json"))
 
 
+def test_scope_presets_are_rejected_for_import_kinds_without_context_scope(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _prepare_profiles(isolated_store, tmp_path, monkeypatch)
+
+    profile = runner.invoke(
+        app,
+        ["import", "profile", "copy", "--from-profile", "source-profile", "-d"],
+    )
+    memory = runner.invoke(
+        app,
+        [
+            "import",
+            "memory",
+            "20000000",
+            "--from-profile",
+            "source-profile",
+            "--context",
+            "source/root",
+            "-r",
+        ],
+    )
+
+    assert profile.exit_code == 1
+    assert "Unsupported option(s) for this import: --direct" in profile.stderr
+    assert memory.exit_code == 1
+    assert "Unsupported option(s) for this import: --recursive" in memory.stderr
+
+
 def test_recursive_context_import_rewrites_internal_names_and_keeps_uids(
     isolated_store,
     tmp_path,
@@ -139,7 +170,7 @@ def test_recursive_context_import_rewrites_internal_names_and_keeps_uids(
             "source/root",
             "--from-profile",
             "source-profile",
-            "--recursive",
+            "-r",
             "--as",
             "copied/root",
         ],

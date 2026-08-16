@@ -4,7 +4,9 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore, context_record_digest
 

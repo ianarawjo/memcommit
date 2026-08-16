@@ -577,14 +577,16 @@ exact-command lifecycle. The current separation remains explicit:
 The common frontend decision and its dynamic-list rules are recorded in
 [`semantic-resolution-workbench-design-rationale.md`](semantic-resolution-workbench-design-rationale.md).
 
-## Future saved Review launcher
+## Saved Review launcher boundary
 
-The current ambiguity Review still has one global overwrite slot, so it cannot
-truthfully present a list of prior Review sessions. After Review is migrated to
-independent Context- and kind-bound durable records with stable identity,
-status, and timestamps, it should adopt the operation-neutral saved-work
-picker already used by Ground, Meld, Atomize, and Compare. The required
-storage migration, replacement/archive policy, and concurrency contract must
-precede that UI; a picker must not imply history that the singleton model does
-not retain. See
+TTY bare `mem review` now aggregates the operation-owned Atomize, Compare,
+Meld, Sever, and Update artifacts that Review can already render. The current
+ambiguity Review still has one global overwrite slot, so the launcher presents
+it as exactly one honest singleton row rather than implying prior Review
+history. Selecting a row revalidates it and enters its existing Review screen;
+the launcher does not rescan, replace, call a provider, or promote evidence.
+
+A future independent Context- and kind-bound Review store still requires its
+own replacement, archive, timestamp, and concurrency contract before multiple
+ambiguity Review rows can exist. See
 [`mem-session-picker-design-rationale.md`](mem-session-picker-design-rationale.md).

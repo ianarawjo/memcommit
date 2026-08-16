@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceTokenRole,

@@ -99,6 +99,125 @@ def _all_atomic(payload: dict) -> dict[str, object]:
     return {"items": [_item(memory["candidate_id"]) for memory in payload["memories"]]}
 
 
+def test_focused_atomize_keeps_neighbors_context_only_and_applies_selected_memory():
+    ctx = ops.init("focused/atomize")
+    before = ops.add(ctx, "The lobby closes at five.")
+    selected = ops.add(ctx, "Parking closes. The stairwell stays open.")
+    after = ops.add(ctx, "Security remains on site.")
+
+    def respond(payload):
+        candidate = payload["memories"][0]
+        return {
+            "items": [
+                _item(
+                    candidate["candidate_id"],
+                    "COMPOSITE",
+                    children=[
+                        {
+                            "content": "Parking closes.",
+                            "source_spans": ["Parking closes"],
+                        },
+                        {
+                            "content": "The stairwell stays open.",
+                            "source_spans": ["The stairwell stays open"],
+                        },
+                    ],
+                    reason_codes=["A01_ONE_FOCUS", "A04_SOURCE_GROUNDED"],
+                )
+            ]
+        }
+
+    provider = AtomizeProvider(respond)
+    report = impact_atomize(
+        ctx,
+        lambda: provider,
+        memory_selector=selected.uid[:8],
+    )
+    payload = provider.calls[0][3]
+
+    assert [item.memory.uid for item in report.items] == [selected.uid]
+    assert [item["content"] for item in payload["memories"]] == [selected.content]
+    assert {item["content"] for item in payload["context_evidence"]} == {
+        before.content,
+        after.content,
+    }
+    assert "context_id" not in json.dumps(provider.calls[0][2])
+
+    analysis = atomize_module.create_atomize_analysis(ctx, report)
+    result = atomize_module.apply_atomize_analysis(ctx, analysis)
+
+    assert result.split_count == 1
+    assert [item.content for item in ctx.iter_items()] == [
+        before.content,
+        "Parking closes.",
+        "The stairwell stays open.",
+        after.content,
+    ]
+
+
+def test_focused_atomize_save_as_preserves_unselected_memories(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("focused/atomize-save-as")
+    neighbor = ops.add(source, "Security remains on site.")
+    selected = ops.add(source, "Parking closes. The stairwell stays open.")
+    store.save(source)
+    store.set_current(source.name)
+
+    def respond(payload):
+        candidate = payload["memories"][0]
+        return {
+            "items": [
+                _item(
+                    candidate["candidate_id"],
+                    "COMPOSITE",
+                    children=[
+                        {
+                            "content": "Parking closes.",
+                            "source_spans": ["Parking closes"],
+                        },
+                        {
+                            "content": "The stairwell stays open.",
+                            "source_spans": ["The stairwell stays open"],
+                        },
+                    ],
+                    reason_codes=["A01_ONE_FOCUS", "A04_SOURCE_GROUNDED"],
+                )
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
+        lambda: AtomizeProvider(respond),
+    )
+
+    preview = runner.invoke(
+        app,
+        ["atomize", "--memory", selected.uid[:8]],
+    )
+    applied = runner.invoke(
+        app,
+        ["atomize", "--save-as", "focused/atomize-derived"],
+    )
+
+    assert preview.exit_code == 0, preview.output
+    assert applied.exit_code == 0, applied.output
+    assert [item.content for item in store.load_direct(source.name).iter_items()] == [
+        neighbor.content,
+        selected.content,
+    ]
+    assert [
+        item.content
+        for item in store.load_direct("focused/atomize-derived").iter_items()
+    ] == [
+        neighbor.content,
+        "Parking closes.",
+        "The stairwell stays open.",
+    ]
+
+
 def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
     ctx = ops.init("overview/report-contract")
     ops.add(ctx, "The main entrance closes at 5 p.m.")

@@ -17,8 +17,6 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     build_tui_frame,
@@ -26,6 +24,12 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
+)
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
 )
 from memcommit.context import Context, Memory
 from memcommit.review import (

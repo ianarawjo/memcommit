@@ -19,10 +19,18 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.components.frame import (
+    bind_focused_frame_style,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.store import MemoryStore
 
 

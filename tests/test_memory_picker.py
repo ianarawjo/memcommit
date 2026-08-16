@@ -19,6 +19,7 @@ import memcommit.commands.context_picker as context_picker
 import memcommit.ops as ops
 from memcommit.provenance import TraceCandidate, collect_trace_candidates
 from memcommit.store import MemoryStore
+from memcommit.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
 
 
 def candidate(
@@ -76,6 +77,22 @@ def test_scoped_picker_keeps_empty_current_context_as_initial_focus():
         )
 
     assert selected == item.uid
+
+
+def test_report_picker_opens_a_frozen_context_catalog_with_no_memories():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        selected = choose_memory_report_target(
+            (),
+            context_name="empty",
+            operation="rationale",
+            catalog_context_names=("empty",),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
 
 
 def test_report_picker_can_broaden_an_empty_root_to_descendant_memories():
@@ -169,9 +186,20 @@ def test_report_picker_projects_current_and_historical_as_separate_badges(
     )
 
     assert selected is None
-    assert [(row.label, row.badges) for row in observed_rows] == [
-        ("00000000", ("r2",)),
-        ("historical", ("00000000", "r3")),
+    assert [
+        (
+            row.label,
+            row.label_style,
+            tuple((badge.text, badge.style) for badge in row.badges),
+        )
+        for row in observed_rows
+    ] == [
+        ("00000000", None, (("r2", None),)),
+        (
+            "historical",
+            "historical-memory-badge",
+            (("00000000", None), ("r3", None)),
+        ),
     ]
 
 
@@ -318,6 +346,16 @@ def test_picker_rows_escape_untrusted_content_and_mark_historical_state():
     )
 
     assert "[historical][00000000][r4]" in rendered
+    historical_style = next(
+        style
+        for style, text in _render_memory_options(options + (candidate(2),), selected=1)
+        if text == "[historical]"
+    )
+    assert historical_style == "class:historical-memory-badge"
+    assert (
+        SEMANTIC_VIEWER_STYLE.get_attrs_for_style_str(historical_style).color
+        == "c9ad93"
+    )
     assert "safe\\nFAKE HEADING\\u202e" in rendered
     assert "\u202e" not in rendered
 
@@ -344,9 +382,7 @@ def test_unrecorded_current_gap_has_zero_recorded_changes(isolated_store):
         store.load_direct(context.name),
     )
 
-    assert [(item.uid, item.change_count) for item in candidates] == [
-        (memory.uid, 0)
-    ]
+    assert [(item.uid, item.change_count) for item in candidates] == [(memory.uid, 0)]
     rendered = "".join(
         text
         for style, text in _render_memory_options(candidates, selected=0)

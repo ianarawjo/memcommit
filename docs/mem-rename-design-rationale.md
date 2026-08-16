@@ -1,15 +1,22 @@
-# `mem rename` design rationale
+# Internal Context namespace relocation design rationale
 
 ## Status and intent
 
-`mem rename` changes the canonical locator of one existing ordinary Context
-namespace without changing the identities or contents of the Contexts and
-Memories inside it:
+Context namespace relocation changes the canonical locator of one existing
+ordinary Context namespace without changing the identities or contents of the
+Contexts and Memories inside it. It remains available to operation-owned code
+through the reviewed store plan:
 
-```bash
-mem rename OLD NEW
-mem rename OLD NEW --force
+```python
+plan = store.plan_context_rename(old_name, new_name)
+store.rename_contexts(plan)
 ```
+
+It is no longer exposed as `mem rename`. That public command now renames a
+Profile display name, with `mem profile rename` retained as its explicit
+equivalent. Direct Context rename was removed because rename belongs beside
+the selected Profile in its picker, while Context namespace relocation is a
+specialized graph migration rather than a routine picker action.
 
 The motivating Task 1 case is migration from provisional fixture names such as
 `construction-updates` to participant-scoped names such as
@@ -22,24 +29,14 @@ stored owner names, references, current state, or restorable checkpoints at
 the old locator would produce a store that is physically present but no longer
 semantically coherent.
 
-## Command contract
+## Internal plan contract
 
-`OLD` locates an existing ordinary Context. The command captures the current
-Context once and resolves `OLD` through the shared existing-Context locator
-contract. Thus a bare value is a canonical global name, while `.`, `..`,
-`./...`, and `../...` opt into lexical relative resolution.
-
-`NEW` is different: it declares a new canonical Context name. It is validated
-as an exact slash-delimited identifier and is never interpreted relative to
-the current Context. This follows the same semantic distinction as `mem init
-NAME`: a new identity locator must not acquire a different meaning when global
-current state changes.
-
-Before mutation, the command builds a read-only plan and displays the resolved
-canonical source and destination, the number of Contexts that will move, and
-the number of lexical descendants included. Confirmation is required by
-default. `-f`/`--force` skips only that prompt; it does not relax name,
-collision, integrity, identity, freshness, or rollback checks.
+Both store operands are canonical slash-delimited Context names supplied by
+the owning internal operation. Relative CLI locators are not accepted or
+resolved at this layer. The caller must build and freeze a read-only plan,
+retain any operation-specific review or authority boundary, and apply exactly
+that plan. The store never relaxes name, collision, integrity, identity,
+freshness, or rollback checks.
 
 The operation requires an ordinary Context at the exact `OLD` name. It renames
 that Context and every stored ordinary Context whose canonical name begins

@@ -37,7 +37,9 @@ from memcommit.commands.review_sessions import (
     SAVED_REVIEW_KIND,
     choose_review_session,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,

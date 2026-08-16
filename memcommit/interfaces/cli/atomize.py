@@ -8,7 +8,9 @@ from memcommit.atomize import (
     AtomizeImpactReport,
     AtomizeItem,
 )
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 
 
 _CLASSIFICATION_COLORS = {
@@ -56,6 +58,7 @@ def render_atomize_apply_result(
             f"  [{item.source_uid[:8]}] -> "
             + ", ".join(f"[{uid[:8]}]" for uid in item.result_uids)
         )
+    typer.echo("  Recovery · mem undo")
     if recovered_application:
         typer.secho(
             "  Recovered the exact prior checkpoint; no duplicate was created",

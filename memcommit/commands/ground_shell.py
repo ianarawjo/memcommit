@@ -57,23 +57,29 @@ from memcommit.interfaces.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
 from memcommit.commands.tui_primitives import anchored_fragments
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+    dispatch_tui_back,
 )
 from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_text_pane,
     equal_pane_height,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.tui.core.keybindings import (
-    bind_case_insensitive_key,
-    dispatch_tui_back,
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
 )
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.commands.tui_table import (
     RenderedTuiTable,
     SelectedTableCellProcessor,

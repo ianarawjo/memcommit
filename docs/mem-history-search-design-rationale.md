@@ -159,11 +159,10 @@ required so scripts never wait for an interactive selector.
 A non-temporal query keeps the existing current-state Find behavior and
 privacy boundary. A temporal query may return versioned direct Memory states
 or direct Memory transitions as well as checkpoints when the wording asks for
-one. Both paths use the selected Context plus every materialized ordinary
-namespace descendant and reachable explicit embed by default; `--direct`
-limits either path to the selected Context. History results must identify their
-Context, checkpoint or transition boundary, relation to the anchor, and
-whether they are restorable.
+one. Both one-shot paths default to the selected Context only; `-r/--recursive`
+adds every materialized ordinary namespace descendant and reachable explicit
+embed. History results must identify their Context, checkpoint or transition
+boundary, relation to the anchor, and whether they are restorable.
 
 In a TTY, temporal results are inspectable with the shared history
 presentation. Enter inspects a selected result; it never changes the Context.

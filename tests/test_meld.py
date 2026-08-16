@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 from dataclasses import replace
+from datetime import datetime, timezone
+import uuid
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -69,19 +71,32 @@ from memcommit.meld_provider import (
     MELD_PAYLOAD_MARKER,
     MeldProviderError,
     assess_meld_turn,
+    meld_turn_request_digest,
     meld_output_schema,
 )
 from memcommit.meld_runtime import prepare_meld_start
 from memcommit.meld_start_application import MeldStartRequest
+from memcommit.update import GrantedUpdateTarget
+from memcommit.meld_choice_branches import MeldChoiceBranchSet
 from memcommit.responses.model import ResponseDraft
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.provenance import build_trace
+from memcommit.profile_config import (
+    ProfileEntry,
+    ProfileRegistry,
+    STUDY_RUN_PARTICIPANT_SOURCE_KIND,
+)
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,
 )
+from memcommit.study_prewarm.meld_resolution import (
+    build_meld_resolution_prewarm_artifact,
+    install_declared_meld_resolution_prewarms,
+)
+from memcommit.study_prewarm.registry import publish_artifact
 
 
 runner = CliRunner()
@@ -265,8 +280,10 @@ class Task2Provider:
                 }
             )
 
-        assert current["scope"] == "ISSUE"
-        assert current["issue_ids"] == ["i000001"]
+        assert current["scope"] in {"ALL", "ISSUE"}
+        assert current["issue_ids"] == (
+            ["i000001"] if current["scope"] == "ISSUE" else []
+        )
         assert "Keep all" in current["comment"]
         return json.dumps(
             {
@@ -3941,6 +3958,411 @@ def test_followup_meld_turn_uses_shared_interactive_wait(
     assert saved.current_assessment is not None
 
 
+def test_followup_meld_turn_reuses_exact_saved_resolution_branch_without_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    scope = "ALL"
+    left = ops.init("left/branch-cache-all")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/branch-cache-all")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/branch-cache-all")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    base = MeldSession.create_symmetric_from_comparison(comparison, target)
+    base.start_turn(
+        "Keep all supported compensation details.",
+        scope=scope,
+    )
+    store.save_meld_session(base, expected_session_digest=None)
+    base_digest = meld_canonical_digest(base.to_dict())
+
+    provider = Task2Provider()
+    first = meld_command._assess_and_save(
+        store=store,
+        session=base,
+        provider_factory=lambda: provider,
+        expected_session_digest=base_digest,
+    )
+    assert len(provider.payloads) == 1
+    branch_files = list(store.meld_resolution_branches_dir.glob("*.json"))
+    assert len(branch_files) == 1
+    branch = store.load_meld_resolution_branch(branch_files[0].stem)
+    assert branch is not None
+    assert branch.branch_kind == "WHOLE_SET_STRATEGY"
+    assert branch.scope == scope
+    assert branch.instruction == "Keep all supported compensation details."
+
+    # Recreate the exact frozen semantic base with new session and turn UUIDs.
+    # Study runs may regenerate those graph identities even when the reviewed
+    # strategy, source evidence, and target contract are unchanged.
+    pending = MeldSession.create_symmetric_from_comparison(comparison, target)
+    pending.start_turn(
+        "Keep all supported compensation details.",
+        scope=scope,
+    )
+    assert pending.uid != first.uid
+    assert pending.current_turn.uid != first.current_turn.uid
+    first_digest = meld_canonical_digest(first.to_dict())
+    store.save_meld_session(
+        pending,
+        expected_session_digest=first_digest,
+    )
+    restored_digest = meld_canonical_digest(pending.to_dict())
+    monkeypatch.setattr(
+        meld_command,
+        "run_command_wait",
+        lambda *args, **kwargs: pytest.fail(
+            "an exact saved Meld branch must not open a provider wait"
+        ),
+    )
+
+    reused = meld_command._assess_and_save(
+        store=store,
+        session=pending,
+        provider_factory=lambda: pytest.fail(
+            "an exact saved Meld branch must not connect a provider"
+        ),
+        expected_session_digest=restored_digest,
+    )
+
+    assert reused.current_assessment is not None
+    assert [
+        proposal.content for proposal in reused.current_assessment.proposals
+    ] == [proposal.content for proposal in first.current_assessment.proposals]
+    assert reused.current_assessment.ready_to_apply
+    assert reused.uid == pending.uid
+    assert len(list(store.meld_resolution_branches_dir.glob("*.json"))) == 1
+    raw_branch = json.loads(branch_files[0].read_text(encoding="utf-8"))
+    raw_branch["completion_sha256"] = "0" * 64
+    branch_files[0].write_text(json.dumps(raw_branch), encoding="utf-8")
+    with pytest.raises(ValueError, match="Saved Meld resolution branch is invalid"):
+        store.load_meld_resolution_branch(branch_files[0].stem)
+
+
+def test_meld_choice_branches_persist_only_the_selected_local_option(
+    isolated_store,
+):
+    store = MemoryStore()
+    left = ops.init("left/local-choice")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/local-choice")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/local-choice")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session, expected_session_digest=None)
+    issue = session.current_assessment.issues[0]
+    option = issue.options[1]
+
+    branches = MeldChoiceBranchSet.empty(session).with_response(
+        session,
+        issue_uid=issue.uid,
+        option_uid=option.uid,
+        explanation="Use this scope for the study condition.",
+    )
+    store.save_meld_choice_branches(session, branches)
+
+    restored = store.load_meld_choice_branches(session)
+    assert restored.response_for(issue.uid) == (
+        option.uid,
+        "Use this scope for the study condition.",
+    )
+    record = json.loads(
+        next(store.meld_choice_branches_dir.glob("*.json")).read_text(
+            encoding="utf-8"
+        )
+    )
+    assert set(record["branches"][0]) == {
+        "issue_uid",
+        "option_uid",
+        "explanation",
+    }
+    assert "completion" not in json.dumps(record)
+    assert "proposal" not in json.dumps(record)
+
+
+def test_meld_workbench_restores_local_choice_without_calling_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left = ops.init("left/reopen-choice")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/reopen-choice")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/reopen-choice")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session, expected_session_digest=None)
+    issue = session.current_assessment.issues[0]
+    option = issue.options[0]
+
+    def select_and_close(current, **kwargs):
+        assert current.uid == session.uid
+        kwargs["draft_saver"](issue.uid, option.uid, "Prefer this condition.")
+        return None
+
+    monkeypatch.setattr(meld_command, "run_meld_shell", select_and_close)
+    meld_command._run_interactive(
+        store=store,
+        session=session,
+        provider_factory=lambda: pytest.fail("local choices need no provider"),
+    )
+
+    def verify_and_close(current, **kwargs):
+        assert current.uid == session.uid
+        assert kwargs["draft_loader"](issue.uid) == (
+            option.uid,
+            "Prefer this condition.",
+        )
+        return None
+
+    monkeypatch.setattr(meld_command, "run_meld_shell", verify_and_close)
+    meld_command._run_interactive(
+        store=store,
+        session=session,
+        provider_factory=lambda: pytest.fail("restoring choices needs no provider"),
+    )
+
+
+def test_completed_meld_reconciliation_does_not_reapply_stale_local_choices(
+    isolated_store,
+):
+    store = MemoryStore()
+    left = ops.init("left/stale-choice")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/stale-choice")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/stale-choice")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    store.save_meld_session(session, expected_session_digest=None)
+    initial_digest = meld_canonical_digest(session.to_dict())
+    issue = session.current_assessment.issues[0]
+    branches = MeldChoiceBranchSet.empty(session).with_response(
+        session,
+        issue_uid=issue.uid,
+        option_uid=issue.options[0].uid,
+        explanation="",
+    )
+    store.save_meld_choice_branches(session, branches)
+    session.start_turn(
+        "Keep all supported compensation details.",
+        scope="ALL",
+    )
+    store.save_meld_session(
+        session,
+        expected_session_digest=initial_digest,
+    )
+
+    revised = meld_command._assess_and_save(
+        store=store,
+        session=session,
+        provider_factory=Task2Provider,
+        expected_session_digest=meld_canonical_digest(session.to_dict()),
+    )
+
+    assert store.load_meld_choice_branches(revised).branches == ()
+
+
+def test_issue_scoped_meld_turn_does_not_publish_a_semantic_outcome_branch(
+    isolated_store,
+):
+    store = MemoryStore()
+    left = ops.init("left/no-issue-outcome")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/no-issue-outcome")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/no-issue-outcome")
+    for context in (left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    issue = session.current_assessment.issues[0]
+    session.start_turn(
+        "Keep all supported compensation details.",
+        scope="ISSUE",
+        issue_uids=(issue.uid,),
+    )
+    store.save_meld_session(session, expected_session_digest=None)
+
+    meld_command._assess_and_save(
+        store=store,
+        session=session,
+        provider_factory=Task2Provider,
+        expected_session_digest=meld_canonical_digest(session.to_dict()),
+    )
+
+    assert not list(store.meld_resolution_branches_dir.glob("*.json"))
+
+
+def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    description = ops.init("task-2/description")
+    ops.add(description, "Combine both advisors' supported proposal guidance.")
+    left = ops.init("task-2/advisor1")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("task-2/advisor2")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("task-2/participant/proposal-workspace")
+    for context in (description, left, right, target):
+        store.save(context)
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    prepared = MeldSession.create_symmetric_from_comparison(comparison, target)
+    prepared.start_turn(
+        "Keep all supported compensation details.",
+        scope="ALL",
+    )
+    store.save_meld_session(prepared, expected_session_digest=None)
+    prepared_digest = meld_canonical_digest(prepared.to_dict())
+    assessed = meld_command._assess_and_save(
+        store=store,
+        session=prepared,
+        provider_factory=Task2Provider,
+        expected_session_digest=prepared_digest,
+    )
+    branch_path = next(store.meld_resolution_branches_dir.glob("*.json"))
+    branch = store.load_meld_resolution_branch(branch_path.stem)
+    assert branch is not None
+
+    baseline_uid = str(uuid.uuid4())
+    profile = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="fresh-study-profile",
+        kind="MANAGED",
+        source={
+            "kind": STUDY_RUN_PARTICIPANT_SOURCE_KIND,
+            "study_uid": str(uuid.uuid4()),
+            "study_name": "fresh-study-profile",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "baseline_sha256": "a" * 64,
+            "baseline_profile_uid": baseline_uid,
+            "baseline_profile_name": "study-baseline",
+        },
+    )
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=profile.uid,
+        profiles=(profile,),
+    )
+    configured = branch.configured_provider
+    key, artifact = build_meld_resolution_prewarm_artifact(
+        task="task-2",
+        task_description=description,
+        prepared_branches=((assessed, branch),),
+        provider=configured["provider"],
+        model=configured["model"],
+        reasoning=configured["reasoning_effort"],
+        offline_provider_seconds=3.0,
+    )
+    publish_artifact(
+        store.store_dir,
+        baseline_profile_uid=baseline_uid,
+        operation="MELD_RESOLUTION",
+        task="task-2",
+        key=key,
+        artifact=artifact,
+    )
+    installed = install_declared_meld_resolution_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    assert installed.declared == installed.installed == 1
+    assert installed.branch_count == 1
+
+    # A new Study run has different Meld graph identities and no ad-hoc cache.
+    branch_path.unlink()
+    pending = MeldSession.create_symmetric_from_comparison(comparison, target)
+    pending.start_turn(
+        "Keep all supported compensation details.",
+        scope="ALL",
+    )
+    store.save_meld_session(
+        pending,
+        expected_session_digest=meld_canonical_digest(assessed.to_dict()),
+    )
+    pending_digest = meld_canonical_digest(pending.to_dict())
+    monkeypatch.setattr(
+        meld_command,
+        "run_command_wait",
+        lambda *args, **kwargs: pytest.fail(
+            "an installed Study Meld branch must not open a provider wait"
+        ),
+    )
+
+    restored = meld_command._assess_and_save(
+        store=store,
+        session=pending,
+        provider_factory=lambda: pytest.fail(
+            "an installed Study Meld branch must not connect a provider"
+        ),
+        expected_session_digest=pending_digest,
+    )
+
+    assert restored.current_assessment is not None
+    assert restored.current_assessment.ready_to_apply
+    assert [
+        proposal.content for proposal in restored.current_assessment.proposals
+    ] == [proposal.content for proposal in assessed.current_assessment.proposals]
+    assert store.load_meld_resolution_branch(branch.key) is not None
+
+
+def test_each_meld_option_has_a_distinct_exact_request_digest():
+    left = ops.init("left/choice-cache-key")
+    ops.add(left, "Budget CAD 20–30 per hour, including travel time.")
+    right = ops.init("right/choice-cache-key")
+    ops.add(right, "Pay in cash, by e-transfer, or by gift card.")
+    target = ops.init("target/choice-cache-key")
+    comparison = analyze_comparison(
+        ComparisonInput.from_contexts(left, right),
+        Task2CompareProvider(),
+    )
+    keys = []
+    for option_index in (0, 1):
+        session = MeldSession.create_symmetric_from_comparison(comparison, target)
+        issue = session.current_assessment.issues[0]
+        session.start_turn(
+            f"Choose this reading: {issue.options[option_index].text}",
+            scope="ISSUE",
+            issue_uids=(issue.uid,),
+        )
+        keys.append(meld_turn_request_digest(session))
+
+    assert keys[0] != keys[1]
+
+
 def test_initial_meld_wait_view_shows_report_shape_and_confirmed_inputs():
     incoming = ops.init("wait/incoming")
     baseline = ops.init("wait/baseline")
@@ -4522,6 +4944,7 @@ def test_applied_meld_reopens_in_read_only_workbench():
         ),
     )
     before = session.to_dict()
+    assert "RECOVERY · mem undo" in render_meld_session(session)
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("q")
@@ -4571,7 +4994,7 @@ def test_meld_todo_opens_required_conflict_before_whole_set_resolution():
     assert session.application is None
 
 
-def test_meld_escape_never_implicitly_accepts_a_ready_session():
+def test_local_ready_meld_auto_accepts_without_a_review_surface():
     incoming = ops.init("incoming/escape-ready")
     ops.add(incoming, "The Campus Store remains open during construction.")
     baseline = ops.init("baseline/escape-ready")
@@ -4585,8 +5008,46 @@ def test_meld_escape_never_implicitly_accepts_a_ready_session():
     assert session.state == "READY_TO_APPLY"
     before = session.to_dict()
 
+    action = run_meld_shell(
+        session,
+        app_output=DummyOutput(),
+        require_tty=False,
+    )
+
+    assert action is not None
+    assert action.kind == "ACCEPT"
+    assert session.to_dict() == before
+    assert session.state == "READY_TO_APPLY"
+
+
+def test_granted_target_ready_meld_retains_final_review_and_escape_cancels():
+    incoming = ops.init("incoming/granted-review")
+    ops.add(incoming, "The Campus Store remains open during construction.")
+    baseline = ops.init("baseline/granted-review")
+    ops.add(baseline, "The Campus Store remains open during construction.")
+    session = MeldSession.create_directional(incoming, baseline)
+    session.start_initial_analysis()
+    session.record_assessment(
+        session.current_turn.uid,
+        assess_meld_turn(session, ZeroChangeDirectionalProvider()),
+    )
+    session.granted_target = GrantedUpdateTarget(
+        public_name="shared/baseline",
+        grantee_profile_uid="11111111-1111-4111-8111-111111111111",
+        authority_profile_uid="22222222-2222-4222-8222-222222222222",
+        attachment_context_uid="attachment-context",
+        attachment_context_name="shared",
+        grant_uid="33333333-3333-4333-8333-333333333333",
+        grant_revision=1,
+        grant_digest="a" * 64,
+        resource_uid=baseline.uid,
+        resource_name=baseline.name,
+        authority_context_name=baseline.name,
+        permissions=("READ", "UPDATE"),
+    )
+
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b")
+        pipe_input.send_text("\x1bq")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4595,7 +5056,6 @@ def test_meld_escape_never_implicitly_accepts_a_ready_session():
         )
 
     assert action is None
-    assert session.to_dict() == before
     assert session.state == "READY_TO_APPLY"
 
 

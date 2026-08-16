@@ -11,11 +11,13 @@ OPENROUTER_PROVIDER = "openrouter"
 CODEX_LUNA_LOW_PRESET = "luna-low"
 CODEX_LUNA_MODEL = "gpt-5.6-luna"
 CODEX_REASONING_EFFORTS = (
+    "none",
     "minimal",
     "low",
     "medium",
     "high",
     "xhigh",
+    "max",
 )
 CODEX_PROVIDER_PRESETS = (CODEX_LUNA_LOW_PRESET,)
 SEMANTIC_PROVIDER_IDS = (

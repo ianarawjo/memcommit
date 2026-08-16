@@ -49,9 +49,9 @@ MELD_OPTION_LIMIT = 5
 # Meld's durable schema. Changing the compact fields or their meaning must make
 # an older prepared assessment miss instead of silently reusing it.
 MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION = "directional-compare-decisions-v2"
-# Exact hidden resolution branches bind to the complete provider-facing
-# request. Bump this when decoder validation changes its semantic meaning
-# without changing the prompt or schema themselves.
+# Resolution-branch cache keys bind to the complete provider-facing request.
+# Bump this when a decoder or validation change alters the meaning of a response
+# without also changing the prompt or output schema.
 MELD_RESOLUTION_REQUEST_CONTRACT_VERSION = "complete-ledger-resolution-v1"
 
 MELD_EXECUTION_POLICY = SemanticExecutionPolicy(
@@ -1911,7 +1911,7 @@ def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
 
 
 def meld_turn_request_digest(session: MeldSession) -> str:
-    """Hash one exact bounded request before any provider connection."""
+    """Hash the complete bounded request without connecting a provider."""
     request = _meld_turn_request(session)
     material = {
         "contract_version": MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,

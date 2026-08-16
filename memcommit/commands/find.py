@@ -50,6 +50,11 @@ from memcommit.context_targeting.search import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_context_traversal,
+    resolve_scope_preset,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
@@ -1201,7 +1206,7 @@ def cmd(
         ),
     ] = 5,
     include_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--descendants/--context-only",
             help=(
@@ -1209,9 +1214,9 @@ def cmd(
                 "descendants, independently of embedded Context traversal"
             ),
         ),
-    ] = True,
+    ] = None,
     follow_embeds: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--follow-embeds/--exclude-embeds",
             help=(
@@ -1219,24 +1224,55 @@ def cmd(
                 "scope, independently of descendant expansion"
             ),
         ),
-    ] = True,
+    ] = None,
     direct: Annotated[
         bool,
         typer.Option(
+            "-d",
             "--direct",
-            help=(
-                "Compatibility shorthand for --context-only --exclude-embeds; "
-                "takes precedence over the separate scope flags"
-            ),
+            help="Search only the selected Context roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants and follow embedded Contexts",
         ),
     ] = False,
 ) -> None:
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or include_descendants is not None
+        or follow_embeds is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=(
+                ContextScopePreset.RECURSIVE
+                if query is None and not scope_flags_supplied
+                else ContextScopePreset.DIRECT
+            ),
+        )
+        traversal = resolve_context_traversal(
+            preset=preset,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+        )
+        include_descendants = traversal.include_descendants
+        follow_embeds = traversal.follow_embeds
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Find error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore()
-    # Keep the established --direct script contract while exposing the same
-    # independent lexical and embedded axes as the interactive Scope control.
-    if direct:
-        include_descendants = False
-        follow_embeds = False
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         operands: tuple[str | None, ...] = (

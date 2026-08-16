@@ -108,6 +108,7 @@ def test_failed_sever_attempt_retains_bounded_frame_diagnostics(
             "local/criteria",
             "--save-as",
             "local/result",
+            "-r",
         ],
     )
 

@@ -18,6 +18,10 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
@@ -37,7 +41,9 @@ from memcommit.commands.context_picker import (
     choose_context,
     context_memory_rows,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.profile_config import AuthorityGrant, ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
@@ -990,12 +996,21 @@ def cmd(
     recursive: Annotated[
         bool,
         typer.Option(
+            "-r",
             "-R",
             "--recursive",
             "--expand",
             help=(
                 "Expand every descendant namespace and embedded Context."
             ),
+        ),
+    ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="List only the selected Context without recursive expansion.",
         ),
     ] = False,
     copy_result: Annotated[
@@ -1028,6 +1043,23 @@ def cmd(
         ),
     ] = False,
 ) -> None:
+    scope_flags_supplied = direct or recursive
+    try:
+        recursive = (
+            resolve_scope_preset(
+                direct=direct,
+                recursive=recursive,
+                default=ContextScopePreset.DIRECT,
+            )
+            is ContextScopePreset.RECURSIVE
+        )
+    except ValueError as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if copy_result and paste_result:
         typer.secho(
             "Error: --copy and --paste cannot be used together.",
@@ -1043,9 +1075,9 @@ def cmd(
         )
         raise typer.Exit(1)
     if paste_result:
-        if context_name is not None or recursive:
+        if context_name is not None or scope_flags_supplied:
             typer.secho(
-                "Error: CONTEXT and --recursive cannot be used with --paste; "
+                "Error: CONTEXT and scope flags cannot be used with --paste; "
                 "the copied scope is already frozen.",
                 fg=typer.colors.RED,
                 err=True,

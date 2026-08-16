@@ -38,16 +38,23 @@ from memcommit.interfaces.tui.workbenches.review import (
     RESPONSE_LABEL,
     ReviewCancelled,
 )
+from memcommit.application_review_policy import (
+    ownership_aware_application_review,
+)
 from memcommit.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
     result_workbench_fragments,
 )
-from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
@@ -955,7 +962,14 @@ def run_atomize_workbench_shell(
             toggle_sort=toggle_sort,
             split_viewer_items=True,
             review_and_apply=workflow_actions,
-            start_final_review_when_no_required=workflow_actions,
+            decision_free_behavior=(
+                ownership_aware_application_review(
+                    mutates_granted_authority=False,
+                    local_undo_available=True,
+                ).decision_free_behavior
+                if workflow_actions
+                else "REPORT_FIRST"
+            ),
             destination=destination,
             global_strategies=(
                 ResolutionGlobalStrategy(

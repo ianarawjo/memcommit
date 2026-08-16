@@ -292,6 +292,17 @@ def cmd(
             help="Context to inspect or atomize (defaults to current)",
         ),
     ] = None,
+    memory_selector: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "Analyze one direct Memory while keeping its Context neighbors "
+                "available only as non-actionable evidence"
+            ),
+        ),
+    ] = None,
     output_name: Annotated[
         Optional[str],
         typer.Option(
@@ -322,9 +333,8 @@ def cmd(
             "--evaluate",
             metavar="ISSUE",
             help=(
-                "Start the issue-scoped directional meld (informally, atomic "
-                "meld) for a visible issue number or unique issue/source uid "
-                "prefix"
+                "Start issue-scoped directional meld; informally, atomic meld, "
+                "for a visible issue number or unique issue/source uid prefix"
             ),
         ),
     ] = None,
@@ -397,6 +407,7 @@ def cmd(
         save
         or save_as is not None
         or context_name is not None
+        or memory_selector is not None
         or output_name is not None
         or grounding_action_count
         or comment is not None
@@ -405,6 +416,20 @@ def cmd(
         typer.secho(
             "Atomize error: --sessions cannot be combined with a Context, "
             "mutation, or grounding action.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if memory_selector is not None and (
+        save
+        or save_as is not None
+        or grounding_action_count
+        or comment is not None
+        or revision is not None
+    ):
+        typer.secho(
+            "Atomize error: --memory selects a new analysis scope and cannot "
+            "be combined with apply or grounding actions.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -454,6 +479,7 @@ def cmd(
             and not save
             and save_as is None
             and context_name is None
+            and memory_selector is None
             and output_name is None
             and grounding_action_count == 0
             and comment is None
@@ -469,11 +495,14 @@ def cmd(
                 if setup is None:
                     typer.echo("New Atomize cancelled; no analysis was opened.")
                     return
-                cmd(
-                    context_name=setup.input_name,
-                    output_name=setup.output_name,
-                    show_all=show_all,
-                )
+                start_kwargs = {
+                    "context_name": setup.input_name,
+                    "output_name": setup.output_name,
+                    "show_all": show_all,
+                }
+                if setup.input_memory_uid is not None:
+                    start_kwargs["memory_selector"] = setup.input_memory_uid
+                cmd(**start_kwargs)
                 return
             _resume_selected_atomize(
                 store=store,
@@ -505,7 +534,8 @@ def cmd(
             return
 
         if (
-            grounding_action_count == 0
+            memory_selector is None
+            and grounding_action_count == 0
             and grounding is not None
             and grounding.state in {"AWAITING_REPLY", "READY_TO_APPLY"}
         ):
@@ -643,7 +673,7 @@ def cmd(
 
         applying = save or save_as is not None
         if not applying:
-            if session is not None and (
+            if memory_selector is None and session is not None and (
                 atomize_analysis_was_applied(store, direct_ctx, session.uid)
                 or atomize_workbench_was_applied(store, session)
             ):
@@ -678,6 +708,7 @@ def cmd(
                     AtomizeAnalysisOpenRequest(
                         context=direct_ctx,
                         output_context_name=output_name,
+                        memory_selector=memory_selector,
                         allow_prepared=session is None,
                     ),
                     store=store,

@@ -1,8 +1,8 @@
-"""Context namespace rename contracts.
+"""Internal Context namespace-relocation contracts.
 
-Rename is an identity-preserving graph migration, not a directory-only move.
-These tests keep the CLI review boundary separate from the store transaction
-so pointer, history, and rollback regressions remain easy to diagnose.
+Relocation remains an identity-preserving graph migration used by internal
+operations, not a public ``mem rename`` command. These tests keep pointer,
+history, and rollback regressions easy to diagnose.
 """
 
 from __future__ import annotations
@@ -12,11 +12,9 @@ import json
 from pathlib import Path
 
 import pytest
-from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.store as store_module
-from memcommit.cli import app
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -36,9 +34,6 @@ from memcommit.translation_view_store import (
     load_translation_catalog,
     save_translation_catalog,
 )
-
-
-runner = CliRunner(mix_stderr=False)
 
 
 def _save_context(
@@ -71,23 +66,7 @@ def _json_tree(root: Path) -> dict[str, bytes]:
     }
 
 
-def test_cli_registers_reviewed_namespace_rename_syntax(isolated_store):
-    command_help = runner.invoke(app, ["rename", "--help"])
-    inventory = runner.invoke(app, ["help"])
-
-    assert command_help.exit_code == 0, command_help.output
-    assert "OLD" in command_help.output
-    assert "NEW" in command_help.output
-    assert "-f" in command_help.output
-    assert "--force" in command_help.output
-    assert inventory.exit_code == 0, inventory.output
-    assert any(
-        line.startswith("rename ") and "Rename an ordinary Context" in line
-        for line in inventory.output.splitlines()
-    )
-
-
-def test_cli_force_rename_preserves_identity_content_order_and_history(
+def test_internal_rename_preserves_identity_content_order_and_history(
     isolated_store,
 ):
     store = MemoryStore()
@@ -97,11 +76,8 @@ def test_cli_force_rename_preserves_identity_content_order_and_history(
     memory_uids = source.ordered_uids()
     original_checkpoint = store.list_checkpoints(source.name)[0]
 
-    result = runner.invoke(app, ["rename", "archive", "renamed", "--force"])
-
-    assert result.exit_code == 0, result.output
-    assert "Renamed Context namespace 'archive'" in result.output
-    assert "'renamed'" in result.output
+    plan = store.plan_context_rename("archive", "renamed")
+    store.rename_contexts(plan)
     assert not store.context_exists("archive")
     assert store.current_context_name() == "renamed"
     renamed = store.load_direct("renamed")
@@ -140,9 +116,7 @@ def test_namespace_rename_moves_only_exact_root_and_lexical_descendants(
     }
     store.set_current("old/a/b")
 
-    result = runner.invoke(app, ["rename", "old", "new", "-f"])
-
-    assert result.exit_code == 0, result.output
+    store.rename_contexts(store.plan_context_rename("old", "new"))
     assert store.list_context_names() == [
         "new",
         "new/a",
@@ -159,45 +133,6 @@ def test_namespace_rename_moves_only_exact_root_and_lexical_descendants(
         assert store.load_direct(new_name).uid == contexts[old_name].uid
     assert store.load_direct("oldish").uid == contexts["oldish"].uid
     assert store.load_direct("other/old").uid == contexts["other/old"].uid
-
-
-def test_cli_resolves_only_old_as_a_relative_context_locator(isolated_store):
-    store = MemoryStore()
-    parent = _save_context(store, "team/source", "parent")
-    child = _save_context(store, "team/source/child", "child")
-    store.set_current(child.name)
-
-    renamed = runner.invoke(app, ["rename", "..", "archive", "--force"])
-
-    assert renamed.exit_code == 0, renamed.output
-    assert store.load_direct("archive").uid == parent.uid
-    assert store.load_direct("archive/child").uid == child.uid
-    assert store.current_context_name() == "archive/child"
-
-    invalid_new = runner.invoke(
-        app,
-        ["rename", ".", "./revised", "--force"],
-    )
-
-    assert invalid_new.exit_code == 1
-    assert "Invalid context name './revised'" in invalid_new.stderr
-    assert store.context_exists("archive/child")
-    assert not store.context_exists("revised")
-
-
-def test_declining_cli_confirmation_changes_nothing(isolated_store):
-    store = MemoryStore()
-    source = _save_context(store, "source", "keep me")
-    store.set_current(source.name)
-    before = _json_tree(isolated_store)
-
-    result = runner.invoke(app, ["rename", "source", "destination"], input="n\n")
-
-    assert "Continue?" in result.output
-    assert _json_tree(isolated_store) == before
-    assert store.context_exists("source")
-    assert not store.context_exists("destination")
-    assert store.current_context_name() == "source"
 
 
 def test_rename_migrates_ordinary_context_and_memory_refs_by_target_uid(

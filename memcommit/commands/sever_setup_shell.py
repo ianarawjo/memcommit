@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import AbstractSet, Literal
 
-from prompt_toolkit.application import Application
+from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -15,11 +15,15 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
+from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
 from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
+)
+from memcommit.context_targeting.tui.range_selection import (
+    project_checked_context_names,
 )
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
@@ -28,6 +32,11 @@ from memcommit.context_targeting.tui.rendering import (
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.commands.context_picker import (
+    CONTEXT_PICKER_STYLE,
+    ContextMemoryPreviewController,
+    ContextMemoryRow,
+)
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
@@ -38,10 +47,18 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.components.frame import (
+    bind_focused_frame_style,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.store import validate_context_name
 
 
@@ -100,6 +117,7 @@ def choose_sever_setup(
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
     annotations: Mapping[str, SourceDisplayValue] | None = None,
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -152,6 +170,11 @@ def choose_sever_setup(
         )
         for role in ("SOURCE", "CRITERIA")
     }
+    memory_previews = {
+        role: ContextMemoryPreviewController(tree_state[role], memory_loader)
+        for role in ("SOURCE", "CRITERIA")
+        if memory_loader is not None
+    }
     scope_choice: dict[_Role, ContextReachState] = {
         role: ContextReachState.create(include_descendants=True)
         for role in ("SOURCE", "CRITERIA")
@@ -179,11 +202,26 @@ def choose_sever_setup(
 
     def render_context(role: _Role) -> list[tuple[str, str]]:
         control = source_control if role == "SOURCE" else criteria_control
-        tree_focused = app.layout.has_focus(control) and not scope_focused[role]
+        preview = memory_previews.get(role)
+        memory_focused = preview is not None and preview.memory_focused
+        tree_focused = (
+            app.layout.has_focus(control)
+            and not scope_focused[role]
+            and not memory_focused
+        )
+        wrap_width = max(1, get_app().output.get_size().columns - 1)
+        checked_names = frozenset(
+            project_checked_context_names(
+                tree_state[role].tree,
+                selections[role].selected_names,
+                include_descendants=scope_choice[role].include_descendants,
+                selectable_names=selectable,
+            )
+        )
 
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             available = row.name in selectable
-            chosen = selections[role].selected_name == row.name
+            chosen = row.name in checked_names
             annotation: SourceDisplayValue | None = labels.get(row.name)
             if not available:
                 annotation = combine_source_display_tokens(
@@ -201,6 +239,13 @@ def choose_sever_setup(
                 annotation=annotation,
                 cursor_style=cursor_style,
                 value_style=value_style,
+                branch=preview.branch_for(row) if preview is not None else None,
+                nested_fragments=(
+                    preview.render_nested(row, wrap_width=wrap_width)
+                    if preview is not None
+                    else ()
+                ),
+                anchor_cursor=not memory_focused,
             )
 
         return render_context_tree_rows(tree_state[role], decorate)
@@ -304,7 +349,9 @@ def choose_sever_setup(
         )
         return (
             f" {role}: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · "
-            f"top ↑ enters scope · {expansion_action} · Tab/Shift-Tab pane · "
+            f"top ↑ enters scope · {expansion_action} · "
+            + ("m Memory here · M all · " if memory_loader is not None else "")
+            + "Tab/Shift-Tab pane · "
             "F continue · Q cancel"
         )
 
@@ -335,7 +382,7 @@ def choose_sever_setup(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=MEMCOMMIT_TUI_STYLE,
+        style=merge_styles([MEMCOMMIT_TUI_STYLE, CONTEXT_PICKER_STYLE]),
     )
     controls = (source_control, criteria_control, output_editor)
 
@@ -344,16 +391,24 @@ def choose_sever_setup(
 
     def move(delta: int) -> None:
         role = active_role()
+        preview = memory_previews.get(role)
         if scope_focused[role]:
             if delta > 0:
                 scope_focused[role] = False
             error_message["value"] = ""
             return
-        if delta < 0 and selected_row_index(role) == 0:
+        if (
+            delta < 0
+            and selected_row_index(role) == 0
+            and not (preview is not None and preview.memory_focused)
+        ):
             scope_focused[role] = True
             error_message["value"] = ""
             return
-        tree_state[role].move(delta)
+        if preview is not None:
+            preview.move(delta)
+        else:
+            tree_state[role].move(delta)
         error_message["value"] = ""
 
     @bindings.add("down", filter=tree_focus, eager=True)
@@ -372,7 +427,11 @@ def choose_sever_setup(
         if scope_focused[role]:
             scope_choice[role].move(1)
         else:
-            tree_state[role].expand_selected()
+            preview = memory_previews.get(role)
+            if preview is not None:
+                preview.expand_selected()
+            else:
+                tree_state[role].expand_selected()
         error_message["value"] = ""
         event.app.invalidate()
 
@@ -382,7 +441,11 @@ def choose_sever_setup(
         if scope_focused[role]:
             scope_choice[role].move(-1)
         else:
-            tree_state[role].collapse_selected()
+            preview = memory_previews.get(role)
+            if preview is not None:
+                preview.collapse_selected()
+            else:
+                tree_state[role].collapse_selected()
         error_message["value"] = ""
         event.app.invalidate()
 
@@ -390,7 +453,29 @@ def choose_sever_setup(
     @bindings.add("A", filter=tree_focus, eager=True)
     def _toggle_expand_all(event) -> None:
         role = active_role()
-        tree_state[role].toggle_expand_all()
+        preview = memory_previews.get(role)
+        if preview is not None:
+            preview.toggle_expand_all()
+        else:
+            tree_state[role].toggle_expand_all()
+        event.app.invalidate()
+
+    @bindings.add("m", filter=tree_focus, eager=True)
+    def _toggle_selected_memories(event) -> None:
+        role = active_role()
+        preview = memory_previews.get(role)
+        if preview is not None and not scope_focused[role]:
+            preview.toggle_selected_memories()
+            error_message["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("M", filter=tree_focus, eager=True)
+    def _toggle_all_memories(event) -> None:
+        role = active_role()
+        preview = memory_previews.get(role)
+        if preview is not None and not scope_focused[role]:
+            preview.toggle_all_memories()
+            error_message["value"] = ""
         event.app.invalidate()
 
     @bindings.add("tab")
@@ -421,6 +506,11 @@ def choose_sever_setup(
             error_message["value"] = (
                 "Use Left/Right to choose this Context only or include descendants."
             )
+            return
+        preview = memory_previews.get(role)
+        if preview is not None and preview.memory_focused:
+            # Preview rows remain read-only navigation stops; choosing one
+            # cannot silently choose its owning Context.
             return
         name = tree_state[role].selected_name
         if name not in selectable:

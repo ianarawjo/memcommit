@@ -590,6 +590,13 @@ def test_picker_validates_empty_duplicate_and_invalid_catalogs():
             title="SAVED WORK",
             require_tty=False,
         )
+    with pytest.raises(ValueError, match="Enter action"):
+        choose_session(
+            (),
+            title="SAVED WORK",
+            enter_action="view\nFAKE",
+            require_tty=False,
+        )
     with pytest.raises(ValueError, match="initial sort mode"):
         choose_session(
             (candidate,),

@@ -2,7 +2,7 @@
 
 import pytest
 
-from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.model import ContextScope, DirectMemoryTarget
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.tui.reach import (
@@ -15,6 +15,9 @@ from memcommit.context_targeting.tui.range_selection import (
     project_checked_context_names,
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
+from memcommit.context_targeting.tui.memory_selection import (
+    DirectMemorySelectionState,
+)
 from memcommit.context_targeting.tui.tree import (
     build_context_tree,
     context_subtree_names,
@@ -42,6 +45,30 @@ def test_lexical_scope_expansion_deduplicates_overlapping_targets():
 def test_context_scope_rejects_non_boolean_descendant_policy():
     with pytest.raises(ValueError, match="must be a boolean"):
         ContextScope.create(("task",), include_descendants=1)  # type: ignore[arg-type]
+
+
+def test_direct_memory_selection_keeps_exact_owner_separate_from_hover():
+    target = DirectMemoryTarget("task/source", "memory-uid")
+    state = DirectMemorySelectionState()
+
+    assert state.choose(target) is True
+    assert state.choose(target) is False
+    assert state.selected == target
+    assert state.clear_unless_context("task/source") is False
+    assert state.clear_unless_context("task/other") is True
+    assert state.selected is None
+
+
+@pytest.mark.parametrize(
+    ("context_name", "memory_uid"),
+    (("", "memory-uid"), ("task/source", "")),
+)
+def test_direct_memory_target_requires_both_exact_identity_parts(
+    context_name,
+    memory_uid,
+):
+    with pytest.raises(ValueError, match="Context name and exact uid"):
+        DirectMemoryTarget(context_name, memory_uid)
 
 
 def test_multiple_selection_collapses_to_the_most_recent_explicit_target():

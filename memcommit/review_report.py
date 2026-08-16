@@ -12,6 +12,7 @@ from memcommit.resolution_workbench import ResolutionWorkbenchView
 ReviewReportKind = Literal[
     "READ_ONLY",
     "RESOLUTION",
+    "CONTENT_SEVERING",
     "DISCLOSURE",
     "CLARIFICATION",
     "CHANGE_PLAN",
@@ -44,6 +45,7 @@ class ReviewReport:
         if self.kind not in {
             "READ_ONLY",
             "RESOLUTION",
+            "CONTENT_SEVERING",
             "DISCLOSURE",
             "CLARIFICATION",
             "CHANGE_PLAN",

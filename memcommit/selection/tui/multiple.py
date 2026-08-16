@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
-from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.interfaces.tui.core.theme import focused_control_style
+from memcommit.interfaces.tui.core.theme import (
+    focused_control_style,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.interfaces.tui.core.text_layout import (
     terminal_cell_width,
     wrap_terminal_text,

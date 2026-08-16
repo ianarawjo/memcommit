@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, Sequence, Set
 from dataclasses import dataclass, field
 
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.reach import ContextReachState
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
@@ -15,6 +17,7 @@ from memcommit.context_targeting.tui.selection import (
     ContextTargetModeState,
 )
 from memcommit.context_targeting.tui.tree import (
+    ContextTree,
     ContextTreeState,
     build_context_tree,
     context_subtree_names,
@@ -24,6 +27,40 @@ from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 _PROFILE_TARGET_UID = "\x00PROFILE"
+
+
+def project_checked_context_names(
+    tree: ContextTree,
+    selected_names: Sequence[str],
+    *,
+    include_descendants: bool,
+    selectable_names: Set[str] | None = None,
+) -> tuple[str, ...]:
+    """Project exact roots and lexical reach into visible checked rows.
+
+    Saved-session operations continue to persist one root plus a descendant
+    boolean.  This projection makes that compact semantic value visible as the
+    complete checked range without turning implied descendants into separately
+    persisted selections.  An availability filter keeps opaque or otherwise
+    unavailable catalog rows from appearing selected.
+    """
+
+    catalog = tuple(tree.parent_by_name)
+    roots = tuple(selected_names)
+    if len(set(roots)) != len(roots) or any(name not in catalog for name in roots):
+        raise ValueError("Checked Context roots are outside the frozen tree.")
+    if type(include_descendants) is not bool:
+        raise ValueError("Checked Context descendant scope must be a boolean.")
+    selectable = frozenset(catalog if selectable_names is None else selectable_names)
+    if not selectable <= set(catalog):
+        raise ValueError("Selectable checked Contexts are outside the frozen tree.")
+    if not roots:
+        return ()
+    expanded = expand_lexical_context_names(
+        ContextScope.create(roots, include_descendants=include_descendants),
+        catalog,
+    )
+    return tuple(name for name in expanded if name in selectable)
 
 
 @dataclass
@@ -97,13 +134,11 @@ class ContextRangeSelectionState:
     def base_names(self) -> tuple[str, ...]:
         if self.profile_selected:
             return self.catalog
-        selected = frozenset(self.explicit_context_names)
-        if not self.reach.include_descendants:
-            return tuple(name for name in self.catalog if name in selected)
-        expanded: set[str] = set()
-        for name in selected:
-            expanded.update(context_subtree_names(self.tree.tree, name))
-        return tuple(name for name in self.catalog if name in expanded)
+        return project_checked_context_names(
+            self.tree.tree,
+            self.explicit_context_names,
+            include_descendants=self.reach.include_descendants,
+        )
 
     @property
     def effective_names(self) -> tuple[str, ...]:

@@ -23,8 +23,11 @@ from memcommit.authority.access import (
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.context import AutoCheckpoint, Context
+from memcommit.config import Config
 from memcommit.forget_resolution_adapter import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
@@ -34,13 +37,48 @@ from memcommit.impact_controller import ImpactController
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.provider_types import ProviderIdentity
-from memcommit.query_provider import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange, apply_changes
 from memcommit.store import MemoryStore
+from memcommit.study_action_log import (
+    record_provider_connection_finished,
+    record_provider_connection_started,
+)
+
+
+FORGET_PROVIDER_MODEL = "gpt-5.6-sol"
+FORGET_PROVIDER_REASONING_EFFORT = "none"
+
+
+def connect_codex_chatgpt_provider() -> CodexChatGPTProvider:
+    """Connect Forget's benchmark-selected provisional provider policy.
+
+    Forget intentionally pins only its model and reasoning effort. The shared
+    timeout and subscription-authentication boundary remain unchanged, while
+    every other semantic operation continues to use its configured provider.
+    """
+
+    started_at = record_provider_connection_started("forget")
+    try:
+        provider = CodexChatGPTProvider.connect(
+            timeout=Config().semantic_timeout_seconds(),
+            model=FORGET_PROVIDER_MODEL,
+            reasoning_effort=FORGET_PROVIDER_REASONING_EFFORT,
+        )
+    except BaseException as error:
+        record_provider_connection_finished(
+            "forget",
+            started_at,
+            failure=error,
+        )
+        raise
+    record_provider_connection_finished(
+        "forget",
+        started_at,
+        provider=provider.identity.provider,
+    )
+    return provider
 
 
 def _interactive_terminal() -> bool:

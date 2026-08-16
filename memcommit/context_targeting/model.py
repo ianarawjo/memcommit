@@ -39,3 +39,32 @@ class ContextScope:
         if type(include_descendants) is not bool:
             raise ValueError("Context descendant scope must be a boolean.")
         return cls(names, include_descendants)
+
+
+@dataclass(frozen=True)
+class DirectMemoryTarget:
+    """One exact direct Memory selected inside its owning Context.
+
+    Hover and expansion are deliberately absent.  This value is the semantic
+    receipt that a selector may hand to an operation after explicit choice.
+    """
+
+    context_name: str
+    selector: str
+
+    @property
+    def memory_uid(self) -> str:
+        """Expose the selector's semantic spelling to operation adapters."""
+
+        return self.selector
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.context_name, str)
+            or not self.context_name
+            or not isinstance(self.selector, str)
+            or not self.selector
+        ):
+            raise ValueError(
+                "A direct Memory target requires a Context name and exact uid."
+            )

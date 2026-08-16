@@ -5,7 +5,9 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context_targeting.tui.tree import ContextTreeRow, ContextTreeState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,

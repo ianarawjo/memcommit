@@ -12,6 +12,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.atomize as atomize_command
 import memcommit.commands.atomize_sessions as atomize_sessions_module
 from memcommit.atomize import (
     ATOMIZE_LEGACY_RULESET_VERSION,
@@ -597,6 +598,44 @@ def test_atomize_launcher_new_persists_input_output_on_shared_workbench(
     assert "provider was not called" in resumed.output
     assert "workbench/atomized-output" in resumed.output
     assert len(provider.payloads) == 1
+
+
+def test_atomize_launcher_passes_exact_setup_memory_to_command(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        atomize_command,
+        "choose_atomize_session",
+        lambda _store, *, show_all: SessionNewReceipt(
+            kind="atomize",
+            argv=("mem", "atomize"),
+        ),
+    )
+    monkeypatch.setattr(
+        atomize_command,
+        "choose_atomize_setup",
+        lambda _store: AtomizeSetupReceipt(
+            input_name="focused/source",
+            output_name="focused/output",
+            create_output=True,
+            input_memory_uid="memory-uid",
+        ),
+    )
+    calls = []
+    monkeypatch.setattr(atomize_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    result = runner.invoke(app, ["atomize", "--sessions"])
+
+    assert result.exit_code == 0, result.output
+    assert calls == [
+        {
+            "context_name": "focused/source",
+            "output_name": "focused/output",
+            "show_all": False,
+            "memory_selector": "memory-uid",
+        }
+    ]
 
 
 def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
@@ -1409,11 +1448,11 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
     assert view.capabilities == frozenset({"SUBMIT_ITEM"})
     assert view.accept_enabled is False
     assert kwargs["review_and_apply"] is False
-    assert kwargs["start_final_review_when_no_required"] is False
+    assert kwargs["decision_free_behavior"] == "REPORT_FIRST"
     assert kwargs["global_strategies"] == ()
 
 
-def test_actionable_atomize_enters_final_review_when_no_response_is_required(
+def test_actionable_atomize_auto_accepts_when_no_response_is_required(
     monkeypatch,
 ):
     ctx = ops.init("workbench/direct-final-review")
@@ -1444,7 +1483,7 @@ def test_actionable_atomize_enters_final_review_when_no_response_is_required(
     assert all(item.effective_obligation == "OPTIONAL" for item in view.items)
     assert view.accept_enabled is True
     assert kwargs["review_and_apply"] is True
-    assert kwargs["start_final_review_when_no_required"] is True
+    assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
 
 
 def test_atomize_uses_shared_save_location_frame_before_final_review():
@@ -1455,6 +1494,11 @@ def test_atomize_uses_shared_save_location_frame_before_final_review():
         analysis,
         output_context_name="workbench/destination-draft",
     )
+    # A saved unary response requires incorporation, so this case remains in
+    # the workbench and can exercise destination editing instead of taking the
+    # decision-free local auto-apply path.
+    issue = workbench.ordered_issues()[0]
+    workbench.response_for(issue.uid).selected_choice_uid = issue.choice_uids[0]
 
     with create_pipe_input() as pipe_input:
         # Viewer starts on Report. Two Tabs reach the compact frame between
@@ -1555,6 +1599,7 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
 
     assert result.exit_code == 0, result.output
     assert "Applied atomize analysis" in result.output
+    assert "Recovery · mem undo" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     assert store.load_direct(ctx.name).uid == ctx.uid
 
@@ -1688,6 +1733,7 @@ def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
 
     assert result.exit_code == 0, result.output
     assert "Applied atomize analysis" in result.output
+    assert "Recovery · mem undo" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     checkpoint = store.list_checkpoints(ctx.name)[-1]
     assert checkpoint["args"]["source_review_uid"] == opened.workbench.uid

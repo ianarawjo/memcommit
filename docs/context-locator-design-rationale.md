@@ -13,7 +13,6 @@ mem meld [LOCATOR] --into LOCATOR
 mem meld --from LOCATOR
 mem impact [--from LOCATOR] [--to LOCATOR]
 mem update [--from LOCATOR] [--to LOCATOR]
-mem rename LOCATOR NEW_NAME
 mem list [LOCATOR]
 mem ls [LOCATOR]
 mem show [SELECTOR] --context LOCATOR
@@ -137,16 +136,12 @@ Read and analysis commands use the same command-entry snapshot without
 changing their operation-specific loader. Mutation-oriented operands add the
 required authority boundary: prompts display the escaped canonical name,
 targets retain their UID/digest CAS, and source-dependent writes revalidate
-canonical source name/UID/digest receipts under the final lock set. Rename
-implements the wider form for its source by freezing a graph-wide plan before
-approval and application.
+canonical source name/UID/digest receipts under the final lock set.
 
 The resolver must not be applied indiscriminately:
 
 - `init NAME`, `branch NAME`, `checkout -b NAME`, and `--save-as` values define
   new canonical identifiers; they are not existing-Context locators.
-- `mem rename OLD NEW` applies the resolver only to `OLD`. `NEW` is a new
-  canonical identifier and must not be reinterpreted as relative input.
 - Memory selectors, embedded-item selectors, requirement targets, and
   query-only source selectors have different namespaces.
 - Embed's `--before` and `--after` values select direct items inside the already
@@ -174,6 +169,6 @@ bindings, and Ground's separately reviewed frame-binding receipt. Adding a new
 ordinary existing-Context operand requires adding it to the rollout list and a
 test that proves every relative operand shares one current snapshot.
 
-The graph migration, identity, reference, checkpoint, query-only, and failure
-semantics of Rename are specified separately in
+The internal graph-migration, identity, reference, checkpoint, query-only, and
+failure semantics retained for operation-owned relocation are specified in
 [`mem-rename-design-rationale.md`](mem-rename-design-rationale.md).

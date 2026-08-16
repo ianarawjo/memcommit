@@ -12,6 +12,7 @@ from memcommit.commands.profile_picker import (
     ProfilePickerEntry,
     ProfilePickerRefresh,
     _picker_rows,
+    _rename_review,
     _removal_action,
     _removal_review,
     _render_profile_options,
@@ -109,6 +110,66 @@ def test_profile_picker_moves_and_returns_use_target():
         uid=None,
         registry_generation=None,
     )
+
+
+def test_profile_picker_r_edits_and_reviews_one_exact_rename():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("r\x15authoring-renamed\ra")
+        selected = choose_profile(
+            ENTRIES,
+            current="authoring",
+            registry_generation=12,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ProfilePickerAction(
+        kind="RENAME_PROFILE",
+        name="authoring",
+        uid=None,
+        registry_generation=12,
+        new_name="authoring-renamed",
+        row_index=0,
+    )
+
+
+def test_profile_picker_rename_review_uses_explicit_profile_command():
+    review = _rename_review(
+        ProfilePickerAction(
+            kind="RENAME_PROFILE",
+            name="old-name",
+            uid="profile-uid",
+            registry_generation=4,
+            new_name="new-name",
+        )
+    )
+
+    assert review.argv == ("mem", "profile", "rename", "old-name", "new-name")
+    assert any("UID" in effect and "store" in effect for effect in review.effects)
+
+
+def test_profile_picker_blocks_rename_before_opening_the_name_field():
+    entries = (
+        ProfilePickerEntry(
+            name="authoring",
+            context_count=1,
+            current_context="notes",
+            rename_block="The fixed authoring Profile cannot be renamed",
+        ),
+        ENTRIES[1],
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("rq")
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
 
 
 def test_profile_picker_cancels_without_a_selection():

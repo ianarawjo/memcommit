@@ -153,10 +153,10 @@ This cache boundary is adjacent to Apply but independent from it. The
 application API returns the typed origin `SAVED`, `EXACT_PREWARM`, or
 `PROVIDER`. `allow_prepared` is an operation-owned request policy: Impact
 refresh/review prohibit hidden reuse, while ordinary first use may allow it.
-The runtime, not the command, looks up the artifact only after the exact
-Context has been loaded and before constructing a provider. Hidden installation
-files remain outside the public session repository, and a cache hit does not
-bypass later Apply freshness or authority checks.
+The runtime, not the command, looks up the artifact only
+after the exact Context has been loaded and before constructing a provider.
+Hidden installation files remain outside the public session repository, and a
+cache hit does not bypass later Apply freshness or authority checks.
 
 ## Implemented and remaining extraction boundary
 
@@ -218,12 +218,20 @@ session lock; the repository rechecks the token before terminal publication.
 
 ## Current verification evidence
 
-The structural boundary file passes eleven cases. In addition to recorded
-all-preserved completion, in-place receipt compensation, late-success
-detection, interrupted recovery, later-edit preservation, workbench-race
-compensation, and dependency direction, it now covers final-only Save As,
-creation-lifecycle Undo/Redo, prepublication failure cleanup, exact receipt
-retry, and recorded Source-frame lineage for both KEEP and SPLIT.
+The current Atomize-focused run passes 186 tests with one pre-existing
+grounding screen-capture comparison deselected because its expected wording no
+longer matches the shared renderer. The new six-case analysis-boundary file
+directly covers provider creation, provider-free saved resume, exact
+hidden-prewarm materialization, prepared-reuse policy, stale rejection,
+refresh, and module dependency direction; the existing refresh rollback test
+continues to prove analysis/workbench pair restoration. The structural boundary
+file passes eleven cases: recorded all-preserved completion, in-place receipt
+compensation, late-success detection, interrupted recovery, later-edit
+preservation, workbench-race compensation, dependency direction, final-only
+Save As, creation-lifecycle Undo/Redo, prepublication failure cleanup, exact
+receipt retry, and recorded Source-frame lineage for both KEEP and SPLIT. A
+second integrated run passes 202 command, Context safety, history/restoration,
+write-protection, and Study-installation tests.
 
 The existing screenshot sets cover Study hidden-session initialization, exact
 prewarm entry, split review, final approval/application, output verification,

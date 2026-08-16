@@ -39,12 +39,11 @@ result:
 
 The one-shot CLI exposes the same two scope axes. `--descendants` and
 `--context-only` choose lexical reach; `--follow-embeds` and
-`--exclude-embeds` independently choose embedded-Context traversal. Both
-positive choices remain the compatibility defaults. Repeatable `--context`
-operands apply that shared scope to every selected root. The older `--direct`
-form remains a compatibility shorthand that forces both axes off and takes
-precedence when supplied, so existing scripts retain their exact disclosure
-boundary.
+`--exclude-embeds` independently choose embedded-Context traversal. A one-shot
+request defaults to the common `-d/--direct` preset, while `-r/--recursive`
+enables both positive choices. Repeatable `--context` operands apply that
+shared scope to every selected root. Either precise long-form axis may refine
+the preset without changing the other axis.
 
 Every peer frame is composed through the service-wide vertical workbench rule:
 `SEARCH → TARGETS → SCOPE → RESULTS`, followed conditionally by
@@ -97,11 +96,12 @@ lexical subtree, including descendants that are currently collapsed. Descendant
 rows remain independently editable after a group action. The selected roots
 and any process-local subtree exclusions derive one effective checked set;
 changing the range clears stale exclusions so the newly visible policy starts
-from the explicit roots. The legacy default starts on `INCLUDE DESCENDANTS`,
-matching the one-shot `--descendants` default. `FOLLOW` under
-`EMBEDDED CONTEXTS` remains an independent graph-traversal choice and matches
-the one-shot `--follow-embeds` default. `--direct` starts both workbench axes in
-their restricted state when it seeds an operand-free TTY launch.
+from the explicit roots. The workbench retains its visible legacy starting
+state on `INCLUDE DESCENDANTS`. `FOLLOW` under `EMBEDDED CONTEXTS` remains an
+independent graph-traversal choice. This TUI default is deliberately broader
+than a one-shot command because both choices are visible and editable before a
+provider turn; `--direct` starts both workbench axes in their restricted state
+when it seeds an operand-free TTY launch.
 
 Search executes the exact visible checked set rather than re-expanding a parent
 behind the UI; otherwise an independently unchecked child would still be
@@ -123,6 +123,25 @@ appear to describe a new frame. Result checks default to empty and follow the
 frozen ranked order rather than interaction history. Search work runs outside
 the prompt-toolkit event-loop thread while the exact request stays visible and
 immutable. Closing during a search waits for that read-only turn to complete.
+
+When `RESULTS` owns focus, lowercase `y` copies the focused host-resolved result
+as plain text, including its original rank, object kind, short identity,
+Context grouping, related-result annotation when present, and complete content.
+Uppercase `Y` copies the complete frozen ranked result set using the stable
+grouped Find renderer, including the broader-query explanation for related
+results. Neither route serializes checkbox glyphs, focus color, scrollbar
+position, viewport wrapping, or the conditional Save As frames. Moving the
+result cursor after a copy clears its transient receipt while leaving the
+clipboard intact.
+
+The copy keys are scoped to the read-only Results Surface, so `y` and `Y`
+remain ordinary query characters in `SEARCH` and ordinary name characters in
+`SAVE LOCATION`. Copy does not check a result, create a Context, save a Find
+checkpoint, or invoke provider work. It writes only the operating-system text
+clipboard and deliberately does not create the structured single-source stage
+used by mutation commands: one result set may combine local and independently
+granted Sources. The footer reports `COPIED` or a nonfatal `COPY FAILED` while
+the same result remains focused.
 
 `COPY` and `REFERENCE` are intentionally Save As modes, not semantic
 keep/drop decisions. `COPY` creates one fresh Memory identity per checked
@@ -216,3 +235,8 @@ last row changes only process-local UI state; pressing Search then fails before
 provider connection because `FindSearchRequest` requires at least one distinct
 readable Context. Switching that empty control to SINGLE selects the visible
 tree cursor so single-cardinality state cannot become invalid.
+
+Command-C remains the terminal emulator's selection-copy path and Ctrl-C keeps
+its established close behavior. Because prompt-toolkit cannot portably receive
+the macOS Command modifier, semantic focused-versus-complete copy uses `y` and
+`Y`, matching the shared Context picker grammar.

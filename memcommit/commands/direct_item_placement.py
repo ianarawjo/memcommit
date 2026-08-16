@@ -10,18 +10,13 @@ from prompt_toolkit.utils import get_cwidth
 
 from memcommit.commands.context_picker import (
     ContextMemoryRow,
+    context_memory_rows,
     render_context_options,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import Context
 from memcommit.context_targeting.tui.selector import ContextSelectorRowProjection
 from memcommit.context_targeting.tui.tree import ContextTreeRow
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
-from memcommit.source_projection.model import (
-    SourceDisplayFacts,
-    SourceForm,
-    SourceReach,
-    SourceState,
-)
 
 
 @dataclass(frozen=True)
@@ -58,77 +53,14 @@ class DirectItemGap:
 def direct_item_placement_rows(context: Context) -> tuple[DirectItemPlacementRow, ...]:
     """Project every persisted direct-item slot without changing its order."""
 
-    rows: list[DirectItemPlacementRow] = []
-    for item in context.iter_items():
-        if isinstance(item, Memory):
-            rows.append(
-                DirectItemPlacementRow(
-                    uid=item.uid,
-                    preview=ContextMemoryRow(
-                        item.uid[:8],
-                        item.content,
-                        source=SourceDisplayFacts(form=SourceForm.MEMORY),
-                    ),
-                )
-            )
-        elif isinstance(item, MemoryRef):
-            rows.append(
-                DirectItemPlacementRow(
-                    uid=item.uid,
-                    preview=ContextMemoryRow(
-                        item.uid[:8],
-                        (
-                            item.target.content
-                            if item.target is not None
-                            else (
-                                f"{item.target_context_name}#"
-                                f"{item.target_memory_uid[:8]}"
-                            )
-                        ),
-                        style=(
-                            "memory-object"
-                            if item.target is not None
-                            else "report-neutral"
-                        ),
-                        source=SourceDisplayFacts(
-                            form=SourceForm.MEMORY_REF,
-                            states=(
-                                (SourceState.READ_ONLY,)
-                                if item.target is not None
-                                else (SourceState.DANGLING,)
-                            ),
-                        ),
-                    ),
-                )
-            )
-        elif isinstance(item, QueryContextRef):
-            rows.append(
-                DirectItemPlacementRow(
-                    uid=item.uid,
-                    preview=ContextMemoryRow(
-                        item.uid[:8],
-                        item.name,
-                        style="report-neutral",
-                        source=SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
-                    ),
-                )
-            )
-        elif isinstance(item, Context):
-            rows.append(
-                DirectItemPlacementRow(
-                    uid=item.uid,
-                    preview=ContextMemoryRow(
-                        item.uid[:8],
-                        item.name,
-                        style="report-neutral",
-                        source=SourceDisplayFacts(
-                            form=SourceForm.CONTEXT,
-                            reach=SourceReach.VIA_EMBED,
-                        ),
-                    ),
-                )
-            )
-    return tuple(rows)
+    items = tuple(context.iter_items())
+    previews = context_memory_rows(context)
+    if len(items) != len(previews):
+        raise RuntimeError("The shared picker omitted a direct Context item.")
+    return tuple(
+        DirectItemPlacementRow(uid=item.uid, preview=preview)
+        for item, preview in zip(items, previews, strict=True)
+    )
 
 
 def direct_item_gap(

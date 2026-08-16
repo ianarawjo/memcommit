@@ -275,6 +275,16 @@ def _unit_uid(
                 and change_set_digest
             ):
                 return f"meld:{session_uid}:{change_set_digest}"
+    if command == "merge":
+        record = args.get("merge_tree")
+        if isinstance(record, dict):
+            operation_uid = record.get("operation_uid")
+            if (
+                record.get("version") in {1, 2}
+                and isinstance(operation_uid, str)
+                and operation_uid
+            ):
+                return f"merge:{operation_uid}"
     return f"checkpoint:{checkpoint_uid}"
 
 
@@ -408,13 +418,13 @@ def _context_parts(
             else None
         )
         merge_tree = args.get("merge_tree")
-        is_recursive_merge = (
+        is_legacy_recursive_merge = (
             command == "merge"
             and isinstance(merge_tree, dict)
             and merge_tree.get("version") == 1
             and isinstance(merge_tree.get("operation_uid"), str)
         )
-        if is_recursive_merge:
+        if is_legacy_recursive_merge:
             # A recursive Merge can both update and create Contexts. The
             # current lifecycle restoration archive supports one exact Sever
             # creation only; exposing a partial tree Undo would be worse than
@@ -431,6 +441,14 @@ def _context_parts(
             and creation.get("version") == 1
             and creation.get("context_uid") == context.uid
             and creation.get("context_name") == context.name
+        )
+        is_merge_creation = (
+            command == "merge"
+            and isinstance(merge_tree, dict)
+            and merge_tree.get("version") == 2
+            and merge_tree.get("target_created") is True
+            and isinstance(merge_tree.get("operation_uid"), str)
+            and bool(merge_tree.get("operation_uid"))
         )
         save_as = args.get("atomize_save_as")
         is_exact_atomize_creation = (
@@ -449,7 +467,11 @@ def _context_parts(
         if (
             normalized_before is None
             and effective is None
-            and (is_exact_sever_creation or is_exact_atomize_creation)
+            and (
+                is_exact_sever_creation
+                or is_merge_creation
+                or is_exact_atomize_creation
+            )
             and owned
             and auto
         ):
@@ -494,7 +516,7 @@ def _context_parts(
             # to APPLIED. Keep that checkpoint in the command stack so Undo
             # and Redo restore the complete operation rather than only visible
             # Context bytes.
-            or (before == snapshot and command != "meld")
+            or (before == snapshot and command not in {"meld", "merge"})
         ):
             continue
         originals.append(

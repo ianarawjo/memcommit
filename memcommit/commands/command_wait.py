@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import sys
 import threading
 import time
-from typing import Protocol, TypeVar
+from typing import AbstractSet, Protocol, TypeVar
 
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
@@ -55,25 +55,34 @@ from memcommit.commands.session_help import (
     SessionHelpController,
     current_help_entries,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+)
 from memcommit.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
     build_scrollable_formatted_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
 )
 from memcommit.context_targeting.tui.tree import (
     ContextTreeState,
     build_context_tree,
 )
+from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.source_projection.presentation import SourceDisplayValue
+from memcommit.source_projection.model import SourceDisplayFacts, SourceState
+from memcommit.source_projection.presentation import (
+    SourceDisplayValue,
+    combine_source_display_tokens,
+)
 from memcommit.store import MemoryStore
 from memcommit.study_action_log import record_study_action
 
@@ -112,16 +121,19 @@ class CommandWaitView:
 
 @dataclass(frozen=True)
 class CommandWaitContextBrowser:
-    """One frozen readable Profile namespace shown like ``mem switch``.
+    """One frozen Profile namespace inventory shown like ``mem switch``.
 
     The catalog and current marker are captured before background work starts.
-    Tree expansion and cursor movement remain process-local and cannot produce
-    a switch receipt or change the global current Context.
+    ``readable_names`` is the independent ordinary-load boundary; opaque Grant
+    routes may remain visible outside it. Tree expansion and cursor movement
+    remain process-local and cannot produce a switch receipt or change the
+    global current Context.
     """
 
     names: tuple[str, ...]
     current_name: str | None
     annotations: Mapping[str, SourceDisplayValue]
+    readable_names: frozenset[str]
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None
 
     @classmethod
@@ -131,6 +143,7 @@ class CommandWaitContextBrowser:
         *,
         current_name: str | None,
         annotations: Mapping[str, SourceDisplayValue] | None = None,
+        readable_names: AbstractSet[str] | None = None,
         memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     ) -> "CommandWaitContextBrowser":
         frozen_names = tuple(names)
@@ -141,16 +154,22 @@ class CommandWaitContextBrowser:
         frozen_annotations = dict(annotations or {})
         if set(frozen_annotations) - set(frozen_names):
             raise ValueError("Context browser annotations are outside the catalog.")
+        frozen_readable_names = frozenset(
+            frozen_names if readable_names is None else readable_names
+        )
+        if not frozen_readable_names <= set(frozen_names):
+            raise ValueError("Readable Context browser names are outside the catalog.")
         return cls(
             names=frozen_names,
             current_name=current_name,
             annotations=frozen_annotations,
+            readable_names=frozen_readable_names,
             memory_loader=memory_loader,
         )
 
 
 def _freeze_default_context_browser() -> CommandWaitContextBrowser | None:
-    """Freeze the same readable Profile namespace used by Context controls."""
+    """Freeze readable Contexts plus visible opaque public Grant routes."""
 
     try:
         store = MemoryStore(create=False)
@@ -179,17 +198,35 @@ def _freeze_default_context_browser() -> CommandWaitContextBrowser | None:
             anchor_access,
             include_query_routes=False,
         )
-        names = tuple(catalog.list_context_names())
+        readable_names = frozenset(catalog.list_context_names())
+        granted_navigation = freeze_granted_context_navigation(store)
+        names = tuple(sorted(readable_names | set(granted_navigation.names)))
         annotations = {
             name: context_access_display_facts(catalog.access_for(name))
-            for name in names
+            for name in readable_names
             if catalog.access_for(name).is_granted
         }
+        for name in set(granted_navigation.names) - readable_names:
+            # Opaque Grant roots belong in the namespace inventory, not in the
+            # ordinary Context loader. UNAVAILABLE makes that independent
+            # authority boundary explicit even when its permissions include
+            # QUERY or another non-READ capability.
+            annotations[name] = combine_source_display_tokens(
+                granted_navigation.annotations[name],
+                SourceDisplayFacts(states=(SourceState.UNAVAILABLE,)),
+            )
+
+        def load_context_memories(name: str) -> tuple[ContextMemoryRow, ...]:
+            if name not in readable_names:
+                raise ValueError("Opaque Grant routes cannot be opened as Contexts.")
+            return context_memory_rows(catalog.load(name))
+
         return CommandWaitContextBrowser.create(
             names,
             current_name=current_name,
             annotations=annotations,
-            memory_loader=lambda name: context_memory_rows(catalog.load(name)),
+            readable_names=readable_names,
+            memory_loader=load_context_memories,
         )
     except (
         FileNotFoundError,
@@ -501,7 +538,10 @@ def run_command_wait(
     context_memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
     context_memory_anchor: tuple[str, int] | None = None
     if frozen_context_browser is not None:
-        context_tree = build_context_tree(frozen_context_browser.names)
+        context_tree = build_context_tree(
+            frozen_context_browser.names,
+            materialized_names=frozen_context_browser.readable_names,
+        )
         initial_name = (
             frozen_context_browser.current_name
             if frozen_context_browser.current_name in frozen_context_browser.names

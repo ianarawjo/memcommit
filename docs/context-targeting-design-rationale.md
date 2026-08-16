@@ -19,7 +19,9 @@ there is intentionally no profile-wide “last Scope” preference.
 
 `memcommit.context_targeting` is the concept package for the shared family:
 
-- `model.py` owns operation-neutral targeting values and cardinality types.
+- `model.py` owns operation-neutral targeting values and cardinality types,
+  including an exact direct-Memory target as its canonical owner Context name
+  plus durable Memory UID.
 - `resolution.py` owns pure canonical name-prefix expansion.
 - `loading.py` loads one root and merges its lexical descendants for existing
   Compare, Update, Meld, and related application paths.
@@ -31,11 +33,15 @@ there is intentionally no profile-wide “last Scope” preference.
   roots. Namespace visibility therefore never becomes ordinary load authority.
 - `tui/tree.py` owns frozen namespace topology, cursor, and expansion state.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
+- `tui/memory_selection.py` owns one retained exact direct-Memory choice. It is
+  deliberately independent from the tree's transient preview cursor.
 - `tui/selector.py` composes that cardinality state with the common framed
   namespace tree while callers retain role labels and availability.
 - `tui/range_selection.py` composes the frozen readable tree with a process-local
   Profile shortcut, one-versus-many roots, exact-versus-descendant reach, and
-  independently unchecked subtree exclusions.
+  independently unchecked subtree exclusions. Its common checked-row
+  projection also maps the compact root-plus-reach state used by saved-session
+  setup screens onto every effective visible Context row.
 - `tui/reach.py` owns the shared exact-versus-descendant segmented control.
 - `tui/rendering.py` owns pointer, marker-slot, indentation, branch, escaping,
   annotation, and line-break grammar while operations supply semantic markers.
@@ -48,8 +54,16 @@ Compare/Update/Meld/Atomize, and Sever import these controls directly. The
 older `commands/context_picker.py` keeps
 its established public and test-facing tree names as imports from the new
 module because it still owns full picker receipts, Memory preview rendering,
-and terminal orchestration. `memcommit.context_scope` is likewise a thin
+and terminal orchestration. Its operation-neutral preview controller is also
+composed into the common endpoint setup and Sever setup trees: it owns lazy
+caches, `m`/`M` visibility, and Memory viewport anchors. A caller must opt a
+role and mode into direct-Memory selection before one of those anchors may
+produce a `DirectMemoryTarget`; otherwise the same row remains read-only and
+cannot change a Context receipt. `memcommit.context_scope` is likewise a thin
 compatibility facade; new internal callers use `context_targeting.loading`.
+The established `ContextMemorySelection` name used by Delete, Import, Trace,
+and Rationale is now a compatibility alias for that same target value, not a
+parallel receipt type.
 
 ## Invariants
 
@@ -70,7 +84,20 @@ role availability, initial scope, validation, provider disclosure, receipts,
 and application authority. Sever therefore continues to default to descendant
 reach while Compare, Update, and Meld setup default to exact roots. Find keeps
 one-versus-many roots, exact-versus-descendant row behavior, and embedded
-traversal as three independently configurable controls.
+traversal as three independently configurable controls. The three flagless
+quality finders also start with multiple roots and exact reach, but deliberately
+omit embedded traversal; their exact visible checked set becomes one aggregate
+direct-Memory judgment frame.
+
+A direct-Memory choice and descendant reach are mutually exclusive targeting
+shapes. Choosing a Memory selects its exact owner Context and forces exact
+reach. Explicitly choosing a Context, proposing a new Context, enabling
+descendants, or entering a mode that does not support Memory focus clears the
+retained Memory target. Hiding or collapsing its preview clears it for the
+same reason. This prevents an invisible UID from surviving after the visible
+selector has changed meaning. MemoryRef, embedded-Context, and query rows
+never receive a direct-Memory selector merely because they share the preview
+renderer.
 
 Presentation labels do not define shared-control ownership. `SAVE LOCATION`,
 `FROM CONTEXT`, `CRITERIA`, and `NEW CONTEXT NAME` are adapter-supplied roles;
@@ -107,10 +134,15 @@ ranges while every effective Context it will search remains visibly checked.
 It freezes that effective checked set exactly at execution, preventing a hidden
 descendant expansion from reintroducing an independently unchecked row. Saved-session
 operations retain their separate descendant-reach boolean and are not migrated
-to expanded checked lists.
+to expanded checked lists. Their setup trees nevertheless project that root and
+boolean through the same checked-row path, so Compare, Update, Meld, Branch, and
+Sever visibly check every effective lexical descendant. Those descendant marks
+are implied range presentation, not independently persisted selections. Rows
+that are unavailable to the role, including opaque query-only routes, remain
+unselected even when their public name is lexically below the chosen root.
 
 The `PROFILE` row is a process-local shortcut composed above the shared Context
-tree. Find and ordinary Query resolve it to their workbench's frozen
+tree. Find, ordinary Query, and the flagless quality finders resolve it to their frozen
 `ReadableContextCatalog`; it never becomes a persisted Context or locator and
 does not broaden the catalog's existing READ authority. Query-only grant routes
 remain a separate typed Source catalog and never enter this ordinary tree.
@@ -124,12 +156,14 @@ retains its narrower selected-view behavior for explicit Query, explicit Find,
 list receipts, rationale, and other operations whose operand defines their
 whole executable scope. Interactive `mem list` / `mem ls` composes that narrow
 result scope with `freeze_profile_context_navigation`: the Profile-wide catalog
-controls orientation, while the resolved operand controls only initial focus,
-initial item visibility, and recursive subtree expansion. `mem contexts` uses
-the same composition, and QUERY-only Grant routes remain visible but
-nonmaterialized exactly as in Switch.
-The blank Find and Query workbenches use the Profile-wide form because they
-render `PROFILE · ALL READABLE CONTEXTS` as an executable target.
+controls orientation, while the resolved operand controls only initial focus
+and recursive subtree expansion. `mem contexts` uses the same composition, and
+QUERY-only Grant routes remain visible but nonmaterialized exactly as in
+Switch.
+The blank Find, Query, and individual quality-finder workbenches use the
+Profile-wide form because they render `PROFILE · ALL READABLE CONTEXTS` as an
+executable target. Durable Audit retains its narrower single exact Source
+contract.
 
 ## Persistence and compatibility boundary
 

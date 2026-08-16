@@ -8,14 +8,20 @@ import sys
 from typing import Literal
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.filters import Condition
+from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
+from prompt_toolkit.layout import (
+    ConditionalContainer,
+    FormattedTextControl,
+    HSplit,
+    Layout,
+    Window,
+)
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.styles import Style
+from prompt_toolkit.styles import Style, merge_styles
 
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
@@ -29,8 +35,18 @@ from memcommit.commands.exact_command_review import (
 from memcommit.interfaces.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
+from memcommit.commands.tui_primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.core.theme import MEMCOMMIT_TUI_STYLE
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.profile_config import ProfileConfigError, validate_profile_name
 
 
 @dataclass(frozen=True)
@@ -54,21 +70,24 @@ class ProfilePickerEntry:
     study_profile_count: int = 0
     study_removed_count: int = 0
     removal_block: str | None = None
+    rename_block: str | None = None
 
 
 @dataclass(frozen=True)
 class ProfilePickerAction:
     """One exact selector action returned only after its required key path."""
 
-    kind: Literal["USE", "REMOVE_PROFILE", "REMOVE_STUDY"]
+    kind: Literal["USE", "RENAME_PROFILE", "REMOVE_PROFILE", "REMOVE_STUDY"]
     name: str
     uid: str | None
     registry_generation: int | None
+    new_name: str | None = None
+    row_index: int | None = None
 
 
 @dataclass(frozen=True)
 class ProfilePickerRefresh:
-    """A completed background deletion that requires a fresh picker catalog."""
+    """A completed picker mutation that requires a fresh Profile catalog."""
 
     status: str
     error: Exception | None = None
@@ -112,6 +131,7 @@ def _validate_entries(
         or len(set(entry.query_source_names)) != len(entry.query_source_names)
         or (entry.uid is not None and not entry.uid)
         or (entry.removal_block is not None and not entry.removal_block.strip())
+        or (entry.rename_block is not None and not entry.rename_block.strip())
         or (
             any(
                 value is not None
@@ -368,6 +388,21 @@ def _removal_review(
     )
 
 
+def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
+    """Render the exact Profile display-name mutation selected in the picker."""
+
+    if action.kind != "RENAME_PROFILE" or action.new_name is None:
+        raise ValueError("Profile rename review requires an exact new name.")
+    return ExactCommandReview(
+        argv=("mem", "profile", "rename", action.name, action.new_name),
+        effects=(
+            f"Change Profile {action.name!r}'s display name to {action.new_name!r}.",
+            "Keep the same Profile UID, store directory, Contexts, Memories, and Grants.",
+            "Keep the same active Profile selected when this Profile is current.",
+        ),
+    )
+
+
 def choose_profile(
     entries: Sequence[ProfilePickerEntry],
     *,
@@ -415,7 +450,9 @@ def choose_profile(
         )
     }
     pending: dict[str, object | None] = {"action": None, "review": None}
+    rename_target: dict[str, ProfilePickerAction | None] = {"action": None}
     status = {"text": initial_status}
+    status_is_error = {"value": False}
     background_turn: BackgroundExecutorTurn[str] = BackgroundExecutorTurn(
         interval_seconds=_PROFILE_DELETION_BUSY_INTERVAL_SECONDS,
     )
@@ -424,8 +461,15 @@ def choose_profile(
     review_mode = Condition(
         lambda: pending["action"] is not None and not background_turn.busy
     )
+    rename_mode = Condition(
+        lambda: rename_target["action"] is not None
+        and pending["action"] is None
+        and not background_turn.busy
+    )
     picker_mode = Condition(
-        lambda: pending["action"] is None and not background_turn.busy
+        lambda: pending["action"] is None
+        and rename_target["action"] is None
+        and not background_turn.busy
     )
 
     def current_row() -> _ProfilePickerRow:
@@ -446,6 +490,28 @@ def choose_profile(
         focusable=True,
         show_cursor=False,
     )
+    rename_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value="",
+            label="NEW PROFILE NAME",
+            state="NOT APPLIED",
+            detail="Enter to review this exact Profile rename.",
+            validate=validate_profile_name,
+            value_label="Profile name",
+            # Profile names are exact one-segment identifiers; prompt padding
+            # must not be normalized into a different registry key.
+            strip_candidate=False,
+        ),
+        input_name="profile-picker-rename",
+        frame_style="class:profile-rename-field",
+    )
+
+    def clear_stale_rename_error(_buffer) -> None:
+        if rename_target["action"] is not None:
+            status["text"] = ""
+            status_is_error["value"] = False
+
+    rename_field.input.buffer.on_text_changed += clear_stale_rename_error
 
     def move(delta: int) -> None:
         selected["index"] = max(
@@ -453,6 +519,7 @@ def choose_profile(
             min(selected["index"] + delta, len(rows) - 1),
         )
         status["text"] = ""
+        status_is_error["value"] = False
 
     @bindings.add("down", filter=picker_mode)
     def _next_row(event) -> None:
@@ -469,6 +536,7 @@ def choose_profile(
         row = current_row()
         if row.kind == "STUDY":
             status["text"] = "Study header selected · D reviews whole-Study removal"
+            status_is_error["value"] = False
             event.app.invalidate()
             return
         event.app.exit(
@@ -480,6 +548,75 @@ def choose_profile(
             )
         )
 
+    @bind_case_insensitive_key(bindings, "r", filter=picker_mode, eager=True)
+    def _edit_profile_name(event) -> None:
+        row = current_row()
+        if row.kind == "STUDY":
+            status["text"] = "Study headers cannot be renamed here"
+            status_is_error["value"] = True
+            event.app.invalidate()
+            return
+        entry = row.entry
+        assert entry is not None
+        if entry.rename_block is not None:
+            status["text"] = entry.rename_block
+            status_is_error["value"] = True
+            event.app.invalidate()
+            return
+        rename_target["action"] = ProfilePickerAction(
+            kind="RENAME_PROFILE",
+            name=row.name,
+            uid=row.uid,
+            registry_generation=registry_generation,
+            row_index=selected["index"],
+        )
+        rename_field.set_text(row.name)
+        status["text"] = ""
+        status_is_error["value"] = False
+        event.app.layout.focus(rename_field.input)
+        event.app.invalidate()
+
+    @bindings.add(
+        "enter",
+        filter=rename_mode & has_focus(rename_field.input),
+        eager=True,
+    )
+    def _review_profile_name(event) -> None:
+        try:
+            new_name = rename_field.validate_candidate()
+        except (ProfileConfigError, TypeError, ValueError) as error:
+            status["text"] = display_escape_text(str(error))
+            status_is_error["value"] = True
+            event.app.invalidate()
+            return
+        target = rename_target["action"]
+        assert isinstance(target, ProfilePickerAction)
+        action = ProfilePickerAction(
+            kind="RENAME_PROFILE",
+            name=target.name,
+            uid=target.uid,
+            registry_generation=target.registry_generation,
+            new_name=new_name,
+            row_index=target.row_index,
+        )
+        pending["action"] = action
+        pending["review"] = _rename_review(action)
+        rename_target["action"] = None
+        status["text"] = ""
+        status_is_error["value"] = False
+        event.app.layout.focus(control)
+        event.app.invalidate()
+
+    @bindings.add(
+        "c-j",
+        filter=rename_mode & has_focus(rename_field.input),
+        eager=True,
+    )
+    def _reject_profile_name_newline(event) -> None:
+        status["text"] = "Profile name must stay on one line"
+        status_is_error["value"] = True
+        event.app.invalidate()
+
     @bind_case_insensitive_key(bindings, "d", filter=picker_mode, eager=True)
     def _review_removal(event) -> None:
         row = current_row()
@@ -488,10 +625,12 @@ def choose_profile(
             assert entry is not None
             if row.name == current:
                 status["text"] = "CURRENT Profile cannot be removed · switch first"
+                status_is_error["value"] = True
                 event.app.invalidate()
                 return
             if entry.removal_block is not None:
                 status["text"] = entry.removal_block
+                status_is_error["value"] = True
                 event.app.invalidate()
                 return
         elif any(
@@ -499,6 +638,7 @@ def choose_profile(
             for entry in options
         ):
             status["text"] = "Study contains CURRENT Profile · switch first"
+            status_is_error["value"] = True
             event.app.invalidate()
             return
         action = _removal_action(
@@ -508,14 +648,17 @@ def choose_profile(
         pending["action"] = action
         pending["review"] = _removal_review(action, row)
         status["text"] = ""
+        status_is_error["value"] = False
         event.app.invalidate()
 
     @bind_exact_command_approval(bindings, filter=review_mode, eager=True)
-    def _apply_reviewed_removal(event) -> None:
+    def _apply_reviewed_action(event) -> None:
         action = pending["action"]
         assert isinstance(action, ProfilePickerAction)
         reviewed_row_index = selected["index"]
-        if apply_removal is None:
+        # Rename is a short registry mutation. Return its frozen receipt to the
+        # Profile command so the picker is rebuilt from the next generation.
+        if action.kind == "RENAME_PROFILE" or apply_removal is None:
             event.app.exit(result=action)
             return
 
@@ -568,9 +711,33 @@ def choose_profile(
             event.app.invalidate()
             return
         if pending["action"] is not None:
+            action = pending["action"]
             pending["action"] = None
             pending["review"] = None
-            status["text"] = "Removal review cancelled"
+            if (
+                isinstance(action, ProfilePickerAction)
+                and action.kind == "RENAME_PROFILE"
+            ):
+                rename_target["action"] = ProfilePickerAction(
+                    kind="RENAME_PROFILE",
+                    name=action.name,
+                    uid=action.uid,
+                    registry_generation=action.registry_generation,
+                    row_index=action.row_index,
+                )
+                status["text"] = "Rename review cancelled"
+                status_is_error["value"] = False
+                event.app.layout.focus(rename_field.input)
+            else:
+                status["text"] = "Removal review cancelled"
+                status_is_error["value"] = False
+            event.app.invalidate()
+            return
+        if rename_target["action"] is not None:
+            rename_target["action"] = None
+            status["text"] = "Rename cancelled"
+            status_is_error["value"] = False
+            event.app.layout.focus(control)
             event.app.invalidate()
             return
         event.app.exit(result=None)
@@ -593,8 +760,17 @@ def choose_profile(
                 f" Permanently deleting {target_kind} "
                 f"{busy_suffix(background_turn.frame)}"
             )
+        if rename_mode():
+            action = rename_target["action"]
+            assert isinstance(action, ProfilePickerAction)
+            return " Rename Profile " + display_escape_text(action.name)
         return (
-            " Review irreversible deletion"
+            (
+                " Review exact Profile rename"
+                if isinstance(pending["action"], ProfilePickerAction)
+                and pending["action"].kind == "RENAME_PROFILE"
+                else " Review irreversible deletion"
+            )
             if review_mode()
             else " Select a Profile or Study"
         )
@@ -612,12 +788,36 @@ def choose_profile(
                 + close_note
             )
         if review_mode():
+            action = pending["action"]
+            if (
+                isinstance(action, ProfilePickerAction)
+                and action.kind == "RENAME_PROFILE"
+            ):
+                return (
+                    " Enter/A apply exact command  Esc back · Profile UID, "
+                    "store, Contexts, Memories, and Grants stay unchanged"
+                )
             return (
                 " Enter/A apply exact command  Esc back · IRREVERSIBLE · "
                 "store and checkpoints will be deleted"
             )
+        if rename_mode():
+            message = status["text"]
+            prefix = " Ctrl-U clear  Enter review exact command  Esc back"
+            if not message:
+                return prefix
+            message_style = (
+                "class:error"
+                if status_is_error["value"]
+                else "class:memcommit.notification"
+            )
+            return [("", prefix + " · "), (message_style, message)]
         row = current_row()
-        action = "D remove Study" if row.kind == "STUDY" else "Enter use  D remove Profile"
+        action = (
+            "D remove Study"
+            if row.kind == "STUDY"
+            else "Enter use  R rename  D remove Profile"
+        )
         message = status["text"]
         prefix = (
             f" ↑/↓ move  {action}  Esc/q cancel"
@@ -625,7 +825,10 @@ def choose_profile(
         )
         if not message:
             return prefix
-        return [("", prefix + " · "), ("class:success", message)]
+        message_style = (
+            "class:error" if status_is_error["value"] else "class:success"
+        )
+        return [("", prefix + " · "), (message_style, message)]
 
     header = Window(
         FormattedTextControl(header_text),
@@ -651,6 +854,15 @@ def choose_profile(
                     header,
                     Window(height=1, char="─"),
                     options_window,
+                    ConditionalContainer(
+                        content=HSplit(
+                            [
+                                Window(height=1, char="─"),
+                                rename_field.frame,
+                            ]
+                        ),
+                        filter=rename_mode,
+                    ),
                     Window(height=1, char="─"),
                     footer,
                 ]
@@ -662,13 +874,20 @@ def choose_profile(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=Style.from_dict(
-            {
-                "selected": "reverse bold",
-                "current": "ansigreen bold",
-                "study": "ansicyan bold",
-                "success": "ansigreen bold",
-            }
+        style=merge_styles(
+            [
+                MEMCOMMIT_TUI_STYLE,
+                Style.from_dict(
+                    {
+                        "selected": "reverse bold",
+                        "current": "ansigreen bold",
+                        "study": "ansicyan bold",
+                        "success": "ansigreen bold",
+                        "error": "ansired bold",
+                        "profile-rename-field": "fg:#f4f5f7",
+                    }
+                ),
+            ]
         ),
     )
     try:

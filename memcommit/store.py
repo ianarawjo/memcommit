@@ -986,6 +986,11 @@ class MemoryStore:
         return self.store_dir / "meld-resolution-branches"
 
     @property
+    def meld_choice_branches_dir(self) -> Path:
+        """Provider-free option selections staged for saved Meld sessions."""
+        return self.store_dir / "meld-choice-branches"
+
+    @property
     def write_protection_registry(self) -> WriteProtectionRegistry:
         """Return the persistent registry scoped to this exact Profile store."""
         return WriteProtectionRegistry(self.store_dir)
@@ -1297,42 +1302,6 @@ class MemoryStore:
             raise
 
     @contextmanager
-    def _atomize_session_write_lock(
-        self,
-        context_uid: str,
-    ) -> Iterator[None]:
-        """Serialize one Context's analysis/workbench CAS lifecycle."""
-
-        try:
-            canonical = str(uuid.UUID(context_uid))
-        except (AttributeError, TypeError, ValueError) as error:
-            raise ValueError("Invalid Atomize session Context uid.") from error
-        if canonical != context_uid:
-            raise ValueError("Invalid Atomize session Context uid.")
-        lock_dir = self.store_dir / "atomize-session-write-locks"
-        if lock_dir.is_symlink():
-            raise ValueError("Refusing to use an Atomize session lock symlink.")
-        lock_dir.mkdir(parents=True, exist_ok=True)
-        lock_path = lock_dir / f"{canonical}.lock"
-        flags = os.O_RDWR | os.O_CREAT
-        if hasattr(os, "O_NOFOLLOW"):
-            flags |= os.O_NOFOLLOW
-        descriptor = os.open(lock_path, flags, 0o600)
-        try:
-            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
-                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-                try:
-                    yield
-                finally:
-                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
-        except Exception:
-            try:
-                os.close(descriptor)
-            except OSError:
-                pass
-            raise
-
-    @contextmanager
     def _context_write_locks(
         self,
         names: Iterable[str],
@@ -1403,6 +1372,42 @@ class MemoryStore:
         lock_path = self.store_dir / "update-session-write.lock"
         if lock_path.is_symlink():
             raise ValueError("Refusing to use a symbolic-link update lock.")
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(lock_path, flags, 0o600)
+        try:
+            with os.fdopen(descriptor, "a+", encoding="utf-8") as lock_file:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+        except Exception:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            raise
+
+    @contextmanager
+    def _atomize_session_write_lock(
+        self,
+        context_uid: str,
+    ) -> Iterator[None]:
+        """Serialize one Context's analysis/workbench CAS lifecycle."""
+
+        try:
+            canonical = str(uuid.UUID(context_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid Atomize session Context uid.") from error
+        if canonical != context_uid:
+            raise ValueError("Invalid Atomize session Context uid.")
+        lock_dir = self.store_dir / "atomize-session-write-locks"
+        if lock_dir.is_symlink():
+            raise ValueError("Refusing to use an Atomize session lock symlink.")
+        lock_dir.mkdir(parents=True, exist_ok=True)
+        lock_path = lock_dir / f"{canonical}.lock"
         flags = os.O_RDWR | os.O_CREAT
         if hasattr(os, "O_NOFOLLOW"):
             flags |= os.O_NOFOLLOW
@@ -2151,6 +2156,99 @@ class MemoryStore:
 
     # --- Context-to-Context meld sessions ---
 
+    def _meld_choice_branches_path(self, session_uid: str) -> Path:
+        try:
+            canonical = str(uuid.UUID(session_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid Meld choice branch session uid.") from error
+        if canonical != session_uid:
+            raise ValueError("Invalid Meld choice branch session uid.")
+        directory = self.meld_choice_branches_dir
+        if directory.is_symlink():
+            raise ValueError("Meld choice branch storage cannot be a symbolic link.")
+        if directory.exists() and not directory.is_dir():
+            raise ValueError("Meld choice branch storage is invalid.")
+        return directory / f"{canonical}.json"
+
+    def load_meld_choice_branches(self, session):
+        """Restore sparse local choices for the exact current assessment."""
+        from memcommit.meld import MeldSession
+        from memcommit.meld_choice_branches import (
+            MeldChoiceBranchError,
+            MeldChoiceBranchSet,
+        )
+
+        if not isinstance(session, MeldSession):
+            raise TypeError("Expected a MeldSession.")
+        path = self._meld_choice_branches_path(session.uid)
+        if not path.exists():
+            return MeldChoiceBranchSet.empty(session)
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("Meld choice branch storage is invalid.")
+        try:
+            with open(path, encoding="utf-8") as file:
+                data = json.load(file, object_pairs_hook=_reject_duplicate_json_keys)
+            branches = MeldChoiceBranchSet.from_dict(data)
+        except (json.JSONDecodeError, MeldChoiceBranchError, ValueError) as error:
+            raise ValueError("Saved Meld choice branches are invalid.") from error
+        if branches.session_uid != session.uid:
+            raise ValueError(
+                "Saved Meld choice branches do not match their storage key."
+            )
+        if branches.target_context_uid != session.target.context_uid:
+            raise ValueError("Saved Meld choice branches target a different Context.")
+        # A completed reconciliation changes the assessment. Its selections
+        # are already retained in the durable user turn, so the old draft set
+        # must not leak into a later revision.
+        if not branches.matches(session):
+            return MeldChoiceBranchSet.empty(session)
+        try:
+            return branches.validated_for(session)
+        except MeldChoiceBranchError as error:
+            raise ValueError("Saved Meld choice branches are invalid.") from error
+
+    def save_meld_choice_branches(self, session, branches) -> None:
+        """Persist only staged choices; no provider outcome is written here."""
+        from memcommit.meld import MeldSession, meld_canonical_digest
+        from memcommit.meld_choice_branches import (
+            MeldChoiceBranchError,
+            MeldChoiceBranchSet,
+        )
+
+        if not isinstance(session, MeldSession):
+            raise TypeError("Expected a MeldSession.")
+        if not isinstance(branches, MeldChoiceBranchSet):
+            raise TypeError("Expected a MeldChoiceBranchSet.")
+        try:
+            restored = MeldChoiceBranchSet.from_dict(
+                branches.to_dict()
+            ).validated_for(session)
+        except MeldChoiceBranchError as error:
+            raise ValueError("Meld choice branches are invalid.") from error
+        path = self._meld_choice_branches_path(session.uid)
+        with self._context_write_lock(session.target.context_name):
+            with self.profile_write_guard():
+                saved_session = self.load_meld_session(session.target.context_uid)
+                if saved_session is None or saved_session.uid != session.uid:
+                    raise ConcurrentContextUpdateError(
+                        "The Meld session changed before its choices could be saved."
+                    )
+                if meld_canonical_digest(saved_session.to_dict()) != (
+                    meld_canonical_digest(session.to_dict())
+                ):
+                    raise ConcurrentContextUpdateError(
+                        "The Meld assessment changed before its choices could be saved."
+                    )
+                directory = self.meld_choice_branches_dir
+                if directory.exists() and (
+                    not directory.is_dir() or directory.is_symlink()
+                ):
+                    raise ValueError("Meld choice branch storage is invalid.")
+                directory.mkdir(parents=True, exist_ok=True)
+                if path.exists() and (not path.is_file() or path.is_symlink()):
+                    raise ValueError("Meld choice branch storage is invalid.")
+                _write_json_atomic(path, restored.to_dict())
+
     def _meld_resolution_branch_path(self, key: str) -> Path:
         if (
             not isinstance(key, str)
@@ -2233,7 +2331,6 @@ class MemoryStore:
                         )
                     return
                 _write_json_atomic(path, restored.to_dict())
-
 
     def _meld_session_path(self, target_context_uid: str) -> Path:
         try:

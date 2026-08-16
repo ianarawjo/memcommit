@@ -101,7 +101,7 @@ def test_recursive_context_lock_uses_a_frozen_existing_namespace_snapshot(
     assert invoke("init", "unrelated").exit_code == 0
     assert invoke("switch", "tree").exit_code == 0
 
-    locked = invoke("lock", "--recursive")
+    locked = invoke("lock", "-r")
 
     assert locked.exit_code == 0
     assert "3 Contexts, 3 changed" in locked.output
@@ -124,7 +124,7 @@ def test_recursive_context_lock_uses_a_frozen_existing_namespace_snapshot(
     assert not store.write_protection_state().context_is_protected(later.uid)
 
     assert invoke("switch", "tree").exit_code == 0
-    unlocked = invoke("unlock", "context", "tree", "--recursive")
+    unlocked = invoke("unlock", "context", "tree", "-r")
     assert unlocked.exit_code == 0
     assert "4 Contexts, 3 changed" in unlocked.output
     assert not store.write_protection_state().context_uids
@@ -323,21 +323,20 @@ def test_memory_lock_does_not_follow_uid_copy_into_branch(isolated_store):
     )
 
 
-def test_context_lock_blocks_rename_while_memory_lock_survives_rename(
+def test_context_lock_blocks_relocation_while_memory_lock_survives_relocation(
     isolated_store,
 ):
     assert invoke("init", "rename-me").exit_code == 0
     assert invoke("lock", "context", "rename-me").exit_code == 0
-    blocked = invoke("rename", "rename-me", "renamed", "--force")
-    assert blocked.exit_code == 1
-    assert "locked against changes" in _all_output(blocked)
+    store = MemoryStore()
+    with pytest.raises(WriteProtectionError, match="locked against changes"):
+        store.rename_contexts(store.plan_context_rename("rename-me", "renamed"))
 
     assert invoke("unlock", "context", "rename-me").exit_code == 0
     assert invoke("add", "identity follows rename").exit_code == 0
-    store = MemoryStore()
     memory = _first_memory(store, "rename-me")
     assert invoke("lock", "memory", memory.uid).exit_code == 0
-    assert invoke("rename", "rename-me", "renamed", "--force").exit_code == 0
+    store.rename_contexts(store.plan_context_rename("rename-me", "renamed"))
 
     assert invoke("edit", memory.uid, "blocked after rename").exit_code == 1
     assert (
@@ -353,7 +352,7 @@ def test_context_lock_blocks_rename_while_memory_lock_survives_rename(
     assert invoke("edit", memory.uid, "allowed after unlock").exit_code == 0
 
 
-def test_rename_cannot_rewrite_a_locked_inbound_reference_owner(
+def test_relocation_cannot_rewrite_a_locked_inbound_reference_owner(
     isolated_store,
 ):
     store = MemoryStore()
@@ -365,17 +364,13 @@ def test_rename_cannot_rewrite_a_locked_inbound_reference_owner(
     store.set_current(owner.name)
     assert invoke("lock", "context", owner.name).exit_code == 0
 
-    result = invoke(
-        "rename",
-        target.name,
-        "renamed-target",
-        "--force",
-    )
-
-    assert result.exit_code == 1
-    assert "Context 'locked-owner' is locked against changes" in _all_output(
-        result
-    )
+    with pytest.raises(
+        WriteProtectionError,
+        match="Context 'locked-owner' is locked against changes",
+    ):
+        store.rename_contexts(
+            store.plan_context_rename(target.name, "renamed-target")
+        )
     assert store.context_exists(target.name)
     assert not store.context_exists("renamed-target")
 

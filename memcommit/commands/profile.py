@@ -18,7 +18,13 @@ from memcommit.commands.profile_picker import (
     ProfilePickerRefresh,
     choose_profile,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.profile_config import (
     ProfileConfigError,
     load_profile_registry,
@@ -262,6 +268,21 @@ def _pick_profile(
                     else None
                 )
             ),
+            rename_block=(
+                "The fixed authoring Profile cannot be renamed"
+                if profile.kind == "AUTHORING"
+                else (
+                    "The fixed study-baseline Profile cannot be renamed"
+                    if profile.name.casefold()
+                    == STUDY_BASELINE_PROFILE_NAME.casefold()
+                    else (
+                        "Legacy Study members cannot be renamed individually"
+                        if profile.uid in memberships
+                        and memberships[profile.uid].task is not None
+                        else None
+                    )
+                )
+            ),
         )
         for profile, inspection in zip(
             registry.visible_profiles,
@@ -359,6 +380,56 @@ def _profile_removal_status(result) -> str:
     )
 
 
+def _profile_rename_status(result) -> str:
+    if not result.changed:
+        return "Profile '" + display_escape_text(result.profile.name) + "' unchanged"
+    return (
+        "Renamed Profile '"
+        + display_escape_text(result.previous_name)
+        + "' to '"
+        + display_escape_text(result.profile.name)
+        + "' · UID and store unchanged"
+    )
+
+
+def _print_profile_rename(result) -> None:
+    if not result.changed:
+        typer.echo(
+            "Profile '"
+            + display_escape_text(result.profile.name)
+            + "' already has that name."
+        )
+        return
+    prefix = "Renamed active Profile" if result.was_active else "Renamed Profile"
+    typer.secho(
+        f"{prefix} '{display_escape_text(result.previous_name)}' to "
+        f"'{display_escape_text(result.profile.name)}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo("Profile UID unchanged: " + display_escape_text(result.profile.uid))
+    typer.echo(
+        "Store unchanged: "
+        + display_escape_text(str(profile_store_dir(result.profile)))
+    )
+    if result.was_active:
+        typer.echo(
+            "The same Profile remains current under its new name: "
+            + display_escape_text(result.active_profile_name)
+        )
+    else:
+        typer.echo(
+            "Active Profile unchanged: "
+            + display_escape_text(result.active_profile_name)
+        )
+    typer.echo(
+        "Store data, Contexts, Memories, grants, and provenance were not modified."
+    )
+    typer.echo(
+        "Use it with: mem profile use "
+        + display_escape_text(result.profile.name)
+    )
+
+
 def _study_removal_status(result) -> str:
     grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
     return (
@@ -380,7 +451,16 @@ def _apply_profile_picker_action(
         _use_profile(action.name)
         return None
     try:
-        if action.kind == "REMOVE_PROFILE":
+        if action.kind == "RENAME_PROFILE":
+            if action.new_name is None:
+                raise ProfileError("Profile picker rename is missing its new name.")
+            result = rename_profile(
+                action.new_name,
+                old_name=action.name,
+                expected_uid=action.uid,
+                expected_generation=action.registry_generation,
+            )
+        elif action.kind == "REMOVE_PROFILE":
             result = remove_profile(
                 action.name,
                 expected_uid=action.uid,
@@ -396,6 +476,10 @@ def _apply_profile_picker_action(
         if propagate_errors:
             raise
         _fail(error)
+    if action.kind == "RENAME_PROFILE":
+        if print_receipt:
+            _print_profile_rename(result)
+        return _profile_rename_status(result)
     if action.kind == "REMOVE_PROFILE":
         if print_receipt:
             _print_profile_removal(result)
@@ -406,11 +490,11 @@ def _apply_profile_picker_action(
 
 
 def _run_profile_selector() -> None:
-    """Keep the selector open after deletion and reload its frozen catalog."""
+    """Keep the selector open after mutations and reload its frozen catalog."""
 
     status = ""
     preferred_row_index: int | None = None
-    completed_removal = False
+    completed_mutation = False
     while True:
         action = _pick_profile(
             initial_status=status,
@@ -425,7 +509,7 @@ def _run_profile_selector() -> None:
             ),
         )
         if action is None:
-            if not completed_removal:
+            if not completed_mutation:
                 typer.echo("Profile selection cancelled.")
             return
         if isinstance(action, ProfilePickerRefresh):
@@ -433,7 +517,7 @@ def _run_profile_selector() -> None:
                 _fail(action.error)
             status = action.status
             preferred_row_index = action.preferred_row_index
-            completed_removal = True
+            completed_mutation = True
             if action.close_requested:
                 return
             continue
@@ -447,8 +531,9 @@ def _run_profile_selector() -> None:
             action,
             print_receipt=False,
             propagate_errors=False,
-        ) or "Profile deletion completed"
-        completed_removal = True
+        ) or "Profile mutation completed"
+        preferred_row_index = action.row_index
+        completed_mutation = True
 
 
 def _use_profile(name: str) -> None:
@@ -660,14 +745,31 @@ def grant_create_cmd(
     recursive: Annotated[
         bool,
         typer.Option(
+            "-r",
             "--recursive",
             help="Freeze the resource's current descendants into this grant",
+        ),
+    ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Freeze only the selected resource root into this grant",
         ),
     ] = False,
 ) -> None:
     """Grant a frozen Context view or SHARE delivery endpoint."""
 
     try:
+        recursive = (
+            resolve_scope_preset(
+                direct=direct,
+                recursive=recursive,
+                default=ContextScopePreset.DIRECT,
+            )
+            is ContextScopePreset.RECURSIVE
+        )
         registry, grant = create_authority_grant(
             authority_name=authority,
             grantee_name=grantee,
@@ -700,6 +802,8 @@ def grant_update_cmd(
     refresh_scope: Annotated[
         bool,
         typer.Option(
+            "-r",
+            "--recursive",
             "--refresh-scope",
             help="Replace the frozen scope with all current descendants",
         ),
@@ -707,6 +811,8 @@ def grant_update_cmd(
     root_only: Annotated[
         bool,
         typer.Option(
+            "-d",
+            "--direct",
             "--root-only",
             help="Replace the frozen scope with only its root Context",
         ),
@@ -898,42 +1004,7 @@ def rename_cmd(
         result = rename_profile(destination, old_name=old_name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    if not result.changed:
-        typer.echo(
-            "Profile '"
-            + display_escape_text(result.profile.name)
-            + "' already has that name."
-        )
-        return
-
-    prefix = "Renamed active Profile" if result.was_active else "Renamed Profile"
-    typer.secho(
-        f"{prefix} '{display_escape_text(result.previous_name)}' to "
-        f"'{display_escape_text(result.profile.name)}'.",
-        fg=typer.colors.GREEN,
-    )
-    typer.echo("Profile UID unchanged: " + display_escape_text(result.profile.uid))
-    typer.echo(
-        "Store unchanged: "
-        + display_escape_text(str(profile_store_dir(result.profile)))
-    )
-    if result.was_active:
-        typer.echo(
-            "The same Profile remains current under its new name: "
-            + display_escape_text(result.active_profile_name)
-        )
-    else:
-        typer.echo(
-            "Active Profile unchanged: "
-            + display_escape_text(result.active_profile_name)
-        )
-    typer.echo(
-        "Store data, Contexts, Memories, grants, and provenance were not modified."
-    )
-    typer.echo(
-        "Use it with: mem profile use "
-        + display_escape_text(result.profile.name)
-    )
+    _print_profile_rename(result)
 
 
 @app.command("import")

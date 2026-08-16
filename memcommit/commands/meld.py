@@ -418,6 +418,8 @@ def render_meld_session(
                 (f"Apply exactly this proposal: {_session_command(session)} --accept"),
             ]
         )
+    elif session.state == "APPLIED" and session.granted_target is None:
+        lines.extend(["", "RECOVERY · mem undo"])
     return "\n".join(lines)
 
 
@@ -913,12 +915,43 @@ def _run_interactive(
             if allow_apply and session.mode == "SYMMETRIC"
             else None
         )
+        # Each visible option is a provider-free local branch. Persist only
+        # its exact issue/option selection (and optional explanation) while
+        # the person reviews; the provider sees the choices together only
+        # after the workbench builds one explicit whole-ledger action.
+        choice_branches = (
+            store.load_meld_choice_branches(session)
+            if session.current_assessment is not None
+            else None
+        )
+
+        def load_choice(issue_uid: str) -> tuple[str | None, str]:
+            assert choice_branches is not None
+            return choice_branches.response_for(issue_uid)
+
+        def save_choice(
+            issue_uid: str,
+            option_uid: str | None,
+            explanation: str,
+        ) -> None:
+            nonlocal choice_branches
+            assert choice_branches is not None
+            choice_branches = choice_branches.with_response(
+                session,
+                issue_uid=issue_uid,
+                option_uid=option_uid,
+                explanation=explanation,
+            )
+            store.save_meld_choice_branches(session, choice_branches)
+
         action = run_meld_shell(
             session,
             navigation=navigation,
             review_only=not allow_apply,
             destination=destination,
             analysis_origin=analysis_origin,
+            draft_loader=(load_choice if choice_branches is not None else None),
+            draft_saver=(save_choice if choice_branches is not None else None),
         )
         if action is None:
             break

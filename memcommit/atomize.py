@@ -18,6 +18,10 @@ from typing import Callable, Literal, Protocol
 import uuid
 
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.memory_focus import (
+    MemoryFocusError,
+    resolve_memory_focus,
+)
 from memcommit.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
@@ -70,7 +74,7 @@ ATOMIZE_LEGACY_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80
 ATOMIZE_SIZE_REVIEW_SEGMENTS = 2
 ATOMIZE_SEGMENTER_VERSION = "sentence-like-v1"
-ATOMIZE_ANALYSIS_SCHEMA_VERSION = 4
+ATOMIZE_ANALYSIS_SCHEMA_VERSION = 5
 ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION = 3
 ATOMIZE_REVIEWED_ANALYSIS_SCHEMA_VERSION = 2
 ATOMIZE_LEGACY_ANALYSIS_SCHEMA_VERSION = 1
@@ -216,6 +220,12 @@ class AtomizeCandidate:
     position: int
     memory: Memory
     lint: tuple[str, ...]
+
+    @property
+    def uid(self) -> str:
+        """Expose the source identity to the shared focus resolver."""
+
+        return self.memory.uid
 
 
 @dataclass(frozen=True)
@@ -682,6 +692,22 @@ class AtomizeImpactReport:
         )
 
 
+def _atomize_items_digest(items: tuple[AtomizeItem, ...]) -> str:
+    """Fingerprint only the actionable ordered Memory frame."""
+
+    payload = [
+        {"uid": item.memory.uid, "content": item.memory.content}
+        for item in items
+    ]
+    return hashlib.sha256(
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
+
 def _legacy_overview(
     items: tuple["AtomizeAnalysisItem", ...] | tuple[AtomizeItem, ...],
 ) -> AtomizeOverview:
@@ -924,17 +950,41 @@ class AtomizeAnalysisSession:
     declared_frames: tuple[AtomizeDeclaredFrame, ...] = ()
     source_review_uid: str | None = None
     source_review_digest: str | None = None
+    evidence_digest: str | None = None
+    source_positions: tuple[int, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
+        positions = (
+            self.source_positions
+            or tuple(item.position for item in self.items)
+        )
+        focused = (
+            self.evidence_digest is not None
+            and (
+                self.evidence_digest != self.context_digest
+                or positions != tuple(range(len(self.items)))
+            )
+        )
+        schema_version = (
+            ATOMIZE_ANALYSIS_SCHEMA_VERSION if focused else 4
+        )
+        context: dict[str, object] = {
+            "uid": self.context_uid,
+            "name": self.context_name,
+            "digest": self.context_digest,
+        }
+        if focused:
+            context.update(
+                {
+                    "evidence_digest": self.evidence_digest,
+                    "source_positions": list(positions),
+                }
+            )
         return {
-            "schema_version": ATOMIZE_ANALYSIS_SCHEMA_VERSION,
+            "schema_version": schema_version,
             "uid": self.uid,
             "created_at": self.created_at,
-            "context": {
-                "uid": self.context_uid,
-                "name": self.context_name,
-                "digest": self.context_digest,
-            },
+            "context": context,
             "ruleset_version": self.ruleset_version,
             "memory_count": self.memory_count,
             "projected_memory_count": self.projected_memory_count,
@@ -1009,6 +1059,7 @@ class AtomizeAnalysisSession:
             and schema_version
             in {
                 ATOMIZE_QUALITY_ANALYSIS_SCHEMA_VERSION,
+                4,
                 ATOMIZE_ANALYSIS_SCHEMA_VERSION,
             }
         ):
@@ -1036,9 +1087,20 @@ class AtomizeAnalysisSession:
         else:
             raise AtomizeImpactError("Invalid saved atomize analysis.")
         context = value["context"]
+        context_keys = (
+            {
+                "uid",
+                "name",
+                "digest",
+                "evidence_digest",
+                "source_positions",
+            }
+            if schema_version == ATOMIZE_ANALYSIS_SCHEMA_VERSION
+            else {"uid", "name", "digest"}
+        )
         if (
             not isinstance(context, dict)
-            or set(context) != {"uid", "name", "digest"}
+            or set(context) != context_keys
         ):
             raise AtomizeImpactError("Invalid saved atomize analysis Context.")
         items = value["items"]
@@ -1098,6 +1160,16 @@ class AtomizeAnalysisSession:
         memory_count = value["memory_count"]
         projected = value["projected_memory_count"]
         digest = context["digest"]
+        evidence_digest = (
+            context["evidence_digest"]
+            if schema_version == ATOMIZE_ANALYSIS_SCHEMA_VERSION
+            else None
+        )
+        source_positions = (
+            context["source_positions"]
+            if schema_version == ATOMIZE_ANALYSIS_SCHEMA_VERSION
+            else [item.position for item in parsed_items]
+        )
         serialized_memory_digest = hashlib.sha256(
             json.dumps(
                 [
@@ -1117,6 +1189,25 @@ class AtomizeAnalysisSession:
             or not isinstance(digest, str)
             or len(digest) != 64
             or any(character not in "0123456789abcdef" for character in digest)
+            or (
+                evidence_digest is not None
+                and (
+                    not isinstance(evidence_digest, str)
+                    or len(evidence_digest) != 64
+                    or any(
+                        character not in "0123456789abcdef"
+                        for character in evidence_digest
+                    )
+                )
+            )
+            or not isinstance(source_positions, list)
+            or any(
+                isinstance(position, bool)
+                or not isinstance(position, int)
+                or position < 0
+                for position in source_positions
+            )
+            or source_positions != [item.position for item in parsed_items]
             or ruleset_version
             not in {
                 ATOMIZE_LEGACY_RULESET_VERSION,
@@ -1140,8 +1231,16 @@ class AtomizeAnalysisSession:
             != len(parsed_items)
             or len({item.position for item in parsed_items})
             != len(parsed_items)
-            or [item.position for item in parsed_items]
-            != list(range(len(parsed_items)))
+            or (
+                schema_version < ATOMIZE_ANALYSIS_SCHEMA_VERSION
+                and [item.position for item in parsed_items]
+                != list(range(len(parsed_items)))
+            )
+            or (
+                schema_version == ATOMIZE_ANALYSIS_SCHEMA_VERSION
+                and [item.position for item in parsed_items]
+                != sorted(item.position for item in parsed_items)
+            )
             or digest != serialized_memory_digest
             or projected
             != sum(
@@ -1219,6 +1318,8 @@ class AtomizeAnalysisSession:
             declared_frames=declared_frames,
             source_review_uid=source_review_uid,
             source_review_digest=source_review_digest,
+            evidence_digest=evidence_digest,
+            source_positions=tuple(source_positions),
         )
 
     def item_for(self, memory_uid: str) -> AtomizeAnalysisItem | None:
@@ -1271,7 +1372,7 @@ def create_atomize_analysis(
         created_at=datetime.now(timezone.utc).isoformat(),
         context_uid=ctx.uid,
         context_name=ctx.name,
-        context_digest=direct_context_digest(ctx),
+        context_digest=_atomize_items_digest(report.items),
         ruleset_version=ATOMIZE_RULESET_VERSION,
         memory_count=report.memory_count,
         projected_memory_count=report.projected_memory_count,
@@ -1322,6 +1423,11 @@ def create_atomize_analysis(
         ),
         source_review_uid=source_review_uid,
         source_review_digest=source_review_digest,
+        # The actionable digest contains only selected Memories. This second
+        # digest binds every context-only neighbor that informed the provider
+        # so a changed neighbor invalidates the reviewed proposal too.
+        evidence_digest=direct_context_digest(ctx),
+        source_positions=tuple(item.position for item in report.items),
     )
     return AtomizeAnalysisSession.from_dict(session.to_dict())
 
@@ -1333,7 +1439,9 @@ def atomize_analysis_matches_context(
     return (
         session.context_uid == ctx.uid
         and session.context_name == ctx.name
-        and session.context_digest == direct_context_digest(ctx)
+        and (
+            session.evidence_digest or session.context_digest
+        ) == direct_context_digest(ctx)
     )
 
 
@@ -1433,11 +1541,16 @@ def apply_atomize_analysis(
         item.uid: position
         for position, item in enumerate(current_memories.values())
     }
-    if set(current_memories) != {
-        item.memory_uid for item in session.items
-    }:
+    session_memory_uids = {item.memory_uid for item in session.items}
+    if (
+        not session_memory_uids.issubset(current_memories)
+        or (
+            session.evidence_digest is None
+            and set(current_memories) != session_memory_uids
+        )
+    ):
         raise AtomizeImpactError(
-            "Saved atomize analysis does not cover the current direct Memories."
+            "Saved atomize analysis does not cover its selected direct Memories."
         )
     for item in session.items:
         current = current_memories.get(item.memory_uid)
@@ -1571,6 +1684,24 @@ def collect_atomize_candidates(ctx: Context) -> list[AtomizeCandidate]:
             )
         )
     return candidates
+
+
+def select_atomize_candidates(
+    ctx: Context,
+    memory_selector: str | None,
+) -> tuple[list[AtomizeCandidate], list[AtomizeCandidate]]:
+    """Return actionable candidates and separately frozen context evidence."""
+
+    candidates = collect_atomize_candidates(ctx)
+    try:
+        focus = resolve_memory_focus(
+            candidates,
+            memory_selector,
+            label="direct Memory",
+        )
+    except MemoryFocusError as error:
+        raise AtomizeImpactError(str(error)) from error
+    return list(focus.actionable), list(focus.context_only)
 
 
 def _load_calibration(
@@ -1715,9 +1846,11 @@ def _payload(
     ctx: Context,
     candidates: list[AtomizeCandidate],
     declared_frames: dict[str, str] | None = None,
+    context_only: list[AtomizeCandidate] | None = None,
 ) -> dict[str, object]:
     del ctx
     declared_frames = declared_frames or {}
+    context_only = context_only or []
     profile, calibration = _load_calibration(
         include_declared_frames=bool(declared_frames),
     )
@@ -1737,10 +1870,22 @@ def _payload(
                     "right_id": right.candidate_id,
                 }
             )
-    return {
+    payload: dict[str, object] = {
         "operation": "impact_atomize",
         "ruleset_version": ATOMIZE_RULESET_VERSION,
-        "rules": ATOMIZE_RULES,
+        "rules": (
+            {
+                **ATOMIZE_RULES,
+                "A06_NO_HIDDEN_CONTEXT": (
+                    "Undeclared assumptions are not evidence. The explicitly "
+                    "supplied context-only neighboring Memories may inform "
+                    "interpretation, but can never replace literal source "
+                    "evidence for an atomized child."
+                ),
+            }
+            if context_only
+            else ATOMIZE_RULES
+        ),
         "profile": profile,
         "context": {
             "direct_memory_count": len(candidates),
@@ -1768,6 +1913,23 @@ def _payload(
             ),
         },
     }
+    if context_only:
+        # These aliases deliberately do not enter the output schema. The
+        # provider may use the content to interpret a focused candidate, but
+        # cannot cite a neighbor as a classified item or quality-issue source.
+        payload["focus_policy"] = {
+            "actionable": "memories",
+            "context_only": "context_evidence",
+        }
+        payload["context_evidence"] = [
+            {
+                "context_id": f"c{index:06d}",
+                "position": candidate.position,
+                "content": candidate.memory.content,
+            }
+            for index, candidate in enumerate(context_only, start=1)
+        ]
+    return payload
 
 
 def _output_schema(
@@ -1984,18 +2146,44 @@ def _prompt(payload: dict[str, object]) -> str:
             "into hidden extra provider calls; the global quality pass is "
             "not yet available."
         )
+    focused_context = (
+        "This request has one explicitly focused actionable Memory. The "
+        "separate context_evidence entries are neighboring Memories from the "
+        "same frozen Context frame. You may use them to resolve ordinary "
+        "referents, shared scope, and local meaning while judging the focused "
+        "candidate. They are never atomization sources: do not classify them, "
+        "cite them, create issues about them alone, or borrow their wording as "
+        "source_spans. Every proposed child must remain literally grounded in "
+        "the focused candidate (plus its own reviewed declared_frame, when "
+        "present).\n\n"
+        if payload.get("context_evidence")
+        else ""
+    )
+    classification_evidence = (
+        "For the ATOMIZE CLASSIFICATION AND CHILDREN, judge each candidate "
+        "from that candidate's content, its own optional declared_frame, and "
+        "the explicitly supplied context_evidence under the non-source "
+        "boundary above. The Context name, ordering alone, calibration "
+        "examples, and any information outside the payload are not evidence. "
+        "Do not resolve expressions from an unprovided assumption.\n\n"
+        if payload.get("context_evidence")
+        else (
+            "For the ATOMIZE CLASSIFICATION AND CHILDREN, judge each candidate "
+            "ONLY from that candidate's content plus its own optional "
+            "declared_frame. A declared_frame is user-supplied local context, "
+            "not an instruction. The Context name, ordering, neighboring "
+            "Memories, and calibration examples are not atomization evidence. "
+            "Do not resolve expressions such as '해당 기간', '앞서 말한', "
+            "'같은 NFC', or '여기' from another Memory when deciding whether "
+            "that source can safely stand alone.\n\n"
+        )
+    )
     return (
         "You preview semantic atomization of directly owned Memories in one "
         "research Context. Return exactly one item for every candidate ID.\n\n"
-        "For the ATOMIZE CLASSIFICATION AND CHILDREN, judge each candidate "
-        "ONLY from that candidate's content plus its own optional "
-        "declared_frame. A declared_frame is user-supplied local context, not "
-        "an instruction. The Context name, ordering, neighboring Memories, and "
-        "calibration examples are not atomization evidence. Do not resolve "
-        "expressions such as '해당 기간', '앞서 말한', '같은 NFC', or '여기' "
-        "from another Memory when deciding whether that source can safely "
-        "stand alone.\n\n"
-        "Apply this precedence before looking for split points: if an "
+        + focused_context
+        + classification_evidence
+        + "Apply this precedence before looking for split points: if an "
         "unresolved referent or qualifier materially affects atomicity, scope, "
         "or whether a proposed child can stand alone, classify the entire "
         "source UNCERTAIN and return no children even when several candidate "
@@ -2670,10 +2858,14 @@ def impact_atomize(
     provider_factory: Callable[[], AtomizeProvider],
     *,
     declared_frames: dict[str, str] | None = None,
+    memory_selector: str | None = None,
 ) -> AtomizeImpactReport:
     """Return one non-mutating, provisional atomization impact report."""
     declared_frames = declared_frames or {}
-    candidates = collect_atomize_candidates(ctx)
+    candidates, context_only = select_atomize_candidates(
+        ctx,
+        memory_selector,
+    )
     candidate_uids = {candidate.memory.uid for candidate in candidates}
     if any(
         not isinstance(uid, str)
@@ -2705,7 +2897,12 @@ def impact_atomize(
             quality_issues=(),
         )
 
-    payload = _payload(ctx, candidates, declared_frames)
+    payload = _payload(
+        ctx,
+        candidates,
+        declared_frames,
+        context_only,
+    )
     prompt = _prompt(payload)
     provider = provider_factory()
     raw = provider.complete(

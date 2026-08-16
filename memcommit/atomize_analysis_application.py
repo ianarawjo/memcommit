@@ -37,6 +37,7 @@ class AtomizeAnalysisOpenRequest:
     source_review_uid: str | None = None
     source_review_digest: str | None = None
     output_context_name: str | None = None
+    memory_selector: str | None = None
     allow_prepared: bool = False
 
     def __post_init__(self) -> None:
@@ -53,6 +54,13 @@ class AtomizeAnalysisOpenRequest:
         ):
             raise AtomizeAnalysisApplicationError(
                 "Atomize Output must be a nonempty Context name."
+            )
+        if self.memory_selector is not None and (
+            not isinstance(self.memory_selector, str)
+            or not self.memory_selector.strip()
+        ):
+            raise AtomizeAnalysisApplicationError(
+                "Atomize Memory selector must be nonempty text."
             )
         reviewed = (
             bool(self.declared_frames)

@@ -14,6 +14,17 @@ curation, decisions, regression checks, and approval.
 
 ## Decision
 
+Induction is distinguished from Distill by its scoped output, not by whether
+it uses examples. `distill` may derive a complete Rule set from Context
+evidence, optionally guided or supported by a Goal. This inner `induct`
+primitive instead proposes one local delta to an existing Rule contract after
+a reviewed case exposes a gap. Once reviewed, the durable Rule records its
+exact evidence and neutral `DISTILLED` or `JOINTLY_REVISED` provenance rather
+than treating `INDUCED_FROM_CASES` as a separate direction of Rule creation.
+
+`DISTILLED_FROM_GOAL` and `INDUCED_FROM_CASES` remain legacy persisted Ground
+tokens. They are readable for compatibility but are not emitted for new Rules.
+
 Given a reviewed candidate, the current Rules, accepted Ground Memories, and
 a user judgment that exposes a rule gap, induction may propose exactly one of:
 

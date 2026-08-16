@@ -153,6 +153,9 @@ class StudyInitializationResult:
     declared_atomize_prewarms: int = 0
     installed_atomize_prewarms: int = 0
     skipped_atomize_prewarms: int = 0
+    declared_summarize_prewarms: int = 0
+    installed_summarize_prewarms: int = 0
+    skipped_summarize_prewarms: int = 0
     declared_update_prewarms: int = 0
     installed_update_prewarms: int = 0
     skipped_update_prewarms: int = 0
@@ -162,6 +165,10 @@ class StudyInitializationResult:
     declared_directional_meld_prewarms: int = 0
     installed_directional_meld_prewarms: int = 0
     skipped_directional_meld_prewarms: int = 0
+    declared_meld_resolution_prewarms: int = 0
+    installed_meld_resolution_prewarms: int = 0
+    skipped_meld_resolution_prewarms: int = 0
+    installed_meld_resolution_branches: int = 0
 
 
 @dataclass(frozen=True)
@@ -1245,6 +1252,8 @@ def rename_profile(
     new_name: str,
     *,
     old_name: str | None = None,
+    expected_uid: str | None = None,
+    expected_generation: int | None = None,
 ) -> ProfileRenameResult:
     """Rename one ordinary managed Profile without changing its stable identity."""
 
@@ -1258,6 +1267,14 @@ def rename_profile(
 
     with _registry_lock():
         registry = load_profile_registry()
+        if (
+            expected_generation is not None
+            and registry.generation != expected_generation
+        ):
+            raise ProfileError(
+                "Profile registry changed after rename selection; review the "
+                "current Profile list and try again."
+            )
         target = (
             registry.active
             if canonical_old is None
@@ -1265,6 +1282,11 @@ def rename_profile(
         )
         if target is None:
             raise ProfileError(f"Profile {canonical_old!r} does not exist.")
+        if expected_uid is not None and target.uid != expected_uid:
+            raise ProfileError(
+                f"Profile {target.name!r} identity changed after rename "
+                "selection; nothing was renamed."
+            )
         if registry.is_removed(target):
             raise ProfileError(
                 f"Profile {target.name!r} cannot be renamed while removed."
@@ -4273,21 +4295,24 @@ def _compose_study_run_pair(
     return merged
 
 
-def _copy_declared_study_prewarms(
+def _attach_declared_study_prewarms(
     baseline_root: Path,
     participant_root: Path,
 ) -> None:
-    """Copy only the baseline-declared semantic fixture into one new run."""
+    """Pin one shared immutable semantic fixture to a new participant run."""
 
-    name = "study-semantic-prewarm"
-    source = baseline_root / name
-    if not source.exists():
-        return
-    _assert_plain_tree(source, label="Study semantic prewarm fixture")
-    destination = participant_root / name
-    if destination.exists() or destination.is_symlink():
-        raise ProfileError("Study semantic prewarm destination is occupied.")
-    shutil.copytree(source, destination, symlinks=True, copy_function=shutil.copy2)
+    from memcommit.study_prewarm.registry import (
+        StudyPrewarmRegistryError,
+        attach_shared_bundle,
+    )
+
+    try:
+        attach_shared_bundle(
+            baseline_store_root=baseline_root,
+            participant_store_root=participant_root,
+        )
+    except StudyPrewarmRegistryError as error:
+        raise ProfileError(f"Study semantic prewarm could not be attached: {error}") from error
 
 
 def _publish_study_run_pair(
@@ -4344,7 +4369,7 @@ def _publish_study_run_pair(
             participant_root=participant_staging,
             authority_root=authority_staging,
         )
-        _copy_declared_study_prewarms(
+        _attach_declared_study_prewarms(
             profile_store_dir(baseline),
             participant_staging,
         )
@@ -4397,52 +4422,10 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
-        # Validate before the registry generation becomes visible. Hidden
-        # receipts are persisted after releasing this lock so the new active
-        # Profile and regenerated Grants are the identities they attest to.
-        from memcommit.store import MemoryStore
-        from memcommit.study_prewarm.atomize import (
-            install_declared_atomize_prewarms,
-        )
-        from memcommit.study_prewarm.compare import (
-            install_declared_compare_prewarms,
-        )
-        from memcommit.study_prewarm.update import install_declared_update_prewarms
-        from memcommit.study_prewarm.sever import install_declared_sever_prewarms
-        from memcommit.study_prewarm.meld_directional import (
-            install_declared_directional_meld_prewarms,
-        )
-
-        install_declared_atomize_prewarms(
-            store=MemoryStore(root=profile_store_dir(participant), create=False),
-            profile=participant,
-            registry_snapshot=updated,
-            publish=False,
-        )
-        install_declared_compare_prewarms(
-            store=MemoryStore(root=profile_store_dir(participant), create=False),
-            profile=participant,
-            registry_snapshot=updated,
-            publish=False,
-        )
-        install_declared_update_prewarms(
-            store=MemoryStore(root=profile_store_dir(participant), create=False),
-            profile=participant,
-            registry_snapshot=updated,
-            publish=False,
-        )
-        install_declared_sever_prewarms(
-            store=MemoryStore(root=profile_store_dir(participant), create=False),
-            profile=participant,
-            registry_snapshot=updated,
-            publish=False,
-        )
-        install_declared_directional_meld_prewarms(
-            store=MemoryStore(root=profile_store_dir(participant), create=False),
-            profile=participant,
-            registry_snapshot=updated,
-            publish=False,
-        )
+        # The participant pins a digest-checked immutable bundle, but no
+        # operation artifact or hidden receipt is installed during setup.
+        # Operation-specific evidence and authority validation happen only
+        # when that participant first invokes the exact declared request.
         try:
             _write_registry(updated)
         except Exception as error:
@@ -4569,74 +4552,27 @@ def init_study_profile(
             if staging.exists() and not staging.is_symlink():
                 shutil.rmtree(staging)
 
-    # The new registry generation is now visible and the outer registry guard
-    # has been released. Revalidate current identities and Grants, then write
-    # only hidden entry-key receipts. Ordinary operation state is materialized
-    # through each command's durable boundary on first explicit use.
-    from memcommit.store import MemoryStore
-    from memcommit.study_prewarm.atomize import install_declared_atomize_prewarms
-    from memcommit.study_prewarm.compare import install_declared_compare_prewarms
-    from memcommit.study_prewarm.update import install_declared_update_prewarms
-    from memcommit.study_prewarm.sever import install_declared_sever_prewarms
-    from memcommit.study_prewarm.meld_directional import (
-        install_declared_directional_meld_prewarms,
-    )
+    # Registry entries are advertised as available, not installed.  First use
+    # validates and materializes exactly one requested artifact in the active
+    # participant overlay.
+    from collections import Counter
+    from memcommit.study_prewarm.registry import load_registry as load_prewarm_registry
 
-    try:
-        participant_store = MemoryStore(
-            root=profile_store_dir(initialization.profile),
-            create=False,
-        )
-        current_registry = load_profile_registry()
-        compare_prewarms = install_declared_compare_prewarms(
-            store=participant_store,
-            profile=initialization.profile,
-            registry_snapshot=current_registry,
-        )
-        atomize_prewarms = install_declared_atomize_prewarms(
-            store=participant_store,
-            profile=initialization.profile,
-            registry_snapshot=current_registry,
-        )
-        update_prewarms = install_declared_update_prewarms(
-            store=participant_store,
-            profile=initialization.profile,
-            registry_snapshot=current_registry,
-        )
-        sever_prewarms = install_declared_sever_prewarms(
-            store=participant_store,
-            profile=initialization.profile,
-            registry_snapshot=current_registry,
-        )
-        directional_meld_prewarms = install_declared_directional_meld_prewarms(
-            store=participant_store,
-            profile=initialization.profile,
-            registry_snapshot=current_registry,
-        )
-    except Exception as error:
-        raise ProfileError(
-            f"Study run {profile_name!r} was created, but its declared semantic "
-            f"prewarm could not be installed: {error}"
-        ) from error
+    available = load_prewarm_registry(profile_store_dir(initialization.profile))
+    counts = Counter(
+        entry.operation
+        for entry in (available.entries if available is not None else ())
+        if entry.enabled
+    )
     return replace(
         initialization,
-        declared_compare_prewarms=compare_prewarms.declared,
-        installed_compare_prewarms=compare_prewarms.installed,
-        skipped_compare_prewarms=compare_prewarms.skipped_configuration,
-        declared_atomize_prewarms=atomize_prewarms.declared,
-        installed_atomize_prewarms=atomize_prewarms.installed,
-        skipped_atomize_prewarms=atomize_prewarms.skipped_configuration,
-        declared_update_prewarms=update_prewarms.declared,
-        installed_update_prewarms=update_prewarms.installed,
-        skipped_update_prewarms=update_prewarms.skipped_configuration,
-        declared_sever_prewarms=sever_prewarms.declared,
-        installed_sever_prewarms=sever_prewarms.installed,
-        skipped_sever_prewarms=sever_prewarms.skipped_configuration,
-        declared_directional_meld_prewarms=directional_meld_prewarms.declared,
-        installed_directional_meld_prewarms=directional_meld_prewarms.installed,
-        skipped_directional_meld_prewarms=(
-            directional_meld_prewarms.skipped_configuration
-        ),
+        declared_compare_prewarms=counts["COMPARE"],
+        declared_atomize_prewarms=counts["ATOMIZE"],
+        declared_summarize_prewarms=counts["SUMMARIZE"],
+        declared_update_prewarms=counts["UPDATE"],
+        declared_sever_prewarms=counts["SEVER"],
+        declared_directional_meld_prewarms=counts["MELD_DIRECTIONAL"],
+        declared_meld_resolution_prewarms=counts["MELD_RESOLUTION"],
     )
 
 

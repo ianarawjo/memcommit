@@ -15,6 +15,7 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResult,
     _find_save_as_available,
     _results_frame_title,
+    project_find_results_clipboard,
     render_find_search_results,
     run_find_search_workbench,
 )
@@ -569,6 +570,126 @@ def test_result_renderer_keeps_related_results_separate_from_primary_matches():
     assert "RELATED RESULTS" in rendered
     assert "Broader search: healthcare" in rendered
     assert "[1 memory memory-o] · RELATED Clinic appointment" in rendered
+
+
+def test_find_clipboard_projects_focused_result_and_complete_ranked_set():
+    request = FindSearchRequest("parking", ("task",))
+    response = FindSearchResponse(
+        request,
+        "CURRENT",
+        (
+            FindSearchResult(
+                context_name="task/a",
+                kind="memory",
+                uid="memory-one",
+                content="Lot A is closed.",
+            ),
+            FindSearchResult(
+                context_name="task/b",
+                kind="ref",
+                uid="reference-two",
+                content="Use the east garage.",
+            ),
+        ),
+    )
+
+    focused = project_find_results_clipboard(response, focused_index=1)
+    assert focused.scope == "FOCUSED"
+    assert focused.result_count == 1
+    assert "[2 memory ref referenc] Use the east garage." in focused.text
+    assert "Lot A is closed." not in focused.text
+
+    complete = project_find_results_clipboard(response, whole_result_set=True)
+    assert complete.scope == "RESULT_SET"
+    assert complete.result_count == 2
+    assert complete.text == render_find_search_results(response)
+    assert "Lot A is closed." in complete.text
+    assert "Use the east garage." in complete.text
+
+
+def test_find_y_and_uppercase_y_copy_focused_results_then_complete_set():
+    copied: list[str] = []
+    search_started = threading.Event()
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        search_started.set()
+        return FindSearchResponse(
+            request,
+            "CURRENT",
+            (
+                FindSearchResult(
+                    context_name="task/a",
+                    kind="memory",
+                    uid="memory-one",
+                    content="Lot A is closed.",
+                ),
+                FindSearchResult(
+                    context_name="task/b",
+                    kind="memory",
+                    uid="memory-two",
+                    content="Use the east garage.",
+                ),
+            ),
+        )
+
+    with create_pipe_input() as pipe_input:
+
+        def drive() -> None:
+            pipe_input.send_text("parking\r")
+            assert search_started.wait(3)
+            time.sleep(0.1)
+            pipe_input.send_text("y\x1b[ByY\x03")
+
+        driver = threading.Thread(target=drive, daemon=True)
+        driver.start()
+        result = run_find_search_workbench(
+            ("task", "task/a", "task/b"),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=True,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        driver.join(timeout=3)
+
+    assert result.status == "CLOSED"
+    assert not driver.is_alive()
+    assert "[1 memory memory-o] Lot A is closed." in copied[0]
+    assert "Use the east garage." not in copied[0]
+    assert "[2 memory memory-t] Use the east garage." in copied[1]
+    assert "Lot A is closed." not in copied[1]
+    assert "Lot A is closed." in copied[2]
+    assert "Use the east garage." in copied[2]
+
+
+def test_find_search_keeps_lower_and_upper_y_as_text():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yY parking\r\x03")
+        run_find_search_workbench(
+            ("task",),
+            current="task",
+            initial_target="task",
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests[0].query == "yY parking"
 
 
 def test_checked_result_copy_returns_exact_materialization_request():

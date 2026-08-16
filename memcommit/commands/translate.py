@@ -10,7 +10,9 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.command_progress import progressing_provider_factory
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
+)
 from memcommit.context import (
     AutoCheckpoint,
     Context,

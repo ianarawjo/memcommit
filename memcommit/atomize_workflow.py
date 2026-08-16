@@ -64,6 +64,7 @@ def open_or_create_atomize_workbench(
     output_context_name: str | None = None,
     validate_before_save: Callable[[], None] | None = None,
     prepared_analysis: AtomizeAnalysisSession | None = None,
+    memory_selector: str | None = None,
 ) -> OpenAtomizeWorkbenchResult:
     """Preserve the historical callable while routing through typed open."""
 
@@ -76,6 +77,7 @@ def open_or_create_atomize_workbench(
             source_review_uid=source_review_uid,
             source_review_digest=source_review_digest,
             output_context_name=output_context_name,
+            memory_selector=memory_selector,
             allow_prepared=prepared_analysis is not None and not refresh,
         ),
         store=store,

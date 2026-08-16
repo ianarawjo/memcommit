@@ -129,6 +129,12 @@ def _report_items_summary(session: SeverSession) -> str:
             else "The current reviewed choices preserve every Source Memory as written."
         )
     )
+    result_boundary = (
+        f"The Result Context {session.output_name} was created in checkpoint "
+        f"[{session.application.checkpoint_uid[:8]}]."
+        if session.state == "APPLIED" and session.application is not None
+        else "The Result Context has not been created."
+    )
     return (
         f"All {len(session.source.memories)} Source Memories were evaluated in one "
         f"contextual batch. {semantic_summary} Affected Source examples: "
@@ -136,7 +142,7 @@ def _report_items_summary(session: SeverSession) -> str:
         f"{_named_examples(influential, total=len(criterion_counts))}. Exact Source-to-"
         "Criteria mappings, rationale, and alternatives remain inspectable in "
         "Items; the complete per-Memory outcome appears once in the full result "
-        "view. The Source is unchanged, and the Result Context has not been created."
+        f"view. The Source is unchanged. {result_boundary}"
     )
 
 

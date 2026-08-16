@@ -42,8 +42,10 @@ artifact can also supply this first materialization assessment with no provider
 call. Its hidden setup receipt becomes an ordinary visible Meld session only
 after the participant invokes the exact descendant-inclusive command. Any task
 description, frame, Compare seed, provider-contract, model, reasoning, or scope
-change misses and retains the live aggregate path; later participant comments
-always remain live.
+change misses and retains the live aggregate path. Later participant review
+stores issue choices provider-free and reconciles the complete reviewed choice
+set in one aggregate call. An already validated identical complete
+reconciliation may be replayed from the active Profile's exact outcome cache.
 Absence retains the schema-6 direct-analysis path for already supported
 workflows; a present but stale basis fails closed rather than being silently
 ignored. Symmetric meld adds a complete result to an empty third Context.
@@ -821,13 +823,14 @@ than sent to the provider immediately. `Enter` visibly selects a supplied
 answer and a second `Enter` clears it; an Other-direction submission returns to
 the same workbench as a staged response. The Report remains the evidence-rich
 review surface: its conflict cards show staged choices and its final card
-shows the current whole-set policy. Once required review is complete, Report
-and To Do expose `REVIEW AND APPLY`. Enter opens a compact final confirmation
-that summarizes responses and offers either `INCORPORATE RESPONSES` or
-`APPLY`; Escape/Backspace returns without acting. Meld deliberately retains a
-separate incorporation turn because a provider-created target must be
-inspected before exact `ACCEPT`. Thus application remains gated by a ready
-exact proposal and can no longer occur from one Enter on To Do.
+shows the current whole-set policy. Required issues and staged responses retain
+the normal Report and incorporation flow. Once no required decision or
+incorporation remains, a local Result/Baseline accepts the exact ready proposal
+without another surface and records its normal Undo-capable Meld checkpoint.
+A granted INCOMING with a local Baseline follows that local target rule; a
+granted Baseline instead opens compact final confirmation before the authority
+write. Thus local recovery relies on `mem undo`, while Grant authority remains
+an explicit consent boundary.
 
 Meld has no independent source-Memory count bound. The canonical Task 2
 topology contains 150 Memories from each Advisor; earlier 200- and 500-item
@@ -1212,9 +1215,9 @@ elapsed time and read-only Help.
 An interrupted provider call publishes no replacement assessment. The saved
 session remains at its last fully assessed turn and the target stays unchanged.
 Process-local response drafts from an interrupted review are not a durable
-provider result and must not be presented as incorporated on reopen. Durable
-retry or resubmission of that exact draft batch is a separate recovery contract;
-the wait-surface change deliberately does not invent one.
+provider result and must not be presented as incorporated on reopen. An
+interrupted call has no complete response and therefore publishes no cache
+branch. Unsubmitted process-local drafts likewise remain outside the cache.
 
 The Task 2 A→B rerun completed this exact path in one 459.43-second provider
 turn after four reviewed conflict responses. It produced 20/20 represented
@@ -1236,13 +1239,90 @@ deterministically collect and bind a bounded frame
 → accept an already exact proposal without a provider call
 ```
 
+### Local choice branches and exact final reconciliations
+
+A visible issue option is a provider-free local branch. Its saved record binds
+the exact current assessment, issue UID, option UID, and optional explanation;
+it contains no provider completion, proposal, relation delta, or application
+authority. Closing and reopening the same assessment restores those reviewed
+choices. If the assessment changes, the old branch set is stale and cannot be
+projected into the new revision; its submitted meaning is already retained in
+the durable user turn.
+
+The workbench combines reviewed branches into one explicit `ALL` turn only
+when the person chooses `INCORPORATE RESPONSES`. That final reconciliation sees
+the complete relation ledger and actual choice vector together. Meld hashes
+the complete provider-facing prompt, output schema, explicit
+provider/model/reasoning selection, and a cache-contract version before it
+connects a provider. An exact hit replays the saved structured response through
+the ordinary decoder and complete `MeldSession.record_assessment` invariants,
+then revalidates both frozen source Contexts, the unchanged target, and every
+applicable Grant. It never installs a cached object directly into a session.
+
+| Branch | Saved material |
+| --- | --- |
+| Local choice branch | One exact issue/option selection and optional explanation; no semantic output |
+| `WHOLE_SET_STRATEGY` outcome | One actual `ALL` choice vector or strategy, or a `REMAINING` preservation instruction, after complete-ledger reconciliation |
+| Legacy `ISSUE_RESOLUTION` outcome | Readable for compatibility; new interactive and Study paths do not publish it |
+
+The cache stores the final fully validated raw completion rather than decoded
+turn, relation, issue, or proposal UUIDs. Provider aliases are stable within
+the exact request, while durable Meld UUIDs are intentionally session-local.
+Re-decoding therefore rebinds the same semantic branch to the current restored
+session identities instead of leaking identities from the run that first
+computed it. If the initial completion needed Meld's one allowed validation
+repair, only the final repaired complete response is eligible for publication.
+
+Publication is profile-local, immutable, and first-writer-wins. A cache entry
+is written only after exhaustive response validation and live Context/Grant
+revalidation. It has no application authority and cannot mutate a target;
+explicit readiness review and acceptance remain unchanged. A concurrent
+different completion for the same exact key fails rather than replacing a
+branch another session may already have reused.
+
+This is deliberately **basis plus lazy reconciliation**, not Cartesian
+enumeration. For five binary issues, the initial assessment defines ten local
+choice branches; it does not precompute 32 complete outcomes. Only the choices
+actually staged are saved, and only the completed choice vector is reconciled.
+That one final result is cached exactly. A later different vector misses and is
+computed once without invalidating the ten provider-free local branches.
+
+Reviewed Task 1--3 final reconciliation bundles may additionally be declared
+in the Study baseline registry. `init-study` copies the digest-bound bundle and
+installs a hidden receipt without creating a visible Meld session or implying
+that the participant selected an option. When a participant later submits the
+exact complete vector or whole-set strategy against the exact frozen
+assessment, Meld replays that final result provider-free and promotes it into
+the Profile's ordinary exact cache. Study artifact construction rejects new
+issue-scoped outcome branches: those cases are selections, not independently
+composable semantic assessments. Different source content, target name, prior
+assessment, choice vector, explanation, provider/model/reasoning configuration,
+or task description misses and retains the live final-call path.
+
+Task 2 is a favorable concrete basis. Its frozen 150 + 150 Memory Compare has
+five REQUIRED binary conflicts (ten visible choices). The conflict member sets
+are pairwise disjoint, no relation bridges two conflicts, and each conflict
+member participates only in its own conflict relation. This supports local
+choice staging. It does **not** prove that independently generated proposal
+deltas could be concatenated: opening length, navigation, participant planning,
+and budget placement still share global document-space and arithmetic
+constraints. The complete final reconciliation therefore remains mandatory.
+
+Participant-generated outcomes are not automatically written back into the
+Study baseline. Such feedback would make later participants inherit an
+unreviewed earlier participant's condition. A researcher must explicitly
+construct and publish a reviewed branch bundle to make it available to future
+Study Profiles. Public branch-tree navigation and a force-refresh control are
+still separate work; the current contract supplies exact provider-free replay
+when the corresponding visible strategy or choice is submitted.
+
 The representative adapters use this rule differently:
 
 | Adapter | Initial bounded one-shot | Later calls |
 | --- | --- | --- |
-| Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn |
-| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the initial output schema cannot restate or rewrite that ledger and returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes. The host reattaches and validates the exact Compare relations. Without a saved basis, the compatible direct call also classifies relations. | One call per user resolution turn; resume, defer, expand, and apply remain provider-free |
-| Context symmetric | A fresh exact ordered Compare is reused provider-free; otherwise one complete Compare call over the two bounded peer frames creates and saves the relation ledger before the Meld session is published | One call per user resolution turn; final materialization remains provider-free |
+| Atomize directional (`ISSUE`) | One selected issue, user clarification, current local frame, and known affected findings | One call for each corrective, extending, confirming, or retracting user turn; Atomize does not yet consume Meld's Context-session branch cache |
+| Context directional | Every Memory in the selected incoming scope plus the complete bounded baseline scope. An exact saved ordered Compare, when present, freezes the initial relation ledger; the initial output schema cannot restate or rewrite that ledger and returns only Directional-specific issues and exact owner-routed `EDIT` / `ADD` changes. The host reattaches and validates the exact Compare relations. Without a saved basis, the compatible direct call also classifies relations. | Local issue choices save provider-free; the actual complete vector or policy gets one live final reconciliation on its first exact occurrence. Exact restored final outcomes, resume, defer, expand, and apply are provider-free |
+| Context symmetric | A fresh exact ordered Compare is reused provider-free; otherwise one complete Compare call over the two bounded peer frames creates and saves the relation ledger before the Meld session is published | Local issue choices save provider-free; the completed vector gets one final reconciliation on first occurrence. Exact restored final outcomes and materialization remain provider-free |
 
 Reattachment uses the original typed Compare relation and imported-issue
 objects, not a decode of their provider-facing projection. That projection

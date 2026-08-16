@@ -138,7 +138,9 @@ def parse_source_linked_understanding(
         raise UnderstandingError(
             "A non-empty understanding summary requires source evidence."
         )
-    return UnderstandingSummary(
-        text=text,
-        source_uids=tuple(source_uid_by_id[alias] for alias in raw_ids),
-    )
+    # One durable Memory may be visible through more than one authorized
+    # Context alias. The provider cites temporary aliases, while the portable
+    # understanding cites durable evidence identities; preserve first-seen
+    # order without fabricating duplicate durable citations.
+    source_uids = tuple(dict.fromkeys(source_uid_by_id[alias] for alias in raw_ids))
+    return UnderstandingSummary(text=text, source_uids=source_uids)

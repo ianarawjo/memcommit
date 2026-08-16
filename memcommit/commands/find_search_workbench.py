@@ -41,8 +41,10 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.interfaces.console.terminal import require_interactive_terminal
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
+)
 from memcommit.interfaces.tui.components.frame import (
     TuiRegion,
     bind_focused_frame_style,
@@ -52,15 +54,22 @@ from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.interfaces.console.text import (
+    safe_terminal_text,
 )
 from memcommit.commands.search_result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
 from memcommit.commands.save_location_control import SaveLocationView
+from memcommit.commands.semantic_clipboard import (
+    PlainTextClipboardReceipt,
+    clipboard_failure_receipt,
+    copy_plain_text,
+)
 from memcommit.commands.session_help import bind_session_help
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
@@ -116,6 +125,16 @@ def _has_granted_materialization_source(
     """Keep authority decisions independent from presentation annotations."""
 
     return any(result.context_name in granted_context_names for result in results)
+
+
+@dataclass(frozen=True)
+class FindResultsClipboardProjection:
+    """One focused Find result or the complete frozen ranked result set."""
+
+    text: str
+    scope: Literal["FOCUSED", "RESULT_SET"]
+    label: str
+    result_count: int
 
 
 @dataclass(frozen=True)
@@ -175,29 +194,79 @@ def _find_save_location_stem(context_name: str, query: str) -> str:
     return f"{context_name}/results/{safe}"
 
 
+def _find_search_result_view_row(
+    result: FindSearchResult,
+    *,
+    rank: int,
+) -> SearchResultViewRow:
+    return SearchResultViewRow(
+        context_name=result.context_name,
+        label=(
+            f"[{rank} {_find_result_kind_label(result)} {result.uid[:8]}]"
+            + (
+                f" · {_find_result_annotation(result)}"
+                if _find_result_annotation(result)
+                else ""
+            )
+        ),
+        content=result.content,
+    )
+
+
 def render_find_search_results(response: FindSearchResponse | None) -> str:
     """Render only rows whose request still matches the visible controls."""
 
     if response is None:
         return "SEARCH RESULTS\n  Enter a query to search the selected scope."
     rows = tuple(
-        SearchResultViewRow(
-            context_name=result.context_name,
-            label=(
-                f"[{index} {_find_result_kind_label(result)} {result.uid[:8]}]"
-                + (
-                    f" · {_find_result_annotation(result)}"
-                    if _find_result_annotation(result)
-                    else ""
-                )
-            ),
-            content=result.content,
-        )
+        _find_search_result_view_row(result, rank=index)
         for index, result in enumerate(response.results, start=1)
     )
     return render_grouped_search_results(
         rows,
         related_query=response.related_query,
+    )
+
+
+def project_find_results_clipboard(
+    response: FindSearchResponse | None,
+    *,
+    focused_index: int = 0,
+    whole_result_set: bool = False,
+) -> FindResultsClipboardProjection:
+    """Project host-resolved results without checkbox or viewport wrapping."""
+
+    if response is None or not response.results:
+        raise ValueError("There are no Find results to copy.")
+    count = len(response.results)
+    if whole_result_set:
+        suffix = "Result" if count == 1 else "Results"
+        return FindResultsClipboardProjection(
+            text=render_find_search_results(response),
+            scope="RESULT_SET",
+            label=f"complete Find result set · {count} {suffix}",
+            result_count=count,
+        )
+    if isinstance(focused_index, bool) or not 0 <= focused_index < count:
+        raise ValueError("The focused Find result is no longer available.")
+    result = response.results[focused_index]
+    return FindResultsClipboardProjection(
+        text=render_grouped_search_results(
+            (
+                _find_search_result_view_row(
+                    result,
+                    rank=focused_index + 1,
+                ),
+            ),
+            related_query=response.related_query,
+        ),
+        scope="FOCUSED",
+        label=(
+            f"Find result {focused_index + 1} · "
+            f"{safe_terminal_text(result.context_name)} · "
+            f"{safe_terminal_text(_find_result_kind_label(result))}"
+        ),
+        result_count=1,
     )
 
 
@@ -252,6 +321,7 @@ def run_find_search_workbench(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    clipboard_writer: Callable[[str], None] | None = None,
 ) -> FindSearchWorkbenchResult:
     """Search repeatedly while keeping query, targets, scope, and results visible."""
 
@@ -340,6 +410,7 @@ def run_find_search_workbench(
     response: FindSearchResponse | None = None
     result_selection: FlatMultiSelectionState | None = None
     status = {"value": "READY · ENTER A QUERY"}
+    copy_receipt: PlainTextClipboardReceipt | None = None
     background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
         BackgroundExecutorTurn()
     )
@@ -552,7 +623,7 @@ def run_find_search_workbench(
         height=Dimension.exact(3),
     )
 
-    def render_footer() -> str:
+    def render_footer() -> str | list[tuple[str, str]]:
         if background_turn.busy:
             return (
                 f" SEARCHING {busy_suffix(background_turn.frame)} · "
@@ -566,6 +637,16 @@ def run_find_search_workbench(
                 "/ search · Esc back · H Help · Q close"
             )
         )
+        if app.layout.has_focus(results_control):
+            hint = (
+                "↑/↓ move results · Enter/Space check · y copy focused · "
+                "Y copy all results · / search · Esc back"
+            )
+        if copy_receipt is not None and app.layout.has_focus(results_control):
+            return [
+                (copy_receipt.style, " " + copy_receipt.message),
+                ("", f" · {hint}"),
+            ]
         return f" {safe_terminal_text(status['value'])} · {hint}"
 
     footer = Window(
@@ -634,9 +715,10 @@ def run_find_search_workbench(
     )
 
     def clear_results(message: str) -> None:
-        nonlocal response, result_selection
+        nonlocal copy_receipt, response, result_selection
         response = None
         result_selection = None
+        copy_receipt = None
         status["value"] = message
 
     def query_changed(_buffer) -> None:
@@ -736,30 +818,42 @@ def run_find_search_workbench(
         event.app.invalidate()
 
     def _move_results(_event, delta: int) -> SurfaceMoveResult:
+        nonlocal copy_receipt
         if result_selection is None or response is None or not response.results:
             return "BOUNDARY"
-        return "MOVED" if result_selection.move(delta) else "BOUNDARY"
+        moved = result_selection.move(delta)
+        if moved:
+            copy_receipt = None
+        return "MOVED" if moved else "BOUNDARY"
 
     def _enter_results(delta: int) -> None:
+        nonlocal copy_receipt
         if result_selection is not None:
+            previous_uid = result_selection.cursor_uid
             result_selection.cursor_uid = (
                 result_selection.options[0].uid
                 if delta > 0
                 else result_selection.options[-1].uid
             )
+            if result_selection.cursor_uid != previous_uid:
+                copy_receipt = None
 
     @bindings.add("pageup", filter=has_focus(results_control), eager=True)
     def _result_page_up(event) -> None:
+        nonlocal copy_receipt
         if result_selection is not None:
-            result_selection.move(-5)
+            if result_selection.move(-5):
+                copy_receipt = None
         else:
             scroll_page_up(event)
         event.app.invalidate()
 
     @bindings.add("pagedown", filter=has_focus(results_control), eager=True)
     def _result_page_down(event) -> None:
+        nonlocal copy_receipt
         if result_selection is not None:
-            result_selection.move(5)
+            if result_selection.move(5):
+                copy_receipt = None
         else:
             scroll_page_down(event)
         event.app.invalidate()
@@ -796,7 +890,7 @@ def run_find_search_workbench(
         event.app.invalidate()
 
     def _search(event) -> SurfaceActionResult:
-        nonlocal response, result_selection
+        nonlocal copy_receipt, response, result_selection
         if background_turn.busy:
             status["value"] = "A Find search is already running."
             return "HANDLED"
@@ -822,8 +916,9 @@ def run_find_search_workbench(
             return next_response
 
         def commit(next_response: FindSearchResponse) -> None:
-            nonlocal response, result_selection
+            nonlocal copy_receipt, response, result_selection
             response = next_response
+            copy_receipt = None
             result_selection = (
                 FlatMultiSelectionState(
                     tuple(
@@ -899,6 +994,8 @@ def run_find_search_workbench(
         return "HANDLED"
 
     def _toggle_result(event) -> SurfaceActionResult:
+        nonlocal copy_receipt
+        copy_receipt = None
         if background_turn.busy:
             status["value"] = "Wait for the current search to finish."
         elif result_selection is None or response is None or not response.results:
@@ -916,6 +1013,39 @@ def run_find_search_workbench(
     @bindings.add(" ", filter=has_focus(results_control), eager=True)
     def _space_result(event) -> None:
         _toggle_result(event)
+
+    def copy_results(event, *, whole_result_set: bool) -> None:
+        nonlocal copy_receipt
+        try:
+            focused_index = (
+                0
+                if result_selection is None
+                else int(result_selection.cursor_uid)
+            )
+            projection = project_find_results_clipboard(
+                response,
+                focused_index=focused_index,
+                whole_result_set=whole_result_set,
+            )
+        except (TypeError, ValueError) as error:
+            copy_receipt = clipboard_failure_receipt(error)
+        else:
+            # Ranked results may combine authority domains, so this remains a
+            # plain-text OS copy and never fabricates a typed mutation stage.
+            copy_receipt = copy_plain_text(
+                projection.text,
+                success_message=projection.label,
+                writer=clipboard_writer,
+            )
+        event.app.invalidate()
+
+    @bindings.add("y", filter=has_focus(results_control), eager=True)
+    def _copy_focused_result(event) -> None:
+        copy_results(event, whole_result_set=False)
+
+    @bindings.add("Y", filter=has_focus(results_control), eager=True)
+    def _copy_all_results(event) -> None:
+        copy_results(event, whole_result_set=True)
 
     def _move_materialize(_event, delta: int) -> SurfaceMoveResult:
         return "MOVED" if materialize_choice.move(delta) else "BOUNDARY"

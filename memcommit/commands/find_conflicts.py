@@ -21,7 +21,9 @@ from memcommit.commands.quality_find_workbench import (
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
@@ -58,9 +60,10 @@ def cmd(
                 store,
                 current_name=context_snapshot.current_name,
                 kind="conflicts",
-                analyze=lambda ctx: ops.find_conflicts(
-                    ctx,
+                analyze=lambda source: ops.find_conflicts(
+                    source.analysis_context(),
                     connect_codex_chatgpt_provider,
+                    context_name_by_uid=source.memory_context_names,
                 ),
             )
         except (

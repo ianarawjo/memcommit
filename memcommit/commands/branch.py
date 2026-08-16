@@ -4,8 +4,16 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.commands.context_picker import context_memory_rows
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
+)
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
 from memcommit.store import (
@@ -28,17 +36,54 @@ def cmd(
         ),
     ] = None,
     source_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--source-descendants/--source-only",
             help="Branch the Source root and every local lexical descendant",
         ),
+    ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Branch only the selected Source root"),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Branch the Source root and all lexical descendants",
+        ),
     ] = False,
 ) -> None:
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        (resolved_source_descendants,) = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(source_descendants,),
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore()
     expected_current = store.current_context_name()
     local_names = tuple(store.list_context_names())
     if name is None:
+        if direct or recursive or source_descendants is not None:
+            typer.secho(
+                "Error: scope flags require an explicit branch NAME; "
+                "interactive setup owns its visible Source range.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         if not local_names:
             typer.secho(
                 "No local Contexts exist. Run 'mem init <name>' first.",
@@ -55,6 +100,9 @@ def cmd(
                     local_names,
                 ),
                 validate_name=store.assert_context_creatable,
+                memory_loader=lambda context_name: context_memory_rows(
+                    store.load(context_name)
+                ),
             )
         except (OSError, TypeError, ValueError) as error:
             typer.secho(
@@ -78,6 +126,7 @@ def cmd(
         source_descendants = receipt.include_descendants
     else:
         source_name = expected_current
+        source_descendants = resolved_source_descendants
     if not source_name:
         typer.secho(
             "No current context. Run 'mem init <name>' first.",

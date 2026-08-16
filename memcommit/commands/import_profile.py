@@ -8,7 +8,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError, import_baseline_profile
 from memcommit.resource_import import (
@@ -195,7 +201,19 @@ def cmd(
     ] = None,
     recursive: Annotated[
         bool,
-        typer.Option("--recursive", help="Include lexical descendant Contexts"),
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include lexical descendant Contexts",
+        ),
+    ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Import only the selected Context root",
+        ),
     ] = False,
 ) -> None:
     """Import one resource by value without copying source operational history."""
@@ -221,12 +239,25 @@ def cmd(
             _fail(str(error))
         return
 
+    try:
+        recursive = (
+            resolve_scope_preset(
+                direct=direct,
+                recursive=recursive,
+                default=ContextScopePreset.DIRECT,
+            )
+            is ContextScopePreset.RECURSIVE
+        )
+    except ValueError as error:
+        _fail(str(error))
+
     options: dict[str, object] = {
         "--from": source,
         "--from-profile": source_profile,
         "--context": source_context,
         "--as": target_name,
         "--into": target_context,
+        "--direct": direct,
         "--recursive": recursive,
     }
     kind = kind_or_name.casefold()
@@ -255,7 +286,7 @@ def cmd(
         if kind == "context":
             _reject_options(
                 options,
-                allowed={"--from-profile", "--as", "--recursive"},
+                allowed={"--from-profile", "--as", "--direct", "--recursive"},
             )
             if source_profile is None:
                 _fail("Context import requires --from-profile NAME.")

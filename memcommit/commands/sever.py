@@ -7,7 +7,13 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.authority.access import resolve_context_access
+from memcommit.application_review_policy import (
+    ownership_aware_application_review,
+)
+from memcommit.authority.access import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.commands.session_picker import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -22,11 +28,17 @@ from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
-from memcommit.commands.switch import _granted_picker_state
+from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.commands.context_picker import context_memory_rows
 from memcommit.commands.sever_setup_shell import choose_sever_setup
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
 )
 from memcommit.query_provider import (
     QueryProviderError,
@@ -264,6 +276,8 @@ def render_sever(session: SeverSession) -> str:
             ]
         )
     lines.extend(["", "The Source Context is unchanged."])
+    if session.state == "APPLIED":
+        lines.append("RECOVERY · mem undo")
     return "\n".join(lines)
 
 
@@ -276,13 +290,29 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
 
 def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] | None:
     names = tuple(store.list_context_names())
-    granted = _granted_picker_state(store)
+    granted = freeze_granted_context_navigation(store)
+    current_name = store.current_context_name()
+
+    def load_setup_memories(context_name: str):
+        if context_name in names:
+            return context_memory_rows(store.load(context_name))
+        access = resolve_context_access(
+            store,
+            context_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        return context_memory_rows(
+            GrantedReadStore(access).load(access.display_name)
+        )
+
     receipt = choose_sever_setup(
         names,
-        current=store.current_context_name(),
+        current=current_name,
         virtual_names=granted.names,
         selectable_virtual_names=granted.selectable_names,
         annotations=granted.annotations,
+        memory_loader=load_setup_memories,
     )
     if receipt is None:
         return None
@@ -388,6 +418,14 @@ def _run_workbench(
             terminal_label="Interactive Sever",
             snapshot_hint="Run 'mem sever --resume SESSION' outside a TTY for a snapshot.",
             review_and_apply=allow_apply,
+            decision_free_behavior=(
+                ownership_aware_application_review(
+                    mutates_granted_authority=False,
+                    local_undo_available=True,
+                ).decision_free_behavior
+                if allow_apply
+                else "REPORT_FIRST"
+            ),
             split_viewer_items=True,
             impact_controller=None if not allow_apply else impact_controller,
             destination=(
@@ -480,20 +518,36 @@ def cmd(
             help="New local Result Context name; never overwrites an existing Context",
         ),
     ] = None,
-    source_descendants: Annotated[
+    direct: Annotated[
         bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Use only the selected Source and Criteria roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both Source and Criteria roots",
+        ),
+    ] = False,
+    source_descendants: Annotated[
+        Optional[bool],
         typer.Option(
             "--source-descendants/--source-only",
             help="Include the Source root's readable descendant Contexts",
         ),
-    ] = True,
+    ] = None,
     criteria_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--criteria-descendants/--criteria-only",
             help="Include the Criteria root's readable descendant Contexts",
         ),
-    ] = True,
+    ] = None,
     resume: Annotated[
         Optional[str],
         typer.Option("--resume", help="Enter one exact saved Sever session by UID"),
@@ -526,6 +580,29 @@ def cmd(
         typer.Option("--sessions", help="Enter the interactive Sever session launcher"),
     ] = False,
 ) -> None:
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or source_descendants is not None
+        or criteria_descendants is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        source_descendants, criteria_descendants = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(source_descendants, criteria_descendants),
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Sever error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore()
     session_store = SeverSessionStore(store)
     try:
@@ -544,6 +621,7 @@ def cmd(
                     )
                 )
                 or accept
+                or scope_flags_supplied
             ):
                 raise SeverCommandError(
                     "--sessions cannot be combined with another Sever action."
@@ -559,7 +637,19 @@ def cmd(
             and choice is None
             and comment is None
             and not accept
+            and not scope_flags_supplied
         )
+        if (
+            scope_flags_supplied
+            and source_name is None
+            and criteria_name is None
+            and save_as is None
+            and resume is None
+        ):
+            raise SeverCommandError(
+                "Scope flags require an explicit --source/--criteria setup; "
+                "interactive setup owns its visible ranges."
+            )
         session: SeverSession | None = None
         snapshot: SeverSessionSnapshot | None = None
         sever_prewarm_origin: str | None = None
@@ -644,6 +734,8 @@ def cmd(
                 raise SeverCommandError(
                     "Starting Sever requires --source or a current Context."
                 )
+            if source_descendants is None or criteria_descendants is None:
+                raise SeverCommandError("Sever scope resolution produced no range.")
             analysis = _start_analysis(
                 store=store,
                 source_name=source_name,
@@ -656,7 +748,7 @@ def cmd(
             snapshot = stored.snapshot
             session = snapshot.session
             sever_prewarm_origin = (
-                stored.origin if stored.origin != "PROVIDER" else None
+                stored.origin if stored.origin == "EXACT_PREWARM" else None
             )
 
         if session is None or snapshot is None:
@@ -711,21 +803,7 @@ def cmd(
             session = _run_workbench(store, session)
 
         if sever_prewarm_origin:
-            label = (
-                "EXACT PREWARM"
-                if sever_prewarm_origin == "EXACT_PREWARM"
-                or (
-                    sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
-                    and session.source.root_name == "task-3/local/personal-memory"
-                    and session.criteria.root_name == "task-3/local/guardrails"
-                    and session.source.include_descendants
-                    and session.criteria.include_descendants
-                )
-                else "EQUIVALENT SCOPE PREWARM"
-                if sever_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
-                else "PROJECTED PREWARM"
-            )
-            typer.echo(f"ANALYSIS · {label} · PROVIDER NOT CALLED")
+            typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
         typer.echo(render_sever(session))
         typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
     except (

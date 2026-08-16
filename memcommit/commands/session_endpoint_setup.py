@@ -6,7 +6,7 @@ import sys
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
-from prompt_toolkit.application import Application
+from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -20,11 +20,15 @@ from prompt_toolkit.layout import (
 )
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
+from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
+)
+from memcommit.context_targeting.tui.range_selection import (
+    project_checked_context_names,
 )
 from memcommit.context_targeting.tui.name_draft import (
     ContextNameDraftState,
@@ -36,7 +40,15 @@ from memcommit.context_targeting.tui.rendering import (
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.selection.tui import tree_choice_styles
+from memcommit.context_targeting.tui.memory_selection import (
+    DirectMemorySelectionState,
+)
+from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
+from memcommit.commands.context_picker import (
+    CONTEXT_PICKER_STYLE,
+    ContextMemoryPreviewController,
+    ContextMemoryRow,
+)
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
@@ -46,12 +58,18 @@ from memcommit.commands.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.components.frame import bind_focused_frame_style
-from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
+)
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_case_insensitive_key,
+)
+from memcommit.interfaces.tui.components.frame import (
+    bind_focused_frame_style,
+)
+from memcommit.interfaces.console.text import (
+    display_escape_text,
 )
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
@@ -77,6 +95,7 @@ class EndpointModeSpec:
     role_titles: Mapping[str, str]
     description: str = ""
     descendant_roles: frozenset[str] = frozenset()
+    memory_focus_roles: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True)
@@ -92,6 +111,7 @@ class EndpointRoleSpec:
     selectable_annotation: str = ""
     new_name_suggester: Callable[[Mapping[str, str]], str] | None = None
     new_parent_locator: bool = False
+    allow_memory_focus: bool = False
 
 
 @dataclass(frozen=True)
@@ -100,6 +120,7 @@ class EndpointValue:
     context_name: str
     create: bool = False
     include_descendants: bool = False
+    memory_uid: str | None = None
 
 
 @dataclass(frozen=True)
@@ -126,6 +147,31 @@ def _endpoint_row_styles(
         cursor=cursor,
         selected=chosen,
         focused=tree_focused,
+    )
+
+
+def _endpoint_checked_names(
+    tree: ContextTreeState,
+    selection: ContextSelectionState,
+    reach: ContextReachState,
+    *,
+    descendants_active: bool,
+    selectable_names: frozenset[str],
+    existing_selected: bool,
+) -> frozenset[str]:
+    """Return the effective existing-Context rows for one endpoint role."""
+
+    if not existing_selected:
+        return frozenset()
+    return frozenset(
+        project_checked_context_names(
+            tree.tree,
+            selection.selected_names,
+            include_descendants=(
+                descendants_active and reach.include_descendants
+            ),
+            selectable_names=selectable_names,
+        )
     )
 
 
@@ -174,6 +220,7 @@ def choose_session_endpoints(
     roles: Sequence[EndpointRoleSpec],
     initial_mode_uid: str,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     validate_draft: DraftValidator | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -212,6 +259,13 @@ def choose_session_endpoints(
         ):
             raise ValueError(
                 "Endpoint setup mode enables an unavailable descendant scope."
+            )
+        if not mode.memory_focus_roles <= set(mode.active_roles) or any(
+            not role_by_uid[uid].allow_memory_focus
+            for uid in mode.memory_focus_roles
+        ):
+            raise ValueError(
+                "Endpoint setup mode enables unavailable Memory focus."
             )
     for role in role_specs:
         if (
@@ -264,6 +318,16 @@ def choose_session_endpoints(
         )
         for role in role_specs
     }
+    memory_previews = {
+        role.uid: ContextMemoryPreviewController(states[role.uid], memory_loader)
+        for role in role_specs
+        if memory_loader is not None
+    }
+    memory_selections = {
+        role.uid: DirectMemorySelectionState()
+        for role in role_specs
+        if role.allow_memory_focus
+    }
     create = {role.uid: role.prefer_new for role in role_specs}
     confirmed_new_names = {
         role.uid: role.initial_new_name.strip() if role.prefer_new else ""
@@ -314,19 +378,58 @@ def choose_session_endpoints(
     def role_descendants_active(uid: str) -> bool:
         return uid in active_mode().descendant_roles
 
+    def role_memory_focus_active(uid: str) -> bool:
+        return uid in active_mode().memory_focus_roles
+
+    def clear_inactive_memory_selections() -> None:
+        for uid, selection in memory_selections.items():
+            if not role_memory_focus_active(uid):
+                selection.clear()
+
+    def clear_hidden_memory_selection(uid: str) -> bool:
+        """Never retain an executable Memory UID after its row is hidden."""
+
+        selection = memory_selections.get(uid)
+        preview = memory_previews.get(uid)
+        if selection is None or selection.selected is None or preview is None:
+            return False
+        if selection.selected.context_name in preview.visible_memory_contexts():
+            return False
+        cleared = selection.clear()
+        if cleared:
+            status["value"] = (
+                "Focused Memory selection cleared because its preview was hidden."
+            )
+        return cleared
+
     def render_role(uid: str):
         state = states[uid]
         role = role_by_uid[uid]
+        preview = memory_previews.get(uid)
+        memory_focused = preview is not None and preview.memory_focused
+        memory_focus_active = role_memory_focus_active(uid)
+        selected_memory = (
+            memory_selections[uid].selected
+            if uid in memory_selections and memory_focus_active
+            else None
+        )
         tree_focused = app_ref.get("app") is not None and app_ref[
             "app"
         ].layout.has_focus(controls[uid])
+        wrap_width = max(1, get_app().output.get_size().columns - 1)
+        checked_names = _endpoint_checked_names(
+            state,
+            selections[uid],
+            descendant_scope[uid],
+            descendants_active=role_descendants_active(uid),
+            selectable_names=role.selectable_names,
+            existing_selected=(role.new_parent_locator or not create[uid]),
+        )
 
         def decorate(row, cursor: bool) -> ContextTreeRowDecoration:
             confirmed_name = confirmed_new_names[uid]
             available = row.name in role.selectable_names
-            chosen = (
-                role.new_parent_locator or not create[uid]
-            ) and selections[uid].selected_name == row.name
+            chosen = row.name in checked_names
             annotation: SourceDisplayValue | None = labels.get(row.name)
             if not available:
                 annotation = combine_source_display_tokens(
@@ -342,19 +445,34 @@ def choose_session_endpoints(
                     ),
                 )
             cursor_style, value_style = _endpoint_row_styles(
-                cursor=cursor,
+                cursor=cursor and not memory_focused,
                 chosen=chosen,
                 tree_focused=tree_focused,
             )
             return ContextTreeRowDecoration(
+                marker=tree_choice_marker(selected=chosen, available=available),
                 annotation=annotation,
                 value_suffix="/" if role.new_parent_locator else "",
                 cursor_style=cursor_style,
                 value_style=value_style,
+                branch=preview.branch_for(row) if preview is not None else None,
+                nested_fragments=(
+                    preview.render_nested(
+                        row,
+                        wrap_width=wrap_width,
+                        selectable_memories=memory_focus_active,
+                        selected_memory=selected_memory,
+                    )
+                    if preview is not None
+                    else ()
+                ),
                 anchor_cursor=(
-                    tree_focused
-                    or role.new_parent_locator
-                    or not (create[uid] and confirmed_name)
+                    not memory_focused
+                    and (
+                        tree_focused
+                        or role.new_parent_locator
+                        or not (create[uid] and confirmed_name)
+                    )
                 ),
             )
 
@@ -648,6 +766,9 @@ def choose_session_endpoints(
             def enter_tree(delta: int, *, role_uid: str = uid) -> None:
                 rows = states[role_uid].visible_rows()
                 states[role_uid].selected_name = rows[0 if delta > 0 else -1].name
+                preview = memory_previews.get(role_uid)
+                if preview is not None:
+                    preview.clear_memory_focus()
 
             values.append(
                 FocusSurface(
@@ -728,14 +849,36 @@ def choose_session_endpoints(
                 name = selections[uid].selected_name
                 if name not in role.selectable_names:
                     raise ValueError(f"{role_title(uid)} is unavailable.")
+                selected_memory = (
+                    memory_selections[uid].selected
+                    if uid in memory_selections and role_memory_focus_active(uid)
+                    else None
+                )
+                if (
+                    selected_memory is not None
+                    and selected_memory.context_name != name
+                ):
+                    raise ValueError(
+                        f"{role_title(uid)} Memory selection belongs to another Context."
+                    )
+                include_descendants = (
+                    descendant_scope[uid].include_descendants
+                    if role_descendants_active(uid)
+                    else False
+                )
+                if selected_memory is not None and include_descendants:
+                    raise ValueError(
+                        f"{role_title(uid)} cannot combine Memory focus with descendants."
+                    )
                 values.append(
                     EndpointValue(
                         uid,
                         name,
-                        include_descendants=(
-                            descendant_scope[uid].include_descendants
-                            if role_descendants_active(uid)
-                            else False
+                        include_descendants=include_descendants,
+                        memory_uid=(
+                            selected_memory.memory_uid
+                            if selected_memory is not None
+                            else None
                         ),
                     )
                 )
@@ -774,10 +917,15 @@ def choose_session_endpoints(
     def _down(event) -> None:
         uid = focused_role_uid()
         if uid is not None:
-            state = states[uid]
-            before = state.selected_name
-            state.move(1)
-            if state.selected_name == before:
+            preview = memory_previews.get(uid)
+            if preview is not None:
+                moved = preview.move(1)
+            else:
+                state = states[uid]
+                before = state.selected_name
+                state.move(1)
+                moved = state.selected_name != before
+            if not moved:
                 focus_vertical_neighbor(event, 1)
         status["value"] = ""
         event.app.invalidate()
@@ -786,10 +934,15 @@ def choose_session_endpoints(
     def _up(event) -> None:
         uid = focused_role_uid()
         if uid is not None:
-            state = states[uid]
-            before = state.selected_name
-            state.move(-1)
-            if state.selected_name == before:
+            preview = memory_previews.get(uid)
+            if preview is not None:
+                moved = preview.move(-1)
+            else:
+                state = states[uid]
+                before = state.selected_name
+                state.move(-1)
+                moved = state.selected_name != before
+            if not moved:
                 focus_vertical_neighbor(event, -1)
         status["value"] = ""
         event.app.invalidate()
@@ -834,14 +987,23 @@ def choose_session_endpoints(
     def _expand(event) -> None:
         uid = focused_role_uid()
         if uid is not None:
-            states[uid].expand_selected()
+            preview = memory_previews.get(uid)
+            if preview is not None:
+                preview.expand_selected()
+            else:
+                states[uid].expand_selected()
         event.app.invalidate()
 
     @bindings.add("left", filter=tree_focus, eager=True)
     def _collapse(event) -> None:
         uid = focused_role_uid()
         if uid is not None:
-            states[uid].collapse_selected()
+            preview = memory_previews.get(uid)
+            if preview is not None:
+                preview.collapse_selected()
+                clear_hidden_memory_selection(uid)
+            else:
+                states[uid].collapse_selected()
         event.app.invalidate()
 
     @bindings.add("a", filter=tree_focus, eager=True)
@@ -849,7 +1011,30 @@ def choose_session_endpoints(
     def _expand_all(event) -> None:
         uid = focused_role_uid()
         if uid is not None:
-            states[uid].toggle_expand_all()
+            preview = memory_previews.get(uid)
+            if preview is not None:
+                preview.toggle_expand_all()
+                clear_hidden_memory_selection(uid)
+            else:
+                states[uid].toggle_expand_all()
+        event.app.invalidate()
+
+    @bindings.add("m", filter=tree_focus, eager=True)
+    def _toggle_selected_memories(event) -> None:
+        uid = focused_role_uid()
+        if uid is not None and uid in memory_previews:
+            memory_previews[uid].toggle_selected_memories()
+            if not clear_hidden_memory_selection(uid):
+                status["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("M", filter=tree_focus, eager=True)
+    def _toggle_all_memories(event) -> None:
+        uid = focused_role_uid()
+        if uid is not None and uid in memory_previews:
+            memory_previews[uid].toggle_all_memories()
+            if not clear_hidden_memory_selection(uid):
+                status["value"] = ""
         event.app.invalidate()
 
     @bindings.add("enter", filter=tree_focus, eager=True)
@@ -857,6 +1042,33 @@ def choose_session_endpoints(
     def _select_existing(event) -> None:
         uid = focused_role_uid()
         if uid is None:
+            return
+        preview = memory_previews.get(uid)
+        if preview is not None and preview.memory_focused:
+            target = preview.focused_target()
+            if not role_memory_focus_active(uid):
+                status["value"] = "Read-only Memory preview; this role uses the whole Context."
+            elif target is None:
+                status["value"] = "That direct item is not a selectable Memory."
+            elif target.context_name not in role_by_uid[uid].selectable_names:
+                status["value"] = f"{role_title(uid)} is unavailable."
+            else:
+                states[uid].selected_name = target.context_name
+                selections[uid].choose(target.context_name)
+                create[uid] = False
+                memory_selections[uid].choose(target)
+                if uid in descendant_scope:
+                    descendant_scope[uid].choice.choose("EXACT")
+                try:
+                    refresh_new_name_suggestions()
+                except (TypeError, ValueError) as error:
+                    status["value"] = str(error)
+                else:
+                    status["value"] = (
+                        f"Focused Memory {target.memory_uid[:8]} selected in "
+                        f"{target.context_name}."
+                    )
+            event.app.invalidate()
             return
         name = states[uid].selected_name
         role = role_by_uid[uid]
@@ -869,6 +1081,8 @@ def choose_session_endpoints(
                 candidate = draft.choose_parent(name)
                 selections[uid].choose(name)
                 create[uid] = True
+                if uid in memory_selections:
+                    memory_selections[uid].clear()
                 if candidate != new_name_fields[uid].text:
                     updating_new_names.add(uid)
                     try:
@@ -889,6 +1103,8 @@ def choose_session_endpoints(
         else:
             selections[uid].choose(name)
             create[uid] = False
+            if uid in memory_selections:
+                memory_selections[uid].clear()
             try:
                 refresh_new_name_suggestions()
             except (TypeError, ValueError) as error:
@@ -905,6 +1121,8 @@ def choose_session_endpoints(
             descendant_scope[uid].move(
                 -1 if descendant_scope[uid].include_descendants else 1
             )
+            if descendant_scope[uid].include_descendants and uid in memory_selections:
+                memory_selections[uid].clear()
             status["value"] = ""
         event.app.invalidate()
 
@@ -921,18 +1139,22 @@ def choose_session_endpoints(
         uid = focused_role_uid()
         if uid is not None and uid in descendant_controls:
             descendant_scope[uid].move(1)
+            if uid in memory_selections:
+                memory_selections[uid].clear()
             status["value"] = ""
         event.app.invalidate()
 
     @bindings.add("left", filter=has_focus(mode_control), eager=True)
     def _previous_mode(event) -> None:
         mode_state.move(-1)
+        clear_inactive_memory_selections()
         status["value"] = ""
         event.app.invalidate()
 
     @bindings.add("right", filter=has_focus(mode_control), eager=True)
     def _next_mode(event) -> None:
         mode_state.move(1)
+        clear_inactive_memory_selections()
         status["value"] = ""
         event.app.invalidate()
 
@@ -949,6 +1171,8 @@ def choose_session_endpoints(
                 return
             confirmed_new_names[role_uid] = name
             create[role_uid] = True
+            if role_uid in memory_selections:
+                memory_selections[role_uid].clear()
             status["value"] = ""
             focus_vertical_neighbor(event, 1)
             event.app.invalidate()
@@ -1032,9 +1256,22 @@ def choose_session_endpoints(
         if uid is not None and role_by_uid[uid].new_parent_locator:
             return (
                 " ↑/↓ move · ←/→ tree · Enter/Space choose parent · "
-                "Tab pane · Q cancel"
+                + ("m Memory here · M all · " if memory_loader is not None else "")
+                + "Tab pane · Q cancel"
             )
-        return " ↑/↓ move · ←/→ tree · Enter/Space choose · Tab pane · Q cancel"
+        if uid is not None and uid in memory_previews and memory_previews[uid].memory_focused:
+            memory_action = (
+                "Enter/Space select this Memory"
+                if role_memory_focus_active(uid)
+                and memory_previews[uid].focused_target() is not None
+                else "read-only preview · Enter/Space does not select"
+            )
+            return f" {memory_action} · ↑/↓ move · Tab pane · Q cancel"
+        return (
+            " ↑/↓ move · ←/→ tree · Enter/Space choose Context · "
+            + ("m Memory here · M all · " if memory_loader is not None else "")
+            + "Tab pane · Q cancel"
+        )
 
     children: list[object] = []
     if len(mode_specs) > 1:
@@ -1065,7 +1302,7 @@ def choose_session_endpoints(
         erase_when_done=True,
         input=app_input,
         output=app_output,
-        style=MEMCOMMIT_TUI_STYLE,
+        style=merge_styles([MEMCOMMIT_TUI_STYLE, CONTEXT_PICKER_STYLE]),
     )
     app_ref["app"] = app
     return app.run()

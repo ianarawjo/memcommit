@@ -41,11 +41,17 @@ In an interactive terminal, omitting `MEMORY` first opens the common session
 picker as a Recents launcher. Recent rows are scoped to the current operation,
 ordered newest first, and deduplicated by public Context name, Memory UID, and
 exact-versus-descendant range.
-The pinned `SELECT A MEMORY` action then opens the common read-only
-Context/Memory tree. This keeps repeated inspection quick without replacing
-the complete namespace route needed for a new target. When the operation has no
-recent rows, the empty catalog is skipped and the Context/Memory tree opens
-directly; no saved-session-shaped decision exists in that case.
+The pinned `SELECT A MEMORY` action then opens a location-first Context tree,
+matching bare Log's ability to leave an empty current Context without changing
+global current state. Trace freezes every ordinary local Context; Rationale
+freezes all Profile-readable local and READ-granted public Contexts. Selecting
+one location opens the common read-only exact/subtree Context/Memory tree for
+that root. This keeps repeated inspection quick without replacing the complete
+namespace route needed for a new target. When the operation has no recent rows,
+the empty Recents catalog is skipped and the Context location tree opens
+directly; no saved-session-shaped decision exists in that case. An explicit
+`--context` bypasses Recents and the Profile location stage but still opens the
+scoped Memory selector when no Memory operand was supplied.
 
 Recents are derived only from completed command-attempt records. A record
 stores the operation, public or scoped Context name, Memory UID, and the
@@ -59,17 +65,25 @@ path, where current Context existence, UID resolution, and effective
 permissions are checked again. A recent row is therefore navigation history,
 not retained read authority or a report snapshot.
 
-The shared execution launcher begins with `THIS CONTEXT ONLY` and
-`INCLUDE DESCENDANTS` projected through the common `ContextReachState`, then
-the common Context/Memory tree. It begins on the command's current or
-explicitly scoped Context row, including when that exact row has no direct
-Memory. Changing range never changes global current Context state. Rationale
-places every eligible Memory beneath its actual owner in the readable public
-hierarchy; a Grant attachment is never treated as a hierarchy edge. Trace may
-discover a Memory in a locally owned lexical descendant, but the resulting
-lineage still opens only that exact owner Context's history. Context rows
-browse or collapse the tree, while only an exact Memory row can complete
+After location selection, the shared target launcher begins with `THIS CONTEXT
+ONLY` and `INCLUDE DESCENDANTS` projected through the common
+`ContextReachState`, then the common Context/Memory tree. It begins on the
+selected or explicitly scoped Context row, including when that exact row and
+its complete descendant range contain no Memory at all. Changing range and
+choosing another location never changes global current Context state.
+Rationale places every eligible Memory beneath its actual owner in the readable
+public hierarchy; a Grant attachment is never treated as a hierarchy edge.
+Trace may discover a Memory in a locally owned lexical descendant, but the
+resulting lineage still opens only that exact owner Context's history. Context
+rows browse or collapse the tree, while only an exact Memory row can complete
 selection.
+
+Immediately before report construction, Rationale refreezes and revalidates a
+location-first selection through the same Profile-readable namespace breadth.
+It does not silently narrow a selected granted location to a grant-only catalog
+after review. Trace likewise carries the canonical selected local name through
+its final owner-history load; raw relative operands never become picker or
+session identity.
 
 The two controls are composed through the same service-wide terminal chrome,
 not through an operation-owned Trace/Rationale shell. `RANGE` and `CONTEXTS &
@@ -82,12 +96,15 @@ actions. The unscoped Context browser used by Switch and Log retains its
 existing single-surface presentation. This avoids manufacturing a parallel
 picker merely to reproduce frame lines or focus color.
 
-The launcher freezes the eligible descendant catalog before it opens but
-starts with exact reach. It therefore remains open when the root has zero
-direct candidates and descendants do have candidates: the person can move to
-`INCLUDE DESCENDANTS` instead of receiving a premature empty-scope error.
-When the complete frozen exact-plus-descendant catalog has no candidate, it
-still fails before opening an empty selector.
+The location launcher freezes its complete eligible Profile catalog before it
+opens. The target launcher then freezes the selected root's eligible descendant
+catalog but starts with exact reach. It therefore remains open both when the
+root has zero direct candidates and descendants do have candidates, and when
+the complete exact-plus-descendant range is empty. Candidate absence is visible
+selector state, not a reason to strand the person at the empty current Context.
+Leaving an unscoped empty target selector returns to the frozen Profile
+location tree, like Back from an empty Log history; leaving that outer tree
+cancels the command.
 
 Each eligible UID appears once per owner Context: currently present Memories
 first in canonical Context order, followed by historical-only Memories using
@@ -105,7 +122,10 @@ row. The compact `rN` badge means N recorded lineage-changing operations; it is
 separate from the UID badge so the two values remain independently scannable.
 `CURRENT` is omitted because it is the default state. Only an exceptional
 retained-only row adds `[historical]`, yielding
-`[historical][UID][rN]`. A granted Rationale row shows
+`[historical][UID][rN]`. Its badge alone uses a muted warm taupe; UID, revision,
+and Memory text retain the shared light lavender Memory-object color. Row focus
+still replaces both colors with the shared blue treatment. A granted Rationale
+row shows
 `[UID][history unavailable]` rather than treating withheld owner history as
 zero or deriving a count from current content. Up/Down, Left/Right,
 held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather
@@ -140,13 +160,14 @@ Rationale reuses the same target and Trace projection, then adds its
 interpretation sections; it does not inherit Trace's owner-history authority
 when the target is granted.
 
-Outside a TTY, omission fails instead of silently selecting the first Memory;
+Outside a TTY, omission fails instead of silently selecting a Context or the
+first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
 explicit selector so machine-readable stdout is never preceded by terminal
 selection traffic. Escape, `q`, and Ctrl-C cancel the picker without changing
-the store. If no current or retained historical direct Memory exists anywhere
-in the frozen exact-plus-descendant catalog, the command reports that boundary
-without opening an empty UI.
+the store. In a TTY, even a Profile containing only empty Contexts still opens
+the location selector and an explicitly opened empty target range; it never
+connects a Rationale provider without an exact selected Memory.
 
 By default, `mem trace` renders the entire selected lineage as compact
 operation rows. The current endpoint comes first, followed by operations in

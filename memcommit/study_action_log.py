@@ -110,6 +110,10 @@ _ACTION_FIELDS: dict[str, tuple[frozenset[str], frozenset[str]]] = {
         frozenset({"surface", "action"}),
         frozenset(),
     ),
+    "DECISION_FREE_AUTO_ACCEPT": (
+        frozenset({"surface", "action"}),
+        frozenset(),
+    ),
     "STUDY_CREATED": (
         frozenset(
             {

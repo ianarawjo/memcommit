@@ -172,11 +172,17 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
 
     assert all(len(line) == 180 for line in lines)
     assert "Compare Memories in two Contexts" in command_line
-    assert "│ USE WHEN: Comparing two Contexts" in command_line
+    assert "│ USE WHEN:" not in command_line
+    assert "    USE WHEN: Comparing two Contexts" in command_line
     row_content = command_line[2:-2]
-    summary_column, use_case_column = row_content.split(" │ ", 1)
-    assert abs(len(summary_column) - len(use_case_column)) <= 1
-    assert use_case_column.startswith("USE WHEN: Comparing two Contexts")
+    use_case_start = row_content.index("USE WHEN:")
+    summary_width = use_case_start - 4
+    use_case_width = len(row_content) - use_case_start
+    assert row_content[summary_width:use_case_start] == " " * 4
+    assert abs(summary_width - use_case_width) <= 1
+    assert row_content[use_case_start:].startswith(
+        "USE WHEN: Comparing two Contexts"
+    )
     assert any(
         style == "class:help-command.selected bold" and text == "USE WHEN:"
         for style, text in fragments
@@ -210,7 +216,8 @@ def test_collapsed_a_z_rows_use_the_same_best_for_column():
         line for line in rendered.splitlines() if "▸ mem compare" in line
     )
 
-    assert "│ USE WHEN: Comparing two Contexts" in command_line
+    assert "│ USE WHEN:" not in command_line
+    assert "    USE WHEN: Comparing two Contexts" in command_line
     assert "BEST FOR" not in rendered
 
 

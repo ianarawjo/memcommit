@@ -55,7 +55,7 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
 
     result = runner.invoke(
         app,
-        ["branch", "experiment", "--source-descendants"],
+        ["branch", "experiment", "-r"],
     )
 
     assert result.exit_code == 0

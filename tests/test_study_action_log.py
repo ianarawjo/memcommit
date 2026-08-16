@@ -204,3 +204,37 @@ def test_rejected_event_does_not_advance_the_durable_sequence(tmp_path):
         store_dir=store_dir,
     ).events_for_attempt(attempt_uid)
     assert [event.sequence for event in events] == [1, 2, 3]
+
+
+def test_decision_free_auto_accept_is_an_allowlisted_content_free_action(tmp_path):
+    store_dir = tmp_path / "store"
+    store_dir.mkdir()
+    attempt_uid = str(uuid.uuid4())
+    active = begin_study_action_recording(
+        profile=_study_profile(),
+        store_dir=store_dir,
+        attempt_uid=attempt_uid,
+        operation="atomize",
+        stdin_tty=True,
+        stdout_tty=True,
+    )
+    assert active is not None
+
+    automatic = active.append(
+        "DECISION_FREE_AUTO_ACCEPT",
+        surface="resolution",
+        action="ACCEPT",
+    )
+    finish_study_action_recording(active, status="COMPLETED")
+
+    events = StudyActionLedger(
+        _study_profile(),
+        store_dir=store_dir,
+    ).events_for_attempt(attempt_uid)
+    assert automatic.sequence == 2
+    assert automatic.data == {"surface": "resolution", "action": "ACCEPT"}
+    assert [event.action for event in events] == [
+        "COMMAND_STARTED",
+        "DECISION_FREE_AUTO_ACCEPT",
+        "COMMAND_FINISHED",
+    ]

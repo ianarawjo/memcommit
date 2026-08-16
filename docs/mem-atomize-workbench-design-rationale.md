@@ -1,5 +1,48 @@
 # `mem atomize` workbench design rationale
 
+## Exact Study tutorial prewarm
+
+For the fixed user-study tutorial only, `init-study` may validate a declared
+exact `AtomizeAnalysisSession` and install a hidden entry-key receipt. It does
+not write the Context-bound production slot or create a workbench. Eligibility
+binds the complete direct Source ledger, tutorial-description digest, semantic
+ruleset, provider contract, model, and reasoning effort. The first explicit
+matching Atomize command installs the prepared analysis through the ordinary
+boundary and creates a blank run-local workbench. It imports no review
+responses, grounding state, application state, or checkpoints. The CLI
+discloses the origin as `EXACT PREWARM`; explicit refresh and any changed input
+retain the ordinary live path. This keeps latency preparation separate from
+both participant history and mutation authority.
+
+An exact Memory selection may reuse that prewarm only when its actionable UID
+set is extensionally identical to the prepared analysis. This covers the Study
+tutorial's one-direct-Memory Source while preserving the visible focused
+selection. If a whole-Context prewarm contains any additional direct Memory,
+focused selection discards it and follows the live provider path rather than
+silently widening the person's target. A setup Input with zero direct Memories
+is rejected before this lookup, which prevents an empty parent Context from
+opening an apparently successful no-result Atomize session.
+
+### Observed previously-applied-session edge
+
+An older or already exercised Profile can retain an `APPLIED` Atomize analysis
+for a Context even after command Undo restores that Context's pre-Apply Memory
+frame. This is intentional one-shot application history, not an ephemeral
+cache. Choosing `New Atomize` and selecting that same Input currently resolves
+the existing Context-scoped latest-analysis slot, so it reopens the `APPLIED`
+session instead of creating a new analysis. The label can therefore suggest a
+fresh session when the actual behavior is resume-by-Context; explicit
+reanalysis still requires `mem impact atomize --refresh`, while restoration of
+the undone application requires `mem redo`.
+
+This edge does not block a newly initialized Study run. `init-study` leaves the
+Atomize catalog empty. The first explicit tutorial Atomize command materializes
+the prewarm with a blank run-local workbench and no application state or
+checkpoints, so the new session begins as `EXACT PREWARM · CURRENT` and its
+reviewed result remains eligible for one Apply. The older-Profile launcher case
+is retained as a known interaction issue; this change records it without
+altering the current session or application contract.
+
 ## Status
 
 This document records the **implemented user-facing contract** for the
@@ -31,7 +74,9 @@ mem review atomize
     -> resume the same saved review position and responses
 
 mem review
-    -> compatibility resume when no older global review owns that command
+    -> in a TTY, browse all saved Review-capable sessions
+    -> choosing Atomize resumes this exact analysis and workbench
+    -> non-TTY and explicit snapshot/response forms retain compatibility resume
 
 mem atomize --save
 mem atomize --save-as NEW_CONTEXT
@@ -44,8 +89,11 @@ What will it split? What remains unclear? `mem atomize` is also allowed as a
 convenient entry point, but it must join the same compatible saved analysis
 rather than creating a second proposal merely because a different command was
 used. `mem review atomize` is a compatibility resume surface, not the
-conceptual owner of atomization. Bare `mem review` may reach the workbench only
-when no older global review is active.
+conceptual owner of atomization. In a TTY, bare `mem review` reaches Atomize
+through the aggregate saved-session launcher and revalidates the selected
+analysis UID. Non-interactive or explicit snapshot/response compatibility
+forms may still reach the current Context's workbench only when no older global
+review is active.
 
 Opening, closing, taking a snapshot of, or re-entering the workbench does not
 rerun the semantic provider. A new model completion is permitted only through
@@ -330,11 +378,12 @@ An unresolved quality finding is not itself proof that the exact structural
 proposal loses content. The workbench therefore does not turn silence into a
 deferment decision or require one response per finding. Answered unary
 responses must first be incorporated in one complete reanalysis turn. With no
-incorporable response pending, the owning Atomize workbench opens Review and
-Apply directly because every finding is optional. Back returns to the complete
-report so those findings remain inspectable and answerable; this entry shortcut
-does not discard them. The final action is still an explicit `APPLY AS IS`;
-applying
+incorporable response pending, the exact local proposal applies without opening
+the workbench because every finding is optional and the application checkpoint
+is recoverable with `mem undo`. The success receipt still discloses unresolved
+findings, and saved analysis remains available for read-only inspection. A
+saved unary response disables the shortcut and requires its complete
+incorporation turn. Applying
 uses every current `COMPOSITE` split, preserves `UNCERTAIN` sources because
 they have no children, and leaves Conflict semantics unresolved. The action
 records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,
@@ -876,9 +925,10 @@ The following decisions are stable enough to guide implementation and tests:
 
 - `mem impact atomize` is the primary atomize workbench entry point.
 - `mem atomize` and `mem review atomize` resume the same compatible saved
-  analysis and workbench state without another provider call. Bare
-  `mem review` is a compatibility fallback when no older global review is
-  active.
+  analysis and workbench state without another provider call. TTY bare
+  `mem review` selects among all saved Review-capable sessions; its Atomize row
+  resumes the exact selected analysis. Non-TTY and explicit snapshot/response
+  forms retain the older compatibility fallback.
 - Reopening or taking a snapshot never silently reruns semantic analysis.
 - Reanalysis is explicit, and applying it must identify the exact analysis.
 - One analysis identity crosses Apply at most once. After its Context
@@ -1026,7 +1076,9 @@ These boxes describe the current implementation and its regression boundary.
 - [x] Make `mem atomize` resume that same compatible analysis before applying
       it.
 - [x] Make `mem review atomize` resume the same cursor, choices, and responses;
-      bare `mem review` is a compatibility fallback when available.
+      TTY bare `mem review` selects the exact workbench through the aggregate
+      launcher, while non-TTY and explicit snapshot/response forms retain the
+      compatibility fallback.
 - [x] Define and implement explicit `--refresh` and `--with-review`
       reanalysis boundaries that never replace a proposal silently.
 - [x] Render counts, both summary blocks, the complete issue list, and one

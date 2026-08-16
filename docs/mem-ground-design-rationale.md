@@ -1213,6 +1213,13 @@ present one concrete source Memory
 Retrieval of supporting and contrast Ground Memories, semantic regression, and
 whole-Ground approval are not yet automated.
 
+The concrete next-step replay for this loop is the synthetic ticker progression
+in
+[`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md).
+It deliberately exercises Example growth, Rule correction, Fit freshness, and
+an explicit non-destructive Context-binding refresh before Distill hidden
+prewarm is added.
+
 The operation is complete only locally: reviewed Ground Memories in the named
 scope are adequately explained, unresolved boundaries remain explicit,
 regression checks pass, and the user explicitly approves the Ground. Neither

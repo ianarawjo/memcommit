@@ -5,6 +5,7 @@ the full user-facing path (argument parsing, error messages, exit codes).
 All tests use the `isolated_store` fixture from conftest.py to avoid touching
 the real ~/.mem directory.
 """
+
 import shlex
 
 import click
@@ -27,6 +28,7 @@ runner = CliRunner(mix_stderr=False)
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def invoke(*args):
     """Invoke the CLI with the given arguments and return the result."""
     return runner.invoke(app, list(args))
@@ -35,6 +37,7 @@ def invoke(*args):
 # ---------------------------------------------------------------------------
 # help
 # ---------------------------------------------------------------------------
+
 
 class TestHelp:
     @staticmethod
@@ -60,8 +63,13 @@ class TestHelp:
         assert "start a new" not in result.output
         lines = result.output.splitlines()
         assert any(
-            line.startswith("impact ")
-            and "no Context changes" in line
+            line.startswith("impact ") and "no Context changes" in line
+            for line in lines
+        )
+        assert any(
+            line.startswith("compare ")
+            and "what they share" in line
+            and "what appears only on one side" in line
             for line in lines
         )
         assert any(
@@ -90,8 +98,7 @@ class TestHelp:
         assert any(line.startswith("help ") for line in lines)
         assert "bare → TUI" not in result.output
         assert any(
-            line.startswith("atomize ")
-            and "issue-scoped directional meld" in line
+            line.startswith("atomize ") and "issue-scoped directional meld" in line
             for line in lines
         )
         assert any(
@@ -105,8 +112,7 @@ class TestHelp:
             for line in lines
         )
         assert any(
-            line.startswith("forget ")
-            and "keep/edit/delete decision" in line
+            line.startswith("forget ") and "keep/edit/delete decision" in line
             for line in lines
         )
 
@@ -128,8 +134,7 @@ class TestHelp:
         }
         assert list_command.callback.__wrapped__ is ls_command.callback.__wrapped__
         assert (
-            delete_command.callback.__wrapped__
-            is remove_command.callback.__wrapped__
+            delete_command.callback.__wrapped__ is remove_command.callback.__wrapped__
         )
 
         root_result = invoke("--help")
@@ -204,10 +209,13 @@ class TestHelp:
         assert "recorded per affected Context" in prose
         assert "Esc / Backspace" in rendered
         assert "Q" not in rendered
-        assert help_inventory._help_information_box_fragments(
-            width=100,
-            by_kind=False,
-        ) == []
+        assert (
+            help_inventory._help_information_box_fragments(
+                width=100,
+                by_kind=False,
+            )
+            == []
+        )
 
     def test_each_core_concept_can_own_focus_without_an_action(self):
         for concept_index, (label, _description) in enumerate(
@@ -221,12 +229,11 @@ class TestHelp:
             )
 
             assert any(
-                style == "class:selected" and label in text
-                for style, text in fragments
+                style == "class:selected" and label in text for style, text in fragments
             )
-            assert sum(
-                style == "[SetCursorPosition]" for style, _text in fragments
-            ) == 1
+            assert (
+                sum(style == "[SetCursorPosition]" for style, _text in fragments) == 1
+            )
             assert any(
                 style == "class:help-guide.border.focused" and "┏" in text
                 for style, text in fragments
@@ -252,13 +259,20 @@ class TestHelp:
 
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
-            == "ANALYZE & TRANSFORM"
+            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"] == "ANALYZE & TRANSFORM"
         )
         assert help_inventory.HELP_CATEGORY_BY_COMMAND["reference"] == "MEMORIES"
         names = (
-            "clear", "branch", "status", "delete", "add", "reference",
-            "show", "switch", "contexts", "edit",
+            "clear",
+            "branch",
+            "status",
+            "delete",
+            "add",
+            "reference",
+            "show",
+            "switch",
+            "contexts",
+            "edit",
         )
         entries = [
             CommandEntry(
@@ -275,8 +289,16 @@ class TestHelp:
         a_z = help_inventory._ordered_help_entries(entries, by_kind=False)
 
         assert [entry.name for entry in by_kind] == [
-            "status", "contexts", "show", "switch", "branch",
-            "add", "reference", "edit", "delete", "clear",
+            "status",
+            "contexts",
+            "show",
+            "switch",
+            "branch",
+            "add",
+            "reference",
+            "edit",
+            "delete",
+            "clear",
         ]
         assert [entry.name for entry in a_z] == sorted(names, key=str.casefold)
 
@@ -428,8 +450,7 @@ class TestHelp:
             "mem checkpoint (save without a message)"
         )
         assert help_inventory.COMMAND_FORMS["translate"][0] == (
-            "mem translate "
-            "(show/save a default-English view of the current Context)"
+            "mem translate " "(show/save a default-English view of the current Context)"
         )
         assert help_inventory.COMMAND_FORMS["init-study"][:2] == (
             "mem init-study (edit or generate a Study Profile name)",
@@ -439,8 +460,7 @@ class TestHelp:
             "mem checkout (enter the Git-style interactive Context picker)"
         )
         assert help_inventory.COMMAND_FORMS["checkout"][3] == (
-            "mem checkout -b [new_context] "
-            "(create and switch to a Context branch)"
+            "mem checkout -b [new_context] " "(create and switch to a Context branch)"
         )
         assert help_inventory.COMMAND_FORMS["init"][0].startswith("mem init (")
         assert help_inventory.COMMAND_FORMS["branch"][0].startswith("mem branch (")
@@ -464,9 +484,7 @@ class TestHelp:
             )
 
         all_forms = tuple(
-            form
-            for forms in help_inventory.COMMAND_FORMS.values()
-            for form in forms
+            form for forms in help_inventory.COMMAND_FORMS.values() for form in forms
         )
         assert not any("browse saved work or start" in form for form in all_forms)
         assert not any("browse saved Grounds or start" in form for form in all_forms)
@@ -544,7 +562,7 @@ class TestHelp:
     def test_meaningful_bare_callbacks_have_a_bare_form(self):
         root = get_command(app)
         context = click.Context(root)
-        semantic_usage_errors = {"add", "edit", "impact"}
+        semantic_usage_errors = {"add", "edit", "elaborate", "impact"}
 
         for command_name in root.list_commands(context):
             command = root.get_command(context, command_name)
@@ -559,8 +577,7 @@ class TestHelp:
                     if isinstance(parameter, click.Argument) and parameter.required
                 ]
                 meaningful_bare = (
-                    not required_arguments
-                    and command_name not in semantic_usage_errors
+                    not required_arguments and command_name not in semantic_usage_errors
                 )
             if not meaningful_bare:
                 continue
@@ -589,12 +606,16 @@ class TestHelp:
         assert any("-d" in form and "direct preset" in form for form in forms)
 
     def test_free_text_placeholders_include_shell_quotes(self):
-        assert help_inventory._selectable_form_line(
-            help_inventory.COMMAND_FORMS["add"][0]
-        ) == 'mem add "[memory]"'
-        assert help_inventory._selectable_form_line(
-            help_inventory.COMMAND_FORMS["find"][1]
-        ) == 'mem find "[query]"'
+        assert (
+            help_inventory._selectable_form_line(help_inventory.COMMAND_FORMS["add"][0])
+            == 'mem add "[memory]"'
+        )
+        assert (
+            help_inventory._selectable_form_line(
+                help_inventory.COMMAND_FORMS["find"][1]
+            )
+            == 'mem find "[query]"'
+        )
         request_form = next(
             form
             for form in help_inventory.COMMAND_FORMS["ground"]
@@ -899,10 +920,10 @@ class TestHelp:
         assert "no Context changes" in result.output
 
 
-
 # ---------------------------------------------------------------------------
 # init
 # ---------------------------------------------------------------------------
+
 
 class TestInit:
     def test_bare_init_edits_a_fresh_suggestion_and_switches(
@@ -998,6 +1019,7 @@ class TestInit:
 # add
 # ---------------------------------------------------------------------------
 
+
 class TestAdd:
     def test_adds_memory_to_current_context(self, isolated_store):
         invoke("init", "ctx")
@@ -1026,6 +1048,7 @@ class TestAdd:
 # ---------------------------------------------------------------------------
 # list
 # ---------------------------------------------------------------------------
+
 
 class TestList:
     def test_lists_memory_ids_with_atomic_contents(self, isolated_store):
@@ -1066,7 +1089,9 @@ class TestList:
         assert alias_result.exit_code == 0
         assert alias_result.output == result.output
 
-    def test_ls_lists_embedded_context_without_leaking_child_contents(self, isolated_store):
+    def test_ls_lists_embedded_context_without_leaking_child_contents(
+        self, isolated_store
+    ):
         invoke("init", "building-access")
         invoke("add", "The east entrance is closed until Friday.")
         invoke("init", "task-123")
@@ -1084,9 +1109,7 @@ class TestList:
     ):
         invoke("init", "source")
         invoke("add", "Referenced atomic name.")
-        source_memory_uid = next(
-            iter(MemoryStore().load_current().memories)
-        )
+        source_memory_uid = next(iter(MemoryStore().load_current().memories))
         invoke("init", "aaa/ab")
         invoke("init", "parent")
         invoke("add", "aaa")
@@ -1125,8 +1148,7 @@ class TestList:
         last_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory " in line
-            and line.endswith("] Last atomic name.")
+            if "[memory " in line and line.endswith("] Last atomic name.")
         )
         assert context_index < first_memory_index < reference_index < last_memory_index
 
@@ -1155,26 +1177,22 @@ class TestList:
         grandchild_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line
-            and line.endswith("grandchild  VIA EMBED")
+            if "[context " in line and line.endswith("grandchild  VIA EMBED")
         )
         grandchild_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory " in line
-            and line.endswith("] Grandchild memory.")
+            if "[memory " in line and line.endswith("] Grandchild memory.")
         )
         child_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory " in line
-            and line.endswith("] Child memory.")
+            if "[memory " in line and line.endswith("] Child memory.")
         )
         parent_memory_index = next(
             index
             for index, line in enumerate(lines)
-            if "[memory " in line
-            and line.endswith("] Parent memory.")
+            if "[memory " in line and line.endswith("] Parent memory.")
         )
         assert (
             child_index
@@ -1304,6 +1322,7 @@ class TestList:
 # show
 # ---------------------------------------------------------------------------
 
+
 class TestShow:
     def test_without_selector_shows_all_memory_contents(self, isolated_store):
         invoke("init", "ctx")
@@ -1383,6 +1402,7 @@ class TestShow:
 # remove
 # ---------------------------------------------------------------------------
 
+
 class TestRemove:
     def test_removes_memory_by_uid_prefix(self, isolated_store):
         invoke("init", "ctx")
@@ -1407,6 +1427,7 @@ class TestRemove:
 
     def test_fails_on_ambiguous_prefix(self, isolated_store):
         from memcommit.context import Memory as Mem
+
         invoke("init", "ctx")
         # Insert two memories that share a prefix directly.
         store = MemoryStore()
@@ -1427,6 +1448,7 @@ class TestRemove:
 # ---------------------------------------------------------------------------
 # switch
 # ---------------------------------------------------------------------------
+
 
 class TestSwitch:
     def test_switches_to_existing_context(self, isolated_store):
@@ -1454,6 +1476,7 @@ class TestSwitch:
 # ---------------------------------------------------------------------------
 # branch
 # ---------------------------------------------------------------------------
+
 
 class TestBranch:
     def test_bare_branch_can_choose_a_noncurrent_local_source(
@@ -1611,6 +1634,7 @@ class TestBranch:
 # merge
 # ---------------------------------------------------------------------------
 
+
 class TestMerge:
     def test_merges_memories_from_other_context(self, isolated_store):
         invoke("init", "source")
@@ -1658,6 +1682,7 @@ class TestMerge:
 # contexts
 # ---------------------------------------------------------------------------
 
+
 class TestContexts:
     def test_lists_all_contexts(self, isolated_store):
         invoke("init", "alpha")
@@ -1682,6 +1707,7 @@ class TestContexts:
 # clear
 # ---------------------------------------------------------------------------
 
+
 class TestClear:
     def test_clear_removes_all_memories(self, isolated_store):
         invoke("init", "ctx")
@@ -1701,6 +1727,7 @@ class TestClear:
 # ---------------------------------------------------------------------------
 # delete
 # ---------------------------------------------------------------------------
+
 
 class TestDelete:
     def test_delete_removes_context(self, isolated_store):
@@ -1734,9 +1761,7 @@ class TestDelete:
         assert "post-delete cleanup was incomplete" in result.stderr
         store = MemoryStore()
         assert not store.context_exists("to-delete")
-        assert len(
-            store.list_context_lifecycle_events(context_name="to-delete")
-        ) == 1
+        assert len(store.list_context_lifecycle_events(context_name="to-delete")) == 1
 
     def test_delete_fails_for_nonexistent_context(self, isolated_store):
         result = invoke("delete", "ghost", "--force")
@@ -1746,6 +1771,7 @@ class TestDelete:
 # ---------------------------------------------------------------------------
 # status
 # ---------------------------------------------------------------------------
+
 
 class TestStatus:
     def test_shows_context_name_and_memory_count(self, isolated_store):
@@ -1778,6 +1804,7 @@ class TestStatus:
 # log
 # ---------------------------------------------------------------------------
 
+
 class TestLog:
     def test_shows_checkpoint_entries(self, isolated_store):
         invoke("init", "ctx")
@@ -1792,9 +1819,10 @@ class TestLog:
         # Bypass the CLI to create a context with no checkpoints.
         from memcommit.store import MemoryStore
         import memcommit.ops as ops
+
         store = MemoryStore()
         ctx = ops.init("bare")
-        store.save(ctx)          # save without AutoCheckpoint
+        store.save(ctx)  # save without AutoCheckpoint
         store.set_current("bare")
 
         result = invoke("log")
@@ -1809,6 +1837,7 @@ class TestLog:
 # ---------------------------------------------------------------------------
 # checkpoint
 # ---------------------------------------------------------------------------
+
 
 class TestCheckpoint:
     def test_saves_manual_checkpoint_with_message(self, isolated_store):
@@ -1845,6 +1874,7 @@ class TestCheckpoint:
 # ---------------------------------------------------------------------------
 # revert
 # ---------------------------------------------------------------------------
+
 
 class TestRevert:
     def test_reverts_to_earlier_checkpoint(self, isolated_store):
@@ -1889,6 +1919,7 @@ class TestRevert:
 # embed (error paths — happy path covered in integration tests)
 # ---------------------------------------------------------------------------
 
+
 class TestEmbed:
     def test_fails_when_child_does_not_exist(self, isolated_store):
         invoke("init", "parent")
@@ -1914,6 +1945,7 @@ class TestEmbed:
 # ---------------------------------------------------------------------------
 # checkout (alias)
 # ---------------------------------------------------------------------------
+
 
 class TestCheckout:
     def test_checkout_switches_context(self, isolated_store):

@@ -8,8 +8,12 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.commands.history_picker import HistoryPickerEntry, choose_history
-from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.core.text_layout import elide_terminal_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
+from memcommit.interfaces.tui.core.text_layout import (
+    elide_terminal_text,
+)
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 
 

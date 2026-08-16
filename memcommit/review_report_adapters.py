@@ -56,13 +56,19 @@ def meld_review_report(session: MeldSession) -> ReviewReportController:
 
 def sever_review_report(session: SeverSession) -> ReviewReportController:
     """Expose content-severing decisions and the proposed local result."""
+    result_boundary = (
+        "The retained local Result has already been created; this Review "
+        "does not create or apply it again."
+        if session.state == "APPLIED"
+        else "Review leaves the Source unchanged and creates no result Context."
+    )
     return ReviewReportController.from_resolution(
         SeverResolutionWorkbenchAdapter(session).view,
-        kind="CONTENT SEVERING",
+        kind="CONTENT_SEVERING",
         title="MEM REVIEW · SEVER",
         summary=(
             "Review what the local result keeps, rewrites, or forgets. "
-            "Review leaves the Source unchanged and creates no result Context."
+            + result_boundary
         ),
     )
 

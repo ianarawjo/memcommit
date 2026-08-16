@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import uuid
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
 
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
@@ -936,6 +936,7 @@ def impact_atomize(
     provider_factory: Callable[[], "AtomizeProvider"],
     *,
     declared_frames: dict[str, str] | None = None,
+    memory_selector: str | None = None,
 ) -> "AtomizeImpactReport":
     """Preview direct-Memory atomization without mutating *ctx*."""
     from memcommit.atomize import impact_atomize as _impact_atomize
@@ -944,37 +945,56 @@ def impact_atomize(
         ctx,
         provider_factory,
         declared_frames=declared_frames,
+        memory_selector=memory_selector,
     )
 
 
 def find_duplicates(
     ctx: Context,
     provider_factory: Callable[[], "FindingsProvider"],
+    *,
+    context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find duplicate direct-Memory pairs without mutating *ctx*."""
     from memcommit.findings import find_duplicates as _find_duplicates
 
-    return _find_duplicates(ctx, provider_factory)
+    return _find_duplicates(
+        ctx,
+        provider_factory,
+        context_name_by_uid=context_name_by_uid,
+    )
 
 
 def find_ambiguities(
     ctx: Context,
     provider_factory: Callable[[], "FindingsProvider"],
+    *,
+    context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
     from memcommit.findings import find_ambiguities as _find_ambiguities
 
-    return _find_ambiguities(ctx, provider_factory)
+    return _find_ambiguities(
+        ctx,
+        provider_factory,
+        context_name_by_uid=context_name_by_uid,
+    )
 
 
 def find_conflicts(
     ctx: Context,
     provider_factory: Callable[[], "FindingsProvider"],
+    *,
+    context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
     from memcommit.findings import find_conflicts as _find_conflicts
 
-    return _find_conflicts(ctx, provider_factory)
+    return _find_conflicts(
+        ctx,
+        provider_factory,
+        context_name_by_uid=context_name_by_uid,
+    )
 
 
 def integrate(

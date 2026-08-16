@@ -5,6 +5,7 @@ from __future__ import annotations
 import threading
 import time
 import uuid
+from types import SimpleNamespace
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -12,16 +13,27 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.commands.command_wait import (
     CommandWaitContextBrowser,
     CommandWaitView,
+    _freeze_default_context_browser,
     build_report_loading_view,
     run_command_wait,
 )
 from memcommit.commands.context_picker import ContextMemoryRow
+from memcommit.context_targeting.catalog import (
+    GrantedContextNavigation,
+    grant_navigation_annotation,
+)
 from memcommit.commands.help_inventory import CommandEntry
 from memcommit.interfaces.tui.components.scrollable_pane import (
     ScrollableFormattedTextPane,
 )
 from memcommit.profile_config import ProfileEntry
 from memcommit.store import MemoryStore
+from memcommit.source_projection.model import (
+    SourceAccess,
+    SourceDisplayFacts,
+    SourceState,
+)
+from memcommit.source_projection.presentation import source_display_text
 from memcommit.study_action_log import (
     StudyActionLedger,
     begin_study_action_recording,
@@ -58,6 +70,127 @@ def _study_profile() -> ProfileEntry:
             "baseline_profile_name": "study-baseline",
         },
     )
+
+
+def test_default_context_browser_includes_opaque_grant_routes(monkeypatch):
+    class FakeStore:
+        def list_context_names(self):
+            return ["local"]
+
+        def current_context_name(self):
+            return "local"
+
+    class FakeCatalog:
+        def list_context_names(self):
+            return ["local", "public/readable"]
+
+        def access_for(self, name):
+            return SimpleNamespace(is_granted=name == "public/readable")
+
+        def load(self, name):
+            raise AssertionError(f"unexpected Context load: {name}")
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.MemoryStore",
+        lambda **_kwargs: FakeStore(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.resolve_context_access",
+        lambda *_args, **_kwargs: object(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.freeze_profile_readable_context_catalog",
+        lambda *_args, **_kwargs: FakeCatalog(),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.context_access_display_facts",
+        lambda _access: SourceDisplayFacts(access=SourceAccess.READ_GRANT),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.freeze_granted_context_navigation",
+        lambda _store: GrantedContextNavigation(
+            names=("public/readable", "public/query"),
+            annotations={
+                "public/readable": grant_navigation_annotation(("READ",)),
+                "public/query": grant_navigation_annotation(
+                    ("QUERY", "SESSION_LOG")
+                ),
+            },
+            selectable_names=frozenset({"public/readable"}),
+        ),
+    )
+
+    browser = _freeze_default_context_browser()
+
+    assert browser is not None
+    assert browser.names == ("local", "public/query", "public/readable")
+    assert browser.readable_names == frozenset({"local", "public/readable"})
+    assert source_display_text(browser.annotations["public/query"]) == (
+        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · UNAVAILABLE"
+    )
+    assert browser.memory_loader is not None
+    try:
+        browser.memory_loader("public/query")
+    except ValueError as error:
+        assert "cannot be opened" in str(error)
+    else:
+        raise AssertionError("Opaque Grant route reached the Context loader.")
+
+
+def test_opaque_context_browser_row_never_reaches_memory_loader():
+    loaded_readable = threading.Event()
+    loaded_names: list[str] = []
+
+    def load_memories(name: str):
+        if name == "public/query":
+            raise AssertionError("QUERY-only route reached the Memory loader.")
+        loaded_names.append(name)
+        loaded_readable.set()
+        return ()
+
+    def work(_progress):
+        if not loaded_readable.wait(3):
+            raise RuntimeError("Readable Context preview was not requested.")
+        return "safe"
+
+    with create_pipe_input() as pipe_input:
+        # Open Contexts, move onto the opaque route, exercise every Memory
+        # expansion path, then ask for all readable Memory previews.
+        driver = threading.Thread(
+            target=lambda: pipe_input.send_text("c\x1b[B\rmM\x1b[C"),
+            daemon=True,
+        )
+        driver.start()
+        result = run_command_wait(
+            "SEVER",
+            "analyzing",
+            total=1,
+            work=work,
+            help_entries=(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            interactive=True,
+            interval=0.01,
+            return_view=CommandWaitView("REPORT", "pending"),
+            context_browser=CommandWaitContextBrowser.create(
+                ("local", "public/query"),
+                current_name="local",
+                annotations={
+                    "public/query": SourceDisplayFacts(
+                        access=SourceAccess.QUERY_GRANT,
+                        states=(SourceState.UNAVAILABLE,),
+                        permissions=("QUERY",),
+                    )
+                },
+                readable_names=frozenset({"local"}),
+                memory_loader=load_memories,
+            ),
+        )
+        driver.join(timeout=3)
+
+    assert result == "safe"
+    assert not driver.is_alive()
+    assert loaded_names == ["local"]
 
 
 def test_report_is_default_and_h_toggles_help_without_restarting_work():

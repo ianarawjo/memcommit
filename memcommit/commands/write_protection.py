@@ -7,8 +7,14 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.store import MemoryStore, context_record_digest
 
 
@@ -22,6 +28,20 @@ unlock_app = typer.Typer(
     invoke_without_command=True,
     help="Remove current-Context, target, or Profile write protection.",
 )
+
+
+def _recursive_scope(*, direct: bool, recursive: bool) -> bool:
+    try:
+        return (
+            resolve_scope_preset(
+                direct=direct,
+                recursive=recursive,
+                default=ContextScopePreset.DIRECT,
+            )
+            is ContextScopePreset.RECURSIVE
+        )
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
 
 
 def _context_target(
@@ -140,6 +160,10 @@ def _change_profile_protection(*, protected: bool) -> None:
 @lock_app.callback(invoke_without_command=True)
 def lock_default(
     ctx: typer.Context,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Lock only the current Context"),
+    ] = False,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -154,18 +178,22 @@ def lock_default(
         _change_context_protection(
             None,
             protected=True,
-            recursive=recursive,
+            recursive=_recursive_scope(direct=direct, recursive=recursive),
         )
-    elif recursive and ctx.invoked_subcommand != "context":
+    elif (direct or recursive) and ctx.invoked_subcommand != "context":
         raise typer.BadParameter(
-            "--recursive applies only to the current Context or the context "
-            "subcommand."
+            "Context scope flags apply only to the current Context or the "
+            "context subcommand."
         )
 
 
 @unlock_app.callback(invoke_without_command=True)
 def unlock_default(
     ctx: typer.Context,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Unlock only the current Context"),
+    ] = False,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -180,12 +208,12 @@ def unlock_default(
         _change_context_protection(
             None,
             protected=False,
-            recursive=recursive,
+            recursive=_recursive_scope(direct=direct, recursive=recursive),
         )
-    elif recursive and ctx.invoked_subcommand != "context":
+    elif (direct or recursive) and ctx.invoked_subcommand != "context":
         raise typer.BadParameter(
-            "--recursive applies only to the current Context or the context "
-            "subcommand."
+            "Context scope flags apply only to the current Context or the "
+            "context subcommand."
         )
 
 
@@ -251,6 +279,10 @@ def lock_context(
             help="Existing ordinary Context (defaults to current Context)"
         ),
     ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Lock only the selected Context"),
+    ] = False,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -264,8 +296,12 @@ def lock_context(
     _change_context_protection(
         context_name,
         protected=True,
-        recursive=recursive
-        or bool(ctx.parent and ctx.parent.params.get("recursive")),
+        recursive=_recursive_scope(
+            direct=direct
+            or bool(ctx.parent and ctx.parent.params.get("direct")),
+            recursive=recursive
+            or bool(ctx.parent and ctx.parent.params.get("recursive")),
+        ),
     )
 
 
@@ -278,6 +314,10 @@ def unlock_context(
             help="Existing ordinary Context (defaults to current Context)"
         ),
     ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Unlock only the selected Context"),
+    ] = False,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -291,8 +331,12 @@ def unlock_context(
     _change_context_protection(
         context_name,
         protected=False,
-        recursive=recursive
-        or bool(ctx.parent and ctx.parent.params.get("recursive")),
+        recursive=_recursive_scope(
+            direct=direct
+            or bool(ctx.parent and ctx.parent.params.get("direct")),
+            recursive=recursive
+            or bool(ctx.parent and ctx.parent.params.get("recursive")),
+        ),
     )
 
 

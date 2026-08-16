@@ -689,7 +689,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
         lambda: provider,
     )
 
-    found = runner.invoke(app, ["find", "service desk", "--limit", "10"])
+    found = runner.invoke(app, ["find", "service desk", "--limit", "10", "-r"])
     listed = runner.invoke(app, ["ls", "-R", "task-root"])
     mixed_copy = runner.invoke(app, ["ls", "-R", "task-root", "--copy"])
 
@@ -921,7 +921,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
             lambda: provider,
         )
 
-    result = runner.invoke(app, ["find", "service desk"])
+    result = runner.invoke(app, ["find", "service desk", "-r"])
 
     assert result.exit_code == 0, result.output
     assert "west lobby" in result.output
@@ -1429,7 +1429,9 @@ def test_new_compare_and_update_setup_include_a_granted_target(
     assert source_display_text(annotations[wiki.name]) == "READ GRANT"
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\t\r")
+        # Shared Compare setup crosses A Context/Range/Memory and then the
+        # corresponding B surfaces before its read-only action.
+        pipe_input.send_text("\t\t\t\t\t\t\r")
         compare = choose_compare_setup(
             active,
             app_input=pipe_input,

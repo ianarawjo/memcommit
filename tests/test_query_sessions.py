@@ -182,11 +182,11 @@ def test_parent_query_federates_only_relevant_descendant_views(
 
     related = runner.invoke(
         app,
-        ["query", "campus-wiki", "건설에는 무엇이 필요하니?"],
+        ["query", "-r", "campus-wiki", "건설에는 무엇이 필요하니?"],
     )
     unrelated = runner.invoke(
         app,
-        ["query", "campus-wiki", "도서관 운영 시간은?"],
+        ["query", "-r", "campus-wiki", "도서관 운영 시간은?"],
     )
 
     assert related.exit_code == 0, related.output
@@ -232,7 +232,7 @@ def test_federated_descendant_revocation_prevents_answer_disclosure(
 
     result = runner.invoke(
         app,
-        ["query", "campus-wiki", "What construction tests are required?"],
+        ["query", "-r", "campus-wiki", "What construction tests are required?"],
     )
 
     assert result.exit_code == 1
@@ -264,7 +264,7 @@ def test_federated_query_rejects_an_invented_descendant_route(
 
     result = runner.invoke(
         app,
-        ["query", "campus-wiki", "Question?"],
+        ["query", "-r", "campus-wiki", "Question?"],
     )
 
     assert result.exit_code == 1

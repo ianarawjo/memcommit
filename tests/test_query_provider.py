@@ -230,6 +230,46 @@ def test_complete_pins_explicit_codex_model_and_reasoning():
     assert provider.last_run.upstream_model == "gpt-5.6-luna"
 
 
+def test_complete_forwards_documented_none_reasoning_effort():
+    captured = {}
+
+    def runner(args, **kwargs):
+        captured["args"] = args
+        return _completed(args, stdout="READY")
+
+    provider = CodexChatGPTProvider(
+        binary=Path("/working/codex"),
+        env={},
+        model="gpt-5.6-sol",
+        reasoning_effort="none",
+        _runner=runner,
+    )
+
+    assert provider.complete("prompt", operation="probe") == "READY"
+    assert 'model_reasoning_effort="none"' in captured["args"]
+    assert provider.identity.reasoning_effort == "none"
+
+
+def test_complete_forwards_documented_max_reasoning_effort():
+    captured = {}
+
+    def runner(args, **kwargs):
+        captured["args"] = args
+        return _completed(args, stdout="READY")
+
+    provider = CodexChatGPTProvider(
+        binary=Path("/working/codex"),
+        env={},
+        model="gpt-5.6-luna",
+        reasoning_effort="max",
+        _runner=runner,
+    )
+
+    assert provider.complete("prompt", operation="probe") == "READY"
+    assert 'model_reasoning_effort="max"' in captured["args"]
+    assert provider.identity.reasoning_effort == "max"
+
+
 def test_query_failure_does_not_expose_prompt_or_stderr():
     secret = "DO NOT EXPOSE THIS"
 

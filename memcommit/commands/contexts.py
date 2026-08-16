@@ -123,8 +123,7 @@ def cmd() -> None:
         candidates = tuple(
             grant
             for grant in active_grants
-            if name == grant.public_name
-            or name.startswith(grant.public_name + "/")
+            if name == grant.public_name or name.startswith(grant.public_name + "/")
         )
         if not candidates:
             continue

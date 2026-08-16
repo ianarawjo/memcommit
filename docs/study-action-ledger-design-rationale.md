@@ -62,7 +62,9 @@ An eligible command records:
   schema presence, input/output character counts, elapsed time, and coarse
   exception class;
 - explicit semantic actions emitted by shared surfaces, initially Resolution
-  workbench return actions and final approval presentation/acceptance;
+  workbench return actions, final approval presentation/acceptance, and the
+  distinct local auto-accept used when a reversible proposal has no required
+  person decision;
 - content-free waiting Help actions, including opening/closing the shared
   inventory, the public command identifier whose forms were inspected, and
   whether the original result or error became ready while Help remained open.

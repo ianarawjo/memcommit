@@ -8,7 +8,9 @@ from memcommit.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.context import AutoCheckpoint
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError

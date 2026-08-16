@@ -59,7 +59,7 @@ The other initial configurations are:
 | Atomize | `INPUT A → OUTPUT B` | A is one existing ordinary local Context; B is either the same Context for in-place application or a validated new exact Context name that preserves A |
 | Compare | `A ↔ B → ANALYSIS` | A and B are existing Context trees with independent, default-off reach controls; the result is a saved analysis, not a Context C |
 | Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off reach control |
-| Meld, directional | `INCOMING A → BASELINE B` | A has a default-off reach control; B is a direct authoritative mutation target and intentionally has none |
+| Meld, directional | `INCOMING A → BASELINE B` | A and B have independent, default-off reach controls; B remains the authoritative result target |
 | Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off reach controls; C is an eligible empty Context or a validated new exact name |
 | Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are existing Context trees with independent scope controls; C is a new exact name |
 
@@ -163,6 +163,8 @@ The shell owns only a process-local draft:
 - one mode UID when the operation has modes;
 - one independent tree state and selected canonical name for each existing
   role;
+- at most one retained exact direct-Memory UID per role when both that role
+  and the current mode opt into Memory focus;
 - one process-local new-name draft for each creatable role;
 - one optional caller-owned annotation for selectable rows in a specific role,
   so operation-specific eligibility meaning does not leak into another role
@@ -220,12 +222,31 @@ saved session, or start an operation.
   parent-locator role it instead selects that row as a placement aid. Before
   direct editing, this reparents the exact draft; after the first direct edit,
   the complete typed path remains unchanged and authoritative.
+- `m` toggles lazy direct-Memory previews below the current Context, while `M`
+  toggles them across the visible tree. `Up` and `Down` include each revealed
+  Memory as a viewport stop so long content can be inspected without moving the
+  retained endpoint. Preview-only roles keep those rows read-only: `Enter` and
+  `Space` cannot select their parent Context or produce a Memory receipt. A
+  role and mode may instead opt into exact direct-Memory selection. There,
+  `Enter` or `Space` checks the focused Memory, selects its canonical owner
+  Context, clears descendant reach, and places its exact UID in the draft.
+  The checked marker is retained independently from the browsing cursor.
+  Atomize Input, both Compare roles, both Update roles, and both Directional
+  Meld roles enable this behavior. Symmetric Meld, Sever, Forget, and Switch
+  remain preview-only. Context references, embedded Contexts, and query rows
+  are never selectable as direct Memories. The loader follows the caller's
+  frozen readable or local-only catalog boundary; unavailable and query-only
+  rows are never opened through this presentation shortcut.
+- Explicitly selecting a whole Context, switching to a new-Context draft,
+  enabling descendants, or moving to a mode that does not support Memory focus
+  clears any retained UID for that role. Hiding or collapsing the checked
+  Memory's preview also clears it. Thus the visible target and executable
+  receipt cannot diverge after exploratory navigation.
 - A mode may opt each readable endpoint into one `THIS CONTEXT ONLY` versus
   `INCLUDE DESCENDANTS` control below a separator. It is exact-only by default;
   Left and Right choose the shared reach, while Enter or Space remains a
   compatibility toggle. The control is in normal Tab order immediately after
-  its Context tree. Compare and Update enable it for A and B. Symmetric Meld
-  enables it for both peers; directional Meld enables it only for incoming A.
+  its Context tree. Compare, Update, and both Meld modes enable it for A and B.
 - Down from a creatable role's final tree row opens its one-line exact-name
   editor. Once the editor owns focus, the action row shows `ENTER CONFIRM`.
   Enter validates and confirms the exact name, projects it back into the role
@@ -253,10 +274,14 @@ The common shell returns a presentation draft with stable role IDs. It does
 not construct command-line arguments and is not an authorization receipt.
 An operation adapter converts the draft into an operation-owned typed receipt:
 
-- Compare: ordered A/B names plus independent descendant-scope flags;
-- Update: source/target names plus independent descendant-scope flags;
+- Compare: ordered A/B names, independent descendant-scope flags, and optional
+  exact Memory UIDs;
+- Update: source/target names, independent descendant-scope flags, and optional
+  exact Memory UIDs;
 - Meld: mode plus A/B, mode-enabled descendant-scope flags, and C/create only
-  for symmetric mode; and
+  for symmetric mode; optional A/B Memory UIDs exist only in directional mode;
+- Atomize: one local Input, its optional exact direct-Memory UID, and the
+  existing or require-new Output plan;
 - Branch: one existing local Source with exact-versus-lexical-subtree reach,
   plus one exact require-new target whose parent tree is only a placement aid;
   and
@@ -280,10 +305,10 @@ continues to own all consequential checks:
   saved analysis.
 - Update applies its endpoint, independently frozen scope, grant,
   staged-session replacement, and application rules.
-- Directional Meld may widen incoming A, but binds direct B as both baseline
-  and target and rechecks both frozen inputs. Descendant B is deliberately
-  unavailable until materialization can preserve each child owner instead of
-  moving child Memories into the root baseline.
+- Directional Meld may widen either frozen input, but binds B as both baseline
+  and target and rechecks both inputs. Its materialization contract preserves
+  each child owner instead of moving descendant Memories into the root
+  baseline.
 - Symmetric Meld requires an exact durable ordered Compare analysis with the
   same A/B scope flags. It reuses a fresh basis or prepares and saves one from
   the frozen receipt itself, then rechecks both peers and verifies that C is
@@ -305,8 +330,10 @@ The implementation has three layers:
    common `SelectionOption`, `FlatSelectionState`, and checked-card renderer, while
    `ContextReachState` fixes the shared `THIS CONTEXT ONLY` versus
    `INCLUDE DESCENDANTS` vocabulary and presentation.
-2. `ContextTreeState`, `ContextSelectionState`, and the common row renderer own
-   namespace cursor/expansion, checked values, and row geometry respectively.
+2. `ContextTreeState`, `ContextSelectionState`,
+   `DirectMemorySelectionState`, and the common row renderer own namespace
+   cursor/expansion, checked Context values, retained exact Memory choice, and
+   row geometry respectively.
    The role-based setup shell composes those controls with optional
    per-mode/per-role descendant controls, editors, focus, and process-local
    draft state.
@@ -376,4 +403,6 @@ existing controller and validation boundaries.
 - It does not merge Ground's conversational Context planning or frozen exact
   approval protocol into the session setup shell.
 - Atomize does not expose descendant scope in this setup. Its semantic and
-  apply contracts remain bound to the selected Input's direct Memory frame.
+  apply contracts remain bound to either the selected Input's complete direct
+  Memory frame or its explicitly selected direct Memory. Apply blocks an Input
+  with zero direct Memories before any provider connection.

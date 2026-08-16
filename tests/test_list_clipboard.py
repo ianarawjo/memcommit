@@ -460,6 +460,7 @@ def test_missing_store_race_never_accepts_an_unlocked_payload(
         ("ls", "--copy", "--paste"),
         ("ls", "source", "--paste"),
         ("list", "-R", "--paste"),
+        ("list", "-d", "--paste"),
         ("ls", "--with-ids"),
         ("ls", "--paste", "--with-ids"),
     ],

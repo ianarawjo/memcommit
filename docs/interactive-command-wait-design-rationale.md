@@ -13,11 +13,12 @@ had just frozen.
 
 The shared interactive wait keeps that semantic work whole while allowing a
 read-only Help session in the same process and terminal. It is used for the
-aggregate analysis in Compare, Forget, and Sever; every provider-backed
-assessment turn in Meld, including issue replies and `INCORPORATE RESPONSES`;
-and Update's initial plan and whole-proposal comment revision. Other call sites
-that still use `CommandProgress` retain the one-line heartbeat until their
-operation adapters are migrated deliberately.
+aggregate analysis in Compare, Forget, and Sever; Audit’s ordered three-finder
+orchestration; every provider-backed assessment turn in Meld, including issue
+replies and `INCORPORATE RESPONSES`; and Update's initial plan and
+whole-proposal comment revision. Other call sites that still use
+`CommandProgress` retain the one-line heartbeat until their operation adapters
+are migrated deliberately.
 
 ## Interaction contract
 
@@ -26,18 +27,23 @@ an executor and gives the foreground to one operation-neutral waiting TUI. The
 screen reports only real host-owned stages and elapsed time; it does not invent
 a provider percentage. Its default foreground is the operation-owned report
 surface: an existing complete report during a Meld follow-up, or a report-shaped
-loading skeleton during first analysis. `C` toggles a separately frozen
-`CONFIRMED INPUTS` copy, and `H` or `?` opens the same command inventory,
-category order, descriptions, and audited forms used by `mem help`. `H` inside
-Help returns to whichever report or input copy was previously visible. None of
-these switches restarts or alters the frozen worker. The progress header remains
-above every host surface and reports only host-owned stages and elapsed time.
+loading skeleton during first analysis. `C` opens a frozen read-only Context
+browser, `I` opens the separately frozen `CONFIRMED INPUTS` copy, and `R`
+returns directly to the report. Repeating an active destination key returns to
+the surface that opened it. `H` or `?` opens the same command inventory,
+category order, descriptions, and audited forms used by `mem help`; `H` inside
+Help restores whichever report, Context browser, or input copy was previously
+visible. None of these switches restarts or alters the frozen worker. The
+progress header remains above every host surface and reports only host-owned
+stages and elapsed time.
 
-Both views are supplied by the operation as frozen values; the common shell
-owns only switching, wrapping, and scrolling. Meld follow-up turns restore the
-immediately preceding complete report and show the submitted turn separately
-as not yet incorporated. Update comment revisions likewise retain the complete
-reviewed staged report and show the submitted comment as not yet incorporated.
+The report and confirmed-input views are supplied by the operation as frozen
+values. The common shell independently freezes the Profile navigation catalog
+and owns only switching, wrapping, scrolling, and read-only Context previews.
+Meld follow-up turns restore the immediately preceding complete report and show
+the submitted turn separately as not yet incorporated. Update comment revisions
+likewise retain the complete reviewed staged report and show the submitted
+comment as not yet incorporated.
 A first Compare, Forget, Sever, Meld, or Update analysis has no result report
 yet, so the default surface shows only its expected section topology and
 one shared busy marker under each section. It is explicitly labeled
@@ -51,12 +57,27 @@ text, but a result-free wait has no prose shape to preserve. The markers use a
 legible neutral gray: softer than completed report prose, but neither Memory
 lavender nor focused-control blue.
 
-`C` exposes the exact frozen setup facts instead: selected Contexts and scope,
+Audit supplies a different operation-owned first-analysis surface because its
+three exact host stages are already known. One numbered list stays visible
+throughout the turn: completed finders remain `COMPLETE`, the current finder
+animates as `RUNNING`, and later finders remain `WAITING`. No finding content
+appears on this surface, and the common shell still owns Help handoff,
+animation, terminal input, and deferred close behavior.
+
+`C` exposes the Profile's command-start Context namespace using the shared
+switch-shaped tree. Ordinary local and READ-granted Contexts may reveal their
+read-only direct-Memory previews. Opaque public Grant roots, including QUERY
+grants, are also visible with their exact permission annotation and
+`UNAVAILABLE`, but are not materialized Context rows: Enter, expansion, and
+all-Memory browsing never send them to the ordinary Context loader. The browser
+cannot switch the current Context or produce a selection receipt.
+
+`I` exposes the exact frozen setup facts instead: selected Contexts and scope,
 frozen counts where already available, the Forget instruction, submitted Meld
 turn, the Update Source→Target route and submitted revision comment, and any
-not-yet-created output name. `C` returns to the report surface.
-Both surfaces are read-only because changing a source or response while the
-provider owns the turn would invalidate the frozen request.
+not-yet-created output name. All three host surfaces are read-only because
+changing a source or response while the provider owns the turn would invalidate
+the frozen request.
 
 The nested Help application runs in `EXPLORE` mode:
 
@@ -64,8 +85,9 @@ The nested Help application runs in `EXPLORE` mode:
   remain available.
 - Enter and Right may reveal descriptions and forms, but cannot return a shell
   template, execute a command, or mutate storage.
-- `H` hides Help; `Q` or Escape also returns to the waiting operation. From
-  either report or confirmed-input view, `H` reopens the same frozen inventory.
+- `H` hides Help; `Q` or Escape also returns to the waiting operation. From the
+  report, Context browser, or confirmed-input view, `H` reopens the same frozen
+  inventory.
 - If work finishes while Help is open, the Help header changes to
   `RESULT READY` (or `ERROR READY`) and remains open. The participant chooses
   when to return; completion never yanks focus away from what they are reading.
@@ -106,10 +128,11 @@ itself can always be closed independently with `Q` or Escape.
 
 ## Study recording
 
-The wait surface emits content-free `TUI_ACTION` records for confirmed-input
-open/close, Help lifecycle transitions, explicit `H` hides, command expansion,
-form inspection, report/input scrolling, and result/error readiness. Command
-names are public inventory identifiers; raw arguments, Memory text, provider
+The wait surface emits content-free `TUI_ACTION` records for Context-browser
+navigation and Memory-preview toggles, confirmed-input open/close, Help
+lifecycle transitions, explicit `H` hides, command expansion, form inspection,
+report/input scrolling, and result/error readiness. Command names are public
+inventory identifiers; raw arguments, Context names, Memory text, provider
 payloads, and output remain excluded.
 
 The worker inherits the command's `ContextVar` state so provider and command
@@ -143,20 +166,20 @@ these switches, and the deterministic worker returned once without being
 restarted.
 
 The first-analysis topology was separately replayed with a deterministic
-Compare wait: report skeleton, `C` confirmed inputs, `H` Help, `H` back to the
-same confirmed inputs, and `C` back to the skeleton. The header advanced from
+Compare wait: report skeleton, `I` confirmed inputs, `H` Help, `H` back to the
+same confirmed inputs, and `I` back to the skeleton. The header advanced from
 `CONNECTING PROVIDER` to `ANALYZING RELATIONS`; no switch restarted the worker,
 and every skeleton row remained visibly distinct from result prose.
 
 Update's migrated path was then captured through the real Typer command in a
 color-capable 180×52 PTY. Its initial report reused the shared `.`, `..`, `…`
 cadence under `PLAN`, `WHAT WILL CHANGE`, `PLANNED CHANGES`, and `TO DO`.
-`C` exposed the frozen Source→Target route, `H` opened the complete root
-inventory, `H` restored those confirmed inputs, and `C` returned to the
-animated report while the deterministic provider continued. Closing the
-resulting staged review left both Contexts unchanged and retained exactly one
-staged receipt. The ordered ANSI evidence, text screens, PNGs, and reproduction
-driver are under
+`C` exposed the read-only Profile Context browser and `I` exposed the frozen
+Source→Target route. `H` opened the complete root inventory and restored the
+same originating host surface; the deterministic provider continued through
+every destination change. Closing the resulting staged review left both
+Contexts unchanged and retained exactly one staged receipt. The ordered ANSI
+evidence, text screens, PNGs, and reproduction driver are under
 [`screenshots/mem-update-command-wait-20260810/`](screenshots/mem-update-command-wait-20260810/).
 
 A real Task 2 Directional Meld follow-up then exercised the production
@@ -187,7 +210,7 @@ prevents Help setup from crashing an otherwise valid semantic turn.
   self-directed discovery. They may be added later without replacing Help.
 - Fabricated report prose was rejected for first analysis. The skeleton shows
   only stable section shape and explicitly denies result status; exact source
-  facts live behind `C` instead.
+  facts live behind `I` instead.
 - The provider primitive remains non-cancellable. The UI can defer closing but
   cannot truthfully claim that a remote request was stopped.
 - Re-entering the exact live setup or workbench `Application` was rejected for

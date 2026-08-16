@@ -17,6 +17,8 @@ The common component owns only process-local interaction mechanics:
 - one or more named Context roles;
 - caller-supplied visible and selectable Context catalogs;
 - fixed roles that remain visible but are omitted from focus traversal;
+- optional caller-authorized direct-Memory projections loaded only for a
+  role's explicitly selected exact Context;
 - shared Context-tree, selection, frame, focus, and key grammar; and
 - one typed setup draft returned without loading operation content or changing
   durable state.
@@ -47,6 +49,13 @@ UID-new additions, and the complete checkpoint count. Its To Do frame applies
 only the same opaque frozen plan. Both cancelling setup and cancelling after
 preparation are read-only.
 
+That Viewer is conditional rather than a universal second step. Once planning
+shows no required conflict, a local Target applies through the common
+ownership-aware decision-free policy and returns its checkpointed receipt
+directly; `mem undo` and `mem redo` retain the complete command boundary. A
+granted-authority Target still requires final frozen-plan review. Conflict
+plans enter their deterministic Resolution workbench instead.
+
 ## Verified progress
 
 - `2bc757a7` established the common endpoint component and canonical readable
@@ -55,6 +64,9 @@ preparation are read-only.
   behavior.
 - `38aff15f` split plan preparation from exact Apply and projected the complete
   frozen plan.
+- Audit became the second real consumer, independent A/B descendant reach was
+  added, and the typed value now supports an optional exact Memory UID whose
+  role-local selection is cleared by Context or descendant-range changes.
 - Ordered 180×52 PTY evidence covers direct and recursive setup, plan review,
   successful application, both cancellation boundaries, and a failure before
   persistence.

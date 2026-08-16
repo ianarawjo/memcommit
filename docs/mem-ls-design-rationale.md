@@ -1,14 +1,16 @@
-# `mem ls` Design Rationale
+# `mem list` / `mem ls` Design Rationale
 
 - Status: Implemented
-- Scope: the co-equal `mem list` and `mem ls` spellings, immediate namespace
+- Scope: canonical `mem list` with the exact compact `mem ls` spelling,
+  immediate namespace
   child navigation, recursive listing with `-R`, `--recursive`, or the
   beginner-facing `--expand` alias, and dual text/structured `--copy` and
   `--paste`
 
 ## 1. Purpose
 
-`mem ls` is the navigation command for a memcommit Context. It answers:
+`mem list`, also available through the compact `mem ls` spelling, is the
+navigation command for a memcommit Context. It answers:
 
 > Which materialized child Contexts can I navigate to, and what direct items
 > are stored in this Context?
@@ -23,12 +25,12 @@ This distinction is similar to Git:
 
 - the shell's `ls` lists physical filesystem entries;
 - `git ls-tree` interprets Git objects and lists a logical tree;
-- `mem ls` interprets a Context, derives its immediate materialized namespace
-  children, and lists its logical Memory, MemoryRef, and embedded Context
-  entries.
+- `mem list` / `mem ls` interprets a Context, derives its immediate materialized
+  namespace children, and lists its logical Memory, MemoryRef, and embedded
+  Context entries.
 
 Consequently, `context.json`, `checkpoints/`, and other storage artifacts must
-never be mixed into normal `mem ls` output.
+never be mixed into normal `mem list` output.
 
 ## 2. Command Surface
 
@@ -45,11 +47,12 @@ mem ls [context] [-R] --copy [--with-ids]
 mem ls --paste
 ```
 
-`mem list` and `mem ls` are co-equal public spellings. Both forms have
-identical behavior, options, implementation level, and short help
-description. They share one callback internally so the two contracts cannot
-drift, but the implementation detail does not make either spelling
-subordinate in participant-facing documentation.
+`mem list` is the canonical discovery name and `mem ls` is its exact compact
+spelling. Both forms retain identical behavior, options, and implementation;
+they share one callback so the executable contracts cannot drift. Command
+discovery shows one `list (ls)` entry rather than presenting one operation as
+two separate rows. The root `ls` registration is hidden from generated command
+inventories, not deprecated or behaviorally narrower.
 
 When no Context is supplied, the current Context is used.
 
@@ -163,7 +166,7 @@ There is no separate title or filename. Adding a title would duplicate
 information for short atomic memories and would make the minimal Memory model
 more complex.
 
-Therefore, `mem ls` uses the Memory's content as its human-readable name:
+Therefore, `mem list` uses the Memory's content as its human-readable name:
 
 ```text
 [memory  abcdef12] The north entrance is closed until Friday.
@@ -321,13 +324,12 @@ second path.
 
 ## 10. Interactive terminal browser
 
-With interactive stdin and stdout, and without `--copy` or `--paste`, `mem ls`
-opens the shared Context tree as a read-only browser over the complete Profile
-navigation catalog used by `mem switch`. The exact resolved target is the
-initial focused row, not the root or visibility boundary of the tree. This
-prevents a nested current Context from hiding its ancestors, siblings, other
-local roots, readable Grant rows, or opaque QUERY-only routes.
-
+With interactive stdin and stdout, and without `--copy` or `--paste`,
+`mem list` or `mem ls` opens the shared Context tree as a read-only browser
+over the complete Profile navigation catalog used by `mem switch`. The exact
+resolved target is the initial focused row, not the root or visibility boundary
+of the tree. This prevents a nested current Context from hiding its ancestors,
+siblings, other local roots, readable Grant rows, or opaque QUERY-only routes.
 Direct Memory and MemoryRef rows start visible only for the resolved target,
 or for its selected subtree under `-R`; unrelated Profile rows remain collapsed
 and unread until explicitly opened. Lowercase `m` hides or restores them for
@@ -339,8 +341,8 @@ pointer. A Context leaf is still expandable: its `▸`/`▾` marker, Enter, and
 Left/Right keys control its direct-Memory rows rather than leaving it as a
 non-actionable dot.
 
-Plain `mem ls` starts with the target's direct Context children visible.
-`mem ls -R` starts with the target's lexical descendant subtree expanded,
+Plain `mem list` starts with the target's direct Context children visible.
+`mem list -R` starts with the target's lexical descendant subtree expanded,
 while the rest of the Profile remains available for orientation. It does not
 eagerly expand the whole Profile. The TUI tree is reconstructed from the same
 ordinary and granted public-name catalogs as Switch; a QUERY-only route is an
@@ -355,11 +357,10 @@ not a silent broadening of a list receipt or copied scope.
 The tree interaction and Profile catalog are deliberately shared with
 `mem contexts` and the bare `mem switch` picker; command meaning comes from the
 initial row, presentation options, and continuation, not from a separate key
-grammar. `mem contexts` enters with Memories hidden, `mem ls` enters with the
-resolved target focused and its in-scope direct Memories visible, and
-`mem switch` consumes an accepted Context as a state-changing target. Opaque
-Grant rows remain virtual annotations, so catalog visibility never becomes
-READ permission.
+grammar. `mem contexts` enters with Memories hidden, `mem list` enters with the
+resolved target focused and direct Memories visible, and `mem switch` consumes
+an accepted Context as a state-changing target. Opaque Grant rows remain
+virtual annotations, so catalog visibility never becomes READ permission.
 
 Noninteractive stdout retains the stable text format for scripts, tests, and
 agents. `--copy`, `--with-ids`, and `--paste` also retain their existing text
@@ -372,9 +373,9 @@ query-only source.
 
 The intended conceptual split is:
 
-- `mem ls`: compact immediate namespace navigation and hanging-indent Memory
-  rows whose selectors remain beside their content;
-- `mem ls -R`, `mem ls --recursive`, or `mem ls --expand`: recursive
+- `mem list` (or `mem ls`): compact immediate namespace navigation and
+  hanging-indent Memory rows whose selectors remain beside their content;
+- `mem list -R`, `mem list --recursive`, or `mem list --expand`: recursive
   navigation through namespace children and embedded Contexts;
 - `mem show <selector>`: full detail for one selected Memory, MemoryRef, or
   embedded Context.

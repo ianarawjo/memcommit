@@ -266,12 +266,12 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
 
     assert result.exit_code == 0, result.output
     assert observed == [
-        FindSearchRequest(
-            query="shared detail",
-            target_names=(first.name, second.name),
-            include_descendants=True,
-            follow_embeds=True,
-            limit=5,
+            FindSearchRequest(
+                query="shared detail",
+                target_names=(first.name, second.name),
+                include_descendants=False,
+                follow_embeds=False,
+                limit=5,
         )
     ]
 
@@ -350,7 +350,10 @@ def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
         "--follow-embeds",
     ) == {
         "ROOT_A_SCOPE",
+        "CHILD_A_SCOPE",
         "ROOT_B_SCOPE",
+        "CHILD_B_SCOPE",
+        "EMBEDDED_SCOPE",
     }
 
 
@@ -695,7 +698,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["find", "parking"])
+    result = runner.invoke(app, ["find", "-r", "parking"])
 
     assert result.exit_code == 0
     assert "1 match" not in result.output
@@ -711,7 +714,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "Temporary parking" not in direct.output
 
 
-def test_find_cli_searches_materialized_namespace_descendants_by_default(
+def test_find_cli_recursive_searches_materialized_namespace_descendants(
     isolated_store,
     monkeypatch,
 ):
@@ -737,7 +740,7 @@ def test_find_cli_searches_materialized_namespace_descendants_by_default(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["find", "healthcare"])
+    result = runner.invoke(app, ["find", "-r", "healthcare"])
 
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory\n" in result.output
@@ -926,7 +929,9 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert "--context-only" in result.output
     assert "--follow-embeds" in result.output
     assert "--exclude-embeds" in result.output
-    assert "Compatibility shorthand" in result.output
+    assert "Search only the selected" in result.output
+    assert "-d" in result.output
+    assert "-r" in result.output
 
 
 def test_find_cli_tty_static_results_include_namespace_descendants(
@@ -956,7 +961,7 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
         ),
     )
 
-    result = runner.invoke(app, ["find", "healthcare"])
+    result = runner.invoke(app, ["find", "-r", "healthcare"])
 
     assert result.exit_code == 0, result.output
     assert child.name in result.output
@@ -1487,7 +1492,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
         lambda: InterleavedProvider(),
     )
 
-    result = runner.invoke(app, ["find", "anything"])
+    result = runner.invoke(app, ["find", "-r", "anything"])
 
     assert result.exit_code == 0
     first_label = f"[memory {first_child.uid[:8]}]"
@@ -1524,7 +1529,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
         lambda: KeywordProvider(),
     )
 
-    result = runner.invoke(app, ["find", "parking"])
+    result = runner.invoke(app, ["find", "-r", "parking"])
 
     assert result.exit_code == 0
     assert result.output == (

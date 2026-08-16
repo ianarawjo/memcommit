@@ -15,6 +15,7 @@ from memcommit.commands.session_endpoint_setup import (
     EndpointSetupDraft,
     choose_session_endpoints,
 )
+from memcommit.commands.context_picker import ContextMemoryRow
 
 
 @dataclass(frozen=True)
@@ -38,6 +39,7 @@ def choose_branch_creation(
     current: str | None,
     suggest_name: Callable[[str], str],
     validate_name: Callable[[str], None],
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -98,6 +100,7 @@ def choose_branch_creation(
             ),
         ),
         initial_mode_uid="BRANCH",
+        memory_loader=memory_loader,
         validate_draft=validate_draft,
         app_input=app_input,
         app_output=app_output,

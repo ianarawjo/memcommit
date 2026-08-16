@@ -24,6 +24,7 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import (
     create_authority_grant,
+    rename_profile,
     study_profile_groups,
 )
 from memcommit.store import MemoryStore
@@ -151,6 +152,74 @@ def _install_legacy_split_study(
     )
     assert study_profile_groups(load_profile_registry().profiles)[-1].uid == study_uid
     return study_uid, profiles
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected_prefix"),
+    [
+        (("rename", "alias-old", "alias-new"), "Renamed Profile"),
+        (
+            ("profile", "rename", "alias-old", "alias-new"),
+            "Renamed Profile",
+        ),
+    ],
+)
+def test_top_level_and_explicit_profile_rename_are_equivalent(
+    profile_home,
+    argv,
+    expected_prefix,
+):
+    profile = _register_profile("alias-old", context_name="context-stays-put")
+    root = profile_store_dir(profile)
+    digest = _tree_digest(root)
+
+    result = runner.invoke(app, list(argv))
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert f"{expected_prefix} 'alias-old' to 'alias-new'." in result.output
+    renamed = load_profile_registry().by_name("alias-new")
+    assert renamed is not None and renamed.uid == profile.uid
+    assert profile_store_dir(renamed) == root
+    assert MemoryStore(root=root, create=False).context_exists("context-stays-put")
+    assert _tree_digest(root) == digest
+
+
+def test_top_level_rename_help_describes_profiles_and_keeps_explicit_route(
+    profile_home,
+):
+    command_help = runner.invoke(app, ["rename", "--help"])
+    inventory = runner.invoke(app, ["help"])
+
+    assert command_help.exit_code == 0, command_help.output
+    assert "current Profile" in command_help.output
+    assert "explicitly named Profile" in command_help.output
+    assert "--force" not in command_help.output
+    assert inventory.exit_code == 0, inventory.output
+    rename_row = next(
+        line for line in inventory.output.splitlines() if line.startswith("rename ")
+    )
+    assert "managed Profile" in rename_row
+
+
+def test_picker_receipt_rejects_a_new_registry_generation(profile_home):
+    target = _register_profile("picked-old")
+    frozen = load_profile_registry()
+    _register_profile("concurrent-profile")
+
+    with pytest.raises(
+        profiles_module.ProfileError,
+        match="registry changed after rename selection",
+    ):
+        rename_profile(
+            "picked-new",
+            old_name=target.name,
+            expected_uid=target.uid,
+            expected_generation=frozen.generation,
+        )
+
+    visible = load_profile_registry()
+    assert visible.by_name("picked-old") is not None
+    assert visible.by_name("picked-new") is None
 
 
 def test_rename_inactive_ordinary_study_changes_only_its_registry_name(

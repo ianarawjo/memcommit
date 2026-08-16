@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -31,7 +32,12 @@ from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.sever import SEVER_SCHEMA_VERSION, SeverSession, sever_record_digest
+from memcommit.sever import (
+    SEVER_SCHEMA_VERSION,
+    SeverApplication,
+    SeverSession,
+    sever_record_digest,
+)
 from memcommit.sever_provider import SEVER_PAYLOAD_MARKER
 from memcommit.sever_resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
@@ -515,10 +521,10 @@ def test_source_and_criteria_descendant_scopes_are_independent(
             "sever",
             "--source",
             "source",
+            "-r",
             "--source-only",
             "--criteria",
             "criteria",
-            "--criteria-descendants",
             "--save-as",
             "draft",
         ],
@@ -656,6 +662,39 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
     assert [result.label for result in view.results] == ["SUMMARIZE"]
 
 
+def test_applied_resolution_report_names_its_existing_checkpoint(isolated_store):
+    store = MemoryStore()
+    source = _context(store, "local/personal-memory", "Source")
+    criteria = _context(store, "local/guardrails", "Criterion")
+    session = sever_command._start(
+        store=store,
+        source_name=source.name,
+        criteria_name=criteria.name,
+        output_name="draft",
+        provider_factory=lambda: SeverProvider(),
+    )
+    checkpoint_uid = str(uuid.uuid4())
+    applied = session.with_application(
+        SeverApplication(
+            output_context_uid=str(uuid.uuid4()),
+            checkpoint_uid=checkpoint_uid,
+            result_memory_uids=tuple(
+                str(uuid.uuid4()) for _candidate, _source, _content in session.results()
+            ),
+        )
+    )
+
+    view = SeverResolutionWorkbenchAdapter(applied).view()
+
+    assert view.report_items_summary is not None
+    assert (
+        f"Result Context draft was created in checkpoint [{checkpoint_uid[:8]}]."
+        in view.report_items_summary.text
+    )
+    assert "Result Context has not been created" not in view.report_items_summary.text
+    assert "RECOVERY · mem undo" in sever_command.render_sever(applied)
+
+
 def test_custom_sever_response_remains_answered_and_apply_ready(isolated_store):
     store = MemoryStore()
     source = _context(store, "local/personal-memory", "Source")
@@ -688,7 +727,7 @@ def test_custom_sever_response_remains_answered_and_apply_ready(isolated_store):
     )
 
 
-def test_sever_workbench_can_change_save_location_before_apply(
+def test_sever_routes_its_local_output_to_decision_free_auto_accept(
     isolated_store,
     monkeypatch,
 ):
@@ -704,24 +743,22 @@ def test_sever_workbench_can_change_save_location_before_apply(
     )
     sessions = SeverSessionStore(store)
     sessions.save(session, expected_digest=None)
-    actions = iter(
-        (
-            ResolutionWorkbenchAction(
-                kind="CHANGE_DESTINATION",
-                destination="task-3/severed",
-            ),
-            ResolutionWorkbenchAction(kind="CLOSE"),
-        )
-    )
+    workbench_kwargs = []
+
+    def next_action(*_args, **kwargs):
+        workbench_kwargs.append(kwargs)
+        return ResolutionWorkbenchAction(kind="CLOSE")
+
     monkeypatch.setattr(
         "memcommit.commands.resolution_workbench_shell.run_resolution_workbench_shell",
-        lambda *args, **kwargs: next(actions),
+        next_action,
     )
 
     changed = sever_command._run_workbench(store, session)
 
-    assert changed.output_name == "task-3/severed"
-    assert sessions.load(session.uid).output_name == "task-3/severed"
+    assert changed.output_name == "draft"
+    assert sessions.load(session.uid).output_name == "draft"
+    assert workbench_kwargs[0]["decision_free_behavior"] == "AUTO_ACCEPT"
 
 
 def test_sever_report_lists_large_result_only_once_when_impact_is_present(

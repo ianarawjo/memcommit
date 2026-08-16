@@ -45,10 +45,18 @@ from memcommit.commands.session_picker import (
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+)
 from memcommit.commands.update_render import (
     render_plan,
     run_update_workbench,
+)
+from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
 )
 from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.query_provider import (
@@ -401,6 +409,10 @@ def _directional_impact(
     current_name: str | None,
     source_name: str | None,
     target_name: str | None,
+    source_memory: str | None = None,
+    target_memory: str | None = None,
+    source_descendants: bool = False,
+    target_descendants: bool = False,
 ) -> None:
     """Preview one explicit or current-filled directional endpoint pair."""
     try:
@@ -420,15 +432,29 @@ def _directional_impact(
             current_name=current_name,
         )
         authorize_derived_transfer(source_access, target_access)
-        source = (
-            GrantedReadStore(source_access).load(source_access.display_name)
-            if source_access.is_granted
-            else store.load(source_access.context_name)
+        source_store = (
+            GrantedReadStore(source_access) if source_access.is_granted else store
         )
-        target = (
-            GrantedReadStore(target_access).load(target_access.display_name)
-            if target_access.is_granted
-            else store.load(target_access.context_name)
+        target_store = (
+            GrantedReadStore(target_access) if target_access.is_granted else store
+        )
+        source = load_context_scope(
+            source_store,
+            (
+                source_access.display_name
+                if source_access.is_granted
+                else source_access.context_name
+            ),
+            include_descendants=source_descendants,
+        )
+        target = load_context_scope(
+            target_store,
+            (
+                target_access.display_name
+                if target_access.is_granted
+                else target_access.context_name
+            ),
+            include_descendants=target_descendants,
         )
         granted_source = (
             freeze_granted_context_binding(source_access)
@@ -444,14 +470,18 @@ def _directional_impact(
             find_installed_projectable_update_prewarm,
         )
 
-        update_prewarm_match = find_installed_projectable_update_prewarm(
-            store=store,
-            source=source,
-            target=target,
-            source_include_descendants=True,
-            target_include_descendants=True,
-            granted_source=granted_source,
-            granted_target=granted_target,
+        update_prewarm_match = (
+            None
+            if source_memory is not None or target_memory is not None
+            else find_installed_projectable_update_prewarm(
+                store=store,
+                source=source,
+                target=target,
+                source_include_descendants=source_descendants,
+                target_include_descendants=target_descendants,
+                granted_source=granted_source,
+                granted_target=granted_target,
+            )
         )
         if update_prewarm_match is not None:
             session = update_prewarm_match.session.with_status("impact")
@@ -475,8 +505,12 @@ def _directional_impact(
                     target,
                     lambda: provider,
                     status="impact",
+                    source_include_descendants=source_descendants,
+                    target_include_descendants=target_descendants,
                     granted_source=granted_source,
                     granted_target=granted_target,
+                    source_memory_selector=source_memory,
+                    target_memory_selector=target_memory,
                 )
 
         # Provider latency is not an authorization lease. Re-resolve both
@@ -496,21 +530,39 @@ def _directional_impact(
                 required_permission="READ",
                 registry=registry,
             )
-            current_source = (
+            current_source_store = (
                 GrantedReadStore(
                     current_source_access,
                     registry=registry,
-                ).load(current_source_access.display_name)
+                )
                 if current_source_access.is_granted
-                else store.load(current_source_access.context_name)
+                else store
             )
-            current_target = (
+            current_target_store = (
                 GrantedReadStore(
                     current_target_access,
                     registry=registry,
-                ).load(current_target_access.display_name)
+                )
                 if current_target_access.is_granted
-                else store.load(current_target_access.context_name)
+                else store
+            )
+            current_source = load_context_scope(
+                current_source_store,
+                (
+                    current_source_access.display_name
+                    if current_source_access.is_granted
+                    else current_source_access.context_name
+                ),
+                include_descendants=source_descendants,
+            )
+            current_target = load_context_scope(
+                current_target_store,
+                (
+                    current_target_access.display_name
+                    if current_target_access.is_granted
+                    else current_target_access.context_name
+                ),
+                include_descendants=target_descendants,
             )
             current_granted_source = (
                 freeze_granted_context_binding(current_source_access)
@@ -587,6 +639,7 @@ def _atomize_impact(
     show_all: bool,
     with_review: bool,
     refresh: bool,
+    memory_selector: str | None,
 ) -> None:
     """Create once or resume the provisional atomization workbench."""
     if refresh and with_review:
@@ -717,7 +770,12 @@ def _atomize_impact(
                     declared_frame_origins=declared_frame_origins,
                     source_review_uid=source_review_uid,
                     source_review_digest=source_review_digest,
-                    allow_prepared=not refresh and not with_review,
+                    memory_selector=memory_selector,
+                    allow_prepared=(
+                        not refresh
+                        and not with_review
+                        and memory_selector is None
+                    ),
                 ),
                 store=store,
                 provider_factory=provider_factory,
@@ -814,12 +872,69 @@ def cmd(
             help=("Target Context B; if --from is omitted, current supplies A"),
         ),
     ] = None,
+    source_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--source-memory",
+            metavar="UID_OR_PREFIX",
+            help="With directional Update, focus one Source Memory",
+        ),
+    ] = None,
+    target_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--target-memory",
+            metavar="UID_OR_PREFIX",
+            help="With directional Update, focus one Target Memory",
+        ),
+    ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Use only explicit directional Update endpoint roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both directional Update endpoints",
+        ),
+    ] = False,
+    source_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--source-descendants/--source-only",
+            help="Refine directional Update Source reach",
+        ),
+    ] = None,
+    target_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--target-descendants/--target-only",
+            help="Refine directional Update Target reach",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
             "--context",
             "-c",
             help="Context for a unary impact operation (defaults to current)",
+        ),
+    ] = None,
+    memory_selector: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "With atomize, analyze one direct Memory while its neighbors "
+                "remain non-actionable context"
+            ),
         ),
     ] = None,
     show_all: Annotated[
@@ -848,7 +963,30 @@ def cmd(
     ] = False,
 ) -> None:
     """Preview a new plan or inspect saved Impact before an optional Apply handoff."""
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or source_descendants is not None
+        or target_descendants is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        source_descendants, target_descendants = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(source_descendants, target_descendants),
+        )
+    except (TypeError, ValueError) as error:
+        _usage_error(str(error))
     if operation is ImpactOperation.atomize:
+        if scope_flags_supplied:
+            _usage_error(
+                "Context scope presets apply to directional Update Impact; "
+                "atomize remains direct-only."
+            )
         if session_uid is not None:
             _usage_error(
                 "'--session' is valid only with 'mem impact meld', "
@@ -860,6 +998,11 @@ def cmd(
                 "Use either 'mem impact atomize' or "
                 "a directional 'mem impact --from SOURCE' / "
                 "'--to TARGET' form."
+            )
+        if source_memory is not None or target_memory is not None:
+            _usage_error(
+                "'--source-memory' and '--target-memory' select directional "
+                "Update inputs, not atomize inputs; use '--memory' for atomize."
             )
         try:
             store = MemoryStore(create=False)
@@ -882,6 +1025,7 @@ def cmd(
             show_all=show_all,
             with_review=with_review,
             refresh=refresh,
+            memory_selector=memory_selector,
         )
         return
 
@@ -890,9 +1034,13 @@ def cmd(
             source_name is not None
             or target_name is not None
             or context_name is not None
+            or memory_selector is not None
+            or source_memory is not None
+            or target_memory is not None
             or show_all
             or with_review
             or refresh
+            or scope_flags_supplied
         ):
             _usage_error(
                 f"'mem impact {operation.value}' opens a saved session and "
@@ -913,13 +1061,14 @@ def cmd(
     if (
         session_uid is not None
         or context_name is not None
+        or memory_selector is not None
         or show_all
         or with_review
         or refresh
     ):
         _usage_error(
             "'--session' is valid only with a saved-session operation; "
-            "'--context', '--all', '--with-review', and '--refresh' are only "
+            "'--context', '--memory', '--all', '--with-review', and '--refresh' are only "
             "valid with 'mem impact atomize'."
         )
     try:
@@ -937,4 +1086,8 @@ def cmd(
         current_name=context_snapshot.current_name,
         source_name=source_name,
         target_name=target_name,
+        source_memory=source_memory,
+        target_memory=target_memory,
+        source_descendants=source_descendants,
+        target_descendants=target_descendants,
     )

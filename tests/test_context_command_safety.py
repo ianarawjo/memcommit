@@ -88,13 +88,19 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
     _save(store, source)
     owner = _save(store, ops.init("owner"))
     store.set_current(owner.name)
-    original_merge = ops.merge
+    from memcommit.merge_runtime import plan_context_merge
 
-    def rename_then_merge(candidate, target):
+    def rename_then_plan(candidate, target, **kwargs):
         _rename(store, "old", "new")
-        return original_merge(candidate, target)
+        return plan_context_merge(candidate, target, **kwargs)
 
-    monkeypatch.setattr("memcommit.merge_runtime.ops.merge", rename_then_merge)
+    # The runtime no longer delegates classification to the legacy mutable
+    # ops.merge helper. Interpose at the new pure planning boundary and retain
+    # the same rename-between-load-and-apply safety assertion.
+    monkeypatch.setattr(
+        "memcommit.merge_runtime.plan_context_merge",
+        rename_then_plan,
+    )
 
     result = runner.invoke(app, ["merge", "old"])
 

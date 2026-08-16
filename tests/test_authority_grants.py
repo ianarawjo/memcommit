@@ -1,4 +1,5 @@
 """Cross-Profile authority grants behave as permissioned views, not forks."""
+
 from __future__ import annotations
 
 import json
@@ -164,10 +165,7 @@ def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
     detailed = runner.invoke(app, ["status"])
 
     assert short.exit_code == 0, short.output
-    assert (
-        "READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
-        in short.output
-    )
+    assert "READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY" in short.output
     assert detailed.exit_code == 0, detailed.output
     assert (
         "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE · READ ONLY"
@@ -321,7 +319,8 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
         store,
         access,
         current_name="campus-wiki",
-        direct=False,
+        include_descendants=True,
+        follow_embeds=True,
         limit=5,
     )
 
@@ -554,9 +553,7 @@ def test_granted_memory_create_and_update_write_authority_store_only(
     assert edited.exit_code == 0, edited.output
     authority = authority_store.load_direct("campus-wiki")
     assert [
-        item.content
-        for item in authority.iter_items()
-        if isinstance(item, Memory)
+        item.content for item in authority.iter_items() if isinstance(item, Memory)
     ] == [
         "Revised through the task view.",
         "Created through the task view.",

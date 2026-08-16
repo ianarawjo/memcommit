@@ -45,6 +45,12 @@ from memcommit.interfaces.cli.query import (
     split_query_memory_selector,
 )
 from memcommit.context import QueryContextRef
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    ContextTraversal,
+    resolve_context_traversal,
+    resolve_scope_preset,
+)
 from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
@@ -69,6 +75,7 @@ def _query_ordinary_context(
     *,
     context_name: str,
     question: str,
+    traversal: ContextTraversal,
 ) -> None:
     """Answer from the same frozen searchable frame used by ordinary Find."""
     access = resolve_context_access(
@@ -81,8 +88,8 @@ def _query_ordinary_context(
     request = OrdinaryQueryRequest(
         question=question,
         target_names=(access.display_name,),
-        include_descendants=True,
-        follow_embeds=True,
+        include_descendants=traversal.include_descendants,
+        follow_embeds=traversal.follow_embeds,
     )
     with CommandProgress(
         "QUERY",
@@ -238,7 +245,57 @@ def cmd(
             help="Show one saved task-owned Q/A transcript",
         ),
     ] = None,
+    include_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--descendants/--context-only",
+            help="Control lexical descendant reach for an ordinary query",
+        ),
+    ] = None,
+    follow_embeds: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--follow-embeds/--exclude-embeds",
+            help="Control embedded Context traversal for an ordinary query",
+        ),
+    ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Query only the selected Context root"),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants and follow embedded Contexts",
+        ),
+    ] = False,
 ) -> None:
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or include_descendants is not None
+        or follow_embeds is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        traversal = resolve_context_traversal(
+            preset=preset,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Query error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore()
     if sessions or show_session_name is not None:
         if sessions and show_session_name is not None:
@@ -254,6 +311,7 @@ def cmd(
             or context_name is not None
             or session_name is not None
             or language != "en"
+            or scope_flags_supplied
         ):
             typer.secho(
                 "Error: transcript inspection cannot be combined with a query.",
@@ -280,6 +338,14 @@ def cmd(
         return
 
     if selector is None:
+        if scope_flags_supplied:
+            typer.secho(
+                "Query error: scope flags require a one-shot SELECTOR; "
+                "the interactive workbench owns its visible scope controls.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         if not is_interactive_terminal():
             typer.secho(
                 "Query error: SELECTOR is required outside a terminal. In a "
@@ -512,6 +578,7 @@ def cmd(
                     store,
                     context_name=selected_name,
                     question=selector,
+                    traversal=traversal,
                 )
             except (
                 FileNotFoundError,
@@ -585,7 +652,7 @@ def cmd(
                 language=language,
                 session_name=session_name,
                 memory_handle=memory_handle,
-                federate_descendants=True,
+                federate_descendants=traversal.include_descendants,
             ),
             store=store,
             provider_factory=lambda: connect_query_provider("codex_chatgpt"),

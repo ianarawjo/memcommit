@@ -10,6 +10,7 @@ from memcommit.atomize import (
     AtomizeImpactError,
     AtomizeProvider,
     atomize_analysis_matches_context,
+    collect_atomize_candidates,
     create_atomize_analysis,
     impact_atomize,
 )
@@ -44,6 +45,26 @@ def _connect_aggregate_atomize_provider(
             ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
         )
     return provider
+
+
+def _requested_memory_uids(
+    context: Context,
+    memory_selector: str | None,
+) -> tuple[str, ...]:
+    if memory_selector is None:
+        return tuple(
+            candidate.memory.uid for candidate in collect_atomize_candidates(context)
+        )
+    # Memory focus is an optional operation shape layered during the rollout.
+    # Keeping the import at the activated edge lets the extracted application
+    # boundary remain compatible with profiles that expose only whole-Context
+    # Atomize.
+    from memcommit.atomize import select_atomize_candidates
+
+    return tuple(
+        candidate.memory.uid
+        for candidate in select_atomize_candidates(context, memory_selector)[0]
+    )
 
 
 def _install_prepared_atomize_analysis(
@@ -146,7 +167,15 @@ class MemoryStoreAtomizeAnalysisOpenPort:
     ) -> AtomizeAnalysisOpenResult:
         context = request.context
         existing = self.store.load_atomize_analysis(context.uid)
-        if existing is not None and not request.refresh:
+        requested_uids = _requested_memory_uids(
+            context,
+            request.memory_selector,
+        )
+        existing_scope_matches = (
+            existing is not None
+            and tuple(item.memory_uid for item in existing.items) == requested_uids
+        )
+        if existing is not None and not request.refresh and existing_scope_matches:
             if (
                 existing.context_uid != context.uid
                 or existing.context_name != context.name
@@ -185,6 +214,14 @@ class MemoryStoreAtomizeAnalysisOpenPort:
 
         prepared_analysis, effective_prepared_output = self._prepared(request)
         if prepared_analysis is not None and not request.refresh:
+            prepared_uids = tuple(
+                item.memory_uid for item in prepared_analysis.items
+            )
+            if request.memory_selector is not None and requested_uids != prepared_uids:
+                raise AtomizeImpactError(
+                    "A focused atomize request cannot reuse a whole-Context "
+                    "prepared analysis."
+                )
             if (
                 request.declared_frames
                 or request.declared_frame_origins
@@ -218,10 +255,14 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             )
             or context.name
         )
+        impact_options: dict[str, object] = {}
+        if request.memory_selector is not None:
+            impact_options["memory_selector"] = request.memory_selector
         report = impact_atomize(
             context,
             lambda: _connect_aggregate_atomize_provider(provider_factory),
             declared_frames=request.declared_frames,
+            **impact_options,
         )
         analysis = create_atomize_analysis(
             context,

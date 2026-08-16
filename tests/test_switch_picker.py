@@ -7,6 +7,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.clipboard import ClipboardError
 from memcommit.commands.context_picker import (
     ContextMemorySelection,
     _CONTEXT_NAVIGATION_HINT,
@@ -14,8 +15,10 @@ from memcommit.commands.context_picker import (
     ContextTreeState,
     ContextMemoryRow,
     build_context_tree,
+    context_memory_rows,
     context_option_continuation_prefixes,
     context_picker_navigation_units,
+    project_context_picker_clipboard,
     _build_context_tree,
     _context_ancestors,
     _expandable_context_subtree,
@@ -24,6 +27,8 @@ from memcommit.commands.context_picker import (
     _visible_context_rows,
     choose_context,
 )
+from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.source_projection.model import SourceForm, SourceReach, SourceState
 from memcommit.store import MemoryStore
 
 
@@ -49,9 +54,7 @@ def test_picker_navigation_hint_names_expand_instead_of_tree():
 
 
 def test_public_context_tree_state_can_be_embedded_without_running_an_app():
-    tree = build_context_tree(
-        ("alpha", "alpha/child", "alpha/child/deep", "beta")
-    )
+    tree = build_context_tree(("alpha", "alpha/child", "alpha/child/deep", "beta"))
     state = ContextTreeState.create(tree, selected="alpha")
 
     state.expand_selected()
@@ -173,9 +176,7 @@ def test_picker_renders_tree_and_anchors_exact_selected_context():
 def test_picker_memory_rows_toggle_without_becoming_context_rows():
     tree = build_context_tree(("alpha", "alpha/child"))
     state = ContextTreeState.create(tree, selected="alpha")
-    memories = {
-        "alpha": (ContextMemoryRow("memory abcdef12", "first\nline"),)
-    }
+    memories = {"alpha": (ContextMemoryRow("memory abcdef12", "first\nline"),)}
 
     hidden = _render_context_options(
         state.visible_rows(),
@@ -199,6 +200,76 @@ def test_picker_memory_rows_toggle_without_becoming_context_rows():
     assert [row.name for row in state.visible_rows()] == ["alpha"]
 
 
+def test_switch_preview_projects_every_direct_item_in_persisted_order():
+    parent = Context("parent-uid", "parent")
+    owned = Memory("memory-uid", "owned Memory")
+    reference = MemoryRef(
+        "reference-uid",
+        "source-uid",
+        "source",
+        owned.uid,
+        target=owned,
+    )
+    query_view = QueryContextRef(
+        "query-uid",
+        "private/query-view",
+        "query-source-uid",
+        "test-provider",
+    )
+    embedded = Context("embedded-uid", "parent/embedded")
+    for item in (owned, reference, query_view, embedded):
+        parent.add(item)
+
+    rows = context_memory_rows(parent)
+
+    assert [row.label for row in rows] == [
+        "memory-u",
+        "referenc",
+        "query-ui",
+        "embedded",
+    ]
+    assert [row.content for row in rows] == [
+        "owned Memory",
+        "owned Memory",
+        "private/query-view",
+        "parent/embedded",
+    ]
+    assert [row.source.form for row in rows if row.source is not None] == [
+        SourceForm.MEMORY,
+        SourceForm.MEMORY_REF,
+        SourceForm.QUERY_VIEW,
+        SourceForm.CONTEXT,
+    ]
+    assert rows[1].source is not None
+    assert rows[1].source.states == (SourceState.READ_ONLY,)
+    assert rows[3].source is not None
+    assert rows[3].source.reach is SourceReach.VIA_EMBED
+
+    tree = build_context_tree((parent.name,))
+    state = ContextTreeState.create(tree, selected=parent.name)
+    rendered = "".join(
+        text
+        for _style, text in _render_context_options(
+            state.visible_rows(),
+            selected=parent.name,
+            current=parent.name,
+            memories_by_context={parent.name: rows},
+            visible_memory_contexts={parent.name},
+        )
+    )
+    assert rendered.index("[memory memory-u]") < rendered.index(
+        "[memory ref referenc]"
+    )
+    assert rendered.index("[memory ref referenc]") < rendered.index(
+        "[query view query-ui]"
+    )
+    assert rendered.index("[query view query-ui]") < rendered.index(
+        "[context embedded]"
+    )
+    assert "[memory ref referenc] READ ONLY · owned Memory" in rendered
+    assert "[context embedded] VIA EMBED · parent/embedded" in rendered
+
+
 def test_picker_navigation_interleaves_read_only_memory_viewport_units():
     tree = build_context_tree(("alpha", "alpha/child", "beta"))
     rows = _visible_context_rows(tree, {"alpha"})
@@ -215,9 +286,7 @@ def test_picker_navigation_interleaves_read_only_memory_viewport_units():
         visible_memory_contexts={"alpha/child"},
     )
 
-    assert [
-        (unit.kind, unit.context_name, unit.memory_index) for unit in units
-    ] == [
+    assert [(unit.kind, unit.context_name, unit.memory_index) for unit in units] == [
         ("CONTEXT", "alpha", None),
         ("CONTEXT", "alpha/child", None),
         ("MEMORY", "alpha/child", 0),
@@ -260,8 +329,7 @@ def test_picker_memory_viewport_anchor_moves_focus_bar_without_selecting():
     )
     assert all(style != "class:selected" for style, _text in fragments)
     assert all(
-        style != "class:selected" or "memory" not in text
-        for style, text in fragments
+        style != "class:selected" or "memory" not in text for style, text in fragments
     )
     focused_style = _CONTEXT_PICKER_STYLE.get_attrs_for_style_str("class:focused")
     assert focused_style.reverse
@@ -372,14 +440,174 @@ def test_picker_wraps_memory_preview_at_spaces_before_character_boundaries():
     memory_lines = rendered.splitlines()[2:]
 
     assert memory_lines[0].endswith("facilities coordinator")
-    assert memory_lines[1] == (
-        " " * 24 + "responsible for maintaining a university"
-    )
+    assert memory_lines[1] == (" " * 24 + "responsible for maintaining a university")
     assert memory_lines[2] == " " * 24 + "organizational wiki."
     assert "coordinator re\n" not in rendered
-    assert sum(
-        style == "class:focused" for style, _text in fragments
-    ) == 3
+    assert sum(style == "class:focused" for style, _text in fragments) == 3
+
+
+def test_picker_memory_clipboard_projection_is_one_logical_line():
+    tree = build_context_tree(("task-1", "task-1/description"))
+    rows = _visible_context_rows(tree, {"task-1"})
+    memories = {
+        "task-1/description": (
+            ContextMemoryRow(
+                "memory 2db26309",
+                "Imagine that you are a campus facilities coordinator\n"
+                "responsible   for maintaining the wiki.",
+            ),
+        )
+    }
+
+    projection = project_context_picker_clipboard(
+        rows,
+        selected="task-1/description",
+        current="task-1",
+        memories_by_context=memories,
+        visible_memory_contexts={"task-1/description"},
+        memory_anchor=("task-1/description", 0),
+    )
+
+    assert projection.scope == "ITEM"
+    assert projection.context_count == 0
+    assert projection.memory_count == 1
+    assert projection.text == (
+        "    · [memory 2db26309] Imagine that you are a campus facilities "
+        "coordinator responsible for maintaining the wiki."
+    )
+    assert "\n" not in projection.text
+
+
+def test_picker_context_clipboard_item_and_visible_branch_are_distinct():
+    tree = build_context_tree(
+        (
+            "task-1",
+            "task-1/description",
+            "task-1/participant",
+            "task-1/participant/route-changes",
+            "task-1/campus-wiki",
+            "task-2",
+        )
+    )
+    rows = _visible_context_rows(tree, {"task-1"})
+    memories = {
+        "task-1/description": (
+            ContextMemoryRow(
+                "memory 2db26309",
+                "A long description\nthat must remain one clipboard line.",
+            ),
+        )
+    }
+    common = {
+        "selected": "task-1",
+        "current": "task-1/participant",
+        "annotations": {
+            "task-1/campus-wiki": "READ GRANT · PERMISSIONS READ + EXPORT",
+        },
+        "memories_by_context": memories,
+        "visible_memory_contexts": {"task-1/description"},
+    }
+
+    item = project_context_picker_clipboard(rows, visible_branch=False, **common)
+    branch = project_context_picker_clipboard(rows, visible_branch=True, **common)
+
+    assert item.scope == "ITEM"
+    assert item.context_count == 1
+    assert item.memory_count == 0
+    assert item.text == "›   ▾ task-1"
+    assert branch.scope == "VISIBLE_BRANCH"
+    assert branch.context_count == 4
+    assert branch.memory_count == 1
+    assert branch.text.splitlines() == [
+        "›   ▾ task-1",
+        "      ▾ task-1/description",
+        "    · [memory 2db26309] A long description that must remain one clipboard line.",
+        "  *   ▸ task-1/participant",
+        "      ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS READ + EXPORT",
+    ]
+    assert "task-1/participant/route-changes" not in branch.text
+    assert "task-2" not in branch.text
+
+
+def test_picker_y_copies_the_focused_context_without_closing():
+    copied: list[str] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yq")
+        selected = choose_context(
+            ("alpha", "beta"),
+            current="alpha",
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert copied == ["› * · alpha"]
+
+
+def test_picker_uppercase_y_copies_only_the_focused_visible_branch():
+    copied: list[str] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[CYq")
+        selected = choose_context(
+            ("alpha", "alpha/child", "alpha/child/deep", "beta"),
+            current="alpha",
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert copied == ["› * ▾ alpha\n      ▸ alpha/child"]
+    assert "alpha/child/deep" not in copied[0]
+    assert "beta" not in copied[0]
+
+
+def test_picker_y_and_uppercase_y_match_for_a_focused_memory():
+    copied: list[str] = []
+    memory = ContextMemoryRow("memory abcdef12", "first\nsecond")
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[ByYq")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            memory_loader=lambda _name: (memory,),
+            initially_show_memories=True,
+            clipboard_writer=copied.append,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert copied == [
+        "  · [memory abcdef12] first second",
+        "  · [memory abcdef12] first second",
+    ]
+
+
+def test_picker_clipboard_failure_keeps_the_picker_open_for_cancellation():
+    attempts: list[str] = []
+
+    def fail_copy(text: str) -> None:
+        attempts.append(text)
+        raise ClipboardError("simulated clipboard unavailable")
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yq")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            clipboard_writer=fail_copy,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert attempts == ["› * · alpha"]
 
 
 def test_picker_leaf_uses_expand_marker_for_its_memory_layer():
@@ -542,9 +770,7 @@ def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
         selected="task-1/campus-wiki",
         current="task-1/participant",
         annotations={
-            "task-1/campus-wiki": (
-                "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
-            ),
+            "task-1/campus-wiki": ("[grant CREATE + READ + UPDATE + DELETE + QUERY]"),
             "task-1/campus-wiki/route-changes": (
                 "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
             ),
@@ -560,8 +786,7 @@ def test_picker_renders_granted_views_below_owned_task_without_selecting_them():
     )
     assert (
         "task-1/campus-wiki/route-changes  "
-        "[grant CREATE + READ + UPDATE + DELETE + QUERY]"
-        in rendered
+        "[grant CREATE + READ + UPDATE + DELETE + QUERY]" in rendered
     )
     assert "[unavailable]" not in rendered
     assert "task-1/campus-wiki" not in tree.materialized_names
@@ -954,9 +1179,7 @@ def test_picker_result_is_revalidated_before_switch(
     invoke("init", "alpha")
     invoke("init", "beta")
 
-    def delete_selected_then_return_it(
-        names, *, current, accept_label, memory_loader
-    ):
+    def delete_selected_then_return_it(names, *, current, accept_label, memory_loader):
         MemoryStore().delete("alpha")
         return "alpha"
 

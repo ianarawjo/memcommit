@@ -384,21 +384,25 @@ non-TTY explicit command retains its deterministic scripted application
 behavior. Its multi-owner locks, rollback, checkpoints, operation digest, and
 application receipt remain unchanged.
 
-### Decision-free entry policy
+### Ownership-aware decision-free policy
 
-An owning workbench may start at its final review only when its adapter has
-declared the proposal applicable and the frozen item set contains no unanswered
-`REQUIRED` decision. This is an entry policy, not automatic application and not
-an inference from an empty-looking report. The exact Apply action remains a
-separate user confirmation, while Back returns to the complete Viewer and any
-optional or no-obligation Items.
+An owning workbench derives one decision-free behavior only after its adapter
+declares the proposal applicable and no `REQUIRED` decision remains unanswered.
+A reversible mutation confined to the active Profile returns the exact Accept
+action without rendering a report or confirmation surface; its normal command
+checkpoint makes `mem undo` the recovery boundary. A mutation of a granted
+authority Context starts at exact final review instead. Read-only workbenches
+never auto-accept.
 
-Update opts into this policy because its planned-change rows have obligation
-`NONE`. Atomize opts in because its findings are `OPTIONAL` and silence means
-apply the exact structural proposal while retaining those findings as
-unresolved. Meld retains the normal report-first decision path whenever a
-required Conflict is unanswered. Read-only workbenches never enter an Apply
-surface through this policy.
+The mutation target, not the input catalog, determines this policy. Update and
+directional Meld may read a granted Source and still auto-apply to a local
+Target, while a granted Target retains confirmation. Atomize writes only local
+Inputs or planned local Outputs. Sever always creates a local Result and leaves
+local or granted Sources unchanged. Forget distinguishes its local Source from
+a granted authority Source. An incorporation turn, destination correction, or
+unanswered required Conflict prevents the shortcut. The focused rationale and
+operation matrix live in
+`docs/ownership-aware-application-review-design-rationale.md`.
 
 The staged host offers both `G` whole-set guidance and `RESPONSE` on an opened
 Items change. An expanded located Impact row exposes the same response through

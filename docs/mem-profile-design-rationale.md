@@ -248,14 +248,34 @@ falls back to the legacy `authoring` store without creating metadata.
 
 ## Stable-identity Profile rename
 
-`mem profile rename` changes one live managed Profile's display name without
-changing which complete MemoryStore it identifies. Its one- and two-argument
-forms deliberately have different target selection:
+`mem rename` and `mem profile rename` are equivalent spellings that change one
+live managed Profile's display name without changing which complete
+MemoryStore it identifies. The explicit `profile` route remains supported for
+scripts and for people who prefer the resource-qualified spelling. Their one-
+and two-argument forms deliberately have different target selection:
 
 ```text
-mem profile rename NEW       # rename the current Profile
-mem profile rename OLD NEW   # rename this explicitly named Profile
+mem rename NEW               # rename the current Profile
+mem rename OLD NEW           # rename this explicitly named Profile
+mem profile rename NEW       # explicit equivalent
+mem profile rename OLD NEW   # explicit equivalent
 ```
+
+Interactive `mem profile` places the same operation beside its target. `R` on
+an eligible Profile opens the shared exact one-line name field prefilled with
+the current display name. Enter produces an exact
+`mem profile rename OLD NEW` review; a second Enter or `A` applies it. Escape
+returns from review to the name field, then from the field to the picker.
+Study headers, fixed anchors, and individually protected legacy Study members
+fail in the picker before the name field opens.
+
+The picker receipt freezes the target Profile UID and registry generation.
+Application checks both under the registry lock, then reloads the complete
+picker catalog and restores the renamed row's visual position. A concurrent
+Profile use, Grant mutation, removal, or rename therefore cannot redirect the
+reviewed action to a same-named replacement. Context pickers deliberately do
+not expose rename: Context namespace relocation is a graph migration and is no
+longer a public `mem rename` meaning.
 
 In the one-argument form, `NEW` is never interpreted as an existing Profile
 selector. The command acquires the Profile registry lock and then captures the

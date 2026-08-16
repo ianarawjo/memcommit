@@ -84,6 +84,47 @@ def _one_edit_response(prompt):
     }
 
 
+def test_focused_update_exposes_neighbors_only_as_context_and_binds_exact_scope():
+    source = ops.init("focused/update/source")
+    source_neighbor = ops.add(source, "Background construction note.")
+    source_focus = ops.add(source, "The south entrance is open.")
+    target = ops.init("focused/update/target")
+    target_focus = ops.add(target, "The south entrance is closed.")
+    target_neighbor = ops.add(target, "The library remains open.")
+    provider = PlanProvider(_one_edit_response)
+
+    session = plan_update(
+        source,
+        target,
+        lambda: provider,
+        source_memory_selector=source_focus.uid[:8],
+        target_memory_selector=target_focus.uid[:8],
+    )
+    prompt, _operation, schema = provider.calls[0]
+    payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
+
+    assert session.source_memory_uid == source_focus.uid
+    assert session.target_memory_uid == target_focus.uid
+    assert payload["source"]["memories"][0]["content"] == source_focus.content
+    assert payload["source"]["context_evidence"][0]["content"] == (
+        source_neighbor.content
+    )
+    assert payload["target"]["memories"][0]["content"] == target_focus.content
+    assert payload["target"]["context_evidence"][0]["content"] == (
+        target_neighbor.content
+    )
+    assert payload["target"]["contexts"] == []
+    assert schema["properties"]["additions"]["maxItems"] == 0
+    assert "cs000001" not in json.dumps(schema)
+    assert "ct000001" not in json.dumps(schema)
+    assert len(session.operations) == 1
+    assert session.operations[0].memory_uid == target_focus.uid
+    assert {ref.memory_uid for ref in session.operations[0].source_refs} == {
+        source_focus.uid
+    }
+    assert UpdateSession.from_dict(session.to_dict()) == session
+
+
 def test_update_revision_replans_complete_operations_from_review_guidance():
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     initial_provider = PlanProvider(_one_edit_response)
@@ -978,8 +1019,8 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     }
     state_before = (isolated_store / "state.json").read_bytes()
 
-    impact = runner.invoke(app, ["impact", "--to", TASK1_TARGET])
-    update = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+    impact = runner.invoke(app, ["impact", "-r", "--to", TASK1_TARGET])
+    update = runner.invoke(app, ["update", "-r", "--to", TASK1_TARGET])
 
     assert impact.exit_code == 0, impact.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
@@ -1495,6 +1536,51 @@ def test_empty_update_launcher_new_collects_distinct_endpoints(
             "target_name": "target",
             "source_descendants": False,
             "target_descendants": False,
+        }
+    ]
+
+
+def test_empty_update_launcher_passes_exact_setup_memories(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+
+    class TTY:
+        @staticmethod
+        def isatty():
+            return True
+
+    monkeypatch.setattr(update_command.sys, "stdin", TTY())
+    monkeypatch.setattr(update_command.sys, "stdout", TTY())
+    monkeypatch.setattr(
+        update_command,
+        "choose_session",
+        lambda entries, **kwargs: kwargs["new_receipt"],
+    )
+    monkeypatch.setattr(
+        update_command,
+        "choose_update_setup",
+        lambda _store: UpdateSetupReceipt(
+            "source",
+            "target",
+            source_memory_uid="source-memory",
+            target_memory_uid="target-memory",
+        ),
+    )
+    invoked = []
+    monkeypatch.setattr(update_command, "cmd", lambda **kwargs: invoked.append(kwargs))
+
+    update_command._browse_saved_update(store)
+
+    assert invoked == [
+        {
+            "source_name": "source",
+            "target_name": "target",
+            "source_descendants": False,
+            "target_descendants": False,
+            "source_memory": "source-memory",
+            "target_memory": "target-memory",
         }
     ]
 

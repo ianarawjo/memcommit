@@ -216,14 +216,14 @@ def test_temporal_find_also_descends_the_visible_embedded_context_graph(
         lambda: LatestEditProvider(),
     )
 
-    result = invoke("find", "the last updated Memory")
+    result = invoke("find", "the last updated Memory", "-r")
 
     assert result.exit_code == 0
     assert "transport" in result.output
     assert "Parking is in Lot B." in result.output
 
 
-def test_temporal_find_searches_materialized_namespace_descendants_by_default(
+def test_temporal_find_searches_materialized_namespace_descendants_recursively(
     isolated_store,
     monkeypatch,
 ):
@@ -241,13 +241,13 @@ def test_temporal_find_searches_materialized_namespace_descendants_by_default(
         lambda: LatestEditProvider(),
     )
 
-    result = invoke("find", "the last updated Memory")
+    result = invoke("find", "the last updated Memory", "-r")
 
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory" in result.output
     assert "The clinic appointment is at 10 a.m." in result.output
 
-    direct = invoke("find", "the last updated Memory", "--direct")
+    direct = invoke("find", "the last updated Memory")
 
     assert direct.exit_code == 0, direct.output
     assert "task-3/personal-memory" not in direct.output
