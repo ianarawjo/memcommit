@@ -24,6 +24,21 @@ from memcommit.atomize_runtime import (
     execute_atomize_save_as,
     execute_atomize_session_apply,
 )
+from memcommit.atomize_grounding_application import (
+    AtomizeGroundingApplicationError,
+    GroundingAcceptRequest,
+    GroundingKeepRequest,
+    GroundingReplyRequest,
+    GroundingStartRequest,
+    run_atomize_grounding_accept,
+    run_atomize_grounding_keep,
+    run_atomize_grounding_reply,
+    run_atomize_grounding_start,
+)
+from memcommit.atomize_grounding_runtime import (
+    MemoryStoreAtomizeGroundingPort,
+    assert_current_grounding_bindings,
+)
 from memcommit.atomize_workbench import (
     AtomizeWorkbenchError,
     atomize_workbench_declared_frames,
@@ -32,17 +47,9 @@ from memcommit.atomize_workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.interfaces.cli.atomize import render_atomize_apply_result
+from memcommit.interfaces.cli.atomize_grounding import render_grounding_session
 from memcommit.interfaces.tui.operations.atomize.adapter import (
     present_atomize_workbench,
-)
-from memcommit.commands.atomize_grounding import (
-    AtomizeGroundingCommandError,
-    accept_grounding,
-    assert_current_grounding_bindings,
-    keep_grounding_review_only,
-    render_grounding_session,
-    reply_to_grounding,
-    start_grounding,
 )
 from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.atomize_sessions import (
@@ -71,6 +78,17 @@ from memcommit.query_provider import (
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
+
+
+def _grounding_provider_progress(stage, provider_factory):
+    return progressing_provider_factory("ATOMIZE", stage, provider_factory)
+
+
+def _grounding_port(store: MemoryStore) -> MemoryStoreAtomizeGroundingPort:
+    return MemoryStoreAtomizeGroundingPort(
+        store=store,
+        provider_progress=_grounding_provider_progress,
+    )
 
 
 def _incorporable_workbench_response_count(
@@ -479,9 +497,9 @@ def cmd(
 
         grounding = store.load_atomize_grounding_session(direct_ctx.uid)
         if keep_review_only:
-            grounding = keep_grounding_review_only(
-                store=store,
-                context_uid=direct_ctx.uid,
+            grounding = run_atomize_grounding_keep(
+                GroundingKeepRequest(context_uid=direct_ctx.uid),
+                port=_grounding_port(store),
             )
             typer.echo(render_grounding_session(grounding, session))
             return
@@ -492,19 +510,19 @@ def cmd(
             and grounding.state in {"AWAITING_REPLY", "READY_TO_APPLY"}
         ):
             if save or save_as is not None:
-                raise AtomizeGroundingCommandError(
+                raise AtomizeGroundingApplicationError(
                     "An atomize grounding dialogue is still open. Reply to "
                     "it, apply its exact proposal, or keep it as review-only "
                     "before using --save or --save-as."
                 )
             if session is None:
-                raise AtomizeGroundingCommandError(
+                raise AtomizeGroundingApplicationError(
                     "The saved atomize grounding dialogue is stale because "
                     "its source analysis is unavailable."
                 )
             workbench = store.load_atomize_workbench(session)
             if workbench is None:
-                raise AtomizeGroundingCommandError(
+                raise AtomizeGroundingApplicationError(
                     "The saved atomize grounding dialogue is stale because "
                     "its source workbench is unavailable."
                 )
@@ -532,15 +550,17 @@ def cmd(
                 )
             workbench = store.load_atomize_workbench(session)
             if workbench is None:
-                raise AtomizeGroundingCommandError(
+                raise AtomizeGroundingApplicationError(
                     "The atomize workbench bound to this grounding dialogue "
                     "is unavailable."
                 )
-            result = accept_grounding(
-                store=store,
-                ctx=direct_ctx,
-                analysis=session,
-                workbench=workbench,
+            result = run_atomize_grounding_accept(
+                GroundingAcceptRequest(
+                    context=direct_ctx,
+                    analysis=session,
+                    workbench=workbench,
+                ),
+                port=_grounding_port(store),
             )
             grounding = store.load_atomize_grounding_session(direct_ctx.uid)
             assert grounding is not None
@@ -585,33 +605,37 @@ def cmd(
                 initial_comment = comment
                 if initial_comment is None:
                     if not sys.stdin.isatty() or not sys.stdout.isatty():
-                        raise AtomizeGroundingCommandError(
+                        raise AtomizeGroundingApplicationError(
                             "--comment is required with --evaluate outside "
                             "an interactive terminal."
                         )
                     initial_comment = typer.prompt(
                         "Refine, comment, or enter a different reading"
                     )
-                grounding = start_grounding(
-                    store=store,
-                    ctx=direct_ctx,
-                    analysis=session,
-                    workbench=workbench,
-                    selector=evaluate,
-                    comment=initial_comment,
+                grounding = run_atomize_grounding_start(
+                    GroundingStartRequest(
+                        context=direct_ctx,
+                        analysis=session,
+                        workbench=workbench,
+                        selector=evaluate,
+                        comment=initial_comment,
+                    ),
+                    port=_grounding_port(store),
                     provider_factory=connect_codex_chatgpt_provider,
                 )
                 typer.echo(render_grounding_session(grounding, session))
                 return
 
             if reply is not None:
-                grounding = reply_to_grounding(
-                    store=store,
-                    ctx=direct_ctx,
-                    analysis=session,
-                    workbench=workbench,
-                    reply=reply,
-                    revision=revision or "extend",
+                grounding = run_atomize_grounding_reply(
+                    GroundingReplyRequest(
+                        context=direct_ctx,
+                        analysis=session,
+                        workbench=workbench,
+                        reply=reply,
+                        revision=revision or "extend",
+                    ),
+                    port=_grounding_port(store),
                     provider_factory=connect_codex_chatgpt_provider,
                 )
                 typer.echo(render_grounding_session(grounding, session))
@@ -955,7 +979,7 @@ def cmd(
         ValueError,
         AtomizeImpactError,
         AtomizeWorkbenchError,
-        AtomizeGroundingCommandError,
+        AtomizeGroundingApplicationError,
         QueryProviderError,
     ) as error:
         typer.secho(f"Atomize error: {error}", fg=typer.colors.RED, err=True)
